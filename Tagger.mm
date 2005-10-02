@@ -134,7 +134,7 @@
 	if(nil == frame) {
 		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
 	}
-	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 	versionString = [NSString stringWithFormat:@"LAME %s (Max %@)", get_lame_version(), bundleVersion];
 	frame->setText(TagLib::String([versionString UTF8String], TagLib::String::UTF8));
 	f.ID3v2Tag()->addFrame(frame);

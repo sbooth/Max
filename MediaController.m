@@ -71,7 +71,7 @@ static MediaController *sharedMedia = nil;
 {
 	@synchronized(self) {
 		if(nil == sharedMedia) {
-			sharedMedia = [[[self alloc] init] autorelease];
+			sharedMedia = [[self alloc] init];
 		}
 	}
 	return sharedMedia;

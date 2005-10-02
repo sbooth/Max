@@ -124,11 +124,10 @@ getID3v2Timestamp()
 	@synchronized(sDateFormatter) {
 		if(nil == sDateFormatter) {
 			[NSDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehavior10_4];
-			sDateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+			sDateFormatter = [[NSDateFormatter alloc] init];
 			[sDateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
 			[sDateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss"];
 		}
 	}
-
 	return [sDateFormatter stringFromDate:[[[NSDate alloc] init] autorelease]];
 }

@@ -188,7 +188,7 @@ static Genres *sharedGenres = nil;
 {
 	@synchronized(self) {
 		if(nil == sharedGenres) {
-			sharedGenres = [[[self alloc] init] autorelease];
+			sharedGenres = [[self alloc] init];
 		}
 	}
 	return [sharedGenres valueForKey:@"genres"];

@@ -85,7 +85,7 @@ static PreferencesController *sharedPreferences = nil;
 {
 	@synchronized(self) {
 		if(nil == sharedPreferences) {
-			sharedPreferences = [[[self alloc] init] autorelease];
+			sharedPreferences = [[self alloc] init];
 		}
 	}
 	return sharedPreferences;
