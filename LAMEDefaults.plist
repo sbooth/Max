@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>org.sbooth.Max.lameBitrate</key>
+	<real>8</real>
+	<key>org.sbooth.Max.lameEncodingEngineQuality</key>
+	<string>High</string>
+	<key>org.sbooth.Max.lameMonoEncoding</key>
+	<false/>
+	<key>org.sbooth.Max.lameQuality</key>
+	<real>4</real>
+	<key>org.sbooth.Max.lameTarget</key>
+	<string>Bitrate</string>
+	<key>org.sbooth.Max.lameUseConstantBitrate</key>
+	<false/>
+	<key>org.sbooth.Max.lameVBRQuality</key>
+	<real>80</real>
+	<key>org.sbooth.Max.lameVariableBitrateMode</key>
+	<string>Standard</string>
+</dict>
+</plist>
