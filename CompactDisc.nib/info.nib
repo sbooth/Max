@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBDocumentLocation</key>
+	<string>30 26 436 278 0 0 1280 832 </string>
+	<key>IBEditorPositions</key>
+	<dict>
+		<key>197</key>
+		<string>474 359 331 394 0 0 1280 832 </string>
+		<key>309</key>
+		<string>436 472 408 168 0 0 1280 832 </string>
+	</dict>
+	<key>IBFramework Version</key>
+	<string>439.0</string>
+	<key>IBGroupedObjects</key>
+	<dict>
+		<key>12</key>
+		<array>
+			<string>41</string>
+			<string>31</string>
+		</array>
+		<key>13</key>
+		<array>
+			<string>27</string>
+			<string>38</string>
+		</array>
+		<key>14</key>
+		<array>
+			<string>40</string>
+			<string>39</string>
+		</array>
+		<key>15</key>
+		<array>
+			<string>29</string>
+			<string>28</string>
+		</array>
+		<key>16</key>
+		<array>
+			<string>227</string>
+			<string>226</string>
+		</array>
+		<key>17</key>
+		<array>
+			<string>222</string>
+			<string>223</string>
+		</array>
+		<key>18</key>
+		<array>
+			<string>229</string>
+			<string>228</string>
+		</array>
+		<key>19</key>
+		<array>
+			<string>225</string>
+			<string>224</string>
+		</array>
+		<key>34</key>
+		<array>
+			<string>407</string>
+			<string>408</string>
+			<string>409</string>
+			<string>410</string>
+		</array>
+		<key>37</key>
+		<array>
+			<string>416</string>
+			<string>417</string>
+		</array>
+		<key>38</key>
+		<array>
+			<string>345</string>
+			<string>346</string>
+		</array>
+		<key>39</key>
+		<array>
+			<string>352</string>
+			<string>353</string>
+		</array>
+		<key>40</key>
+		<array>
+			<string>344</string>
+			<string>349</string>
+		</array>
+		<key>41</key>
+		<array>
+			<string>354</string>
+			<string>355</string>
+		</array>
+		<key>42</key>
+		<array>
+			<string>357</string>
+			<string>356</string>
+		</array>
+		<key>43</key>
+		<array>
+			<string>358</string>
+			<string>359</string>
+		</array>
+	</dict>
+	<key>IBLastGroupID</key>
+	<string>45</string>
+	<key>IBOpenObjects</key>
+	<array>
+		<integer>25</integer>
+	</array>
+	<key>IBSystem Version</key>
+	<string>8C46</string>
+</dict>
+</plist>
