@@ -1,0 +1,30 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {
+                customNamingButtonAction = id; 
+                restoreDefaults = id; 
+                selectOutputDirectory = id; 
+                setFreeDBMirror = id; 
+            }; 
+            CLASS = PreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_cddbMirrorsController" = NSArrayController; 
+                "_cddbPortTextField" = NSTextField; 
+                "_cddbServerTextField" = NSTextField; 
+                "_customNameTextField" = NSTextField; 
+                "_window" = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
