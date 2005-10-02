@@ -189,18 +189,18 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 149958972;
-			PBXWorkspaceStateSaveDate = 149958972;
+			PBXPerProjectTemplateStateSaveDate = 149962648;
+			PBXWorkspaceStateSaveDate = 149962648;
 		};
 		perUserProjectItems = {
 			8C01470908F033AF002D1DF4 /* PBXTextBookmark */ = 8C01470908F033AF002D1DF4 /* PBXTextBookmark */;
 			8C124A1B08C5B455008C8FBD /* PBXTextBookmark */ = 8C124A1B08C5B455008C8FBD /* PBXTextBookmark */;
 			8C124A1C08C5B455008C8FBD /* PBXTextBookmark */ = 8C124A1C08C5B455008C8FBD /* PBXTextBookmark */;
 			8C124A2508C5B455008C8FBD /* PBXTextBookmark */ = 8C124A2508C5B455008C8FBD /* PBXTextBookmark */;
-			8C1B088C08EFC78500C0F41C /* PBXTextBookmark */ = 8C1B088C08EFC78500C0F41C /* PBXTextBookmark */;
 			8C752A8D08C50983001F588B /* PBXTextBookmark */ = 8C752A8D08C50983001F588B /* PBXTextBookmark */;
 			8C752A8E08C50983001F588B /* PBXTextBookmark */ = 8C752A8E08C50983001F588B /* PBXTextBookmark */;
 			8C9D204D08C5379E00D95535 /* PBXTextBookmark */ = 8C9D204D08C5379E00D95535 /* PBXTextBookmark */;
+			8CA9BFBA08F03FDF00D6F109 /* PBXTextBookmark */ = 8CA9BFBA08F03FDF00D6F109 /* PBXTextBookmark */;
 			8CBEC73508ED8D980064F794 /* PBXTextBookmark */ = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
 			8CBEC73708ED8D980064F794 /* PBXTextBookmark */ = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */ = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
@@ -328,16 +328,6 @@
 		objects = (
 			8C5589FA08DD8C0B009C2F24 /* szone_error */,
 		);
-	};
-	8C1B088C08EFC78500C0F41C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */;
-		name = "Encoder.m: 358";
-		rLen = 0;
-		rLoc = 11195;
-		rType = 0;
-		vrLen = 0;
-		vrLoc = 0;
 	};
 	8C5589FA08DD8C0B009C2F24 /* szone_error */ = {
 		isa = PBXSymbolicBreakpoint;
@@ -522,6 +512,16 @@
 		rLoc = 876;
 		rType = 0;
 		vrLen = 169;
+		vrLoc = 0;
+	};
+	8CA9BFBA08F03FDF00D6F109 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */;
+		name = "Encoder.m: finishEncode";
+		rLen = 0;
+		rLoc = 11195;
+		rType = 0;
+		vrLen = 0;
 		vrLoc = 0;
 	};
 	8CB6DE8908DA844000345B8F /* Encoder.h */ = {
