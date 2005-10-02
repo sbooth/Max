@@ -1,0 +1,611 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8C08573908DE90DD004B42F0 /* CDDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* CDDB.m */; };
+		8C73004A08ECA9C10008D7E0 /* CDDBMatchSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C73004908ECA9C10008D7E0 /* CDDBMatchSheet.nib */; };
+		8C73004E08ECAA5B0008D7E0 /* CDDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */; };
+		8C7300A708ECB1E80008D7E0 /* CDDBMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7300A608ECB1E80008D7E0 /* CDDBMatch.m */; };
+		8C73021008ECD4AD0008D7E0 /* CDDBSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73020F08ECD4AD0008D7E0 /* CDDBSite.m */; };
+		8C73033E08ECEA500008D7E0 /* CDDBProtocolValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73033D08ECEA500008D7E0 /* CDDBProtocolValueTransformer.m */; };
+		8C752A8408C507CE001F588B /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C752A8308C507CE001F588B /* Genres.m */; };
+		8C76E43408C6DE1A00F4F9A1 /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDisc.m */; };
+		8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */; };
+		8C7C88BC08EC37D800F6FCB1 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */; };
+		8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
+		8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */; };
+		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
+		8CB6E20108DACB8100345B8F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING */; };
+		8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */; };
+		8CBB881D08EE57A6007197C3 /* UtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */; };
+		8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */; };
+		8CBB89BC08EF28D6007197C3 /* libcddb.2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB89BB08EF28D6007197C3 /* libcddb.2.0.0.dylib */; };
+		8CBB89C008EF2908007197C3 /* libmp3lame.0.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB89BF08EF2908007197C3 /* libmp3lame.0.0.0.dylib */; };
+		8CBB89C208EF2925007197C3 /* libtag.1.4.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB89C108EF2925007197C3 /* libtag.1.4.0.dylib */; };
+		8CBB8BA408EFAE53007197C3 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */; };
+		8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */; };
+		8CBB8BA808EFAE60007197C3 /* CDDBDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA708EFAE60007197C3 /* CDDBDefaults.plist */; };
+		8CBB8BBD08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BBC08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist */; };
+		8CBB8BCD08EFB0BF007197C3 /* MissingResourceException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */; };
+		8CBEC4F008ED6F770064F794 /* CDDBException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC4EF08ED6F770064F794 /* CDDBException.m */; };
+		8CBEC55608ED74E90064F794 /* MallocException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC55508ED74E90064F794 /* MallocException.m */; };
+		8CBEC57C08ED75DA0064F794 /* IOException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC57B08ED75DA0064F794 /* IOException.m */; };
+		8CBEC69808ED85670064F794 /* LAMEException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC69708ED85670064F794 /* LAMEException.m */; };
+		8CBEC6B208ED861C0064F794 /* StopException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6B108ED861C0064F794 /* StopException.m */; };
+		8CBEC6CF08ED88950064F794 /* EmptySelectionException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */; };
+		8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */; };
+		8CC111C408CA4538008BB9B0 /* CompactDisc.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC111C308CA4538008BB9B0 /* CompactDisc.nib */; };
+		8CC564E908DD12A700C3030F /* StringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC564E808DD12A700C3030F /* StringValueTransformer.m */; };
+		8CE5F63008DDD02D007DD7F7 /* Tagger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */; };
+		8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CE6F51D08CD60970028DA37 /* Credits.rtf */; };
+		8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
+		8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */; };
+		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PREBINDING = NO;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PREBINDING = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
+		8C08573708DE90DD004B42F0 /* CDDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDB.h; sourceTree = "<group>"; };
+		8C08573808DE90DD004B42F0 /* CDDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDB.m; sourceTree = "<group>"; };
+		8C73004908ECA9C10008D7E0 /* CDDBMatchSheet.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CDDBMatchSheet.nib; sourceTree = "<group>"; };
+		8C73004C08ECAA5B0008D7E0 /* CDDBMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CDDBMatchSheet.h; sourceTree = "<group>"; };
+		8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CDDBMatchSheet.m; sourceTree = "<group>"; };
+		8C7300A508ECB1E80008D7E0 /* CDDBMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDBMatch.h; sourceTree = "<group>"; };
+		8C7300A608ECB1E80008D7E0 /* CDDBMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDBMatch.m; sourceTree = "<group>"; };
+		8C73020E08ECD4AD0008D7E0 /* CDDBSite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDBSite.h; sourceTree = "<group>"; };
+		8C73020F08ECD4AD0008D7E0 /* CDDBSite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDBSite.m; sourceTree = "<group>"; };
+		8C73033C08ECEA500008D7E0 /* CDDBProtocolValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDBProtocolValueTransformer.h; sourceTree = "<group>"; };
+		8C73033D08ECEA500008D7E0 /* CDDBProtocolValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDBProtocolValueTransformer.m; sourceTree = "<group>"; };
+		8C752A8208C507CE001F588B /* Genres.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genres.h; sourceTree = "<group>"; };
+		8C752A8308C507CE001F588B /* Genres.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genres.m; sourceTree = "<group>"; };
+		8C76E43208C6DE1A00F4F9A1 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
+		8C76E43308C6DE1A00F4F9A1 /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
+		8C76E43908C6DE3900F4F9A1 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		8C76E43A08C6DE3900F4F9A1 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Preferences.nib; sourceTree = "<group>"; };
+		8C7C891208EC3EC500F6FCB1 /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
+		8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
+		8C7C897808EC435700F6FCB1 /* MediaController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MediaController.m; sourceTree = "<group>"; };
+		8C7C897908EC435700F6FCB1 /* MediaController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MediaController.h; sourceTree = "<group>"; };
+		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
+		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
+		8CB6E20008DACB8100345B8F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		8CBB3C5608D8CC7A005266A8 /* Ripper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ripper.h; sourceTree = "<group>"; };
+		8CBB3C5708D8CC7A005266A8 /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
+		8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UtilityFunctions.m; sourceTree = "<group>"; };
+		8CBB882208EE57D4007197C3 /* UtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityFunctions.h; sourceTree = "<group>"; };
+		8CBB892B08EEEFE0007197C3 /* CustomNamingException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNamingException.h; sourceTree = "<group>"; };
+		8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNamingException.m; sourceTree = "<group>"; };
+		8CBB89BB08EF28D6007197C3 /* libcddb.2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcddb.2.0.0.dylib; path = /opt/local/lib/libcddb.2.0.0.dylib; sourceTree = "<absolute>"; };
+		8CBB89BF08EF2908007197C3 /* libmp3lame.0.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmp3lame.0.0.0.dylib; path = /opt/local/lib/libmp3lame.0.0.0.dylib; sourceTree = "<absolute>"; };
+		8CBB89C108EF2925007197C3 /* libtag.1.4.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtag.1.4.0.dylib; path = /opt/local/lib/libtag.1.4.0.dylib; sourceTree = "<absolute>"; };
+		8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
+		8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = LAMEDefaults.plist; sourceTree = "<group>"; };
+		8CBB8BA708EFAE60007197C3 /* CDDBDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CDDBDefaults.plist; sourceTree = "<group>"; };
+		8CBB8BBC08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CompactDiscControllerDefaults.plist; sourceTree = "<group>"; };
+		8CBB8BCB08EFB0BF007197C3 /* MissingResourceException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingResourceException.h; sourceTree = "<group>"; };
+		8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingResourceException.m; sourceTree = "<group>"; };
+		8CBEC4EE08ED6F770064F794 /* CDDBException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDBException.h; sourceTree = "<group>"; };
+		8CBEC4EF08ED6F770064F794 /* CDDBException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDBException.m; sourceTree = "<group>"; };
+		8CBEC55408ED74E90064F794 /* MallocException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MallocException.h; sourceTree = "<group>"; };
+		8CBEC55508ED74E90064F794 /* MallocException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MallocException.m; sourceTree = "<group>"; };
+		8CBEC57A08ED75DA0064F794 /* IOException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOException.h; sourceTree = "<group>"; };
+		8CBEC57B08ED75DA0064F794 /* IOException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOException.m; sourceTree = "<group>"; };
+		8CBEC69608ED85670064F794 /* LAMEException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LAMEException.h; sourceTree = "<group>"; };
+		8CBEC69708ED85670064F794 /* LAMEException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LAMEException.m; sourceTree = "<group>"; };
+		8CBEC6B008ED861C0064F794 /* StopException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopException.h; sourceTree = "<group>"; };
+		8CBEC6B108ED861C0064F794 /* StopException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopException.m; sourceTree = "<group>"; };
+		8CBEC6CD08ED88950064F794 /* EmptySelectionException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptySelectionException.h; sourceTree = "<group>"; };
+		8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptySelectionException.m; sourceTree = "<group>"; };
+		8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscController.h; sourceTree = "<group>"; };
+		8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
+		8CC111C308CA4538008BB9B0 /* CompactDisc.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CompactDisc.nib; sourceTree = "<group>"; };
+		8CC564E708DD12A700C3030F /* StringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringValueTransformer.h; sourceTree = "<group>"; };
+		8CC564E808DD12A700C3030F /* StringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringValueTransformer.m; sourceTree = "<group>"; };
+		8CE5F62E08DDD02D007DD7F7 /* Tagger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tagger.h; sourceTree = "<group>"; };
+		8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Tagger.mm; sourceTree = "<group>"; };
+		8CE6F51D08CD60970028DA37 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		8CE9B39708CF7937007FCDB3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
+		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */,
+				8CBB89BC08EF28D6007197C3 /* libcddb.2.0.0.dylib in Frameworks */,
+				8CBB89C008EF2908007197C3 /* libmp3lame.0.0.0.dylib in Frameworks */,
+				8CBB89C208EF2925007197C3 /* libtag.1.4.0.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* MP3 */ = {
+			isa = PBXGroup;
+			children = (
+				8CE5F62E08DDD02D007DD7F7 /* Tagger.h */,
+				8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */,
+				8CB6DE8908DA844000345B8F /* Encoder.h */,
+				8CB6DE8A08DA844000345B8F /* Encoder.m */,
+				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
+				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
+				8C752A8208C507CE001F588B /* Genres.h */,
+				8C752A8308C507CE001F588B /* Genres.m */,
+			);
+			name = MP3;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* Max.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* cocoa test */ = {
+			isa = PBXGroup;
+			children = (
+				8C7C894308EC3FFE00F6FCB1 /* Models */,
+				8C7C897408EC42BC00F6FCB1 /* Controllers */,
+				8CBEC4EB08ED6F640064F794 /* Exceptions */,
+				080E96DDFE201D6D7F000001 /* MP3 */,
+				8C7300B808ECB21B0008D7E0 /* CDDB */,
+				8CBEC66108ED80D10064F794 /* ValueTransformers */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = "cocoa test";
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* Max_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+				8CBB882208EE57D4007197C3 /* UtilityFunctions.h */,
+				8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				8CC111C308CA4538008BB9B0 /* CompactDisc.nib */,
+				8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */,
+				8C73004908ECA9C10008D7E0 /* CDDBMatchSheet.nib */,
+				8CB6E20008DACB8100345B8F /* COPYING */,
+				8CE6F51D08CD60970028DA37 /* Credits.rtf */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				8CBB8BA708EFAE60007197C3 /* CDDBDefaults.plist */,
+				8CBB8BBC08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist */,
+				8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */,
+				8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8CBB89C108EF2925007197C3 /* libtag.1.4.0.dylib */,
+				8CBB89BF08EF2908007197C3 /* libmp3lame.0.0.0.dylib */,
+				8CBB89BB08EF28D6007197C3 /* libcddb.2.0.0.dylib */,
+				8CE9B39708CF7937007FCDB3 /* IOKit.framework */,
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8C7300B808ECB21B0008D7E0 /* CDDB */ = {
+			isa = PBXGroup;
+			children = (
+				8C08573708DE90DD004B42F0 /* CDDB.h */,
+				8C08573808DE90DD004B42F0 /* CDDB.m */,
+				8C7300A508ECB1E80008D7E0 /* CDDBMatch.h */,
+				8C7300A608ECB1E80008D7E0 /* CDDBMatch.m */,
+				8C73004C08ECAA5B0008D7E0 /* CDDBMatchSheet.h */,
+				8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */,
+				8C73020E08ECD4AD0008D7E0 /* CDDBSite.h */,
+				8C73020F08ECD4AD0008D7E0 /* CDDBSite.m */,
+			);
+			name = CDDB;
+			sourceTree = "<group>";
+		};
+		8C7C894308EC3FFE00F6FCB1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8C76E43208C6DE1A00F4F9A1 /* CompactDisc.h */,
+				8C76E43308C6DE1A00F4F9A1 /* CompactDisc.m */,
+				8C76E43908C6DE3900F4F9A1 /* Track.h */,
+				8C76E43A08C6DE3900F4F9A1 /* Track.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		8C7C897408EC42BC00F6FCB1 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8C7C891208EC3EC500F6FCB1 /* ApplicationController.h */,
+				8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */,
+				8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */,
+				8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */,
+				8C7C897908EC435700F6FCB1 /* MediaController.h */,
+				8C7C897808EC435700F6FCB1 /* MediaController.m */,
+				8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */,
+				8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8CBEC4EB08ED6F640064F794 /* Exceptions */ = {
+			isa = PBXGroup;
+			children = (
+				8CBEC4EE08ED6F770064F794 /* CDDBException.h */,
+				8CBEC4EF08ED6F770064F794 /* CDDBException.m */,
+				8CBEC55408ED74E90064F794 /* MallocException.h */,
+				8CBEC55508ED74E90064F794 /* MallocException.m */,
+				8CBEC57A08ED75DA0064F794 /* IOException.h */,
+				8CBEC57B08ED75DA0064F794 /* IOException.m */,
+				8CBEC69608ED85670064F794 /* LAMEException.h */,
+				8CBEC69708ED85670064F794 /* LAMEException.m */,
+				8CBEC6B008ED861C0064F794 /* StopException.h */,
+				8CBEC6B108ED861C0064F794 /* StopException.m */,
+				8CBEC6CD08ED88950064F794 /* EmptySelectionException.h */,
+				8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */,
+				8CBB892B08EEEFE0007197C3 /* CustomNamingException.h */,
+				8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */,
+				8CBB8BCB08EFB0BF007197C3 /* MissingResourceException.h */,
+				8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */,
+			);
+			name = Exceptions;
+			sourceTree = "<group>";
+		};
+		8CBEC66108ED80D10064F794 /* ValueTransformers */ = {
+			isa = PBXGroup;
+			children = (
+				8C73033C08ECEA500008D7E0 /* CDDBProtocolValueTransformer.h */,
+				8C73033D08ECEA500008D7E0 /* CDDBProtocolValueTransformer.m */,
+				8CC564E708DD12A700C3030F /* StringValueTransformer.h */,
+				8CC564E808DD12A700C3030F /* StringValueTransformer.m */,
+			);
+			name = ValueTransformers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* Max */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C1919DE08C50B7A00CB7453 /* Build configuration list for PBXNativeTarget "Max" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "cocoa test_Prefix.pch";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = "cocoa test";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = Max;
+			productInstallPath = "$(HOME)/Applications";
+			productName = "cocoa test";
+			productReference = 8D1107320486CEB800E47090 /* Max.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 8C1919E208C50B7A00CB7453 /* Build configuration list for PBXProject "Max" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA /* Development */,
+				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* cocoa test */;
+			projectDirPath = "";
+			targets = (
+				8D1107260486CEB800E47090 /* Max */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				8CC111C408CA4538008BB9B0 /* CompactDisc.nib in Resources */,
+				8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */,
+				8CB6E20108DACB8100345B8F /* COPYING in Resources */,
+				8C7C88BC08EC37D800F6FCB1 /* Preferences.nib in Resources */,
+				8C73004A08ECA9C10008D7E0 /* CDDBMatchSheet.nib in Resources */,
+				8CBB8BA408EFAE53007197C3 /* TrackDefaults.plist in Resources */,
+				8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */,
+				8CBB8BA808EFAE60007197C3 /* CDDBDefaults.plist in Resources */,
+				8CBB8BBD08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				8C752A8408C507CE001F588B /* Genres.m in Sources */,
+				8C76E43408C6DE1A00F4F9A1 /* CompactDisc.m in Sources */,
+				8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */,
+				8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */,
+				8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */,
+				8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */,
+				8CC564E908DD12A700C3030F /* StringValueTransformer.m in Sources */,
+				8CE5F63008DDD02D007DD7F7 /* Tagger.mm in Sources */,
+				8C08573908DE90DD004B42F0 /* CDDB.m in Sources */,
+				8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */,
+				8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */,
+				8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */,
+				8C73004E08ECAA5B0008D7E0 /* CDDBMatchSheet.m in Sources */,
+				8C7300A708ECB1E80008D7E0 /* CDDBMatch.m in Sources */,
+				8C73021008ECD4AD0008D7E0 /* CDDBSite.m in Sources */,
+				8C73033E08ECEA500008D7E0 /* CDDBProtocolValueTransformer.m in Sources */,
+				8CBEC4F008ED6F770064F794 /* CDDBException.m in Sources */,
+				8CBEC55608ED74E90064F794 /* MallocException.m in Sources */,
+				8CBEC57C08ED75DA0064F794 /* IOException.m in Sources */,
+				8CBEC69808ED85670064F794 /* LAMEException.m in Sources */,
+				8CBEC6B208ED861C0064F794 /* StopException.m in Sources */,
+				8CBEC6CF08ED88950064F794 /* EmptySelectionException.m in Sources */,
+				8CBB881D08EE57A6007197C3 /* UtilityFunctions.m in Sources */,
+				8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */,
+				8CBB8BCD08EFB0BF007197C3 /* MissingResourceException.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29B97319FDCFA39411CA2CEA /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8C1919DF08C50B7A00CB7453 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Max_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Max;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		8C1919E008C50B7A00CB7453 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Max_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)",
+					/opt/local/lib,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = Max;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		8C1919E108C50B7A00CB7453 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Max_Prefix.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)",
+					/opt/local/lib,
+				);
+				PRODUCT_NAME = Max;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		8C1919E308C50B7A00CB7453 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					/opt/local/include/taglib,
+				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_STYLE = STATIC;
+			};
+			name = Development;
+		};
+		8C1919E408C50B7A00CB7453 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					/opt/local/include/taglib,
+				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_STYLE = STATIC;
+			};
+			name = Deployment;
+		};
+		8C1919E508C50B7A00CB7453 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				HEADER_SEARCH_PATHS = (
+					/opt/local/include,
+					/opt/local/include/taglib,
+				);
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_STYLE = STATIC;
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8C1919DE08C50B7A00CB7453 /* Build configuration list for PBXNativeTarget "Max" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C1919DF08C50B7A00CB7453 /* Development */,
+				8C1919E008C50B7A00CB7453 /* Deployment */,
+				8C1919E108C50B7A00CB7453 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		8C1919E208C50B7A00CB7453 /* Build configuration list for PBXProject "Max" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C1919E308C50B7A00CB7453 /* Development */,
+				8C1919E408C50B7A00CB7453 /* Deployment */,
+				8C1919E508C50B7A00CB7453 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
