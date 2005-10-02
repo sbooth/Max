@@ -17,6 +17,8 @@
 	<key>CFBundleSignature</key>
 	<string>_Max</string>
 	<key>CFBundleVersion</key>
+	<string>0.1.$Revision$</string>
+	<key>CFBundleShortVersionString</key>
 	<string>0.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
