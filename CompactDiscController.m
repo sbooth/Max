@@ -386,6 +386,11 @@
 	}
 }
 
+- (IBAction) skip:(id)sender
+{
+	_stop = [NSNumber numberWithBool:TRUE];
+}
+
 - (IBAction)stop:(id)sender
 {
 	[_stopButton setEnabled:FALSE];

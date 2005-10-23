@@ -8,6 +8,7 @@
                 selectAll = id; 
                 selectNone = id; 
                 showTrackInfo = id; 
+                skip = id; 
                 stop = id; 
             }; 
             CLASS = CompactDiscController; 
@@ -16,6 +17,7 @@
                 "_encodeButton" = NSButton; 
                 "_ripProgressIndicator" = NSProgressIndicator; 
                 "_ripTrack" = NSTextField; 
+                "_skipButton" = NSButton; 
                 "_statusDrawer" = NSDrawer; 
                 "_stopButton" = NSButton; 
                 "_trackDrawer" = NSDrawer; 

@@ -65,6 +65,7 @@ static PreferencesController *sharedPreferences = nil;
 		}
 	    
 		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"org.sbooth.Max.customNamingUseFallback", @"org.sbooth.Max.customTrackColor", 
+			@"org.sbooth.Max.createAlbumPlaylist",
 			@"org.sbooth.Max.freeDBPort", @"org.sbooth.Max.freeDBProtocol", @"org.sbooth.Max.freeDBServer", 
 			@"org.sbooth.Max.lameBitrate", @"org.sbooth.Max.lameEncodingEngineQuality", @"org.sbooth.Max.lameMonoEncoding", 
 			@"org.sbooth.Max.lameQuality",@"org.sbooth.Max.lameTarget", @"org.sbooth.Max.lameUseConstantBitrate", 
@@ -104,7 +105,7 @@ static PreferencesController *sharedPreferences = nil;
 - (id)init
 {
 	if(self = [super init]) {
-		
+
 		@try {
 			if(NO == [NSBundle loadNibNamed:@"Preferences" owner:self])  {
 				@throw [MissingResourceException exceptionWithReason:@"Unable to load Preferences.nib" userInfo:nil];
@@ -113,9 +114,9 @@ static PreferencesController *sharedPreferences = nil;
 			// Update the example track text field
 			[self controlTextDidChange:nil];
 
-			// Get mirror list
-			CDDB *cddb = [[[CDDB alloc] init] autorelease];
-			[self setValue:[cddb fetchSites] forKey:@"cddbMirrors"];
+			// Get mirror list - too slow to do this here
+			//CDDB *cddb = [[[CDDB alloc] init] autorelease];
+			//[self setValue:[cddb fetchSites] forKey:@"cddbMirrors"];
 		}
 		
 		@catch(NSException *exception) {
@@ -157,6 +158,22 @@ static PreferencesController *sharedPreferences = nil;
 		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"org.sbooth.Max.freeDBServer"];
 		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"org.sbooth.Max.freeDBPort"];
 		[[defaultsController values] setValue:[mirror valueForKey:@"protocol"] forKey:@"org.sbooth.Max.freeDBProtocol"];
+	}
+}
+
+- (IBAction)refreshFreeDBMirrorList:(id)sender
+{
+	@try {
+		// Get mirror list
+		CDDB *cddb = [[[CDDB alloc] init] autorelease];
+		[self setValue:[cddb fetchSites] forKey:@"cddbMirrors"];
+	}
+	
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+	
+	@finally {
 	}
 }
 

@@ -10,6 +10,7 @@
         {
             ACTIONS = {
                 customNamingButtonAction = id; 
+                refreshFreeDBMirrorList = id; 
                 restoreDefaults = id; 
                 selectOutputDirectory = id; 
                 setFreeDBMirror = id; 

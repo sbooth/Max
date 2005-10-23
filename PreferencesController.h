@@ -41,6 +41,7 @@
 - (IBAction)customNamingButtonAction:(id)sender;
 
 - (IBAction)setFreeDBMirror:(id)sender;
+- (IBAction)refreshFreeDBMirrorList:(id)sender;
 
 - (IBAction)restoreDefaults:(id)sender;
 

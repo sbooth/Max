@@ -46,6 +46,7 @@ NSString *gDataDir;
 
 - (IBAction) showTrackInfo:(id)sender;
 - (IBAction) encode:(id)sender;
+- (IBAction) skip:(id)sender;
 - (IBAction) stop:(id)sender;
 - (IBAction) getCDInformation:(id)sender;
 
