@@ -19,14 +19,14 @@
 		8C7C88BC08EC37D800F6FCB1 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */; };
 		8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
 		8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */; };
+		8CA382EF0924598D00BDFD02 /* libcddb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EC0924598D00BDFD02 /* libcddb.a */; };
+		8CA382F00924598D00BDFD02 /* libtag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382ED0924598D00BDFD02 /* libtag.a */; };
+		8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EE0924598D00BDFD02 /* libmp3lame.a */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
 		8CB6E20108DACB8100345B8F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING */; };
 		8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */; };
 		8CBB881D08EE57A6007197C3 /* UtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */; };
 		8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */; };
-		8CBB89BC08EF28D6007197C3 /* libcddb.2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB89BB08EF28D6007197C3 /* libcddb.2.0.0.dylib */; };
-		8CBB89C008EF2908007197C3 /* libmp3lame.0.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB89BF08EF2908007197C3 /* libmp3lame.0.0.0.dylib */; };
-		8CBB89C208EF2925007197C3 /* libtag.1.4.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB89C108EF2925007197C3 /* libtag.1.4.0.dylib */; };
 		8CBB8BA408EFAE53007197C3 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */; };
 		8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */; };
 		8CBB8BA808EFAE60007197C3 /* CDDBDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA708EFAE60007197C3 /* CDDBDefaults.plist */; };
@@ -109,6 +109,9 @@
 		8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
 		8C7C897808EC435700F6FCB1 /* MediaController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MediaController.m; sourceTree = "<group>"; };
 		8C7C897908EC435700F6FCB1 /* MediaController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MediaController.h; sourceTree = "<group>"; };
+		8CA382EC0924598D00BDFD02 /* libcddb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcddb.a; sourceTree = "<group>"; };
+		8CA382ED0924598D00BDFD02 /* libtag.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtag.a; sourceTree = "<group>"; };
+		8CA382EE0924598D00BDFD02 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
 		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
 		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
@@ -118,9 +121,6 @@
 		8CBB882208EE57D4007197C3 /* UtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityFunctions.h; sourceTree = "<group>"; };
 		8CBB892B08EEEFE0007197C3 /* CustomNamingException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNamingException.h; sourceTree = "<group>"; };
 		8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNamingException.m; sourceTree = "<group>"; };
-		8CBB89BB08EF28D6007197C3 /* libcddb.2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcddb.2.0.0.dylib; path = /opt/local/lib/libcddb.2.0.0.dylib; sourceTree = "<absolute>"; };
-		8CBB89BF08EF2908007197C3 /* libmp3lame.0.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmp3lame.0.0.0.dylib; path = /opt/local/lib/libmp3lame.0.0.0.dylib; sourceTree = "<absolute>"; };
-		8CBB89C108EF2925007197C3 /* libtag.1.4.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtag.1.4.0.dylib; path = /opt/local/lib/libtag.1.4.0.dylib; sourceTree = "<absolute>"; };
 		8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
 		8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = LAMEDefaults.plist; sourceTree = "<group>"; };
 		8CBB8BA708EFAE60007197C3 /* CDDBDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CDDBDefaults.plist; sourceTree = "<group>"; };
@@ -161,9 +161,9 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */,
-				8CBB89BC08EF28D6007197C3 /* libcddb.2.0.0.dylib in Frameworks */,
-				8CBB89C008EF2908007197C3 /* libmp3lame.0.0.0.dylib in Frameworks */,
-				8CBB89C208EF2925007197C3 /* libtag.1.4.0.dylib in Frameworks */,
+				8CA382EF0924598D00BDFD02 /* libcddb.a in Frameworks */,
+				8CA382F00924598D00BDFD02 /* libtag.a in Frameworks */,
+				8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +223,7 @@
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				8CA382DB0924589D00BDFD02 /* Libraries */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = "cocoa test";
@@ -261,9 +262,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8CBB89C108EF2925007197C3 /* libtag.1.4.0.dylib */,
-				8CBB89BF08EF2908007197C3 /* libmp3lame.0.0.0.dylib */,
-				8CBB89BB08EF28D6007197C3 /* libcddb.2.0.0.dylib */,
 				8CE9B39708CF7937007FCDB3 /* IOKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
@@ -310,6 +308,16 @@
 				8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		8CA382DB0924589D00BDFD02 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				8CA382EC0924598D00BDFD02 /* libcddb.a */,
+				8CA382ED0924598D00BDFD02 /* libtag.a */,
+				8CA382EE0924598D00BDFD02 /* libmp3lame.a */,
+			);
+			name = Libraries;
 			sourceTree = "<group>";
 		};
 		8CBEC4EB08ED6F640064F794 /* Exceptions */ = {
@@ -488,12 +496,14 @@
 				GCC_PREFIX_HEADER = Max_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../lame-install/include",
+					"../libcddb-install/include",
+					"../taglib-install/include/taglib",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)",
-					/opt/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = Max;
 				WRAPPER_EXTENSION = app;
@@ -511,12 +521,14 @@
 				GCC_PREFIX_HEADER = Max_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../lame-install/include",
+					"../libcddb-install/include",
+					"../taglib-install/include/taglib",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)",
-					/opt/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = Max;
 				WRAPPER_EXTENSION = app;
@@ -532,12 +544,14 @@
 				GCC_PREFIX_HEADER = Max_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"../lame-install/include",
+					"../libcddb-install/include",
+					"../taglib-install/include/taglib",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)",
-					/opt/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				PRODUCT_NAME = Max;
 				WRAPPER_EXTENSION = app;
 			};
@@ -547,12 +561,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				HEADER_SEARCH_PATHS = (
-					/opt/local/include,
-					/opt/local/include/taglib,
-				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				LIBRARY_STYLE = STATIC;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-liconv",
+				);
 			};
 			name = Development;
 		};
@@ -560,12 +574,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				HEADER_SEARCH_PATHS = (
-					/opt/local/include,
-					/opt/local/include/taglib,
-				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				LIBRARY_STYLE = STATIC;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-liconv",
+				);
 			};
 			name = Deployment;
 		};
@@ -573,12 +587,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				HEADER_SEARCH_PATHS = (
-					/opt/local/include,
-					/opt/local/include/taglib,
-				);
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				LIBRARY_STYLE = STATIC;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-liconv",
+				);
 			};
 			name = Default;
 		};

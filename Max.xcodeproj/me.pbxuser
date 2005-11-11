@@ -189,11 +189,10 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 151741682;
-			PBXWorkspaceStateSaveDate = 151741682;
+			PBXPerProjectTemplateStateSaveDate = 153378304;
+			PBXWorkspaceStateSaveDate = 153378304;
 		};
 		perUserProjectItems = {
-			8C0A6B32090B64DF00072EC3 = 8C0A6B32090B64DF00072EC3 /* PBXTextBookmark */;
 			8C124A1B08C5B455008C8FBD = 8C124A1B08C5B455008C8FBD /* PBXTextBookmark */;
 			8C124A1C08C5B455008C8FBD = 8C124A1C08C5B455008C8FBD /* PBXTextBookmark */;
 			8C124A2508C5B455008C8FBD = 8C124A2508C5B455008C8FBD /* PBXTextBookmark */;
@@ -202,7 +201,6 @@
 			8C9D204D08C5379E00D95535 = 8C9D204D08C5379E00D95535 /* PBXTextBookmark */;
 			8CBEC73508ED8D980064F794 = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
 			8CBEC73708ED8D980064F794 = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
-			8CD4E94F090AE8CC0021A859 = 8CD4E94F090AE8CC0021A859 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
 			8CFDCBD008ECA53C00EBB077 = 8CFDCBD008ECA53C00EBB077 /* PBXTextBookmark */;
 		};
@@ -282,16 +280,6 @@
 			sepNavWindowFrame = "{{37, 43}, {1032, 775}}";
 		};
 	};
-	8C0A6B32090B64DF00072EC3 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */;
-		name = "Encoder.m: finishEncode";
-		rLen = 0;
-		rLoc = 11195;
-		rType = 0;
-		vrLen = 0;
-		vrLoc = 0;
-	};
 	8C124A1B08C5B455008C8FBD /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 8C752A8308C507CE001F588B /* Genres.m */;
@@ -358,9 +346,9 @@
 	};
 	8C7300A508ECB1E80008D7E0 /* CDDBMatch.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {762, 659}}";
-			sepNavSelRange = "{887, 21}";
-			sepNavVisRect = "{{0, 0}, {762, 659}}";
+			sepNavIntBoundsRect = "{{0, 0}, {776, 532}}";
+			sepNavSelRange = "{1103, 5}";
+			sepNavVisRect = "{{0, 237}, {776, 295}}";
 			sepNavWindowFrame = "{{38, 18}, {807, 788}}";
 		};
 	};
@@ -781,16 +769,6 @@
 			sepNavVisRect = "{{0, 317}, {711, 663}}";
 			sepNavWindowFrame = "{{15, 35}, {756, 792}}";
 		};
-	};
-	8CD4E94F090AE8CC0021A859 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */;
-		name = "Encoder.m: finishEncode";
-		rLen = 0;
-		rLoc = 11195;
-		rType = 0;
-		vrLen = 0;
-		vrLoc = 0;
 	};
 	8CE5F62E08DDD02D007DD7F7 /* Tagger.h */ = {
 		uiCtxt = {
