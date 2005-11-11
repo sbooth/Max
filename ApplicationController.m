@@ -25,6 +25,8 @@
 #import "StringValueTransformer.h"
 #import "CDDBProtocolValueTransformer.h";
 
+#include "lame/lame.h"
+
 @implementation ApplicationController
 
 + (void)initialize
@@ -55,6 +57,19 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
 	[[MediaController sharedMedia] scanForMedia];
+}
+
+- (IBAction)aboutLAME:(id)sender
+{
+	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+	[alert addButtonWithTitle: @"OK"];
+	[alert setMessageText: @"About LAME"];
+	[alert setInformativeText: [NSString stringWithFormat:@"LAME %s", get_lame_version()]];
+	[alert setAlertStyle: NSWarningAlertStyle];
+	
+	if([alert runModal] == NSAlertFirstButtonReturn) {
+		// do nothing
+	} 
 }
 
 @end
