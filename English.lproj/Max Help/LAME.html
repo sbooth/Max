@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>LAME Encoder Information</title>
+  <link rel="stylesheet" href="helpstyle.css" type="text/css">
+</head>
+<body>
+<span class="header">LAME Encoder Information</span>
+<p>Max uses the <a href="http://mp3dev.org">LAME</a> encoding engine to generate MP3 files.  LAME is an high-quality, open-source encoding engine.</p>
+<p>
+The following table was taken from an <a href="http://www.hydrogenaudio.org/forums/index.php?showtopic=28124">HydrogenAudio</a> forum post regarding LAME quality at various settings.<br>
+<tt><pre>
+# Recommended encoder settings:
+
+The settings, presets are listed beginning with highest 
+possible quality (-b 320) stepping down to lower qualities:
+
+CODE
+switch           equals preset        target kbit/s   bitrate range kbit/s
+
+-b 320           = --preset insane          320        320 CBR
+-V 0 --vbr-new   = --preset fast extreme    245        220-260
+-V 0             = --preset extreme         245        220-260
+-V 1 --vbr-new                              225        200-250
+-V 1                                        225        200-250
+-V 2 --vbr-new   = --preset fast standard   190        170-210
+-V 2             = --preset standard        190        170-210
+-V 3 --vbr-new                              175        155-195
+-V 3                                        175        155-195
+-V 4 --vbr-new   = --preset fast medium     165        145-185
+-V 4             = --preset medium          165        145-185
+-V 5 --vbr-new                              130        110-150
+-V 5                                        130        110-150
+-V 6 --vbr-new                              115         95-135
+-V 6                                        115         95-135
+-V 7 --vbr-new                              100         80-120
+-V 7                                        100         80-120
+-V 8 --vbr-new                               85         65-105
+-V 8                                         85         65-105
+-V 9 --vbr-new                               65         45-85
+-V 9                                         65         45-85
+--abr 56 -mm     = --preset voice            56         56 ABR
+</pre></tt></p>
+
+</body>
+</html>
