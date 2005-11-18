@@ -86,7 +86,6 @@
 {
 	@throw [NSException exceptionWithName:@"InternalInconsistencyException" reason:@"CompactDiscController init called" userInfo:nil];
 	return nil;
-//	return [self initWithDisc: [[[CompactDisc alloc] init] autorelease]];
 }
 
 - (CompactDiscController *)initWithDisc: (CompactDisc *) disc
@@ -97,9 +96,7 @@
 			_disc = [disc retain];
 
 			_stop = [NSNumber numberWithBool:FALSE];
-			
-			[_disc addObserver:self forKeyPath:@"title" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-			
+						
 			// Load data from file if it exists
 			NSFileManager	*manager	= [NSFileManager defaultManager];
 			NSString		*discPath	= [NSString stringWithFormat:@"%@/0x%.8x.xml", gDataDir, [_disc cddb_id]];
@@ -121,7 +118,7 @@
 			}
 			
 			// Query CDDB if disc not previously seen
-			if(YES == fileExists) {
+			if(YES == fileExists && nil != [disc valueForKey:@"title"]) {
 				[[self window] setTitle:[disc valueForKey:@"title"]];
 			}
 			else {
@@ -129,6 +126,8 @@
 			}
 			[self setWindowFrameAutosaveName:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [_disc cddb_id]]];	
 			[self showWindow:self];
+
+			[_disc addObserver:self forKeyPath:@"title" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 			
 			// Query CDDB if disc not previously seen
 			if(NO == fileExists) {
@@ -159,7 +158,12 @@
 - (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
 {
     if([keyPath isEqual:@"title"]) {
-		[[self window] setTitle:[change objectForKey:NSKeyValueChangeNewKey]];
+		if(YES == [[change objectForKey:NSKeyValueChangeNewKey] isEqual:[NSNull null]]) {
+			[[self window] setTitle:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [_disc cddb_id]]];
+		}
+		else {
+			[[self window] setTitle:[change objectForKey:NSKeyValueChangeNewKey]];
+		}
     }
 }
 
@@ -350,8 +354,35 @@
 				}
 				[customPath release];
 			}
-			// Use standard iTunes style naming: "{Track|Disc}Artist/Album/DiscNumber TrackNumber TrackTitle.mp3"
-			// TODO: compilations
+			// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
+			else if(YES == [[_disc valueForKey:@"multiArtist"] boolValue]) {
+				NSString			*path;
+				
+				NSString			*discTitle			= [_disc valueForKey:@"title"];
+				NSString			*trackTitle			= [track valueForKey:@"title"];
+				
+				if(nil == discTitle) {
+					discTitle = @"Unknown Album";
+				}
+				if(nil == trackTitle) {
+					trackTitle = @"Unknown Track";
+				}
+				
+				// Create the directory structure
+				path = [NSString stringWithFormat:@"%@/Compilations", outputDirectory]; 
+				validateAndCreateDirectory(path);
+
+				path = [NSString stringWithFormat:@"%@/Compilations/%@", outputDirectory, makeStringSafeForFilename(discTitle)]; 
+				validateAndCreateDirectory(path);
+				
+				if(nil == [_disc valueForKey:@"discNumber"]) {
+					filename = [NSString stringWithFormat:@"%@/%02u %@.mp3", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+				}
+				else {
+					filename = [NSString stringWithFormat:@"%@/%i-%02u %@.mp3", path, [[_disc valueForKey:@"discNumber"] intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+				}
+			}
+			// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
 			else {
 				NSString			*path;
 				
