@@ -8,24 +8,16 @@
                 selectAll = id; 
                 selectNone = id; 
                 showTrackInfo = id; 
-                skip = id; 
-                stop = id; 
             }; 
             CLASS = CompactDiscController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 "_encodeButton" = NSButton; 
-                "_ripProgressIndicator" = NSProgressIndicator; 
-                "_ripTrack" = NSTextField; 
-                "_skipButton" = NSButton; 
-                "_statusDrawer" = NSDrawer; 
-                "_stopButton" = NSButton; 
                 "_trackDrawer" = NSDrawer; 
                 "_trackInfoButton" = NSButton; 
                 "_tracksTable" = NSTableView; 
-                "_window" = NSWindow; 
             }; 
-            SUPERCLASS = NSObject; 
+            SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = Genre; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 

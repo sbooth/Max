@@ -23,7 +23,6 @@
 #import "Track.h"
 #import "CompactDisc.h"
 
-
 @interface Ripper : NSObject 
 {
 	CompactDisc				*_disc;
@@ -42,12 +41,18 @@
 	ssize_t					_bufsize;
 	
 	int						_fd;
+	
+	NSNumber				*_started;
+	NSNumber				*_completed;
+	NSNumber				*_stopped;
+	NSNumber				*_percentComplete;
+	NSNumber				*_shouldStop;
+	NSDate					*_startTime;
+	NSNumber				*_timeRemaining;
 }
 
-- (id) initWithDisc:(CompactDisc *)disc forTrack:(Track *)track;
+- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track;
 
-- (NSData *) get;
-- (ssize_t) bytesRemaining;
-- (double) percentRead;
+- (void) ripToFile:(int) file;
 
 @end

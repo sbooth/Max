@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: CompactDiscController.m 112 2005-10-23 06:31:51Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -21,36 +21,23 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CompactDisc.h"
-#import "CDDBMatch.h"
+#import "Track.h"
 
-NSString *gDataDir;
+@class RipperTask;
+@class EncoderTask;
 
-@interface CompactDiscController : NSWindowController
+@interface Task : NSObject 
 {
-	IBOutlet NSTableView			*_tracksTable;
-	IBOutlet NSDrawer				*_trackDrawer;
-	IBOutlet NSButton				*_trackInfoButton;
-	IBOutlet NSButton				*_encodeButton;
-		
-	CompactDisc						*_disc;
-	NSNumber						*_stop;
+	CompactDisc		*_disc;
+	Track			*_track;
+	NSString		*_filename;
+
+	RipperTask		*_ripperTask;
+	EncoderTask		*_encoderTask;
+	
+	NSString		*_trackName;
 }
 
-- (IBAction) selectAll:(id)sender;
-- (IBAction) selectNone:(id)sender;
-- (BOOL) emptySelection;
-
-- (IBAction) showTrackInfo:(id)sender;
-- (IBAction) encode:(id)sender;
-
-// ========== FreeDB-related methods
-- (IBAction) getCDInformation:(id)sender;
-- (void) updateDiscFromCDDB:(CDDBMatch *)info;
-
-- (CompactDiscController *) initWithDisc: (CompactDisc *) disc;
-
-- (void) displayExceptionSheet:(NSException *)exception;
-
-- (void) discUnmounted;
+- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track outputFilename:(NSString*) filename;
 
 @end

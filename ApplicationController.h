@@ -20,7 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ApplicationController : NSObject
+#import <Growl/GrowlApplicationBridge.h>
+
+@interface ApplicationController : NSObject < GrowlApplicationBridgeDelegate >
 {
 }
 
@@ -28,5 +30,8 @@
 - (IBAction)showPreferences:(id)sender;
 
 - (IBAction)aboutLAME:(id)sender;
+- (IBAction)toggleTasksPanel:(id)sender;
+
+-(NSDictionary *)registrationDictionaryForGrowl;
 
 @end

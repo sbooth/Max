@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Genres.m 109 2005-10-02 18:36:05Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,37 +20,30 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDisc.h"
-#import "CDDBMatch.h"
+#import "Task.h"
 
-NSString *gDataDir;
-
-@interface CompactDiscController : NSWindowController
+@interface TaskMaster : NSWindowController
 {
-	IBOutlet NSTableView			*_tracksTable;
-	IBOutlet NSDrawer				*_trackDrawer;
-	IBOutlet NSButton				*_trackInfoButton;
-	IBOutlet NSButton				*_encodeButton;
-		
-	CompactDisc						*_disc;
-	NSNumber						*_stop;
+	NSMutableArray			*_taskList;
+	
+	NSMutableArray			*_rippingTasks;
+	NSMutableArray			*_encodingTasks;
 }
 
-- (IBAction) selectAll:(id)sender;
-- (IBAction) selectNone:(id)sender;
-- (BOOL) emptySelection;
++ (TaskMaster*) sharedController;
 
-- (IBAction) showTrackInfo:(id)sender;
-- (IBAction) encode:(id)sender;
+- (void) runTask:(Task*) task;
+- (void) removeTask:(Task*) task;
 
-// ========== FreeDB-related methods
-- (IBAction) getCDInformation:(id)sender;
-- (void) updateDiscFromCDDB:(CDDBMatch *)info;
+- (void) displayExceptionSheet:(NSException*) exception;
+- (void) alertDidEnd:(NSAlert*) alert returnCode:(int) returnCode contextInfo:(void*) contextInfo;
 
-- (CompactDiscController *) initWithDisc: (CompactDisc *) disc;
+- (void) ripDidStart:(id) object;
+- (void) ripDidStop:(id) object;
+- (void) ripDidComplete:(id) object;
 
-- (void) displayExceptionSheet:(NSException *)exception;
-
-- (void) discUnmounted;
+- (void) encodeDidStart:(id) object;
+- (void) encodeDidStop:(id) object;
+- (void) encodeDidComplete:(id) object;
 
 @end

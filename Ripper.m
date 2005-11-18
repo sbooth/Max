@@ -20,6 +20,7 @@
 
 #import "Ripper.h"
 #import "MallocException.h"
+#import "StopException.h"
 #import "IOException.h"
 
 #include <stdlib.h>			// calloc, free
@@ -28,9 +29,14 @@
 
 @implementation Ripper
 
-- (id) initWithDisc:(CompactDisc *)disc forTrack:(Track *)track;
+- (id) init
 {
-	_buf	= NULL;
+	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Ripper::init called" userInfo:nil];
+}
+
+- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track
+{
+	_buf = NULL;
 	
 	if(self = [super init]) {
 		
@@ -38,6 +44,11 @@
 			_disc	= [disc retain];
 			_track	= [track retain];
 			
+			[self setValue:[NSNumber numberWithBool:NO] forKey:@"started"];
+			[self setValue:[NSNumber numberWithBool:NO] forKey:@"completed"];
+			[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
+			[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+
 			// Open the disc for reading
 			_fd = open([[_disc valueForKey:@"bsdPath"] UTF8String], O_RDONLY);
 			if(-1 == _fd) {
@@ -46,7 +57,7 @@
 			
 			// Allocate the buffer
 			_blockSize		= [[_disc valueForKey: @"preferredBlockSize"] unsignedIntValue];
-			_bufsize		= 512 * _blockSize;
+			_bufsize		= 1024 * _blockSize;
 			_buf			= (unsigned char*) calloc(_bufsize, sizeof(unsigned char));
 			if(NULL == _buf) {
 				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
@@ -80,7 +91,7 @@
 - (void) dealloc
 {
 	if(-1 == close(_fd)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
 	free(_buf);
@@ -91,21 +102,44 @@
 	[super dealloc];
 }
 
-- (NSData *) get
+- (void) ripToFile:(int) file
 {
 	ssize_t bytesRead;
+
+	// Tell our owner we are starting
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+
+	_startTime = [NSDate date];
 	
-	bytesRead = read(_fd, _buf, (_bytesToRead > _bufsize ? _bufsize : _bytesToRead));
-	if(-1 == bytesRead) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	while(0 < _bytesToRead) {
+
+		// Check if we should stop, and if so throw an exception
+		if(YES == [_shouldStop boolValue]) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+		}
+		
+		// Read a chunk
+		bytesRead = read(_fd, _buf, (_bytesToRead > _bufsize ? _bufsize : _bytesToRead));
+		if(-1 == bytesRead) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}
+		
+		// Update status
+		_bytesToRead -= bytesRead;
+		[self setValue:[NSNumber numberWithDouble:((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) * 100.0] forKey:@"percentComplete"];
+		NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
+		[self setValue:[NSNumber numberWithDouble:(interval / ((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) - interval)] forKey:@"timeRemaining"];
+		
+		// Write data to file
+		if(-1 == write(file, _buf, bytesRead)) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}
 	}
-
-	_bytesToRead -= bytesRead;
 	
-	return [NSData dataWithBytesNoCopy:_buf length:bytesRead freeWhenDone:NO];
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
+	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
 }
-
-- (ssize_t) bytesRemaining										{ return _bytesToRead; }
-- (double) percentRead											{ return ((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) * 100.0; }
 
 @end

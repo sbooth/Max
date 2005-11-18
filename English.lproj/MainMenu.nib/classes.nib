@@ -1,7 +1,12 @@
 {
     IBClasses = (
         {
-            ACTIONS = {aboutLAME = id; scanForMedia = id; showPreferences = id; }; 
+            ACTIONS = {
+                aboutLAME = id; 
+                scanForMedia = id; 
+                showPreferences = id; 
+                toggleTasksPanel = id; 
+            }; 
             CLASS = ApplicationController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 

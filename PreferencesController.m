@@ -54,7 +54,7 @@ static PreferencesController *sharedPreferences = nil;
 
 	@try {
 		defaultsDictionary	= [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
-		defaultFiles		= [NSArray arrayWithObjects:@"CDDBDefaults", @"CompactDiscControllerDefaults", @"LAMEDefaults", @"TrackDefaults", nil];
+		defaultFiles		= [NSArray arrayWithObjects:@"CDDBDefaults", @"CompactDiscControllerDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -70,7 +70,7 @@ static PreferencesController *sharedPreferences = nil;
 			@"org.sbooth.Max.lameBitrate", @"org.sbooth.Max.lameEncodingEngineQuality", @"org.sbooth.Max.lameMonoEncoding", 
 			@"org.sbooth.Max.lameQuality",@"org.sbooth.Max.lameTarget", @"org.sbooth.Max.lameUseConstantBitrate", 
 			@"org.sbooth.Max.lameVBRQuality", @"org.sbooth.Max.lameVariableBitrateMode", 
-			@"org.sbooth.Max.outputDirectory", @"org.sbooth.Max.useCustomNaming", nil];
+			@"org.sbooth.Max.outputDirectory", @"org.sbooth.Max.useCustomNaming", @"org.sbooth.Max.maximumEncoderThreads", nil];
 		initialValuesDictionary = [defaultsDictionary dictionaryWithValuesForKeys:resettableUserDefaultsKeys];
 		
 		[[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:initialValuesDictionary];

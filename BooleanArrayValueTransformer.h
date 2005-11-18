@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: StringValueTransformer.h 68 2005-10-02 16:10:43Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,37 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDisc.h"
-#import "CDDBMatch.h"
 
-NSString *gDataDir;
-
-@interface CompactDiscController : NSWindowController
+@interface BooleanArrayValueTransformer : NSValueTransformer
 {
-	IBOutlet NSTableView			*_tracksTable;
-	IBOutlet NSDrawer				*_trackDrawer;
-	IBOutlet NSButton				*_trackInfoButton;
-	IBOutlet NSButton				*_encodeButton;
-		
-	CompactDisc						*_disc;
-	NSNumber						*_stop;
+	NSArray	*_target;
 }
 
-- (IBAction) selectAll:(id)sender;
-- (IBAction) selectNone:(id)sender;
-- (BOOL) emptySelection;
-
-- (IBAction) showTrackInfo:(id)sender;
-- (IBAction) encode:(id)sender;
-
-// ========== FreeDB-related methods
-- (IBAction) getCDInformation:(id)sender;
-- (void) updateDiscFromCDDB:(CDDBMatch *)info;
-
-- (CompactDiscController *) initWithDisc: (CompactDisc *) disc;
-
-- (void) displayExceptionSheet:(NSException *)exception;
-
-- (void) discUnmounted;
-
+- (id) initWithTarget: (NSArray *) target;
 @end

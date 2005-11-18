@@ -28,7 +28,6 @@
 
 #import <Growl/GrowlApplicationBridge.h>
 
-#include <unistd.h>		// unlink
 
 static TaskMaster *sharedController = nil;
 
@@ -111,7 +110,7 @@ static TaskMaster *sharedController = nil;
 		// Add the task to our master list of pending/active tasks
 		[_taskList addObject:task];
 		
-		// Add the ripping portion of the task to our list of Rip tasks
+		// Add the ripping portion of the task to our list of ripping tasks
 		[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[task valueForKey:@"ripperTask"]];
 		
 		// Start the rip if it is the only one
@@ -122,14 +121,15 @@ static TaskMaster *sharedController = nil;
 	
 	// We already know about this task, determine the next step
 	else {
-
 		// If encoding is complete, tag the file
 		if(YES == [[[task valueForKey:@"encoderTask"] valueForKey:@"completed"] boolValue]) {
 			[Tagger tagFile:[task valueForKey:@"filename"] fromTrack:[task valueForKey:@"track"]];
 
 			// Uncheck the selection
 			[[task valueForKey:@"track"] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-			
+
+			// Remove the ripper temporary 
+			[[task valueForKey:@"ripperTask"] removeTemporaryFile];
 			[self removeTask:task];
 		}
 		// Add the encoding portion of the task to our list and run it
@@ -149,18 +149,14 @@ static TaskMaster *sharedController = nil;
 	if(YES == [_encodingTasks containsObject:[task valueForKey:@"encoderTask"]]) {
 		[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:[task valueForKey:@"encoderTask"]];
 	}
-	
-	// Delete temporary file
-	if(-1 == unlink([[[task valueForKey:@"ripperTask"] valueForKey:@"path"] UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-	}
 
 	[_taskList removeObject:task];
 	
+	// Close the tasks window if this is the last task
 	if(0 == [_taskList count]) {
-		NSWindow *jobsWindow = [[TaskMaster sharedController] window];
-		if([jobsWindow isVisible]) {
-			[jobsWindow performClose:self];
+		NSWindow *tasksWindow = [[TaskMaster sharedController] window];
+		if([tasksWindow isVisible]) {
+			[tasksWindow performClose:self];
 		}
 	}
 }

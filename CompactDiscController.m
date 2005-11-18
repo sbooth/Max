@@ -24,6 +24,7 @@
 #import "CDDB.h"
 #import "CDDBMatchSheet.h"
 #import "Genres.h"
+#import "TaskMaster.h"
 #import "Encoder.h"
 #import "Tagger.h"
 
@@ -35,6 +36,7 @@
 #import "MissingResourceException.h"
 
 #import "UtilityFunctions.h"
+
 
 @implementation CompactDiscController
 
@@ -64,7 +66,7 @@
 				@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
 			}
 		}
-		else if(FALSE == isDir) {
+		else if(NO == isDir) {
 			@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
 		}
 	}
@@ -82,27 +84,28 @@
 
 - (id)init
 {
-	return [self initWithDisc: [[[CompactDisc alloc] init] autorelease]];
+	@throw [NSException exceptionWithName:@"InternalInconsistencyException" reason:@"CompactDiscController init called" userInfo:nil];
+	return nil;
+//	return [self initWithDisc: [[[CompactDisc alloc] init] autorelease]];
 }
 
 - (CompactDiscController *)initWithDisc: (CompactDisc *) disc
 {
 	@try {
-		self = [super init];
-		if(self) {
+		if(self = [super initWithWindowNibName:@"CompactDisc"]) {
 			
 			_disc = [disc retain];
 
 			_stop = [NSNumber numberWithBool:FALSE];
 			
-			if(NO == [NSBundle loadNibNamed:@"CompactDisc" owner:self])  {
-				@throw [MissingResourceException exceptionWithReason:@"Unable to load CompactDisc.nib" userInfo:nil];
-			}
+			[_disc addObserver:self forKeyPath:@"title" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 			
 			// Load data from file if it exists
 			NSFileManager	*manager	= [NSFileManager defaultManager];
 			NSString		*discPath	= [NSString stringWithFormat:@"%@/0x%.8x.xml", gDataDir, [_disc cddb_id]];
-			if([manager fileExistsAtPath:discPath isDirectory:nil]) {
+			BOOL			fileExists	= [manager fileExistsAtPath:discPath isDirectory:nil];
+
+			if(YES == fileExists) {
 				NSData					*xmlData	= [manager contentsAtPath:discPath];
 				NSDictionary			*discInfo;
 				NSPropertyListFormat	format;
@@ -114,14 +117,21 @@
 				}
 				else {
 					[error release];
-				}					
-				[_window setTitle:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [_disc cddb_id]]];
-				[_window makeKeyAndOrderFront:nil];
+				}
 			}
-			// Otherwise query cddb
+			
+			// Query CDDB if disc not previously seen
+			if(YES == fileExists) {
+				[[self window] setTitle:[disc valueForKey:@"title"]];
+			}
 			else {
-				[_window setTitle:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [_disc cddb_id]]];
-				[_window makeKeyAndOrderFront:nil];
+				[[self window] setTitle:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [_disc cddb_id]]];
+			}
+			[self setWindowFrameAutosaveName:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [_disc cddb_id]]];	
+			[self showWindow:self];
+			
+			// Query CDDB if disc not previously seen
+			if(NO == fileExists) {
 				[self getCDInformation:nil];
 			}
 		}
@@ -129,6 +139,7 @@
 	
 	@catch(NSException *exception) {
 		[self release];
+		displayExceptionAlert(exception);
 		@throw;
 	}
 	
@@ -139,15 +150,22 @@
 	return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
 	[_disc release];
 	[super dealloc];
 }
 
+- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+{
+    if([keyPath isEqual:@"title"]) {
+		[[self window] setTitle:[change objectForKey:NSKeyValueChangeNewKey]];
+    }
+}
+
 - (void) discUnmounted
 {
-	[_window performClose:nil];
+	[[self window] performClose:self];
 }
 
 - (IBAction)showTrackInfo:(id)sender
@@ -181,19 +199,24 @@
 	NSArray			*selectedTracks;
 	NSEnumerator	*enumerator;
 	NSString		*filename;
+	NSString		*outputDirectory;
 	
-	@try {		
+	@try {
 		// Do nothing for empty selection
 		if([self emptySelection]) {
 			@throw [EmptySelectionException exceptionWithReason:@"Please select one or more tracks to encode." userInfo:nil];
 		}
 
+		// Show the jobs window if it is hidden
+		[[TaskMaster sharedController] showWindow:self];
+		
 		// Iterate through the selected tracks and rip/encode them
 		selectedTracks	= [_disc selectedTracks];
 		enumerator		= [selectedTracks objectEnumerator];
 
 		// Create output directory (should exist but could have been deleted/moved)
-		validateAndCreateDirectory([[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.outputDirectory"]);
+		outputDirectory = [[[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.outputDirectory"] stringByExpandingTildeInPath];
+		validateAndCreateDirectory(outputDirectory);
 		
 		while(track = [enumerator nextObject]) {
 
@@ -308,7 +331,7 @@
 				NSArray *pathComponents = [customPath pathComponents];
 
 				// pathComponents will always contain at least 1 element since customNamingScheme was not nil
-				path = [NSString stringWithFormat:@"%@/%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.outputDirectory"], makeStringSafeForFilename([pathComponents objectAtIndex:0])]; 
+				path = [NSString stringWithFormat:@"%@/%@", outputDirectory, makeStringSafeForFilename([pathComponents objectAtIndex:0])]; 
 
 				if(1 < [pathComponents count]) {
 					int				i;
@@ -349,14 +372,14 @@
 					discTitle = @"Unknown Album";
 				}
 				if(nil == trackTitle) {
-					discTitle = @"Unknown Track";
+					trackTitle = @"Unknown Track";
 				}
 				
 				// Create the directory structure
-				path = [NSString stringWithFormat:@"%@/%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.outputDirectory"], makeStringSafeForFilename(artist)]; 
+				path = [NSString stringWithFormat:@"%@/%@", outputDirectory, makeStringSafeForFilename(artist)]; 
 				validateAndCreateDirectory(path);
 				
-				path = [NSString stringWithFormat:@"%@/%@/%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.outputDirectory"], makeStringSafeForFilename(artist), makeStringSafeForFilename(discTitle)]; 
+				path = [NSString stringWithFormat:@"%@/%@/%@", outputDirectory, makeStringSafeForFilename(artist), makeStringSafeForFilename(discTitle)]; 
 				validateAndCreateDirectory(path);
 				
 				if(nil == [_disc valueForKey:@"discNumber"]) {
@@ -366,14 +389,17 @@
 					filename = [NSString stringWithFormat:@"%@/%i-%02u %@.mp3", path, [[_disc valueForKey:@"discNumber"] intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 				}
 			}
-						
-			// Create the encoder
-			// TODO(?): add other types of encoders (PCM/WAV/AIFF would be trivial)
-			Ripper		*source		= [[[Ripper alloc] initWithDisc:_disc forTrack:track] autorelease];
-			Encoder		*encoder	= [[[Encoder alloc] initWithController:self usingSource:source forDisc:_disc forTrack:track toFile:filename] autorelease];
-
-			// Spawn each encoder in a separate thread
-			[NSThread detachNewThreadSelector:@selector(doIt:) toTarget:encoder withObject:self];
+			
+			// Check if the output file exists
+			if(YES == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+				// Don't actually throw the exception here
+				[self displayExceptionSheet:[IOException exceptionWithReason:[NSString stringWithFormat:@"The file %@ already exists.", filename] userInfo:nil]];
+			}
+			else {
+				// Create and run the task
+				Task *task = [[[Task alloc] initWithDisc:_disc forTrack:track outputFilename:filename] autorelease];
+				[[TaskMaster sharedController] runTask:task];
+			}
 		}
 	}
 
@@ -386,17 +412,6 @@
 	}
 }
 
-- (IBAction) skip:(id)sender
-{
-	_stop = [NSNumber numberWithBool:TRUE];
-}
-
-- (IBAction)stop:(id)sender
-{
-	[_stopButton setEnabled:FALSE];
-	_stop = [NSNumber numberWithBool:TRUE];
-}
-
 - (IBAction)getCDInformation:(id)sender
 {
 	CDDB				*cddb				= nil;
@@ -404,7 +419,6 @@
 	CDDBMatchSheet		*sheet				= nil;
 
 	@try {
-		
 		cddb = [[[CDDB alloc] init] autorelease];
 		[cddb setValue:_disc forKey:@"disc"];
 		
@@ -453,59 +467,19 @@
 	
 }
 
-- (BOOL)emptySelection
+- (BOOL) emptySelection
 {
 	return (0 == [[_disc selectedTracks] count]);
 }
 
 - (void) displayExceptionSheet:(NSException *)exception
 {
-	displayExceptionSheet(exception, _window, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
 }
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
 	// Nothing for now
-}
-
-#pragma mark Encoder callbacks
-
-- (void) encodeDidStart:(id) object
-{
-	NSString *trackString;
-	
-	[_encodeButton setEnabled:FALSE];
-	[_stopButton setEnabled:TRUE];
-	[_statusDrawer openOnEdge:NSMinYEdge];	
-
-	trackString = @"Track ";
-	[_ripTrack setStringValue:[trackString stringByAppendingString: (NSString *)object]];
-}
-
-- (void) encodeDidStop:(id) object
-{
-	[_statusDrawer close];
-	[_stopButton setEnabled:TRUE];
-	[_encodeButton setEnabled:TRUE];
-	_stop = [NSNumber numberWithBool:FALSE];
-}
-
-- (void) encodeDidComplete:(id) object
-{
-	Encoder *encoder = (Encoder *)object;
-	
-	// Write ID3 tags
-	[Tagger tagFile:[encoder valueForKey:@"filename"] fromTrack:[encoder valueForKey:@"track"]];
-	
-	[_statusDrawer close];
-	[_stopButton setEnabled:TRUE];
-	[_encodeButton setEnabled:TRUE];
-	[[encoder valueForKey:@"track"] setValue:[NSNumber numberWithBool:FALSE] forKey:@"selected"];
-}
-
-- (void) updateEncodeProgress:(id) object
-{
-	[_ripProgressIndicator setDoubleValue:[(NSNumber *)object doubleValue]];
 }
 
 #pragma mark NSDrawer delegate methods

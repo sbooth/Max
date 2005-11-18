@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Ripper.h 64 2005-10-02 16:10:43Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,37 +20,30 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Ripper.h"
 #import "CompactDisc.h"
-#import "CDDBMatch.h"
+#import "Track.h"
 
-NSString *gDataDir;
-
-@interface CompactDiscController : NSWindowController
+@interface RipperTask : NSObject 
 {
-	IBOutlet NSTableView			*_tracksTable;
-	IBOutlet NSDrawer				*_trackDrawer;
-	IBOutlet NSButton				*_trackInfoButton;
-	IBOutlet NSButton				*_encodeButton;
-		
-	CompactDisc						*_disc;
-	NSNumber						*_stop;
+	NSString			*_path;
+	int					_out;
+	
+	Ripper				*_ripper;
+	
+	NSString			*_trackName;
+	NSNumber			*_completed;
+	NSNumber			*_stopped;
+	NSNumber			*_percentComplete;
+	NSString			*_timeRemaining;
 }
 
-- (IBAction) selectAll:(id)sender;
-- (IBAction) selectNone:(id)sender;
-- (BOOL) emptySelection;
+- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track trackName:(NSString*) trackName;
 
-- (IBAction) showTrackInfo:(id)sender;
-- (IBAction) encode:(id)sender;
+- (void) run:(id) object;
 
-// ========== FreeDB-related methods
-- (IBAction) getCDInformation:(id)sender;
-- (void) updateDiscFromCDDB:(CDDBMatch *)info;
+- (void) stop;
 
-- (CompactDiscController *) initWithDisc: (CompactDisc *) disc;
-
-- (void) displayExceptionSheet:(NSException *)exception;
-
-- (void) discUnmounted;
+- (void) removeTemporaryFile;
 
 @end

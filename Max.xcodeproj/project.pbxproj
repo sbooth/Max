@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C040A31092AB41A0052D881 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */; };
 		8C08573908DE90DD004B42F0 /* CDDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* CDDB.m */; };
+		8C206E8B092938D600793FD0 /* TasksPanel.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C206E8A092938D600793FD0 /* TasksPanel.nib */; };
+		8C206F150929486C00793FD0 /* TaskMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C206F130929486C00793FD0 /* TaskMaster.m */; };
+		8C20728709299A4300793FD0 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C20728509299A4300793FD0 /* Task.m */; };
+		8C22FA27092DA69800566739 /* libcddb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EC0924598D00BDFD02 /* libcddb.a */; };
 		8C73004A08ECA9C10008D7E0 /* CDDBMatchSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C73004908ECA9C10008D7E0 /* CDDBMatchSheet.nib */; };
 		8C73004E08ECAA5B0008D7E0 /* CDDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */; };
 		8C7300A708ECB1E80008D7E0 /* CDDBMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7300A608ECB1E80008D7E0 /* CDDBMatch.m */; };
@@ -19,7 +24,8 @@
 		8C7C88BC08EC37D800F6FCB1 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */; };
 		8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
 		8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */; };
-		8CA382EF0924598D00BDFD02 /* libcddb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EC0924598D00BDFD02 /* libcddb.a */; };
+		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
+		8C9A24B40925ADB200FB244D /* Growl.framework in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8CA382F00924598D00BDFD02 /* libtag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382ED0924598D00BDFD02 /* libtag.a */; };
 		8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EE0924598D00BDFD02 /* libmp3lame.a */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
@@ -44,6 +50,9 @@
 		8CE5F63008DDD02D007DD7F7 /* Tagger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */; };
 		8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CE6F51D08CD60970028DA37 /* Credits.rtf */; };
 		8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
+		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
+		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
+		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
 		8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -78,6 +87,20 @@
 		};
 /* End PBXBuildStyle section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		8C9A24AC0925ACF400FB244D /* Copy Growl */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				8C9A24B40925ADB200FB244D /* Growl.framework in Copy Growl */,
+			);
+			name = "Copy Growl";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -87,8 +110,17 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
+		8C040A2E092AB41A0052D881 /* RipperTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperTask.h; sourceTree = "<group>"; };
+		8C040A2F092AB41A0052D881 /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C08573708DE90DD004B42F0 /* CDDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDB.h; sourceTree = "<group>"; };
 		8C08573808DE90DD004B42F0 /* CDDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDB.m; sourceTree = "<group>"; };
+		8C206E8A092938D600793FD0 /* TasksPanel.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = TasksPanel.nib; sourceTree = "<group>"; };
+		8C206F120929486C00793FD0 /* TaskMaster.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TaskMaster.h; sourceTree = "<group>"; };
+		8C206F130929486C00793FD0 /* TaskMaster.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TaskMaster.m; sourceTree = "<group>"; };
+		8C20728409299A4300793FD0 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
+		8C20728509299A4300793FD0 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		8C618E2609255F470075621C /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
+		8C618E2809255F4E0075621C /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
 		8C73004908ECA9C10008D7E0 /* CDDBMatchSheet.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CDDBMatchSheet.nib; sourceTree = "<group>"; };
 		8C73004C08ECAA5B0008D7E0 /* CDDBMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CDDBMatchSheet.h; sourceTree = "<group>"; };
 		8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CDDBMatchSheet.m; sourceTree = "<group>"; };
@@ -109,6 +141,7 @@
 		8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
 		8C7C897808EC435700F6FCB1 /* MediaController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MediaController.m; sourceTree = "<group>"; };
 		8C7C897908EC435700F6FCB1 /* MediaController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MediaController.h; sourceTree = "<group>"; };
+		8C9A24A30925ACD100FB244D /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		8CA382EC0924598D00BDFD02 /* libcddb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcddb.a; sourceTree = "<group>"; };
 		8CA382ED0924598D00BDFD02 /* libtag.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtag.a; sourceTree = "<group>"; };
 		8CA382EE0924598D00BDFD02 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
@@ -148,6 +181,11 @@
 		8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Tagger.mm; sourceTree = "<group>"; };
 		8CE6F51D08CD60970028DA37 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		8CE9B39708CF7937007FCDB3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
+		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
+		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
+		8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
+		8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooleanArrayValueTransformer.m; sourceTree = "<group>"; };
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -161,28 +199,27 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */,
-				8CA382EF0924598D00BDFD02 /* libcddb.a in Frameworks */,
 				8CA382F00924598D00BDFD02 /* libtag.a in Frameworks */,
 				8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */,
+				8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */,
+				8C22FA27092DA69800566739 /* libcddb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* MP3 */ = {
+		080E96DDFE201D6D7F000001 /* Encoder */ = {
 			isa = PBXGroup;
 			children = (
 				8CE5F62E08DDD02D007DD7F7 /* Tagger.h */,
 				8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */,
 				8CB6DE8908DA844000345B8F /* Encoder.h */,
 				8CB6DE8A08DA844000345B8F /* Encoder.m */,
-				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
-				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
 				8C752A8208C507CE001F588B /* Genres.h */,
 				8C752A8308C507CE001F588B /* Genres.m */,
 			);
-			name = MP3;
+			name = Encoder;
 			sourceTree = "<group>";
 		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
@@ -216,9 +253,11 @@
 			children = (
 				8C7C894308EC3FFE00F6FCB1 /* Models */,
 				8C7C897408EC42BC00F6FCB1 /* Controllers */,
-				8CBEC4EB08ED6F640064F794 /* Exceptions */,
-				080E96DDFE201D6D7F000001 /* MP3 */,
+				8CDB0A19092D78C60080A0D8 /* Tasks */,
+				8C0408DA092A89770052D881 /* Ripper */,
+				080E96DDFE201D6D7F000001 /* Encoder */,
 				8C7300B808ECB21B0008D7E0 /* CDDB */,
+				8CBEC4EB08ED6F640064F794 /* Exceptions */,
 				8CBEC66108ED80D10064F794 /* ValueTransformers */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -255,6 +294,8 @@
 				8CBB8BBC08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist */,
 				8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */,
 				8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */,
+				8C206E8A092938D600793FD0 /* TasksPanel.nib */,
+				8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -262,11 +303,21 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C9A24A30925ACD100FB244D /* Growl.framework */,
 				8CE9B39708CF7937007FCDB3 /* IOKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8C0408DA092A89770052D881 /* Ripper */ = {
+			isa = PBXGroup;
+			children = (
+				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
+				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
+			);
+			name = Ripper;
 			sourceTree = "<group>";
 		};
 		8C7300B808ECB21B0008D7E0 /* CDDB */ = {
@@ -306,6 +357,8 @@
 				8C7C897808EC435700F6FCB1 /* MediaController.m */,
 				8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */,
 				8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */,
+				8C206F120929486C00793FD0 /* TaskMaster.h */,
+				8C206F130929486C00793FD0 /* TaskMaster.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -313,6 +366,8 @@
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8C618E2809255F4E0075621C /* libcdda_paranoia.a */,
+				8C618E2609255F470075621C /* libcdda_interface.a */,
 				8CA382EC0924598D00BDFD02 /* libcddb.a */,
 				8CA382ED0924598D00BDFD02 /* libtag.a */,
 				8CA382EE0924598D00BDFD02 /* libmp3lame.a */,
@@ -346,12 +401,27 @@
 		8CBEC66108ED80D10064F794 /* ValueTransformers */ = {
 			isa = PBXGroup;
 			children = (
+				8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */,
+				8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */,
 				8C73033C08ECEA500008D7E0 /* CDDBProtocolValueTransformer.h */,
 				8C73033D08ECEA500008D7E0 /* CDDBProtocolValueTransformer.m */,
 				8CC564E708DD12A700C3030F /* StringValueTransformer.h */,
 				8CC564E808DD12A700C3030F /* StringValueTransformer.m */,
 			);
 			name = ValueTransformers;
+			sourceTree = "<group>";
+		};
+		8CDB0A19092D78C60080A0D8 /* Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */,
+				8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */,
+				8C040A2E092AB41A0052D881 /* RipperTask.h */,
+				8C040A2F092AB41A0052D881 /* RipperTask.m */,
+				8C20728409299A4300793FD0 /* Task.h */,
+				8C20728509299A4300793FD0 /* Task.m */,
+			);
+			name = Tasks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -364,6 +434,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				8C9A24AC0925ACF400FB244D /* Copy Growl */,
 			);
 			buildRules = (
 			);
@@ -423,6 +494,8 @@
 				8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */,
 				8CBB8BA808EFAE60007197C3 /* CDDBDefaults.plist in Resources */,
 				8CBB8BBD08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist in Resources */,
+				8C206E8B092938D600793FD0 /* TasksPanel.nib in Resources */,
+				8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,6 +532,11 @@
 				8CBB881D08EE57A6007197C3 /* UtilityFunctions.m in Sources */,
 				8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */,
 				8CBB8BCD08EFB0BF007197C3 /* MissingResourceException.m in Sources */,
+				8C206F150929486C00793FD0 /* TaskMaster.m in Sources */,
+				8C20728709299A4300793FD0 /* Task.m in Sources */,
+				8C040A31092AB41A0052D881 /* RipperTask.m in Sources */,
+				8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */,
+				8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,6 +566,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -497,13 +576,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../lame-install/include",
-					"../libcddb-install/include",
-					"../taglib-install/include/taglib",
+					./include,
+					./include/taglib,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Max;
 				WRAPPER_EXTENSION = app;
@@ -515,6 +593,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -522,13 +601,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../lame-install/include",
-					"../libcddb-install/include",
-					"../taglib-install/include/taglib",
+					./include,
+					./include/taglib,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Max;
 				WRAPPER_EXTENSION = app;
@@ -539,19 +617,20 @@
 		8C1919E108C50B7A00CB7453 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Max_Prefix.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"../lame-install/include",
-					"../libcddb-install/include",
-					"../taglib-install/include/taglib",
+					./include,
+					./include/taglib,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)\"";
+				LIBRARY_SEARCH_PATHS = "";
+				PREBINDING = NO;
 				PRODUCT_NAME = Max;
 				WRAPPER_EXTENSION = app;
 			};
@@ -561,12 +640,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
-				LIBRARY_STYLE = STATIC;
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-liconv",
-				);
+				LIBRARY_SEARCH_PATHS = "../libcddb-install/lib";
+				OTHER_LDFLAGS = "";
 			};
 			name = Development;
 		};
@@ -574,12 +649,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
-				LIBRARY_STYLE = STATIC;
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-liconv",
-				);
+				LIBRARY_SEARCH_PATHS = "../libcddb-install/lib";
+				OTHER_LDFLAGS = "";
 			};
 			name = Deployment;
 		};
@@ -587,12 +658,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
-				LIBRARY_STYLE = STATIC;
-				OTHER_LDFLAGS = (
-					"-lz",
-					"-liconv",
-				);
+				LIBRARY_SEARCH_PATHS = "../libcddb-install/lib";
+				OTHER_LDFLAGS = "";
 			};
 			name = Default;
 		};

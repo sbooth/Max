@@ -27,6 +27,6 @@
 
 }
 
-+ (void) tagFile:(NSString *)filename fromTrack:(Track *)track;
++ (void) tagFile:(NSString*) filename fromTrack:(Track*) track;
 
 @end

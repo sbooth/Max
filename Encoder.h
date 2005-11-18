@@ -20,27 +20,35 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDiscController.h"
-#import "CompactDisc.h"
-#import "Track.h"
-#import "Ripper.h"
-
 #include "lame/lame.h"
 
 @interface Encoder : NSObject 
 {
-	CompactDiscController		*_controller;
-	CompactDisc					*_disc;
-	Track						*_track;
-	Ripper						*_source;
+	NSString				*_sourceFilename;	
+	int						_source;
+	unsigned int			_totalBytes;
+	long					_bytesToRead;
 	
-	int							_fd;
-	lame_global_flags			*_gfp;
-	NSString					*_filename;
+	ssize_t					_bytesRead;
+	ssize_t					_bytesWritten;
+	
+	unsigned char			*_buf;
+	ssize_t					_bufsize;
+
+	int						_out;
+	lame_global_flags		*_gfp;
+
+	NSNumber				*_started;
+	NSNumber				*completed;
+	NSNumber				*_stopped;
+	NSNumber				*_percentComplete;
+	NSNumber				*_shouldStop;
+	NSDate					*_startTime;
+	NSNumber				*_timeRemaining;
 }
 
-- (id) initWithController:(CompactDiscController *)controller usingSource:(Ripper *)source forDisc:(CompactDisc *)disc forTrack:(Track *)track toFile:(NSString *)filename;
+- (id) initWithSource:(NSString*) source;
 
-- (ssize_t) encode: (NSData *) data;
-- (ssize_t) finishEncode;
+- (ssize_t) encodeToFile:(NSString*) filename;
+
 @end

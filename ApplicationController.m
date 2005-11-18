@@ -22,8 +22,10 @@
 
 #import "PreferencesController.h"
 #import "MediaController.h"
+#import "TaskMaster.h"
 #import "StringValueTransformer.h"
 #import "CDDBProtocolValueTransformer.h";
+#import "BooleanArrayValueTransformer.h";
 
 #include "lame/lame.h"
 
@@ -42,6 +44,14 @@
 	
 	transformer = [[[CDDBProtocolValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"CDDBProtocolValueTransformer"];
+
+	transformer = [[[BooleanArrayValueTransformer alloc] init] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"BooleanArrayValueTransformer"];
+}
+
+-(void)awakeFromNib
+{
+	[GrowlApplicationBridge setGrowlDelegate:self];
 }
 
 - (IBAction)showPreferences:(id)sender
@@ -59,17 +69,86 @@
 	[[MediaController sharedMedia] scanForMedia];
 }
 
+- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication*) sender
+{
+	if(0 != [[[TaskMaster sharedController] valueForKey:@"taskList"] count]) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:@"OK"];
+		[alert addButtonWithTitle:@"Cancel"];
+		[alert setMessageText:@"Really Quit?"];
+		[alert setInformativeText:@"There are active ripping/encoding tasks."];
+		[alert setAlertStyle:NSWarningAlertStyle];
+		
+		if([alert runModal] == NSAlertSecondButtonReturn) {
+			return NSTerminateCancel;
+		}
+		// Remove all tasks
+		else {
+			NSEnumerator *enumerator = [[[TaskMaster sharedController] valueForKey:@"taskList"] objectEnumerator];
+			Task *task;
+			
+			while(task = [enumerator nextObject]) {
+				[[TaskMaster sharedController] removeTask:task];
+			}		
+		}
+	}
+	
+	return NSTerminateNow;
+}
+
 - (IBAction)aboutLAME:(id)sender
 {
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-	[alert addButtonWithTitle: @"OK"];
-	[alert setMessageText: @"About LAME"];
-	[alert setInformativeText: [NSString stringWithFormat:@"LAME %s", get_lame_version()]];
-	[alert setAlertStyle: NSWarningAlertStyle];
+	[alert addButtonWithTitle:@"OK"];
+	[alert setMessageText:@"About LAME"];
+	[alert setInformativeText:[NSString stringWithFormat:@"LAME %s", get_lame_version()]];
+	[alert setAlertStyle:NSWarningAlertStyle];
 	
 	if([alert runModal] == NSAlertFirstButtonReturn) {
 		// do nothing
 	} 
+}
+
+- (IBAction)toggleTasksPanel:(id)sender
+{
+	NSWindow *tasksWindow = [[TaskMaster sharedController] window];
+	if([tasksWindow isVisible]) {
+		[tasksWindow performClose:self];
+	}
+	else {
+		[tasksWindow makeKeyAndOrderFront:self];
+	}
+}
+
+-(NSDictionary *)registrationDictionaryForGrowl
+{
+	NSArray *defaultNotifications = [NSArray arrayWithObjects:
+		@"Rip started",
+		@"Rip completed",
+		@"Rip stopped",
+		@"Encode started",
+		@"Encode completed",
+		@"Encode stopped",
+		nil
+		];
+
+	NSArray *allNotifications = [NSArray arrayWithObjects:
+		@"Rip started",
+		@"Rip completed",
+		@"Rip stopped",
+		@"Encode started",
+		@"Encode completed",
+		@"Encode stopped",
+		nil
+		];
+	
+	
+	NSDictionary *regDict = [NSDictionary dictionaryWithObjectsAndKeys:
+		@"Max", GROWL_APP_NAME, 
+		allNotifications, GROWL_NOTIFICATIONS_ALL, 
+		defaultNotifications, GROWL_NOTIFICATIONS_DEFAULT,
+		nil];
+	return regDict;
 }
 
 @end

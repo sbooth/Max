@@ -5,7 +5,7 @@
 	<key>org.sbooth.Max.customNamingUseFallback</key>
 	<false/>
 	<key>org.sbooth.Max.outputDirectory</key>
-	<string>~/Music</string>
+	<string>~/Music/</string>
 	<key>org.sbooth.Max.useCustomNaming</key>
 	<false/>
 	<key>org.sbooth.Max.createAlbumPlaylist</key>

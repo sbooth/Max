@@ -27,11 +27,17 @@
 
 #import "UtilityFunctions.h"
 
-#include <fcntl.h>	// open, write
-#include <stdio.h>	// fopen, fclose
+#include <fcntl.h>		// open, write
+#include <stdio.h>		// fopen, fclose
+#include <sys/stat.h>	// stat
 
 // Bitrates supported for 44.1 kHz audio
 static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
+
+@interface Encoder (Private)
+- (ssize_t) encodeChunk:(unsigned char*) chunk chunkSize:(ssize_t) chunkSize;
+- (ssize_t) finishEncode;
+@end
 
 @implementation Encoder
 
@@ -55,23 +61,24 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	}
 }
 
-- (id) initWithController:(CompactDiscController *)controller usingSource:(Ripper *)source forDisc:(CompactDisc *)disc forTrack:(Track *)track toFile:(NSString *)filename
+- (id) init
+{
+	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Encoder::init called" userInfo:nil];
+}
+
+- (id) initWithSource:(NSString*) source
 {
 	NSString	*quality;
 	int			bitrate;
 	int			lameResult;
 	
 	
-	_gfp			= 0;
-	_controller		= [controller retain];
-	_source			= [source retain];
-	_disc			= [disc retain];
-	_track			= [track retain];
-	_filename		= [filename retain];
+	_gfp				= 0;
+	_sourceFilename		= [source retain];
 	
 	@try {
-		self = [super init];
-		if(self) {			
+		if(self = [super init]) {
+			
 			// LAME setup
 			_gfp = lame_init();
 			if(NULL == _gfp) {
@@ -121,19 +128,6 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			if(-1 == lameResult) {
 				@throw [LAMEException exceptionWithReason:@"Failure initializing LAME library" userInfo:nil];
 			}
-#if 0
-			// Dump configuration info
-			NSLog(@"=====================");
-			NSLog(@"LAME configuration");
-			NSLog(@"=====================");
-			NSLog(@"Mode               %i", lame_get_mode(_gfp));
-			NSLog(@"Bitrate            %i", lame_get_brate(_gfp));
-			NSLog(@"VBR                %i", lame_get_VBR(_gfp));
-			NSLog(@"Compression ratio  %f", lame_get_compression_ratio(_gfp));
-			NSLog(@"Quality            %i", lame_get_quality(_gfp));
-			NSLog(@"VBR Quality        %i", lame_get_VBR_q(_gfp));
-			NSLog(@"=====================");
-#endif			
 		}
 	}
 	@catch(NSException *exception) {
@@ -142,7 +136,9 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			lame_close(_gfp);
 		}
 		
-		[_filename release];
+		free(_buf);
+
+		[_sourceFilename release];
 
 		@throw;
 	}
@@ -156,89 +152,104 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 - (void) dealloc
 {
 	lame_close(_gfp);
+
+	if(-1 == close(_source)) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
 	
-	[_controller release];
-	[_source release];
-	[_disc release];
-	[_track release];
-	[_filename release];
+	free(_buf);
 	
+	[_sourceFilename release];
+
 	[super dealloc];
 }
 
-- (void) doIt:(id)object
+- (ssize_t) encodeToFile:(NSString*) filename
 {
-	NSAutoreleasePool		*pool		= [[NSAutoreleasePool alloc] init];
-	FILE					*file;
+	FILE		*file;
+	ssize_t		bytesRead			= 0;
+	ssize_t		bytesWritten		= 0;
 	
-	@try {
-		// Only allow one rip at a time (per CompactDiscController)
-		@synchronized(object) {
-			
-			// Tell the controller we are starting
-			[_controller performSelectorOnMainThread:@selector(encodeDidStart:) withObject:[[_track valueForKey:@"number"] stringValue] waitUntilDone:TRUE];
-			[_controller performSelectorOnMainThread:@selector(updateEncodeProgress:) withObject:[NSNumber numberWithDouble:0.0] waitUntilDone:FALSE];
-			
-			// Create the output file
-			_fd = open([_filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-			if(-1 == _fd) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
+	// Tell our owner we are starting
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 
-			// Iteratively get the PCM data and encode it
-			while(0 < [_source bytesRemaining]) {
-								
-				// Fetch a chunk of input and encode it
-				[self encode:[_source get]];
+	_startTime = [NSDate date];
 
-				// Update the controller on our progress
-				[_controller performSelectorOnMainThread:@selector(updateEncodeProgress:) withObject:[NSNumber numberWithDouble:[_source percentRead]] waitUntilDone:FALSE];
-				
-				// Check if we should stop, and if so throw an exception
-				if(YES == [[_controller valueForKey:@"stop"] boolValue]) {
-					[_controller performSelectorOnMainThread:@selector(encodeDidStop:) withObject:nil waitUntilDone:TRUE];
-					@throw [StopException exceptionWithReason:nil userInfo:nil];
-				}
-			}
-			
-			// Flush the last MP3 frames (maybe)
-			[self finishEncode];
+	// Open the input file
+	_source = open([_sourceFilename UTF8String], O_RDONLY);
+	if(-1 == _source) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
+	
+	// Get input file information
+	struct stat stat;
+	if(-1 == fstat(_source, &stat)) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
+	
+	// Allocate the buffer
+	_bufsize		= 1024 * 1024;
+	_buf			= (unsigned char*) calloc(_bufsize, sizeof(unsigned char));
+	if(NULL == _buf) {
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
+	
+	_totalBytes		= stat.st_size;
+	_bytesToRead	= _totalBytes;
+	
+	// Create the output file
+	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+	if(-1 == _out) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
 
-			// Close the output file
-			if(-1 == close(_fd)) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			
-			// Write the Xing VBR tag
-			file = fopen([_filename UTF8String], "r+");
-			if(NULL == file) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			lame_mp3_tags_fid(_gfp, file);
-			if(EOF == fclose(file)) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			
-			// Tell the controller we are finished
-			[_controller performSelectorOnMainThread:@selector(updateEncodeProgress:) withObject:[NSNumber numberWithDouble:100.0] waitUntilDone:TRUE];
-			[_controller performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:self waitUntilDone:TRUE];
+	// Iteratively get the PCM data and encode it
+	while(0 < _bytesToRead) {
+		// Check if we should stop, and if so throw an exception
+		if(YES == [_shouldStop boolValue]) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
+		
+		// Read a chunk of PCM input
+		bytesRead = read(_source, _buf, (_bytesToRead > _bufsize ? _bufsize : _bytesToRead));
+
+		// Encode the PCM data
+		bytesWritten += [self encodeChunk:_buf chunkSize:bytesRead];
+
+		// Update status
+		_bytesToRead -= bytesRead;
+		[self setValue:[NSNumber numberWithDouble:((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) * 100.0] forKey:@"percentComplete"];
+		NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
+		[self setValue:[NSNumber numberWithDouble:(interval / ((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) - interval)] forKey:@"timeRemaining"];
 	}
 	
-	@catch(StopException *exception) {
+	// Flush the last MP3 frames (maybe)
+	bytesWritten += [self finishEncode];
+
+	// Close the output file
+	if(-1 == close(_out)) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
-	@catch(NSException *exception) {
-		[_controller performSelectorOnMainThread:@selector(encodeDidStop:) withObject:nil waitUntilDone:TRUE];
-		[_controller performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
+	// Write the Xing VBR tag
+	file = fopen([_sourceFilename UTF8String], "r+");
+	if(NULL == file) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
+	lame_mp3_tags_fid(_gfp, file);
+	if(EOF == fclose(file)) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
-	@finally {
-		[pool release];
-	}	
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
+	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	
+	return bytesWritten;
 }
 
-- (ssize_t) encode: (NSData *)data
+- (ssize_t) encodeChunk:(unsigned char*) chunk chunkSize:(ssize_t) chunkSize;
 {
 	int						*leftPCM,		*left;
 	int						*rightPCM,		*right;
@@ -259,7 +270,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	buf			= 0;
 
 	@try {
-		numSamples	= [data length] / 2;
+		numSamples	= chunkSize / 2;
 		
 		leftPCM		= (int *) calloc(numSamples / 2, sizeof(int));
 		rightPCM	= (int *) calloc(numSamples / 2, sizeof(int));
@@ -268,8 +279,8 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 		}
 		
 		// Raw PCM needs to be byte-swapped and separated into L/R channels
-		iter	= [data bytes];
-		limit	= [data bytes] + [data length];
+		iter	= chunk;
+		limit	= chunk + chunkSize;
 		left	= leftPCM;
 		right	= rightPCM;
 		while(iter < limit) {
@@ -292,7 +303,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			@throw [LAMEException exceptionWithReason:@"LAME encoding error" userInfo:nil];
 		}
 		
-		bytesWritten = write(_fd, buf, lameResult);
+		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
@@ -337,7 +348,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 		}
 		
 		// And write any frames it returns
-		bytesWritten = write(_fd, buf, lameResult);
+		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
