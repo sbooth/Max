@@ -630,7 +630,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
-				PREBINDING = NO;
+				PREBINDING = YES;
 				PRODUCT_NAME = Max;
 				WRAPPER_EXTENSION = app;
 			};
@@ -640,7 +640,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				LIBRARY_SEARCH_PATHS = "../libcddb-install/lib";
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = "";
 			};
 			name = Development;
