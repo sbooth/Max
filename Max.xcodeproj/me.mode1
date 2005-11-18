@@ -381,9 +381,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>8C93F9DC092E8C8F00F0091C</string>
+				<string>8C5B1FFD092E9067008BA731</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>8C93F9DD092E8C8F00F0091C</string>
+				<string>8C5B1FFE092E9067008BA731</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -518,7 +518,7 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
-		<string>/Users/me/Development/Max/Max.xcodeproj</string>
+		<string>/tmp/trunk/Max.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>728 323 519 504 0 0 1280 832 </string>
@@ -960,9 +960,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>8C93F9DE092E8C8F00F0091C</string>
+				<string>8C5B1FFF092E9067008BA731</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>8C93F9DF092E8C8F00F0091C</string>
+				<string>8C5B2000092E9067008BA731</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>
