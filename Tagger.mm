@@ -42,6 +42,7 @@
 	NSString									*title					= nil;
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
+	NSString									*comment				= nil;
 	NSNumber									*discNumber				= nil;
 	NSNumber									*discsInSet				= nil;
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= nil;
@@ -100,6 +101,12 @@
 		f.tag()->setYear([year intValue]);
 	}
 	
+	// Comment
+	comment = [[track valueForKey:@"disc"] valueForKey:@"comment"];
+	if(nil != comment) {
+		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
+	}
+
 	// Disc number
 	discNumber = [[track valueForKey:@"disc"] valueForKey:@"discNumber"];
 	discsInSet = [[track valueForKey:@"disc"] valueForKey:@"discsInSet"];
