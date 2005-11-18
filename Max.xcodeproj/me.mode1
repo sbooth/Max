@@ -381,9 +381,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>8C440DB3092E8AB300A053AA</string>
+				<string>8C93F9DC092E8C8F00F0091C</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>8C440DB4092E8AB300A053AA</string>
+				<string>8C93F9DD092E8C8F00F0091C</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -517,7 +517,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>8C191A4608C515A500CB7453</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
@@ -911,8 +910,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {366, 168}}</string>
-											<string>{{0, 173}, {366, 270}}</string>
+											<string>{{0, 0}, {367, 168}}</string>
+											<string>{{0, 173}, {367, 270}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -961,9 +960,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>8C440DB6092E8AB300A053AA</string>
+				<string>8C93F9DE092E8C8F00F0091C</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>8C440DB7092E8AB300A053AA</string>
+				<string>8C93F9DF092E8C8F00F0091C</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>
