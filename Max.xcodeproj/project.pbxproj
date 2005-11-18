@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		8C040A31092AB41A0052D881 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */; };
 		8C08573908DE90DD004B42F0 /* CDDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* CDDB.m */; };
-		8C206E8B092938D600793FD0 /* Tasks.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C206E8A092938D600793FD0 /* Tasks.nib */; };
 		8C206F150929486C00793FD0 /* TaskMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C206F130929486C00793FD0 /* TaskMaster.m */; };
 		8C20728709299A4300793FD0 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C20728509299A4300793FD0 /* Task.m */; };
 		8C22FA27092DA69800566739 /* libcddb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EC0924598D00BDFD02 /* libcddb.a */; };
-		8C73004A08ECA9C10008D7E0 /* CDDBMatches.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C73004908ECA9C10008D7E0 /* CDDBMatches.nib */; };
+		8C440DC0092E8B3000A053AA /* CDDBMatches.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DBB092E8B3000A053AA /* CDDBMatches.nib */; };
+		8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DC1092E8B3C00A053AA /* Tasks.nib */; };
 		8C73004E08ECAA5B0008D7E0 /* CDDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */; };
 		8C7300A708ECB1E80008D7E0 /* CDDBMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7300A608ECB1E80008D7E0 /* CDDBMatch.m */; };
 		8C73021008ECD4AD0008D7E0 /* CDDBSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73020F08ECD4AD0008D7E0 /* CDDBSite.m */; };
@@ -119,14 +119,14 @@
 		8C040A2F092AB41A0052D881 /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C08573708DE90DD004B42F0 /* CDDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDB.h; sourceTree = "<group>"; };
 		8C08573808DE90DD004B42F0 /* CDDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDB.m; sourceTree = "<group>"; };
-		8C206E8A092938D600793FD0 /* Tasks.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Tasks.nib; sourceTree = "<group>"; };
 		8C206F120929486C00793FD0 /* TaskMaster.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TaskMaster.h; sourceTree = "<group>"; };
 		8C206F130929486C00793FD0 /* TaskMaster.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TaskMaster.m; sourceTree = "<group>"; };
 		8C20728409299A4300793FD0 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		8C20728509299A4300793FD0 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		8C440DBB092E8B3000A053AA /* CDDBMatches.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CDDBMatches.nib; sourceTree = "<group>"; };
+		8C440DC1092E8B3C00A053AA /* Tasks.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Tasks.nib; sourceTree = "<group>"; };
 		8C618E2609255F470075621C /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
 		8C618E2809255F4E0075621C /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
-		8C73004908ECA9C10008D7E0 /* CDDBMatches.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CDDBMatches.nib; sourceTree = "<group>"; };
 		8C73004C08ECAA5B0008D7E0 /* CDDBMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CDDBMatchSheet.h; sourceTree = "<group>"; };
 		8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CDDBMatchSheet.m; sourceTree = "<group>"; };
 		8C7300A508ECB1E80008D7E0 /* CDDBMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDBMatch.h; sourceTree = "<group>"; };
@@ -295,10 +295,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C440DC1092E8B3C00A053AA /* Tasks.nib */,
+				8C440DBB092E8B3000A053AA /* CDDBMatches.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8CC111C308CA4538008BB9B0 /* CompactDisc.nib */,
 				8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */,
-				8C73004908ECA9C10008D7E0 /* CDDBMatches.nib */,
 				8CB6E20008DACB8100345B8F /* COPYING */,
 				8CE6F51D08CD60970028DA37 /* Credits.rtf */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -307,7 +308,6 @@
 				8CBB8BBC08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist */,
 				8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */,
 				8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */,
-				8C206E8A092938D600793FD0 /* Tasks.nib */,
 				8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */,
 				8C8B0DA1092E641200418C45 /* MacPAD.url */,
 				8C8B0EC8092E710200418C45 /* UpdateChecker.nib */,
@@ -524,16 +524,16 @@
 				8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */,
 				8CB6E20108DACB8100345B8F /* COPYING in Resources */,
 				8C7C88BC08EC37D800F6FCB1 /* Preferences.nib in Resources */,
-				8C73004A08ECA9C10008D7E0 /* CDDBMatches.nib in Resources */,
 				8CBB8BA408EFAE53007197C3 /* TrackDefaults.plist in Resources */,
 				8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */,
 				8CBB8BA808EFAE60007197C3 /* CDDBDefaults.plist in Resources */,
 				8CBB8BBD08EFAF4E007197C3 /* CompactDiscControllerDefaults.plist in Resources */,
-				8C206E8B092938D600793FD0 /* Tasks.nib in Resources */,
 				8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */,
 				8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */,
 				8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */,
 				8C8B0EC9092E710200418C45 /* UpdateChecker.nib in Resources */,
+				8C440DC0092E8B3000A053AA /* CDDBMatches.nib in Resources */,
+				8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
