@@ -224,8 +224,6 @@
 		080E96DDFE201D6D7F000001 /* Encoder */ = {
 			isa = PBXGroup;
 			children = (
-				8CE5F62E08DDD02D007DD7F7 /* Tagger.h */,
-				8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */,
 				8CB6DE8908DA844000345B8F /* Encoder.h */,
 				8CB6DE8A08DA844000345B8F /* Encoder.m */,
 				8C752A8208C507CE001F588B /* Genres.h */,
@@ -268,6 +266,7 @@
 				8CDB0A19092D78C60080A0D8 /* Tasks */,
 				8C0408DA092A89770052D881 /* Ripper */,
 				080E96DDFE201D6D7F000001 /* Encoder */,
+				8C8B0F6D092E863200418C45 /* Tagger */,
 				8C7300B808ECB21B0008D7E0 /* CDDB */,
 				8CBEC4EB08ED6F640064F794 /* Exceptions */,
 				8CBEC66108ED80D10064F794 /* ValueTransformers */,
@@ -388,6 +387,15 @@
 				8C8B0DAB092E64D900418C45 /* UpdateChecker.m */,
 			);
 			name = MacPAD;
+			sourceTree = "<group>";
+		};
+		8C8B0F6D092E863200418C45 /* Tagger */ = {
+			isa = PBXGroup;
+			children = (
+				8CE5F62E08DDD02D007DD7F7 /* Tagger.h */,
+				8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */,
+			);
+			name = Tagger;
 			sourceTree = "<group>";
 		};
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {

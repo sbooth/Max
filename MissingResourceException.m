@@ -1,5 +1,5 @@
 /*
- *  $Id: CDDBException.m 3 2005-10-01 17:27:18Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
