@@ -36,7 +36,7 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"RipperTask::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track trackName:(NSString*) trackName
+- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track trackName:(NSString *) trackName
 {
 	char *path = NULL;
 	
@@ -140,7 +140,7 @@
 	}
 }
 
-- (void) observeValueForKeyPath:(NSString*) keyPath ofObject:(id) object change:(NSDictionary*) change context:(void*) context
+- (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
     if([keyPath isEqual:@"started"]) {
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStart:) withObject:self waitUntilDone:TRUE];

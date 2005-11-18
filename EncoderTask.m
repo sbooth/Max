@@ -34,7 +34,7 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"EncoderTask::init called" userInfo:nil];
 }
 
-- (id) initWithSource:(NSString*) source target:(NSString*) target trackName:(NSString*) trackName;
+- (id) initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
 {
 	if(self = [super init]) {
 		_target = [target retain];
@@ -106,7 +106,7 @@
 	}
 }
 
-- (void) observeValueForKeyPath:(NSString*) keyPath ofObject:(id) object change:(NSDictionary*) change context:(void*) context
+- (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
     if([keyPath isEqual:@"started"]) {
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStart:) withObject:self waitUntilDone:TRUE];

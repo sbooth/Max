@@ -28,14 +28,14 @@
 - (id) init
 {
 	if(self = [super init]) {
-		if(NO == [NSBundle loadNibNamed:@"CDDBMatchSheet" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load CDDBMatchSheet.nib" userInfo:nil];
+		if(NO == [NSBundle loadNibNamed:@"CDDBMatches" owner:self])  {
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load CDDBMatches.nib" userInfo:nil];
 		}
 	}
 	return self;
 }
 
-- (void)showCDDBMatchSheet
+- (void)showCDDBMatches
 {
     [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_controller valueForKey:@"window"] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }

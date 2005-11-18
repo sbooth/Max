@@ -34,7 +34,7 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Ripper::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track
+- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track
 {
 	_buf = NULL;
 	
@@ -58,7 +58,7 @@
 			// Allocate the buffer
 			_blockSize		= [[_disc valueForKey: @"preferredBlockSize"] unsignedIntValue];
 			_bufsize		= 1024 * _blockSize;
-			_buf			= (unsigned char*) calloc(_bufsize, sizeof(unsigned char));
+			_buf			= (unsigned char *) calloc(_bufsize, sizeof(unsigned char));
 			if(NULL == _buf) {
 				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 			}

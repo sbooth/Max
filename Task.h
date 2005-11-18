@@ -38,6 +38,6 @@
 	NSString		*_trackName;
 }
 
-- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track outputFilename:(NSString*) filename;
+- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track outputFilename:(NSString *) filename;
 
 @end

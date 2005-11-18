@@ -1,5 +1,5 @@
 /*
- *  $Id: Ripper.h 64 2005-10-02 16:10:43Z me $
+ *  $Id: StringValueTransformer.h 68 2005-10-02 16:10:43Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,30 +20,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Ripper.h"
-#import "CompactDisc.h"
-#import "Track.h"
+#import "MacPADSocket.h"
 
-@interface RipperTask : NSObject 
+@interface UpdateChecker : NSWindowController 
 {
-	NSString			*_path;
-	int					_out;
-	
-	Ripper				*_ripper;
-	
-	NSString			*_trackName;
-	NSNumber			*_completed;
-	NSNumber			*_stopped;
-	NSNumber			*_percentComplete;
-	NSString			*_timeRemaining;
+	MacPADSocket		*_socket;
 }
 
-- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track trackName:(NSString *) trackName;
++ (UpdateChecker *) sharedController;
 
-- (void) run:(id) object;
-
-- (void) stop;
-
-- (void) removeTemporaryFile;
+- (void) checkForUpdate;
 
 @end

@@ -23,6 +23,7 @@
 #import "PreferencesController.h"
 #import "MediaController.h"
 #import "TaskMaster.h"
+#import "UpdateChecker.h"
 #import "StringValueTransformer.h"
 #import "CDDBProtocolValueTransformer.h";
 #import "BooleanArrayValueTransformer.h";
@@ -69,7 +70,7 @@
 	[[MediaController sharedMedia] scanForMedia];
 }
 
-- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication*) sender
+- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
 {
 	if(0 != [[[TaskMaster sharedController] valueForKey:@"taskList"] count]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
@@ -118,6 +119,16 @@
 	else {
 		[tasksWindow makeKeyAndOrderFront:self];
 	}
+}
+
+- (IBAction) checkForUpdate:(id)sender
+{
+	[[UpdateChecker sharedController] checkForUpdate];
+}
+
+- (IBAction)openHomeURL:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://sbooth.org/Max/"]];
 }
 
 -(NSDictionary *)registrationDictionaryForGrowl

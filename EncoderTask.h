@@ -37,7 +37,7 @@
 	NSString			*_timeRemaining;
 }
 
-- (id) initWithSource:(NSString*) source target:(NSString*) target trackName:(NSString*) trackName;
+- (id) initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
 
 - (void) run:(id) object;
 

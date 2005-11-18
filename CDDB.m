@@ -191,12 +191,23 @@
 		[_disc setValue:[NSNumber numberWithUnsignedInt:tempInt] forKey:@"year"];
 	}
 
+	tempString = cddb_disc_get_ext_data(disc);
+	if(NULL != tempString) {
+		[_disc setValue:[NSString stringWithCString:tempString] forKey:@"comment"];		
+	}
+	
 	track = cddb_disc_get_track_first(disc);
 	while(NULL != track) {
 		
 		tempString = cddb_track_get_title(track);
 		if(NULL != tempString) {
 			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithCString:tempString] forKey:@"title"];
+		}
+
+		tempString = cddb_track_get_artist(track);
+		if(NULL != tempString && NO == [[NSString stringWithCString:tempString] isEqualToString:[_disc valueForKey:@"artist"]]) {
+			[_disc setValue:[NSNumber numberWithBool:YES] forKey:@"multiArtist"];
+			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithCString:tempString] forKey:@"artist"];
 		}
 		
 		track = cddb_disc_get_track_next(disc);

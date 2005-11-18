@@ -30,7 +30,7 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Task::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track outputFilename:(NSString*) filename
+- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track outputFilename:(NSString *) filename
 {
 	if(self = [super init]) {
 		_disc			= [disc retain];
@@ -86,7 +86,7 @@
 	[super dealloc];
 }
 
-- (void) observeValueForKeyPath:(NSString*) keyPath ofObject:(id) object change:(NSDictionary*) change context:(void*) context
+- (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
 	// We handle ripping and encoding tasks the same way
 	if([keyPath isEqual:@"completed"]) {

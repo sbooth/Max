@@ -3,6 +3,8 @@
         {
             ACTIONS = {
                 aboutLAME = id; 
+                checkForUpdate = id; 
+                openHomeURL = id; 
                 scanForMedia = id; 
                 showPreferences = id; 
                 toggleTasksPanel = id; 

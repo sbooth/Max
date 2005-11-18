@@ -32,6 +32,7 @@
 	NSString			*_artist;			// TPE1
 	NSNumber			*_year;				// TYER
 	NSNumber			*_genre;			// TCON
+	NSString			*_comment;			// COMM
 	
 	NSNumber			*_partOfSet;		// TPOS
 

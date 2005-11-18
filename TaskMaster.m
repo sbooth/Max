@@ -59,7 +59,7 @@ static TaskMaster *sharedController = nil;
 
 - (id) init
 {
-	if(self = [super initWithWindowNibName:@"TasksPanel"]) {
+	if(self = [super initWithWindowNibName:@"Tasks"]) {
 		_taskList		= [[NSMutableArray alloc] initWithCapacity:20];
 		_rippingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
 		_encodingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
@@ -103,7 +103,7 @@ static TaskMaster *sharedController = nil;
 	[super dealloc];
 }
 
-- (void) runTask:(Task*) task
+- (void) runTask:(Task *) task
 {
 	// If this task isn't in our task list, add it to the list and begin ripping
 	if(NO == [_taskList containsObject:task]) {
@@ -140,7 +140,7 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
-- (void) removeTask:(Task*) task
+- (void) removeTask:(Task *) task
 {
 	// Remove from the ripping/encoding lists if needed
 	if(YES == [_rippingTasks containsObject:[task valueForKey:@"ripperTask"]]) {

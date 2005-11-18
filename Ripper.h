@@ -51,7 +51,7 @@
 	NSNumber				*_timeRemaining;
 }
 
-- (id) initWithDisc:(CompactDisc*) disc forTrack:(Track*) track;
+- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track;
 
 - (void) ripToFile:(int) file;
 

@@ -31,6 +31,8 @@
 
 - (IBAction)aboutLAME:(id)sender;
 - (IBAction)toggleTasksPanel:(id)sender;
+- (IBAction)checkForUpdate:(id)sender;
+- (IBAction)openHomeURL:(id)sender;
 
 -(NSDictionary *)registrationDictionaryForGrowl;
 

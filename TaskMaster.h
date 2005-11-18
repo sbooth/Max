@@ -30,13 +30,13 @@
 	NSMutableArray			*_encodingTasks;
 }
 
-+ (TaskMaster*) sharedController;
++ (TaskMaster *) sharedController;
 
-- (void) runTask:(Task*) task;
-- (void) removeTask:(Task*) task;
+- (void) runTask:(Task *) task;
+- (void) removeTask:(Task *) task;
 
-- (void) displayExceptionSheet:(NSException*) exception;
-- (void) alertDidEnd:(NSAlert*) alert returnCode:(int) returnCode contextInfo:(void*) contextInfo;
+- (void) displayExceptionSheet:(NSException *) exception;
+- (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
 
 - (void) ripDidStart:(id) object;
 - (void) ripDidStop:(id) object;

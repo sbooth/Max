@@ -74,7 +74,7 @@ cddb_sum(int n)
 	
 	@try {
 		// Grab a dictionary containing all the properties of the CD
-		err = IORegistryEntryCreateCFProperties(disc, (CFMutableDictionaryRef*)&properties, kCFAllocatorDefault, kNilOptions);
+		err = IORegistryEntryCreateCFProperties(disc, (CFMutableDictionaryRef *)&properties, kCFAllocatorDefault, kNilOptions);
 		if(KERN_SUCCESS != err) {
 			@throw [IOException exceptionWithReason:@"Unable to access IORegistry" userInfo:nil];
 		}
@@ -247,6 +247,7 @@ cddb_sum(int n)
 	[result setValue:_artist forKey:@"artist"];
 	[result setValue:_year forKey:@"year"];
 	[result setValue:_genre forKey:@"genre"];
+	[result setValue:_comment forKey:@"comment"];
 	[result setValue:_discNumber forKey:@"discNumber"];
 	[result setValue:_discsInSet forKey:@"discsInSet"];
 	[result setValue:_multiArtist forKey:@"multiArtist"];
@@ -260,7 +261,7 @@ cddb_sum(int n)
 	return result;
 }
 
-- (void) setPropertiesFromDictionary:(NSDictionary *)properties
+- (void) setPropertiesFromDictionary:(NSDictionary *) properties
 {
 	int						i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
@@ -277,6 +278,7 @@ cddb_sum(int n)
 	[self setValue:[properties valueForKey:@"artist"] forKey:@"artist"];
 	[self setValue:[properties valueForKey:@"year"] forKey:@"year"];
 	[self setValue:[properties valueForKey:@"genre"] forKey:@"genre"];
+	[self setValue:[properties valueForKey:@"comment"] forKey:@"comment"];
 	[self setValue:[properties valueForKey:@"discNumber"] forKey:@"discNumber"];
 	[self setValue:[properties valueForKey:@"discsInSet"] forKey:@"discsInSet"];
 	[self setValue:[properties valueForKey:@"multiArtist"] forKey:@"multiArtist"];

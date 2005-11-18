@@ -36,6 +36,8 @@ NSString *gDataDir;
 	NSNumber						*_stop;
 }
 
+- (id) initWithDisc: (CompactDisc *) disc;
+
 - (IBAction) selectAll:(id)sender;
 - (IBAction) selectNone:(id)sender;
 - (BOOL) emptySelection;
@@ -43,11 +45,8 @@ NSString *gDataDir;
 - (IBAction) showTrackInfo:(id)sender;
 - (IBAction) encode:(id)sender;
 
-// ========== FreeDB-related methods
 - (IBAction) getCDInformation:(id)sender;
 - (void) updateDiscFromCDDB:(CDDBMatch *)info;
-
-- (CompactDiscController *) initWithDisc: (CompactDisc *) disc;
 
 - (void) displayExceptionSheet:(NSException *)exception;
 

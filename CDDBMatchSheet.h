@@ -30,7 +30,7 @@
 	CompactDiscController		*_controller;
 }
 
-- (void)showCDDBMatchSheet;
+- (void)showCDDBMatches;
 
 - (IBAction) cancel:(id)sender;
 - (IBAction) useSelected:(id)sender;

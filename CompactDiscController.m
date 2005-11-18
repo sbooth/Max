@@ -82,13 +82,13 @@
 	return [Genres sharedGenres];
 }
 
-- (id)init
+- (id) init
 {
 	@throw [NSException exceptionWithName:@"InternalInconsistencyException" reason:@"CompactDiscController init called" userInfo:nil];
 	return nil;
 }
 
-- (CompactDiscController *)initWithDisc: (CompactDisc *) disc
+- (id) initWithDisc: (CompactDisc *) disc
 {
 	@try {
 		if(self = [super initWithWindowNibName:@"CompactDisc"]) {
@@ -155,7 +155,7 @@
 	[super dealloc];
 }
 
-- (void) observeValueForKeyPath:(NSString*)keyPath ofObject:(id)object change:(NSDictionary*)change context:(void*)context
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if([keyPath isEqual:@"title"]) {
 		if(YES == [[change objectForKey:NSKeyValueChangeNewKey] isEqual:[NSNull null]]) {
@@ -465,7 +465,7 @@
 			sheet = [[[CDDBMatchSheet alloc] init] autorelease];
 			[sheet setValue:matches forKey:@"matches"];
 			[sheet setValue:self forKey:@"controller"];
-			[sheet showCDDBMatchSheet];
+			[sheet showCDDBMatches];
 		}
 	}
 	

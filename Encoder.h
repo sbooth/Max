@@ -47,8 +47,8 @@
 	NSNumber				*_timeRemaining;
 }
 
-- (id) initWithSource:(NSString*) source;
+- (id) initWithSource:(NSString *) source;
 
-- (ssize_t) encodeToFile:(NSString*) filename;
+- (ssize_t) encodeToFile:(NSString *) filename;
 
 @end

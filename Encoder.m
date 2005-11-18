@@ -35,7 +35,7 @@
 static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
 
 @interface Encoder (Private)
-- (ssize_t) encodeChunk:(unsigned char*) chunk chunkSize:(ssize_t) chunkSize;
+- (ssize_t) encodeChunk:(unsigned char *) chunk chunkSize:(ssize_t) chunkSize;
 - (ssize_t) finishEncode;
 @end
 
@@ -66,7 +66,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Encoder::init called" userInfo:nil];
 }
 
-- (id) initWithSource:(NSString*) source
+- (id) initWithSource:(NSString *) source
 {
 	NSString	*quality;
 	int			bitrate;
@@ -164,7 +164,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	[super dealloc];
 }
 
-- (ssize_t) encodeToFile:(NSString*) filename
+- (ssize_t) encodeToFile:(NSString *) filename
 {
 	FILE		*file;
 	ssize_t		bytesRead			= 0;
@@ -190,7 +190,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	
 	// Allocate the buffer
 	_bufsize		= 1024 * 1024;
-	_buf			= (unsigned char*) calloc(_bufsize, sizeof(unsigned char));
+	_buf			= (unsigned char *) calloc(_bufsize, sizeof(unsigned char));
 	if(NULL == _buf) {
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
@@ -249,7 +249,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	return bytesWritten;
 }
 
-- (ssize_t) encodeChunk:(unsigned char*) chunk chunkSize:(ssize_t) chunkSize;
+- (ssize_t) encodeChunk:(unsigned char *) chunk chunkSize:(ssize_t) chunkSize;
 {
 	int						*leftPCM,		*left;
 	int						*rightPCM,		*right;
@@ -293,7 +293,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 		
 		// Allocate the MP3 buffer using LAME guide for size
 		bufSize = 1.25 * numSamples + 7200;
-		buf = (unsigned char*) calloc(bufSize, sizeof(unsigned char));
+		buf = (unsigned char *) calloc(bufSize, sizeof(unsigned char));
 		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
@@ -336,7 +336,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	@try {
 		// Allocate the MP3 buffer using LAME guide for size
 		bufSize = 7200;
-		buf = (unsigned char*) calloc(bufSize, sizeof(unsigned char));
+		buf = (unsigned char *) calloc(bufSize, sizeof(unsigned char));
 		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
