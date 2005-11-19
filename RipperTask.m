@@ -105,12 +105,9 @@
 	}
 	
 	@catch(StopException *exception) {
-		[self removeTemporaryFile];
 	}
 	
 	@catch(NSException *exception) {
-		[self removeTemporaryFile];
-		//[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
 	}
 	

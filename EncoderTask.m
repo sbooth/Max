@@ -71,12 +71,9 @@
 	}
 	
 	@catch(StopException *exception) {
-		[self removeOutputFile];
 	}
 	
 	@catch(NSException *exception) {
-		[self removeOutputFile];
-		//[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
 	}
 	

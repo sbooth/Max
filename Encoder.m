@@ -152,10 +152,6 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 - (void) dealloc
 {
 	lame_close(_gfp);
-
-	if(-1 == close(_source)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-	}
 	
 	free(_buf);
 	
@@ -242,13 +238,18 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	// Flush the last MP3 frames (maybe)
 	bytesWritten += [self finishEncode];
 
+	// Close the input file
+	if(-1 == close(_source)) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
+
 	// Close the output file
 	if(-1 == close(_out)) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Write the Xing VBR tag
-	file = fopen([_sourceFilename UTF8String], "r+");
+	file = fopen([filename UTF8String], "r+");
 	if(NULL == file) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}

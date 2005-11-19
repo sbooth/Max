@@ -97,25 +97,23 @@
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStart:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"ripper.stopped"]) {
+		[_ripperTask removeTemporaryFile];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
-//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"ripper.completed"]) {
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidComplete:) withObject:self waitUntilDone:TRUE];
-//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"encoder.started"]) {
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStart:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"encoder.stopped"]) {
 		[_ripperTask removeTemporaryFile];
+		[_encoderTask removeOutputFile];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
-//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"encoder.completed"]) {
 		[_ripperTask removeTemporaryFile];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:self waitUntilDone:TRUE];
-//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
 	}
 }
 
