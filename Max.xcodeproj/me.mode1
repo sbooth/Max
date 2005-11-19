@@ -258,7 +258,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
+									<integer>12</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -525,8 +525,8 @@
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>8C6EC068092FA918006DB0A5</string>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
+		<string>1C0AD2B3069F1EA900FABCE6</string>
 	</array>
 	<key>WindowString</key>
 	<string>728 323 519 504 0 0 1280 832 </string>

@@ -16,8 +16,6 @@
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>_Max</string>
-	<key>CFBundleVersion</key>
-	<string>$Revision$</string>
 	<key>CFBundleShortVersionString</key>
 	<string>0.2</string>
 	<key>CFBundleHelpBookFolder</key>
