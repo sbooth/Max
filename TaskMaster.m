@@ -111,8 +111,8 @@ static TaskMaster *sharedController = nil;
 	// If this task isn't in our task list, add it to the list and begin ripping
 	if(NO == [_taskList containsObject:task]) {
 
-		// Show the jobs window if it is hidden
-		[self showWindow:self];
+		// Show the tasks window if it is hidden
+		[[self window] orderFront:self];
 		
 		// Add the task to our master list of pending/active tasks
 		[_taskList addObject:task];

@@ -117,7 +117,7 @@
 		[tasksWindow performClose:self];
 	}
 	else {
-		[tasksWindow makeKeyAndOrderFront:self];
+		[tasksWindow orderFront:self];
 	}
 }
 
