@@ -62,7 +62,7 @@ static TaskMaster *sharedController = nil;
 
 - (id) init
 {
-	if(self = [super initWithWindowNibName:@"Tasks"]) {
+	if((self = [super initWithWindowNibName:@"Tasks"])) {
 		_taskList		= [[NSMutableArray alloc] initWithCapacity:20];
 		_rippingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
 		_encodingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
@@ -225,10 +225,12 @@ static TaskMaster *sharedController = nil;
 
 - (void) spawnEncoderThreads
 {
-	int i;
-	int limit;
+	unsigned	i;
+	unsigned	limit;
+	unsigned	maxEncoderThreads;
 	
-	limit = ([[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"] < [_encodingTasks count] ? [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"] : [_encodingTasks count]);
+	maxEncoderThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"];
+	limit = (maxEncoderThreads < [_encodingTasks count] ? maxEncoderThreads : [_encodingTasks count]);
 	
 	// Start encoding the next track(s)
 	for(i = 0; i < limit; ++i) {

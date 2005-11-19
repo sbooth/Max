@@ -1,5 +1,5 @@
 /*
- *  $Id: StringValueTransformer.h 68 2005-10-02 16:10:43Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -26,7 +26,7 @@ static UpdateChecker *sharedController = nil;
 
 - (id) init
 {
-	if(self = [super initWithWindowNibName:@"UpdateChecker"]) {
+	if((self = [super initWithWindowNibName:@"UpdateChecker"])) {
 		_socket		= [[MacPADSocket alloc] init];
 
 		[_socket setDelegate:self];

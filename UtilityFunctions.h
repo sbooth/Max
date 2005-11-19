@@ -46,4 +46,3 @@ NSString* getID3v2Timestamp();
 #ifdef __cplusplus
 }
 #endif
-	

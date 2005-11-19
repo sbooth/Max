@@ -32,7 +32,7 @@
 
 - (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track outputFilename:(NSString *) filename
 {
-	if(self = [super init]) {
+	if((self = [super init])) {
 		_disc			= [disc retain];
 		_track			= [track retain];
 		_filename		= [filename retain];

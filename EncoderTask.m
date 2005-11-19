@@ -36,7 +36,7 @@
 
 - (id) initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
 {
-	if(self = [super init]) {
+	if((self = [super init])) {
 		_target = [target retain];
 		
 		[self setValue:trackName forKey:@"trackName"];

@@ -57,7 +57,7 @@
 
 - (id) init
 {
-	if(self = [super init]) {
+	if((self = [super init])) {
 		_cddb = cddb_new();
 		if(NULL == _cddb) {
 			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];

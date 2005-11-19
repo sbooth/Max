@@ -27,7 +27,7 @@
 
 - (id) init
 {
-	if(self = [super init]) {
+	if((self = [super init])) {
 		if(NO == [NSBundle loadNibNamed:@"CDDBMatches" owner:self])  {
 			@throw [MissingResourceException exceptionWithReason:@"Unable to load CDDBMatches.nib" userInfo:nil];
 		}

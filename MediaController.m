@@ -91,7 +91,7 @@ static MediaController *sharedMedia = nil;
 {
 	NSNotificationCenter	*notificationCenter;
 
-	if(self = [super init]) {
+	if((self = [super init])) {
 
 		// Array of controllers for all mounted CDs
 		_media = [[NSMutableArray alloc] initWithCapacity:3];
@@ -124,7 +124,7 @@ static MediaController *sharedMedia = nil;
 	// First show any windows that might have been closed
 	NSEnumerator *enumerator = [_media objectEnumerator];
 	CompactDiscController *object;
-	while(object = [enumerator nextObject]) {
+	while((object = [enumerator nextObject])) {
 		[[object valueForKey:@"window"] makeKeyAndOrderFront:nil];
 	}
 	
@@ -142,12 +142,12 @@ static MediaController *sharedMedia = nil;
 	
 	kernResult = findEjectableCDMedia(&mediaIterator);
 	
-	while(nextMedia = IOIteratorNext(mediaIterator)) {
+	while((nextMedia = IOIteratorNext(mediaIterator))) {
 		NSEnumerator			*enumerator = [_media objectEnumerator];
 		CompactDiscController	*object;
 		found = FALSE;
-		while(object = [enumerator nextObject]) {
-			if(nextMedia == [[[object valueForKey:@"disc"] valueForKey:@"io_object"] intValue]) {
+		while((object = [enumerator nextObject])) {
+			if(nextMedia == [[[object valueForKey:@"disc"] valueForKey:@"io_object"] unsignedIntValue]) {
 				found = TRUE;
 				break;
 			}
@@ -168,11 +168,11 @@ static MediaController *sharedMedia = nil;
 	
 	kernResult = findEjectableCDMedia(&mediaIterator);
 	
-	while(nextMedia = IOIteratorNext(mediaIterator)) {
+	while((nextMedia = IOIteratorNext(mediaIterator))) {
 		NSEnumerator			*enumerator = [_media objectEnumerator];
 		CompactDiscController	*object;
-		while(object = [enumerator nextObject]) {
-			if(nextMedia == [[[object valueForKey:@"disc"] valueForKey:@"io_object"] intValue]) {
+		while((object = [enumerator nextObject])) {
+			if(nextMedia == [[[object valueForKey:@"disc"] valueForKey:@"io_object"] unsignedIntValue]) {
 				[object discUnmounted];
 				[_media removeObject:object];
 				break;

@@ -27,7 +27,7 @@ static Genres *sharedGenres = nil;
 
 - (id) init
 {
-	if(self = [super init]) {
+	if((self = [super init])) {
 		_genres = [NSArray arrayWithObjects:
 			@"Blues",
 			@"Classic Rock",

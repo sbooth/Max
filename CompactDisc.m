@@ -62,7 +62,7 @@ cddb_sum(int n)
 	
 	kern_return_t			err					= KERN_FAILURE;
 	
-	int						i;
+	unsigned				i;
 	UInt32					numDescriptors;
 	
 	char					bsdPath [MAXPATHLEN];
@@ -129,7 +129,7 @@ cddb_sum(int n)
 		}	
 		
 		// Fill in last sector information
-		unsigned int lastTrack = [[result valueForKey:@"lastTrack"] unsignedIntValue];
+		unsigned lastTrack = [[result valueForKey:@"lastTrack"] unsignedIntValue];
 		for(i = 1; i < lastTrack; ++i) {
 			Track *track			= [[result valueForKey:@"tracks"] objectAtIndex:i];
 			Track *previousTrack	= [[result valueForKey:@"tracks"] objectAtIndex:i - 1];
@@ -166,8 +166,7 @@ cddb_sum(int n)
 
 - (id)init
 {
-	self = [super init];
-	if(self) {
+	if((self = [super init])) {
 		_tracks = [[NSMutableArray alloc] initWithCapacity:20];
 		_leadOut = nil;		
 	}
@@ -223,7 +222,7 @@ cddb_sum(int n)
 	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
 	Track			*track;
 	
-	while(track = [enumerator nextObject]) {
+	while((track = [enumerator nextObject])) {
 		if([[track valueForKey:@"selected"] boolValue]) {
 			[result addObject: track];
 		}
@@ -239,7 +238,7 @@ cddb_sum(int n)
 
 - (NSDictionary *) getDictionary
 {
-	int						i;
+	unsigned				i;
 	NSMutableDictionary		*result		= [[[NSMutableDictionary alloc] init] autorelease];
 	NSMutableArray			*tracks		= [[[NSMutableArray alloc] initWithCapacity:[_tracks count]] autorelease];
 		
@@ -263,7 +262,7 @@ cddb_sum(int n)
 
 - (void) setPropertiesFromDictionary:(NSDictionary *) properties
 {
-	int						i;
+	unsigned				i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
 	
 	if([tracks count] != [_tracks count]) {

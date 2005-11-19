@@ -50,7 +50,7 @@ static PreferencesController *sharedPreferences = nil;
     NSDictionary			*initialValuesDictionary;
     NSArray					*resettableUserDefaultsKeys;
 	NSArray					*defaultFiles;
-	int						i;
+	unsigned				i;
 
 	@try {
 		defaultsDictionary	= [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
@@ -103,7 +103,7 @@ static PreferencesController *sharedPreferences = nil;
 
 - (id)init
 {
-	if(self = [super init]) {
+	if((self = [super init])) {
 
 		@try {
 			if(NO == [NSBundle loadNibNamed:@"Preferences" owner:self])  {

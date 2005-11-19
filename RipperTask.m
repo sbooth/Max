@@ -41,7 +41,7 @@
 	char *path = NULL;
 	
 	@try {
-		if(self = [super init]) {
+		if((self = [super init])) {
 			
 			[self setValue:trackName forKey:@"trackName"];
 			

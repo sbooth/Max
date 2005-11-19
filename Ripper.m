@@ -38,7 +38,7 @@
 {
 	_buf = NULL;
 	
-	if(self = [super init]) {
+	if((self = [super init])) {
 		
 		@try {
 			_disc	= [disc retain];

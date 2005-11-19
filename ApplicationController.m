@@ -88,7 +88,7 @@
 			NSEnumerator *enumerator = [[[TaskMaster sharedController] valueForKey:@"taskList"] objectEnumerator];
 			Task *task;
 			
-			while(task = [enumerator nextObject]) {
+			while((task = [enumerator nextObject])) {
 				[[TaskMaster sharedController] removeTask:task];
 			}		
 		}

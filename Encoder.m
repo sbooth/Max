@@ -77,7 +77,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	_sourceFilename		= [source retain];
 	
 	@try {
-		if(self = [super init]) {
+		if((self = [super init])) {
 			
 			// LAME setup
 			_gfp = lame_init();
@@ -196,8 +196,8 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	}
 	
 	// Get input file information
-	struct stat stat;
-	if(-1 == fstat(_source, &stat)) {
+	struct stat sourceStat;
+	if(-1 == fstat(_source, &sourceStat)) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
@@ -208,7 +208,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
-	totalBytes		= stat.st_size;
+	totalBytes		= sourceStat.st_size;
 	bytesToRead		= totalBytes;
 	
 	// Create the output file

@@ -92,7 +92,7 @@
 - (id) initWithDisc: (CompactDisc *) disc
 {
 	@try {
-		if(self = [super initWithWindowNibName:@"CompactDisc"]) {
+		if((self = [super initWithWindowNibName:@"CompactDisc"])) {
 			
 			_disc = [disc retain];
 
@@ -180,7 +180,7 @@
 
 - (IBAction) selectAll:(id)sender
 {
-	int			i;
+	unsigned	i;
 	NSArray		*tracks = [_disc valueForKey:@"tracks"];
 	
 	for(i = 0; i < [tracks count]; ++i) {
@@ -190,7 +190,7 @@
 
 - (IBAction) selectNone:(id)sender
 {
-	int			i;
+	unsigned	i;
 	NSArray		*tracks = [_disc valueForKey:@"tracks"];
 	
 	for(i = 0; i < [tracks count]; ++i) {
@@ -220,7 +220,7 @@
 		outputDirectory = [[[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.outputDirectory"] stringByExpandingTildeInPath];
 		validateAndCreateDirectory(outputDirectory);
 		
-		while(track = [enumerator nextObject]) {
+		while((track = [enumerator nextObject])) {
 
 			// Use custom naming scheme
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"org.sbooth.Max.useCustomNaming"]) {
