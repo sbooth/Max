@@ -1,5 +1,5 @@
 /*
- *  $Id: CompactDiscController.m 112 2005-10-23 06:31:51Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -53,16 +53,19 @@
 		if(nil == trackTitle) {
 			trackTitle = @"Unknown Track";
 		}
-		_trackName = [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
+		
+		_trackName		= [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
 		
 		_ripperTask		= [[[RipperTask alloc] initWithDisc:_disc forTrack:_track trackName:_trackName] retain];
 		_encoderTask	= [[[EncoderTask alloc] initWithSource:[_ripperTask valueForKey:@"path"] target:_filename trackName:_trackName] retain];
 
-		[_ripperTask addObserver:self forKeyPath:@"completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
-		[_ripperTask addObserver:self forKeyPath:@"stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
+		[_ripperTask addObserver:self forKeyPath:@"ripper.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
+		[_ripperTask addObserver:self forKeyPath:@"ripper.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
+		[_ripperTask addObserver:self forKeyPath:@"ripper.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
 
-		[_encoderTask addObserver:self forKeyPath:@"completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
-		[_encoderTask addObserver:self forKeyPath:@"stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
+		[_encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
+		[_encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
+		[_encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];	
 	}
 	return self;
 }
@@ -73,13 +76,15 @@
 	[_track release];
 	[_filename release];
 	
-	[_ripperTask removeObserver:self forKeyPath:@"completed"];
-	[_ripperTask removeObserver:self forKeyPath:@"stopped"];
+	[_ripperTask removeObserver:self forKeyPath:@"ripper.started"];
+	[_ripperTask removeObserver:self forKeyPath:@"ripper.completed"];
+	[_ripperTask removeObserver:self forKeyPath:@"ripper.stopped"];
 	
 	[_ripperTask release];
 
-	[_encoderTask removeObserver:self forKeyPath:@"completed"];
-	[_encoderTask removeObserver:self forKeyPath:@"stopped"];
+	[_encoderTask removeObserver:self forKeyPath:@"encoder.started"];
+	[_encoderTask removeObserver:self forKeyPath:@"encoder.completed"];
+	[_encoderTask removeObserver:self forKeyPath:@"encoder.stopped"];
 	
 	[_encoderTask release];
 	
@@ -88,15 +93,29 @@
 
 - (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
-	// We handle ripping and encoding tasks the same way
-	if([keyPath isEqual:@"completed"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:FALSE];
+	NSLog(@"Task::observeValueForKeyPath(%@)",keyPath);
+	NSLog(@"thread = 0x%.8x", [NSThread currentThread]);
+	
+	if([keyPath isEqual:@"ripper.started"]) {
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStart:) withObject:_ripperTask waitUntilDone:TRUE];
 	}
-	else if([keyPath isEqual:@"stopped"]) {
-		if(YES == [object isKindOfClass:[EncoderTask class]]) {
-			[_ripperTask removeTemporaryFile];
-		}
-		[[TaskMaster sharedController] removeTask:self];
+	else if([keyPath isEqual:@"ripper.stopped"]) {
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:_ripperTask waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
+	}
+	else if([keyPath isEqual:@"ripper.completed"]) {
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidComplete:) withObject:_ripperTask waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
+	}
+	else if([keyPath isEqual:@"encoder.started"]) {
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStart:) withObject:_encoderTask waitUntilDone:TRUE];
+	}
+	else if([keyPath isEqual:@"encoder.stopped"]) {
+		[_ripperTask removeTemporaryFile];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
+	}
+	else if([keyPath isEqual:@"encoder.completed"]) {
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
 	}
 }
 

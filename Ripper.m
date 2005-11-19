@@ -47,7 +47,6 @@
 			[self setValue:[NSNumber numberWithBool:NO] forKey:@"started"];
 			[self setValue:[NSNumber numberWithBool:NO] forKey:@"completed"];
 			[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
-			[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 
 			// Open the disc for reading
 			_fd = open([[_disc valueForKey:@"bsdPath"] UTF8String], O_RDONLY);
@@ -67,7 +66,6 @@
 			_firstSector	= [[_track getFirstSector] unsignedIntValue];
 			_lastSector		= [[_track valueForKey:@"lastSector"] unsignedIntValue];
 			_totalBytes		= (_lastSector - _firstSector) * _blockSize;
-			_bytesToRead	= _totalBytes;
 
 			// Go to the track's first sector in preparation for reading
 			off_t where = lseek(_fd, _firstSector * _blockSize, SEEK_SET);
@@ -102,17 +100,29 @@
 	[super dealloc];
 }
 
+- (void) requestStop
+{
+	@synchronized(self) {
+		if(YES == [_started boolValue]) {
+			_shouldStop = [NSNumber numberWithBool:YES];			
+		}
+		else {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		}
+	}
+}
+
 - (void) ripToFile:(int) file
 {
-	ssize_t bytesRead;
-
+	ssize_t		bytesToRead			= _totalBytes;
+	ssize_t		bytesRead			= 0;
+	NSDate		*startTime			= [NSDate date];
+	
 	// Tell our owner we are starting
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
 	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
-
-	_startTime = [NSDate date];
 	
-	while(0 < _bytesToRead) {
+	while(0 < bytesToRead) {
 
 		// Check if we should stop, and if so throw an exception
 		if(YES == [_shouldStop boolValue]) {
@@ -121,16 +131,17 @@
 		}
 		
 		// Read a chunk
-		bytesRead = read(_fd, _buf, (_bytesToRead > _bufsize ? _bufsize : _bytesToRead));
+		bytesRead = read(_fd, _buf, (bytesToRead > _bufsize ? _bufsize : bytesToRead));
 		if(-1 == bytesRead) {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
 		// Update status
-		_bytesToRead -= bytesRead;
-		[self setValue:[NSNumber numberWithDouble:((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) * 100.0] forKey:@"percentComplete"];
-		NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
-		[self setValue:[NSNumber numberWithDouble:(interval / ((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) - interval)] forKey:@"timeRemaining"];
+		bytesToRead -= bytesRead;
+		[self setValue:[NSNumber numberWithDouble:((double)(_totalBytes - bytesToRead)/(double) _totalBytes) * 100.0] forKey:@"percentComplete"];
+		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+		unsigned int timeRemaining = interval / ((double)(_totalBytes - bytesToRead)/(double) _totalBytes) - interval;
+		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 		
 		// Write data to file
 		if(-1 == write(file, _buf, bytesRead)) {

@@ -80,7 +80,7 @@
 		[alert setInformativeText:@"There are active ripping/encoding tasks."];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
-		if([alert runModal] == NSAlertSecondButtonReturn) {
+		if(NSAlertSecondButtonReturn == [alert runModal]) {
 			return NSTerminateCancel;
 		}
 		// Remove all tasks

@@ -32,7 +32,6 @@
 	unsigned int			_lastSector;
 	unsigned int			_blockSize;
 	unsigned int			_totalBytes;
-	long					_bytesToRead;
 	
 	ssize_t					_bytesRead;
 	ssize_t					_bytesWritten;
@@ -47,11 +46,12 @@
 	NSNumber				*_stopped;
 	NSNumber				*_percentComplete;
 	NSNumber				*_shouldStop;
-	NSDate					*_startTime;
-	NSNumber				*_timeRemaining;
+	NSString				*_timeRemaining;
 }
 
 - (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track;
+
+- (void) requestStop;
 
 - (void) ripToFile:(int) file;
 

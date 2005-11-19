@@ -1,5 +1,5 @@
 /*
- *  $Id: Ripper.h 64 2005-10-02 16:10:43Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -61,11 +61,6 @@
 			_path = [NSString stringWithUTF8String:path];
 			
 			_ripper = [[Ripper alloc] initWithDisc:disc forTrack:track];
-			[_ripper addObserver:self forKeyPath:@"started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-			[_ripper addObserver:self forKeyPath:@"completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-			[_ripper addObserver:self forKeyPath:@"stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-			[_ripper addObserver:self forKeyPath:@"percentComplete" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-			[_ripper addObserver:self forKeyPath:@"timeRemaining" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 		}
 	}
 	
@@ -89,12 +84,6 @@
 
 	[_path release];
 	
-	[_ripper removeObserver:self forKeyPath:@"started"];
-	[_ripper removeObserver:self forKeyPath:@"completed"];
-	[_ripper removeObserver:self forKeyPath:@"stopped"];
-	[_ripper removeObserver:self forKeyPath:@"percentComplete"];
-	[_ripper removeObserver:self forKeyPath:@"timeRemaining"];
-
 	[_ripper release];
 	
 	[super dealloc];
@@ -103,7 +92,7 @@
 - (void) removeTemporaryFile
 {
 	if(-1 == unlink([_path UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _path, errno, strerror(errno)] userInfo:nil];
 	}	
 }
 
@@ -116,9 +105,11 @@
 	}
 	
 	@catch(StopException *exception) {
+		[self removeTemporaryFile];
 	}
 	
 	@catch(NSException *exception) {
+		[self removeTemporaryFile];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
 	}
@@ -130,36 +121,8 @@
 
 - (void) stop
 {
-	// If ripping has started request a stop
-	if(YES == [[_ripper valueForKey:@"started"] boolValue]) {
-		[_ripper setValue:[NSNumber numberWithBool:YES] forKey:@"shouldStop"];
-	}
-	// Otherwise remove it right away since it isn't running
-	else {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
-	}
-}
-
-- (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
-{
-    if([keyPath isEqual:@"started"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStart:) withObject:self waitUntilDone:TRUE];
-    }
-	else if([keyPath isEqual:@"completed"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidComplete:) withObject:self waitUntilDone:TRUE];
-		[self setValue:[change objectForKey:NSKeyValueChangeNewKey] forKey:@"completed"];
-	}
-	else if([keyPath isEqual:@"stopped"]) {
-		[self removeTemporaryFile];
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
-	}
-	else if([keyPath isEqual:@"percentComplete"]) {
-		[self setValue:[change objectForKey:NSKeyValueChangeNewKey] forKey:@"percentComplete"];
-	}
-	else if([keyPath isEqual:@"timeRemaining"]) {
-		unsigned int timeRemaining = [[change objectForKey:NSKeyValueChangeNewKey] unsignedIntValue];
-		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+	@synchronized(_ripper) {
+		[_ripper requestStop];
 	}
 }
 

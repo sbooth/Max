@@ -37,6 +37,7 @@
 
 #import "UtilityFunctions.h"
 
+#include <unistd.h>		// unlink
 
 @implementation CompactDiscController
 
@@ -423,8 +424,23 @@
 			
 			// Check if the output file exists
 			if(YES == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
-				// Don't actually throw the exception here
-				[self displayExceptionSheet:[IOException exceptionWithReason:[NSString stringWithFormat:@"The file %@ already exists.", filename] userInfo:nil]];
+				NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+				[alert addButtonWithTitle:@"No"];
+				[alert addButtonWithTitle:@"Yes"];
+				[alert setMessageText:@"Overwrite existing file?"];
+				[alert setInformativeText:[NSString stringWithFormat:@"The file '%@' already exists.  Do you wish to replace it?", filename]];
+				[alert setAlertStyle:NSWarningAlertStyle];
+
+				if(NSAlertSecondButtonReturn == [alert runModal]) {
+					// Remove the file
+					if(-1 == unlink([filename UTF8String])) {
+						@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+					}
+
+					// Create and run the task
+					Task *task = [[[Task alloc] initWithDisc:_disc forTrack:track outputFilename:filename] autorelease];
+					[[TaskMaster sharedController] runTask:task];
+				}
 			}
 			else {
 				// Create and run the task

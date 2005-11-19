@@ -133,7 +133,7 @@ static MediaController *sharedMedia = nil;
 }
 
 // We don't actually use the notification, it is just a convenient hook
-- (void) volumeMounted: (NSNotification *)aNotification
+- (void) volumeMounted: (NSNotification *) aNotification
 {
 	kern_return_t	kernResult;
 	io_iterator_t	mediaIterator;
@@ -160,7 +160,7 @@ static MediaController *sharedMedia = nil;
 }
 
 // We don't actually use the notification, it is just a convenient hook
-- (void) volumeUnmounted: (NSNotification *)aNotification
+- (void) volumeUnmounted: (NSNotification *) aNotification
 {
 	kern_return_t	kernResult;
 	io_iterator_t	mediaIterator;

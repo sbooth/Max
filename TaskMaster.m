@@ -1,5 +1,5 @@
 /*
- *  $Id: Genres.m 109 2005-10-02 18:36:05Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -33,6 +33,9 @@ static TaskMaster *sharedController = nil;
 
 @interface TaskMaster (Private)
 - (void) spawnEncoderThreads;
+- (void) spawnRipperThreads;
+- (void) removeRippingTask:(RipperTask *) task;
+- (void) removeEncodingTask:(EncoderTask *) task;
 @end
 
 @implementation TaskMaster
@@ -107,170 +110,167 @@ static TaskMaster *sharedController = nil;
 {
 	// If this task isn't in our task list, add it to the list and begin ripping
 	if(NO == [_taskList containsObject:task]) {
+		
 		// Add the task to our master list of pending/active tasks
-		[_taskList addObject:task];
+		@synchronized(_taskList) {
+			[_taskList addObject:task];
+		}
 		
 		// Add the ripping portion of the task to our list of ripping tasks
-		[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[task valueForKey:@"ripperTask"]];
-		
-		// Start the rip if it is the only one
-		if(1 == [_rippingTasks count]) {
-			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[task valueForKey:@"ripperTask"] withObject:self];
-		}
+		@synchronized(_rippingTasks) {
+			[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[task valueForKey:@"ripperTask"]];				
+			[self spawnRipperThreads];
+		}			
 	}
 	
 	// We already know about this task, determine the next step
 	else {
-		// If encoding is complete, tag the file
-		if(YES == [[[task valueForKey:@"encoderTask"] valueForKey:@"completed"] boolValue]) {
-			[Tagger tagFile:[task valueForKey:@"filename"] fromTrack:[task valueForKey:@"track"]];
-
-			// Uncheck the selection
-			[[task valueForKey:@"track"] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-
-			// Remove the ripper temporary 
-			[[task valueForKey:@"ripperTask"] removeTemporaryFile];
-			[self removeTask:task];
+		@synchronized(_taskList) {
+			// If encoding is complete, tag the file
+			if(YES == [[[task valueForKey:@"encoderTask"] valueForKey:@"completed"] boolValue]) {
+				[Tagger tagFile:[task valueForKey:@"filename"] fromTrack:[task valueForKey:@"track"]];
+				
+				// Uncheck the selection
+				[[task valueForKey:@"track"] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+				
+				// Remove the ripper temporary 
+				[[task valueForKey:@"ripperTask"] removeTemporaryFile];
+				[self removeTask:task];
+			}
+			// Add the encoding portion of the task to our list and run it
+			else {
+				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[task valueForKey:@"encoderTask"]];
+				[self spawnEncoderThreads];
+			}
 		}
-		// Add the encoding portion of the task to our list and run it
-		else {
-			[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[task valueForKey:@"encoderTask"]];
-			[self spawnEncoderThreads];
-		}
-	}
+	}		
 }
 
 - (void) removeTask:(Task *) task
 {
-	// Remove from the ripping/encoding lists if needed
-	if(YES == [_rippingTasks containsObject:[task valueForKey:@"ripperTask"]]) {
-		[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:[task valueForKey:@"ripperTask"]];
-	}
-	if(YES == [_encodingTasks containsObject:[task valueForKey:@"encoderTask"]]) {
-		[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:[task valueForKey:@"encoderTask"]];
-	}
-
-	[_taskList removeObject:task];
+	[self removeRippingTask:[task valueForKey:@"ripperTask"]];
 	
-	// Close the tasks window if this is the last task
-	if(0 == [_taskList count]) {
-		NSWindow *tasksWindow = [[TaskMaster sharedController] window];
-		if([tasksWindow isVisible]) {
-			[tasksWindow performClose:self];
+	@synchronized(_encodingTasks) {
+		if(YES == [_encodingTasks containsObject:[task valueForKey:@"encoderTask"]]) {
+			[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:[task valueForKey:@"encoderTask"]];
+		}
+	}
+	
+	@synchronized(_taskList) {
+		[_taskList removeObject:task];
+		
+		// Close the tasks window if this is the last task
+		if(0 == [_taskList count]) {
+			NSWindow *tasksWindow = [[TaskMaster sharedController] window];
+			if([tasksWindow isVisible]) {
+				[tasksWindow performClose:self];
+			}
 		}
 	}
 }
 
-- (void) displayExceptionSheet:(NSException *)exception
+- (void) displayExceptionSheet:(NSException *) exception
 {
 	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
 }
 
-- (void)alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
+- (void)alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo
 {
 	// Nothing for now
 }
 
 #pragma mark Rip functionality
 
+- (void) removeRippingTask:(RipperTask *) task
+{
+	// Remove from the list of ripping tasks
+	@synchronized(_rippingTasks) {
+		if(YES == [_rippingTasks containsObject:task]) {
+			NSLog(@"TaskMaster::removeRippingTask(%@)", [task valueForKey:@"trackName"]);
+			[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
+		}
+	}	
+}
+
+- (void) spawnRipperThreads
+{
+	@synchronized(_rippingTasks) {
+		if(0 != [_rippingTasks count] && NO == [[[[_rippingTasks objectAtIndex:0] valueForKey:@"ripper"] valueForKey:@"started"] boolValue]) {
+			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
+		}
+	}
+}
+
 - (void) ripDidStart:(id) object
 {
-	[GrowlApplicationBridge 
-		notifyWithTitle:@"Rip started" 
-			description:[object valueForKey:@"trackName"]
-	   notificationName:@"Rip started"
-			   iconData:nil
-			   priority:0
-			   isSticky:NO
-		   clickContext:nil
-		];
+	[GrowlApplicationBridge notifyWithTitle:@"Rip started" description:[object valueForKey:@"trackName"]
+	   notificationName:@"Rip started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) ripDidStop:(id) object
 {
 	// Remove from the list of ripping tasks
-	[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:object];
-
-	[GrowlApplicationBridge 
-		notifyWithTitle:@"Rip stopped" 
-			description:[object valueForKey:@"trackName"]
-	   notificationName:@"Rip started"
-			   iconData:nil
-			   priority:0
-			   isSticky:NO
-		   clickContext:nil
-		];
+	[self removeRippingTask:object];
+	
+	[GrowlApplicationBridge notifyWithTitle:@"Rip stopped" description:[object valueForKey:@"trackName"]
+	   notificationName:@"Rip started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	
 	// Start ripping the next track
-	if(0 != [_rippingTasks count]) {
-		[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
-	}
+	[self spawnRipperThreads];
 }
 
 - (void) ripDidComplete:(id) object
 {
 	// Remove from the list of ripping tasks
-	[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:object];
-
-	[GrowlApplicationBridge 
-		notifyWithTitle:@"Rip completed" 
-			description:[object valueForKey:@"trackName"]
-	   notificationName:@"Rip completed"
-			   iconData:nil
-			   priority:0
-			   isSticky:NO
-		   clickContext:nil
-		];
+	[self removeRippingTask:object];
+	
+	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:[object valueForKey:@"trackName"]
+	   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	
 	// Start ripping the next track
-	if(0 != [_rippingTasks count]) {
-		[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
-	}
+	[self spawnRipperThreads];
 }
 
 #pragma mark Encoding functionality
+
+- (void) removeEncodingTask:(EncoderTask *) task
+{
+	// Remove from the list of encoding tasks
+	@synchronized(_encodingTasks) {
+		[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:task];
+	}	
+}
 
 - (void) spawnEncoderThreads
 {
 	int i;
 	int limit;
 	
-	limit = ([[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"] < [_encodingTasks count] ? [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"] : [_encodingTasks count]);
-	
-	// Start encoding the next track(s)
-	for(i = 0; i < limit; ++i) {
-		if(NO == [[[[_encodingTasks objectAtIndex:i] valueForKey:@"encoder"] valueForKey:@"started"] boolValue]) {
-			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
-		}
-	}	
+	@synchronized(_encodingTasks) {
+		limit = ([[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"] < [_encodingTasks count] ? [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"] : [_encodingTasks count]);
+		
+		// Start encoding the next track(s)
+		for(i = 0; i < limit; ++i) {
+			if(NO == [[[[_encodingTasks objectAtIndex:i] valueForKey:@"encoder"] valueForKey:@"started"] boolValue]) {
+				[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
+			}
+		}	
+	}
 }
+
 - (void) encodeDidStart:(id) object
 {
-	[GrowlApplicationBridge 
-		notifyWithTitle:@"Encode started" 
-			description:[object valueForKey:@"trackName"]
-	   notificationName:@"Encode started"
-			   iconData:nil
-			   priority:0
-			   isSticky:NO
-		   clickContext:nil
-		];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[object valueForKey:@"trackName"]
+	   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) encodeDidStop:(id) object
 {
 	// Remove from the list of encoding tasks
-	[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:object];
+	[self removeEncodingTask:object];
 	
-	[GrowlApplicationBridge 
-		notifyWithTitle:@"Encode stopped" 
-			description:[object valueForKey:@"trackName"]
-	   notificationName:@"Encode started"
-			   iconData:nil
-			   priority:0
-			   isSticky:NO
-		   clickContext:nil
-		];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[object valueForKey:@"trackName"]
+	   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	
 	// Start encoding the next files if less than the specified number of threads are running
 	[self spawnEncoderThreads];
@@ -279,17 +279,10 @@ static TaskMaster *sharedController = nil;
 - (void) encodeDidComplete:(id) object
 {
 	// Remove from the list of encoding tasks
-	[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:object];
+	[self removeEncodingTask:object];
 	
-	[GrowlApplicationBridge 
-		notifyWithTitle:@"Encode completed" 
-			description:[object valueForKey:@"trackName"]
-	   notificationName:@"Encode completed"
-			   iconData:nil
-			   priority:0
-			   isSticky:NO
-		   clickContext:nil
-		];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[object valueForKey:@"trackName"]
+	   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
 	// Start encoding the next files if less than the specified number of threads are running
 	[self spawnEncoderThreads];
