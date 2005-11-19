@@ -24,6 +24,8 @@
 
 @interface TaskMaster : NSWindowController
 {
+    IBOutlet NSTextField	*_ripperStatusTextField;
+    IBOutlet NSTextField	*_encoderStatusTextField;
 	NSMutableArray			*_taskList;
 	
 	NSMutableArray			*_rippingTasks;

@@ -115,31 +115,11 @@ static TaskMaster *sharedController = nil;
 		[_taskList addObject:task];
 		
 		// Add the ripping portion of the task to our list of ripping tasks
-		[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[task valueForKey:@"ripperTask"]];				
+		[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[task valueForKey:@"ripperTask"]];
+		[_ripperStatusTextField setStringValue:[NSString stringWithFormat:@"Ripper Tasks: %u", [_rippingTasks count]]];
+		[_ripperStatusTextField setHidden:NO];
 		[self spawnRipperThreads];
 	}
-	
-	// We already know about this task, determine the next step
-	else {
-		NSLog(@"ERR FNORD");
-		
-		// If encoding is complete, tag the file
-		if(YES == [[[[task valueForKey:@"encoderTask"] valueForKey:@"encoder"] valueForKey:@"completed"] boolValue]) {
-			[Tagger tagFile:[task valueForKey:@"filename"] fromTrack:[task valueForKey:@"track"]];
-			
-			// Uncheck the selection
-			[[task valueForKey:@"track"] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-			
-			// Remove the ripper temporary 
-			[[task valueForKey:@"ripperTask"] removeTemporaryFile];
-			[self removeTask:task];
-		}
-		// Add the encoding portion of the task to our list and run it
-		else {
-			[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[task valueForKey:@"encoderTask"]];
-			[self spawnEncoderThreads];
-		}
-	}		
 }
 
 - (void) removeTask:(Task *) task
@@ -175,6 +155,14 @@ static TaskMaster *sharedController = nil;
 	// Remove from the list of ripping tasks
 	if(YES == [_rippingTasks containsObject:task]) {
 		[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
+
+		if(0 == [_rippingTasks count]) {
+			[_ripperStatusTextField setHidden:YES];
+		}
+		else {
+			[_ripperStatusTextField setStringValue:[NSString stringWithFormat:@"Ripper Tasks: %u", [_rippingTasks count]]];
+			[_ripperStatusTextField setHidden:NO];
+		}
 	}
 }
 
@@ -209,6 +197,8 @@ static TaskMaster *sharedController = nil;
 	[self spawnRipperThreads];
 
 	[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[task valueForKey:@"encoderTask"]];
+	[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
+	[_encoderStatusTextField setHidden:NO];
 	[self spawnEncoderThreads];
 }
 
@@ -219,6 +209,14 @@ static TaskMaster *sharedController = nil;
 	// Remove from the list of encoding tasks
 	if(YES == [_encodingTasks containsObject:task]) {
 		[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:task];
+
+		if(0 == [_encodingTasks count]) {
+			[_encoderStatusTextField setHidden:YES];
+		}
+		else {
+			[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
+			[_encoderStatusTextField setHidden:NO];
+		}
 	}	
 }
 

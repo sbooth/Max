@@ -1,7 +1,15 @@
 {
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = TaskMaster; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }
+        {
+            CLASS = TaskMaster; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_encoderStatusTextField" = NSTextField; 
+                "_ripperStatusTextField" = NSTextField; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
     ); 
     IBVersion = 1; 
 }

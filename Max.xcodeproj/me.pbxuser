@@ -270,6 +270,20 @@
 			8C6EC20D092FBCB4006DB0A5 /* PBXTextBookmark */ = 8C6EC20D092FBCB4006DB0A5 /* PBXTextBookmark */;
 			8C6EC215092FBE48006DB0A5 /* PBXTextBookmark */ = 8C6EC215092FBE48006DB0A5 /* PBXTextBookmark */;
 			8C6EC216092FBE48006DB0A5 /* PBXTextBookmark */ = 8C6EC216092FBE48006DB0A5 /* PBXTextBookmark */;
+			8C6EC218092FBE8C006DB0A5 /* PBXTextBookmark */ = 8C6EC218092FBE8C006DB0A5 /* PBXTextBookmark */;
+			8C6EC219092FBE8C006DB0A5 /* PBXTextBookmark */ = 8C6EC219092FBE8C006DB0A5 /* PBXTextBookmark */;
+			8C6EC229092FC396006DB0A5 /* PBXTextBookmark */ = 8C6EC229092FC396006DB0A5 /* PBXTextBookmark */;
+			8C6EC22A092FC396006DB0A5 /* PBXTextBookmark */ = 8C6EC22A092FC396006DB0A5 /* PBXTextBookmark */;
+			8C6EC22B092FC398006DB0A5 /* PBXBookmark */ = 8C6EC22B092FC398006DB0A5 /* PBXBookmark */;
+			8C6EC237092FC465006DB0A5 /* PBXTextBookmark */ = 8C6EC237092FC465006DB0A5 /* PBXTextBookmark */;
+			8C6EC23A092FC483006DB0A5 /* PBXTextBookmark */ = 8C6EC23A092FC483006DB0A5 /* PBXTextBookmark */;
+			8C6EC243092FC54D006DB0A5 /* PBXTextBookmark */ = 8C6EC243092FC54D006DB0A5 /* PBXTextBookmark */;
+			8C6EC247092FC663006DB0A5 /* PBXTextBookmark */ = 8C6EC247092FC663006DB0A5 /* PBXTextBookmark */;
+			8C6EC248092FC663006DB0A5 /* PBXTextBookmark */ = 8C6EC248092FC663006DB0A5 /* PBXTextBookmark */;
+			8C6EC252092FC768006DB0A5 /* PBXTextBookmark */ = 8C6EC252092FC768006DB0A5 /* PBXTextBookmark */;
+			8C6EC257092FC7BC006DB0A5 /* PBXTextBookmark */ = 8C6EC257092FC7BC006DB0A5 /* PBXTextBookmark */;
+			8C6EC25A092FC8B3006DB0A5 /* PBXTextBookmark */ = 8C6EC25A092FC8B3006DB0A5 /* PBXTextBookmark */;
+			8C6EC260092FC965006DB0A5 /* PBXTextBookmark */ = 8C6EC260092FC965006DB0A5 /* PBXTextBookmark */;
 			8C752A8D08C50983001F588B = 8C752A8D08C50983001F588B /* PBXTextBookmark */;
 			8C752A8E08C50983001F588B = 8C752A8E08C50983001F588B /* PBXTextBookmark */;
 			8C9D204D08C5379E00D95535 = 8C9D204D08C5379E00D95535 /* PBXTextBookmark */;
@@ -413,17 +427,17 @@
 	};
 	8C206F120929486C00793FD0 /* TaskMaster.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {719, 713}}";
-			sepNavSelRange = "{1530, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {719, 728}}";
+			sepNavSelRange = "{973, 0}";
 			sepNavVisRect = "{{0, 0}, {719, 713}}";
 			sepNavWindowFrame = "{{38, 20}, {764, 786}}";
 		};
 	};
 	8C206F130929486C00793FD0 /* TaskMaster.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1544, 3780}}";
-			sepNavSelRange = "{6330, 0}";
-			sepNavVisRect = "{{0, 2310}, {719, 713}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1544, 3752}}";
+			sepNavSelRange = "{3710, 0}";
+			sepNavVisRect = "{{0, 1498}, {719, 713}}";
 			sepNavWindowFrame = "{{15, 41}, {764, 786}}";
 		};
 	};
@@ -488,7 +502,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1597;
 		vrLoc = 3906;
@@ -586,7 +600,7 @@
 		comments = "error: parse error before 'AT_NAME' token";
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		rLen = 1;
-		rLoc = 149;
+		rLoc = 129;
 		rType = 1;
 	};
 	8C6EC0B7092FADEE006DB0A5 /* PBXTextBookmark */ = {
@@ -594,7 +608,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4537;
+		rLoc = 3881;
 		rType = 0;
 		vrLen = 661;
 		vrLoc = 5140;
@@ -614,7 +628,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1660;
 		vrLoc = 3652;
@@ -644,7 +658,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 189";
 		rLen = 0;
-		rLoc = 5282;
+		rLoc = 4626;
 		rType = 0;
 		vrLen = 1446;
 		vrLoc = 4841;
@@ -674,7 +688,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4537;
+		rLoc = 3881;
 		rType = 0;
 		vrLen = 662;
 		vrLoc = 5140;
@@ -704,7 +718,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 189";
 		rLen = 0;
-		rLoc = 5282;
+		rLoc = 4626;
 		rType = 0;
 		vrLen = 1446;
 		vrLoc = 4841;
@@ -724,7 +738,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4537;
+		rLoc = 3881;
 		rType = 0;
 		vrLen = 662;
 		vrLoc = 5140;
@@ -744,7 +758,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 189";
 		rLen = 0;
-		rLoc = 5282;
+		rLoc = 4626;
 		rType = 0;
 		vrLen = 1446;
 		vrLoc = 4841;
@@ -764,7 +778,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 189";
 		rLen = 0;
-		rLoc = 5282;
+		rLoc = 4626;
 		rType = 0;
 		vrLen = 1446;
 		vrLoc = 4841;
@@ -774,7 +788,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 206";
 		rLen = 0;
-		rLoc = 5687;
+		rLoc = 5284;
 		rType = 0;
 		vrLen = 1629;
 		vrLoc = 5311;
@@ -804,7 +818,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 204";
 		rLen = 0;
-		rLoc = 5687;
+		rLoc = 5284;
 		rType = 0;
 		vrLen = 1646;
 		vrLoc = 5311;
@@ -824,7 +838,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4537;
+		rLoc = 3881;
 		rType = 0;
 		vrLen = 662;
 		vrLoc = 5140;
@@ -834,7 +848,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 199";
 		rLen = 0;
-		rLoc = 5438;
+		rLoc = 5035;
 		rType = 0;
 		vrLen = 1637;
 		vrLoc = 5311;
@@ -854,7 +868,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 148";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1511;
 		vrLoc = 4828;
@@ -894,7 +908,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 148";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1511;
 		vrLoc = 4828;
@@ -918,7 +932,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 148";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1503;
 		vrLoc = 4165;
@@ -928,7 +942,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 148";
 		rLen = 0;
-		rLoc = 4537;
+		rLoc = 3881;
 		rType = 0;
 		vrLen = 633;
 		vrLoc = 5070;
@@ -948,7 +962,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 148";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1503;
 		vrLoc = 4165;
@@ -968,7 +982,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 148";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1503;
 		vrLoc = 4165;
@@ -996,7 +1010,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 236";
 		rLen = 0;
-		rLoc = 7464;
+		rLoc = 7477;
 		rType = 0;
 		vrLen = 1819;
 		vrLoc = 6802;
@@ -1006,7 +1020,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 272";
 		rLen = 0;
-		rLoc = 8643;
+		rLoc = 8656;
 		rType = 0;
 		vrLen = 558;
 		vrLoc = 1025;
@@ -1016,7 +1030,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 272";
 		rLen = 0;
-		rLoc = 8643;
+		rLoc = 8656;
 		rType = 0;
 		vrLen = 558;
 		vrLoc = 1025;
@@ -1024,8 +1038,8 @@
 	8C6EC1C5092FB8E0006DB0A5 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
-		rLen = 12;
-		rLoc = 3857;
+		rLen = 0;
+		rLoc = 3783;
 		rType = 0;
 	};
 	8C6EC1CC092FB8F1006DB0A5 /* PBXTextBookmark */ = {
@@ -1033,7 +1047,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: valueForKey";
 		rLen = 0;
-		rLoc = 3859;
+		rLoc = 3783;
 		rType = 0;
 		vrLen = 1684;
 		vrLoc = 3130;
@@ -1043,7 +1057,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 272";
 		rLen = 0;
-		rLoc = 8643;
+		rLoc = 8656;
 		rType = 0;
 		vrLen = 558;
 		vrLoc = 1025;
@@ -1053,7 +1067,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: valueForKey";
 		rLen = 0;
-		rLoc = 3859;
+		rLoc = 3783;
 		rType = 0;
 		vrLen = 1039;
 		vrLoc = 3334;
@@ -1063,7 +1077,7 @@
 		comments = "error: 'object' undeclared (first use in this function)";
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		rLen = 1;
-		rLoc = 189;
+		rLoc = 177;
 		rType = 1;
 	};
 	8C6EC1F6092FBC00006DB0A5 /* PBXTextBookmark */ = {
@@ -1071,7 +1085,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "[GrowlApplicationBridge notifyWithTitle:@\"Rip started\" description:[object valueForKey:@\"trackName\"]";
 		rLen = 100;
-		rLoc = 5727;
+		rLoc = 5324;
 		rType = 0;
 		vrLen = 812;
 		vrLoc = 5406;
@@ -1081,7 +1095,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: valueForKey";
 		rLen = 0;
-		rLoc = 3859;
+		rLoc = 3783;
 		rType = 0;
 		vrLen = 958;
 		vrLoc = 3334;
@@ -1091,7 +1105,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 205";
 		rLen = 0;
-		rLoc = 6330;
+		rLoc = 5927;
 		rType = 0;
 		vrLen = 1677;
 		vrLoc = 5034;
@@ -1101,7 +1115,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 190";
 		rLen = 0;
-		rLoc = 5800;
+		rLoc = 5397;
 		rType = 0;
 		vrLen = 808;
 		vrLoc = 5406;
@@ -1111,7 +1125,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: valueForKey";
 		rLen = 0;
-		rLoc = 3859;
+		rLoc = 3783;
 		rType = 0;
 		vrLen = 958;
 		vrLoc = 3334;
@@ -1121,7 +1135,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 190";
 		rLen = 0;
-		rLoc = 5800;
+		rLoc = 5397;
 		rType = 0;
 		vrLen = 808;
 		vrLoc = 5406;
@@ -1131,10 +1145,144 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: valueForKey";
 		rLen = 0;
-		rLoc = 3859;
+		rLoc = 3783;
 		rType = 0;
 		vrLen = 958;
 		vrLoc = 3334;
+	};
+	8C6EC218092FBE8C006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 270";
+		rLen = 0;
+		rLoc = 8656;
+		rType = 0;
+		vrLen = 808;
+		vrLoc = 5406;
+	};
+	8C6EC219092FBE8C006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 270";
+		rLen = 0;
+		rLoc = 8656;
+		rType = 0;
+		vrLen = 958;
+		vrLoc = 3334;
+	};
+	8C6EC229092FC396006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 270";
+		rLen = 0;
+		rLoc = 8656;
+		rType = 0;
+		vrLen = 808;
+		vrLoc = 5406;
+	};
+	8C6EC22A092FC396006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 270";
+		rLen = 0;
+		rLoc = 8656;
+		rType = 0;
+		vrLen = 958;
+		vrLoc = 3334;
+	};
+	8C6EC22B092FC398006DB0A5 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+	};
+	8C6EC237092FC465006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 120";
+		rLen = 0;
+		rLoc = 3682;
+		rType = 0;
+		vrLen = 1517;
+		vrLoc = 2687;
+	};
+	8C6EC23A092FC483006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 120";
+		rLen = 0;
+		rLoc = 3680;
+		rType = 0;
+		vrLen = 1518;
+		vrLoc = 2687;
+	};
+	8C6EC243092FC54D006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 157";
+		rLen = 0;
+		rLoc = 4998;
+		rType = 0;
+		vrLen = 1678;
+		vrLoc = 3747;
+	};
+	8C6EC247092FC663006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 254";
+		rLen = 0;
+		rLoc = 8656;
+		rType = 0;
+		vrLen = 763;
+		vrLoc = 5658;
+	};
+	8C6EC248092FC663006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 254";
+		rLen = 0;
+		rLoc = 8656;
+		rType = 0;
+		vrLen = 832;
+		vrLoc = 3334;
+	};
+	8C6EC252092FC768006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 194";
+		rLen = 0;
+		rLoc = 6112;
+		rType = 0;
+		vrLen = 1872;
+		vrLoc = 4800;
+	};
+	8C6EC257092FC7BC006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = Idle;
+		rLen = 0;
+		rLoc = 4818;
+		rType = 0;
+		vrLen = 1602;
+		vrLoc = 4088;
+	};
+	8C6EC25A092FC8B3006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 159";
+		rLen = 0;
+		rLoc = 4818;
+		rType = 0;
+		vrLen = 1622;
+		vrLoc = 4120;
+	};
+	8C6EC260092FC965006DB0A5 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 120";
+		rLen = 0;
+		rLoc = 3710;
+		rType = 0;
+		vrLen = 1569;
+		vrLoc = 3177;
 	};
 	8C73004C08ECAA5B0008D7E0 /* CDDBMatchSheet.h */ = {
 		uiCtxt = {
@@ -1631,7 +1779,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1595;
 		vrLoc = 3906;
@@ -1641,7 +1789,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 151";
 		rLen = 0;
-		rLoc = 4478;
+		rLoc = 3822;
 		rType = 0;
 		vrLen = 1599;
 		vrLoc = 3906;
@@ -1733,8 +1881,8 @@
 	8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {987, 728}}";
-			sepNavSelRange = "{1369, 0}";
-			sepNavVisRect = "{{0, 0}, {987, 646}}";
+			sepNavSelRange = "{1028, 48}";
+			sepNavVisRect = "{{0, 0}, {987, 702}}";
 			sepNavWindowFrame = "{{15, 52}, {1032, 775}}";
 		};
 	};

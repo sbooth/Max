@@ -65,7 +65,6 @@ static PreferencesController *sharedPreferences = nil;
 		}
 	    
 		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"org.sbooth.Max.customNamingUseFallback", @"org.sbooth.Max.customTrackColor", 
-			@"org.sbooth.Max.createAlbumPlaylist",
 			@"org.sbooth.Max.freeDBPort", @"org.sbooth.Max.freeDBProtocol", @"org.sbooth.Max.freeDBServer", 
 			@"org.sbooth.Max.lameBitrate", @"org.sbooth.Max.lameEncodingEngineQuality", @"org.sbooth.Max.lameMonoEncoding", 
 			@"org.sbooth.Max.lameQuality",@"org.sbooth.Max.lameTarget", @"org.sbooth.Max.lameUseConstantBitrate", 
