@@ -1,5 +1,5 @@
 /*
- *  $Id: Genres.m 109 2005-10-02 18:36:05Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -38,12 +38,12 @@
 - (void) displayExceptionSheet:(NSException *) exception;
 - (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
 
-- (void) ripDidStart:(id) object;
-- (void) ripDidStop:(id) object;
-- (void) ripDidComplete:(id) object;
+- (void) ripDidStart:(Task *) task;
+- (void) ripDidStop:(Task *) task;
+- (void) ripDidComplete:(Task *) task;
 
-- (void) encodeDidStart:(id) object;
-- (void) encodeDidStop:(id) object;
-- (void) encodeDidComplete:(id) object;
+- (void) encodeDidStart:(Task *) task;
+- (void) encodeDidStop:(Task *) task;
+- (void) encodeDidComplete:(Task *) task;
 
 @end

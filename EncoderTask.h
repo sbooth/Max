@@ -1,5 +1,5 @@
 /*
- *  $Id: Ripper.h 64 2005-10-02 16:10:43Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -21,28 +21,17 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Encoder.h"
-#import "CompactDisc.h"
-#import "Track.h"
 
 @interface EncoderTask : NSObject 
 {
-	NSString		*_target;
-	
-	Encoder			*_encoder;
-	
+	NSString			*_target;
+	Encoder				*_encoder;
 	NSString			*_trackName;
-	NSNumber			*_completed;
-	NSNumber			*_stopped;
-	NSNumber			*_percentComplete;
-	NSString			*_timeRemaining;
 }
 
 - (id) initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
-
 - (void) run:(id) object;
-
 - (void) stop;
-
 - (void) removeOutputFile;
 
 @end

@@ -110,7 +110,7 @@
 	
 	@catch(NSException *exception) {
 		[self removeTemporaryFile];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
+		//[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
 	}
 	
@@ -121,9 +121,7 @@
 
 - (void) stop
 {
-	@synchronized(_ripper) {
-		[_ripper requestStop];
-	}
+	[_ripper requestStop];
 }
 
 @end

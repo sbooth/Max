@@ -93,29 +93,29 @@
 
 - (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
-	NSLog(@"Task::observeValueForKeyPath(%@)",keyPath);
-	NSLog(@"thread = 0x%.8x", [NSThread currentThread]);
-	
 	if([keyPath isEqual:@"ripper.started"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStart:) withObject:_ripperTask waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStart:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"ripper.stopped"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:_ripperTask waitUntilDone:TRUE];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
+//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"ripper.completed"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidComplete:) withObject:_ripperTask waitUntilDone:TRUE];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidComplete:) withObject:self waitUntilDone:TRUE];
+//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"encoder.started"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStart:) withObject:_encoderTask waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStart:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"encoder.stopped"]) {
 		[_ripperTask removeTemporaryFile];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
+//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(removeTask:) withObject:self waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqual:@"encoder.completed"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
+		[_ripperTask removeTemporaryFile];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:self waitUntilDone:TRUE];
+//		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(runTask:) withObject:self waitUntilDone:TRUE];
 	}
 }
 

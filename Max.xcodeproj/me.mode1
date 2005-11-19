@@ -185,88 +185,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>8C6EC121092FB2F7006DB0A5</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>RipperTask.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>8C6EC122092FB2F7006DB0A5</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>RipperTask.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>8C6EC133092FB3D5006DB0A5</string>
-						<key>history</key>
-						<array>
-							<string>8C6EC11C092FB276006DB0A5</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {764, 745}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>15 41 764 786 0 0 1280 832 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>8C6EC0BD092FADF3006DB0A5</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>TaskMaster.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>8C6EC0BE092FADF3006DB0A5</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>TaskMaster.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>8C6EC134092FB3D5006DB0A5</string>
-						<key>history</key>
-						<array>
-							<string>8C6EC0F2092FB088006DB0A5</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {764, 745}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>15 41 764 786 0 0 1280 832 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -339,7 +258,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>4</integer>
+									<integer>12</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -598,16 +517,16 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D57069F1CE1000CFCEE</string>
+		<string>8C6EC153092FB55C006DB0A5</string>
 		<string>8C6EC085092FAA12006DB0A5</string>
 		<string>8C6EC086092FAA12006DB0A5</string>
 		<string>8C9D1F4208C5287A00D95535</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>8C6EC068092FA918006DB0A5</string>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>8C6EC0BD092FADF3006DB0A5</string>
-		<string>/Users/me/Development/Max/Max.xcodeproj</string>
-		<string>8C6EC121092FB2F7006DB0A5</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>728 323 519 504 0 0 1280 832 </string>
@@ -626,8 +545,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -650,6 +567,8 @@
 							<string>327pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -829,14 +748,12 @@
 							<key>Dock</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>RipperTask.m</string>
+										<string>TaskMaster.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -857,6 +774,8 @@
 							<string>370pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -892,8 +811,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>8CE267E8092F07CF0050E9C4</string>
-				<string>8CE267E9092F07CF0050E9C4</string>
+				<string>8C6EC1CD092FB8F1006DB0A5</string>
+				<string>8C6EC1CE092FB8F1006DB0A5</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
@@ -1062,7 +981,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C0AD2B3069F1EA900FABCE6</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -1265,8 +1184,8 @@
 			<true/>
 			<key>TableOfContents</key>
 			<array>
-				<string>8CE26A20092FA3F10050E9C4</string>
-				<string>8CE26A21092FA3F10050E9C4</string>
+				<string>8C6EC153092FB55C006DB0A5</string>
+				<string>8C6EC154092FB55C006DB0A5</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
 				<string>1CA1AED706398EBD00589147</string>
 			</array>
@@ -1275,7 +1194,7 @@
 			<key>WindowString</key>
 			<string>21 400 744 409 0 0 1280 832 </string>
 			<key>WindowToolGUID</key>
-			<string>8CE26A20092FA3F10050E9C4</string>
+			<string>8C6EC153092FB55C006DB0A5</string>
 			<key>WindowToolIsVisible</key>
 			<false/>
 		</dict>

@@ -28,16 +28,12 @@
 {
 	NSString			*_path;
 	int					_out;
-	
 	Ripper				*_ripper;
-	
 	NSString			*_trackName;
 }
 
 - (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track trackName:(NSString *) trackName;
-
 - (void) run:(id) object;
-
 - (void) removeTemporaryFile;
 
 @end

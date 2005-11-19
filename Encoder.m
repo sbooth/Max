@@ -164,17 +164,30 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	[super dealloc];
 }
 
+- (void) requestStop
+{
+	@synchronized(self) {
+		if(YES == [_started boolValue]) {
+			_shouldStop = [NSNumber numberWithBool:YES];			
+		}
+		else {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		}
+	}
+}
+
 - (ssize_t) encodeToFile:(NSString *) filename
 {
 	FILE		*file;
 	ssize_t		bytesRead			= 0;
 	ssize_t		bytesWritten		= 0;
+	ssize_t		bytesToRead			= 0;
+	ssize_t		totalBytes			= 0;
+	NSDate		*startTime			= [NSDate date];
 	
 	// Tell our owner we are starting
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
 	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
-
-	_startTime = [NSDate date];
 
 	// Open the input file
 	_source = open([_sourceFilename UTF8String], O_RDONLY);
@@ -195,8 +208,8 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
-	_totalBytes		= stat.st_size;
-	_bytesToRead	= _totalBytes;
+	totalBytes		= stat.st_size;
+	bytesToRead		= totalBytes;
 	
 	// Create the output file
 	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -205,7 +218,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	}
 
 	// Iteratively get the PCM data and encode it
-	while(0 < _bytesToRead) {
+	while(0 < bytesToRead) {
 		// Check if we should stop, and if so throw an exception
 		if(YES == [_shouldStop boolValue]) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
@@ -213,16 +226,17 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 		}
 		
 		// Read a chunk of PCM input
-		bytesRead = read(_source, _buf, (_bytesToRead > _bufsize ? _bufsize : _bytesToRead));
+		bytesRead = read(_source, _buf, (bytesToRead > _bufsize ? _bufsize : bytesToRead));
 
 		// Encode the PCM data
 		bytesWritten += [self encodeChunk:_buf chunkSize:bytesRead];
 
 		// Update status
-		_bytesToRead -= bytesRead;
-		[self setValue:[NSNumber numberWithDouble:((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) * 100.0] forKey:@"percentComplete"];
-		NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
-		[self setValue:[NSNumber numberWithDouble:(interval / ((double)(_totalBytes - _bytesToRead)/(double) _totalBytes) - interval)] forKey:@"timeRemaining"];
+		bytesToRead -= bytesRead;
+		[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 	}
 	
 	// Flush the last MP3 frames (maybe)

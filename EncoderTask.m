@@ -1,5 +1,5 @@
 /*
- *  $Id: Ripper.h 64 2005-10-02 16:10:43Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -42,11 +42,6 @@
 		[self setValue:trackName forKey:@"trackName"];
 		
 		_encoder = [[Encoder alloc] initWithSource:source];
-		[_encoder addObserver:self forKeyPath:@"started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-		[_encoder addObserver:self forKeyPath:@"completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-		[_encoder addObserver:self forKeyPath:@"stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-		[_encoder addObserver:self forKeyPath:@"percentComplete" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
-		[_encoder addObserver:self forKeyPath:@"timeRemaining" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 	}
 	return self;
 }
@@ -54,12 +49,6 @@
 - (void) dealloc
 {
 	[_target release];
-	
-	[_encoder removeObserver:self forKeyPath:@"started"];
-	[_encoder removeObserver:self forKeyPath:@"completed"];
-	[_encoder removeObserver:self forKeyPath:@"stopped"];
-	[_encoder removeObserver:self forKeyPath:@"percentComplete"];
-	[_encoder removeObserver:self forKeyPath:@"timeRemaining"];
 	
 	[_encoder release];
 	
@@ -82,10 +71,12 @@
 	}
 	
 	@catch(StopException *exception) {
+		[self removeOutputFile];
 	}
 	
 	@catch(NSException *exception) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
+		[self removeOutputFile];
+		//[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
 	}
 	
@@ -96,37 +87,7 @@
 
 - (void) stop
 {
-	// If encoding has started request a stop
-	if(YES == [[_encoder valueForKey:@"started"] boolValue]) {
-		[_encoder setValue:[NSNumber numberWithBool:YES] forKey:@"shouldStop"];
-	}
-	// Otherwise remove it right away since it isn't running
-	else {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
-	}
-}
-
-- (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
-{
-    if([keyPath isEqual:@"started"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStart:) withObject:self waitUntilDone:TRUE];
-    }
-	else if([keyPath isEqual:@"completed"]) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:self waitUntilDone:TRUE];
-		[self setValue:[change objectForKey:NSKeyValueChangeNewKey] forKey:@"completed"];
-	}
-	else if([keyPath isEqual:@"stopped"]) {
-		[self removeOutputFile];
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
-	}
-	else if([keyPath isEqual:@"percentComplete"]) {
-		[self setValue:[change objectForKey:NSKeyValueChangeNewKey] forKey:@"percentComplete"];
-	}
-	else if([keyPath isEqual:@"timeRemaining"]) {
-		unsigned int timeRemaining = [[change objectForKey:NSKeyValueChangeNewKey] unsignedIntValue];
-		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
-	}
+	[_encoder requestStop];
 }
 
 @end

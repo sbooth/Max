@@ -26,12 +26,7 @@
 {
 	NSString				*_sourceFilename;	
 	int						_source;
-	unsigned int			_totalBytes;
-	long					_bytesToRead;
-	
-	ssize_t					_bytesRead;
-	ssize_t					_bytesWritten;
-	
+		
 	unsigned char			*_buf;
 	ssize_t					_bufsize;
 
@@ -39,16 +34,17 @@
 	lame_global_flags		*_gfp;
 
 	NSNumber				*_started;
-	NSNumber				*completed;
+	NSNumber				*_completed;
 	NSNumber				*_stopped;
 	NSNumber				*_percentComplete;
 	NSNumber				*_shouldStop;
-	NSDate					*_startTime;
 	NSNumber				*_timeRemaining;
 }
 
 - (id) initWithSource:(NSString *) source;
 
 - (ssize_t) encodeToFile:(NSString *) filename;
+
+- (void) requestStop;
 
 @end

@@ -28,13 +28,10 @@
 	CompactDisc				*_disc;
 	Track					*_track;
 
-	unsigned int			_firstSector;
-	unsigned int			_lastSector;
-	unsigned int			_blockSize;
-	unsigned int			_totalBytes;
-	
-	ssize_t					_bytesRead;
-	ssize_t					_bytesWritten;
+	ssize_t					_firstSector;
+	ssize_t					_lastSector;
+	ssize_t					_blockSize;
+	ssize_t					_totalBytes;
 	
 	unsigned char			*_buf;
 	ssize_t					_bufsize;
