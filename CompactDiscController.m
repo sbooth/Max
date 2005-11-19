@@ -212,9 +212,6 @@
 			@throw [EmptySelectionException exceptionWithReason:@"Please select one or more tracks to encode." userInfo:nil];
 		}
 
-		// Show the jobs window if it is hidden
-		[[TaskMaster sharedController] showWindow:self];
-		
 		// Iterate through the selected tracks and rip/encode them
 		selectedTracks	= [_disc selectedTracks];
 		enumerator		= [selectedTracks objectEnumerator];
