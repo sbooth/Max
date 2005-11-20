@@ -24,6 +24,8 @@
 
 @interface Track : NSObject 
 {
+	NSNumber			*_ripInProgress;
+
 	// View properties
 	NSNumber			*_selected;
 	NSColor				*_color;

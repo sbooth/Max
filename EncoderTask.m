@@ -49,7 +49,6 @@
 - (void) dealloc
 {
 	[_target release];
-	
 	[_encoder release];
 	
 	[super dealloc];
@@ -67,7 +66,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	@try {
-		[_encoder encodeToFile:_target];		
+		[_encoder encodeToFile:_target];					
 	}
 	
 	@catch(StopException *exception) {

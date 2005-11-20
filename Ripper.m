@@ -59,6 +59,7 @@
 			_bufsize		= 1024 * _blockSize;
 			_buf			= (unsigned char *) calloc(_bufsize, sizeof(unsigned char));
 			if(NULL == _buf) {
+				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 			}
 			
@@ -70,6 +71,7 @@
 			// Go to the track's first sector in preparation for reading
 			off_t where = lseek(_fd, _firstSector * _blockSize, SEEK_SET);
 			if(-1 == where) {
+				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
 			}
 		}
@@ -133,6 +135,7 @@
 		// Read a chunk
 		bytesRead = read(_fd, _buf, (bytesToRead > _bufsize ? _bufsize : bytesToRead));
 		if(-1 == bytesRead) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
@@ -145,6 +148,7 @@
 		
 		// Write data to file
 		if(-1 == write(file, _buf, bytesRead)) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 	}

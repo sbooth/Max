@@ -27,6 +27,8 @@
 #import "StringValueTransformer.h"
 #import "CDDBProtocolValueTransformer.h";
 #import "BooleanArrayValueTransformer.h";
+#import "NegateBooleanArrayValueTransformer.h";
+#import "TrackValueTransformer.h";
 
 #include "lame/lame.h"
 
@@ -48,6 +50,12 @@
 
 	transformer = [[[BooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"BooleanArrayValueTransformer"];
+
+	transformer = [[[NegateBooleanArrayValueTransformer alloc] init] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"NegateBooleanArrayValueTransformer"];
+
+	transformer = [[[TrackValueTransformer alloc] init] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"TrackValueTransformer"];
 }
 
 -(void)awakeFromNib
@@ -57,7 +65,7 @@
 
 - (IBAction)showPreferences:(id)sender
 {
-	[[PreferencesController sharedPreferences] showPreferencesWindow];
+	[[PreferencesController sharedPreferences] showWindow:self];
 }
 
 - (IBAction)scanForMedia:(id)sender
@@ -102,7 +110,7 @@
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert addButtonWithTitle:@"OK"];
 	[alert setMessageText:@"About LAME"];
-	[alert setInformativeText:[NSString stringWithFormat:@"LAME %s", get_lame_version()]];
+	[alert setInformativeText:[NSString stringWithFormat:@"LAME %s", get_lame_short_version()]];
 	[alert setAlertStyle:NSWarningAlertStyle];
 	
 	if([alert runModal] == NSAlertFirstButtonReturn) {

@@ -14,6 +14,7 @@
 		8C22FA27092DA69800566739 /* libcddb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EC0924598D00BDFD02 /* libcddb.a */; };
 		8C440DC0092E8B3000A053AA /* CDDBMatches.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DBB092E8B3000A053AA /* CDDBMatches.nib */; };
 		8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DC1092E8B3C00A053AA /* Tasks.nib */; };
+		8C6EC5C2092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */; };
 		8C73004E08ECAA5B0008D7E0 /* CDDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */; };
 		8C7300A708ECB1E80008D7E0 /* CDDBMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7300A608ECB1E80008D7E0 /* CDDBMatch.m */; };
 		8C73021008ECD4AD0008D7E0 /* CDDBSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73020F08ECD4AD0008D7E0 /* CDDBSite.m */; };
@@ -127,6 +128,8 @@
 		8C440DC1092E8B3C00A053AA /* Tasks.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Tasks.nib; sourceTree = "<group>"; };
 		8C618E2609255F470075621C /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
 		8C618E2809255F4E0075621C /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
+		8C6EC5BF092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NegateBooleanArrayValueTransformer.h; sourceTree = "<group>"; };
+		8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NegateBooleanArrayValueTransformer.m; sourceTree = "<group>"; };
 		8C73004C08ECAA5B0008D7E0 /* CDDBMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CDDBMatchSheet.h; sourceTree = "<group>"; };
 		8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CDDBMatchSheet.m; sourceTree = "<group>"; };
 		8C7300A508ECB1E80008D7E0 /* CDDBMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDBMatch.h; sourceTree = "<group>"; };
@@ -436,6 +439,8 @@
 		8CBEC66108ED80D10064F794 /* ValueTransformers */ = {
 			isa = PBXGroup;
 			children = (
+				8C6EC5BF092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.h */,
+				8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */,
 				8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */,
 				8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */,
 				8C73033C08ECEA500008D7E0 /* CDDBProtocolValueTransformer.h */,
@@ -577,6 +582,7 @@
 				8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */,
 				8C8B0D22092E617B00418C45 /* MacPADSocket.m in Sources */,
 				8C8B0DAD092E64D900418C45 /* UpdateChecker.m in Sources */,
+				8C6EC5C2092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

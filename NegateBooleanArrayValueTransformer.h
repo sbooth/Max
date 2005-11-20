@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: BooleanArrayValueTransformer.h 123 2005-11-18 22:09:57Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,43 +18,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "BooleanArrayValueTransformer.h"
+#import <Cocoa/Cocoa.h>
 
 
-@implementation BooleanArrayValueTransformer
-
-+ (Class) transformedValueClass
+@interface NegateBooleanArrayValueTransformer : NSValueTransformer
 {
-	return [NSNumber class];
-}
-
-+ (BOOL) allowsReverseTransformation
-{
-	return NO;
-}
-
-- (id) transformedValue:(id) value;
-{
-	BOOL result = NO;
-	
-	if(nil == value) {
-		return nil;		
-	}
-	
-	if([value isKindOfClass:[NSArray class]]) {
-		unsigned i;
-		for(i = 0; i < [value count]; ++i) {
-			if(NO == [[value objectAtIndex:i] isEqual:[NSNull null]] && YES == [[value objectAtIndex:i] boolValue]) {
-				result = YES;
-				break;
-			}
-		}
-	} 
-	else {
-		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Value was not NSArray." userInfo:nil];
-	}
-	
-	return [NSNumber numberWithBool: result];
 }
 
 @end

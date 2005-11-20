@@ -23,8 +23,6 @@
 
 @interface BooleanArrayValueTransformer : NSValueTransformer
 {
-	NSArray	*_target;
 }
 
-- (id) initWithTarget: (NSArray *) target;
 @end

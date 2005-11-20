@@ -8,5 +8,7 @@
 	<string>~/Music/</string>
 	<key>org.sbooth.Max.useCustomNaming</key>
 	<false/>
+	<key>org.sbooth.Max.customNamingScheme</key>
+	<string></string>
 </dict>
 </plist>

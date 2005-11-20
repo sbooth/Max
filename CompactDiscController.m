@@ -184,7 +184,9 @@
 	NSArray		*tracks = [_disc valueForKey:@"tracks"];
 	
 	for(i = 0; i < [tracks count]; ++i) {
-		[[tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
+		if(NO == [[[tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue]) {
+			[[tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
+		}
 	}
 }
 
@@ -194,7 +196,9 @@
 	NSArray		*tracks = [_disc valueForKey:@"tracks"];
 	
 	for(i = 0; i < [tracks count]; ++i) {
-		[[tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+		if(NO == [[[tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue]) {
+			[[tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+		}
 	}
 }
 

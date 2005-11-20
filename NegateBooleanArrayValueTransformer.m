@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: BooleanArrayValueTransformer.m 134 2005-11-19 21:43:36Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,10 +18,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "BooleanArrayValueTransformer.h"
+#import "NegateBooleanArrayValueTransformer.h"
 
 
-@implementation BooleanArrayValueTransformer
+@implementation NegateBooleanArrayValueTransformer
 
 + (Class) transformedValueClass
 {
@@ -35,7 +35,7 @@
 
 - (id) transformedValue:(id) value;
 {
-	BOOL result = NO;
+	BOOL result = YES;
 	
 	if(nil == value) {
 		return nil;		
@@ -45,7 +45,7 @@
 		unsigned i;
 		for(i = 0; i < [value count]; ++i) {
 			if(NO == [[value objectAtIndex:i] isEqual:[NSNull null]] && YES == [[value objectAtIndex:i] boolValue]) {
-				result = YES;
+				result = NO;
 				break;
 			}
 		}

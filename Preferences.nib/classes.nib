@@ -22,9 +22,8 @@
                 "_cddbPortTextField" = NSTextField; 
                 "_cddbServerTextField" = NSTextField; 
                 "_customNameTextField" = NSTextField; 
-                "_window" = NSWindow; 
             }; 
-            SUPERCLASS = NSObject; 
+            SUPERCLASS = NSWindowController; 
         }
     ); 
     IBVersion = 1; 

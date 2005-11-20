@@ -46,11 +46,12 @@
 	NSNumber									*discNumber				= nil;
 	NSNumber									*discsInSet				= nil;
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= nil;
-	TagLib::MPEG::File							f						([filename UTF8String]);
+	TagLib::MPEG::File							f						([filename UTF8String], false);
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	NSString									*timestamp				= nil;
-		
+	
+
 	// Track title
 	title = [track valueForKey:@"title"];
 	if(nil != title) {
@@ -142,7 +143,7 @@
 		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
 	}
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-	versionString = [NSString stringWithFormat:@"LAME %s (Max %@)", get_lame_version(), bundleVersion];
+	versionString = [NSString stringWithFormat:@"LAME %s (Max %@)", get_lame_short_version(), bundleVersion];
 	frame->setText(TagLib::String([versionString UTF8String], TagLib::String::UTF8));
 	f.ID3v2Tag()->addFrame(frame);
 	

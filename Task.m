@@ -54,6 +54,8 @@
 			trackTitle = @"Unknown Track";
 		}
 		
+		[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+			
 		_trackName		= [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
 		
 		_ripperTask		= [[[RipperTask alloc] initWithDisc:_disc forTrack:_track trackName:_trackName] retain];
@@ -72,6 +74,8 @@
 
 - (void) dealloc
 {
+	[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+
 	[_disc release];
 	[_track release];
 	[_filename release];

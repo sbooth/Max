@@ -168,7 +168,6 @@ cddb_sum(int n)
 {
 	if((self = [super init])) {
 		_tracks = [[NSMutableArray alloc] initWithCapacity:20];
-		_leadOut = nil;		
 	}
 	
 	return self;
@@ -177,7 +176,6 @@ cddb_sum(int n)
 - (void) dealloc
 {
 	[_tracks release];
-	[_leadOut release];
 	
 	[super dealloc];
 }
@@ -223,7 +221,7 @@ cddb_sum(int n)
 	Track			*track;
 	
 	while((track = [enumerator nextObject])) {
-		if([[track valueForKey:@"selected"] boolValue]) {
+		if(YES == [[track valueForKey:@"selected"] boolValue]) {
 			[result addObject: track];
 		}
 	}

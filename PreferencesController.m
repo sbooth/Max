@@ -69,7 +69,8 @@ static PreferencesController *sharedPreferences = nil;
 			@"org.sbooth.Max.lameBitrate", @"org.sbooth.Max.lameEncodingEngineQuality", @"org.sbooth.Max.lameMonoEncoding", 
 			@"org.sbooth.Max.lameQuality",@"org.sbooth.Max.lameTarget", @"org.sbooth.Max.lameUseConstantBitrate", 
 			@"org.sbooth.Max.lameVBRQuality", @"org.sbooth.Max.lameVariableBitrateMode", 
-			@"org.sbooth.Max.outputDirectory", @"org.sbooth.Max.useCustomNaming", @"org.sbooth.Max.maximumEncoderThreads", nil];
+			@"org.sbooth.Max.outputDirectory", @"org.sbooth.Max.useCustomNaming", @"org.sbooth.Max.customNamingScheme", 
+			@"org.sbooth.Max.maximumEncoderThreads", nil];
 		initialValuesDictionary = [defaultsDictionary dictionaryWithValuesForKeys:resettableUserDefaultsKeys];
 		
 		[[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:initialValuesDictionary];
@@ -103,19 +104,11 @@ static PreferencesController *sharedPreferences = nil;
 
 - (id)init
 {
-	if((self = [super init])) {
+	if((self = [super initWithWindowNibName:@"Preferences"])) {
 
 		@try {
-			if(NO == [NSBundle loadNibNamed:@"Preferences" owner:self])  {
-				@throw [MissingResourceException exceptionWithReason:@"Unable to load Preferences.nib" userInfo:nil];
-			}
-
 			// Update the example track text field
 			[self controlTextDidChange:nil];
-
-			// Get mirror list - too slow to do this here
-			//CDDB *cddb = [[[CDDB alloc] init] autorelease];
-			//[self setValue:[cddb fetchSites] forKey:@"cddbMirrors"];
 		}
 		
 		@catch(NSException *exception) {
@@ -141,11 +134,6 @@ static PreferencesController *sharedPreferences = nil;
 - (unsigned) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
-
-- (void)showPreferencesWindow
-{
-	[_window makeKeyAndOrderFront:self];
-}
 
 
 - (IBAction)setFreeDBMirror:(id)sender
@@ -179,6 +167,7 @@ static PreferencesController *sharedPreferences = nil;
 - (IBAction)customNamingButtonAction:(id)sender
 {
 	NSString *string;
+	
 	switch([(NSButton *)sender tag]) {
 		case kDiscNumberButton:			string = @"{discNumber}";		break;
 		case kDiscsInSetButton:			string = @"{discsInSet}";		break;
@@ -198,7 +187,7 @@ static PreferencesController *sharedPreferences = nil;
 		[_customNameTextField setStringValue:string];
 	}
 	else {
-		if([_customNameTextField textShouldBeginEditing:fieldEditor]) {
+		if(YES == [_customNameTextField textShouldBeginEditing:fieldEditor]) {
 			[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
 			[_customNameTextField textShouldEndEditing:fieldEditor];
 			[self controlTextDidChange:nil];
@@ -209,11 +198,12 @@ static PreferencesController *sharedPreferences = nil;
 - (IBAction)selectOutputDirectory:(id)sender
 {
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	
 	[panel setAllowsMultipleSelection:NO];
 	[panel setCanChooseDirectories:YES];
 	[panel setCanChooseFiles:NO];
 	
-	[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:_window modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
 }
 
 - (IBAction)restoreDefaults:(id)sender
@@ -237,9 +227,14 @@ static PreferencesController *sharedPreferences = nil;
 
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
-	NSMutableString *sample = [[[NSMutableString alloc] initWithCapacity:[[_customNameTextField stringValue] length]] autorelease];
+	NSString *scheme = [_customNameTextField stringValue];
+	if(nil == scheme) {
+		scheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.customNamingScheme"];
+	}
+	
+	NSMutableString *sample = [[[NSMutableString alloc] initWithCapacity:[scheme length]] autorelease];
 
-	[sample setString:[_customNameTextField stringValue]];
+	[sample setString:scheme];		
 	
 	[sample replaceOccurrencesOfString:@"{discNumber}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
 	[sample replaceOccurrencesOfString:@"{discsInSet}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];

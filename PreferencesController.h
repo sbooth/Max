@@ -20,13 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface PreferencesController : NSObject
+@interface PreferencesController : NSWindowController
 {
     IBOutlet NSTextField			*_customNameTextField;
     IBOutlet NSTextField			*_cddbServerTextField;
     IBOutlet NSTextField			*_cddbPortTextField;
-
-    IBOutlet NSWindow				*_window;
 
 	IBOutlet NSArrayController		*_cddbMirrorsController;
 
@@ -35,8 +33,6 @@
 }
 
 + (PreferencesController *) sharedPreferences;
-
-- (void)showPreferencesWindow;
 
 - (IBAction)customNamingButtonAction:(id)sender;
 

@@ -53,8 +53,9 @@
 {
 	BOOL result;
 	
-	if(nil == value) 
-		return nil;
+	if(nil == value) {
+		return nil;		
+	}
 
 	if([value isKindOfClass:[NSString class]]) {
 		result = [_target isEqualToString: value];

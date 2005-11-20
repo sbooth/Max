@@ -36,8 +36,9 @@
 
 - (id) transformedValue:(id) value;
 {
-	if(nil == value) 
-		return nil;
+	if(nil == value) {
+		return nil;		
+	}
 	
 	if(NO == [value isKindOfClass:[NSNumber class]]) {
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Value was not NSNumber." userInfo:nil];
@@ -53,8 +54,9 @@
 
 - (id) reverseTransformedValue:(id) value;
 {	
-	if(nil == value) 
-		return nil;
+	if(nil == value) {
+		return nil;		
+	}
 	
 	if(NO == [value isKindOfClass:[NSString class]]) {
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Value was not NSString." userInfo:nil];

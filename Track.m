@@ -174,15 +174,9 @@
 	return result;
 }
 
-- (void) dealloc
+- (NSString *) description
 {
-	[_number release];
-	[_minute release];
-	[_second release];
-	[_frame release];
-	[_type release];
-	[_title release];
-	[super dealloc];
+	return [NSString stringWithFormat:@"%@ %@ %@", _number, _title, [self getLength]];
 }
 
 #pragma mark Save/Restore
