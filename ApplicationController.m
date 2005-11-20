@@ -28,7 +28,6 @@
 #import "CDDBProtocolValueTransformer.h";
 #import "BooleanArrayValueTransformer.h";
 #import "NegateBooleanArrayValueTransformer.h";
-#import "TrackValueTransformer.h";
 
 #include "lame/lame.h"
 
@@ -53,9 +52,6 @@
 
 	transformer = [[[NegateBooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"NegateBooleanArrayValueTransformer"];
-
-	transformer = [[[TrackValueTransformer alloc] init] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"TrackValueTransformer"];
 }
 
 -(void)awakeFromNib
