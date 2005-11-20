@@ -231,9 +231,12 @@ static PreferencesController *sharedPreferences = nil;
 	if(nil == scheme) {
 		scheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.customNamingScheme"];
 	}
+	// No love
+	if(nil == scheme) {
+		return;
+	}
 	
 	NSMutableString *sample = [[[NSMutableString alloc] initWithCapacity:[scheme length]] autorelease];
-
 	[sample setString:scheme];		
 	
 	[sample replaceOccurrencesOfString:@"{discNumber}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
