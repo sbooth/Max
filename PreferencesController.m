@@ -187,7 +187,7 @@ static PreferencesController *sharedPreferences = nil;
 		[_customNameTextField setStringValue:string];
 	}
 	else {
-		if(YES == [_customNameTextField textShouldBeginEditing:fieldEditor]) {
+		if([_customNameTextField textShouldBeginEditing:fieldEditor]) {
 			[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
 			[_customNameTextField textShouldEndEditing:fieldEditor];
 			[self controlTextDidChange:nil];

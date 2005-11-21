@@ -156,7 +156,7 @@ static TaskMaster *sharedController = nil;
 - (void) removeRippingTask:(RipperTask *) task
 {
 	// Remove from the list of ripping tasks
-	if(YES == [_rippingTasks containsObject:task]) {
+	if([_rippingTasks containsObject:task]) {
 		[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
 
 		if(0 == [_rippingTasks count]) {
@@ -210,7 +210,7 @@ static TaskMaster *sharedController = nil;
 - (void) removeEncodingTask:(EncoderTask *) task
 {
 	// Remove from the list of encoding tasks
-	if(YES == [_encodingTasks containsObject:task]) {
+	if([_encodingTasks containsObject:task]) {
 		[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:task];
 
 		if(0 == [_encodingTasks count]) {

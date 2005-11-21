@@ -44,7 +44,7 @@
 	if([value isKindOfClass:[NSArray class]]) {
 		unsigned i;
 		for(i = 0; i < [value count]; ++i) {
-			if(NO == [[value objectAtIndex:i] isEqual:[NSNull null]] && YES == [[value objectAtIndex:i] boolValue]) {
+			if(NO == [[value objectAtIndex:i] isEqual:[NSNull null]] && [[value objectAtIndex:i] boolValue]) {
 				result = NO;
 				break;
 			}

@@ -221,7 +221,7 @@ cddb_sum(int n)
 	Track			*track;
 	
 	while((track = [enumerator nextObject])) {
-		if(YES == [[track valueForKey:@"selected"] boolValue]) {
+		if([[track valueForKey:@"selected"] boolValue]) {
 			[result addObject: track];
 		}
 	}

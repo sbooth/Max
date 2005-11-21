@@ -103,7 +103,7 @@
 			NSString		*discPath	= [NSString stringWithFormat:@"%@/0x%.8x.xml", gDataDir, [_disc cddb_id]];
 			BOOL			fileExists	= [manager fileExistsAtPath:discPath isDirectory:nil];
 
-			if(YES == fileExists) {
+			if(fileExists) {
 				NSData					*xmlData	= [manager contentsAtPath:discPath];
 				NSDictionary			*discInfo;
 				NSPropertyListFormat	format;
@@ -119,7 +119,7 @@
 			}
 			
 			// Query CDDB if disc not previously seen
-			if(YES == fileExists && nil != [disc valueForKey:@"title"]) {
+			if(fileExists && nil != [disc valueForKey:@"title"]) {
 				[[self window] setTitle:[disc valueForKey:@"title"]];
 			}
 			else {
@@ -159,7 +159,7 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if([keyPath isEqual:@"title"]) {
-		if(YES == [[change objectForKey:NSKeyValueChangeNewKey] isEqual:[NSNull null]]) {
+		if([[change objectForKey:NSKeyValueChangeNewKey] isEqual:[NSNull null]]) {
 			[[self window] setTitle:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [_disc cddb_id]]];
 		}
 		else {
@@ -355,9 +355,11 @@
 					filename = path;
 				}
 				[customPath release];
+				
+				filename = [filename stringByAppendingString:@".mp3"];
 			}
 			// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
-			else if(YES == [[_disc valueForKey:@"multiArtist"] boolValue]) {
+			else if([[_disc valueForKey:@"multiArtist"] boolValue]) {
 				NSString			*path;
 				
 				NSString			*discTitle			= [_disc valueForKey:@"title"];
@@ -424,7 +426,7 @@
 			}
 			
 			// Check if the output file exists
-			if(YES == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+			if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
 				NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 				[alert addButtonWithTitle:@"No"];
 				[alert addButtonWithTitle:@"Yes"];

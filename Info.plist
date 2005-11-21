@@ -6,22 +6,22 @@
 	<string>English</string>
 	<key>CFBundleExecutable</key>
 	<string>Max</string>
+	<key>CFBundleHelpBookFolder</key>
+	<string>Max Help</string>
+	<key>CFBundleHelpBookName</key>
+	<string>Max Help</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>Max</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.sbooth.Max</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>_Max</string>
 	<key>CFBundleShortVersionString</key>
 	<string>0.2</string>
-	<key>CFBundleHelpBookFolder</key>
-	<string>Max Help</string>
-	<key>CFBundleHelpBookName</key>
-	<string>Max Help</string>
+	<key>CFBundleSignature</key>
+	<string>_Max</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

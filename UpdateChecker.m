@@ -80,7 +80,7 @@ static UpdateChecker *sharedController = nil;
 {
 	NSWindow *updateWindow = [self window];
 
-	if(YES == [updateWindow isVisible]) {
+	if([updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: @"OK"];
 		[alert setMessageText: [[aNotification userInfo] objectForKey:MacPADErrorMessage]];
@@ -95,7 +95,7 @@ static UpdateChecker *sharedController = nil;
 {
 	NSWindow *updateWindow = [self window];
 	
-	if(YES == [updateWindow isVisible]) {
+	if([updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: @"OK"];
 		if(kMacPADResultNoNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue]) {
@@ -116,7 +116,7 @@ static UpdateChecker *sharedController = nil;
 {
 	NSWindow *updateWindow = [self window];
 
-	if(YES == [updateWindow isVisible]) {
+	if([updateWindow isVisible]) {
 		[updateWindow orderOut:self];
 	}
 }

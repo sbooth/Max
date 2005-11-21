@@ -105,7 +105,7 @@
 - (void) requestStop
 {
 	@synchronized(self) {
-		if(YES == [_started boolValue]) {
+		if([_started boolValue]) {
 			_shouldStop = [NSNumber numberWithBool:YES];			
 		}
 		else {
@@ -127,7 +127,7 @@
 	while(0 < bytesToRead) {
 
 		// Check if we should stop, and if so throw an exception
-		if(YES == [_shouldStop boolValue]) {
+		if([_shouldStop boolValue]) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}

@@ -165,7 +165,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 - (void) requestStop
 {
 	@synchronized(self) {
-		if(YES == [_started boolValue]) {
+		if([_started boolValue]) {
 			_shouldStop = [NSNumber numberWithBool:YES];			
 		}
 		else {
@@ -222,7 +222,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	// Iteratively get the PCM data and encode it
 	while(0 < bytesToRead) {
 		// Check if we should stop, and if so throw an exception
-		if(YES == [_shouldStop boolValue]) {
+		if([_shouldStop boolValue]) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}

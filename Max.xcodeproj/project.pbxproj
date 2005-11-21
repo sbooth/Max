@@ -12,6 +12,7 @@
 		8C206F150929486C00793FD0 /* TaskMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C206F130929486C00793FD0 /* TaskMaster.m */; };
 		8C20728709299A4300793FD0 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C20728509299A4300793FD0 /* Task.m */; };
 		8C22FA27092DA69800566739 /* libcddb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EC0924598D00BDFD02 /* libcddb.a */; };
+		8C3101280931297C000A50FC /* Max.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8C3101270931297C000A50FC /* Max.icns */; };
 		8C440DC0092E8B3000A053AA /* CDDBMatches.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DBB092E8B3000A053AA /* CDDBMatches.nib */; };
 		8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DC1092E8B3C00A053AA /* Tasks.nib */; };
 		8C6EC5C2092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */; };
@@ -124,6 +125,7 @@
 		8C206F130929486C00793FD0 /* TaskMaster.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TaskMaster.m; sourceTree = "<group>"; };
 		8C20728409299A4300793FD0 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		8C20728509299A4300793FD0 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		8C3101270931297C000A50FC /* Max.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Max.icns; sourceTree = "<group>"; };
 		8C440DBB092E8B3000A053AA /* CDDBMatches.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CDDBMatches.nib; sourceTree = "<group>"; };
 		8C440DC1092E8B3C00A053AA /* Tasks.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Tasks.nib; sourceTree = "<group>"; };
 		8C618E2609255F470075621C /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C3101270931297C000A50FC /* Max.icns */,
 				8C440DC1092E8B3C00A053AA /* Tasks.nib */,
 				8C440DBB092E8B3000A053AA /* CDDBMatches.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -539,6 +542,7 @@
 				8C8B0EC9092E710200418C45 /* UpdateChecker.nib in Resources */,
 				8C440DC0092E8B3000A053AA /* CDDBMatches.nib in Resources */,
 				8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */,
+				8C3101280931297C000A50FC /* Max.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
