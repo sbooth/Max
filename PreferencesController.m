@@ -107,6 +107,9 @@ static PreferencesController *sharedPreferences = nil;
 	if((self = [super initWithWindowNibName:@"Preferences"])) {
 
 		@try {
+			[self setShouldCascadeWindows:NO];
+			[self setWindowFrameAutosaveName:@"Preferences"];	
+
 			// Update the example track text field
 			[self controlTextDidChange:nil];
 		}
