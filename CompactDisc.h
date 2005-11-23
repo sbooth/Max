@@ -20,12 +20,17 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "CDDrive.h"
 #import "Track.h"
+
+#include "cddb/cddb_disc.h"
+
 
 @interface CompactDisc : NSObject 
 {
-	// io_object
-	NSNumber			*_io_object;
+	// Related data structures
+	CDDrive				*_drive;
+	cddb_disc_t			*_cddb_disc;
 	
 	// ID3 tags
 	NSString			*_title;			// TALB
@@ -36,34 +41,27 @@
 	
 	NSNumber			*_partOfSet;		// TPOS
 
+	// Other disc info
 	NSNumber			*_discNumber;
 	NSNumber			*_discsInSet;
-	
 	NSNumber			*_multiArtist;
+	
+	unsigned			_length;
 
-	// Array of all actual audio tracks (no leadin or TOC data)
+	// Array of audio tracks
 	NSMutableArray		*_tracks;
-	
-	NSString			*_bsdPath;
-	NSNumber			*_preferredBlockSize;
-	
-	Track				*_leadOut;
-	NSNumber			*_type;
-	NSNumber			*_firstTrack;
-	NSNumber			*_lastTrack;
 }
 
-+ (CompactDisc *) createFromIOObject:(io_object_t)disc;
+- (id) initWithBSDName:(NSString *) bsdName;
 
-- (unsigned long) cddb_id;
+- (unsigned long)	cddb_id;
+- (cddb_disc_t *)	cddb_disc;
+- (NSString *)		length;
 
-- (NSNumber *) getDuration;
+- (NSArray *)		selectedTracks;
 
-- (NSArray *) selectedTracks;
-
+// Save/Restore
 - (NSDictionary *) getDictionary;
 - (void) setPropertiesFromDictionary:(NSDictionary *)properties;
 
-// ========== Private Methods - DO NOT USE
-- (void) addTrack:(Track *)track;
 @end

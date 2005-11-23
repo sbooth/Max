@@ -22,6 +22,16 @@
 
 #include "lame/lame.h"
 
+/*
+@protocol Encoder
+
+- (void) setSource:(NSString *) source;
+- (void) encodeToFile:(int) file;
+- (void) requestStop; 
+
+@end
+*/
+
 @interface Encoder : NSObject 
 {
 	NSString				*_sourceFilename;	

@@ -22,152 +22,68 @@
 #import "Track.h"
 #import "MallocException.h"
 #import "IOException.h"
+#import "FreeDBException.h"
 
-#include <IOKit/IOBSD.h>
-#include <IOKit/storage/IOMedia.h>
-#include <IOKit/storage/IOCDMedia.h>
-#include <IOKit/storage/IOCDTypes.h>
-
-#include <CoreFoundation/CoreFoundation.h>
+#include "cddb/cddb_track.h"
 
 #include <sys/param.h>		// MAXPATHLEN
 #include <paths.h>			//_PATH_DEV
 
-// ==================================================
-// Code from the CDDB howto
-// ==================================================
-static int
-cddb_sum(int n)
-{
-	int ret = 0;
-	
-	while(0 < n) {
-		ret = ret + (n % 10);
-		n = n / 10;
-	}
-	
-	return ret;
-}
-// ==================================================
-// End CDDB code
-// ==================================================
 
 @implementation CompactDisc
 
-+ (CompactDisc *) createFromIOObject:(io_object_t)disc
+- (id) init
 {
-	CDTOC					*toc;
-	NSMutableDictionary		*properties;
-	NSData					*data;
-	
-	kern_return_t			err					= KERN_FAILURE;
-	
-	unsigned				i;
-	UInt32					numDescriptors;
-	
-	char					bsdPath [MAXPATHLEN];
-	NSString				*path;
-	CFTypeRef				deviceName;
-	
-	CompactDisc				*result;
-	
-	
-	@try {
-		// Grab a dictionary containing all the properties of the CD
-		err = IORegistryEntryCreateCFProperties(disc, (CFMutableDictionaryRef *)&properties, kCFAllocatorDefault, kNilOptions);
-		if(KERN_SUCCESS != err) {
-			@throw [IOException exceptionWithReason:@"Unable to access IORegistry" userInfo:nil];
-		}
-		
-		// Extract the CD's TOC data
-		data = [properties objectForKey: [NSString stringWithCString: kIOCDMediaTOCKey]];
-		toc = (CDTOC *) [data bytes];
-		
-		result = [[[CompactDisc alloc] init] autorelease];
-		[result setValue:[NSNumber numberWithInt:disc] forKey:@"io_object"];
-		[result setValue: [properties objectForKey: [NSString stringWithCString:kIOMediaPreferredBlockSizeKey]] forKey: @"preferredBlockSize"];
-		
-		// Loop over each descriptor in the TOC
-		numDescriptors = CDTOCGetDescriptorCount(toc);
-		for(i = 0; i < numDescriptors; ++i) {
-			CDTOCDescriptor *desc = &toc->descriptors[i];
-			
-			// A disc can have up to 99 tracks
-			if(99 >= desc->point && 1 == desc->adr) {
-				Track *track = [[Track alloc] init];
-				[track setValue:result forKey:@"disc"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->point] forKey:@"number"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->p.minute] forKey:@"minute"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->p.second] forKey:@"second"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->p.frame] forKey:@"frame"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->control] forKey:@"type"];
-				[result addTrack: track];
-			}
-			
-			// 0xA0 identifies the first track and disc type
-			else if(0xA0 == desc->point && 1 == desc->adr) {
-				[result setValue:[NSNumber numberWithUnsignedInt:desc->p.second] forKey:@"type"];
-				[result setValue:[NSNumber numberWithUnsignedInt:desc->p.minute] forKey:@"firstTrack"];
-			}
-			
-			// 0xA1 identifies the last track
-			else if(0xA1 == desc->point && 1 == desc->adr) {
-				[result setValue:[NSNumber numberWithUnsignedInt:desc->p.minute] forKey:@"lastTrack"];
-			}
-			
-			// 0xA2 identifies the lead-out
-			else if(0xA2 == desc->point && 1 == desc->adr) {
-				Track *track = [[Track alloc] init];
-				[track setValue:result forKey:@"disc"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->point] forKey:@"number"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->p.minute] forKey:@"minute"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->p.second] forKey:@"second"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->p.frame] forKey:@"frame"];
-				[track setValue:[NSNumber numberWithUnsignedInt:desc->control] forKey:@"type"];
-				[result setValue:track forKey:@"leadOut"];
-			}
-		}	
-		
-		// Fill in last sector information
-		unsigned lastTrack = [[result valueForKey:@"lastTrack"] unsignedIntValue];
-		for(i = 1; i < lastTrack; ++i) {
-			Track *track			= [[result valueForKey:@"tracks"] objectAtIndex:i];
-			Track *previousTrack	= [[result valueForKey:@"tracks"] objectAtIndex:i - 1];
-			[previousTrack setValue:[NSNumber numberWithUnsignedInt:([[track getFirstSector] unsignedIntValue] - 1)] forKey:@"lastSector"];
-		}
-		Track *track			= [result valueForKey:@"leadOut"];
-		Track *previousTrack	= [[result valueForKey:@"tracks"] objectAtIndex:lastTrack - 1];
-		[previousTrack setValue:[NSNumber numberWithInt:([[track getFirstSector] unsignedIntValue] - 1)] forKey:@"lastSector"];	
-		
-		// Get the BSD path for the device
-		deviceName = IORegistryEntryCreateCFProperty(disc, CFSTR(kIOBSDNameKey), kCFAllocatorDefault, 0);
-		if(NULL == deviceName) {
-			@throw [IOException exceptionWithReason:@"Unable to create BSD path for device" userInfo:nil];
-		}
-		path = [[NSString stringWithCString: _PATH_DEV] stringByAppendingString:@"r"];
-		if(FALSE ==  CFStringGetCString(deviceName, bsdPath, MAXPATHLEN, kCFStringEncodingASCII)) {
-			// What's the best kind of exception to raise here?
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
-		}
-		path = [path stringByAppendingString: [NSString stringWithCString:bsdPath]];
-		[result setValue:path forKey:@"bsdPath"];
-	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
-	@finally {
-		CFRelease(deviceName);
-	}
-
-	return result;
+	@throw [NSException exceptionWithName:@"InternalInconsistencyException" reason:@"CompactDisc init called" userInfo:nil];
+	return nil;
 }
 
-- (id)init
+- (id) initWithBSDName:(NSString *) bsdName
 {
 	if((self = [super init])) {
-		_tracks = [[NSMutableArray alloc] initWithCapacity:20];
+		unsigned			i;
+		unsigned long		discLength	= 150;
+		
+		_tracks		= [[NSMutableArray alloc] initWithCapacity:20];
+		_drive		= [[CDDrive alloc] initWithBSDName:bsdName];
+
+		
+		for(i = 1; i <= [_drive trackCount]; ++i) {
+			Track			*track		= [[Track alloc] init];
+			
+			[track setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"number"];
+			[track setValue:[NSNumber numberWithUnsignedLong:[_drive firstSectorForTrack:i]] forKey:@"firstSector"];
+			[track setValue:[NSNumber numberWithUnsignedLong:[_drive lastSectorForTrack:i]] forKey:@"lastSector"];
+
+			[track setValue:[NSNumber numberWithUnsignedInt:[_drive channelsForTrack:i]] forKey:@"channels"];
+			[track setValue:[NSNumber numberWithUnsignedInt:[_drive trackHasPreEmphasis:i]] forKey:@"preEmphasis"];
+			[track setValue:[NSNumber numberWithUnsignedInt:[_drive trackAllowsDigitalCopy:i]] forKey:@"copyPermitted"];
+
+			[_tracks addObject: track];
+			
+			discLength += [_drive lastSectorForTrack:i] - [_drive firstSectorForTrack:i] + 1;
+		}
+		
+		// Setup libcddb data structures
+		_cddb_disc	= cddb_disc_new();
+		if(NULL == _cddb_disc) {
+			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		}
+		
+		_length = (unsigned) (60 * (discLength / (60 * 75))) + (unsigned)((discLength / 75) % 60);
+		cddb_disc_set_length(_cddb_disc, _length);
+		for(i = 1; i <= [_drive trackCount]; ++i) {
+			cddb_track_t	*cddb_track	= cddb_track_new();
+			if(NULL == cddb_track) {
+				@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+			}
+			cddb_track_set_frame_offset(cddb_track, [_drive firstSectorForTrack:i] + 150);
+			cddb_disc_add_track(_cddb_disc, cddb_track);
+		}
+		
+		if(0 == cddb_disc_calc_discid(_cddb_disc)) {
+			@throw [CDDBException exceptionWithReason:@"Unable to calculate disc id" userInfo:nil];
+		}
 	}
 	
 	return self;
@@ -176,47 +92,21 @@ cddb_sum(int n)
 - (void) dealloc
 {
 	[_tracks release];
+	[_drive release];
+	
+	cddb_disc_destroy(_cddb_disc);
 	
 	[super dealloc];
 }
 
-- (unsigned long) cddb_id
-{
-	int		i				= 0;
-	int		t				= 0;
-	int		n				= 0;
-	int		total_tracks	= [_tracks count];
-	Track	*track			= nil;
-	
-	while(i < total_tracks) {
-		track = [_tracks objectAtIndex: i];
-		n += cddb_sum(([[track valueForKey:@"minute"] intValue] * 60) + [[track valueForKey:@"second"] intValue]);
-		i++;
-	}
-	
-	track = [_tracks objectAtIndex: 0];
-	t = (([[_leadOut valueForKey:@"minute"] intValue] * 60) + [[_leadOut valueForKey:@"second"] intValue]) - 
-		(([[track valueForKey:@"minute"] intValue] * 60) + [[track valueForKey:@"second"] intValue]);
-	
-	return ((n % 0xff) << 24 | t << 8 | total_tracks);	
-}
+- (unsigned long)	cddb_id			{ return cddb_disc_get_discid(_cddb_disc); }
+- (cddb_disc_t *)	cddb_disc		{ return _cddb_disc; }
+- (NSString *)		length			{ return [NSString stringWithFormat:@"%u:%.02u", _length / 60, _length % 60]; }
 
-- (NSNumber *) getDuration
-{
-	int					i;
-	unsigned int		result = 0;
-	int					totalTracks	= [_tracks count];
-	
-	for(i = 0; i < totalTracks; ++i) {
-		result += [[[_tracks objectAtIndex:i] getDuration] unsignedIntValue];
-	}
-	
-	return [NSNumber numberWithUnsignedInt:result];
-}
 
 - (NSArray *) selectedTracks
 {
-	NSMutableArray	*result			= [[[NSMutableArray alloc] initWithCapacity:[_lastTrack intValue]] autorelease];
+	NSMutableArray	*result			= [[[NSMutableArray alloc] initWithCapacity:[_drive trackCount]] autorelease];
 	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
 	Track			*track;
 	
@@ -228,9 +118,6 @@ cddb_sum(int n)
 	
 	return result;
 }
-
-- (void) addTrack:(Track *)value					{ [_tracks addObject: value]; }
-- (void) setLeadOut:(Track *)leadOut				{ [_leadOut release]; _leadOut = [leadOut retain]; }
 
 #pragma mark Save/Restore
 

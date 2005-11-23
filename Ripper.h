@@ -23,6 +23,17 @@
 #import "Track.h"
 #import "CompactDisc.h"
 
+/*
+ @protocol Ripper
+ 
+ - (void) setDisc:(CompactDisc *) disc;
+ - (void) setTrack:(Track *) track;
+ - (void) ripToFile:(int) file;
+ - (void) requestStop; 
+ 
+ @end
+ */
+
 @interface Ripper : NSObject 
 {
 	CompactDisc				*_disc;

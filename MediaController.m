@@ -23,11 +23,17 @@
 
 #import "CompactDiscController.h"
 
+#include <CoreFoundation/CoreFoundation.h>
+
 #include <IOKit/IOKitLib.h>
+#include <IOKit/IOBSD.h>
 #include <IOKit/storage/IOMedia.h>
 #include <IOKit/storage/IOCDMedia.h>
 #include <IOKit/storage/IOCDTypes.h>
-#include <CoreFoundation/CoreFoundation.h>
+
+#include <paths.h>			// _PATH_DEV
+#include <sys/param.h>		// MAXPATHLEN
+
 
 // ==================================================
 // From Apple's CDROMSample.c
@@ -62,6 +68,45 @@ findEjectableCDMedia(io_iterator_t *mediaIterator)
 // ==================================================
 // End Apple code
 // ==================================================
+
+static NSString *
+getBSDName(io_object_t media)
+{
+	char			bsdPath[ MAXPATHLEN ];
+	ssize_t			devPathLength;
+	CFTypeRef		deviceNameAsCFString;
+	
+	@try {
+		/* Get the BSD path for the device */
+		deviceNameAsCFString = IORegistryEntryCreateCFProperty(media, CFSTR(kIOBSDNameKey), kCFAllocatorDefault, 0);
+		if(NULL == deviceNameAsCFString) {
+			@throw [IOException exceptionWithReason:@"IORegistryEntryCreateCFProperty returned NULL." userInfo:nil];
+		}
+		
+		strcpy(bsdPath, _PATH_DEV);
+		
+		/* Add "r" before the BSD node name from the I/O Registry to specify the raw disk
+			node. The raw disk nodes receive I/O requests directly and do not go through
+			the buffer cache. */	
+		strcat(bsdPath, "r");
+		
+		devPathLength = strlen(bsdPath);
+		
+		if(FALSE == CFStringGetCString(deviceNameAsCFString, bsdPath + devPathLength, MAXPATHLEN - devPathLength, kCFStringEncodingASCII)) {
+			@throw [IOException exceptionWithReason:@"CFStringGetCString returned FALSE." userInfo:nil];
+		}
+	}
+	
+	@catch(NSException *exception) {
+		@throw;
+	}
+
+	@finally {
+		CFRelease(deviceNameAsCFString);
+	}
+
+	return [NSString stringWithUTF8String:(const char *)bsdPath];
+}
 
 static MediaController *sharedMedia = nil;
 
@@ -127,13 +172,13 @@ static MediaController *sharedMedia = nil;
 	while((object = [enumerator nextObject])) {
 		[[object valueForKey:@"window"] makeKeyAndOrderFront:nil];
 	}
-	
+
 	// Now look for new devices
 	[self volumeMounted:nil];
 }
 
 // We don't actually use the notification, it is just a convenient hook
-- (void) volumeMounted: (NSNotification *) aNotification
+- (void) volumeMounted: (NSNotification *) notification
 {
 	kern_return_t	kernResult;
 	io_iterator_t	mediaIterator;
@@ -143,42 +188,61 @@ static MediaController *sharedMedia = nil;
 	kernResult = findEjectableCDMedia(&mediaIterator);
 	
 	while((nextMedia = IOIteratorNext(mediaIterator))) {
-		NSEnumerator			*enumerator = [_media objectEnumerator];
-		CompactDiscController	*object;
+		NSEnumerator			*enumerator		= [_media objectEnumerator];
+		CompactDiscController	*object			= nil;
+		NSString				*bsdName		= getBSDName(nextMedia);
+
 		found = FALSE;
+		
 		while((object = [enumerator nextObject])) {
-			if(nextMedia == [[[object valueForKey:@"disc"] valueForKey:@"io_object"] unsignedIntValue]) {
+			if([bsdName isEqualToString:[[[object valueForKey:@"disc"] valueForKey:@"drive"] valueForKey:@"bsdName"]]) {
 				found = TRUE;
 				break;
 			}
 		}
 		if(FALSE == found) {
-			CompactDiscController *controller = [[CompactDiscController alloc] initWithDisc:[CompactDisc createFromIOObject: nextMedia]];
+			CompactDiscController *controller = [[CompactDiscController alloc] initWithDisc:[[CompactDisc alloc] initWithBSDName:bsdName]];
 			[_media addObject: controller];
 		}				
 	}
+	
+	kernResult = IOObjectRelease(mediaIterator);
+    if(KERN_SUCCESS != kernResult) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"IOObjectRelease returned %d", kernResult] userInfo:nil];
+    }
 }
 
 // We don't actually use the notification, it is just a convenient hook
-- (void) volumeUnmounted: (NSNotification *) aNotification
+- (void) volumeUnmounted: (NSNotification *) notification
 {
 	kern_return_t	kernResult;
 	io_iterator_t	mediaIterator;
 	io_object_t		nextMedia;
 	
 	kernResult = findEjectableCDMedia(&mediaIterator);
+    if(KERN_SUCCESS != kernResult) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"findEjectableCDMedia returned %d", kernResult] userInfo:nil];
+    }
 	
 	while((nextMedia = IOIteratorNext(mediaIterator))) {
-		NSEnumerator			*enumerator = [_media objectEnumerator];
-		CompactDiscController	*object;
+		NSEnumerator			*enumerator		= [_media objectEnumerator];
+		CompactDiscController	*object			= nil;
+		NSString				*bsdName		= getBSDName(nextMedia);
+
 		while((object = [enumerator nextObject])) {
-			if(nextMedia == [[[object valueForKey:@"disc"] valueForKey:@"io_object"] unsignedIntValue]) {
+			NSString *comp = [[[object valueForKey:@"disc"] valueForKey:@"drive"] valueForKey:@"bsdName"];
+			if([bsdName isEqualToString:comp]) {
 				[object discUnmounted];
 				[_media removeObject:object];
 				break;
 			}
 		}
 	}
+	
+	kernResult = IOObjectRelease(mediaIterator);
+    if(KERN_SUCCESS != kernResult) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"IOObjectRelease returned %d", kernResult] userInfo:nil];
+    }	
 }
 
 @end

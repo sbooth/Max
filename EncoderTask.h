@@ -25,6 +25,7 @@
 @interface EncoderTask : NSObject 
 {
 	NSString			*_target;
+	//id <Encoder>		_encoder;
 	Encoder				*_encoder;
 	NSString			*_trackName;
 }

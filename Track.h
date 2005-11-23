@@ -20,7 +20,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CompactDisc;
 
 @interface Track : NSObject 
 {
@@ -34,32 +33,30 @@
 	NSString			*_title;			// TALB
 	NSString			*_artist;			// TPE1
 	NSNumber			*_year;				// TYER
-	NSNumber			*_genre;			// TCON
+	NSString			*_genre;			// TCON
 	
 	// Physical track properties
 	NSNumber			*_number;
-	NSNumber			*_minute;
-	NSNumber			*_second;
-	NSNumber			*_frame;
-	NSNumber			*_type;
-	
+	NSNumber			*_firstSector;
 	NSNumber			*_lastSector;
-	
-	CompactDisc			*_disc;
+	NSNumber			*_channels;
+	NSNumber			*_preEmphasis;
+	NSNumber			*_copyPermitted;
 }
 
-- (NSString *) getType;
-- (NSString *) getChannels;
 - (NSString *) getPreEmphasis;
 - (NSString *) getCopyPermitted;
-- (NSNumber *) getFirstSector;
+
 - (NSNumber *) getSize;
 - (NSColor *) getColor;
 
+- (unsigned) getMinute;
+- (unsigned) getSecond;
+- (unsigned) getFrame;
+
 - (NSString *) getLength;
 
-- (NSNumber *) getDuration;
-
+// Save/Restore
 - (NSDictionary *) getDictionary;
 - (void) setPropertiesFromDictionary:(NSDictionary *)properties;
 @end

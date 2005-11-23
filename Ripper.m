@@ -23,6 +23,9 @@
 #import "StopException.h"
 #import "IOException.h"
 
+#include "cdparanoia/interface/cdda_interface.h"
+#include "cdparanoia/paranoia/cdda_paranoia.h"
+
 #include <stdlib.h>			// calloc, free
 #include <unistd.h>			// lseek, read
 #include <fcntl.h>			// open, close

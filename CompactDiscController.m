@@ -118,7 +118,6 @@
 				}
 			}
 			
-			// Query CDDB if disc not previously seen
 			if(fileExists && nil != [disc valueForKey:@"title"]) {
 				[[self window] setTitle:[disc valueForKey:@"title"]];
 			}
@@ -152,6 +151,7 @@
 
 - (void) dealloc
 {
+	NSLog(@"CompactDiscController::dealloc");
 	[_disc release];
 	[super dealloc];
 }

@@ -106,47 +106,29 @@
 
 - (NSArray *) fetchMatches
 {
-	cddb_disc_t				*disc			= NULL;
-	cddb_track_t			*track			= NULL;
 	NSMutableArray			*result			= [[[NSMutableArray alloc] initWithCapacity:10] autorelease];
-
-	int i, totalTracks, matches;
+	cddb_disc_t				*cddb_disc		= [_disc cddb_disc];
+	int						matches;
 	
-	// Create disc structure
-	disc = cddb_disc_new();
-	if(NULL == disc) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
-	}
-	
-	cddb_disc_set_length(disc, [[_disc getDuration] unsignedIntValue]);
-	totalTracks = [[_disc valueForKey:@"tracks"] count];
-	for(i = 0; i < totalTracks; ++i) {
-		track = cddb_track_new();
-		if(NULL == track) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
-		}
-		cddb_track_set_frame_offset(track, [[[[_disc valueForKey:@"tracks"] objectAtIndex:i] valueForKey:@"firstSector"] intValue] + 150);
-		cddb_disc_add_track(disc, track);
-	}
 
 	// Run query to find matches
-	matches = cddb_query(_cddb, disc);
+	matches = cddb_query(_cddb, cddb_disc);
 	if(-1 == matches) {
 		@throw [CDDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
 	}
 
 	while(matches > 0) {
-		[result addObject:[CDDBMatch createFromCDDBDisc:disc]];
+		[result addObject:[CDDBMatch createFromCDDBDisc:cddb_disc]];
 		
 		--matches;
 		if(0 < matches) {
-			if(0 == cddb_query_next(_cddb, disc)) {
+			if(0 == cddb_query_next(_cddb, cddb_disc)) {
 				@throw [CDDBException exceptionWithReason:@"Query index out of bounds" userInfo:nil];
 			}
 		}
 	}
 	
-	cddb_disc_destroy(disc);
+	cddb_disc_destroy(cddb_disc);
 	
 	return result;
 }

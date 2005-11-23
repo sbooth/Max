@@ -41,10 +41,14 @@
 		[[NSUserDefaults standardUserDefaults] registerDefaults:trackDefaultsValuesDictionary];
 		
 		[self setKeys:[NSArray arrayWithObjects:@"artist", @"year", @"genre", nil] triggerChangeNotificationsForDependentKey:@"color"];
-		[self setKeys:[NSArray arrayWithObjects:@"minute", @"second", @"frame", nil] triggerChangeNotificationsForDependentKey:@"firstSector"];
-		[self setKeys:[NSArray arrayWithObjects:@"lastSector", @"firstSector", nil] triggerChangeNotificationsForDependentKey:@"size"];
-		[self setKeys:[NSArray arrayWithObjects:@"lastSector", @"firstSector", nil] triggerChangeNotificationsForDependentKey:@"length"];
-		[self setKeys:[NSArray arrayWithObjects:@"lastSector", @"firstSector", nil] triggerChangeNotificationsForDependentKey:@"duration"];
+		
+		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"minute"];
+		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"second"];
+		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"frame"];
+		
+		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"size"];
+		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"length"];
+		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"duration"];
 	}
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
@@ -53,109 +57,56 @@
 	}
 }
 
-- (NSString *) getType
+- (NSString *) description
 {
-	switch([_type intValue]) {
-		case 0x00: return @"2ch audio, no pre-emphasis, digital copy prohibited";
-		case 0x01: return @"2ch audio, with pre-emphasis, digital copy prohibited";
-		case 0x02: return @"2ch audio, no pre-emphasis, digital copy permitted";
-		case 0x03: return @"2ch audio, with pre-emphasis, digital copy permitted";
-		case 0x04: return @"data track, digital copy prohibited";
-		case 0x06: return @"data track, digital copy permitted";
-		case 0x08: return @"4ch audio, no pre-emphasis, digital copy prohibited";
-		case 0x09: return @"4ch audio, with pre-emphasis, digital copy prohibited";
-		case 0x0A: return @"4ch audio, no pre-emphasis, digital copy permitted";
-		case 0x0B: return @"4ch audio, with pre-emphasis, digital copy permitted";
-		default:   return @"Unknown";
-	}
+	return [NSString stringWithFormat:@"%@ %@ %@", _number, _title, [self getLength]];
 }
 
-- (NSString *) getChannels
+#pragma mark Accessors
+
+- (unsigned) getMinute
 {
-	switch([_type intValue]) {
-		case 0x00: return @"2";
-		case 0x01: return @"2";
-		case 0x02: return @"2";
-		case 0x03: return @"2";
-		case 0x04: return @"-";
-		case 0x06: return @"-";
-		case 0x08: return @"4";
-		case 0x09: return @"4";
-		case 0x0A: return @"4";
-		case 0x0B: return @"4";
-		default:   return @"Unknown";
-	}
+	unsigned long	sector		= [_firstSector unsignedLongValue];
+	unsigned long	offset		= [_lastSector unsignedLongValue] - sector + 1;
+	
+	return (unsigned) (offset / (60 * 75));
+}
+
+- (unsigned) getSecond
+{
+	unsigned long	sector		= [_firstSector unsignedLongValue];
+	unsigned long	offset		= [_lastSector unsignedLongValue] - sector + 1;
+	
+	return (unsigned) ((offset / 75) % 60);
+}
+
+- (unsigned) getFrame
+{
+	unsigned long	sector		= [_firstSector unsignedLongValue];
+	unsigned long	offset		= [_lastSector unsignedLongValue] - sector + 1;
+	
+	return (unsigned) (offset % 75);
 }
 
 - (NSString *) getPreEmphasis
 {
-	switch([_type intValue]) {
-		case 0x00: return @"No";
-		case 0x01: return @"Yes";
-		case 0x02: return @"No";
-		case 0x03: return @"Yes";
-		case 0x04: return @"-";
-		case 0x06: return @"-";
-		case 0x08: return @"No";
-		case 0x09: return @"Yes";
-		case 0x0A: return @"No";
-		case 0x0B: return @"Yes";
-		default:   return @"Unknown";
-	}	
+	return [_preEmphasis boolValue] ? @"Yes" : @"No";
 }
 
 - (NSString *) getCopyPermitted
 {
-	switch([_type intValue]) {
-		case 0x00: return @"No";
-		case 0x01: return @"No";
-		case 0x02: return @"Yes";
-		case 0x03: return @"Yes";
-		case 0x04: return @"No";
-		case 0x06: return @"Yes";
-		case 0x08: return @"No";
-		case 0x09: return @"No";
-		case 0x0A: return @"Yes";
-		case 0x0B: return @"Yes";
-		default:   return @"No";
-	}	
-}
-
-- (NSNumber *) getFirstSector
-{
-	CDMSF msf;
-	
-	msf.minute	= [_minute unsignedIntValue];
-	msf.second	= [_second unsignedIntValue];
-	msf.frame	= [_frame unsignedIntValue];
-	
-	return [NSNumber numberWithUnsignedInt:CDConvertMSFToLBA(msf)];
+	return [_copyPermitted boolValue] ? @"Yes" : @"No";
 }
 
 - (NSNumber *) getSize
 {
-	unsigned int size;
-	
-	size = ([_lastSector unsignedIntValue] - [[self getFirstSector] unsignedIntValue]) * kCDSectorSizeCDDA;
-	return [NSNumber numberWithUnsignedInt:size];
+	unsigned long size = ([_lastSector unsignedLongValue] - [_firstSector unsignedLongValue]) * kCDSectorSizeCDDA;
+	return [NSNumber numberWithUnsignedLong:size];
 }
 
 - (NSString *) getLength
 {
-	CDMSF msf;
-	
-	// subtract 2 second lead-in
-	msf = CDConvertLBAToMSF([_lastSector unsignedIntValue] - [[self getFirstSector] unsignedIntValue] - 150);
-	return [NSString stringWithFormat:@"%i:%02i", msf.minute, msf.second ];
-}
-
-- (NSNumber *) getDuration
-{
-	CDMSF msf;
-	
-	// subtract 2 second lead-in
-	msf = CDConvertLBAToMSF([_lastSector unsignedIntValue] - [[self getFirstSector] unsignedIntValue] - 150);
-	return [NSNumber numberWithUnsignedInt:60 * msf.minute + msf.second];
+	return [NSString stringWithFormat:@"%i:%02i", [self getMinute], [self getSecond]];
 }
 
 - (NSColor *) getColor
@@ -170,13 +121,8 @@
 		if(nil != data)
 			result = (NSColor *)[NSUnarchiver unarchiveObjectWithData:data];
 	}
-
+	
 	return result;
-}
-
-- (NSString *) description
-{
-	return [NSString stringWithFormat:@"%@ %@ %@", _number, _title, [self getLength]];
 }
 
 #pragma mark Save/Restore

@@ -28,6 +28,7 @@
 {
 	NSString			*_path;
 	int					_out;
+	//id <Ripper>		_ripper;
 	Ripper				*_ripper;
 	NSString			*_trackName;
 }

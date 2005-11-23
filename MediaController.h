@@ -29,7 +29,7 @@
 
 - (void) scanForMedia;
 
-- (void) volumeMounted: (NSNotification *)aNotification;
-- (void) volumeUnmounted: (NSNotification *)aNotification;
+- (void) volumeMounted: (NSNotification *) notification;
+- (void) volumeUnmounted: (NSNotification *) notification;
 
 @end

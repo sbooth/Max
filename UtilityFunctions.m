@@ -27,6 +27,7 @@
 #import "EmptySelectionException.h"
 #import "CustomNamingException.h"
 #import "MissingResourceException.h"
+#import "ParanoiaException.h"
 
 static NSDateFormatter *sDateFormatter = nil;
 
@@ -82,7 +83,7 @@ displayExceptionSheet(NSException	*exception,
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert addButtonWithTitle: @"OK"];
 	if([exception isKindOfClass:[CDDBException class]]) {
-		[alert setMessageText: @"CDDB Error"];
+		[alert setMessageText: @"FreeDB Error"];
 	}
 	else if([exception isKindOfClass:[IOException class]]) {
 		[alert setMessageText: @"Input/Output Error"];
@@ -101,6 +102,9 @@ displayExceptionSheet(NSException	*exception,
 	}
 	else if([exception isKindOfClass:[MissingResourceException class]]) {
 		[alert setMessageText: @"Missing Resource"];
+	}
+	else if([exception isKindOfClass:[ParanoiaException class]]) {
+		[alert setMessageText: @"CDParanoia Error"];
 	}
 	else {
 		[alert setMessageText: @"Unknown Error"];
@@ -129,5 +133,5 @@ getID3v2Timestamp()
 			[sDateFormatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss"];
 		}
 	}
-	return [sDateFormatter stringFromDate:[[[NSDate alloc] init] autorelease]];
+	return [sDateFormatter stringFromDate:[NSDate date]];
 }
