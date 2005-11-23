@@ -202,6 +202,7 @@
 			8C9D204D08C5379E00D95535 = 8C9D204D08C5379E00D95535 /* PBXTextBookmark */;
 			8CB584E609352048006FC08E /* PBXTextBookmark */ = 8CB584E609352048006FC08E /* PBXTextBookmark */;
 			8CB584E709352048006FC08E /* PBXTextBookmark */ = 8CB584E709352048006FC08E /* PBXTextBookmark */;
+			8CB584F809352114006FC08E /* PBXTextBookmark */ = 8CB584F809352114006FC08E /* PBXTextBookmark */;
 			8CBEC73508ED8D980064F794 = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
 			8CBEC73708ED8D980064F794 = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
@@ -384,7 +385,7 @@
 			sepNavWindowFrame = "{{38, 24}, {821, 782}}";
 		};
 	};
-	8C73004C08ECAA5B0008D7E0 /* CDDBMatchSheet.h */ = {
+	8C73004C08ECAA5B0008D7E0 /* FreeDBMatchSheet.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {762, 659}}";
 			sepNavSelRange = "{1110, 0}";
@@ -392,7 +393,7 @@
 			sepNavWindowFrame = "{{38, 18}, {807, 788}}";
 		};
 	};
-	8C73004D08ECAA5B0008D7E0 /* CDDBMatchSheet.m */ = {
+	8C73004D08ECAA5B0008D7E0 /* FreeDBMatchSheet.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1256, 840}}";
 			sepNavSelRange = "{1009, 0}";
@@ -416,7 +417,7 @@
 			sepNavWindowFrame = "{{15, 39}, {807, 788}}";
 		};
 	};
-	8C73020E08ECD4AD0008D7E0 /* CDDBSite.h */ = {
+	8C73020E08ECD4AD0008D7E0 /* FreeDBSite.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {762, 659}}";
 			sepNavSelRange = "{968, 0}";
@@ -424,7 +425,7 @@
 			sepNavWindowFrame = "{{15, 39}, {807, 788}}";
 		};
 	};
-	8C73020F08ECD4AD0008D7E0 /* CDDBSite.m */ = {
+	8C73020F08ECD4AD0008D7E0 /* FreeDBSite.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {762, 756}}";
 			sepNavSelRange = "{1086, 0}";
@@ -615,6 +616,16 @@
 		vrLen = 726;
 		vrLoc = 512;
 	};
+	8CB584F809352114006FC08E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDisc.m */;
+		name = "CompactDisc.m: 25";
+		rLen = 0;
+		rLoc = 956;
+		rType = 0;
+		vrLen = 726;
+		vrLoc = 512;
+	};
 	8CB6DE8908DA844000345B8F /* Encoder.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {711, 854}}";
@@ -703,7 +714,7 @@
 			sepNavWindowFrame = "{{15, 41}, {764, 786}}";
 		};
 	};
-	8CBB8BA708EFAE60007197C3 /* CDDBDefaults.plist */ = {
+	8CBB8BA708EFAE60007197C3 /* FreeDBDefaults.plist */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {719, 657}}";
 			sepNavSelRange = "{284, 0}";
