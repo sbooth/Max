@@ -21,14 +21,14 @@
 #import "CompactDiscController.h"
 
 #import "Track.h"
-#import "CDDB.h"
-#import "CDDBMatchSheet.h"
+#import "FreeDB.h"
+#import "FreeDBMatchSheet.h"
 #import "Genres.h"
 #import "TaskMaster.h"
 #import "Encoder.h"
 #import "Tagger.h"
 
-#import "CDDBException.h"
+#import "FreeDBException.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "LAMEException.h"
@@ -129,7 +129,7 @@
 
 			[_disc addObserver:self forKeyPath:@"title" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
 			
-			// Query CDDB if disc not previously seen
+			// Query FreeDB if disc not previously seen
 			if(NO == fileExists) {
 				[self getCDInformation:nil];
 			}
@@ -464,27 +464,27 @@
 
 - (IBAction)getCDInformation:(id)sender
 {
-	CDDB				*cddb				= nil;
+	FreeDB				*cddb				= nil;
 	NSArray				*matches			= nil;
-	CDDBMatchSheet		*sheet				= nil;
+	FreeDBMatchSheet		*sheet				= nil;
 
 	@try {
-		cddb = [[[CDDB alloc] init] autorelease];
+		cddb = [[[FreeDB alloc] init] autorelease];
 		[cddb setValue:_disc forKey:@"disc"];
 		
 		matches = [cddb fetchMatches];
 		
 		if(0 == [matches count]) {
-			@throw [CDDBException exceptionWithReason:@"No matches found for this disc." userInfo:nil];
+			@throw [FreeDBException exceptionWithReason:@"No matches found for this disc." userInfo:nil];
 		}
 		else if(1 == [matches count]) {
-			[self updateDiscFromCDDB:[matches objectAtIndex:0]];
+			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
 		}
 		else {
-			sheet = [[[CDDBMatchSheet alloc] init] autorelease];
+			sheet = [[[FreeDBMatchSheet alloc] init] autorelease];
 			[sheet setValue:matches forKey:@"matches"];
 			[sheet setValue:self forKey:@"controller"];
-			[sheet showCDDBMatches];
+			[sheet showFreeDBMatches];
 		}
 	}
 	
@@ -496,12 +496,12 @@
 	}
 }
 
-- (void) updateDiscFromCDDB:(CDDBMatch *)info
+- (void) updateDiscFromFreeDB:(FreeDBMatch *)info
 {
-	CDDB *cddb;
+	FreeDB *cddb;
 	
 	@try {
-		cddb = [[CDDB alloc] init];
+		cddb = [[FreeDB alloc] init];
 		[cddb setValue:_disc forKey:@"disc"];
 		
 		[cddb updateDisc:info];

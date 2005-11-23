@@ -21,7 +21,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CompactDisc.h"
-#import "CDDBMatch.h"
+#import "FreeDBMatch.h"
 
 NSString *gDataDir;
 
@@ -46,7 +46,7 @@ NSString *gDataDir;
 - (IBAction) encode:(id)sender;
 
 - (IBAction) getCDInformation:(id)sender;
-- (void) updateDiscFromCDDB:(CDDBMatch *)info;
+- (void) updateDiscFromFreeDB:(FreeDBMatch *)info;
 
 - (void) displayExceptionSheet:(NSException *)exception;
 

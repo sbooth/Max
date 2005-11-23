@@ -20,8 +20,8 @@
 
 #import "PreferencesController.h"
 
-#import "CDDB.h"
-#import "CDDBSite.h"
+#import "FreeDB.h"
+#import "FreeDBSite.h"
 #import "MissingResourceException.h"
 
 #import "UtilityFunctions.h"
@@ -54,7 +54,7 @@ static PreferencesController *sharedPreferences = nil;
 
 	@try {
 		defaultsDictionary	= [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
-		defaultFiles		= [NSArray arrayWithObjects:@"CDDBDefaults", @"CompactDiscControllerDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", nil];
+		defaultFiles		= [NSArray arrayWithObjects:@"FreeDBDefaults", @"CompactDiscControllerDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -143,7 +143,7 @@ static PreferencesController *sharedPreferences = nil;
 {
 	NSArray *selectedObjects = [_cddbMirrorsController selectedObjects];
 	if(0 < [selectedObjects count]) {
-		CDDBSite					*mirror					= [selectedObjects objectAtIndex:0];
+		FreeDBSite					*mirror					= [selectedObjects objectAtIndex:0];
 		NSUserDefaultsController	*defaultsController		= [NSUserDefaultsController sharedUserDefaultsController];
 		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"org.sbooth.Max.freeDBServer"];
 		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"org.sbooth.Max.freeDBPort"];
@@ -155,7 +155,7 @@ static PreferencesController *sharedPreferences = nil;
 {
 	@try {
 		// Get mirror list
-		CDDB *cddb = [[[CDDB alloc] init] autorelease];
+		FreeDB *cddb = [[[FreeDB alloc] init] autorelease];
 		[self setValue:[cddb fetchSites] forKey:@"cddbMirrors"];
 	}
 	

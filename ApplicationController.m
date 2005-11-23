@@ -25,7 +25,7 @@
 #import "TaskMaster.h"
 #import "UpdateChecker.h"
 #import "StringValueTransformer.h"
-#import "CDDBProtocolValueTransformer.h";
+#import "FreeDBProtocolValueTransformer.h";
 #import "BooleanArrayValueTransformer.h";
 #import "NegateBooleanArrayValueTransformer.h";
 
@@ -44,8 +44,8 @@
 	transformer = [[[StringValueTransformer alloc] initWithTarget:@"Quality"] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"LAMETargetIsQuality"];
 	
-	transformer = [[[CDDBProtocolValueTransformer alloc] init] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"CDDBProtocolValueTransformer"];
+	transformer = [[[FreeDBProtocolValueTransformer alloc] init] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"FreeDBProtocolValueTransformer"];
 
 	transformer = [[[BooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"BooleanArrayValueTransformer"];

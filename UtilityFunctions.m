@@ -20,7 +20,7 @@
 
 #import "UtilityFunctions.h"
 
-#import "CDDBException.h"
+#import "FreeDBException.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "LAMEException.h"
@@ -82,7 +82,7 @@ displayExceptionSheet(NSException	*exception,
 	
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert addButtonWithTitle: @"OK"];
-	if([exception isKindOfClass:[CDDBException class]]) {
+	if([exception isKindOfClass:[FreeDBException class]]) {
 		[alert setMessageText: @"FreeDB Error"];
 	}
 	else if([exception isKindOfClass:[IOException class]]) {

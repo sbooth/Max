@@ -82,7 +82,7 @@
 		}
 		
 		if(0 == cddb_disc_calc_discid(_cddb_disc)) {
-			@throw [CDDBException exceptionWithReason:@"Unable to calculate disc id" userInfo:nil];
+			@throw [FreeDBException exceptionWithReason:@"Unable to calculate disc id" userInfo:nil];
 		}
 	}
 	
