@@ -18,18 +18,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CDDBSite.h"
+#import "FreeDBSite.h"
 
-@implementation CDDBSite
+@implementation FreeDBSite
 
-+ (id) createFromCDDBSite:(const cddb_site_t *)site
++ (id) createFromFreeDBSite:(const cddb_site_t *)site
 {
 	const char		*tempString;
 	unsigned int	i;
 	float			latitude, longitude;
-	CDDBSite		*result;
+	FreeDBSite		*result;
 	
-	result = [[[CDDBSite alloc] init] autorelease];
+	result = [[[FreeDBSite alloc] init] autorelease];
 	
 	if(CDDB_ERR_OK == cddb_site_get_address(site, &tempString, &i)) {
 		[result setValue:[NSString stringWithCString:tempString] forKey:@"address"];

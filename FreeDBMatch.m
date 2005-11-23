@@ -18,13 +18,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CDDBMatch.h"
+#import "FreeDBMatch.h"
 
-@implementation CDDBMatch
+@implementation FreeDBMatch
 
-+ (id) createFromCDDBDisc:(cddb_disc_t *)disc
++ (id) createFromFreeDBDisc:(cddb_disc_t *)disc
 {
-	CDDBMatch *result = [[[CDDBMatch alloc] init] autorelease];
+	FreeDBMatch *result = [[[FreeDBMatch alloc] init] autorelease];
 	
 	[result setValue:[NSString stringWithCString:cddb_disc_get_artist(disc)] forKey:@"artist"];
 	[result setValue:[NSString stringWithCString:cddb_disc_get_title(disc)] forKey:@"title"];

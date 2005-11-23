@@ -18,18 +18,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CDDBException.h"
+#import "FreeDBException.h"
 
-@implementation CDDBException
+@implementation FreeDBException
 
 + (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo
 {
-	return [[[CDDBException alloc] initWithReason:reason userInfo:userInfo] autorelease];
+	return [[[FreeDBException alloc] initWithReason:reason userInfo:userInfo] autorelease];
 }
 
 - (id) initWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo
 {
-	return [super initWithName:@"CDDBException" reason:reason userInfo:userInfo];
+	return [super initWithName:@"FreeDBException" reason:reason userInfo:userInfo];
 }
 
 @end

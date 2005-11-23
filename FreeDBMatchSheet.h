@@ -22,7 +22,7 @@
 
 #import "CompactDiscController.h"
 
-@interface CDDBMatchSheet : NSObject
+@interface FreeDBMatchSheet : NSObject
 {
     IBOutlet NSWindow			*_sheet;
     IBOutlet NSTableView		*_table;
@@ -30,7 +30,7 @@
 	CompactDiscController		*_controller;
 }
 
-- (void)showCDDBMatches;
+- (void)showFreeDBMatches;
 
 - (IBAction) cancel:(id)sender;
 - (IBAction) useSelected:(id)sender;

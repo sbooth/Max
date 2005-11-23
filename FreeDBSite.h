@@ -22,7 +22,7 @@
 
 #include "cddb/cddb.h"
 
-@interface CDDBSite : NSObject 
+@interface FreeDBSite : NSObject 
 {
 	NSString		*_address;
 	NSNumber		*_port;
@@ -32,6 +32,6 @@
 	NSNumber		*_longitude;
 }
 
-+ (id) createFromCDDBSite:(const cddb_site_t *)site;
++ (id) createFromFreeDBSite:(const cddb_site_t *)site;
 
 @end

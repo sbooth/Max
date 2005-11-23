@@ -1,5 +1,5 @@
 /*
- *  $Id: CDDB.m 153 2005-11-23 22:13:56Z me $
+ *  $Id: FreeDB.m 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,19 +18,19 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CDDB.h"
+#import "FreeDB.h"
 
-#import "CDDBSite.h"
-#import "CDDBMatch.h"
+#import "FreeDBSite.h"
+#import "FreeDBMatch.h"
 #import "MallocException.h"
-#import "CDDBException.h"
+#import "FreeDBException.h"
 #import "MissingResourceException.h"
 
 #import "UtilityFunctions.h"
 
 #include "cddb/cddb.h"
 
-@implementation CDDB
+@implementation FreeDB
 
 + (void) initialize
 {
@@ -38,12 +38,12 @@
     NSDictionary			*cddbDefaultsValuesDictionary;
     
 	@try {
-		cddbDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CDDBDefaults" ofType:@"plist"];
+		cddbDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"FreeDBDefaults" ofType:@"plist"];
 		if(nil == cddbDefaultsValuesPath) {
 			// Hardcode default value to avoid a crash
 			NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"freedb.freedb.org", @"8880", @"1", nil] forKeys:[NSArray arrayWithObjects:@"org.sbooth.Max.freeDBServer", @"org.sbooth.Max.freeDBPort", @"org.sbooth.Max.freeDBProtocol", nil]];
 			[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load CDDBDefaults.plist" userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load FreeDBDefaults.plist" userInfo:nil];
 		}
 		cddbDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:cddbDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:cddbDefaultsValuesDictionary];
@@ -92,12 +92,12 @@
 	cddb_sites(_cddb);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	/*if(FALSE == cddb_sites(_cddb)) {
-		@throw [CDDBException exceptionWithReason:[NSString stringWithFormat:@"Unable to obtain list of FreeDB mirrors.\nlibcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"Unable to obtain list of FreeDB mirrors.\nlibcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
 	}*/
 	
 	site = cddb_first_site(_cddb);
 	while(NULL != site) {
-		[result addObject:[CDDBSite createFromCDDBSite:site]];
+		[result addObject:[FreeDBSite createFromFreeDBSite:site]];
 		site = cddb_next_site(_cddb);
 	}
 	
@@ -114,16 +114,16 @@
 	// Run query to find matches
 	matches = cddb_query(_cddb, cddb_disc);
 	if(-1 == matches) {
-		@throw [CDDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
 	}
 
 	while(matches > 0) {
-		[result addObject:[CDDBMatch createFromCDDBDisc:cddb_disc]];
+		[result addObject:[FreeDBMatch createFromFreeDBDisc:cddb_disc]];
 		
 		--matches;
 		if(0 < matches) {
 			if(0 == cddb_query_next(_cddb, cddb_disc)) {
-				@throw [CDDBException exceptionWithReason:@"Query index out of bounds" userInfo:nil];
+				@throw [FreeDBException exceptionWithReason:@"Query index out of bounds" userInfo:nil];
 			}
 		}
 	}
@@ -133,7 +133,7 @@
 	return result;
 }
 
-- (void) updateDisc:(CDDBMatch *)info
+- (void) updateDisc:(FreeDBMatch *)info
 {
 	cddb_disc_t				*disc			= NULL;
 	cddb_track_t			*track			= NULL;
@@ -150,7 +150,7 @@
 	cddb_disc_set_discid(disc, [[info valueForKey:@"discid"] unsignedIntValue]);
 	
 	if(0 == cddb_read(_cddb, disc)) {
-		@throw [CDDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
 	}
 
 	tempString = cddb_disc_get_title(disc);

@@ -21,11 +21,11 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CompactDisc.h"
-#import "CDDBMatch.h"
+#import "FreeDBMatch.h"
 
 #include "cddb/cddb.h"
 
-@interface CDDB : NSObject 
+@interface FreeDB : NSObject 
 {
 	CompactDisc		*_disc;
 	cddb_conn_t		*_cddb;
@@ -34,6 +34,6 @@
 - (NSArray *) fetchSites;
 - (NSArray *) fetchMatches;
 
-- (void) updateDisc:(CDDBMatch *)info;
+- (void) updateDisc:(FreeDBMatch *)info;
 
 @end

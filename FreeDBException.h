@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CDDBException : NSException 
+@interface FreeDBException : NSException 
 {
 
 }

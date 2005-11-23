@@ -18,24 +18,24 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CDDBMatchSheet.h"
+#import "FreeDBMatchSheet.h"
 
-#import "CDDBMatch.h"
+#import "FreeDBMatch.h"
 #import "MissingResourceException.h"
 
-@implementation CDDBMatchSheet
+@implementation FreeDBMatchSheet
 
 - (id) init
 {
 	if((self = [super init])) {
-		if(NO == [NSBundle loadNibNamed:@"CDDBMatches" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load CDDBMatches.nib" userInfo:nil];
+		if(NO == [NSBundle loadNibNamed:@"FreeDBMatches" owner:self])  {
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load FreeDBMatches.nib" userInfo:nil];
 		}
 	}
 	return self;
 }
 
-- (void)showCDDBMatches
+- (void)showFreeDBMatches
 {
     [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_controller valueForKey:@"window"] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }
@@ -47,7 +47,7 @@
 
 - (IBAction)useSelected: (id)sender
 {	
-	[_controller updateDiscFromCDDB:[_matches objectAtIndex:[_table selectedRow]]];	
+	[_controller updateDiscFromFreeDB:[_matches objectAtIndex:[_table selectedRow]]];	
     [[NSApplication sharedApplication] endSheet:_sheet];
 }
 

@@ -22,7 +22,7 @@
 
 #include "cddb/cddb.h"
 
-@interface CDDBMatch : NSObject 
+@interface FreeDBMatch : NSObject 
 {
 	NSString		*_artist;
 	NSString		*_title;
@@ -32,6 +32,6 @@
 	NSNumber		*_discid;
 }
 
-+ (id) createFromCDDBDisc:(cddb_disc_t *)disc;
++ (id) createFromFreeDBDisc:(cddb_disc_t *)disc;
 
 @end

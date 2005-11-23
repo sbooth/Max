@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CDDBProtocolValueTransformer : NSObject 
+@interface FreeDBProtocolValueTransformer : NSObject 
 {
 
 }
