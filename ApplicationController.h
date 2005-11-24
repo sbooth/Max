@@ -26,14 +26,14 @@
 {
 }
 
-- (IBAction)scanForMedia:(id)sender;
-- (IBAction)showPreferences:(id)sender;
+- (IBAction)			scanForMedia:(id)sender;
+- (IBAction)			showPreferences:(id)sender;
 
-- (IBAction)aboutLAME:(id)sender;
-- (IBAction)toggleTasksPanel:(id)sender;
-- (IBAction)checkForUpdate:(id)sender;
-- (IBAction)openHomeURL:(id)sender;
+- (IBAction)			aboutLAME:(id)sender;
+- (IBAction)			toggleTasksPanel:(id)sender;
+- (IBAction)			checkForUpdate:(id)sender;
+- (IBAction)			openHomeURL:(id)sender;
 
--(NSDictionary *)registrationDictionaryForGrowl;
+-(NSDictionary *)		registrationDictionaryForGrowl;
 
 @end

@@ -25,9 +25,11 @@
 	NSMutableArray				*_media;	
 }
 
-+ (MediaController *) sharedMedia;
++ (MediaController *) sharedController;
 
 - (void) scanForMedia;
+
+- (void) releaseAll;
 
 - (void) volumeMounted: (NSNotification *) notification;
 - (void) volumeUnmounted: (NSNotification *) notification;

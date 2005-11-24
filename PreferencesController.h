@@ -28,7 +28,7 @@
 
 	IBOutlet NSArrayController		*_cddbMirrorsController;
 
-	NSArray							*_cddbMirrors;
+	NSArray							*_freeDBMirrors;
     NSString						*_customNameExample;
 }
 

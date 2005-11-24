@@ -21,32 +21,34 @@
 #import <Cocoa/Cocoa.h>
 
 #include "cdparanoia/interface/cdda_interface.h"
+#include "cddb/cddb_disc.h"
 
-
-@interface CDDrive : NSObject
+@interface CompactDisc : NSObject
 {
-	NSString		*_bsdName;
-	cdrom_drive		*_drive;
+	NSString			*_bsdName;
+	cdrom_drive			*_drive;
+	cddb_disc_t			*_freeDBDisc;
+	unsigned			_length;	
 }
 
-- (id) initWithBSDName:(NSString *) bsdName;
+- (void)				setBSDName:(NSString *)bsdName;
 
-//- (cdrom_drive *) drive;
+- (unsigned long)		firstSector;
+- (unsigned long)		lastSector;
 
-- (unsigned long) firstSector;
-- (unsigned long) lastSector;
+- (unsigned)			trackCount;
+- (unsigned)			trackContainingSector:(unsigned long) sector;
 
-- (unsigned) trackCount;
-- (unsigned) trackContainingSector:(unsigned long) sector;
+- (unsigned long)		firstSectorForTrack:(ssize_t) track;
+- (unsigned long)		lastSectorForTrack:(ssize_t) track;
 
-- (unsigned long) firstSectorForTrack:(ssize_t) track;
-- (unsigned long) lastSectorForTrack:(ssize_t) track;
+- (unsigned)			channelsForTrack:(ssize_t) track;
 
-- (unsigned) channelsForTrack:(ssize_t) track;
+- (BOOL)				trackContainsAudio:(ssize_t) track;
+- (BOOL)				trackHasPreEmphasis:(ssize_t) track;
+- (BOOL)				trackAllowsDigitalCopy:(ssize_t) track;
 
-- (BOOL) trackContainsAudio:(ssize_t) track;
-- (BOOL) trackHasPreEmphasis:(ssize_t) track;
-- (BOOL) trackAllowsDigitalCopy:(ssize_t) track;
+- (int)					discID;
 
 //- (id < Ripper>) getRipper;
 

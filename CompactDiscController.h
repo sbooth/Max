@@ -20,36 +20,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDisc.h"
-#import "FreeDBMatch.h"
-
-NSString *gDataDir;
-
 @interface CompactDiscController : NSWindowController
 {
-	IBOutlet NSTableView			*_tracksTable;
-	IBOutlet NSDrawer				*_trackDrawer;
-	IBOutlet NSButton				*_trackInfoButton;
-	IBOutlet NSButton				*_encodeButton;
-		
-	CompactDisc						*_disc;
-	NSNumber						*_stop;
 }
-
-- (id) initWithDisc: (CompactDisc *) disc;
-
-- (IBAction) selectAll:(id)sender;
-- (IBAction) selectNone:(id)sender;
-- (BOOL) emptySelection;
-
-- (IBAction) showTrackInfo:(id)sender;
-- (IBAction) encode:(id)sender;
-
-- (IBAction) getCDInformation:(id)sender;
-- (void) updateDiscFromFreeDB:(FreeDBMatch *)info;
-
-- (void) displayExceptionSheet:(NSException *)exception;
-
-- (void) discUnmounted;
 
 @end

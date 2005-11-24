@@ -24,16 +24,14 @@
 #import "Track.h"
 #import "FreeDBMatch.h"
 
-#include "cddb/cddb_disc.h"
 
-@interface CompactDisc : NSDocument 
+@interface CompactDiscDocument : NSDocument 
 {
     IBOutlet NSDrawer				*_trackDrawer;
     IBOutlet NSButton				*_trackInfoButton;
 
 	// Related data structures
 	CDDrive							*_drive;
-	cddb_disc_t						*_cddb_disc;
 	
 	// ID3 tags
 	NSString						*_title;			// TALB
@@ -48,8 +46,6 @@
 	NSNumber						*_discNumber;
 	NSNumber						*_discsInSet;
 	NSNumber						*_multiArtist;
-	
-	unsigned						_length;
 	
 	NSNumber						*_stop;
 
@@ -71,8 +67,6 @@
 - (void)			updateDiscFromFreeDB:(FreeDBMatch *) info;
 
 
-- (unsigned long)	cddb_id;
-- (cddb_disc_t *)	cddb_disc;
 - (NSString *)		length;
 
 

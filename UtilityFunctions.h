@@ -24,8 +24,11 @@
 extern "C" {
 #endif
 
+// Get data directory (~/Application Support/Max/)
+NSString * getApplicationDataDirectory();
+	
 // Remove /: characters and replace with _
-NSString* makeStringSafeForFilename(NSString *string);
+NSString * makeStringSafeForFilename(NSString *string);
 
 // Create path if it does not exist; throw an exception if it exists and is a file
 void validateAndCreateDirectory(NSString *path);
@@ -41,7 +44,7 @@ void displayExceptionSheet(NSException	*exception,
 						   void			*userInfo);
 
 // Get a timestamp in the ID3v2 format
-NSString* getID3v2Timestamp();
+NSString * getID3v2Timestamp();
 
 #ifdef __cplusplus
 }
