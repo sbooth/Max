@@ -21,7 +21,7 @@
 		8C73021008ECD4AD0008D7E0 /* FreeDBSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73020F08ECD4AD0008D7E0 /* FreeDBSite.m */; };
 		8C73033E08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */; };
 		8C752A8408C507CE001F588B /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C752A8308C507CE001F588B /* Genres.m */; };
-		8C76E43408C6DE1A00F4F9A1 /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDisc.m */; };
+		8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */; };
 		8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */; };
 		8C7C88BC08EC37D800F6FCB1 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */; };
 		8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
@@ -52,11 +52,10 @@
 		8CBEC6B208ED861C0064F794 /* StopException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6B108ED861C0064F794 /* StopException.m */; };
 		8CBEC6CF08ED88950064F794 /* EmptySelectionException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */; };
 		8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */; };
-		8CC111C408CA4538008BB9B0 /* CompactDisc.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC111C308CA4538008BB9B0 /* CompactDisc.nib */; };
+		8CC111C408CA4538008BB9B0 /* CompactDiscDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */; };
 		8CC564E908DD12A700C3030F /* StringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC564E808DD12A700C3030F /* StringValueTransformer.m */; };
 		8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164600933D42700A99A68 /* libcdda_paranoia.a */; };
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
-		8CE165B80933FAD400A99A68 /* CDDrive.h in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8CE165B60933FAD400A99A68 /* CDDrive.h */; };
 		8CE165B90933FAD400A99A68 /* CDDrive.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE165B70933FAD400A99A68 /* CDDrive.m */; };
 		8CE1687D0934681C00A99A68 /* ParanoiaException.h in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8CE1687B0934681C00A99A68 /* ParanoiaException.h */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
@@ -66,6 +65,8 @@
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
+		8CFD2009093560E400F3FF51 /* CD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CFD2008093560E400F3FF51 /* CD.icns */; };
+		8CFD212509358B1700F3FF51 /* CompactDiscDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CFD212409358B1700F3FF51 /* CompactDiscDefaults.plist */; };
 		8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -108,7 +109,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				8C9A24B40925ADB200FB244D /* Growl.framework in Copy Growl */,
-				8CE165B80933FAD400A99A68 /* CDDrive.h in Copy Growl */,
 				8CE1687D0934681C00A99A68 /* ParanoiaException.h in Copy Growl */,
 			);
 			name = "Copy Growl";
@@ -148,8 +148,8 @@
 		8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDBProtocolValueTransformer.m; sourceTree = "<group>"; };
 		8C752A8208C507CE001F588B /* Genres.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genres.h; sourceTree = "<group>"; };
 		8C752A8308C507CE001F588B /* Genres.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genres.m; sourceTree = "<group>"; };
-		8C76E43208C6DE1A00F4F9A1 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
-		8C76E43308C6DE1A00F4F9A1 /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
+		8C76E43208C6DE1A00F4F9A1 /* CompactDiscDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = CompactDiscDocument.h; sourceTree = "<group>"; };
+		8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = CompactDiscDocument.m; sourceTree = "<group>"; };
 		8C76E43908C6DE3900F4F9A1 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		8C76E43A08C6DE3900F4F9A1 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Preferences.nib; sourceTree = "<group>"; };
@@ -197,12 +197,12 @@
 		8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptySelectionException.m; sourceTree = "<group>"; };
 		8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscController.h; sourceTree = "<group>"; };
 		8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
-		8CC111C308CA4538008BB9B0 /* CompactDisc.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CompactDisc.nib; sourceTree = "<group>"; };
+		8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = CompactDiscDocument.nib; sourceTree = "<group>"; };
 		8CC564E708DD12A700C3030F /* StringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringValueTransformer.h; sourceTree = "<group>"; };
 		8CC564E808DD12A700C3030F /* StringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringValueTransformer.m; sourceTree = "<group>"; };
 		8CE164600933D42700A99A68 /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
 		8CE164610933D42700A99A68 /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
-		8CE165B60933FAD400A99A68 /* CDDrive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDDrive.h; sourceTree = "<group>"; };
+		8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = CompactDisc.h; sourceTree = "<group>"; };
 		8CE165B70933FAD400A99A68 /* CDDrive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDDrive.m; sourceTree = "<group>"; };
 		8CE1687B0934681C00A99A68 /* ParanoiaException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParanoiaException.h; sourceTree = "<group>"; };
 		8CE1687C0934681C00A99A68 /* ParanoiaException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParanoiaException.m; sourceTree = "<group>"; };
@@ -215,6 +215,8 @@
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
 		8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooleanArrayValueTransformer.m; sourceTree = "<group>"; };
+		8CFD2008093560E400F3FF51 /* CD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CD.icns; sourceTree = "<group>"; };
+		8CFD212409358B1700F3FF51 /* CompactDiscDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = CompactDiscDefaults.plist; sourceTree = "<group>"; };
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -280,7 +282,7 @@
 		29B97314FDCFA39411CA2CEA /* cocoa test */ = {
 			isa = PBXGroup;
 			children = (
-				8C7C894308EC3FFE00F6FCB1 /* Models */,
+				8C7C894308EC3FFE00F6FCB1 /* CompactDisc */,
 				8C7C897408EC42BC00F6FCB1 /* Controllers */,
 				8CDB0A19092D78C60080A0D8 /* Tasks */,
 				8C0408DA092A89770052D881 /* Ripper */,
@@ -314,11 +316,13 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CFD212409358B1700F3FF51 /* CompactDiscDefaults.plist */,
+				8CFD2008093560E400F3FF51 /* CD.icns */,
 				8C3101270931297C000A50FC /* Max.icns */,
 				8C440DC1092E8B3C00A053AA /* Tasks.nib */,
 				8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
-				8CC111C308CA4538008BB9B0 /* CompactDisc.nib */,
+				8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */,
 				8C7C88BB08EC37D800F6FCB1 /* Preferences.nib */,
 				8CB6E20008DACB8100345B8F /* COPYING */,
 				8CE6F51D08CD60970028DA37 /* Credits.rtf */,
@@ -370,17 +374,19 @@
 			name = FreeDB;
 			sourceTree = "<group>";
 		};
-		8C7C894308EC3FFE00F6FCB1 /* Models */ = {
+		8C7C894308EC3FFE00F6FCB1 /* CompactDisc */ = {
 			isa = PBXGroup;
 			children = (
-				8C76E43208C6DE1A00F4F9A1 /* CompactDisc.h */,
-				8C76E43308C6DE1A00F4F9A1 /* CompactDisc.m */,
+				8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */,
+				8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */,
+				8C76E43208C6DE1A00F4F9A1 /* CompactDiscDocument.h */,
+				8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */,
 				8C76E43908C6DE3900F4F9A1 /* Track.h */,
 				8C76E43A08C6DE3900F4F9A1 /* Track.m */,
-				8CE165B60933FAD400A99A68 /* CDDrive.h */,
+				8CE165B60933FAD400A99A68 /* CompactDisc.h */,
 				8CE165B70933FAD400A99A68 /* CDDrive.m */,
 			);
-			name = Models;
+			name = CompactDisc;
 			sourceTree = "<group>";
 		};
 		8C7C897408EC42BC00F6FCB1 /* Controllers */ = {
@@ -388,8 +394,6 @@
 			children = (
 				8C7C891208EC3EC500F6FCB1 /* ApplicationController.h */,
 				8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */,
-				8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */,
-				8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */,
 				8C7C897908EC435700F6FCB1 /* MediaController.h */,
 				8C7C897808EC435700F6FCB1 /* MediaController.m */,
 				8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */,
@@ -546,7 +550,7 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				8CC111C408CA4538008BB9B0 /* CompactDisc.nib in Resources */,
+				8CC111C408CA4538008BB9B0 /* CompactDiscDocument.nib in Resources */,
 				8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */,
 				8CB6E20108DACB8100345B8F /* COPYING in Resources */,
 				8C7C88BC08EC37D800F6FCB1 /* Preferences.nib in Resources */,
@@ -561,6 +565,8 @@
 				8C440DC0092E8B3000A053AA /* FreeDBMatches.nib in Resources */,
 				8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */,
 				8C3101280931297C000A50FC /* Max.icns in Resources */,
+				8CFD2009093560E400F3FF51 /* CD.icns in Resources */,
+				8CFD212509358B1700F3FF51 /* CompactDiscDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,7 +579,7 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				8C752A8408C507CE001F588B /* Genres.m in Sources */,
-				8C76E43408C6DE1A00F4F9A1 /* CompactDisc.m in Sources */,
+				8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */,
 				8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */,
 				8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */,
 				8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */,
