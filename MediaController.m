@@ -21,7 +21,7 @@
 #import "MediaController.h"
 #import "IOException.h"
 
-#import "CompactDiscController.h"
+#import "CompactDisc.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 
@@ -108,28 +108,28 @@ getBSDName(io_object_t media)
 	return [NSString stringWithUTF8String:(const char *)bsdPath];
 }
 
-static MediaController *sharedMedia = nil;
+static MediaController *sharedController = nil;
 
 @implementation MediaController
 
-+ (MediaController *) sharedMedia
++ (MediaController *) sharedController
 {
 	@synchronized(self) {
-		if(nil == sharedMedia) {
-			sharedMedia = [[self alloc] init];
+		if(nil == sharedController) {
+			sharedController = [[self alloc] init];
 		}
 	}
-	return sharedMedia;
+	return sharedController;
 }
 
 + (id) allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
-        if(nil == sharedMedia) {
+        if(nil == sharedController) {
             return [super allocWithZone:zone];
         }
     }
-    return sharedMedia;
+    return sharedController;
 }
 
 - (id) init
@@ -168,13 +168,22 @@ static MediaController *sharedMedia = nil;
 {
 	// First show any windows that might have been closed
 	NSEnumerator *enumerator = [_media objectEnumerator];
-	CompactDiscController *object;
+	CompactDisc *object;
 	while((object = [enumerator nextObject])) {
-		[[object valueForKey:@"window"] makeKeyAndOrderFront:nil];
+		[object showWindows];
 	}
 
 	// Now look for new devices
 	[self volumeMounted:nil];
+}
+
+- (void) releaseAll
+{
+	NSEnumerator *enumerator = [_media objectEnumerator];
+	CompactDisc *object;
+	while((object = [enumerator nextObject])) {
+		[_media removeObject:object];
+	}
 }
 
 // We don't actually use the notification, it is just a convenient hook
@@ -189,20 +198,21 @@ static MediaController *sharedMedia = nil;
 	
 	while((nextMedia = IOIteratorNext(mediaIterator))) {
 		NSEnumerator			*enumerator		= [_media objectEnumerator];
-		CompactDiscController	*object			= nil;
+		CompactDisc				*object			= nil;
 		NSString				*bsdName		= getBSDName(nextMedia);
 
 		found = FALSE;
 		
 		while((object = [enumerator nextObject])) {
-			if([bsdName isEqualToString:[[[object valueForKey:@"disc"] valueForKey:@"drive"] valueForKey:@"bsdName"]]) {
+			if([bsdName isEqualToString:[[object valueForKey:@"drive"] valueForKey:@"bsdName"]]) {
 				found = TRUE;
 				break;
 			}
 		}
 		if(FALSE == found) {
-			CompactDiscController *controller = [[CompactDiscController alloc] initWithDisc:[[CompactDisc alloc] initWithBSDName:bsdName]];
-			[_media addObject: controller];
+			CompactDisc *disc = [[[CompactDisc alloc] init] autorelease];
+			[disc setBSDName:bsdName];
+			[_media addObject:disc];
 		}				
 	}
 	
@@ -226,13 +236,12 @@ static MediaController *sharedMedia = nil;
 	
 	while((nextMedia = IOIteratorNext(mediaIterator))) {
 		NSEnumerator			*enumerator		= [_media objectEnumerator];
-		CompactDiscController	*object			= nil;
+		CompactDisc				*object			= nil;
 		NSString				*bsdName		= getBSDName(nextMedia);
 
 		while((object = [enumerator nextObject])) {
-			NSString *comp = [[[object valueForKey:@"disc"] valueForKey:@"drive"] valueForKey:@"bsdName"];
+			NSString *comp = [[object valueForKey:@"drive"] valueForKey:@"bsdName"];
 			if([bsdName isEqualToString:comp]) {
-				[object discUnmounted];
 				[_media removeObject:object];
 				break;
 			}

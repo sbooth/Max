@@ -18,50 +18,97 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CDDrive.h"
+#import "CompactDisc.h"
 
+#import "MallocException.h"
 #import "ParanoiaException.h"
+#import "FreeDBException.h"
 
-@implementation CDDrive
+@implementation CompactDisc
 
 - (id) init
 {
-	@throw [NSException exceptionWithName:@"InternalInconsistencyException" reason:@"CDDrive init called" userInfo:nil];
-	return nil;
+	if((self = [super init])) {
+		_bsdName		= nil;
+		_drive			= NULL;
+		_freeDBDisc		= NULL;
+		
+		return self;
+	}
+	else {
+		return nil;
+	}
 }
 
-- (id) initWithBSDName:(NSString *) bsdName
+- (void) setBSDName:(NSString *)bsdName
 {
-	if((self = [super init])) {
-		_bsdName = [bsdName retain];
-		
-		_drive = cdda_identify([_bsdName UTF8String], 0, NULL);
-		if(NULL == _drive) {
-			@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
-		}
-		
-		if(0 != cdda_open(_drive)) {
-			@throw [ParanoiaException exceptionWithReason:@"cdda_open failed" userInfo:nil];
-		}
+	unsigned			i;
+	unsigned long		discLength	= 150;
+
+	// Cleanup
+	if(nil != _bsdName) {
+		[_bsdName release];
 	}
-	return self;
+	
+	if(NULL != _drive) {
+		cdda_close(_drive);
+	}
+
+	if(NULL != _freeDBDisc) {
+		cddb_disc_destroy(_freeDBDisc);
+	}
+	
+	
+	_bsdName	= [bsdName retain];
+
+	// cdparanoia setup
+	_drive		= cdda_identify([_bsdName UTF8String], 0, NULL);
+	if(NULL == _drive) {
+		@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
+	}
+	
+	if(0 != cdda_open(_drive)) {
+		@throw [ParanoiaException exceptionWithReason:@"cdda_open failed" userInfo:nil];
+	}
+	
+	// Setup libcddb data structures
+	_freeDBDisc	= cddb_disc_new();
+	if(NULL == _freeDBDisc) {
+		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+	}
+	
+	for(i = 1; i <= [self trackCount]; ++i) {
+		cddb_track_t	*cddb_track	= cddb_track_new();
+		if(NULL == cddb_track) {
+			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		}
+		cddb_track_set_frame_offset(cddb_track, [self firstSectorForTrack:i] + 150);
+		cddb_disc_add_track(_freeDBDisc, cddb_track);
+		discLength += [self lastSectorForTrack:i] - [self firstSectorForTrack:i] + 1;
+	}
+	cddb_disc_set_length(_freeDBDisc, (unsigned) (60 * (discLength / (60 * 75))) + (unsigned)((discLength / 75) % 60));
+	
+	if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
+		@throw [FreeDBException exceptionWithReason:@"Unable to calculate disc id" userInfo:nil];
+	}
 }
 
 - (void) dealloc
 {
-	[_bsdName release];
+	if(nil != _bsdName) {
+		[_bsdName release];
+	}
 	
-	if(0 != cdda_close(_drive)) {
-		@throw [ParanoiaException exceptionWithReason:@"cdda_close failed" userInfo:nil];
+	if(NULL != _drive) {
+		cdda_close(_drive);
+	}
+	
+	if(NULL != _freeDBDisc) {
+		cddb_disc_destroy(_freeDBDisc);
 	}
 	
 	[super dealloc];
 }
-
-/*- (cdrom_drive *) drive
-{
-	return _drive;
-}*/
 
 - (unsigned) trackCount
 {
@@ -111,6 +158,11 @@
 - (BOOL) trackAllowsDigitalCopy:(ssize_t) track
 {
 	return cdda_track_copyp(_drive, track) ? YES : NO;
+}
+
+- (int) discID
+{
+	return cddb_get_disc_id(_freeDBDisc);
 }
 
 @end

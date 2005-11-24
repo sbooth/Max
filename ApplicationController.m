@@ -24,6 +24,7 @@
 #import "MediaController.h"
 #import "TaskMaster.h"
 #import "UpdateChecker.h"
+#import "IOException.h"
 #import "StringValueTransformer.h"
 #import "FreeDBProtocolValueTransformer.h";
 #import "BooleanArrayValueTransformer.h";
@@ -66,12 +67,12 @@
 
 - (IBAction)scanForMedia:(id)sender
 {
-	[[MediaController sharedMedia] scanForMedia];
+	[[MediaController sharedController] scanForMedia];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	[[MediaController sharedMedia] scanForMedia];
+	[[MediaController sharedController] scanForMedia];
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
@@ -97,6 +98,8 @@
 			}		
 		}
 	}
+	
+	[[MediaController sharedController] releaseAll];
 	
 	return NSTerminateNow;
 }

@@ -29,9 +29,40 @@
 #import "MissingResourceException.h"
 #import "ParanoiaException.h"
 
-static NSDateFormatter *sDateFormatter = nil;
+static NSDateFormatter		*sDateFormatter		= nil;
+static NSString				*sDataDirectory		= nil;
 
-NSString* 
+NSString *
+getApplicationDataDirectory()
+{
+	@synchronized(sDataDirectory) {
+		if(nil == sDataDirectory) {
+			BOOL					isDir;
+			NSFileManager			*manager;
+			NSArray					*paths;
+			
+			manager			= [NSFileManager defaultManager];
+			paths			= NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+			sDataDirectory	= [[[paths objectAtIndex:0] stringByAppendingString:@"/Max"] retain];
+
+			if(NO == [manager fileExistsAtPath:sDataDirectory isDirectory:&isDir]) {
+				if(NO == [manager createDirectoryAtPath:sDataDirectory attributes:nil]) {
+					NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
+					[[NSDocumentController sharedDocumentController] presentError:error];
+//					@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
+				}
+			}
+			else if(NO == isDir) {
+				NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
+				[[NSDocumentController sharedDocumentController] presentError:error];
+//				@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
+			}
+		}
+	}
+	return [[sDataDirectory retain] autorelease];
+}
+
+NSString * 
 makeStringSafeForFilename(NSString *string)
 {
 	NSCharacterSet		*characterSet		= [NSCharacterSet characterSetWithCharactersInString:@"/:"];
@@ -46,7 +77,7 @@ makeStringSafeForFilename(NSString *string)
 		range = [result rangeOfCharacterFromSet:characterSet];		
 	}
 	
-	return result;
+	return [[result retain] autorelease];
 }
 
 void
@@ -122,7 +153,7 @@ displayExceptionSheet(NSException	*exception,
 	}
 }
 
-NSString*
+NSString *
 getID3v2Timestamp()
 {
 	@synchronized(sDateFormatter) {

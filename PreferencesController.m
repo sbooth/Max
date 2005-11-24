@@ -126,8 +126,8 @@ static PreferencesController *sharedPreferences = nil;
 
 - (void) dealloc
 {
-	if(nil != _cddbMirrors) {
-		[_cddbMirrors release];
+	if(nil != _freeDBMirrors) {
+		[_freeDBMirrors release];
 	}
 	[super dealloc];
 }

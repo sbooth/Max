@@ -36,15 +36,4 @@
 	return result;
 }
 
-- (void) dealloc
-{
-	[_artist release];
-	[_title release];
-	[_year release];
-	[_genre release];
-	[_category release];
-	[_discid release];
-	[super dealloc];
-}
-
 @end

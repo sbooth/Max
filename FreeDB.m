@@ -79,7 +79,6 @@
 
 - (void) dealloc
 {
-	[_disc release];
 	cddb_destroy(_cddb);
 	[super dealloc];
 }
@@ -127,9 +126,7 @@
 			}
 		}
 	}
-	
-	cddb_disc_destroy(cddb_disc);
-	
+		
 	return result;
 }
 
