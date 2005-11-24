@@ -1,23 +1,11 @@
 {
     IBClasses = (
-        {CLASS = CompactDisc; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {
-                encode = id; 
-                getCDInformation = id; 
-                selectAll = id; 
-                selectNone = id; 
-                showTrackInfo = id; 
-            }; 
-            CLASS = CompactDiscController; 
+            ACTIONS = {encode = id; getCDInformation = id; selectAll = id; selectNone = id; }; 
+            CLASS = CompactDisc; 
             LANGUAGE = ObjC; 
-            OUTLETS = {
-                "_encodeButton" = NSButton; 
-                "_trackDrawer" = NSDrawer; 
-                "_trackInfoButton" = NSButton; 
-                "_tracksTable" = NSTableView; 
-            }; 
-            SUPERCLASS = NSWindowController; 
+            OUTLETS = {"_trackDrawer" = NSDrawer; "_trackInfoButton" = NSButton; }; 
+            SUPERCLASS = NSDocument; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = Genre; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
