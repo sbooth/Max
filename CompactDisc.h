@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: CompactDisc.h 122 2005-11-18 21:57:28Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,64 +20,36 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CDDrive.h"
-#import "Track.h"
-#import "FreeDBMatch.h"
-
+#include "cdparanoia/interface/cdda_interface.h"
 #include "cddb/cddb_disc.h"
 
-@interface CompactDisc : NSDocument 
+@interface CompactDisc : NSObject
 {
-    IBOutlet NSDrawer				*_trackDrawer;
-    IBOutlet NSButton				*_trackInfoButton;
-
-	// Related data structures
-	CDDrive							*_drive;
-	cddb_disc_t						*_cddb_disc;
-	
-	// ID3 tags
-	NSString						*_title;			// TALB
-	NSString						*_artist;			// TPE1
-	NSNumber						*_year;				// TYER
-	NSNumber						*_genre;			// TCON
-	NSString						*_comment;			// COMM
-	
-	NSNumber						*_partOfSet;		// TPOS
-
-	// Other disc info
-	NSNumber						*_discNumber;
-	NSNumber						*_discsInSet;
-	NSNumber						*_multiArtist;
-	
-	unsigned						_length;
-	
-	NSNumber						*_stop;
-
-	// Array of audio tracks
-	NSMutableArray					*_tracks;
+	NSString			*_bsdName;
+	cdrom_drive			*_drive;
+	cddb_disc_t			*_freeDBDisc;
+	unsigned			_length;	
 }
 
-- (void)			setBSDName:(NSString *) bsdName;
+- (void)				setBSDName:(NSString *)bsdName;
 
-- (void)			displayException:(NSException *)exception;
+- (unsigned long)		firstSector;
+- (unsigned long)		lastSector;
 
-- (NSArray *)		selectedTracks;
-- (BOOL)			emptySelection;
-- (IBAction)		selectAll:(id) sender;
-- (IBAction)		selectNone:(id) sender;
-- (IBAction)		encode:(id) sender;
+- (unsigned)			trackCount;
+- (unsigned)			trackContainingSector:(unsigned long) sector;
 
-- (IBAction)		getCDInformation:(id) sender;
-- (void)			updateDiscFromFreeDB:(FreeDBMatch *) info;
+- (unsigned long)		firstSectorForTrack:(ssize_t) track;
+- (unsigned long)		lastSectorForTrack:(ssize_t) track;
 
+- (unsigned)			channelsForTrack:(ssize_t) track;
 
-- (unsigned long)	cddb_id;
-- (cddb_disc_t *)	cddb_disc;
-- (NSString *)		length;
+- (BOOL)				trackContainsAudio:(ssize_t) track;
+- (BOOL)				trackHasPreEmphasis:(ssize_t) track;
+- (BOOL)				trackAllowsDigitalCopy:(ssize_t) track;
 
+- (int)					discID;
 
-// Save/Restore
-- (NSDictionary *)	getDictionary;
-- (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
+//- (id < Ripper>) getRipper;
 
 @end
