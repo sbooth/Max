@@ -22,46 +22,62 @@
 
 #import "CDDrive.h"
 #import "Track.h"
+#import "FreeDBMatch.h"
 
 #include "cddb/cddb_disc.h"
 
-
-@interface CompactDisc : NSObject 
+@interface CompactDisc : NSDocument 
 {
+    IBOutlet NSDrawer				*_trackDrawer;
+    IBOutlet NSButton				*_trackInfoButton;
+
 	// Related data structures
-	CDDrive				*_drive;
-	cddb_disc_t			*_cddb_disc;
+	CDDrive							*_drive;
+	cddb_disc_t						*_cddb_disc;
 	
 	// ID3 tags
-	NSString			*_title;			// TALB
-	NSString			*_artist;			// TPE1
-	NSNumber			*_year;				// TYER
-	NSNumber			*_genre;			// TCON
-	NSString			*_comment;			// COMM
+	NSString						*_title;			// TALB
+	NSString						*_artist;			// TPE1
+	NSNumber						*_year;				// TYER
+	NSNumber						*_genre;			// TCON
+	NSString						*_comment;			// COMM
 	
-	NSNumber			*_partOfSet;		// TPOS
+	NSNumber						*_partOfSet;		// TPOS
 
 	// Other disc info
-	NSNumber			*_discNumber;
-	NSNumber			*_discsInSet;
-	NSNumber			*_multiArtist;
+	NSNumber						*_discNumber;
+	NSNumber						*_discsInSet;
+	NSNumber						*_multiArtist;
 	
-	unsigned			_length;
+	unsigned						_length;
+	
+	NSNumber						*_stop;
 
 	// Array of audio tracks
-	NSMutableArray		*_tracks;
+	NSMutableArray					*_tracks;
 }
 
-- (id) initWithBSDName:(NSString *) bsdName;
+- (void)			setBSDName:(NSString *) bsdName;
+
+- (void)			displayException:(NSException *)exception;
+
+- (NSArray *)		selectedTracks;
+- (BOOL)			emptySelection;
+- (IBAction)		selectAll:(id) sender;
+- (IBAction)		selectNone:(id) sender;
+- (IBAction)		encode:(id) sender;
+
+- (IBAction)		getCDInformation:(id) sender;
+- (void)			updateDiscFromFreeDB:(FreeDBMatch *) info;
+
 
 - (unsigned long)	cddb_id;
 - (cddb_disc_t *)	cddb_disc;
 - (NSString *)		length;
 
-- (NSArray *)		selectedTracks;
 
 // Save/Restore
-- (NSDictionary *) getDictionary;
-- (void) setPropertiesFromDictionary:(NSDictionary *)properties;
+- (NSDictionary *)	getDictionary;
+- (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
 
 @end
