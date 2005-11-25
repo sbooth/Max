@@ -25,6 +25,7 @@
 
 #include <IOKit/storage/IOCDTypes.h>
 
+
 @implementation Track
 
 + (void)initialize 
@@ -117,7 +118,7 @@
 	result = nil;
 	
 	if(nil != _artist || nil != _year || nil != _genre) {
-		data = [[NSUserDefaults standardUserDefaults] dataForKey:@"org.sbooth.Max.customTrackColor"];
+		data = [[NSUserDefaults standardUserDefaults] dataForKey:@"customTrackColor"];
 		if(nil != data)
 			result = (NSColor *)[NSUnarchiver unarchiveObjectWithData:data];
 	}
@@ -125,36 +126,54 @@
 	return result;
 }
 
+- (void) clearFreeDBData
+{
+	[self setValue:nil forKey:@"title"];
+	[self setValue:nil forKey:@"artist"];
+	[self setValue:nil forKey:@"year"];
+	[self setValue:nil forKey:@"genre"];
+}
+
 #pragma mark Save/Restore
 
 - (NSDictionary *) getDictionary
 {
-	NSMutableDictionary *result = [[[NSMutableDictionary alloc] init] autorelease];
+	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
 	
-	[result setValue:_number forKey:@"number"];
-
 	[result setValue:_selected forKey:@"selected"];
 	[result setValue:_color forKey:@"color"];
+
 	[result setValue:_title forKey:@"title"];
 	[result setValue:_artist forKey:@"artist"];
 	[result setValue:_year forKey:@"year"];;
 	[result setValue:_genre forKey:@"genre"];
 
-	return result;
+	[result setValue:_number forKey:@"number"];
+	[result setValue:_firstSector forKey:@"firstSector"];
+	[result setValue:_lastSector forKey:@"lastSector"];
+	[result setValue:_channels forKey:@"channels"];
+	[result setValue:_preEmphasis forKey:@"preEmphasis"];
+	[result setValue:_copyPermitted forKey:@"copyPermitted"];
+	
+	return [[result retain] autorelease];
 }
 
 - (void) setPropertiesFromDictionary:(NSDictionary *)properties
-{
-	if(NO == [[properties valueForKey:@"number"] isEqualToNumber:[self valueForKey:@"number"]]) {
-		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track number mismatch" userInfo:nil];
-	}
-	
+{	
 	[self setValue:[properties valueForKey:@"selected"] forKey:@"selected"];
 	[self setValue:[properties valueForKey:@"color"] forKey:@"color"];
+	
 	[self setValue:[properties valueForKey:@"title"] forKey:@"title"];
 	[self setValue:[properties valueForKey:@"artist"] forKey:@"artist"];
 	[self setValue:[properties valueForKey:@"year"] forKey:@"year"];
 	[self setValue:[properties valueForKey:@"genre"] forKey:@"genre"];
+
+	[self setValue:[properties valueForKey:@"number"] forKey:@"number"];
+	[self setValue:[properties valueForKey:@"firstSector"] forKey:@"firstSector"];
+	[self setValue:[properties valueForKey:@"lastSector"] forKey:@"lastSector"];
+	[self setValue:[properties valueForKey:@"channels"] forKey:@"channels"];
+	[self setValue:[properties valueForKey:@"preEmphasis"] forKey:@"preEmphasis"];
+	[self setValue:[properties valueForKey:@"copyPermitted"] forKey:@"copyPermitted"];
 }
 
 @end

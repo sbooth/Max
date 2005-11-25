@@ -20,19 +20,22 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDiscController.h"
+#import "CompactDiscDocument.h"
 
 @interface FreeDBMatchSheet : NSObject
 {
     IBOutlet NSWindow			*_sheet;
     IBOutlet NSTableView		*_table;
+	
 	NSMutableArray				*_matches;
-	CompactDiscController		*_controller;
+	CompactDiscDocument			*_doc;
 }
 
-- (void)showFreeDBMatches;
+- (id)				initWithCompactDiscDocument:(CompactDiscDocument *)doc;
 
-- (IBAction) cancel:(id)sender;
-- (IBAction) useSelected:(id)sender;
+- (void)			showFreeDBMatches;
+
+- (IBAction)		cancel:(id)sender;
+- (IBAction)		useSelected:(id)sender;
 
 @end

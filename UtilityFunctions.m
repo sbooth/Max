@@ -47,19 +47,52 @@ getApplicationDataDirectory()
 
 			if(NO == [manager fileExistsAtPath:sDataDirectory isDirectory:&isDir]) {
 				if(NO == [manager createDirectoryAtPath:sDataDirectory attributes:nil]) {
-					NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
-					[[NSDocumentController sharedDocumentController] presentError:error];
-//					@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
+//					NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
+//					[[NSDocumentController sharedDocumentController] presentError:error];
+					@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
 				}
 			}
 			else if(NO == isDir) {
-				NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
-				[[NSDocumentController sharedDocumentController] presentError:error];
-//				@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
+//				NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
+//				[[NSDocumentController sharedDocumentController] presentError:error];
+				@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
 			}
 		}
 	}
 	return [[sDataDirectory retain] autorelease];
+}
+
+void 
+createDirectoryStructure(NSString *path)
+{
+	NSString		*pathPart;
+	NSArray			*pathComponents		= [path pathComponents];
+	
+	if(1 < [pathComponents count]) {
+		int				i;
+		int				directoryCount		= [pathComponents count] - 1;
+
+		// Accept a '/' as the first path
+		if(NO == [[pathComponents objectAtIndex:0] isEqualToString:@"/"]) {
+			pathPart = makeStringSafeForFilename([pathComponents objectAtIndex:0]);
+		}
+		else {
+			pathPart = [pathComponents objectAtIndex:0];
+		}		
+		validateAndCreateDirectory(pathPart);
+		
+		// Iterate through all the components
+		for(i = 1; i < directoryCount - 1; ++i) {
+			pathPart = [NSString stringWithFormat:@"%@/%@", pathPart, makeStringSafeForFilename([pathComponents objectAtIndex:i])];				
+			validateAndCreateDirectory(pathPart);
+		}
+		
+		// Ignore trailing '/'
+		if(NO == [[pathComponents objectAtIndex:directoryCount - 1] isEqualToString:@"/"]) {
+			pathPart = [NSString stringWithFormat:@"%@/%@", pathPart, makeStringSafeForFilename([pathComponents objectAtIndex:directoryCount - 1])];
+			validateAndCreateDirectory(pathPart);
+		}
+	}
 }
 
 NSString * 

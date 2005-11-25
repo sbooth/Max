@@ -2,13 +2,12 @@
     IBClasses = (
         {
             ACTIONS = {encode = id; getCDInformation = id; selectAll = id; selectNone = id; }; 
-            CLASS = CompactDisc; 
+            CLASS = CompactDiscDocument; 
             LANGUAGE = ObjC; 
             OUTLETS = {"_trackDrawer" = NSDrawer; "_trackInfoButton" = NSButton; }; 
             SUPERCLASS = NSDocument; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = Genre; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = Track; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
     ); 
     IBVersion = 1; 

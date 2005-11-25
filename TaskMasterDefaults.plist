@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>org.sbooth.Max.maximumEncoderThreads</key>
+	<key>maximumEncoderThreads</key>
 	<real>2</real>
 </dict>
 </plist>

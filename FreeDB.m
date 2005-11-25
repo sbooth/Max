@@ -28,6 +28,7 @@
 
 #import "UtilityFunctions.h"
 
+#include "cddb/cddb_disc.h"
 #include "cddb/cddb.h"
 
 @implementation FreeDB
@@ -41,7 +42,7 @@
 		cddbDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"FreeDBDefaults" ofType:@"plist"];
 		if(nil == cddbDefaultsValuesPath) {
 			// Hardcode default value to avoid a crash
-			NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"freedb.freedb.org", @"8880", @"1", nil] forKeys:[NSArray arrayWithObjects:@"org.sbooth.Max.freeDBServer", @"org.sbooth.Max.freeDBPort", @"org.sbooth.Max.freeDBProtocol", nil]];
+			NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"freedb.freedb.org", @"8880", @"1", nil] forKeys:[NSArray arrayWithObjects:@"freeDBServer", @"freeDBPort", @"freeDBProtocol", nil]];
 			[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
 			@throw [MissingResourceException exceptionWithReason:@"Unable to load FreeDBDefaults.plist" userInfo:nil];
 		}
@@ -58,76 +59,88 @@
 - (id) init
 {
 	if((self = [super init])) {
-		_cddb = cddb_new();
-		if(NULL == _cddb) {
+		_freeDB = cddb_new();
+		if(NULL == _freeDB) {
 			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
 		}
-		cddb_set_server_name(_cddb, [[[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.freeDBServer"] UTF8String]);
-		cddb_set_server_port(_cddb, [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.freeDBPort"]);
-		if(PROTO_HTTP == [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.freeDBProtocol"]) {
-			cddb_http_enable(_cddb);
+		cddb_set_server_name(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBServer"] UTF8String]);
+		cddb_set_server_port(_freeDB, [[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBPort"]);
+		if(PROTO_HTTP == [[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBProtocol"]) {
+			cddb_http_enable(_freeDB);
 		}
 		else {
-			cddb_http_disable(_cddb);
+			cddb_http_disable(_freeDB);
 		}
 		
-		cddb_cache_disable(_cddb);
+		cddb_cache_disable(_freeDB);
+
+		return self;
+	}
+	return nil;
+}
+
+- (id) initWithCompactDiscDocument:(CompactDiscDocument *)disc;
+{
+	if((self = [self init])) {
+		_disc = [disc retain];
+		return self;
 	}
 	
-	return self;
+	return nil;
 }
 
 - (void) dealloc
 {
-	cddb_destroy(_cddb);
+	cddb_destroy(_freeDB);
+	[_disc release];
 	[super dealloc];
 }
 
 - (NSArray *) fetchSites
 {
 	const cddb_site_t		*site			= NULL;
-	NSMutableArray			*result			= [[[NSMutableArray alloc] initWithCapacity:20] autorelease];
+	NSMutableArray			*result			= [[NSMutableArray alloc] initWithCapacity:20];
 
-	cddb_sites(_cddb);
+	cddb_sites(_freeDB);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
-	/*if(FALSE == cddb_sites(_cddb)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"Unable to obtain list of FreeDB mirrors.\nlibcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
+	/*if(FALSE == cddb_sites(_freeDB)) {
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"Unable to obtain list of FreeDB mirrors.\nlibcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
 	}*/
 	
-	site = cddb_first_site(_cddb);
+	site = cddb_first_site(_freeDB);
 	while(NULL != site) {
 		[result addObject:[FreeDBSite createFromFreeDBSite:site]];
-		site = cddb_next_site(_cddb);
+		site = cddb_next_site(_freeDB);
 	}
 	
-	return result;
+	return [[result retain] autorelease];
 }
 
 - (NSArray *) fetchMatches
 {
-	NSMutableArray			*result			= [[[NSMutableArray alloc] initWithCapacity:10] autorelease];
-	cddb_disc_t				*cddb_disc		= [_disc cddb_disc];
+	NSMutableArray			*result			= [[NSMutableArray alloc] initWithCapacity:10];
+	cddb_disc_t				*freeDBDisc		= [[_disc getDisc] getFreeDBDisc];
 	int						matches;
 	
 
 	// Run query to find matches
-	matches = cddb_query(_cddb, cddb_disc);
+	matches = cddb_query(_freeDB, freeDBDisc);
 	if(-1 == matches) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
 	}
 
 	while(matches > 0) {
-		[result addObject:[FreeDBMatch createFromFreeDBDisc:cddb_disc]];
+		[result addObject:[FreeDBMatch createFromFreeDBDisc:freeDBDisc]];
 		
 		--matches;
 		if(0 < matches) {
-			if(0 == cddb_query_next(_cddb, cddb_disc)) {
+			if(0 == cddb_query_next(_freeDB, freeDBDisc)) {
 				@throw [FreeDBException exceptionWithReason:@"Query index out of bounds" userInfo:nil];
 			}
 		}
 	}
 		
-	return result;
+	return [[result retain] autorelease];
 }
 
 - (void) updateDisc:(FreeDBMatch *)info
@@ -146,8 +159,8 @@
 	cddb_disc_set_category(disc, [[info valueForKey:@"category"] intValue]);
 	cddb_disc_set_discid(disc, [[info valueForKey:@"discid"] unsignedIntValue]);
 	
-	if(0 == cddb_read(_cddb, disc)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_cddb))] userInfo:nil];
+	if(0 == cddb_read(_freeDB, disc)) {
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
 	}
 
 	tempString = cddb_disc_get_title(disc);

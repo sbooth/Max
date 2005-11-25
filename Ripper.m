@@ -23,9 +23,6 @@
 #import "StopException.h"
 #import "IOException.h"
 
-#include "cdparanoia/interface/cdda_interface.h"
-#include "cdparanoia/paranoia/cdda_paranoia.h"
-
 #include <stdlib.h>			// calloc, free
 #include <unistd.h>			// lseek, read
 #include <fcntl.h>			// open, close
@@ -37,67 +34,46 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Ripper::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track
+- (id) initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track
 {
-	_buf = NULL;
-	
 	if((self = [super init])) {
 		
-		@try {
-			_disc	= [disc retain];
-			_track	= [track retain];
-			
-			[self setValue:[NSNumber numberWithBool:NO] forKey:@"started"];
-			[self setValue:[NSNumber numberWithBool:NO] forKey:@"completed"];
-			[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
-
-			// Open the disc for reading
-			_fd = open([[_disc valueForKey:@"bsdPath"] UTF8String], O_RDONLY);
-			if(-1 == _fd) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			
-			// Allocate the buffer
-			_blockSize		= [[_disc valueForKey: @"preferredBlockSize"] unsignedIntValue];
-			_bufsize		= 1024 * _blockSize;
-			_buf			= (unsigned char *) calloc(_bufsize, sizeof(unsigned char));
-			if(NULL == _buf) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			
-			// Determine the size of the track we are ripping
-			_firstSector	= [[_track getFirstSector] unsignedIntValue];
-			_lastSector		= [[_track valueForKey:@"lastSector"] unsignedIntValue];
-			_totalBytes		= (_lastSector - _firstSector) * _blockSize;
-
-			// Go to the track's first sector in preparation for reading
-			off_t where = lseek(_fd, _firstSector * _blockSize, SEEK_SET);
-			if(-1 == where) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
+		_disc	= [disc retain];
+		_track	= [track retain];
+		
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"started"];
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"completed"];
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
+		
+		// Setup cdparanoia
+		_drive		= [[_disc getDisc] getDrive];
+		_paranoia	= paranoia_init(_drive);
+		
+		/* full paranoia, but allow skipping */
+		int paranoia_mode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
+		paranoia_modeset(_paranoia, paranoia_mode);
+		
+		// Determine the size of the track we are ripping
+		_firstSector	= [[_track valueForKey:@"firstSector"] unsignedLongValue];
+		_lastSector		= [[_track valueForKey:@"lastSector"] unsignedLongValue];
+		
+		// Go to the track's first sector in preparation for reading
+		long where = paranoia_seek(_paranoia, _firstSector, SEEK_SET);   	    
+		if(-1 == where) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			paranoia_free(_paranoia);
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
-		@catch(NSException *exception) {
-			free(_buf);
-			close(_fd);
-			@throw;
-		}
-		
-		@finally {
-		}
+		return self;
 	}
-	return self;
+	
+	return nil;
 }
 
 - (void) dealloc
 {
-	if(-1 == close(_fd)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
-	}
-	
-	free(_buf);
+	paranoia_free(_paranoia);
 	
 	[_disc release];
 	[_track release];
@@ -119,15 +95,17 @@
 
 - (void) ripToFile:(int) file
 {
-	ssize_t		bytesToRead			= _totalBytes;
-	ssize_t		bytesRead			= 0;
-	NSDate		*startTime			= [NSDate date];
+	unsigned long		cursor				= _firstSector;
+	int16_t				*buf				= NULL;
+	NSDate				*startTime			= [NSDate date];
+	unsigned long		totalSectors		= _lastSector - _firstSector + 1;
+	unsigned long		sectorsToRead		= totalSectors;
 	
 	// Tell our owner we are starting
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
 	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
-	while(0 < bytesToRead) {
+	while(cursor <= _lastSector) {
 
 		// Check if we should stop, and if so throw an exception
 		if([_shouldStop boolValue]) {
@@ -136,24 +114,29 @@
 		}
 		
 		// Read a chunk
-		bytesRead = read(_fd, _buf, (bytesToRead > _bufsize ? _bufsize : bytesToRead));
-		if(-1 == bytesRead) {
+		buf = paranoia_read_limited(_paranoia, NULL, 20/*max_retries*/);
+		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];			
+		}
+				
+		// Update status
+		sectorsToRead--;
+		if(0 == sectorsToRead % 10) {
+			[self setValue:[NSNumber numberWithDouble:((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0] forKey:@"percentComplete"];
+			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+			unsigned int timeRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
+			[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 		}
 		
-		// Update status
-		bytesToRead -= bytesRead;
-		[self setValue:[NSNumber numberWithDouble:((double)(_totalBytes - bytesToRead)/(double) _totalBytes) * 100.0] forKey:@"percentComplete"];
-		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-		unsigned int timeRemaining = interval / ((double)(_totalBytes - bytesToRead)/(double) _totalBytes) - interval;
-		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
-		
 		// Write data to file
-		if(-1 == write(file, _buf, bytesRead)) {
+		if(-1 == write(file, (unsigned char *)buf, CD_FRAMESIZE_RAW)) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
+		
+		// Advance cursor
+		++cursor;
 	}
 	
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];

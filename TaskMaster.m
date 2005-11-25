@@ -229,7 +229,7 @@ static TaskMaster *sharedController = nil;
 	unsigned	limit;
 	unsigned	maxEncoderThreads;
 	
-	maxEncoderThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.maximumEncoderThreads"];
+	maxEncoderThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"];
 	limit = (maxEncoderThreads < [_encodingTasks count] ? maxEncoderThreads : [_encodingTasks count]);
 	
 	// Start encoding the next track(s)

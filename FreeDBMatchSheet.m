@@ -25,19 +25,29 @@
 
 @implementation FreeDBMatchSheet
 
-- (id) init
+- (id) initWithCompactDiscDocument:(CompactDiscDocument *)doc;
 {
 	if((self = [super init])) {
 		if(NO == [NSBundle loadNibNamed:@"FreeDBMatches" owner:self])  {
 			@throw [MissingResourceException exceptionWithReason:@"Unable to load FreeDBMatches.nib" userInfo:nil];
 		}
+		
+		_doc = [doc retain];
+		
+		return self;
 	}
-	return self;
+	return nil;
+}
+
+- (void) dealloc
+{
+	[_doc release];
+	[super dealloc];
 }
 
 - (void)showFreeDBMatches
 {
-    [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_controller valueForKey:@"window"] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
+    [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_doc windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }
 
 - (IBAction)cancel: (id)sender
@@ -47,7 +57,7 @@
 
 - (IBAction)useSelected: (id)sender
 {	
-	[_controller updateDiscFromFreeDB:[_matches objectAtIndex:[_table selectedRow]]];	
+	[_doc updateDiscFromFreeDB:[_matches objectAtIndex:[_table selectedRow]]];	
     [[NSApplication sharedApplication] endSheet:_sheet];
 }
 

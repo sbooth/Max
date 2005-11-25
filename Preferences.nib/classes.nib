@@ -18,10 +18,10 @@
             CLASS = PreferencesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                "_cddbMirrorsController" = NSArrayController; 
-                "_cddbPortTextField" = NSTextField; 
-                "_cddbServerTextField" = NSTextField; 
                 "_customNameTextField" = NSTextField; 
+                "_freeDBMirrorsController" = NSArrayController; 
+                "_freeDBPortTextField" = NSTextField; 
+                "_freeDBServerTextField" = NSTextField; 
             }; 
             SUPERCLASS = NSWindowController; 
         }

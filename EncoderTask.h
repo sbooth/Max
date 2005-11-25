@@ -30,9 +30,10 @@
 	NSString			*_trackName;
 }
 
-- (id) initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
-- (void) run:(id) object;
-- (void) stop;
-- (void) removeOutputFile;
+- (id)		initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
+
+- (void)	run:(id) object;
+- (void)	stop;
+- (void)	removeOutputFile;
 
 @end

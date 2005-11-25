@@ -38,11 +38,10 @@
 
 #import "UtilityFunctions.h"
 
-#include "cddb/cddb_track.h"
 
-#include <sys/param.h>		// MAXPATHLEN
-#include <paths.h>			//_PATH_DEV
-
+@interface CompactDiscDocument (Private)
+- (NSString *) basenameForTrack:(Track *)track;
+@end
 
 @implementation CompactDiscDocument
 
@@ -70,88 +69,93 @@
 
 - (id) init
 {
-	NSLog(@"CompactDisc::init");
 	if((self = [super init])) {
 		_tracks			= [[NSMutableArray alloc] initWithCapacity:20];
-		_drive			= NULL;
-		_cddb_disc		= NULL;
-		_length			= 0;
+		_discInDrive	= NO;
+		_disc			= nil;
 		
 		return self;
 	}
-	else {
-		return nil;
-	}
-}
-
-- (void) setBSDName:(NSString *) bsdName
-{
-	unsigned			i;
-	unsigned long		discLength	= 150;
-	
-	_drive = [[CDDrive alloc] initWithBSDName:bsdName];
-	
-	for(i = 1; i <= [_drive trackCount]; ++i) {
-		Track			*track		= [[[Track alloc] init] autorelease];
-		
-		[track setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"number"];
-		[track setValue:[NSNumber numberWithUnsignedLong:[_drive firstSectorForTrack:i]] forKey:@"firstSector"];
-		[track setValue:[NSNumber numberWithUnsignedLong:[_drive lastSectorForTrack:i]] forKey:@"lastSector"];
-		
-		[track setValue:[NSNumber numberWithUnsignedInt:[_drive channelsForTrack:i]] forKey:@"channels"];
-		[track setValue:[NSNumber numberWithUnsignedInt:[_drive trackHasPreEmphasis:i]] forKey:@"preEmphasis"];
-		[track setValue:[NSNumber numberWithUnsignedInt:[_drive trackAllowsDigitalCopy:i]] forKey:@"copyPermitted"];
-		
-		[_tracks addObject: track];
-		
-		discLength += [_drive lastSectorForTrack:i] - [_drive firstSectorForTrack:i] + 1;
-	}
-	
-	
-	
-	[self showWindows];
+	return nil;
 }
 
 - (void) dealloc
-{
+{	
+	[_tracks removeAllObjects];
 	[_tracks release];
+	
+	if(nil != _disc) {
+		[_disc release];
+	}
 	
 	[super dealloc];
 }
 
-#pragma mark -
 #pragma mark NSDocument overrides
 
-- (void) makeWindowControllers
+- (void) makeWindowControllers 
 {
-	NSLog(@"makeWindowControllers");
-	CompactDiscController *controller = [[[CompactDiscController alloc] init] autorelease];
-	[self addWindowController:controller];
+	CompactDiscController *controller = [[CompactDiscController alloc] initWithWindowNibName:@"CompactDiscDocument" owner:self];
+	[self addObserver:controller forKeyPath:@"title" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:nil];
+	[self addWindowController:[controller autorelease]];
 }
 
-- (void) windowControllerDidLoadNib:(NSWindowController *) controller
+- (void) windowControllerDidLoadNib:(NSWindowController *)controller
 {
-	NSLog(@"windowControllerDidLoadNib");
-    [super windowControllerDidLoadNib:controller];
-	
-	[controller setWindowFrameAutosaveName:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [self cddb_id]]];
-	[[controller window] setRepresentedFilename:[NSString stringWithFormat:@"%@/0x%.8x.xml", getApplicationDataDirectory(), [self cddb_id]]];
+	[controller setShouldCascadeWindows:NO];
+	[controller setWindowFrameAutosaveName:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [self discID]]];
 }
 
 - (NSData *) dataOfType:(NSString *) typeName error:(NSError **) outError
-{	
-	NSLog(@"dataOfType");
-    return nil;
+{
+	if([typeName isEqualToString:@"Max CD Information"]) {
+		NSData					*data;
+		NSString				*error;
+		
+		data = [NSPropertyListSerialization dataFromPropertyList:[self getDictionary] format:NSPropertyListXMLFormat_v1_0 errorDescription:&error];
+		if(nil != data) {
+			return data;
+		}
+		else {
+			[error release];
+		}
+	}
+	return nil;
 }
 
 - (BOOL) readFromData:(NSData *) data ofType:(NSString *) typeName error:(NSError **) outError
 {    
-	NSLog(@"readFromData");
-    return YES;
+	if([typeName isEqualToString:@"Max CD Information"]) {
+		NSDictionary			*dictionary;
+		NSPropertyListFormat	format;
+		NSString				*error;
+		
+		dictionary = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&error];
+		if(nil != dictionary) {
+			[self setPropertiesFromDictionary:dictionary];
+		}
+		else {
+			[error release];
+		}
+		return YES;
+	}
+    return NO;
 }
 
-#pragma mark -
-#pragma mark NSDrawer delegate methods
+#pragma mark Delegate methods
+
+- (void) windowWillClose:(NSNotification *)notification
+{
+	NSArray *controllers = [self windowControllers];
+	if(0 != [controllers count]) {
+		[self removeObserver:[controllers objectAtIndex:0] forKeyPath:@"title"];
+	}
+}
+
+- (void) controlTextDidEndEditing:(NSNotification *)notification
+{
+	[self updateChangeCount:NSChangeDone];
+}
 
 - (void) drawerDidClose:(NSNotification *)notification
 {
@@ -167,13 +171,12 @@
 	}
 }
 
-#pragma mark -
 #pragma mark Exception Display
 
 - (void) displayException:(NSException *)exception
 {
 	NSWindow *window = [self windowForSheet];
-	if(nil == window) {
+	if(1 || nil == window) {
 		displayExceptionAlert(exception);
 	}
 	else {
@@ -186,13 +189,79 @@
 	// Nothing for now
 }
 
+#pragma mark Disc Management
 
-#pragma mark -
-#pragma mark Track Selection
+- (int) discID
+{
+	if([self discInDrive]) {
+		return [_disc discID];
+	}
+	else {
+		return [_discID intValue];
+	}
+}
+
+- (BOOL) discInDrive
+{
+	return [_discInDrive boolValue];
+}
+
+- (void) discEjected
+{
+	[self setDisc:nil];
+}
+
+- (CompactDisc *) getDisc
+{
+	return _disc;
+}
+
+- (void) setDisc:(CompactDisc *) disc
+{
+	unsigned			i;
+	
+	if(nil != _disc) {
+		[_disc release];
+		_disc = nil;
+	}
+
+	if(nil == disc) {
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"discInDrive"];
+		return;
+	}
+	
+	_disc			= [disc retain];
+
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"discInDrive"];
+	
+	[self willChangeValueForKey:@"tracks"];
+	if(0 == [_tracks count]) {
+		for(i = 0; i < [_disc trackCount]; ++i) {
+			Track *track = [[Track alloc] init];
+			[track setValue:self forKey:@"disc"];
+			[_tracks addObject:[[track retain] autorelease]];
+		}
+	}
+	[self didChangeValueForKey:@"tracks"];
+	
+	for(i = 1; i <= [_disc trackCount]; ++i) {
+		Track			*track		= [_tracks objectAtIndex:i - 1];
+		
+		[track setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"number"];
+		[track setValue:[NSNumber numberWithUnsignedLong:[_disc firstSectorForTrack:i]] forKey:@"firstSector"];
+		[track setValue:[NSNumber numberWithUnsignedLong:[_disc lastSectorForTrack:i]] forKey:@"lastSector"];
+		
+		[track setValue:[NSNumber numberWithUnsignedInt:[_disc channelsForTrack:i]] forKey:@"channels"];
+		[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackHasPreEmphasis:i]] forKey:@"preEmphasis"];
+		[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackAllowsDigitalCopy:i]] forKey:@"copyPermitted"];
+	}
+}
+
+#pragma mark Track selection
 
 - (NSArray *) selectedTracks
 {
-	NSMutableArray	*result			= [[NSMutableArray alloc] initWithCapacity:[_drive trackCount]];
+	NSMutableArray	*result			= [[NSMutableArray alloc] initWithCapacity:[_disc trackCount]];
 	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
 	Track			*track;
 	
@@ -232,7 +301,185 @@
 	}
 }
 
-#pragma mark -
+#pragma mark Actions
+
+- (NSString *) basenameForTrack:(Track *)track
+{
+	NSString		*filename;
+	NSString		*outputDirectory;
+
+	
+	// Create output directory (should exist but could have been deleted/moved)
+	outputDirectory = [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath];
+	
+	// Use custom naming scheme
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomNaming"]) {
+		
+		NSMutableString		*customPath			= [[NSMutableString alloc] initWithCapacity:100];
+		NSString			*customNamingScheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"customNamingScheme"];
+		
+		// Get the elements needed to build the pathname
+		NSNumber			*discNumber			= _discNumber;
+		NSNumber			*discsInSet			= _discsInSet;
+		NSString			*discArtist			= _artist;
+		NSString			*discTitle			= _title;
+		NSString			*discGenre			= _genre;
+		NSNumber			*discYear			= _year;
+		NSNumber			*trackNumber		= [track valueForKey:@"number"];
+		NSString			*trackArtist		= [track valueForKey:@"artist"];
+		NSString			*trackTitle			= [track valueForKey:@"title"];
+		NSString			*trackGenre			= [track valueForKey:@"genre"];
+		NSNumber			*trackYear			= [track valueForKey:@"year"];
+		
+		// Fallback to disc if specified in preferences
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"customNamingUseFallback"]) {
+			if(nil == trackArtist) {
+				trackArtist = discArtist;
+			}
+			if(nil == trackGenre) {
+				trackGenre = discGenre;
+			}
+			if(nil == trackYear) {
+				trackYear = discYear;
+			}
+		}
+		
+		if(nil == customNamingScheme) {
+			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"Invalid custom naming string." userInfo:nil];
+		}
+		else {
+			[customPath setString:customNamingScheme];
+		}
+
+		if(nil == discNumber) {
+			[customPath replaceOccurrencesOfString:@"{discNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{discNumber}" withString:[discNumber stringValue] options:nil range:NSMakeRange(0, [customPath length])];					
+		}
+		if(nil == discsInSet) {
+			[customPath replaceOccurrencesOfString:@"{discsInSet}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{discsInSet}" withString:[discsInSet stringValue] options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == discArtist) {
+			[customPath replaceOccurrencesOfString:@"{discArtist}" withString:@"Unknown Artist" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{discArtist}" withString:makeStringSafeForFilename(discArtist) options:nil range:NSMakeRange(0, [customPath length])];					
+		}
+		if(nil == discTitle) {
+			[customPath replaceOccurrencesOfString:@"{discTitle}" withString:@"Unknown Disc" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{discTitle}" withString:makeStringSafeForFilename(discTitle) options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == discGenre) {
+			[customPath replaceOccurrencesOfString:@"{discGenre}" withString:@"Unknown Genre" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{discGenre}" withString:makeStringSafeForFilename(discGenre) options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == discYear) {
+			[customPath replaceOccurrencesOfString:@"{discYear}" withString:@"Unknown Year" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{discYear}" withString:[discYear stringValue] options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == trackNumber) {
+			[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[trackNumber stringValue] options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == trackArtist) {
+			[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:@"Unknown Artist" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:makeStringSafeForFilename(trackArtist) options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == trackTitle) {
+			[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:@"Unknown Track" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:makeStringSafeForFilename(trackTitle) options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == trackGenre) {
+			[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:@"Unknown Genre" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:makeStringSafeForFilename(trackGenre) options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		if(nil == trackYear) {
+			[customPath replaceOccurrencesOfString:@"{trackYear}" withString:@"Unknown Year" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{trackYear}" withString:[trackYear stringValue] options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		
+		filename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
+		[customPath release];
+	}
+	// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
+	else if([_multiArtist boolValue]) {
+		NSString			*path;
+		
+		NSString			*discTitle			= _title;
+		NSString			*trackTitle			= [track valueForKey:@"title"];
+		
+		if(nil == discTitle) {
+			discTitle = @"Unknown Album";
+		}
+		if(nil == trackTitle) {
+			trackTitle = @"Unknown Track";
+		}
+		
+		path = [NSString stringWithFormat:@"%@/Compilations/%@", outputDirectory, makeStringSafeForFilename(discTitle)]; 
+
+		if(nil == _discNumber) {
+			filename = [NSString stringWithFormat:@"%@/%02u %@", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+		}
+		else {
+			filename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+		}
+	}
+	// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
+	else {
+		NSString			*path;
+		
+		NSString			*discArtist			= _artist;
+		NSString			*trackArtist		= [track valueForKey:@"artist"];
+		NSString			*artist;
+		NSString			*discTitle			= _title;
+		NSString			*trackTitle			= [track valueForKey:@"title"];
+		
+		artist = trackArtist;
+		if(nil == artist) {
+			artist = discArtist;
+			if(nil == artist) {
+				artist = @"Unknown Artist";
+			}
+		}
+		if(nil == discTitle) {
+			discTitle = @"Unknown Album";
+		}
+		if(nil == trackTitle) {
+			trackTitle = @"Unknown Track";
+		}
+				
+		path = [NSString stringWithFormat:@"%@/%@/%@", outputDirectory, makeStringSafeForFilename(artist), makeStringSafeForFilename(discTitle)]; 
+		
+		if(nil == _discNumber) {
+			filename = [NSString stringWithFormat:@"%@/%02u %@", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+		}
+		else {
+			filename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+		}
+	}
+	
+	return filename;
+}
 
 - (IBAction) encode:(id) sender
 {
@@ -240,7 +487,6 @@
 	NSArray			*selectedTracks;
 	NSEnumerator	*enumerator;
 	NSString		*filename;
-	NSString		*outputDirectory;
 	
 	@try {
 		// Do nothing for empty selection
@@ -252,210 +498,11 @@
 		selectedTracks	= [self selectedTracks];
 		enumerator		= [selectedTracks objectEnumerator];
 		
-		// Create output directory (should exist but could have been deleted/moved)
-		outputDirectory = [[[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.outputDirectory"] stringByExpandingTildeInPath];
-		validateAndCreateDirectory(outputDirectory);
-		
 		while((track = [enumerator nextObject])) {
 			
-			// Use custom naming scheme
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"org.sbooth.Max.useCustomNaming"]) {
-				
-				NSMutableString		*customPath			= [[NSMutableString alloc] initWithCapacity:100];
-				NSString			*customNamingScheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.customNamingScheme"];
-				NSString			*path;
-				
-				// Get the elements needed to build the pathname
-				NSNumber			*discNumber			= _discNumber;
-				NSNumber			*discsInSet			= _discsInSet;
-				NSString			*discArtist			= _artist;
-				NSString			*discTitle			= _title;
-				NSString			*discGenre			= _genre;
-				NSNumber			*discYear			= _year;
-				NSNumber			*trackNumber		= [track valueForKey:@"number"];
-				NSString			*trackArtist		= [track valueForKey:@"artist"];
-				NSString			*trackTitle			= [track valueForKey:@"title"];
-				NSString			*trackGenre			= [track valueForKey:@"genre"];
-				NSNumber			*trackYear			= [track valueForKey:@"year"];
-				
-				// Fallback to disc if specified in preferences
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"org.sbooth.Max.customNamingUseFallback"]) {
-					if(nil == trackArtist) {
-						trackArtist = discArtist;
-					}
-					if(nil == trackGenre) {
-						trackGenre = discGenre;
-					}
-					if(nil == trackYear) {
-						trackYear = discYear;
-					}
-				}
-				
-				if(nil == customNamingScheme) {
-					@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"Invalid custom naming string." userInfo:nil];
-				}
-				else {
-					[customPath setString:customNamingScheme];
-				}
-				
-				if(nil == discNumber) {
-					[customPath replaceOccurrencesOfString:@"{discNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{discNumber}" withString:[discNumber stringValue] options:nil range:NSMakeRange(0, [customPath length])];					
-				}
-				if(nil == discsInSet) {
-					[customPath replaceOccurrencesOfString:@"{discsInSet}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{discsInSet}" withString:[discsInSet stringValue] options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == discArtist) {
-					[customPath replaceOccurrencesOfString:@"{discArtist}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{discArtist}" withString:makeStringSafeForFilename(discArtist) options:nil range:NSMakeRange(0, [customPath length])];					
-				}
-				if(nil == discTitle) {
-					[customPath replaceOccurrencesOfString:@"{discTitle}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{discTitle}" withString:makeStringSafeForFilename(discTitle) options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == discGenre) {
-					[customPath replaceOccurrencesOfString:@"{discGenre}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{discGenre}" withString:makeStringSafeForFilename(discGenre) options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == discYear) {
-					[customPath replaceOccurrencesOfString:@"{discYear}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{discYear}" withString:[discYear stringValue] options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == trackNumber) {
-					[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[trackNumber stringValue] options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == trackArtist) {
-					[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:makeStringSafeForFilename(trackArtist) options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == trackTitle) {
-					[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:makeStringSafeForFilename(trackTitle) options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == trackGenre) {
-					[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:makeStringSafeForFilename(trackGenre) options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				if(nil == trackYear) {
-					[customPath replaceOccurrencesOfString:@"{trackYear}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				else {
-					[customPath replaceOccurrencesOfString:@"{trackYear}" withString:[trackYear stringValue] options:nil range:NSMakeRange(0, [customPath length])];
-				}
-				
-				// Create the directory structure
-				NSArray *pathComponents = [customPath pathComponents];
-				
-				// pathComponents will always contain at least 1 element since customNamingScheme was not nil
-				path = [NSString stringWithFormat:@"%@/%@", outputDirectory, makeStringSafeForFilename([pathComponents objectAtIndex:0])]; 
-				
-				if(1 < [pathComponents count]) {
-					int				i;
-					int				directoryCount		= [pathComponents count] - 1;
-					
-					validateAndCreateDirectory(path);
-					for(i = 1; i < directoryCount; ++i) {						
-						path = [NSString stringWithFormat:@"%@/%@", path, makeStringSafeForFilename([pathComponents objectAtIndex:i])];
-						validateAndCreateDirectory(path);
-					}
-					
-					filename = [NSString stringWithFormat:@"%@/%@", path, makeStringSafeForFilename([pathComponents objectAtIndex:i])];
-				}
-				else {
-					filename = path;
-				}
-				[customPath release];
-				
-				filename = [filename stringByAppendingString:@".mp3"];
-			}
-			// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
-			else if([_multiArtist boolValue]) {
-				NSString			*path;
-				
-				NSString			*discTitle			= _title;
-				NSString			*trackTitle			= [track valueForKey:@"title"];
-				
-				if(nil == discTitle) {
-					discTitle = @"Unknown Album";
-				}
-				if(nil == trackTitle) {
-					trackTitle = @"Unknown Track";
-				}
-				
-				// Create the directory structure
-				path = [NSString stringWithFormat:@"%@/Compilations", outputDirectory]; 
-				validateAndCreateDirectory(path);
-				
-				path = [NSString stringWithFormat:@"%@/Compilations/%@", outputDirectory, makeStringSafeForFilename(discTitle)]; 
-				validateAndCreateDirectory(path);
-				
-				if(nil == _discNumber) {
-					filename = [NSString stringWithFormat:@"%@/%02u %@.mp3", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
-				}
-				else {
-					filename = [NSString stringWithFormat:@"%@/%i-%02u %@.mp3", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
-				}
-			}
-			// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
-			else {
-				NSString			*path;
-				
-				NSString			*discArtist			= _artist;
-				NSString			*trackArtist		= [track valueForKey:@"artist"];
-				NSString			*artist;
-				NSString			*discTitle			= _title;
-				NSString			*trackTitle			= [track valueForKey:@"title"];
-				
-				artist = trackArtist;
-				if(nil == artist) {
-					artist = discArtist;
-					if(nil == artist) {
-						artist = @"Unknown Artist";
-					}
-				}
-				if(nil == discTitle) {
-					discTitle = @"Unknown Album";
-				}
-				if(nil == trackTitle) {
-					trackTitle = @"Unknown Track";
-				}
-				
-				// Create the directory structure
-				path = [NSString stringWithFormat:@"%@/%@", outputDirectory, makeStringSafeForFilename(artist)]; 
-				validateAndCreateDirectory(path);
-				
-				path = [NSString stringWithFormat:@"%@/%@/%@", outputDirectory, makeStringSafeForFilename(artist), makeStringSafeForFilename(discTitle)]; 
-				validateAndCreateDirectory(path);
-				
-				if(nil == _discNumber) {
-					filename = [NSString stringWithFormat:@"%@/%02u %@.mp3", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
-				}
-				else {
-					filename = [NSString stringWithFormat:@"%@/%i-%02u %@.mp3", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
-				}
-			}
+			filename = [self basenameForTrack:track];			
+			filename = [filename stringByAppendingString:@".mp3"];
+			createDirectoryStructure(filename);
 			
 			// Check if the output file exists
 			if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
@@ -494,6 +541,26 @@
 	}
 }
 
+#pragma mark FreeDB Functionality
+
+- (void) clearFreeDBData
+{
+	unsigned i;
+	
+	[self setValue:nil forKey:@"title"];
+	[self setValue:nil forKey:@"artist"];
+	[self setValue:nil forKey:@"year"];
+	[self setValue:nil forKey:@"genre"];
+	[self setValue:nil forKey:@"comment"];
+	[self setValue:nil forKey:@"discNumber"];
+	[self setValue:nil forKey:@"discsInSet"];
+	[self setValue:[NSNumber numberWithBool:NO] forKey:@"multiArtist"];
+	
+	for(i = 0; i < [_tracks count]; ++i) {
+		[[_tracks objectAtIndex:i] clearFreeDBData];
+	}
+}
+
 - (IBAction)getCDInformation:(id)sender
 {
 	FreeDB				*freeDB				= nil;
@@ -501,8 +568,7 @@
 	FreeDBMatchSheet	*sheet				= nil;
 	
 	@try {
-		freeDB = [[FreeDB alloc] init];
-		[freeDB setValue:self forKey:@"disc"];
+		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
 		matches = [freeDB fetchMatches];
 		
@@ -513,9 +579,8 @@
 			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
 		}
 		else {
-			sheet = [[[FreeDBMatchSheet alloc] init] autorelease];
+			sheet = [[[FreeDBMatchSheet alloc] initWithCompactDiscDocument:self] autorelease];
 			[sheet setValue:matches forKey:@"matches"];
-			[sheet setValue:self forKey:@"controller"];
 			[sheet showFreeDBMatches];
 		}
 	}
@@ -534,8 +599,10 @@
 	FreeDB *freeDB;
 	
 	@try {
-		freeDB = [[FreeDB alloc] init];
-		[freeDB setValue:self forKey:@"disc"];
+		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
+	
+		[self updateChangeCount:NSChangeReadOtherContents];
+		[self clearFreeDBData];
 		
 		[freeDB updateDisc:info];
 	}
@@ -553,22 +620,19 @@
 
 #pragma mark -
 
-- (unsigned long)	cddb_id			{ return cddb_disc_get_discid(_cddb_disc); }
-- (cddb_disc_t *)	cddb_disc		{ return _cddb_disc; }
-- (NSString *)		length			{ return [NSString stringWithFormat:@"%u:%.02u", _length / 60, _length % 60]; }
+- (NSString *)		length			{ return [NSString stringWithFormat:@"%u:%.02u", [_disc length] / 60, [_disc length] % 60]; }
 
 - (NSArray *) genres
 {
 	return [Genres sharedGenres];
 }
 
-#pragma mark -
 #pragma mark Save/Restore
 
 - (NSDictionary *) getDictionary
 {
 	unsigned				i;
-	NSMutableDictionary		*result		= [[[NSMutableDictionary alloc] init] autorelease];
+	NSMutableDictionary		*result		= [[NSMutableDictionary alloc] init];
 	NSMutableArray			*tracks		= [[[NSMutableArray alloc] initWithCapacity:[_tracks count]] autorelease];
 		
 	[result setValue:_title forKey:@"title"];
@@ -579,6 +643,7 @@
 	[result setValue:_discNumber forKey:@"discNumber"];
 	[result setValue:_discsInSet forKey:@"discsInSet"];
 	[result setValue:_multiArtist forKey:@"multiArtist"];
+	[result setValue:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
 	
 	for(i = 0; i < [_tracks count]; ++i) {
 		[tracks addObject:[[_tracks objectAtIndex:i] getDictionary]];
@@ -586,7 +651,7 @@
 	
 	[result setValue:tracks forKey:@"tracks"];
 	
-	return result;
+	return [[result retain] autorelease];
 }
 
 - (void) setPropertiesFromDictionary:(NSDictionary *) properties
@@ -594,10 +659,19 @@
 	unsigned				i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
 	
-	if([tracks count] != [_tracks count]) {
+	if(_discInDrive && [tracks count] != [_tracks count]) {
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
 	}
-
+	else if(0 == [_tracks count]) {
+		[self willChangeValueForKey:@"tracks"];
+		for(i = 0; i < [tracks count]; ++i) {
+			Track *track = [[Track alloc] init];
+			[track setValue:self forKey:@"disc"];
+			[_tracks addObject:[[track retain] autorelease]];
+		}
+		[self didChangeValueForKey:@"tracks"];
+	}
+	
 	for(i = 0; i < [tracks count]; ++i) {
 		[[_tracks objectAtIndex:i] setPropertiesFromDictionary:[tracks objectAtIndex:i]];
 	}
@@ -610,6 +684,7 @@
 	[self setValue:[properties valueForKey:@"discNumber"] forKey:@"discNumber"];
 	[self setValue:[properties valueForKey:@"discsInSet"] forKey:@"discsInSet"];
 	[self setValue:[properties valueForKey:@"multiArtist"] forKey:@"multiArtist"];
+	[self setValue:[properties valueForKey:@"discID"] forKey:@"discID"];
 }
 
 @end

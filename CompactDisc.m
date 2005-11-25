@@ -26,71 +26,49 @@
 
 @implementation CompactDisc
 
-- (id) init
+- (id) initWithBSDName:(NSString *)bsdName;
 {
 	if((self = [super init])) {
-		_bsdName		= nil;
-		_drive			= NULL;
-		_freeDBDisc		= NULL;
+		unsigned			i;
+		unsigned long		discLength	= 150;
+
+		_bsdName	= [bsdName retain];
+		
+		// cdparanoia setup
+		_drive		= cdda_identify([_bsdName UTF8String], 0, NULL);
+		if(NULL == _drive) {
+			@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
+		}
+		
+		if(0 != cdda_open(_drive)) {
+			@throw [ParanoiaException exceptionWithReason:@"cdda_open failed" userInfo:nil];
+		}
+		
+		// Setup libcddb data structures
+		_freeDBDisc	= cddb_disc_new();
+		if(NULL == _freeDBDisc) {
+			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		}
+		
+		for(i = 1; i <= [self trackCount]; ++i) {
+			cddb_track_t	*cddb_track	= cddb_track_new();
+			if(NULL == cddb_track) {
+				@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+			}
+			cddb_track_set_frame_offset(cddb_track, [self firstSectorForTrack:i] + 150);
+			cddb_disc_add_track(_freeDBDisc, cddb_track);
+			discLength += [self lastSectorForTrack:i] - [self firstSectorForTrack:i] + 1;
+		}
+		_length = (unsigned) (60 * (discLength / (60 * 75))) + (unsigned)((discLength / 75) % 60);
+		cddb_disc_set_length(_freeDBDisc, _length);
+		
+		if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
+			@throw [FreeDBException exceptionWithReason:@"Unable to calculate disc id" userInfo:nil];
+		}
 		
 		return self;
 	}
-	else {
-		return nil;
-	}
-}
-
-- (void) setBSDName:(NSString *)bsdName
-{
-	unsigned			i;
-	unsigned long		discLength	= 150;
-
-	// Cleanup
-	if(nil != _bsdName) {
-		[_bsdName release];
-	}
-	
-	if(NULL != _drive) {
-		cdda_close(_drive);
-	}
-
-	if(NULL != _freeDBDisc) {
-		cddb_disc_destroy(_freeDBDisc);
-	}
-	
-	
-	_bsdName	= [bsdName retain];
-
-	// cdparanoia setup
-	_drive		= cdda_identify([_bsdName UTF8String], 0, NULL);
-	if(NULL == _drive) {
-		@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
-	}
-	
-	if(0 != cdda_open(_drive)) {
-		@throw [ParanoiaException exceptionWithReason:@"cdda_open failed" userInfo:nil];
-	}
-	
-	// Setup libcddb data structures
-	_freeDBDisc	= cddb_disc_new();
-	if(NULL == _freeDBDisc) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
-	}
-	
-	for(i = 1; i <= [self trackCount]; ++i) {
-		cddb_track_t	*cddb_track	= cddb_track_new();
-		if(NULL == cddb_track) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
-		}
-		cddb_track_set_frame_offset(cddb_track, [self firstSectorForTrack:i] + 150);
-		cddb_disc_add_track(_freeDBDisc, cddb_track);
-		discLength += [self lastSectorForTrack:i] - [self firstSectorForTrack:i] + 1;
-	}
-	cddb_disc_set_length(_freeDBDisc, (unsigned) (60 * (discLength / (60 * 75))) + (unsigned)((discLength / 75) % 60));
-	
-	if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
-		@throw [FreeDBException exceptionWithReason:@"Unable to calculate disc id" userInfo:nil];
-	}
+	return nil;
 }
 
 - (void) dealloc
@@ -162,7 +140,22 @@
 
 - (int) discID
 {
-	return cddb_get_disc_id(_freeDBDisc);
+	return cddb_disc_get_discid(_freeDBDisc);
+}
+
+- (unsigned) length
+{
+	return _length;
+}
+
+- (cdrom_drive *) getDrive
+{
+	return _drive;
+}
+
+- (cddb_disc_t *) getFreeDBDisc
+{
+	return _freeDBDisc;
 }
 
 @end

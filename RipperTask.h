@@ -21,7 +21,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Ripper.h"
-#import "CompactDisc.h"
+#import "CompactDiscDocument.h"
 #import "Track.h"
 
 @interface RipperTask : NSObject 
@@ -33,8 +33,9 @@
 	NSString			*_trackName;
 }
 
-- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track trackName:(NSString *) trackName;
-- (void) run:(id) object;
-- (void) removeTemporaryFile;
+- (id)		initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track trackName:(NSString *) trackName;
+
+- (void)	run:(id) object;
+- (void)	removeTemporaryFile;
 
 @end

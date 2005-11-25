@@ -22,6 +22,7 @@
 #import "IOException.h"
 
 #import "CompactDisc.h"
+#import "CompactDiscDocument.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 
@@ -137,10 +138,6 @@ static MediaController *sharedController = nil;
 	NSNotificationCenter	*notificationCenter;
 
 	if((self = [super init])) {
-
-		// Array of controllers for all mounted CDs
-		_media = [[NSMutableArray alloc] initWithCapacity:3];
-				
 		// Register to receive mount/unmount notifications
 		notificationCenter = [[NSWorkspace sharedWorkspace] notificationCenter];
 		[notificationCenter addObserver:self selector:@selector(volumeMounted:) name:@"NSWorkspaceDidMountNotification" object:nil];
@@ -153,8 +150,6 @@ static MediaController *sharedController = nil;
 {
 	[[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
 	
-	[_media release];
-
 	[super dealloc];
 }
 
@@ -166,24 +161,7 @@ static MediaController *sharedController = nil;
 
 - (void) scanForMedia
 {
-	// First show any windows that might have been closed
-	NSEnumerator *enumerator = [_media objectEnumerator];
-	CompactDisc *object;
-	while((object = [enumerator nextObject])) {
-		[object showWindows];
-	}
-
-	// Now look for new devices
 	[self volumeMounted:nil];
-}
-
-- (void) releaseAll
-{
-	NSEnumerator *enumerator = [_media objectEnumerator];
-	CompactDisc *object;
-	while((object = [enumerator nextObject])) {
-		[_media removeObject:object];
-	}
 }
 
 // We don't actually use the notification, it is just a convenient hook
@@ -192,28 +170,45 @@ static MediaController *sharedController = nil;
 	kern_return_t	kernResult;
 	io_iterator_t	mediaIterator;
 	io_object_t		nextMedia;
-	BOOL			found;
 	
 	kernResult = findEjectableCDMedia(&mediaIterator);
 	
 	while((nextMedia = IOIteratorNext(mediaIterator))) {
-		NSEnumerator			*enumerator		= [_media objectEnumerator];
-		CompactDisc				*object			= nil;
-		NSString				*bsdName		= getBSDName(nextMedia);
 
-		found = FALSE;
+		NSString				*bsdName	= getBSDName(nextMedia);
+		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
+
+		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
+		NSURL					*url		= [NSURL fileURLWithPath:filename];
+		CompactDiscDocument		*doc		= nil;
+		NSError					*err		= nil;
+		BOOL					queryFreeDB = NO;
 		
-		while((object = [enumerator nextObject])) {
-			if([bsdName isEqualToString:[[object valueForKey:@"drive"] valueForKey:@"bsdName"]]) {
-				found = TRUE;
-				break;
+		// If the file exists open it (disc already seen)
+		if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+			doc	= [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:NO error:&err];
+		}
+		else {
+			// Ugly hack to avoid letting the user specify the save filename
+			[[NSFileManager defaultManager] createFileAtPath:filename contents:nil attributes:nil];
+			doc = [[NSDocumentController sharedDocumentController] openUntitledDocumentAndDisplay:NO error:&err];
+			[doc setFileURL:url];
+			queryFreeDB = YES;
+		}
+		
+		if(nil != doc && nil == [doc getDisc]) {
+			[doc setDisc:disc];
+			if(0 == [[doc windowControllers] count]) {
+				[doc makeWindowControllers];
+				[doc showWindows];				
+			}
+			if(queryFreeDB) {
+				[doc getCDInformation:self];
 			}
 		}
-		if(FALSE == found) {
-			CompactDisc *disc = [[[CompactDisc alloc] init] autorelease];
-			[disc setBSDName:bsdName];
-			[_media addObject:disc];
-		}				
+		else {
+			[[NSDocumentController sharedDocumentController] presentError:err];
+		}		
 	}
 	
 	kernResult = IOObjectRelease(mediaIterator);
@@ -235,16 +230,15 @@ static MediaController *sharedController = nil;
     }
 	
 	while((nextMedia = IOIteratorNext(mediaIterator))) {
-		NSEnumerator			*enumerator		= [_media objectEnumerator];
-		CompactDisc				*object			= nil;
-		NSString				*bsdName		= getBSDName(nextMedia);
-
-		while((object = [enumerator nextObject])) {
-			NSString *comp = [[object valueForKey:@"drive"] valueForKey:@"bsdName"];
-			if([bsdName isEqualToString:comp]) {
-				[_media removeObject:object];
-				break;
-			}
+		NSString				*bsdName	= getBSDName(nextMedia);
+		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
+		
+		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
+		NSURL					*url		= [NSURL fileURLWithPath:filename];
+		CompactDiscDocument		*doc		= [[NSDocumentController sharedDocumentController] documentForURL:url];
+		
+		if(nil != doc) {
+			[doc discEjected];
 		}
 	}
 	

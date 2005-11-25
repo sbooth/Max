@@ -26,12 +26,18 @@ extern "C" {
 
 // Get data directory (~/Application Support/Max/)
 NSString * getApplicationDataDirectory();
+
+// Create directory structure for path
+void createDirectoryStructure(NSString *path);
 	
 // Remove /: characters and replace with _
 NSString * makeStringSafeForFilename(NSString *string);
 
 // Create path if it does not exist; throw an exception if it exists and is a file
 void validateAndCreateDirectory(NSString *path);
+
+// Get a timestamp in the ID3v2 format
+NSString * getID3v2Timestamp();
 
 // Display a modal alert for exception
 void displayExceptionAlert(NSException *exception);
@@ -42,9 +48,6 @@ void displayExceptionSheet(NSException	*exception,
 						   id			delegate,
 						   SEL			selector,
 						   void			*userInfo);
-
-// Get a timestamp in the ID3v2 format
-NSString * getID3v2Timestamp();
 
 #ifdef __cplusplus
 }

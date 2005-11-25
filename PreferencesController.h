@@ -23,10 +23,10 @@
 @interface PreferencesController : NSWindowController
 {
     IBOutlet NSTextField			*_customNameTextField;
-    IBOutlet NSTextField			*_cddbServerTextField;
-    IBOutlet NSTextField			*_cddbPortTextField;
+    IBOutlet NSTextField			*_freeDBServerTextField;
+    IBOutlet NSTextField			*_freeDBPortTextField;
 
-	IBOutlet NSArrayController		*_cddbMirrorsController;
+	IBOutlet NSArrayController		*_freeDBMirrorsController;
 
 	NSArray							*_freeDBMirrors;
     NSString						*_customNameExample;

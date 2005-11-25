@@ -30,7 +30,7 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Task::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track outputFilename:(NSString *) filename
+- (id) initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track outputFilename:(NSString *) filename
 {
 	if((self = [super init])) {
 		_disc			= [disc retain];
@@ -97,25 +97,25 @@
 
 - (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
-	if([keyPath isEqual:@"ripper.started"]) {
+	if([keyPath isEqualToString:@"ripper.started"]) {
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStart:) withObject:self waitUntilDone:TRUE];
 	}
-	else if([keyPath isEqual:@"ripper.stopped"]) {
+	else if([keyPath isEqualToString:@"ripper.stopped"]) {
 		[_ripperTask removeTemporaryFile];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidStop:) withObject:self waitUntilDone:TRUE];
 	}
-	else if([keyPath isEqual:@"ripper.completed"]) {
+	else if([keyPath isEqualToString:@"ripper.completed"]) {
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(ripDidComplete:) withObject:self waitUntilDone:TRUE];
 	}
-	else if([keyPath isEqual:@"encoder.started"]) {
+	else if([keyPath isEqualToString:@"encoder.started"]) {
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStart:) withObject:self waitUntilDone:TRUE];
 	}
-	else if([keyPath isEqual:@"encoder.stopped"]) {
+	else if([keyPath isEqualToString:@"encoder.stopped"]) {
 		[_ripperTask removeTemporaryFile];
 		[_encoderTask removeOutputFile];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidStop:) withObject:self waitUntilDone:TRUE];
 	}
-	else if([keyPath isEqual:@"encoder.completed"]) {
+	else if([keyPath isEqualToString:@"encoder.completed"]) {
 		[_ripperTask removeTemporaryFile];
 		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:self waitUntilDone:TRUE];
 	}

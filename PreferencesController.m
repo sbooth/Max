@@ -64,13 +64,13 @@ static PreferencesController *sharedPreferences = nil;
 			[defaultsDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:defaultsPath]];
 		}
 	    
-		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"org.sbooth.Max.customNamingUseFallback", @"org.sbooth.Max.customTrackColor", 
-			@"org.sbooth.Max.freeDBPort", @"org.sbooth.Max.freeDBProtocol", @"org.sbooth.Max.freeDBServer", 
-			@"org.sbooth.Max.lameBitrate", @"org.sbooth.Max.lameEncodingEngineQuality", @"org.sbooth.Max.lameMonoEncoding", 
-			@"org.sbooth.Max.lameQuality",@"org.sbooth.Max.lameTarget", @"org.sbooth.Max.lameUseConstantBitrate", 
-			@"org.sbooth.Max.lameVBRQuality", @"org.sbooth.Max.lameVariableBitrateMode", 
-			@"org.sbooth.Max.outputDirectory", @"org.sbooth.Max.useCustomNaming", @"org.sbooth.Max.customNamingScheme", 
-			@"org.sbooth.Max.maximumEncoderThreads", nil];
+		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"customNamingUseFallback", @"customTrackColor", 
+			@"freeDBPort", @"freeDBProtocol", @"freeDBServer", 
+			@"lameBitrate", @"lameEncodingEngineQuality", @"lameMonoEncoding", 
+			@"lameQuality",@"lameTarget", @"lameUseConstantBitrate", 
+			@"lameVBRQuality", @"lameVariableBitrateMode", 
+			@"outputDirectory", @"useCustomNaming", @"customNamingScheme", 
+			@"maximumEncoderThreads", nil];
 		initialValuesDictionary = [defaultsDictionary dictionaryWithValuesForKeys:resettableUserDefaultsKeys];
 		
 		[[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:initialValuesDictionary];
@@ -141,13 +141,13 @@ static PreferencesController *sharedPreferences = nil;
 
 - (IBAction)setFreeDBMirror:(id)sender
 {
-	NSArray *selectedObjects = [_cddbMirrorsController selectedObjects];
+	NSArray *selectedObjects = [_freeDBMirrorsController selectedObjects];
 	if(0 < [selectedObjects count]) {
 		FreeDBSite					*mirror					= [selectedObjects objectAtIndex:0];
 		NSUserDefaultsController	*defaultsController		= [NSUserDefaultsController sharedUserDefaultsController];
-		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"org.sbooth.Max.freeDBServer"];
-		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"org.sbooth.Max.freeDBPort"];
-		[[defaultsController values] setValue:[mirror valueForKey:@"protocol"] forKey:@"org.sbooth.Max.freeDBProtocol"];
+		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"freeDBServer"];
+		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"freeDBPort"];
+		[[defaultsController values] setValue:[mirror valueForKey:@"protocol"] forKey:@"freeDBProtocol"];
 	}
 }
 
@@ -155,8 +155,8 @@ static PreferencesController *sharedPreferences = nil;
 {
 	@try {
 		// Get mirror list
-		FreeDB *cddb = [[[FreeDB alloc] init] autorelease];
-		[self setValue:[cddb fetchSites] forKey:@"cddbMirrors"];
+		FreeDB *freeDB = [[[FreeDB alloc] init] autorelease];
+		[self setValue:[freeDB fetchSites] forKey:@"freeDBMirrors"];
 	}
 	
 	@catch(NSException *exception) {
@@ -221,18 +221,18 @@ static PreferencesController *sharedPreferences = nil;
 		int i, count = [filesToOpen count];
 		for (i=0; i<count; i++) {
 			NSString *aFile = [filesToOpen objectAtIndex:i];
-			[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:aFile forKey:@"org.sbooth.Max.outputDirectory"];
+			[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:aFile forKey:@"outputDirectory"];
 		}
 	}	
 }
 
-#pragma mark NSTextField Delegate methods
+#pragma mark Delegate methods
 
-- (void)controlTextDidChange:(NSNotification *)aNotification
+- (void) controlTextDidChange:(NSNotification *)aNotification
 {
 	NSString *scheme = [_customNameTextField stringValue];
 	if(nil == scheme) {
-		scheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.customNamingScheme"];
+		scheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"customNamingScheme"];
 	}
 	// No love
 	if(nil == scheme) {

@@ -22,14 +22,11 @@
 
 @interface MediaController : NSObject
 {
-	NSMutableArray				*_media;	
 }
 
 + (MediaController *) sharedController;
 
 - (void) scanForMedia;
-
-- (void) releaseAll;
 
 - (void) volumeMounted: (NSNotification *) notification;
 - (void) volumeUnmounted: (NSNotification *) notification;

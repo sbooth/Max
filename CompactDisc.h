@@ -31,8 +31,9 @@
 	unsigned			_length;	
 }
 
-- (void)				setBSDName:(NSString *)bsdName;
+- (id)					initWithBSDName:(NSString *)bsdName;
 
+// Physical disc properties
 - (unsigned long)		firstSector;
 - (unsigned long)		lastSector;
 
@@ -48,7 +49,12 @@
 - (BOOL)				trackHasPreEmphasis:(ssize_t) track;
 - (BOOL)				trackAllowsDigitalCopy:(ssize_t) track;
 
+// Derived properties
 - (int)					discID;
+- (unsigned)			length;
+
+- (cdrom_drive *)		getDrive;
+- (cddb_disc_t *)		getFreeDBDisc;
 
 //- (id < Ripper>) getRipper;
 

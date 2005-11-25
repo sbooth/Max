@@ -94,9 +94,9 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			lame_set_bWriteVbrTag(_gfp, 1);
 			
 			// Set encoding properties from user defaults
-			lame_set_mode(_gfp, [[NSUserDefaults standardUserDefaults] boolForKey:@"org.sbooth.Max.lameMonoEncoding"] ? MONO : JOINT_STEREO);
+			lame_set_mode(_gfp, [[NSUserDefaults standardUserDefaults] boolForKey:@"lameMonoEncoding"] ? MONO : JOINT_STEREO);
 			
-			quality = [[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.lameEncodingEngineQuality"];
+			quality = [[NSUserDefaults standardUserDefaults] stringForKey:@"lameEncodingEngineQuality"];
 			if([quality isEqualToString:@"Fast"]) {
 				lame_set_quality(_gfp, 7);
 			}
@@ -108,10 +108,10 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			}
 			
 			// Target is bitrate
-			if([[[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.lameTarget"] isEqualToString:@"Bitrate"]) {
-				bitrate = maxBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.lameBitrate"]];
+			if([[[NSUserDefaults standardUserDefaults] stringForKey:@"lameTarget"] isEqualToString:@"Bitrate"]) {
+				bitrate = maxBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"lameBitrate"]];
 				lame_set_brate(_gfp, bitrate);
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"org.sbooth.Max.lameUseConstantBitrate"]) {
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"lameUseConstantBitrate"]) {
 					lame_set_VBR(_gfp, vbr_off);
 				}
 				else {
@@ -121,8 +121,8 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			}
 			// Target is quality
 			else {
-				lame_set_VBR(_gfp, [[[NSUserDefaults standardUserDefaults] stringForKey:@"org.sbooth.Max.lameVariableBitrateMode"] isEqualToString:@"Fast"] ? vbr_mtrh : vbr_rh);
-				lame_set_preset(_gfp, 400 + [[NSUserDefaults standardUserDefaults] integerForKey:@"org.sbooth.Max.lameVBRQuality"]);
+				lame_set_VBR(_gfp, [[[NSUserDefaults standardUserDefaults] stringForKey:@"lameVariableBitrateMode"] isEqualToString:@"Fast"] ? vbr_mtrh : vbr_rh);
+				lame_set_preset(_gfp, 400 + [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]);
 			}
 			
 			lameResult = lame_init_params(_gfp);
@@ -281,7 +281,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 	int						numSamples;
 	
 	const unsigned char		*iter,			*limit;
-	unsigned char			swap;
+	unsigned char			temp;
 	
 	unsigned char			*buf;
 	int						bufSize;
@@ -304,17 +304,17 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
-		// Raw PCM needs to be byte-swapped and separated into L/R channels
+		// Raw PCM needs to separated into L/R channels
 		iter	= chunk;
 		limit	= chunk + chunkSize;
 		left	= leftPCM;
 		right	= rightPCM;
 		while(iter < limit) {
-			swap		= *iter++;
-			*left++		= (*iter++ << 24) | (swap << 16);
+			temp		= *iter++;
+			*left++		= (temp << 24) | (*iter++ << 16);
 			
-			swap		= *iter++;
-			*right++	= (*iter++ << 24) | (swap << 16);
+			temp		= *iter++;
+			*right++	= (temp << 24) | (*iter++ << 16);
 		}
 		
 		// Allocate the MP3 buffer using LAME guide for size

@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CDDrive.h"
+#import "CompactDisc.h"
 #import "Track.h"
 #import "FreeDBMatch.h"
 
@@ -31,13 +31,14 @@
     IBOutlet NSButton				*_trackInfoButton;
 
 	// Related data structures
-	CDDrive							*_drive;
+	NSNumber						*_discInDrive;
+	CompactDisc						*_disc;
 	
 	// ID3 tags
 	NSString						*_title;			// TALB
 	NSString						*_artist;			// TPE1
 	NSNumber						*_year;				// TYER
-	NSNumber						*_genre;			// TCON
+	NSString						*_genre;			// TCON
 	NSString						*_comment;			// COMM
 	
 	NSNumber						*_partOfSet;		// TPOS
@@ -47,14 +48,15 @@
 	NSNumber						*_discsInSet;
 	NSNumber						*_multiArtist;
 	
+	NSNumber						*_discID;
+	
 	NSNumber						*_stop;
 
 	// Array of audio tracks
 	NSMutableArray					*_tracks;
 }
 
-- (void)			setBSDName:(NSString *) bsdName;
-
+- (NSArray *)		genres;
 - (void)			displayException:(NSException *)exception;
 
 - (NSArray *)		selectedTracks;
@@ -63,12 +65,17 @@
 - (IBAction)		selectNone:(id) sender;
 - (IBAction)		encode:(id) sender;
 
+- (void)			clearFreeDBData;
 - (IBAction)		getCDInformation:(id) sender;
 - (void)			updateDiscFromFreeDB:(FreeDBMatch *) info;
 
+- (int)				discID;
 
-- (NSString *)		length;
+- (BOOL)			discInDrive;
+- (void)			discEjected;
 
+- (CompactDisc *)	getDisc;
+- (void)			setDisc:(CompactDisc *)disc;
 
 // Save/Restore
 - (NSDictionary *)	getDictionary;

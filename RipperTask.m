@@ -36,7 +36,7 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"RipperTask::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track trackName:(NSString *) trackName
+- (id) initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track trackName:(NSString *) trackName
 {
 	char *path = NULL;
 	

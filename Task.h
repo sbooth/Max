@@ -1,5 +1,5 @@
 /*
- *  $Id: CompactDiscController.m 112 2005-10-23 06:31:51Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDisc.h"
+#import "CompactDiscDocument.h"
 #import "Track.h"
 
 @class RipperTask;
@@ -28,16 +28,17 @@
 
 @interface Task : NSObject 
 {
-	CompactDisc		*_disc;
-	Track			*_track;
-	NSString		*_filename;
+	CompactDiscDocument		*_disc;
+	Track					*_track;
 
-	RipperTask		*_ripperTask;
-	EncoderTask		*_encoderTask;
+	NSString				*_filename;
+
+	RipperTask				*_ripperTask;
+	EncoderTask				*_encoderTask;
 	
-	NSString		*_trackName;
+	NSString				*_trackName;
 }
 
-- (id) initWithDisc:(CompactDisc *) disc forTrack:(Track *) track outputFilename:(NSString *) filename;
+- (id) initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track outputFilename:(NSString *) filename;
 
 @end

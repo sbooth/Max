@@ -20,43 +20,48 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class CompactDiscDocument;
 
 @interface Track : NSObject 
 {
-	NSNumber			*_ripInProgress;
+	NSNumber				*_ripInProgress;
+	CompactDiscDocument		*_disc;
 
 	// View properties
-	NSNumber			*_selected;
-	NSColor				*_color;
+	NSNumber				*_selected;
+	NSColor					*_color;
 	
 	// ID3 tags
-	NSString			*_title;			// TALB
-	NSString			*_artist;			// TPE1
-	NSNumber			*_year;				// TYER
-	NSString			*_genre;			// TCON
+	NSString				*_title;			// TALB
+	NSString				*_artist;			// TPE1
+	NSNumber				*_year;				// TYER
+	NSString				*_genre;			// TCON
 	
 	// Physical track properties
-	NSNumber			*_number;
-	NSNumber			*_firstSector;
-	NSNumber			*_lastSector;
-	NSNumber			*_channels;
-	NSNumber			*_preEmphasis;
-	NSNumber			*_copyPermitted;
+	NSNumber				*_number;
+	NSNumber				*_firstSector;
+	NSNumber				*_lastSector;
+	NSNumber				*_channels;
+	NSNumber				*_preEmphasis;
+	NSNumber				*_copyPermitted;
 }
 
-- (NSString *) getPreEmphasis;
-- (NSString *) getCopyPermitted;
+- (NSString *)		getPreEmphasis;
+- (NSString *)		getCopyPermitted;
 
-- (NSNumber *) getSize;
-- (NSColor *) getColor;
+- (NSNumber *)		getSize;
+- (NSColor *)		getColor;
 
-- (unsigned) getMinute;
-- (unsigned) getSecond;
-- (unsigned) getFrame;
+- (unsigned)		getMinute;
+- (unsigned)		getSecond;
+- (unsigned)		getFrame;
 
-- (NSString *) getLength;
+- (NSString *)		getLength;
+
+- (void)			clearFreeDBData;
 
 // Save/Restore
-- (NSDictionary *) getDictionary;
-- (void) setPropertiesFromDictionary:(NSDictionary *)properties;
+- (NSDictionary *)	getDictionary;
+- (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
+
 @end

@@ -55,9 +55,14 @@
 	[NSValueTransformer setValueTransformer:transformer forName:@"NegateBooleanArrayValueTransformer"];
 }
 
--(void)awakeFromNib
+- (void) awakeFromNib
 {
 	[GrowlApplicationBridge setGrowlDelegate:self];
+}
+
+- (BOOL) applicationShouldOpenUntitledFile:(NSApplication *)sender
+{
+	return NO;
 }
 
 - (IBAction)showPreferences:(id)sender
@@ -99,7 +104,7 @@
 		}
 	}
 	
-	[[MediaController sharedController] releaseAll];
+//	[[MediaController sharedController] releaseAll];
 	
 	return NSTerminateNow;
 }

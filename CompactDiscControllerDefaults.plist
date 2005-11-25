@@ -2,13 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>org.sbooth.Max.customNamingUseFallback</key>
+	<key>customNamingUseFallback</key>
 	<false/>
-	<key>org.sbooth.Max.outputDirectory</key>
+	<key>outputDirectory</key>
 	<string>~/Music/</string>
-	<key>org.sbooth.Max.useCustomNaming</key>
+	<key>useCustomNaming</key>
 	<false/>
-	<key>org.sbooth.Max.customNamingScheme</key>
+	<key>customNamingScheme</key>
 	<string></string>
 </dict>
 </plist>
