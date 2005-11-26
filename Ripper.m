@@ -22,12 +22,33 @@
 #import "MallocException.h"
 #import "StopException.h"
 #import "IOException.h"
+#import "MissingResourceException.h"
 
 #include <stdlib.h>			// calloc, free
 #include <unistd.h>			// lseek, read
 #include <fcntl.h>			// open, close
 
 @implementation Ripper
+
++ (void) initialize
+{
+	NSString				*paranoiaDefaultsValuesPath;
+    NSDictionary			*paranoiaDefaultsValuesDictionary;
+    
+	@try {
+		paranoiaDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ParanoiaDefaults" ofType:@"plist"];
+		if(nil == paranoiaDefaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load ParanoiaDefaults.plist." userInfo:nil];
+		}
+		paranoiaDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:paranoiaDefaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:paranoiaDefaultsValuesDictionary];
+	}
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+	@finally {
+	}
+}
 
 - (id) init
 {
@@ -37,6 +58,8 @@
 - (id) initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track
 {
 	if((self = [super init])) {
+
+		int paranoiaMode = PARANOIA_MODE_DISABLE;
 		
 		_disc	= [disc retain];
 		_track	= [track retain];
@@ -48,10 +71,32 @@
 		// Setup cdparanoia
 		_drive		= [[_disc getDisc] getDrive];
 		_paranoia	= paranoia_init(_drive);
-		
-		/* full paranoia, but allow skipping */
-		int paranoia_mode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
-		paranoia_modeset(_paranoia, paranoia_mode);
+
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
+			paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
+			
+			NSString *paranoiaLevel = [[NSUserDefaults standardUserDefaults] stringForKey:@"paranoiaLevel"];
+			
+			if([paranoiaLevel isEqualToString:@"Full paranoia"]) {
+			}
+			else if([paranoiaLevel isEqualToString:@"Overlap checking"]) {
+				paranoiaMode |= PARANOIA_MODE_OVERLAP;
+				paranoiaMode &= ~PARANOIA_MODE_VERIFY;
+			}
+			
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaNeverSkip"]) {
+				paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
+				_maximumRetries = -1;
+			}
+			else {
+				_maximumRetries = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaMaximumRetries"];
+			}
+		}
+		else {
+			paranoiaMode = PARANOIA_MODE_DISABLE;
+		}
+
+		paranoia_modeset(_paranoia, paranoiaMode);
 		
 		// Determine the size of the track we are ripping
 		_firstSector	= [[_track valueForKey:@"firstSector"] unsignedLongValue];
@@ -114,7 +159,7 @@
 		}
 		
 		// Read a chunk
-		buf = paranoia_read_limited(_paranoia, NULL, 20/*max_retries*/);
+		buf = paranoia_read_limited(_paranoia, NULL, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];			

@@ -35,6 +35,7 @@
 		8C9A24B40925ADB200FB244D /* Growl.framework in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8CA382F00924598D00BDFD02 /* libtag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382ED0924598D00BDFD02 /* libtag.a */; };
 		8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EE0924598D00BDFD02 /* libmp3lame.a */; };
+		8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
 		8CB6E20108DACB8100345B8F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING */; };
 		8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */; };
@@ -168,6 +169,7 @@
 		8CA382EC0924598D00BDFD02 /* libcddb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcddb.a; sourceTree = "<group>"; };
 		8CA382ED0924598D00BDFD02 /* libtag.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtag.a; sourceTree = "<group>"; };
 		8CA382EE0924598D00BDFD02 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
+		8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
 		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
 		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */,
 				8CFD212409358B1700F3FF51 /* CompactDiscDefaults.plist */,
 				8CFD2008093560E400F3FF51 /* CD.icns */,
 				8C3101270931297C000A50FC /* Max.icns */,
@@ -567,6 +570,7 @@
 				8C3101280931297C000A50FC /* Max.icns in Resources */,
 				8CFD2009093560E400F3FF51 /* CD.icns in Resources */,
 				8CFD212509358B1700F3FF51 /* CompactDiscDefaults.plist in Resources */,
+				8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

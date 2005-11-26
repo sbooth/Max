@@ -54,7 +54,7 @@ static PreferencesController *sharedPreferences = nil;
 
 	@try {
 		defaultsDictionary	= [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
-		defaultFiles		= [NSArray arrayWithObjects:@"FreeDBDefaults", @"CompactDiscControllerDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", nil];
+		defaultFiles		= [NSArray arrayWithObjects:@"FreeDBDefaults", @"CompactDiscControllerDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -66,6 +66,7 @@ static PreferencesController *sharedPreferences = nil;
 	    
 		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"customNamingUseFallback", @"customTrackColor", 
 			@"freeDBPort", @"freeDBProtocol", @"freeDBServer", 
+			@"paranoiaEnable", @"paranoiaLevel", @"paranoiaNeverSkip", @"paranoiaMaximumRetries",
 			@"lameBitrate", @"lameEncodingEngineQuality", @"lameMonoEncoding", 
 			@"lameQuality",@"lameTarget", @"lameUseConstantBitrate", 
 			@"lameVBRQuality", @"lameVariableBitrateMode", 
