@@ -47,20 +47,9 @@ static LogController *sharedLog = nil;
 - (id)init
 {
 	if((self = [super initWithWindowNibName:@"Log"])) {
-		
-		@try {
-			[self setShouldCascadeWindows:NO];
-			[self setWindowFrameAutosaveName:@"Log"];	
-		}
-		
-		@catch(NSException *exception) {
-			displayExceptionAlert(exception);
-		}
-		
-		@finally {
-		}
+		return self;
 	}
-	return self;
+	return nil;
 }
 
 - (void) dealloc
@@ -73,6 +62,12 @@ static LogController *sharedLog = nil;
 - (unsigned) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
+
+- (void) windowDidLoad
+{
+	[self setShouldCascadeWindows:NO];
+	[self setWindowFrameAutosaveName:@"Log"];	
+}
 
 - (IBAction) clear:(id)sender
 {
@@ -103,13 +98,25 @@ static LogController *sharedLog = nil;
 
 - (void) logMessage:(NSString *)message
 {
-	NSTextStorage	*storage		= [_logTextView textStorage];
-	NSRange			range			= NSMakeRange([storage length], 0);
-	NSString		*logMessage		= [message stringByAppendingString:@"\n"];
+	NSTextStorage					*storage		= [_logTextView textStorage];
+	NSRange							range			= NSMakeRange([storage length], 0);
+	NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
+	NSDate							*now			= [NSDate date];
+	
+	// Build the string
+	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[NSString stringWithFormat:@"%@", now]];
+	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@": "];
+	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:message];
+	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
+
+	// Apply styles
+	[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
 	
 	[storage beginEditing];
-	[storage replaceCharactersInRange:range withString:logMessage];
+	[storage replaceCharactersInRange:range withAttributedString:logMessage];
 	[storage endEditing];
+	
+	[logMessage release];
 }
 
 @end

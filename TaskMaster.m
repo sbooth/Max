@@ -19,6 +19,7 @@
  */
 
 #import "TaskMaster.h"
+#import "LogController.h"
 #import "RipperTask.h"
 #import "EncoderTask.h"
 #import "Tagger.h"
@@ -67,10 +68,9 @@ static TaskMaster *sharedController = nil;
 		_rippingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
 		_encodingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
 
-		[self setShouldCascadeWindows:NO];
-		[self setWindowFrameAutosaveName:@"TaskMaster"];	
+		return self;
 	}
-	return self;
+	return nil;
 }
 
 + (TaskMaster *) sharedController
@@ -104,6 +104,12 @@ static TaskMaster *sharedController = nil;
 	[_rippingTasks release];
 	[_encodingTasks release];
 	[super dealloc];
+}
+
+- (void) windowDidLoad
+{
+	[self setShouldCascadeWindows:NO];
+	[self setWindowFrameAutosaveName:@"TaskMaster"];	
 }
 
 - (void) runTask:(Task *) task
@@ -178,12 +184,14 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidStart:(Task* ) task
 {
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip started for %@", [task valueForKey:@"trackName"]]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip started" description:[task valueForKey:@"trackName"]
 						   notificationName:@"Rip started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) ripDidStop:(Task* ) task
 {
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip stopped for %@", [task valueForKey:@"trackName"]]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip stopped" description:[task valueForKey:@"trackName"]
 						   notificationName:@"Rip stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
@@ -193,6 +201,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidComplete:(Task* ) task
 {
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip completed for %@", [task valueForKey:@"trackName"]]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:[task valueForKey:@"trackName"]
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
@@ -242,12 +251,14 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeDidStart:(Task* ) task
 {
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode started for %@", [task valueForKey:@"trackName"]]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[task valueForKey:@"trackName"]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) encodeDidStop:(Task* ) task
 {
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode stopped for %@", [task valueForKey:@"trackName"]]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[task valueForKey:@"trackName"]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
@@ -257,6 +268,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeDidComplete:(Task* ) task
 {
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode completed for %@", [task valueForKey:@"trackName"]]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[task valueForKey:@"trackName"]
 						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	
