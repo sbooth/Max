@@ -23,6 +23,7 @@
 #import "PreferencesController.h"
 #import "MediaController.h"
 #import "TaskMaster.h"
+#import "LogController.h"
 #import "UpdateChecker.h"
 #import "IOException.h"
 #import "StringValueTransformer.h"
@@ -58,6 +59,9 @@
 - (void) awakeFromNib
 {
 	[GrowlApplicationBridge setGrowlDelegate:self];
+	
+	// Force the log window to load (so log messages will show up)
+	[[LogController sharedController] window];
 }
 
 - (BOOL) applicationShouldOpenUntitledFile:(NSApplication *)sender
@@ -104,8 +108,6 @@
 		}
 	}
 	
-//	[[MediaController sharedController] releaseAll];
-	
 	return NSTerminateNow;
 }
 
@@ -130,6 +132,17 @@
 	}
 	else {
 		[tasksWindow orderFront:self];
+	}
+}
+
+- (IBAction)toggleLogPanel:(id)sender
+{
+	NSWindow *logWindow = [[LogController sharedController] window];
+	if([logWindow isVisible]) {
+		[logWindow performClose:self];
+	}
+	else {
+		[logWindow orderFront:self];
 	}
 }
 

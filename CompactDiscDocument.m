@@ -47,17 +47,17 @@
 
 + (void) initialize
 {
-	NSString				*compactDiscDefaultsValuesPath;
-    NSDictionary			*compactDiscDefaultsValuesDictionary;
+	NSString				*compactDiscDocumentDefaultsValuesPath;
+    NSDictionary			*compactDiscDocumentDefaultsValuesDictionary;
 	
 	@try {
 		// Set up defaults
-		compactDiscDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CompactDiscDefaults" ofType:@"plist"];
-		if(nil == compactDiscDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load CompactDiscDefaults.plist" userInfo:nil];
+		compactDiscDocumentDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CompactDiscDocumentDefaults" ofType:@"plist"];
+		if(nil == compactDiscDocumentDefaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load CompactDiscDocumentDefaults.plist" userInfo:nil];
 		}
-		compactDiscDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDefaultsValuesPath];
-		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDefaultsValuesDictionary];
+		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
 		
 	}
 	@catch(NSException *exception) {

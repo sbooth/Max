@@ -34,14 +34,14 @@
 
 + (PreferencesController *) sharedPreferences;
 
-- (IBAction)customNamingButtonAction:(id)sender;
+- (IBAction)			customNamingButtonAction:(id)sender;
 
-- (IBAction)setFreeDBMirror:(id)sender;
-- (IBAction)refreshFreeDBMirrorList:(id)sender;
+- (IBAction)			setFreeDBMirror:(id)sender;
+- (IBAction)			refreshFreeDBMirrorList:(id)sender;
 
-- (IBAction)restoreDefaults:(id)sender;
+- (IBAction)			restoreDefaults:(id)sender;
 
-- (IBAction)selectOutputDirectory:(id)sender;
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (IBAction)			selectOutputDirectory:(id)sender;
+- (void)				openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 @end

@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: PreferencesController.h 175 2005-11-25 04:56:46Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,23 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <Growl/GrowlApplicationBridge.h>
-
-@interface ApplicationController : NSObject < GrowlApplicationBridgeDelegate >
+@interface LogController : NSWindowController 
 {
+    IBOutlet NSTextView				*_logTextView;
 }
 
-- (IBAction)			scanForMedia:(id)sender;
-- (IBAction)			showPreferences:(id)sender;
++ (LogController *)		sharedController;
 
-- (IBAction)			aboutLAME:(id)sender;
+- (IBAction)			clear:(id)sender;
+- (IBAction)			save:(id)sender;
 
-- (IBAction)			toggleTasksPanel:(id)sender;
-- (IBAction)			toggleLogPanel:(id)sender;
-
-- (IBAction)			checkForUpdate:(id)sender;
-- (IBAction)			openHomeURL:(id)sender;
-
--(NSDictionary *)		registrationDictionaryForGrowl;
+- (void)				logMessage:(NSString *)message;
 
 @end
