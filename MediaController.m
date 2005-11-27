@@ -179,6 +179,7 @@ static MediaController *sharedController = nil;
 		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
 
 		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
+//		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
 		NSURL					*url		= [NSURL fileURLWithPath:filename];
 		CompactDiscDocument		*doc		= nil;
 		NSError					*err		= nil;
@@ -234,6 +235,7 @@ static MediaController *sharedController = nil;
 		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
 		
 		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
+//		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
 		NSURL					*url		= [NSURL fileURLWithPath:filename];
 		CompactDiscDocument		*doc		= [[NSDocumentController sharedDocumentController] documentForURL:url];
 		

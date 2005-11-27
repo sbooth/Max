@@ -28,6 +28,245 @@
 #include <unistd.h>			// lseek, read
 #include <fcntl.h>			// open, close
 
+static char *callback_strings[15]={"wrote",
+	"finished",
+	"read",
+	"verify",
+	"jitter",
+	"correction",
+	"scratch",
+	"scratch repair",
+	"skip",
+	"drift",
+	"backoff",
+	"overlap",
+	"dropped",
+	"duped",
+	"transport error"};
+
+static void 
+callback(long inpos, int function)
+{
+	/*
+	 
+	 (== PROGRESS == [--+!---x-------------->           | 007218 01 ] == :-) . ==) 
+	 
+	 */
+	
+	int graph=30;
+	char buffer[256];
+	static long c_sector=0,v_sector=0;
+	static char dispcache[30]="                              ";
+	static int last=0;
+	static long lasttime=0;
+	long sector,osector=0;
+	struct timeval thistime;
+	static char heartbeat=' ';
+	int position=0,aheadposition=0;
+	static int overlap=0;
+	static int printit=-1;
+	
+	static int slevel=0;
+	static int slast=0;
+	static int stimeout=0;
+	char *smilie="= :-)";
+	
+//	if(callscript)
+		fprintf(stderr,"##: %d [%s] @ %ld\n",
+				function,(function>=-2&&function<=13?callback_strings[function+2]:
+						  ""),inpos);
+#if 0	
+	if(!quiet){
+		long test;
+		osector=inpos;
+		sector=inpos/CD_FRAMEWORDS;
+		
+		if(printit==-1){
+			if(isatty(STDERR_FILENO)){
+				printit=1;
+			}else{
+				printit=0;
+			}
+		}
+		
+		if(printit==1){  /* else don't bother; it's probably being 
+			redirected */
+			position=((float)(sector-callbegin)/
+					  (callend-callbegin))*graph;
+			
+			aheadposition=((float)(c_sector-callbegin)/
+						   (callend-callbegin))*graph;
+			
+			if(function==-2){
+				v_sector=sector;
+				return;
+			}
+			if(function==-1){
+				last=8;
+				heartbeat='*';
+				slevel=0;
+				v_sector=sector;
+			}else
+				if(position<graph && position>=0)
+					switch(function){
+						case PARANOIA_CB_VERIFY:
+							if(stimeout>=30){
+								if(overlap>CD_FRAMEWORDS)
+									slevel=2;
+								else
+									slevel=1;
+							}
+							break;
+						case PARANOIA_CB_READ:
+							if(sector>c_sector)c_sector=sector;
+							break;
+							
+						case PARANOIA_CB_FIXUP_EDGE:
+							if(stimeout>=5){
+								if(overlap>CD_FRAMEWORDS)
+									slevel=2;
+								else
+									slevel=1;
+							}
+							if(dispcache[position]==' ') 
+								dispcache[position]='-';
+							break;
+						case PARANOIA_CB_FIXUP_ATOM:
+							if(slevel<3 || stimeout>5)slevel=3;
+							if(dispcache[position]==' ' ||
+							   dispcache[position]=='-')
+								dispcache[position]='+';
+								break;
+						case PARANOIA_CB_READERR:
+							slevel=6;
+							if(dispcache[position]!='V')
+								dispcache[position]='e';
+								break;
+						case PARANOIA_CB_SKIP:
+							slevel=8;
+							dispcache[position]='V';
+							break;
+						case PARANOIA_CB_OVERLAP:
+							overlap=osector;
+							break;
+						case PARANOIA_CB_SCRATCH:
+							slevel=7;
+							break;
+						case PARANOIA_CB_DRIFT:
+							if(slevel<4 || stimeout>5)slevel=4;
+							break;
+						case PARANOIA_CB_FIXUP_DROPPED:
+						case PARANOIA_CB_FIXUP_DUPED:
+							slevel=5;
+							if(dispcache[position]==' ' ||
+							   dispcache[position]=='-' ||
+							   dispcache[position]=='+')
+								dispcache[position]='!';
+								break;
+					}
+						
+						switch(slevel){
+							case 0:  /* finished, or no jitter */
+								if(skipped_flag)
+									smilie=" 8-X";
+								else
+									smilie=" :^D";
+								break;
+							case 1:  /* normal.  no atom, low jitter */
+								smilie=" :-)";
+								break;
+							case 2:  /* normal, overlap > 1 */
+								smilie=" :-|";
+								break; 
+							case 4:  /* drift */
+								smilie=" :-/";
+									break;
+								case 3:  /* unreported loss of streaming */
+									smilie=" :-P";
+									break;
+								case 5:  /* dropped/duped bytes */
+									smilie=" 8-|";
+									break;
+								case 6:  /* scsi error */
+									smilie=" :-0";
+									break;
+								case 7:  /* scratch */
+									smilie=" :-(";
+									break;
+								case 8:  /* skip */
+									smilie=" ;-(";
+									skipped_flag=1;
+									break;
+									
+						}
+						
+						gettimeofday(&thistime,NULL);
+			test=thistime.tv_sec*10+thistime.tv_usec/100000;
+			
+			if(lasttime!=test || function==-1 || slast!=slevel){
+				if(lasttime!=test || function==-1){
+					last++;
+					lasttime=test;
+					if(last>7)last=0;
+					stimeout++;
+					switch(last){
+						case 0:
+							heartbeat=' ';
+							break;
+						case 1:case 7:
+							heartbeat='.';
+							break;
+						case 2:case 6:
+							heartbeat='o';
+							break;
+						case 3:case 5:  
+							heartbeat='0';
+							break;
+						case 4:
+							heartbeat='O';
+							break;
+					}
+					if(function==-1)
+						heartbeat='*';
+					
+				}
+				if(slast!=slevel){
+					stimeout=0;
+				}
+				slast=slevel;
+				
+				if(abort_on_skip && skipped_flag && function !=-1){
+					sprintf(buffer,
+							"\r (== PROGRESS == [%s| %06ld %02d ] ==%s %c ==)   ",
+							"  ...aborting; please wait... ",
+							v_sector,overlap/CD_FRAMEWORDS,smilie,heartbeat);
+				}else{
+					if(v_sector==0)
+						sprintf(buffer,
+								"\r (== PROGRESS == [%s| ...... %02d ] ==%s %c ==)   ",
+								dispcache,overlap/CD_FRAMEWORDS,smilie,heartbeat);
+					
+					else
+						sprintf(buffer,
+								"\r (== PROGRESS == [%s| %06ld %02d ] ==%s %c ==)   ",
+								dispcache,v_sector,overlap/CD_FRAMEWORDS,smilie,heartbeat);
+					
+					if(aheadposition>=0 && aheadposition<graph && !(function==-1))
+						buffer[aheadposition+19]='>';
+				}
+				
+				fprintf(stderr,buffer);
+			}
+		}
+	}
+	
+	/* clear the indicator for next batch */
+	if(function==-1)
+		memset(dispcache,' ',graph);
+#endif
+}
+
+
 @implementation Ripper
 
 + (void) initialize
@@ -159,7 +398,7 @@
 		}
 		
 		// Read a chunk
-		buf = paranoia_read_limited(_paranoia, NULL, (-1 == _maximumRetries ? 20 : _maximumRetries));
+		buf = paranoia_read_limited(_paranoia, NULL/*callback*/, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to access CD (%i:%s)", errno, strerror(errno)] userInfo:nil];			

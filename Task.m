@@ -55,8 +55,14 @@
 		}
 		
 		[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+		
+		if([[_disc valueForKey:@"multiArtist"] boolValue]) {
+			_trackName	= [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
+		}
+		else {
+			_trackName	= [NSString stringWithFormat:@"%@", trackTitle];
 			
-		_trackName		= [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
+		}
 		
 		_ripperTask		= [[[RipperTask alloc] initWithDisc:_disc forTrack:_track trackName:_trackName] retain];
 		_encoderTask	= [[[EncoderTask alloc] initWithSource:[_ripperTask valueForKey:@"path"] target:_filename trackName:_trackName] retain];

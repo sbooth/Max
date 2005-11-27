@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -21,18 +21,15 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Encoder.h"
+#include "lame/lame.h"
 
-@interface EncoderTask : NSObject 
+@interface MPEGEncoder : Encoder
 {
-	NSString			*_target;
-	Encoder				*_encoder;
-	NSString			*_trackName;
+	unsigned char			*_buf;
+	ssize_t					_bufsize;
+	
+	int						_out;
+	lame_global_flags		*_gfp;
 }
-
-- (id)		initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
-
-- (void)	run:(id) object;
-- (void)	stop;
-- (void)	removeOutputFile;
 
 @end

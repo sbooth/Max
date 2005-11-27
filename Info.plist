@@ -19,10 +19,6 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Max CD Information</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>????</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSItemContentTypes</key>
@@ -57,7 +53,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>0.3</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>MaxX</string>
 	<key>CFBundleVersion</key>
 	<string>$Revision$</string>
 	<key>NSMainNibFile</key>

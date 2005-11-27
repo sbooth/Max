@@ -123,7 +123,9 @@
 	return nil;
 }
 
-- (BOOL) readFromData:(NSData *) data ofType:(NSString *) typeName error:(NSError **) outError
+- (BOOL) readFromData:(NSData *) data 
+			   ofType:(NSString *) typeName 
+				error:(NSError **) outError
 {    
 	if([typeName isEqualToString:@"Max CD Information"]) {
 		NSDictionary			*dictionary;
@@ -176,7 +178,7 @@
 - (void) displayException:(NSException *)exception
 {
 	NSWindow *window = [self windowForSheet];
-	if(1 || nil == window) {
+	if(nil == window) {
 		displayExceptionAlert(exception);
 	}
 	else {

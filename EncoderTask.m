@@ -19,6 +19,7 @@
  */
 
 #import "EncoderTask.h"
+#import "MPEGEncoder.h"
 #import "TaskMaster.h"
 #import "MallocException.h"
 #import "IOException.h"
@@ -41,7 +42,7 @@
 		
 		[self setValue:trackName forKey:@"trackName"];
 		
-		_encoder = [[Encoder alloc] initWithSource:source];
+		_encoder = [[MPEGEncoder alloc] initWithSource:source];
 	}
 	return self;
 }

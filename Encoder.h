@@ -20,29 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include "lame/lame.h"
-
-/*
-@protocol Encoder
-
-- (void) setSource:(NSString *) source;
-- (void) encodeToFile:(int) file;
-- (void) requestStop; 
-
-@end
-*/
-
 @interface Encoder : NSObject 
 {
 	NSString				*_sourceFilename;	
 	int						_source;
 		
-	unsigned char			*_buf;
-	ssize_t					_bufsize;
-
-	int						_out;
-	lame_global_flags		*_gfp;
-
 	NSNumber				*_started;
 	NSNumber				*_completed;
 	NSNumber				*_stopped;
@@ -51,10 +33,10 @@
 	NSNumber				*_timeRemaining;
 }
 
-- (id) initWithSource:(NSString *) source;
+- (id)				initWithSource:(NSString *) source;
 
-- (ssize_t) encodeToFile:(NSString *) filename;
+- (ssize_t)			encodeToFile:(NSString *) filename;
 
-- (void) requestStop;
+- (void)			requestStop;
 
 @end
