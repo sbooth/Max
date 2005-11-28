@@ -46,19 +46,21 @@
 	NSNumber				*_copyPermitted;
 }
 
-- (NSString *)		getPreEmphasis;
-- (NSString *)		getCopyPermitted;
+- (NSString *)				getPreEmphasis;
+- (NSString *)				getCopyPermitted;
 
-- (NSNumber *)		getSize;
-- (NSColor *)		getColor;
+- (NSNumber *)				getSize;
+- (NSColor *)				getColor;
 
-- (unsigned)		getMinute;
-- (unsigned)		getSecond;
-- (unsigned)		getFrame;
+- (unsigned)				getMinute;
+- (unsigned)				getSecond;
+- (unsigned)				getFrame;
 
-- (NSString *)		getLength;
+- (NSString *)				getLength;
 
-- (void)			clearFreeDBData;
+- (void)					clearFreeDBData;
+
+- (CompactDiscDocument *)	getDiscDocument;
 
 // Save/Restore
 - (NSDictionary *)	getDictionary;

@@ -20,13 +20,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Task.h"
+#import "Track.h"
+#import "CompactDiscDocument.h"
+#import "RipperTask.h"
+#import "EncoderTask.h"
 
 @interface TaskMaster : NSWindowController
 {
     IBOutlet NSTextField	*_ripperStatusTextField;
     IBOutlet NSTextField	*_encoderStatusTextField;
-	NSMutableArray			*_taskList;
 	
 	NSMutableArray			*_rippingTasks;
 	NSMutableArray			*_encodingTasks;
@@ -34,18 +36,20 @@
 
 + (TaskMaster *) sharedController;
 
-- (void) runTask:(Task *) task;
-- (void) removeTask:(Task *) task;
+- (BOOL) hasActiveTasks;
+- (void) removeAllTasks;
+
+- (void) encodeTrack:(Track *)track outputBasename:(NSString *)basename;
 
 - (void) displayExceptionSheet:(NSException *) exception;
 - (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
 
-- (void) ripDidStart:(Task *) task;
-- (void) ripDidStop:(Task *) task;
-- (void) ripDidComplete:(Task *) task;
+- (void) ripDidStart:(RipperTask *) task;
+- (void) ripDidStop:(RipperTask *) task;
+- (void) ripDidComplete:(RipperTask *) task;
 
-- (void) encodeDidStart:(Task *) task;
-- (void) encodeDidStop:(Task *) task;
-- (void) encodeDidComplete:(Task *) task;
+- (void) encodeDidStart:(EncoderTask *) task;
+- (void) encodeDidStop:(EncoderTask *) task;
+- (void) encodeDidComplete:(EncoderTask *) task;
 
 @end

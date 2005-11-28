@@ -307,7 +307,7 @@
 
 - (NSString *) basenameForTrack:(Track *)track
 {
-	NSString		*filename;
+	NSString		*basename;
 	NSString		*outputDirectory;
 
 	
@@ -420,7 +420,7 @@
 			[customPath replaceOccurrencesOfString:@"{trackYear}" withString:[trackYear stringValue] options:nil range:NSMakeRange(0, [customPath length])];
 		}
 		
-		filename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
+		basename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
 		[customPath release];
 	}
 	// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
@@ -440,10 +440,10 @@
 		path = [NSString stringWithFormat:@"%@/Compilations/%@", outputDirectory, makeStringSafeForFilename(discTitle)]; 
 
 		if(nil == _discNumber) {
-			filename = [NSString stringWithFormat:@"%@/%02u %@", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 		else {
-			filename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 	}
 	// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
@@ -473,14 +473,14 @@
 		path = [NSString stringWithFormat:@"%@/%@/%@", outputDirectory, makeStringSafeForFilename(artist), makeStringSafeForFilename(discTitle)]; 
 		
 		if(nil == _discNumber) {
-			filename = [NSString stringWithFormat:@"%@/%02u %@", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 		else {
-			filename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 	}
 	
-	return filename;
+	return basename;
 }
 
 - (IBAction) encode:(id) sender
@@ -488,6 +488,7 @@
 	Track			*track;
 	NSArray			*selectedTracks;
 	NSEnumerator	*enumerator;
+	NSString		*basename;
 	NSString		*filename;
 	
 	@try {
@@ -502,35 +503,10 @@
 		
 		while((track = [enumerator nextObject])) {
 			
-			filename = [self basenameForTrack:track];			
-			filename = [filename stringByAppendingString:@".mp3"];
-			createDirectoryStructure(filename);
+			basename = [self basenameForTrack:track];			
+			createDirectoryStructure(basename);
 			
-			// Check if the output file exists
-			if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
-				NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-				[alert addButtonWithTitle:@"No"];
-				[alert addButtonWithTitle:@"Yes"];
-				[alert setMessageText:@"Overwrite existing file?"];
-				[alert setInformativeText:[NSString stringWithFormat:@"The file '%@' already exists.  Do you wish to replace it?", filename]];
-				[alert setAlertStyle:NSWarningAlertStyle];
-				
-				if(NSAlertSecondButtonReturn == [alert runModal]) {
-					// Remove the file
-					if(-1 == unlink([filename UTF8String])) {
-						@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-					}
-					
-					// Create and run the task
-					Task *task = [[[Task alloc] initWithDisc:self forTrack:track outputFilename:filename] autorelease];
-					[[TaskMaster sharedController] runTask:task];
-				}
-			}
-			else {
-				// Create and run the task
-				Task *task = [[[Task alloc] initWithDisc:self forTrack:track outputFilename:filename] autorelease];
-				[[TaskMaster sharedController] runTask:task];
-			}
+			[[TaskMaster sharedController] encodeTrack:track outputBasename:basename];
 		}
 	}
 	

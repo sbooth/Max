@@ -25,7 +25,6 @@
 
 #include <IOKit/storage/IOCDTypes.h>
 
-
 @implementation Track
 
 + (void)initialize 
@@ -60,7 +59,29 @@
 
 - (NSString *) description
 {
-	return [NSString stringWithFormat:@"%@ %@ %@", _number, _title, [self getLength]];
+	NSString			*discArtist			= [_disc valueForKey:@"artist"];
+	NSString			*trackArtist		= _artist;
+	NSString			*artist;
+	NSString			*trackTitle			= _title;
+	
+	artist = trackArtist;
+	if(nil == artist) {
+		artist = discArtist;
+		if(nil == artist) {
+			artist = @"Unknown Artist";
+		}
+	}
+	if(nil == trackTitle) {
+		trackTitle = @"Unknown Track";
+	}
+	
+	
+	if([[_disc valueForKey:@"multiArtist"] boolValue]) {
+		return [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
+	}
+	else {
+		return [NSString stringWithFormat:@"%@", trackTitle];		
+	}
 }
 
 #pragma mark Accessors
@@ -132,6 +153,11 @@
 	[self setValue:nil forKey:@"artist"];
 	[self setValue:nil forKey:@"year"];
 	[self setValue:nil forKey:@"genre"];
+}
+
+- (CompactDiscDocument *) getDiscDocument
+{
+	return _disc;
 }
 
 #pragma mark Save/Restore

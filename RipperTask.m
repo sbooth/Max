@@ -36,14 +36,15 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"RipperTask::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track trackName:(NSString *) trackName
+- (id) initWithTrack:(Track *)track
 {
 	char *path = NULL;
 	
 	@try {
 		if((self = [super init])) {
 			
-			[self setValue:trackName forKey:@"trackName"];
+			_track = [track retain];
+			[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
 			
 			// Create the output file
 			path = malloc((strlen(_PATH_TMP) + strlen(TEMPFILE_PATTERN) + 1) *  sizeof(char));
@@ -58,9 +59,8 @@
 				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
 			}
 			
-			_path = [NSString stringWithUTF8String:path];
-			
-			_ripper = [[Ripper alloc] initWithDisc:disc forTrack:track];
+			_path	= [[NSString stringWithUTF8String:path] retain];
+			_ripper = [[Ripper alloc] initWithTrack:track];
 		}
 	}
 	
@@ -77,6 +77,9 @@
 
 - (void) dealloc
 {
+	[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+	[_track release];
+	
 	close(_out);
 	if(-1 == _out) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];

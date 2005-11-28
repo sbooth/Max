@@ -19,6 +19,9 @@
  */
 
 #import "Ripper.h"
+#import "Track.h"
+#import "CompactDiscDocument.h"
+#import "CompactDisc.h"
 #import "MallocException.h"
 #import "StopException.h"
 #import "IOException.h"
@@ -299,13 +302,12 @@ enum {
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Ripper::init called" userInfo:nil];
 }
 
-- (id) initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track
+- (id) initWithTrack:(Track *)track
 {
 	if((self = [super init])) {
-
-		int paranoiaMode = PARANOIA_MODE_DISABLE;
+		int paranoiaLevel	= 0;
+		int paranoiaMode	= PARANOIA_MODE_DISABLE;
 		
-		_disc	= [disc retain];
 		_track	= [track retain];
 		
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"started"];
@@ -313,13 +315,13 @@ enum {
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
 		
 		// Setup cdparanoia
-		_drive		= [[_disc getDisc] getDrive];
+		_drive		= [[[_track getDiscDocument] getDisc] getDrive];
 		_paranoia	= paranoia_init(_drive);
 
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
 			paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
 			
-			NSString *paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
+			paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
 			
 			if(PARANOIA_LEVEL_FULL == paranoiaLevel) {
 			}
@@ -364,7 +366,6 @@ enum {
 {
 	paranoia_free(_paranoia);
 	
-	[_disc release];
 	[_track release];
 	
 	[super dealloc];

@@ -79,7 +79,7 @@
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
 {
-	if(0 != [[[TaskMaster sharedController] valueForKey:@"taskList"] count]) {
+	if([[TaskMaster sharedController] hasActiveTasks]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:@"OK"];
 		[alert addButtonWithTitle:@"Cancel"];
@@ -92,12 +92,7 @@
 		}
 		// Remove all tasks
 		else {
-			NSEnumerator *enumerator = [[[TaskMaster sharedController] valueForKey:@"taskList"] objectEnumerator];
-			Task *task;
-			
-			while((task = [enumerator nextObject])) {
-				[[TaskMaster sharedController] removeTask:task];
-			}		
+			[[TaskMaster sharedController] removeAllTasks];
 		}
 	}
 	

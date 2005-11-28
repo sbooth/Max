@@ -19,8 +19,6 @@
  */
 
 #import "EncoderTask.h"
-#import "MPEGEncoder.h"
-#import "FLACEncoder.h"
 #import "TaskMaster.h"
 #import "MallocException.h"
 #import "IOException.h"
@@ -33,15 +31,12 @@
 	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"EncoderTask::init called" userInfo:nil];
 }
 
-- (id) initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
+- (id) initWithSource:(NSString *) source target:(NSString *) target track:(Track *) track;
 {
 	if((self = [super init])) {
 		_target = [target retain];
-		
-		[self setValue:trackName forKey:@"trackName"];
-		
-//		_encoder = [[MPEGEncoder alloc] initWithSource:source];
-		_encoder = [[FLACEncoder alloc] initWithSource:source];
+		_track	= [track retain];
+
 		return self;
 	}
 	return nil;
@@ -50,9 +45,16 @@
 - (void) dealloc
 {
 	[_target release];
-	[_encoder release];
+	[_track release];
 	
 	[super dealloc];
+}
+
+- (void) removeSourceFile
+{
+	if(-1 == unlink([[_encoder valueForKey:@"sourceFilename"] UTF8String])) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete source file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}	
 }
 
 - (void) removeOutputFile

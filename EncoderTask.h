@@ -21,18 +21,20 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Encoder.h"
+#import "Track.h"
 
 @interface EncoderTask : NSObject 
 {
 	NSString			*_target;
 	Encoder				*_encoder;
-	NSString			*_trackName;
+	Track				*_track;
 }
 
-- (id)		initWithSource:(NSString *) source target:(NSString *) target trackName:(NSString *) trackName;
+- (id)		initWithSource:(NSString *) source target:(NSString *) target track:(Track *) track;
 
 - (void)	run:(id) object;
 - (void)	stop;
+- (void)	removeSourceFile;
 - (void)	removeOutputFile;
 
 @end

@@ -20,26 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDiscDocument.h"
 #import "Track.h"
 
 #include "cdparanoia/interface/cdda_interface.h"
 #include "cdparanoia/paranoia/cdda_paranoia.h"
 
-/*
- @protocol Ripper
- 
- - (void) setDisc:(CompactDisc *) disc;
- - (void) setTrack:(Track *) track;
- - (void) ripToFile:(int) file;
- - (void) requestStop; 
- 
- @end
- */
-
 @interface Ripper : NSObject 
 {
-	CompactDiscDocument		*_disc;
 	Track					*_track;
 
 	cdrom_paranoia			*_paranoia;
@@ -58,10 +45,10 @@
 	NSString				*_timeRemaining;
 }
 
-- (id)		initWithDisc:(CompactDiscDocument *) disc forTrack:(Track *) track;
+- (id)		initWithTrack:(Track *)track;
 
 - (void)	requestStop;
 
-- (void)	ripToFile:(int) file;
+- (void)	ripToFile:(int)file;
 
 @end
