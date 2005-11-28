@@ -22,7 +22,6 @@
 
 @interface LAMEException : NSException 
 {
-	
 }
 
 + (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;

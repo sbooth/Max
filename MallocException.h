@@ -21,8 +21,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface MallocException : NSException 
-{
-	
+{	
 }
 
 + (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;

@@ -22,7 +22,6 @@
 
 @interface MissingResourceException : NSException 
 {
-	
 }
 
 + (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;

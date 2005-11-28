@@ -5,7 +5,7 @@
 	<key>paranoiaEnable</key>
 	<true/>
 	<key>paranoiaLevel</key>
-	<string>Full paranoia</string>
+	<integer>0</integer>
 	<key>paranoiaNeverSkip</key>
 	<false/>
 	<key>paranoiaMaximumRetries</key>

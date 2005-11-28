@@ -39,6 +39,19 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 - (ssize_t) finishEncode;
 @end
 
+// Tag values for NSPopupButton
+enum {
+	LAME_TARGET_BITRATE						= 0,
+	LAME_TARGET_QUALITY						= 1,
+	
+	LAME_ENCODING_ENGINE_QUALITY_FAST		= 0,
+	LAME_ENCODING_ENGINE_QUALITY_STANDARD	= 1,
+	LAME_ENCODING_ENGINE_QUALITY_HIGH		= 2,
+	
+	LAME_VARIABLE_BITRATE_MODE_STANDARD		= 0,
+	LAME_VARIABLE_BITRATE_MODE_FAST			= 1
+};
+
 @implementation MPEGEncoder
 
 + (void) initialize
@@ -63,7 +76,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 
 - (id) initWithSource:(NSString *) source
 {
-	NSString	*quality;
+	int			quality;
 	int			bitrate;
 	int			lameResult;
 	
@@ -90,19 +103,19 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			// Set encoding properties from user defaults
 			lame_set_mode(_gfp, [[NSUserDefaults standardUserDefaults] boolForKey:@"lameMonoEncoding"] ? MONO : JOINT_STEREO);
 			
-			quality = [[NSUserDefaults standardUserDefaults] stringForKey:@"lameEncodingEngineQuality"];
-			if([quality isEqualToString:@"Fast"]) {
+			quality = [[NSUserDefaults standardUserDefaults] integerForKey:@"lameEncodingEngineQuality"];
+			if(LAME_ENCODING_ENGINE_QUALITY_FAST == quality) {
 				lame_set_quality(_gfp, 7);
 			}
-			else if([quality isEqualToString:@"Standard"]) {
+			else if(LAME_ENCODING_ENGINE_QUALITY_STANDARD == quality) {
 				lame_set_quality(_gfp, 5);
 			}
-			else if([quality isEqualToString:@"High"]) {
+			else if(LAME_ENCODING_ENGINE_QUALITY_HIGH == quality) {
 				lame_set_quality(_gfp, 2);
 			}
 			
 			// Target is bitrate
-			if([[[NSUserDefaults standardUserDefaults] stringForKey:@"lameTarget"] isEqualToString:@"Bitrate"]) {
+			if(LAME_TARGET_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
 				bitrate = maxBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"lameBitrate"]];
 				lame_set_brate(_gfp, bitrate);
 				if([[NSUserDefaults standardUserDefaults] boolForKey:@"lameUseConstantBitrate"]) {
@@ -115,7 +128,7 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 			}
 			// Target is quality
 			else {
-				lame_set_VBR(_gfp, [[[NSUserDefaults standardUserDefaults] stringForKey:@"lameVariableBitrateMode"] isEqualToString:@"Fast"] ? vbr_mtrh : vbr_rh);
+				lame_set_VBR(_gfp, LAME_VARIABLE_BITRATE_MODE_FAST == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVariableBitrateMode"] ? vbr_mtrh : vbr_rh);
 				lame_set_preset(_gfp, 400 + [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]);
 			}
 			
@@ -131,8 +144,6 @@ static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 
 		if(0 != _gfp) {
 			lame_close(_gfp);
 		}
-		
-		free(_buf);
 		
 		@throw;
 	}

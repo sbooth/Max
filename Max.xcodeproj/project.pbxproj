@@ -39,6 +39,10 @@
 		8CA5229F0938E5DD00250BE8 /* Log.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA5229E0938E5DD00250BE8 /* Log.nib */; };
 		8CA8C03E093A5F2B00FDA506 /* MPEGEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */; };
 		8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */; };
+		8CB0AE64093AE12100968F66 /* FLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */; };
+		8CB0AE79093AE1E500968F66 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0AE78093AE1E500968F66 /* libFLAC.a */; };
+		8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0AED8093AE96C00968F66 /* FLACException.m */; };
+		8CB0AF3B093AEAEE00968F66 /* FLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
 		8CB6E20108DACB8100345B8F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING */; };
 		8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */; };
@@ -177,6 +181,12 @@
 		8CA8C03B093A5F2B00FDA506 /* MPEGEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEGEncoder.h; sourceTree = "<group>"; };
 		8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEGEncoder.m; sourceTree = "<group>"; };
 		8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
+		8CB0AE61093AE12000968F66 /* FLACEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACEncoder.h; sourceTree = "<group>"; };
+		8CB0AE62093AE12000968F66 /* FLACEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACEncoder.m; sourceTree = "<group>"; };
+		8CB0AE78093AE1E500968F66 /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFLAC.a; sourceTree = "<group>"; };
+		8CB0AED7093AE96C00968F66 /* FLACException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACException.h; sourceTree = "<group>"; };
+		8CB0AED8093AE96C00968F66 /* FLACException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACException.m; sourceTree = "<group>"; };
+		8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = FLACDefaults.plist; sourceTree = "<group>"; };
 		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
 		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
@@ -244,6 +254,7 @@
 				8C22FA27092DA69800566739 /* libcddb.a in Frameworks */,
 				8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */,
 				8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */,
+				8CB0AE79093AE1E500968F66 /* libFLAC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +264,8 @@
 		080E96DDFE201D6D7F000001 /* Encoder */ = {
 			isa = PBXGroup;
 			children = (
+				8CB0AE61093AE12000968F66 /* FLACEncoder.h */,
+				8CB0AE62093AE12000968F66 /* FLACEncoder.m */,
 				8CA8C03B093A5F2B00FDA506 /* MPEGEncoder.h */,
 				8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */,
 				8CB6DE8908DA844000345B8F /* Encoder.h */,
@@ -346,6 +359,7 @@
 				8C8B0DA1092E641200418C45 /* MacPAD.url */,
 				8C8B0EC8092E710200418C45 /* UpdateChecker.nib */,
 				8CA5229E0938E5DD00250BE8 /* Log.nib */,
+				8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -438,6 +452,7 @@
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8CB0AE78093AE1E500968F66 /* libFLAC.a */,
 				8CE164600933D42700A99A68 /* libcdda_paranoia.a */,
 				8CE164610933D42700A99A68 /* libcdda_interface.a */,
 				8CA382EC0924598D00BDFD02 /* libcddb.a */,
@@ -468,6 +483,8 @@
 				8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */,
 				8CBB8BCB08EFB0BF007197C3 /* MissingResourceException.h */,
 				8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */,
+				8CB0AED7093AE96C00968F66 /* FLACException.h */,
+				8CB0AED8093AE96C00968F66 /* FLACException.m */,
 			);
 			name = Exceptions;
 			sourceTree = "<group>";
@@ -581,6 +598,7 @@
 				8CFD2009093560E400F3FF51 /* CD.icns in Resources */,
 				8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */,
 				8CA5229F0938E5DD00250BE8 /* Log.nib in Resources */,
+				8CB0AF3B093AEAEE00968F66 /* FLACDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,6 +647,8 @@
 				8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */,
 				8CA522790938E44100250BE8 /* LogController.m in Sources */,
 				8CA8C03E093A5F2B00FDA506 /* MPEGEncoder.m in Sources */,
+				8CB0AE64093AE12100968F66 /* FLACEncoder.m in Sources */,
+				8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -675,6 +695,7 @@
 				HEADER_SEARCH_PATHS = (
 					./include,
 					./include/taglib,
+					./include/FLAC,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -698,6 +719,7 @@
 				HEADER_SEARCH_PATHS = (
 					./include,
 					./include/taglib,
+					./include/FLAC,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -719,6 +741,7 @@
 				HEADER_SEARCH_PATHS = (
 					./include,
 					./include/taglib,
+					./include/FLAC,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";

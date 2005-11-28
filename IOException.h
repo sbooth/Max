@@ -22,7 +22,6 @@
 
 @interface IOException : NSException 
 {
-	
 }
 
 + (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;

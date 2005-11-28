@@ -22,7 +22,6 @@
 
 @interface ParanoiaException : NSException 
 {
-	
 }
 
 + (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;

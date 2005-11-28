@@ -276,7 +276,7 @@ static TaskMaster *sharedController = nil;
 	[self removeEncodingTask:[task valueForKey:@"encoderTask"]];
 	[self spawnEncoderThreads];
 	
-	[Tagger tagFile:[task valueForKey:@"filename"] fromTrack:[task valueForKey:@"track"]];
+//	[Tagger tagFile:[task valueForKey:@"filename"] fromTrack:[task valueForKey:@"track"]];
 	[[task valueForKey:@"track"] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
 	[self removeTask:task];				
 }

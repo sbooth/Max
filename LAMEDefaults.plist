@@ -5,18 +5,18 @@
 	<key>lameBitrate</key>
 	<real>8</real>
 	<key>lameEncodingEngineQuality</key>
-	<string>High</string>
+	<integer>2</integer>
 	<key>lameMonoEncoding</key>
 	<false/>
 	<key>lameQuality</key>
 	<real>4</real>
 	<key>lameTarget</key>
-	<string>Bitrate</string>
+	<integer>0</integer>
 	<key>lameUseConstantBitrate</key>
 	<false/>
 	<key>lameVBRQuality</key>
 	<real>80</real>
 	<key>lameVariableBitrateMode</key>
-	<string>Standard</string>
+	<integer>1</integer>
 </dict>
 </plist>

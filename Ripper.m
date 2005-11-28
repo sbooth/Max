@@ -266,6 +266,11 @@ callback(long inpos, int function)
 #endif
 }
 
+// Tag values for NSPopupButton
+enum {
+	PARANOIA_LEVEL_FULL					= 0,
+	PARANOIA_LEVEL_OVERLAP_CHECKING		= 1
+};
 
 @implementation Ripper
 
@@ -314,11 +319,11 @@ callback(long inpos, int function)
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
 			paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
 			
-			NSString *paranoiaLevel = [[NSUserDefaults standardUserDefaults] stringForKey:@"paranoiaLevel"];
+			NSString *paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
 			
-			if([paranoiaLevel isEqualToString:@"Full paranoia"]) {
+			if(PARANOIA_LEVEL_FULL == paranoiaLevel) {
 			}
-			else if([paranoiaLevel isEqualToString:@"Overlap checking"]) {
+			else if(PARANOIA_LEVEL_OVERLAP_CHECKING == paranoiaLevel) {
 				paranoiaMode |= PARANOIA_MODE_OVERLAP;
 				paranoiaMode &= ~PARANOIA_MODE_VERIFY;
 			}

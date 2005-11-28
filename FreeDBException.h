@@ -22,7 +22,6 @@
 
 @interface FreeDBException : NSException 
 {
-
 }
 
 + (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;

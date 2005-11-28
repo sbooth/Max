@@ -20,13 +20,11 @@
 
 #import "EncoderTask.h"
 #import "MPEGEncoder.h"
+#import "FLACEncoder.h"
 #import "TaskMaster.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
-
-#include <paths.h>			//_PATH_TMP
-#include <unistd.h>			// mkstemp
 
 @implementation EncoderTask
 
@@ -42,9 +40,11 @@
 		
 		[self setValue:trackName forKey:@"trackName"];
 		
-		_encoder = [[MPEGEncoder alloc] initWithSource:source];
+//		_encoder = [[MPEGEncoder alloc] initWithSource:source];
+		_encoder = [[FLACEncoder alloc] initWithSource:source];
+		return self;
 	}
-	return self;
+	return nil;
 }
 
 - (void) dealloc

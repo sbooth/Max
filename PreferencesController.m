@@ -65,6 +65,7 @@ static PreferencesController *sharedPreferences = nil;
 		}
 	    
 		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"customNamingUseFallback", @"customTrackColor", 
+			@"outputMP3", @"outputFLAC", @"outputOgg",
 			@"freeDBPort", @"freeDBProtocol", @"freeDBServer", 
 			@"paranoiaEnable", @"paranoiaLevel", @"paranoiaNeverSkip", @"paranoiaMaximumRetries",
 			@"lameBitrate", @"lameEncodingEngineQuality", @"lameMonoEncoding", 

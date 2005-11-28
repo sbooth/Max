@@ -26,7 +26,6 @@
 #import "LogController.h"
 #import "UpdateChecker.h"
 #import "IOException.h"
-#import "StringValueTransformer.h"
 #import "FreeDBProtocolValueTransformer.h";
 #import "BooleanArrayValueTransformer.h";
 #import "NegateBooleanArrayValueTransformer.h";
@@ -39,12 +38,6 @@
 {
 	// Set up the ValueTransformers
 	NSValueTransformer			*transformer;
-	
-	transformer = [[[StringValueTransformer alloc] initWithTarget:@"Bitrate"] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"LAMETargetIsBitrate"];
-	
-	transformer = [[[StringValueTransformer alloc] initWithTarget:@"Quality"] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"LAMETargetIsQuality"];
 	
 	transformer = [[[FreeDBProtocolValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"FreeDBProtocolValueTransformer"];
