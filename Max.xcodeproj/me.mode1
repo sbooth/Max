@@ -185,48 +185,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>8CA8C265093DBDA000CDA226</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>FLACEncoder.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>8CA8C266093DBDA000CDA226</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>FLACEncoder.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>8CA8C28C093DBF7300CDA226</string>
-						<key>history</key>
-						<array>
-							<string>8CA8C25F093DBD7500CDA226</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {875, 732}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>38 33 875 773 0 0 1280 832 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -559,6 +518,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>8CA8C154093DAA4A00CDA226</string>
 		<string>8CA8BFF4093D9BE000CDA226</string>
 		<string>8CA8BFF5093D9BE000CDA226</string>
@@ -567,9 +527,8 @@
 		<string>8CA8BFF2093D9BE000CDA226</string>
 		<string>8CA8BFD0093D9A0A00CDA226</string>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>/Users/me/Development/Max/Max.xcodeproj</string>
-		<string>8CA8C265093DBDA000CDA226</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>718 279 520 548 0 0 1280 832 </string>
@@ -791,12 +750,14 @@
 							<key>Dock</key>
 							<array>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>CompactDiscDocument.m</string>
+										<string>FLACEncoder.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -817,8 +778,6 @@
 							<string>370pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -854,8 +813,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>8CA8BD40093D750B00CDA226</string>
-				<string>8CA8BD41093D750B00CDA226</string>
+				<string>8CA8C2A2093DC11300CDA226</string>
+				<string>8CA8C2A3093DC11300CDA226</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>

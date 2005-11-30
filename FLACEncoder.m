@@ -117,13 +117,13 @@
 	
 	// Initialize the FLAC encoder
 	if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(NO == FLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(FLAC__FILE_ENCODER_OK != FLAC__file_encoder_init(_flac)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	
 	// Iteratively get the PCM data and encode it
@@ -196,9 +196,9 @@
 		// Encode the chunk
 		flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);
 		
-		if(FLAC__FILE_ENCODER_OK > flacResult) {
+		if(NO == flacResult) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [FLACException exceptionWithReason:@"FLAC encoding error" userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 	}
 	

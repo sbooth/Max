@@ -330,6 +330,9 @@
 			8CA8C286093DBF0600CDA226 /* PBXTextBookmark */ = 8CA8C286093DBF0600CDA226 /* PBXTextBookmark */;
 			8CA8C287093DBF3D00CDA226 /* PBXTextBookmark */ = 8CA8C287093DBF3D00CDA226 /* PBXTextBookmark */;
 			8CA8C28C093DBF7300CDA226 /* PBXTextBookmark */ = 8CA8C28C093DBF7300CDA226 /* PBXTextBookmark */;
+			8CA8C29E093DC11300CDA226 /* PBXTextBookmark */ = 8CA8C29E093DC11300CDA226 /* PBXTextBookmark */;
+			8CA8C2A0093DC11300CDA226 /* PBXTextBookmark */ = 8CA8C2A0093DC11300CDA226 /* PBXTextBookmark */;
+			8CA8C2A1093DC11300CDA226 /* PBXTextBookmark */ = 8CA8C2A1093DC11300CDA226 /* PBXTextBookmark */;
 			8CBEC73508ED8D980064F794 /* PBXTextBookmark */ = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
 			8CBEC73708ED8D980064F794 /* PBXTextBookmark */ = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */ = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
@@ -775,7 +778,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 538;
 		vrLoc = 7040;
@@ -789,7 +792,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 523;
 		vrLoc = 6990;
@@ -799,7 +802,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: exceptionWithReason";
 		rLen = 0;
-		rLoc = 4783;
+		rLoc = 4816;
 		rType = 0;
 		vrLen = 1433;
 		vrLoc = 1663;
@@ -809,7 +812,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 202";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 1336;
 		vrLoc = 6731;
@@ -819,7 +822,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 202";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 1336;
 		vrLoc = 6731;
@@ -829,7 +832,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 614;
 		vrLoc = 7399;
@@ -847,7 +850,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "int\t\t\t\t\t\trawPCM [2][];";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 465;
 		vrLoc = 6323;
@@ -857,7 +860,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 170";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 461;
 		vrLoc = 6323;
@@ -875,7 +878,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 170";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 461;
 		vrLoc = 6323;
@@ -895,7 +898,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 209";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 1562;
 		vrLoc = 6728;
@@ -905,7 +908,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 209";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 1562;
 		vrLoc = 6728;
@@ -1019,7 +1022,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, (const FLAC__int32 * const)rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 625;
 		vrLoc = 7415;
@@ -1053,7 +1056,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, (const FLAC__int32 * const)rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 625;
 		vrLoc = 7415;
@@ -1063,7 +1066,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 211";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 1405;
 		vrLoc = 6668;
@@ -1081,7 +1084,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "int\t\t\t\t\t\trawPCM [][2];";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 465;
 		vrLoc = 6323;
@@ -1099,7 +1102,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "int\t\t\t\t\t\trawPCM [2][];";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 465;
 		vrLoc = 6323;
@@ -1109,7 +1112,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 170";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 464;
 		vrLoc = 6323;
@@ -1127,7 +1130,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 170";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 464;
 		vrLoc = 6323;
@@ -1193,7 +1196,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, foo, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 597;
 		vrLoc = 7435;
@@ -1203,7 +1206,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 212";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 611;
 		vrLoc = 7435;
@@ -1221,7 +1224,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 212";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 611;
 		vrLoc = 7435;
@@ -1241,7 +1244,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 211";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 1354;
 		vrLoc = 6731;
@@ -1251,7 +1254,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 213";
 		rLen = 0;
-		rLoc = 7598;
+		rLoc = 7688;
 		rType = 0;
 		vrLen = 1178;
 		vrLoc = 6585;
@@ -1271,7 +1274,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 210";
 		rLen = 0;
-		rLoc = 7598;
+		rLoc = 7688;
 		rType = 0;
 		vrLen = 1222;
 		vrLoc = 6505;
@@ -1313,7 +1316,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 538;
 		vrLoc = 7040;
@@ -1323,7 +1326,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 168";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 1298;
 		vrLoc = 6336;
@@ -1353,7 +1356,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 524;
 		vrLoc = 7035;
@@ -1363,7 +1366,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 524;
 		vrLoc = 7035;
@@ -1383,7 +1386,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 524;
 		vrLoc = 7035;
@@ -1407,7 +1410,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 524;
 		vrLoc = 7035;
@@ -1425,7 +1428,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7568;
+		rLoc = 7658;
 		rType = 0;
 		vrLen = 524;
 		vrLoc = 7035;
@@ -1919,7 +1922,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, chunk, numSamples / 2);";
 		rLen = 0;
-		rLoc = 7565;
+		rLoc = 7655;
 		rType = 0;
 		vrLen = 602;
 		vrLoc = 6168;
@@ -1929,7 +1932,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 211";
 		rLen = 0;
-		rLoc = 7565;
+		rLoc = 7655;
 		rType = 0;
 		vrLen = 725;
 		vrLoc = 6162;
@@ -1943,7 +1946,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 189";
 		rLen = 0;
-		rLoc = 7131;
+		rLoc = 7164;
 		rType = 0;
 		vrLen = 1345;
 		vrLoc = 6165;
@@ -1953,7 +1956,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 211";
 		rLen = 0;
-		rLoc = 7565;
+		rLoc = 7655;
 		rType = 0;
 		vrLen = 725;
 		vrLoc = 6162;
@@ -1963,7 +1966,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 195";
 		rLen = 0;
-		rLoc = 7228;
+		rLoc = 7261;
 		rType = 0;
 		vrLen = 1431;
 		vrLoc = 6165;
@@ -1973,7 +1976,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 182";
 		rLen = 0;
-		rLoc = 7565;
+		rLoc = 7655;
 		rType = 0;
 		vrLen = 1929;
 		vrLoc = 4855;
@@ -1983,7 +1986,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 182";
 		rLen = 0;
-		rLoc = 7565;
+		rLoc = 7655;
 		rType = 0;
 		vrLen = 1929;
 		vrLoc = 4855;
@@ -1993,7 +1996,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 182";
 		rLen = 0;
-		rLoc = 7565;
+		rLoc = 7655;
 		rType = 0;
 		vrLen = 616;
 		vrLoc = 6162;
@@ -2003,7 +2006,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 195";
 		rLen = 0;
-		rLoc = 7154;
+		rLoc = 7187;
 		rType = 0;
 		vrLen = 1286;
 		vrLoc = 6316;
@@ -2013,7 +2016,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 194";
 		rLen = 0;
-		rLoc = 7154;
+		rLoc = 7187;
 		rType = 0;
 		vrLen = 1201;
 		vrLoc = 6314;
@@ -2023,7 +2026,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 211";
 		rLen = 0;
-		rLoc = 7565;
+		rLoc = 7655;
 		rType = 0;
 		vrLen = 725;
 		vrLoc = 6162;
@@ -2033,10 +2036,37 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "FLACEncoder.m: 190";
 		rLen = 0;
-		rLoc = 7041;
+		rLoc = 7074;
 		rType = 0;
 		vrLen = 1254;
 		vrLoc = 6314;
+	};
+	8CA8C29E093DC11300CDA226 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
+		name = "FLACEncoder.m: 215";
+		rLen = 0;
+		rLoc = 7655;
+		rType = 0;
+		vrLen = 747;
+		vrLoc = 6162;
+	};
+	8CA8C2A0093DC11300CDA226 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
+		rLen = 6;
+		rLoc = 7368;
+		rType = 0;
+	};
+	8CA8C2A1093DC11300CDA226 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
+		name = "FLACEncoder.m: 200";
+		rLen = 0;
+		rLoc = 7356;
+		rType = 0;
+		vrLen = 580;
+		vrLoc = 6916;
 	};
 	8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */ = {
 		uiCtxt = {
@@ -2056,9 +2086,9 @@
 	};
 	8CB0AE62093AE12000968F66 /* FLACEncoder.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {986, 3052}}";
-			sepNavSelRange = "{7041, 0}";
-			sepNavVisRect = "{{0, 2310}, {830, 700}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1016, 3052}}";
+			sepNavSelRange = "{5890, 25}";
+			sepNavVisRect = "{{0, 1880}, {830, 700}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -2081,7 +2111,7 @@
 	8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {830, 700}}";
-			sepNavSelRange = "{0, 0}";
+			sepNavSelRange = "{180, 0}";
 			sepNavVisRect = "{{0, 0}, {830, 700}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
@@ -2208,9 +2238,9 @@
 	};
 	8CBB8BA708EFAE60007197C3 /* FreeDBDefaults.plist */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {719, 657}}";
-			sepNavSelRange = "{284, 0}";
-			sepNavVisRect = "{{0, 0}, {719, 657}}";
+			sepNavIntBoundsRect = "{{0, 0}, {719, 713}}";
+			sepNavSelRange = "{0, 355}";
+			sepNavVisRect = "{{0, 0}, {719, 713}}";
 			sepNavWindowFrame = "{{38, 20}, {764, 786}}";
 		};
 	};

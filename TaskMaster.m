@@ -422,7 +422,7 @@ static TaskMaster *sharedController = nil;
 	NSString	*type			= [task getType];
 
 	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode started for %@ [%@]", trackName, type]];
-	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[NSString stringWithFormat:@"%@ [%@]", trackName, type]
+	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
@@ -432,7 +432,7 @@ static TaskMaster *sharedController = nil;
 	NSString	*type			= [task getType];
 
 	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode stopped for %@ [%@]", trackName, type]];
-	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[NSString stringWithFormat:@"%@ [%@]", trackName, type]
+	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
 	[task removeOutputFile];
@@ -447,7 +447,7 @@ static TaskMaster *sharedController = nil;
 	NSString	*type			= [task getType];
 	
 	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];
-	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@ [%@]", trackName, type]
+	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	
 
