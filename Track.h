@@ -25,6 +25,8 @@
 @interface Track : NSObject 
 {
 	NSNumber				*_ripInProgress;
+	unsigned				_activeEncoders;
+//	NSNumber				*_encodeInProgress;
 	CompactDiscDocument		*_disc;
 
 	// View properties
@@ -61,6 +63,10 @@
 - (void)					clearFreeDBData;
 
 - (CompactDiscDocument *)	getDiscDocument;
+
+- (void)					encodeStarted;
+- (void)					encodeCompleted;
+- (NSNumber *)				encodeInProgress;
 
 // Save/Restore
 - (NSDictionary *)	getDictionary;

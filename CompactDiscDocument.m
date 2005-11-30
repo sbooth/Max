@@ -28,7 +28,6 @@
 #import "Genres.h"
 #import "TaskMaster.h"
 #import "Encoder.h"
-#import "Tagger.h"
 
 #import "MallocException.h"
 #import "IOException.h"
@@ -286,7 +285,7 @@
 	unsigned	i;
 	
 	for(i = 0; i < [_tracks count]; ++i) {
-		if(NO == [[[_tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue]) {
+		if(NO == [[[_tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue] && NO == [[[_tracks objectAtIndex:i] valueForKey:@"encodeInProgress"] boolValue]) {
 			[[_tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
 		}
 	}
@@ -297,7 +296,7 @@
 	unsigned	i;
 	
 	for(i = 0; i < [_tracks count]; ++i) {
-		if(NO == [[[_tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue]) {
+		if(NO == [[[_tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue] && NO == [[[_tracks objectAtIndex:i] valueForKey:@"encodeInProgress"] boolValue]) {
 			[[_tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
 		}
 	}

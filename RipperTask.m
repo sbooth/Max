@@ -90,10 +90,6 @@
 	@try {
 		[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
 		[_ripper ripToFile:_out];
-		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
-		if(-1 == close(_out)) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}		
 	}
 	
 	@catch(StopException *exception) {
@@ -104,6 +100,10 @@
 	}
 	
 	@finally {
+		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+		if(-1 == close(_out)) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}		
 		[pool release];
 	}
 }

@@ -258,7 +258,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -282,7 +282,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>722 279 520 548 0 0 1280 832 </string>
+						<string>720 279 520 548 0 0 1280 832 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -335,7 +335,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {312, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>722 279 520 548 0 0 1280 832 </string>
+								<string>720 279 520 548 0 0 1280 832 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -357,7 +357,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {312, 502}}</string>
 								<key>RubberWindowFrame</key>
-								<string>722 279 520 548 0 0 1280 832 </string>
+								<string>720 279 520 548 0 0 1280 832 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -517,12 +517,19 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>8CA8BDAD093D7B5800CDA226</string>
+		<string>8CA8BDAE093D7B5800CDA226</string>
+		<string>8C9D1F4208C5287A00D95535</string>
+		<string>1CD10A99069EF8BA00B06720</string>
+		<string>8CA8BDAB093D7B5800CDA226</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
+		<string>8CA8BD37093D74F300CDA226</string>
 		<string>8C191A4608C515A500CB7453</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 	</array>
 	<key>WindowString</key>
-	<string>722 279 520 548 0 0 1280 832 </string>
+	<string>720 279 520 548 0 0 1280 832 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -538,12 +545,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>cddb_disc.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -641,8 +650,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {281, 136}}</string>
-											<string>{{281, 0}, {999, 136}}</string>
+											<string>{{0, 0}, {256, 131}}</string>
+											<string>{{256, 0}, {1024, 131}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -657,8 +666,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {1280, 136}}</string>
-											<string>{{0, 136}, {1280, 595}}</string>
+											<string>{{0, 0}, {1280, 131}}</string>
+											<string>{{0, 131}, {1280, 600}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -705,14 +714,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>8CB0AF46093AEB3A00968F66</string>
+				<string>8CA8BDA5093D7B5800CDA226</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>8CB0AF47093AEB3A00968F66</string>
-				<string>8CB0AF48093AEB3A00968F66</string>
-				<string>8CB0AF49093AEB3A00968F66</string>
-				<string>8CB0AF4A093AEB3A00968F66</string>
-				<string>8CB0AF4B093AEB3A00968F66</string>
-				<string>8CB0AF4C093AEB3A00968F66</string>
+				<string>8CA8BDA6093D7B5800CDA226</string>
+				<string>8CA8BDA7093D7B5800CDA226</string>
+				<string>8CA8BDA8093D7B5800CDA226</string>
+				<string>8CA8BDA9093D7B5800CDA226</string>
+				<string>8CA8BDAA093D7B5800CDA226</string>
+				<string>8CA8BDAB093D7B5800CDA226</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>
@@ -744,7 +753,7 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>RipperTask.m</string>
+										<string>CompactDiscDocument.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -802,8 +811,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>8CB0AEF2093AE9D100968F66</string>
-				<string>8CB0AEF3093AE9D100968F66</string>
+				<string>8CA8BD40093D750B00CDA226</string>
+				<string>8CA8BD41093D750B00CDA226</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
@@ -866,7 +875,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>8C9D1F4208C5287A00D95535</string>
-				<string>8CB0AF4D093AEB3A00968F66</string>
+				<string>8CA8BDAC093D7B5800CDA226</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>WindowString</key>
@@ -1072,8 +1081,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBottomSmartGroupGIDs</key>
@@ -1136,6 +1143,8 @@
 							<string>185pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -1175,8 +1184,8 @@
 			<true/>
 			<key>TableOfContents</key>
 			<array>
-				<string>8CB0B223093B0CD000968F66</string>
-				<string>8CB0B224093B0CD000968F66</string>
+				<string>8CA8BD37093D74F300CDA226</string>
+				<string>8CA8BD38093D74F300CDA226</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
 				<string>1CA1AED706398EBD00589147</string>
 			</array>
@@ -1185,7 +1194,7 @@
 			<key>WindowString</key>
 			<string>21 400 744 409 0 0 1280 832 </string>
 			<key>WindowToolGUID</key>
-			<string>8CB0B223093B0CD000968F66</string>
+			<string>8CA8BD37093D74F300CDA226</string>
 			<key>WindowToolIsVisible</key>
 			<false/>
 		</dict>

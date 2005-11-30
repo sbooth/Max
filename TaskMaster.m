@@ -445,7 +445,6 @@ static TaskMaster *sharedController = nil;
 {
 	NSString	*trackName		= [[task valueForKey:@"track"] description];
 	NSString	*type			= [task getType];
-	Track		*track			= [task valueForKey:@"track"];
 	
 	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@ [%@]", trackName, type]
@@ -454,8 +453,6 @@ static TaskMaster *sharedController = nil;
 
 	[self removeEncodingTask:task];
 	[self spawnEncoderThreads];
-	
-	[track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
 }
 
 @end

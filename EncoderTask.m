@@ -64,6 +64,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	@try {
+		[_track encodeStarted];
 		[_encoder encodeToFile:_target];
 		[self writeTags];
 	}
@@ -76,6 +77,10 @@
 	}
 	
 	@finally {
+		[_track encodeCompleted];
+		if(NO == [[_track encodeInProgress] boolValue]) {
+			[_track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+		}
 		[pool release];
 	}
 }

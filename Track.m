@@ -57,6 +57,15 @@
 	}
 }
 
+- (id) init
+{
+	if((self = [super init])) {
+		_activeEncoders = 0;
+		return self;
+	}
+	return nil;
+}
+
 - (NSString *) description
 {
 	NSString			*discArtist			= [_disc valueForKey:@"artist"];
@@ -158,6 +167,25 @@
 - (CompactDiscDocument *) getDiscDocument
 {
 	return _disc;
+}
+
+- (void)					encodeStarted
+{
+	[self willChangeValueForKey:@"encodeInProgress"];
+	++_activeEncoders;
+	[self didChangeValueForKey:@"encodeInProgress"];
+}
+
+- (void)					encodeCompleted
+{
+	[self willChangeValueForKey:@"encodeInProgress"];
+	--_activeEncoders;
+	[self didChangeValueForKey:@"encodeInProgress"];
+}
+
+- (NSNumber *)				encodeInProgress
+{
+	return [NSNumber numberWithBool:(0 != _activeEncoders)];
 }
 
 #pragma mark Save/Restore
