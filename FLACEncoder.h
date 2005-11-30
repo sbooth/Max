@@ -25,8 +25,8 @@
 
 @interface FLACEncoder : Encoder
 {
-	unsigned char			*_buf;
-	ssize_t					_bufsize;
+	int16_t					*_buf;
+	ssize_t					_buflen;
 
 	FLAC__FileEncoder		*_flac;
 }

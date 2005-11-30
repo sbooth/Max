@@ -35,7 +35,7 @@
 static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
 
 @interface MPEGEncoder (Private)
-- (ssize_t) encodeChunk:(unsigned char *) chunk chunkSize:(ssize_t) chunkSize;
+- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
 - (ssize_t) finishEncode;
 @end
 
@@ -190,8 +190,8 @@ enum {
 	}
 	
 	// Allocate the buffer
-	_bufsize		= 1024 * 1024;
-	_buf			= (unsigned char *) calloc(_bufsize, sizeof(unsigned char));
+	_buflen			= 1024 * 512;
+	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
@@ -216,10 +216,14 @@ enum {
 		}
 		
 		// Read a chunk of PCM input
-		bytesRead = read(_source, _buf, (bytesToRead > _bufsize ? _bufsize : bytesToRead));
+		bytesRead = read(_source, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+		if(-1 == bytesRead) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}
 		
 		// Encode the PCM data
-		bytesWritten += [self encodeChunk:_buf chunkSize:bytesRead];
+		bytesWritten += [self encodeChunk:_buf numSamples:bytesRead / 2];
 		
 		// Update status
 		bytesToRead -= bytesRead;
@@ -262,58 +266,27 @@ enum {
 	return bytesWritten;
 }
 
-- (ssize_t) encodeChunk:(unsigned char *) chunk chunkSize:(ssize_t) chunkSize;
+- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
 {
-	int						*leftPCM,		*left;
-	int						*rightPCM,		*right;
-	int						numSamples;
-	
-	const unsigned char		*iter,			*limit;
-	unsigned char			temp;
-	
-	unsigned char			*buf;
-	int						bufSize;
-	
-	int						lameResult;
-	long					bytesWritten;
+	u_int8_t		*buf;
+	int				bufSize;
+
+	int				lameResult;
+	long			bytesWritten;
 	
 	
-	leftPCM		= 0;
-	rightPCM	= 0;
-	buf			= 0;
+	buf = 0;
 	
 	@try {
-		numSamples	= chunkSize / 2;
-		
-		leftPCM		= (int *) calloc(numSamples / 2, sizeof(int));
-		rightPCM	= (int *) calloc(numSamples / 2, sizeof(int));
-		if(NULL == leftPCM || NULL == rightPCM) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}
-		
-		// Raw PCM needs to separated into L/R channels
-		iter	= chunk;
-		limit	= chunk + chunkSize;
-		left	= leftPCM;
-		right	= rightPCM;
-		while(iter < limit) {
-			temp		= *iter++;
-			*left++		= (temp << 24) | (*iter++ << 16);
-			
-			temp		= *iter++;
-			*right++	= (temp << 24) | (*iter++ << 16);
-		}
-		
 		// Allocate the MP3 buffer using LAME guide for size
 		bufSize = 1.25 * numSamples + 7200;
-		buf = (unsigned char *) calloc(bufSize, sizeof(unsigned char));
+		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
-		lameResult = lame_encode_buffer_int(_gfp, leftPCM, rightPCM, numSamples / 2, buf, bufSize);
+		lameResult = lame_encode_buffer_interleaved(_gfp, chunk, numSamples / 2, buf, bufSize);
 		if(0 > lameResult) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [LAMEException exceptionWithReason:@"LAME encoding error" userInfo:nil];
@@ -331,8 +304,6 @@ enum {
 	}
 	
 	@finally {
-		free(leftPCM);
-		free(rightPCM);
 		free(buf);
 	}
 	
@@ -341,7 +312,7 @@ enum {
 
 - (ssize_t) finishEncode
 {
-	unsigned char		*buf;
+	u_int8_t			*buf;
 	int					bufSize;
 	
 	int					lameResult;
@@ -353,7 +324,7 @@ enum {
 	@try {
 		// Allocate the MP3 buffer using LAME guide for size
 		bufSize = 7200;
-		buf = (unsigned char *) calloc(bufSize, sizeof(unsigned char));
+		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];

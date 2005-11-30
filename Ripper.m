@@ -420,7 +420,7 @@ enum {
 		}
 		
 		// Write data to file
-		if(-1 == write(file, (unsigned char *)buf, CD_FRAMESIZE_RAW)) {
+		if(-1 == write(file, buf, CD_FRAMESIZE_RAW)) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}

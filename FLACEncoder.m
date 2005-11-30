@@ -32,7 +32,7 @@
 #include <sys/stat.h>	// stat
 
 @interface FLACEncoder (Private)
-- (ssize_t) encodeChunk:(unsigned char *) chunk chunkSize:(ssize_t) chunkSize;
+- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
 @end
 
 @implementation FLACEncoder
@@ -105,8 +105,8 @@
 	}
 		
 	// Allocate the buffer
-	_bufsize		= 1024 * 1024;
-	_buf			= (unsigned char *) calloc(_bufsize, sizeof(unsigned char));
+	_buflen			= 1024 * 512;
+	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
@@ -135,10 +135,14 @@
 		}
 		
 		// Read a chunk of PCM input
-		bytesRead = read(_source, _buf, (bytesToRead > _bufsize ? _bufsize : bytesToRead));
+		bytesRead = read(_source, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+		if(-1 == bytesRead) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}
 		
 		// Encode the PCM data
-		bytesWritten += [self encodeChunk:_buf chunkSize:bytesRead];
+		bytesWritten += [self encodeChunk:_buf numSamples:bytesRead / 2];
 		
 		// Update status
 		bytesToRead -= bytesRead;
@@ -163,47 +167,30 @@
 	return 0;//bytesWritten;
 }
 
-- (ssize_t) encodeChunk:(unsigned char *) chunk chunkSize:(ssize_t) chunkSize;
+- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples
 {
-	int						*rawPCM [2];
-	
-	int						*leftPCM, *left;
-	int						*rightPCM, *right;
-	int						numSamples;
-	
-	const unsigned char		*iter,			*limit;
-	unsigned char			temp;
-	
-	FLAC__bool				flacResult;
-	long					bytesWritten;
-	
-	
-	rawPCM[0]		= 0;
-	rawPCM[1]		= 0;
+	FLAC__bool		flacResult;
+	int32_t			*rawPCM [2];
+	int32_t			*left, *right;
+	int16_t			*iter, *limit;
 	
 	@try {
-		numSamples	= chunkSize / 2;
 		
-		rawPCM[0]		= (int *) calloc(numSamples / 2, sizeof(int));
-		rawPCM[1]		= (int *) calloc(numSamples / 2, sizeof(int));
-		leftPCM			= rawPCM[0];
-		rightPCM		= rawPCM[1];
-		if(NULL == leftPCM || NULL == rightPCM) {
+		rawPCM[0] = calloc(numSamples / 2, sizeof(int32_t));
+		rawPCM[1] = calloc(numSamples / 2, sizeof(int32_t));
+		if(NULL == rawPCM[0] || NULL == rawPCM[1]) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
-		// Raw PCM needs to separated into L/R channels
+		// Split PCM into channels and convert to 32-bits
 		iter	= chunk;
-		limit	= chunk + chunkSize;
-		left	= leftPCM;
-		right	= rightPCM;
+		limit	= chunk + numSamples;
+		left	= rawPCM[0];
+		right	= rawPCM[1];
 		while(iter < limit) {
-			temp		= *iter++;
-			*left++		= (temp << 24) | (*iter++ << 16);
-			
-			temp		= *iter++;
-			*right++	= (temp << 24) | (*iter++ << 16);
+			*left++		= *iter++;
+			*right++	= *iter++;
 		}
 		
 		// Encode the chunk
@@ -220,11 +207,11 @@
 	}
 	
 	@finally {
-		free(leftPCM);
-		free(rightPCM);
+		free(rawPCM[0]);
+		free(rawPCM[1]);
 	}
 	
-	return 0;//bytesWritten;
-}
+	return 0; //bytesWritten;
+}	
 
 @end
