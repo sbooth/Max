@@ -33,8 +33,6 @@
 }
 
 - (id)		initWithTrack:(Track *)track;
-
 - (void)	run:(id)object;
-- (void)	removeTemporaryFile;
 
 @end

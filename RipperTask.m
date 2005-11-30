@@ -31,11 +31,6 @@
 
 @implementation RipperTask
 
-- (id) init
-{
-	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"RipperTask::init called" userInfo:nil];
-}
-
 - (id) initWithTrack:(Track *)track
 {
 	char *path = NULL;
@@ -44,7 +39,6 @@
 		if((self = [super init])) {
 			
 			_track = [track retain];
-			[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
 			
 			// Create the output file
 			path = malloc((strlen(_PATH_TMP) + strlen(TEMPFILE_PATTERN) + 1) *  sizeof(char));
@@ -77,34 +71,29 @@
 
 - (void) dealloc
 {
-	[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
 	[_track release];
 	
-	close(_out);
-	if(-1 == _out) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
-	}
+	if(-1 == unlink([_path UTF8String])) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _path, errno, strerror(errno)] userInfo:nil];
+	}	
 
-	[_path release];
-	
+	[_path release];	
 	[_ripper release];
 	
 	[super dealloc];
 }
 
-- (void) removeTemporaryFile
-{
-	if(-1 == unlink([_path UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _path, errno, strerror(errno)] userInfo:nil];
-	}	
-}
-
-- (void) run:(id) object
+- (void) run:(id)object
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	@try {
-		[_ripper ripToFile:_out];		
+		[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+		[_ripper ripToFile:_out];
+		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+		if(-1 == close(_out)) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}		
 	}
 	
 	@catch(StopException *exception) {

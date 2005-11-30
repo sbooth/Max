@@ -22,7 +22,7 @@
 #import "LogController.h"
 #import "RipperTask.h"
 #import "MPEGEncoderTask.h"
-#import "Tagger.h"
+#import "FLACEncoderTask.h"
 #import "MissingResourceException.h"
 #import "IOException.h"
 #import "UtilityFunctions.h"
@@ -113,12 +113,24 @@ static TaskMaster *sharedController = nil;
 
 - (BOOL) hasActiveTasks
 {
-	return (0 != [_rippingTasks count] && 0 != [_encodingTasks count]);
+	return (0 != [_rippingTasks count] || 0 != [_encodingTasks count]);
 }
 
 - (void) removeAllTasks
 {
+	NSEnumerator	*enumerator;
+	RipperTask		*ripperTask;
+	EncoderTask		*encoderTask;
 	
+	enumerator = [_rippingTasks objectEnumerator];
+	while((ripperTask = [enumerator nextObject])) {
+		[self removeRippingTask:ripperTask];
+	}
+
+	enumerator = [_encodingTasks objectEnumerator];
+	while((encoderTask = [enumerator nextObject])) {
+		[self removeEncodingTask:encoderTask];
+	}
 }
 
 - (void) encodeTrack:(Track *)track outputBasename:(NSString *)basename
@@ -220,7 +232,6 @@ static TaskMaster *sharedController = nil;
 	[GrowlApplicationBridge notifyWithTitle:@"Rip stopped" description:trackName
 						   notificationName:@"Rip stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	[task removeTemporaryFile];
 	[self removeRippingTask:task];
 	[self spawnRipperThreads];
 }
@@ -231,7 +242,6 @@ static TaskMaster *sharedController = nil;
 	NSString		*trackName		= [track description];
 	NSString		*basename		= [task valueForKey:@"basename"];
 	NSString		*filename		= nil;
-	NSString		*source			= [task valueForKey:@"path"];
 	EncoderTask		*encoderTask	= nil;
 	int				alertResult		= 0;
 	BOOL			createFile		= YES;
@@ -287,7 +297,7 @@ static TaskMaster *sharedController = nil;
 		
 		// Encode the file
 		if(createFile) {
-			encoderTask = [[MPEGEncoderTask alloc] initWithSource:source target:filename track:track];
+			encoderTask = [[MPEGEncoderTask alloc] initWithSource:task target:filename track:track];
 			[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 			[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 			[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
@@ -341,7 +351,7 @@ static TaskMaster *sharedController = nil;
 		
 		// Encode the file
 		if(createFile) {
-			encoderTask = [[FLACEncoderTask alloc] initWithSource:source target:filename track:track];
+			encoderTask = [[FLACEncoderTask alloc] initWithSource:task target:filename track:track];
 			[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 			[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 			[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
@@ -409,21 +419,22 @@ static TaskMaster *sharedController = nil;
 - (void) encodeDidStart:(EncoderTask* ) task
 {
 	NSString	*trackName		= [[task valueForKey:@"track"] description];
+	NSString	*type			= [task getType];
 
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode started for %@", trackName]];
-	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:trackName
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode started for %@ [%@]", trackName, type]];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[NSString stringWithFormat:@"%@ [%@]", trackName, type]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) encodeDidStop:(EncoderTask* ) task
 {
 	NSString	*trackName		= [[task valueForKey:@"track"] description];
+	NSString	*type			= [task getType];
 
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode stopped for %@", trackName]];
-	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:trackName
-						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode stopped for %@ [%@]", trackName, type]];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[NSString stringWithFormat:@"%@ [%@]", trackName, type]
+						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	[task removeSourceFile];
 	[task removeOutputFile];
 	
 	[self removeEncodingTask:task];
@@ -433,20 +444,17 @@ static TaskMaster *sharedController = nil;
 - (void) encodeDidComplete:(EncoderTask* ) task
 {
 	NSString	*trackName		= [[task valueForKey:@"track"] description];
-	NSString	*filename		= [task valueForKey:@"target"];
+	NSString	*type			= [task getType];
 	Track		*track			= [task valueForKey:@"track"];
 	
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode completed for %@", trackName]];
-	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:trackName
+	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@ [%@]", trackName, type]
 						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	
-
-	[task removeSourceFile];
 
 	[self removeEncodingTask:task];
 	[self spawnEncoderThreads];
 	
-	[Tagger tagFile:filename fromTrack:track];
 	[track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
 }
 

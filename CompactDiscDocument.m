@@ -489,7 +489,6 @@
 	NSArray			*selectedTracks;
 	NSEnumerator	*enumerator;
 	NSString		*basename;
-	NSString		*filename;
 	
 	@try {
 		// Do nothing for empty selection

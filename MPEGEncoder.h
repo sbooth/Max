@@ -32,4 +32,6 @@
 	lame_global_flags		*_gfp;
 }
 
+- (id) initWithSource:(NSString *)source;
+
 @end

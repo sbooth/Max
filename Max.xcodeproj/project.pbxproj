@@ -42,8 +42,8 @@
 		8CB0AE79093AE1E500968F66 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0AE78093AE1E500968F66 /* libFLAC.a */; };
 		8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0AED8093AE96C00968F66 /* FLACException.m */; };
 		8CB0AF3B093AEAEE00968F66 /* FLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */; };
-		8CB0B088093AFBF300968F66 /* MPEGEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B086093AFBF300968F66 /* MPEGEncoderTask.m */; };
-		8CB0B38E093B301400968F66 /* FLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B38C093B301400968F66 /* FLACEncoderTask.m */; };
+		8CB0B088093AFBF300968F66 /* MPEGEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */; };
+		8CB0B38E093B301400968F66 /* FLACEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
 		8CB6E20108DACB8100345B8F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING */; };
 		8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */; };
@@ -67,7 +67,6 @@
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
 		8CE1687D0934681C00A99A68 /* ParanoiaException.h in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8CE1687B0934681C00A99A68 /* ParanoiaException.h */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
-		8CE5F63008DDD02D007DD7F7 /* Tagger.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */; };
 		8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CE6F51D08CD60970028DA37 /* Credits.rtf */; };
 		8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
@@ -138,8 +137,6 @@
 		8C08573808DE90DD004B42F0 /* FreeDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDB.m; sourceTree = "<group>"; };
 		8C206F120929486C00793FD0 /* TaskMaster.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TaskMaster.h; sourceTree = "<group>"; };
 		8C206F130929486C00793FD0 /* TaskMaster.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TaskMaster.m; sourceTree = "<group>"; };
-		8C20728409299A4300793FD0 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
-		8C20728509299A4300793FD0 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
 		8C3101270931297C000A50FC /* Max.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Max.icns; sourceTree = "<group>"; };
 		8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FreeDBMatches.nib; sourceTree = "<group>"; };
 		8C440DC1092E8B3C00A053AA /* Tasks.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Tasks.nib; sourceTree = "<group>"; };
@@ -188,9 +185,9 @@
 		8CB0AED8093AE96C00968F66 /* FLACException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACException.m; sourceTree = "<group>"; };
 		8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = FLACDefaults.plist; sourceTree = "<group>"; };
 		8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEGEncoderTask.h; sourceTree = "<group>"; };
-		8CB0B086093AFBF300968F66 /* MPEGEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEGEncoderTask.m; sourceTree = "<group>"; };
+		8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MPEGEncoderTask.mm; sourceTree = "<group>"; };
 		8CB0B38B093B301400968F66 /* FLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACEncoderTask.h; sourceTree = "<group>"; };
-		8CB0B38C093B301400968F66 /* FLACEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACEncoderTask.m; sourceTree = "<group>"; };
+		8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FLACEncoderTask.mm; sourceTree = "<group>"; };
 		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
 		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
@@ -227,8 +224,6 @@
 		8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
 		8CE1687B0934681C00A99A68 /* ParanoiaException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParanoiaException.h; sourceTree = "<group>"; };
 		8CE1687C0934681C00A99A68 /* ParanoiaException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParanoiaException.m; sourceTree = "<group>"; };
-		8CE5F62E08DDD02D007DD7F7 /* Tagger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tagger.h; sourceTree = "<group>"; };
-		8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Tagger.mm; sourceTree = "<group>"; };
 		8CE6F51D08CD60970028DA37 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		8CE9B39708CF7937007FCDB3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
@@ -312,7 +307,6 @@
 				8CDB0A19092D78C60080A0D8 /* Tasks */,
 				8C0408DA092A89770052D881 /* Ripper */,
 				080E96DDFE201D6D7F000001 /* Encoder */,
-				8C8B0F6D092E863200418C45 /* Tagger */,
 				8C7300B808ECB21B0008D7E0 /* FreeDB */,
 				8CBEC4EB08ED6F640064F794 /* Exceptions */,
 				8CBEC66108ED80D10064F794 /* ValueTransformers */,
@@ -442,15 +436,6 @@
 			name = MacPAD;
 			sourceTree = "<group>";
 		};
-		8C8B0F6D092E863200418C45 /* Tagger */ = {
-			isa = PBXGroup;
-			children = (
-				8CE5F62E08DDD02D007DD7F7 /* Tagger.h */,
-				8CE5F62F08DDD02D007DD7F7 /* Tagger.mm */,
-			);
-			name = Tagger;
-			sourceTree = "<group>";
-		};
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -508,17 +493,15 @@
 			isa = PBXGroup;
 			children = (
 				8CB0B38B093B301400968F66 /* FLACEncoderTask.h */,
-				8CB0B38C093B301400968F66 /* FLACEncoderTask.m */,
+				8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */,
 				8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */,
-				8CB0B086093AFBF300968F66 /* MPEGEncoderTask.m */,
+				8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */,
 				8C206F120929486C00793FD0 /* TaskMaster.h */,
 				8C206F130929486C00793FD0 /* TaskMaster.m */,
 				8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */,
 				8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */,
 				8C040A2E092AB41A0052D881 /* RipperTask.h */,
 				8C040A2F092AB41A0052D881 /* RipperTask.m */,
-				8C20728409299A4300793FD0 /* Task.h */,
-				8C20728509299A4300793FD0 /* Task.m */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";
@@ -620,7 +603,6 @@
 				8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */,
 				8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */,
 				8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */,
-				8CE5F63008DDD02D007DD7F7 /* Tagger.mm in Sources */,
 				8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */,
 				8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */,
 				8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */,
@@ -651,8 +633,8 @@
 				8CA8C03E093A5F2B00FDA506 /* MPEGEncoder.m in Sources */,
 				8CB0AE64093AE12100968F66 /* FLACEncoder.m in Sources */,
 				8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */,
-				8CB0B088093AFBF300968F66 /* MPEGEncoderTask.m in Sources */,
-				8CB0B38E093B301400968F66 /* FLACEncoderTask.m in Sources */,
+				8CB0B088093AFBF300968F66 /* MPEGEncoderTask.mm in Sources */,
+				8CB0B38E093B301400968F66 /* FLACEncoderTask.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
