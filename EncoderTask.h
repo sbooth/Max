@@ -22,19 +22,24 @@
 
 #import "Encoder.h"
 #import "Track.h"
+#import "RipperTask.h"
 
 @interface EncoderTask : NSObject 
 {
 	NSString			*_target;
 	Encoder				*_encoder;
 	Track				*_track;
+	RipperTask			*_source;
 }
 
-- (id)		initWithSource:(NSString *) source target:(NSString *) target track:(Track *) track;
+- (id)				initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
 
-- (void)	run:(id) object;
-- (void)	stop;
-- (void)	removeSourceFile;
-- (void)	removeOutputFile;
+- (void)			run:(id) object;
+- (void)			stop;
+- (void)			removeOutputFile;
+
+- (void)			writeTags;
+
+- (NSString *)		getType;
 
 @end

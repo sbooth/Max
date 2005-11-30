@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: EncoderTask.m 183 2005-11-30 05:36:21Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
