@@ -24,7 +24,7 @@
 #import "UtilityFunctions.h"
 
 
-static PreferencesController *sharedPreferences = nil;
+static PreferencesController	*sharedPreferences					= nil;
 
 static NSString		*GeneralPreferencesToolbarItemIdentifier		= @"GeneralPreferences";
 static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences";
@@ -143,7 +143,7 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 		[toolbarItem setLabel: @"General"];
 		[toolbarItem setPaletteLabel: @"General"];		
 		[toolbarItem setToolTip: @"General preferences"];
-		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"GeneralToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
@@ -154,7 +154,7 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 		[toolbarItem setLabel: @"Output"];
 		[toolbarItem setPaletteLabel: @"Output"];
 		[toolbarItem setToolTip: @"Output preferences"];
-		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
@@ -165,7 +165,7 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 		[toolbarItem setLabel: @"FreeDB"];
 		[toolbarItem setPaletteLabel: @"FreeDB"];
 		[toolbarItem setToolTip: @"FreeDB preferences"];
-		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"FreeDBToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
@@ -176,7 +176,7 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 		[toolbarItem setLabel: @"Ripper"];
 		[toolbarItem setPaletteLabel: @"Ripper"];
 		[toolbarItem setToolTip: @"CD ripper preferences"];
-		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"RipperToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
@@ -187,7 +187,7 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 		[toolbarItem setLabel: @"LAME"];
 		[toolbarItem setPaletteLabel: @"LAME"];
 		[toolbarItem setToolTip: @"LAME mp3 encoder preferences"];
-		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"LAMEToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
