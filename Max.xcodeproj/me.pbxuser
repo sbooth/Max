@@ -359,6 +359,10 @@
 			8CB8640F093F3D5900A60FC1 /* PBXTextBookmark */ = 8CB8640F093F3D5900A60FC1 /* PBXTextBookmark */;
 			8CB86416093F3DBB00A60FC1 /* PBXBookmark */ = 8CB86416093F3DBB00A60FC1 /* PBXBookmark */;
 			8CB86421093F3DEE00A60FC1 /* PBXTextBookmark */ = 8CB86421093F3DEE00A60FC1 /* PBXTextBookmark */;
+			8CB8642B093F3E8500A60FC1 /* PBXTextBookmark */ = 8CB8642B093F3E8500A60FC1 /* PBXTextBookmark */;
+			8CB8642C093F3E8500A60FC1 /* PBXTextBookmark */ = 8CB8642C093F3E8500A60FC1 /* PBXTextBookmark */;
+			8CB8642D093F3E8500A60FC1 /* PBXTextBookmark */ = 8CB8642D093F3E8500A60FC1 /* PBXTextBookmark */;
+			8CB8642E093F3E8500A60FC1 /* PBXTextBookmark */ = 8CB8642E093F3E8500A60FC1 /* PBXTextBookmark */;
 			8CBEC73508ED8D980064F794 = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
 			8CBEC73708ED8D980064F794 = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
@@ -547,8 +551,8 @@
 	8C4D3E2F093DE4C300A88927 /* VorbisEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1052, 4788}}";
-			sepNavSelRange = "{10538, 0}";
-			sepNavVisRect = "{{0, 3812}, {830, 700}}";
+			sepNavSelRange = "{6591, 108}";
+			sepNavVisRect = "{{0, 2730}, {776, 295}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -2761,6 +2765,44 @@
 		rType = 0;
 		vrLen = 1925;
 		vrLoc = 8964;
+	};
+	8CB8642B093F3E8500A60FC1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C4D3E2F093DE4C300A88927 /* VorbisEncoder.m */;
+		name = "vorbis_comment_add_tag(&vc, \"ENCODER\", [[NSString stringWithFormat:@\"Max %@\", bundleVersion] UTF8String]);";
+		rLen = 108;
+		rLoc = 6591;
+		rType = 0;
+		vrLen = 725;
+		vrLoc = 6272;
+	};
+	8CB8642C093F3E8500A60FC1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: declaration of 'id' shadows a global declaration";
+		fRef = 8CB8621F093F180D00A60FC1 /* cddb_disc.h */;
+		rLen = 1;
+		rLoc = 173;
+		rType = 1;
+	};
+	8CB8642D093F3E8500A60FC1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C4D3E2F093DE4C300A88927 /* VorbisEncoder.m */;
+		name = "vorbis_comment_add_tag(&vc, \"ENCODER\", [[NSString stringWithFormat:@\"Max %@\", bundleVersion] UTF8String]);";
+		rLen = 108;
+		rLoc = 6591;
+		rType = 0;
+		vrLen = 725;
+		vrLoc = 6272;
+	};
+	8CB8642E093F3E8500A60FC1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB8621F093F180D00A60FC1 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
 	};
 	8CBB3C5608D8CC7A005266A8 /* Ripper.h */ = {
 		uiCtxt = {
