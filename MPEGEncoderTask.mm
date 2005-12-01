@@ -184,7 +184,7 @@
 
 - (NSString *) getType
 {
-	return @"mp3";
+	return @"MP3";
 }
 
 @end

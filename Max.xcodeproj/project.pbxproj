@@ -65,6 +65,9 @@
 		8CB86028093EE79800A60FC1 /* OutputToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB86027093EE79800A60FC1 /* OutputToolbarImage.png */; };
 		8CB8602A093EE7E200A60FC1 /* RipperToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB86029093EE7E200A60FC1 /* RipperToolbarImage.png */; };
 		8CB8603D093EE8A100A60FC1 /* FreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB8603C093EE8A100A60FC1 /* FreeDBToolbarImage.png */; };
+		8CB860DF093EF46D00A60FC1 /* VorbisPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB860DE093EF46D00A60FC1 /* VorbisPreferences.nib */; };
+		8CB860E9093EF4DC00A60FC1 /* VorbisPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB860E7093EF4DC00A60FC1 /* VorbisPreferencesController.m */; };
+		8CB8611F093EFAD700A60FC1 /* VorbisEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D3E2F093DE4C300A88927 /* VorbisEncoder.m */; };
 		8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */; };
 		8CBB881D08EE57A6007197C3 /* UtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */; };
 		8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */; };
@@ -234,6 +237,9 @@
 		8CB86027093EE79800A60FC1 /* OutputToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OutputToolbarImage.png; sourceTree = "<group>"; };
 		8CB86029093EE7E200A60FC1 /* RipperToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RipperToolbarImage.png; sourceTree = "<group>"; };
 		8CB8603C093EE8A100A60FC1 /* FreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FreeDBToolbarImage.png; sourceTree = "<group>"; };
+		8CB860DE093EF46D00A60FC1 /* VorbisPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = VorbisPreferences.nib; sourceTree = "<group>"; };
+		8CB860E6093EF4DC00A60FC1 /* VorbisPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VorbisPreferencesController.h; sourceTree = "<group>"; };
+		8CB860E7093EF4DC00A60FC1 /* VorbisPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VorbisPreferencesController.m; sourceTree = "<group>"; };
 		8CBB3C5608D8CC7A005266A8 /* Ripper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ripper.h; sourceTree = "<group>"; };
 		8CBB3C5708D8CC7A005266A8 /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
 		8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UtilityFunctions.m; sourceTree = "<group>"; };
@@ -274,7 +280,6 @@
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
 		8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooleanArrayValueTransformer.m; sourceTree = "<group>"; };
-		8CFD2008093560E400F3FF51 /* CD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CD.icns; sourceTree = "<group>"; };
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -394,7 +399,6 @@
 				8C4D4631093E764A00A88927 /* LAMEPreferences.nib */,
 				8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */,
 				8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */,
-				8CFD2008093560E400F3FF51 /* CD.icns */,
 				8C3101270931297C000A50FC /* Max.icns */,
 				8C440DC1092E8B3C00A053AA /* Tasks.nib */,
 				8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */,
@@ -415,6 +419,7 @@
 				8CA5229E0938E5DD00250BE8 /* Log.nib */,
 				8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */,
 				8C4D489F093E932600A88927 /* Acknowledgments.nib */,
+				8CB860DE093EF46D00A60FC1 /* VorbisPreferences.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -442,6 +447,8 @@
 		8C4D4265093E0E5F00A88927 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				8CB860E6093EF4DC00A60FC1 /* VorbisPreferencesController.h */,
+				8CB860E7093EF4DC00A60FC1 /* VorbisPreferencesController.m */,
 				8C4D471E093E843F00A88927 /* OutputPreferencesController.h */,
 				8C4D471F093E843F00A88927 /* OutputPreferencesController.m */,
 				8C4D46FA093E815800A88927 /* RipperPreferencesController.h */,
@@ -676,6 +683,7 @@
 				8CB86028093EE79800A60FC1 /* OutputToolbarImage.png in Resources */,
 				8CB8602A093EE7E200A60FC1 /* RipperToolbarImage.png in Resources */,
 				8CB8603D093EE8A100A60FC1 /* FreeDBToolbarImage.png in Resources */,
+				8CB860DF093EF46D00A60FC1 /* VorbisPreferences.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -731,6 +739,8 @@
 				8C4D46FD093E815800A88927 /* RipperPreferencesController.m in Sources */,
 				8C4D4721093E843F00A88927 /* OutputPreferencesController.m in Sources */,
 				8C4D48A8093E93AC00A88927 /* AcknowledgmentsController.m in Sources */,
+				8CB860E9093EF4DC00A60FC1 /* VorbisPreferencesController.m in Sources */,
+				8CB8611F093EFAD700A60FC1 /* VorbisEncoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

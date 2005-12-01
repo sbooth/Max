@@ -27,10 +27,11 @@
 static PreferencesController	*sharedPreferences					= nil;
 
 static NSString		*GeneralPreferencesToolbarItemIdentifier		= @"GeneralPreferences";
+static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences";
 static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences";
 static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences";
 static NSString		*LAMEPreferencesToolbarItemIdentifier			= @"LAMEPreferences";
-static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences";
+static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences";
 
 @interface PreferencesController (Private)
 - (void) setupToolbar;
@@ -192,6 +193,17 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	} 
+    else if([itemIdentifier isEqualToString:VorbisPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"Vorbis"];
+		[toolbarItem setPaletteLabel: @"Vorbis"];
+		[toolbarItem setToolTip: @"Ogg Vorbis encoder preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"VorbisToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
+	} 
 	else {
 		toolbarItem = nil;
     }
@@ -202,14 +214,14 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
 		nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
 		nil];
 }
 

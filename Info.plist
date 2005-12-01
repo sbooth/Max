@@ -11,8 +11,6 @@
 			<array>
 				<string>xml</string>
 			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>CD.icns</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>text/plain</string>
@@ -55,7 +53,7 @@
 	<key>CFBundleSignature</key>
 	<string>MaxX</string>
 	<key>CFBundleVersion</key>
-	<string>$Revision$</string>
+	<string>0.3</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
