@@ -31,6 +31,7 @@
 - (IBAction)			showAcknowledgments:(id)sender;
 
 - (IBAction)			aboutLAME:(id)sender;
+- (IBAction)			aboutFLAC:(id)sender;
 
 - (IBAction)			toggleTasksPanel:(id)sender;
 - (IBAction)			toggleLogPanel:(id)sender;

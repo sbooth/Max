@@ -32,6 +32,7 @@
 #import "NegateBooleanArrayValueTransformer.h";
 
 #include "lame/lame.h"
+#include "flac/format.h"
 
 @implementation ApplicationController
 
@@ -105,12 +106,12 @@
 	return NSTerminateNow;
 }
 
-- (IBAction)aboutLAME:(id)sender
+- (IBAction) aboutLAME:(id)sender
 {
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 	[alert addButtonWithTitle:@"OK"];
 	[alert setMessageText:@"About LAME"];
-	[alert setInformativeText:[NSString stringWithFormat:@"LAME %s", get_lame_short_version()]];
+	[alert setInformativeText:[NSString stringWithFormat:@"LAME %s", get_lame_version()]];
 	[alert setAlertStyle:NSWarningAlertStyle];
 	
 	if([alert runModal] == NSAlertFirstButtonReturn) {
@@ -118,7 +119,20 @@
 	} 
 }
 
-- (IBAction)toggleTasksPanel:(id)sender
+- (IBAction) aboutFLAC:(id)sender
+{
+	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+	[alert addButtonWithTitle:@"OK"];
+	[alert setMessageText:@"About FLAC"];
+	[alert setInformativeText:[NSString stringWithFormat:@"FLAC %s", FLAC__VERSION_STRING]];
+	[alert setAlertStyle:NSWarningAlertStyle];
+	
+	if([alert runModal] == NSAlertFirstButtonReturn) {
+		// do nothing
+	} 
+}
+
+- (IBAction) toggleTasksPanel:(id)sender
 {
 	NSWindow *tasksWindow = [[TaskMaster sharedController] window];
 	if([tasksWindow isVisible]) {
@@ -129,7 +143,7 @@
 	}
 }
 
-- (IBAction)toggleLogPanel:(id)sender
+- (IBAction) toggleLogPanel:(id)sender
 {
 	NSWindow *logWindow = [[LogController sharedController] window];
 	if([logWindow isVisible]) {
@@ -145,12 +159,12 @@
 	[[UpdateChecker sharedController] checkForUpdate];
 }
 
-- (IBAction)openHomeURL:(id)sender
+- (IBAction) openHomeURL:(id)sender
 {
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://sbooth.org/Max/"]];
 }
 
--(NSDictionary *)registrationDictionaryForGrowl
+- (NSDictionary *) registrationDictionaryForGrowl
 {
 	NSArray *defaultNotifications = [NSArray arrayWithObjects:
 		@"Rip started",

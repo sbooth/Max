@@ -2,6 +2,7 @@
     IBClasses = (
         {
             ACTIONS = {
+                aboutFLAC = id; 
                 aboutLAME = id; 
                 checkForUpdate = id; 
                 openHomeURL = id; 
