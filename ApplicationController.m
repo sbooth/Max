@@ -21,6 +21,7 @@
 #import "ApplicationController.h"
 
 #import "PreferencesController.h"
+#import "AcknowledgmentsController.h"
 #import "MediaController.h"
 #import "TaskMaster.h"
 #import "LogController.h"
@@ -65,6 +66,11 @@
 - (IBAction)showPreferences:(id)sender
 {
 	[[PreferencesController sharedPreferences] showWindow:self];
+}
+
+- (IBAction) showAcknowledgments:(id)sender
+{
+	[[AcknowledgmentsController sharedController] showWindow:self];
 }
 
 - (IBAction)scanForMedia:(id)sender

@@ -6,6 +6,7 @@
                 checkForUpdate = id; 
                 openHomeURL = id; 
                 scanForMedia = id; 
+                showAcknowledgments = id; 
                 showPreferences = id; 
                 toggleLogPanel = id; 
                 toggleTasksPanel = id; 

@@ -1,5 +1,5 @@
 /*
- *  $Id: PreferencesController.h 189 2005-12-01 01:55:55Z me $
+ *  $Id: ApplicationController.h 178 2005-11-26 20:27:04Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,8 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface LAMEPreferencesController : NSWindowController 
+@interface AcknowledgmentsController : NSWindowController
 {
+    IBOutlet NSTextView		*_text;
 }
+
++ (AcknowledgmentsController *)		sharedController;
 
 @end

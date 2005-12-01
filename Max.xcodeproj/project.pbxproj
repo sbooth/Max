@@ -25,6 +25,9 @@
 		8C4D46FD093E815800A88927 /* RipperPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D46FB093E815800A88927 /* RipperPreferencesController.m */; };
 		8C4D471D093E842C00A88927 /* OutputPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D4717093E842B00A88927 /* OutputPreferences.nib */; };
 		8C4D4721093E843F00A88927 /* OutputPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D471F093E843F00A88927 /* OutputPreferencesController.m */; };
+		8C4D48A0093E932600A88927 /* Acknowledgments.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D489F093E932600A88927 /* Acknowledgments.nib */; };
+		8C4D48A8093E93AC00A88927 /* AcknowledgmentsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */; };
+		8C4D48DB093E957300A88927 /* Acknowledgments.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D48DA093E957300A88927 /* Acknowledgments.rtf */; };
 		8C6EC5C2092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */; };
 		8C73004E08ECAA5B0008D7E0 /* FreeDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* FreeDBMatchSheet.m */; };
 		8C7300A708ECB1E80008D7E0 /* FreeDBMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7300A608ECB1E80008D7E0 /* FreeDBMatch.m */; };
@@ -165,6 +168,10 @@
 		8C4D4718093E842B00A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
 		8C4D471E093E843F00A88927 /* OutputPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OutputPreferencesController.h; sourceTree = "<group>"; };
 		8C4D471F093E843F00A88927 /* OutputPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OutputPreferencesController.m; sourceTree = "<group>"; };
+		8C4D489F093E932600A88927 /* Acknowledgments.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Acknowledgments.nib; sourceTree = "<group>"; };
+		8C4D48A5093E93AC00A88927 /* AcknowledgmentsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AcknowledgmentsController.h; sourceTree = "<group>"; };
+		8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AcknowledgmentsController.m; sourceTree = "<group>"; };
+		8C4D48DA093E957300A88927 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
 		8C6EC5BF092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NegateBooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NegateBooleanArrayValueTransformer.m; sourceTree = "<group>"; };
 		8C73004C08ECAA5B0008D7E0 /* FreeDBMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FreeDBMatchSheet.h; sourceTree = "<group>"; };
@@ -364,6 +371,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C4D48DA093E957300A88927 /* Acknowledgments.rtf */,
 				8C4D4717093E842B00A88927 /* OutputPreferences.nib */,
 				8C4D46EE093E813300A88927 /* RipperPreferences.nib */,
 				8C4D4692093E7C1E00A88927 /* FreeDBPreferences.nib */,
@@ -391,6 +399,7 @@
 				8C8B0EC8092E710200418C45 /* UpdateChecker.nib */,
 				8CA5229E0938E5DD00250BE8 /* Log.nib */,
 				8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */,
+				8C4D489F093E932600A88927 /* Acknowledgments.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -546,6 +555,8 @@
 				8C7C897808EC435700F6FCB1 /* MediaController.m */,
 				8CA522760938E44100250BE8 /* LogController.h */,
 				8CA522770938E44100250BE8 /* LogController.m */,
+				8C4D48A5093E93AC00A88927 /* AcknowledgmentsController.h */,
+				8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -716,6 +727,8 @@
 				8C4D4698093E7C1E00A88927 /* FreeDBPreferences.nib in Resources */,
 				8C4D46F4093E813300A88927 /* RipperPreferences.nib in Resources */,
 				8C4D471D093E842C00A88927 /* OutputPreferences.nib in Resources */,
+				8C4D48A0093E932600A88927 /* Acknowledgments.nib in Resources */,
+				8C4D48DB093E957300A88927 /* Acknowledgments.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -770,6 +783,7 @@
 				8C4D4658093E7A6100A88927 /* FreeDBPreferencesController.m in Sources */,
 				8C4D46FD093E815800A88927 /* RipperPreferencesController.m in Sources */,
 				8C4D4721093E843F00A88927 /* OutputPreferencesController.m in Sources */,
+				8C4D48A8093E93AC00A88927 /* AcknowledgmentsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

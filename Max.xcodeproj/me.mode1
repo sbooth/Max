@@ -382,9 +382,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>8C4D418A093E09F400A88927</string>
+				<string>8C1A6BF6093E9B62006176C4</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>8C4D418B093E09F400A88927</string>
+				<string>8C1A6BF7093E9B62006176C4</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -518,13 +518,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>8C4D43C2093E1D9C00A88927</string>
-		<string>8C4D4382093E18F200A88927</string>
-		<string>8C4D4383093E18F200A88927</string>
-		<string>8C9D1F4208C5287A00D95535</string>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>8C4D4380093E18F200A88927</string>
-		<string>8C191A4608C515A500CB7453</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
@@ -552,7 +545,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>cddb_disc.h</string>
+								<string>AcknowledgmentsController.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -608,7 +601,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>8C191A4608C515A500CB7453</string>
-				<string>8C4D419D093E0C3700A88927</string>
+				<string>8C1A6B26093E96F1006176C4</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -920,8 +913,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {367, 168}}</string>
-											<string>{{0, 173}, {367, 270}}</string>
+											<string>{{0, 0}, {491, 168}}</string>
+											<string>{{0, 173}, {491, 270}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -970,9 +963,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>8C4D418C093E09F400A88927</string>
+				<string>8C1A6BF8093E9B62006176C4</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>8C4D418D093E09F400A88927</string>
+				<string>8C1A6BF9093E9B62006176C4</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>

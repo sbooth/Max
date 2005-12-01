@@ -28,6 +28,7 @@
 
 - (IBAction)			scanForMedia:(id)sender;
 - (IBAction)			showPreferences:(id)sender;
+- (IBAction)			showAcknowledgments:(id)sender;
 
 - (IBAction)			aboutLAME:(id)sender;
 

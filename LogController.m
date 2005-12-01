@@ -52,18 +52,13 @@ static LogController *sharedLog = nil;
 	return nil;
 }
 
-- (void) dealloc
-{
-	[super dealloc];
-}
-
 - (id) copyWithZone:(NSZone *)zone								{ return self; }
 - (id) retain													{ return self; }
 - (unsigned) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 
-- (void) windowDidLoad
+- (void) awakeFromNib
 {
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"Log"];	
