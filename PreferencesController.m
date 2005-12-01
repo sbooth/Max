@@ -19,26 +19,23 @@
  */
 
 #import "PreferencesController.h"
-
-#import "FreeDB.h"
-#import "FreeDBSite.h"
 #import "MissingResourceException.h"
 
 #import "UtilityFunctions.h"
 
-#define kDiscNumberButton		0
-#define kDiscsInSetButton		1
-#define kDiscArtistButton		2
-#define kDiscTitleButton		3
-#define kDiscGenreButton		4
-#define kDiscYearButton			5
-#define kTrackNumberButton		6
-#define kTrackArtistButton		7
-#define kTrackTitleButton		8
-#define kTrackGenreButton		9
-#define kTrackYearButton		10
 
 static PreferencesController *sharedPreferences = nil;
+
+static NSString		*GeneralPreferencesToolbarItemIdentifier		= @"GeneralPreferences";
+static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences";
+static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences";
+static NSString		*LAMEPreferencesToolbarItemIdentifier			= @"LAMEPreferences";
+static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences";
+
+@interface PreferencesController (Private)
+- (void) setupToolbar;
+- (void) selectPrefsPane:(id)sender;
+@end
 
 @implementation PreferencesController
 
@@ -104,34 +101,12 @@ static PreferencesController *sharedPreferences = nil;
     return sharedPreferences;
 }
 
-- (id)init
+- (id) init
 {
 	if((self = [super initWithWindowNibName:@"Preferences"])) {
-
-		@try {
-			[self setShouldCascadeWindows:NO];
-			[self setWindowFrameAutosaveName:@"Preferences"];	
-
-			// Update the example track text field
-			[self controlTextDidChange:nil];
-		}
-		
-		@catch(NSException *exception) {
-			displayExceptionAlert(exception);
-		}
-		
-		@finally {
-		}
+		return self;
 	}
-	return self;
-}
-
-- (void) dealloc
-{
-	if(nil != _freeDBMirrors) {
-		[_freeDBMirrors release];
-	}
-	[super dealloc];
+	return nil;
 }
 
 - (id) copyWithZone:(NSZone *)zone								{ return self; }
@@ -140,123 +115,137 @@ static PreferencesController *sharedPreferences = nil;
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 
-
-- (IBAction)setFreeDBMirror:(id)sender
+- (void) awakeFromNib
 {
-	NSArray *selectedObjects = [_freeDBMirrorsController selectedObjects];
-	if(0 < [selectedObjects count]) {
-		FreeDBSite					*mirror					= [selectedObjects objectAtIndex:0];
-		NSUserDefaultsController	*defaultsController		= [NSUserDefaultsController sharedUserDefaultsController];
-		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"freeDBServer"];
-		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"freeDBPort"];
-		[[defaultsController values] setValue:[mirror valueForKey:@"protocol"] forKey:@"freeDBProtocol"];
-	}
+	[self setShouldCascadeWindows:NO];
+//	[self setWindowFrameAutosaveName:@"Preferences"];
+
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"Max Preferences Toolbar"] autorelease];
+    
+    [toolbar setAllowsUserCustomization: NO];
+    [toolbar setAutosavesConfiguration: NO];
+    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    
+    [toolbar setDelegate:self];
+	
+    [[self window] setToolbar:toolbar];
+	[[self window] center];
+	[self selectPrefsPane:[[toolbar items] objectAtIndex:0]];
 }
 
-- (IBAction)refreshFreeDBMirrorList:(id)sender
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag 
 {
-	@try {
-		// Get mirror list
-		FreeDB *freeDB = [[[FreeDB alloc] init] autorelease];
-		[self setValue:[freeDB fetchSites] forKey:@"freeDBMirrors"];
+    NSToolbarItem *toolbarItem = nil;
+    
+    if([itemIdentifier isEqualToString:GeneralPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"General"];
+		[toolbarItem setPaletteLabel: @"General"];		
+		[toolbarItem setToolTip: @"General preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	}
-	
-	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+    else if([itemIdentifier isEqualToString:OutputPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"Output"];
+		[toolbarItem setPaletteLabel: @"Output"];
+		[toolbarItem setToolTip: @"Output preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	}
-	
-	@finally {
+    else if([itemIdentifier isEqualToString:FreeDBPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"FreeDB"];
+		[toolbarItem setPaletteLabel: @"FreeDB"];
+		[toolbarItem setToolTip: @"FreeDB preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	}
-}
-
-- (IBAction)customNamingButtonAction:(id)sender
-{
-	NSString *string;
-	
-	switch([(NSButton *)sender tag]) {
-		case kDiscNumberButton:			string = @"{discNumber}";		break;
-		case kDiscsInSetButton:			string = @"{discsInSet}";		break;
-		case kDiscArtistButton:			string = @"{discArtist}";		break;
-		case kDiscTitleButton:			string = @"{discTitle}";		break;
-		case kDiscGenreButton:			string = @"{discGenre}";		break;
-		case kDiscYearButton:			string = @"{discYear}";			break;
-		case kTrackNumberButton:		string = @"{trackNumber}";		break;
-		case kTrackArtistButton:		string = @"{trackArtist}";		break;
-		case kTrackTitleButton:			string = @"{trackTitle}";		break;
-		case kTrackGenreButton:			string = @"{trackGenre}";		break;
-		case kTrackYearButton:			string = @"{trackYear}";		break;
+    else if([itemIdentifier isEqualToString:RipperPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"Ripper"];
+		[toolbarItem setPaletteLabel: @"Ripper"];
+		[toolbarItem setToolTip: @"CD ripper preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	}
-	
-	NSText *fieldEditor = [_customNameTextField currentEditor];
-	if(nil == fieldEditor) {
-		[_customNameTextField setStringValue:string];
-	}
+    else if([itemIdentifier isEqualToString:LAMEPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"LAME"];
+		[toolbarItem setPaletteLabel: @"LAME"];
+		[toolbarItem setToolTip: @"LAME mp3 encoder preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SaveDocumentItemImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
+	} 
 	else {
-		if([_customNameTextField textShouldBeginEditing:fieldEditor]) {
-			[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
-			[_customNameTextField textShouldEndEditing:fieldEditor];
-			[self controlTextDidChange:nil];
-		}
-	}
-}
-
-- (IBAction)selectOutputDirectory:(id)sender
-{
-	NSOpenPanel *panel = [NSOpenPanel openPanel];
+		toolbarItem = nil;
+    }
 	
-	[panel setAllowsMultipleSelection:NO];
-	[panel setCanChooseDirectories:YES];
-	[panel setCanChooseFiles:NO];
+    return toolbarItem;
+}
+
+- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
+{
+    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier,
+		nil];
+}
+
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
+{
+    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier,
+		nil];
+}
+
+- (void) selectPrefsPane:(id)sender
+{
+	NSToolbar				*toolbar;
+	NSString				*itemIdentifier;
+	Class					prefPaneClass;
+	NSWindowController		*prefPaneObject;
+	NSView					*prefView;
+	float					toolbarHeight, newWindowHeight, newWindowWidth;
+	NSRect					windowFrame, newFrameRect, newWindowFrame;
+
 	
-	[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-}
-
-- (IBAction)restoreDefaults:(id)sender
-{
-	[[NSUserDefaultsController sharedUserDefaultsController] revertToInitialValues:nil];
-}
-
-- (void)openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if(NSOKButton == returnCode) {
-		NSArray *filesToOpen = [sheet filenames];
-		int i, count = [filesToOpen count];
-		for (i=0; i<count; i++) {
-			NSString *aFile = [filesToOpen objectAtIndex:i];
-			[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:aFile forKey:@"outputDirectory"];
-		}
-	}	
-}
-
-#pragma mark Delegate methods
-
-- (void) controlTextDidChange:(NSNotification *)aNotification
-{
-	NSString *scheme = [_customNameTextField stringValue];
-	if(nil == scheme) {
-		scheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"customNamingScheme"];
-	}
-	// No love
-	if(nil == scheme) {
-		return;
+	toolbar					= [[self window] toolbar];
+	itemIdentifier			= [sender itemIdentifier];
+	prefPaneClass			= NSClassFromString([itemIdentifier stringByAppendingString:@"Controller"]);
+	prefPaneObject			= [[prefPaneClass alloc] init];
+	prefView				= [[prefPaneObject window] contentView];
+		
+	float windowHeight		= NSHeight([[[self window] contentView] frame]);
+	
+	// Calculate toolbar height
+	if([toolbar isVisible]) {
+		windowFrame = [NSWindow contentRectForFrameRect:[[self window] frame] styleMask:[[self window] styleMask]];
+		toolbarHeight = NSHeight(windowFrame) - windowHeight;
 	}
 	
-	NSMutableString *sample = [[[NSMutableString alloc] initWithCapacity:[scheme length]] autorelease];
-	[sample setString:scheme];		
+	newWindowHeight		= NSHeight([prefView frame]) + toolbarHeight;
+	newWindowWidth		= NSWidth([prefView frame]);
+	newFrameRect		= NSMakeRect(NSMinX(windowFrame), NSMaxY(windowFrame) - newWindowHeight, newWindowWidth, newWindowHeight);
+	newWindowFrame		= [NSWindow frameRectForContentRect:newFrameRect styleMask:[[self window] styleMask]];
 	
-	[sample replaceOccurrencesOfString:@"{discNumber}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discsInSet}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discArtist}"		withString:@"Nirvana" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discTitle}"		withString:@"MTV Unplugged in New York" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discGenre}"		withString:@"Grunge" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discYear}"		withString:@"1994" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{trackNumber}"		withString:@"4" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{trackArtist}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{trackTitle}"		withString:@"The Man Who Sold the World" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{trackGenre}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{trackYear}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
-	
-	[self setValue:sample forKey:@"customNameExample"];
+	[[self window] setContentView:[[[NSView alloc] init] autorelease]];
+	[[self window] setFrame:newWindowFrame display:YES animate:[[self window] isVisible]];
+	[[self window] setContentView:prefView];
 }
 
 @end

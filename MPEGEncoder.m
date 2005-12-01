@@ -129,7 +129,7 @@ enum {
 			// Target is quality
 			else {
 				lame_set_VBR(_gfp, LAME_VARIABLE_BITRATE_MODE_FAST == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVariableBitrateMode"] ? vbr_mtrh : vbr_rh);
-				lame_set_preset(_gfp, 400 + [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]);
+				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
 			}
 			
 			lameResult = lame_init_params(_gfp);

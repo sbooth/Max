@@ -22,26 +22,8 @@
 
 @interface PreferencesController : NSWindowController
 {
-    IBOutlet NSTextField			*_customNameTextField;
-    IBOutlet NSTextField			*_freeDBServerTextField;
-    IBOutlet NSTextField			*_freeDBPortTextField;
-
-	IBOutlet NSArrayController		*_freeDBMirrorsController;
-
-	NSArray							*_freeDBMirrors;
-    NSString						*_customNameExample;
 }
 
 + (PreferencesController *) sharedPreferences;
-
-- (IBAction)			customNamingButtonAction:(id)sender;
-
-- (IBAction)			setFreeDBMirror:(id)sender;
-- (IBAction)			refreshFreeDBMirrorList:(id)sender;
-
-- (IBAction)			restoreDefaults:(id)sender;
-
-- (IBAction)			selectOutputDirectory:(id)sender;
-- (void)				openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 @end
