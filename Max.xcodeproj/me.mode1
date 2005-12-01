@@ -261,7 +261,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>12</integer>
+									<integer>6</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -285,7 +285,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>732 266 520 548 0 0 1280 832 </string>
+						<string>725 266 520 548 0 0 1280 832 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -338,7 +338,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {312, 0}}</string>
 								<key>RubberWindowFrame</key>
-								<string>732 266 520 548 0 0 1280 832 </string>
+								<string>725 266 520 548 0 0 1280 832 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -358,7 +358,7 @@
 								<key>Frame</key>
 								<string>{{0, 5}, {312, 502}}</string>
 								<key>RubberWindowFrame</key>
-								<string>732 266 520 548 0 0 1280 832 </string>
+								<string>725 266 520 548 0 0 1280 832 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -519,11 +519,11 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>732 266 520 548 0 0 1280 832 </string>
+	<string>725 266 520 548 0 0 1280 832 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
