@@ -63,7 +63,7 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 		}
 	    
 		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"customNamingUseFallback", @"customTrackColor", 
-			@"outputMP3", @"outputFLAC", @"outputOgg",
+			@"outputMP3", @"outputFLAC", @"outputVorbis",
 			@"freeDBPort", @"freeDBProtocol", @"freeDBServer", 
 			@"paranoiaEnable", @"paranoiaLevel", @"paranoiaNeverSkip", @"paranoiaMaximumRetries",
 			@"lameBitrate", @"lameEncodingEngineQuality", @"lameMonoEncoding", 

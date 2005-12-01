@@ -6,7 +6,7 @@
 	<true/>
 	<key>outputFLAC</key>
 	<false/>
-	<key>outputOgg</key>
+	<key>outputVorbis</key>
 	<false/>
 	<key>customNamingUseFallback</key>
 	<false/>
