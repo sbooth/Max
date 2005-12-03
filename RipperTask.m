@@ -33,10 +33,38 @@
 
 - (id) initWithTrack:(Track *)track
 {
+	char *path = NULL;
+
 	if((self = [super init])) {
-		_track = [track retain];
-		[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
-		_ripper = [[Ripper alloc] initWithTrack:track];
+		@try {
+			_track = [track retain];
+			[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+			
+			// Create and open the output file
+			path = malloc((strlen(_PATH_TMP) + strlen(TEMPFILE_PATTERN) + 1) *  sizeof(char));
+			if(NULL == path) {
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			}
+			memcpy(path, _PATH_TMP, strlen(_PATH_TMP));
+			memcpy(path + strlen(_PATH_TMP), TEMPFILE_PATTERN, strlen(TEMPFILE_PATTERN));
+			
+			_out = mkstemp(path);
+			if(-1 == _out) {
+				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			}
+			
+			_path	= [[NSString stringWithUTF8String:path] retain];
+			
+			_ripper = [[Ripper alloc] initWithTrack:track];
+		}
+		
+		@catch(NSException *exception) {
+			@throw;
+		}
+		
+		@finally {
+			free(path);
+		}
 		
 		return self;
 	}
@@ -62,24 +90,8 @@
 - (void) run:(id)object
 {
 	NSAutoreleasePool	*pool	= [[NSAutoreleasePool alloc] init];
-	char				*path	= NULL;
 
 	@try {
-		// Create and open the output file
-		path = alloc((strlen(_PATH_TMP) + strlen(TEMPFILE_PATTERN) + 1) *  sizeof(char));
-		if(NULL == path) {
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}
-		memcpy(path, _PATH_TMP, strlen(_PATH_TMP));
-		memcpy(path + strlen(_PATH_TMP), TEMPFILE_PATTERN, strlen(TEMPFILE_PATTERN));
-		
-		_out = mkstemp(path);
-		if(-1 == _out) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}
-		
-		_path	= [[NSString stringWithUTF8String:path] retain];
-		
 		// Start ripping
 		[_ripper ripToFile:_out];
 	}
@@ -92,10 +104,9 @@
 	}
 	
 	@finally {
-		free(path);
-		
 		// Close output file
 		if(-1 == close(_out)) {
+			// Just ignore it for now
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		

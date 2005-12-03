@@ -139,7 +139,7 @@
 		[tasksWindow performClose:self];
 	}
 	else {
-		[tasksWindow orderFront:self];
+		[tasksWindow makeKeyAndOrderFront:self];
 	}
 }
 
@@ -150,7 +150,7 @@
 		[logWindow performClose:self];
 	}
 	else {
-		[logWindow orderFront:self];
+		[logWindow makeKeyAndOrderFront:self];
 	}
 }
 

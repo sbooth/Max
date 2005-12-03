@@ -10,7 +10,10 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>xml</string>
+				<string>cdinfo</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>CD</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>text/plain</string>

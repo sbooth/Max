@@ -33,8 +33,8 @@
 #include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
 
-// My (semi-artbitrary) list of supported vorbis bitrates
-static int sVorbisBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
+// My (semi-arbitrary) list of supported vorbis bitrates
+static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
 
 // Tag values for NSPopupButton
 enum {
@@ -159,17 +159,21 @@ enum {
 	// Use quality-based VBR
 	if(VORBIS_MODE_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisMode"]) {
 		if(vorbis_encode_init_vbr(&vi, 2, 44100, [[NSUserDefaults standardUserDefaults] floatForKey:@"vorbisQuality"])) {
-			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder."];
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
 		}
 	}
 	else if(VORBIS_MODE_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisMode"]) {
-		long	bitrate		= sVorbisBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisBitrate"]];
+		long	bitrate		= sVorbisBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisBitrate"]] * 1000;
 		BOOL	cbr			= [[NSUserDefaults standardUserDefaults] boolForKey:@"vorbisUseConstantBitrate"];
+
 		if(vorbis_encode_init(&vi, 2, 44100, cbr ? bitrate : -1, bitrate, cbr ? bitrate : -1)) {
-			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder."];
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
 		}
 	}
 	else {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
 	}
 
@@ -210,6 +214,7 @@ example: 44kHz stereo coupled, average 128kbps VBR
 	vorbis_analysis_init(&vd, &vi);
 	vorbis_block_init(&vd, &vb);
 	
+	// Use the current time as the stream id
 	srand(time(NULL));
 	ogg_stream_init(&os, rand());
 	

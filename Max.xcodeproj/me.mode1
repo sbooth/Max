@@ -259,7 +259,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>2</integer>
+									<integer>12</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -382,9 +382,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>8CA65E6A0940C3BD00CC84F2</string>
+				<string>8CED13890941B8A8005AAFB1</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>8CA65E6B0940C3BD00CC84F2</string>
+				<string>8CED138A0941B8A8005AAFB1</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -518,8 +518,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D57069F1CE1000CFCEE</string>
-		<string>8C191A4608C515A500CB7453</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
@@ -540,14 +538,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>VorbisException.m</string>
+								<string>VorbisEncoder.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -564,6 +560,8 @@
 							<string>327pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -645,8 +643,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {256, 112}}</string>
-											<string>{{256, 0}, {1024, 112}}</string>
+											<string>{{0, 0}, {256, 107}}</string>
+											<string>{{256, 0}, {1024, 107}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -661,8 +659,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {1280, 112}}</string>
-											<string>{{0, 112}, {1280, 619}}</string>
+											<string>{{0, 0}, {1280, 107}}</string>
+											<string>{{0, 107}, {1280, 624}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -709,14 +707,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>8CB86233093F18B800A60FC1</string>
+				<string>8CA660E90941AEC400CC84F2</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>8CB86234093F18B800A60FC1</string>
-				<string>8CB86235093F18B800A60FC1</string>
-				<string>8CB86236093F18B800A60FC1</string>
-				<string>8CB86237093F18B800A60FC1</string>
-				<string>8CB86238093F18B800A60FC1</string>
-				<string>8CB86239093F18B800A60FC1</string>
+				<string>8CA660EA0941AEC400CC84F2</string>
+				<string>8CA660EB0941AEC400CC84F2</string>
+				<string>8CA660EC0941AEC400CC84F2</string>
+				<string>8CA660ED0941AEC400CC84F2</string>
+				<string>8CA660EE0941AEC400CC84F2</string>
+				<string>8CA660EF0941AEC400CC84F2</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>
@@ -750,7 +748,7 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>CompactDiscDocument.m</string>
+										<string>RipperTask.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -835,8 +833,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -872,7 +868,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>8C9D1F4208C5287A00D95535</string>
-				<string>8CB8623A093F18B800A60FC1</string>
+				<string>8CA660F00941AEC400CC84F2</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>WindowString</key>
@@ -967,9 +963,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>8CA65E6C0940C3BD00CC84F2</string>
+				<string>8CED138B0941B8A8005AAFB1</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>8CA65E6D0940C3BD00CC84F2</string>
+				<string>8CED138C0941B8A8005AAFB1</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>

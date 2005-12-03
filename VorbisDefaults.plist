@@ -7,7 +7,7 @@
 	<key>vorbisQuality</key>
 	<real>0.5</real>
 	<key>vorbisBitrate</key>
-	<real>8</real>
+	<real>6</real>
 	<key>vorbisUseConstantBitrate</key>
 	<false/>
 </dict>

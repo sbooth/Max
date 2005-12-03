@@ -132,6 +132,7 @@ enum {
 				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
 			}
 			else {
+				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME mode" userInfo:nil];
 			}
 			

@@ -139,7 +139,7 @@ static TaskMaster *sharedController = nil;
 	RipperTask	*ripperTask		= nil;
 	
 	// Show the tasks window if it is hidden
-	[[self window] orderFront:self];
+	[[self window] makeKeyAndOrderFront:self];
 
 	// Start rip
 	ripperTask = [[RipperTask alloc] initWithTrack:track];
