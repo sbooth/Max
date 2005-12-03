@@ -50,7 +50,7 @@ findEjectableCDMedia(io_iterator_t *mediaIterator)
     if(KERN_SUCCESS != kernResult) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"IOMasterPort returned %d", kernResult] userInfo:nil];
     }
-	
+
     classesToMatch = IOServiceMatching(kIOCDMediaClass); 
     if(NULL == classesToMatch) {
 		@throw [IOException exceptionWithReason:@"IOServiceMatching returned a NULL dictionary." userInfo:nil];
@@ -78,7 +78,6 @@ getBSDName(io_object_t media)
 	CFTypeRef		deviceNameAsCFString;
 	
 	@try {
-		/* Get the BSD path for the device */
 		deviceNameAsCFString = IORegistryEntryCreateCFProperty(media, CFSTR(kIOBSDNameKey), kCFAllocatorDefault, 0);
 		if(NULL == deviceNameAsCFString) {
 			@throw [IOException exceptionWithReason:@"IORegistryEntryCreateCFProperty returned NULL." userInfo:nil];
@@ -179,32 +178,39 @@ static MediaController *sharedController = nil;
 		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
 
 		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
-//		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
 		NSURL					*url		= [NSURL fileURLWithPath:filename];
 		CompactDiscDocument		*doc		= nil;
 		NSError					*err		= nil;
-		BOOL					queryFreeDB = NO;
+		BOOL					newDisc		= NO;
 		
-		// If the file exists open it (disc already seen)
-		if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
-			doc	= [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:NO error:&err];
-		}
-		else {
-			// Ugly hack to avoid letting the user specify the save filename
+		// Ugly hack to avoid letting the user specify the save filename
+		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
 			[[NSFileManager defaultManager] createFileAtPath:filename contents:nil attributes:nil];
-			doc = [[NSDocumentController sharedDocumentController] openUntitledDocumentAndDisplay:NO error:&err];
-			[doc setFileURL:url];
-			queryFreeDB = YES;
+			newDisc = YES;
 		}
+
+		doc	= [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:NO error:&err];
 		
 		if(nil != doc && nil == [doc getDisc]) {
 			[doc setDisc:disc];
+			
 			if(0 == [[doc windowControllers] count]) {
 				[doc makeWindowControllers];
-				[doc showWindows];				
+				[doc showWindows];		
 			}
-			if(queryFreeDB) {
-				[doc getCDInformation:self];
+
+			if(newDisc) {
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
+					[doc getCDInformation:self];
+				}				
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"]) {
+					[doc selectAll:self];
+					[doc encode:self];
+				}
+				
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
+					[[doc getDisc] eject];
+				}
 			}
 		}
 		else {
@@ -235,7 +241,6 @@ static MediaController *sharedController = nil;
 		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
 		
 		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
-//		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
 		NSURL					*url		= [NSURL fileURLWithPath:filename];
 		CompactDiscDocument		*doc		= [[NSDocumentController sharedDocumentController] documentForURL:url];
 		

@@ -33,46 +33,22 @@
 
 - (id) initWithTrack:(Track *)track
 {
-	char *path = NULL;
-	
-	@try {
-		if((self = [super init])) {
-			
-			_track = [track retain];
-			
-			// Create the output file
-			path = malloc((strlen(_PATH_TMP) + strlen(TEMPFILE_PATTERN) + 1) *  sizeof(char));
-			if(NULL == path) {
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			memcpy(path, _PATH_TMP, strlen(_PATH_TMP));
-			memcpy(path + strlen(_PATH_TMP), TEMPFILE_PATTERN, strlen(TEMPFILE_PATTERN));
-			
-			_out = mkstemp(path);
-			if(-1 == _out) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			
-			_path	= [[NSString stringWithUTF8String:path] retain];
-			_ripper = [[Ripper alloc] initWithTrack:track];
-		}
+	if((self = [super init])) {
+		_track = [track retain];
+		[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+		_ripper = [[Ripper alloc] initWithTrack:track];
+		
+		return self;
 	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
-	@finally {
-		free(path);
-	}
-	
-	return self;
+	return nil;
 }
 
 - (void) dealloc
 {
+	[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
 	[_track release];
 	
+	// Delete output file
 	if(-1 == unlink([_path UTF8String])) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _path, errno, strerror(errno)] userInfo:nil];
 	}	
@@ -85,10 +61,26 @@
 
 - (void) run:(id)object
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
+	NSAutoreleasePool	*pool	= [[NSAutoreleasePool alloc] init];
+	char				*path	= NULL;
+
 	@try {
-		[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+		// Create and open the output file
+		path = alloc((strlen(_PATH_TMP) + strlen(TEMPFILE_PATTERN) + 1) *  sizeof(char));
+		if(NULL == path) {
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}
+		memcpy(path, _PATH_TMP, strlen(_PATH_TMP));
+		memcpy(path + strlen(_PATH_TMP), TEMPFILE_PATTERN, strlen(TEMPFILE_PATTERN));
+		
+		_out = mkstemp(path);
+		if(-1 == _out) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		}
+		
+		_path	= [[NSString stringWithUTF8String:path] retain];
+		
+		// Start ripping
 		[_ripper ripToFile:_out];
 	}
 	
@@ -100,10 +92,13 @@
 	}
 	
 	@finally {
-		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+		free(path);
+		
+		// Close output file
 		if(-1 == close(_out)) {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}		
+		}
+		
 		[pool release];
 	}
 }

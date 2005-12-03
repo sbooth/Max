@@ -52,7 +52,7 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 
 	@try {
 		defaultsDictionary	= [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
-		defaultFiles		= [NSArray arrayWithObjects:@"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", nil];
+		defaultFiles		= [NSArray arrayWithObjects:@"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"VorbisDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -62,17 +62,7 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 			[defaultsDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:defaultsPath]];
 		}
 	    
-		resettableUserDefaultsKeys = [NSArray arrayWithObjects:@"customNamingUseFallback", @"customTrackColor", 
-			@"outputMP3", @"outputFLAC", @"outputVorbis",
-			@"freeDBPort", @"freeDBProtocol", @"freeDBServer", 
-			@"paranoiaEnable", @"paranoiaLevel", @"paranoiaNeverSkip", @"paranoiaMaximumRetries",
-			@"lameBitrate", @"lameEncodingEngineQuality", @"lameMonoEncoding", 
-			@"lameQuality",@"lameTarget", @"lameUseConstantBitrate", 
-			@"lameVBRQuality", @"lameVariableBitrateMode", 
-			@"outputDirectory", @"useCustomNaming", @"customNamingScheme", 
-			@"maximumEncoderThreads", nil];
-		initialValuesDictionary = [defaultsDictionary dictionaryWithValuesForKeys:resettableUserDefaultsKeys];
-		
+		initialValuesDictionary = [defaultsDictionary dictionaryWithValuesForKeys:[defaultsDictionary allKeys]];		
 		[[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:initialValuesDictionary];
 	}
 	@catch(NSException *exception) {

@@ -51,6 +51,7 @@
 		8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EE0924598D00BDFD02 /* libmp3lame.a */; };
 		8CA522790938E44100250BE8 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA522770938E44100250BE8 /* LogController.m */; };
 		8CA5229F0938E5DD00250BE8 /* Log.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA5229E0938E5DD00250BE8 /* Log.nib */; };
+		8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA660650941A87B00CC84F2 /* VorbisException.m */; };
 		8CA8C03E093A5F2B00FDA506 /* MPEGEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */; };
 		8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */; };
 		8CB0AE64093AE12100968F66 /* FLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */; };
@@ -222,6 +223,8 @@
 		8CA522760938E44100250BE8 /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogController.h; sourceTree = "<group>"; };
 		8CA522770938E44100250BE8 /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogController.m; sourceTree = "<group>"; };
 		8CA5229E0938E5DD00250BE8 /* Log.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Log.nib; sourceTree = "<group>"; };
+		8CA660640941A87B00CC84F2 /* VorbisException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VorbisException.h; sourceTree = "<group>"; };
+		8CA660650941A87B00CC84F2 /* VorbisException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VorbisException.m; sourceTree = "<group>"; };
 		8CA8C03B093A5F2B00FDA506 /* MPEGEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEGEncoder.h; sourceTree = "<group>"; };
 		8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEGEncoder.m; sourceTree = "<group>"; };
 		8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
@@ -555,6 +558,8 @@
 		8CBEC4EB08ED6F640064F794 /* Exceptions */ = {
 			isa = PBXGroup;
 			children = (
+				8CA660640941A87B00CC84F2 /* VorbisException.h */,
+				8CA660650941A87B00CC84F2 /* VorbisException.m */,
 				8CE1687B0934681C00A99A68 /* ParanoiaException.h */,
 				8CE1687C0934681C00A99A68 /* ParanoiaException.m */,
 				8CBEC4EE08ED6F770064F794 /* FreeDBException.h */,
@@ -763,6 +768,7 @@
 				8CB860E9093EF4DC00A60FC1 /* VorbisPreferencesController.m in Sources */,
 				8CB861A4093F0E4700A60FC1 /* VorbisEncoder.m in Sources */,
 				8CB861FE093F177200A60FC1 /* VorbisEncoderTask.mm in Sources */,
+				8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

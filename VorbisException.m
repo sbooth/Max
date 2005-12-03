@@ -1,5 +1,5 @@
 /*
- *  $Id: FLACException.h 53 2005-10-02 16:10:42Z me $
+ *  $Id: LAMEException.m 54 2005-10-02 16:10:42Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -9,7 +9,7 @@
  *  (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty oFLACf
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
@@ -18,14 +18,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import <Cocoa/Cocoa.h>
+#import "VorbisException.h"
 
-@interface FLACException : NSException 
+@implementation VorbisException
+
++ (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo
 {
+	return [[[VorbisException alloc] initWithReason:reason userInfo:userInfo] autorelease];
 }
 
-+ (NSException *) exceptionWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;
-
-- (id) initWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo;
+- (id) initWithReason:(NSString *)reason userInfo:(NSDictionary *)userInfo
+{
+	return [super initWithName:@"VorbisException" reason:reason userInfo:userInfo];
+}
 
 @end

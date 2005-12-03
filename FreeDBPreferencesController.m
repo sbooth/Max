@@ -19,6 +19,7 @@
  */
 
 #import "FreeDBPreferencesController.h"
+#import "PreferencesController.h"
 #import "FreeDB.h"
 #import "FreeDBSite.h"
 
@@ -42,11 +43,16 @@
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		displayExceptionSheet(exception, [[PreferencesController sharedPreferences] window], self, @selector(alertDidEnd:returnCode:contextInfo:), NULL);
 	}
 	
 	@finally {
 	}
+}
+
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	// Nothing for now
 }
 
 - (IBAction) selectMirror:(id)sender

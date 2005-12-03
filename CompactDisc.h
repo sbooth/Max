@@ -56,6 +56,7 @@
 - (cdrom_drive *)		getDrive;
 - (cddb_disc_t *)		getFreeDBDisc;
 
-//- (id < Ripper>) getRipper;
+// Actions
+- (void)				eject;
 
 @end

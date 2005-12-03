@@ -26,17 +26,14 @@
 
 @implementation EncoderTask
 
-- (id) init
-{
-	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"EncoderTask::init called" userInfo:nil];
-}
-
 - (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
 {
 	if((self = [super init])) {
 		_target = [target retain];
 		_track	= [track retain];
 		_source = [source retain];
+
+		[_track encodeStarted];
 
 		return self;
 	}
@@ -45,6 +42,11 @@
 
 - (void) dealloc
 {
+	[_track encodeCompleted];
+	if(NO == [[_track encodeInProgress] boolValue]) {
+		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+	}
+	
 	[_target release];
 	[_track release];
 	[_source release];
@@ -64,7 +66,6 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	@try {
-		[_track encodeStarted];
 		[_encoder encodeToFile:_target];
 		[self writeTags];
 	}
@@ -77,10 +78,6 @@
 	}
 	
 	@finally {
-		[_track encodeCompleted];
-		if(NO == [[_track encodeInProgress] boolValue]) {
-			[_track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-		}
 		[pool release];
 	}
 }
@@ -94,7 +91,6 @@
 {
 	return;
 }
-
 
 - (NSString *) getType
 {

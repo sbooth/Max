@@ -103,9 +103,9 @@
 
 	cddb_sites(_freeDB);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
-	/*if(FALSE == cddb_sites(_freeDB)) {
+	if(FALSE == cddb_sites(_freeDB)) {
 		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"Unable to obtain list of FreeDB mirrors.\nlibcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
-	}*/
+	}
 	
 	site = cddb_first_site(_freeDB);
 	while(NULL != site) {

@@ -486,8 +486,6 @@ static TaskMaster *sharedController = nil;
 	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	[task removeOutputFile];
-	
 	[self removeEncodingTask:task];
 	[self spawnEncoderThreads];
 }

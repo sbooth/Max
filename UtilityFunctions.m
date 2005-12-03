@@ -28,6 +28,8 @@
 #import "CustomNamingException.h"
 #import "MissingResourceException.h"
 #import "ParanoiaException.h"
+#import "FLACException.h"
+#import "VorbisException.h"
 
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;
@@ -168,7 +170,13 @@ displayExceptionSheet(NSException	*exception,
 		[alert setMessageText: @"Missing Resource"];
 	}
 	else if([exception isKindOfClass:[ParanoiaException class]]) {
-		[alert setMessageText: @"CDParanoia Error"];
+		[alert setMessageText: @"cdparanoia Error"];
+	}
+	else if([exception isKindOfClass:[FLACException class]]) {
+		[alert setMessageText: @"FLAC Error"];
+	}
+	else if([exception isKindOfClass:[VorbisException class]]) {
+		[alert setMessageText: @"Ogg Vorbis Error"];
 	}
 	else {
 		[alert setMessageText: @"Unknown Error"];

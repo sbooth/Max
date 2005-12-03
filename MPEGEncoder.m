@@ -32,7 +32,7 @@
 #include <sys/stat.h>	// stat
 
 // Bitrates supported for 44.1 kHz audio
-static int maxBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
+static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
 
 @interface MPEGEncoder (Private)
 - (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
@@ -116,7 +116,7 @@ enum {
 			
 			// Target is bitrate
 			if(LAME_TARGET_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
-				bitrate = maxBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"lameBitrate"]];
+				bitrate = sLAMEBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"lameBitrate"]];
 				lame_set_brate(_gfp, bitrate);
 				if([[NSUserDefaults standardUserDefaults] boolForKey:@"lameUseConstantBitrate"]) {
 					lame_set_VBR(_gfp, vbr_off);
@@ -127,9 +127,12 @@ enum {
 				}
 			}
 			// Target is quality
-			else {
+			else if(LAME_TARGET_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
 				lame_set_VBR(_gfp, LAME_VARIABLE_BITRATE_MODE_FAST == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVariableBitrateMode"] ? vbr_mtrh : vbr_rh);
 				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
+			}
+			else {
+				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME mode" userInfo:nil];
 			}
 			
 			lameResult = lame_init_params(_gfp);

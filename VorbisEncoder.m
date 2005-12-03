@@ -23,6 +23,7 @@
 #import "IOException.h"
 #import "StopException.h"
 #import "MissingResourceException.h"
+#import "VorbisException.h"
 
 #import "UtilityFunctions.h"
 
@@ -32,18 +33,14 @@
 #include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
 
-@interface VorbisEncoder (Private)
-- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
-@end
+// My (semi-artbitrary) list of supported vorbis bitrates
+static int sVorbisBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
 
-int oe_write_page(ogg_page *page, int fd)
-{
-	int written;
-	written = write(fd, page->header, page->header_len);
-	written += write(fd, page->body, page->body_len);
-	
-	return written;
-}
+// Tag values for NSPopupButton
+enum {
+	VORBIS_MODE_QUALITY						= 0,
+	VORBIS_MODE_BITRATE						= 1,
+};
 
 @implementation VorbisEncoder
 
@@ -99,8 +96,6 @@ int oe_write_page(ogg_page *page, int fd)
 	
 	vorbis_dsp_state			vd;
 	vorbis_block				vb;
-	
-	int							ret;
 	
 	float						**buffer;
 	
@@ -160,8 +155,25 @@ int oe_write_page(ogg_page *page, int fd)
 		
 	// Setup the encoder
 	vorbis_info_init(&vi);
-	
-	/* choose an encoding mode.  A few possibilities commented out, one
+
+	// Use quality-based VBR
+	if(VORBIS_MODE_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisMode"]) {
+		if(vorbis_encode_init_vbr(&vi, 2, 44100, [[NSUserDefaults standardUserDefaults] floatForKey:@"vorbisQuality"])) {
+			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder."];
+		}
+	}
+	else if(VORBIS_MODE_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisMode"]) {
+		long	bitrate		= sVorbisBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisBitrate"]];
+		BOOL	cbr			= [[NSUserDefaults standardUserDefaults] boolForKey:@"vorbisUseConstantBitrate"];
+		if(vorbis_encode_init(&vi, 2, 44100, cbr ? bitrate : -1, bitrate, cbr ? bitrate : -1)) {
+			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder."];
+		}
+	}
+	else {
+		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
+	}
+
+		/* choose an encoding mode.  A few possibilities commented out, one
 		actually used: */
 	
 	/*********************************************************************
@@ -189,16 +201,6 @@ example: 44kHz stereo coupled, average 128kbps VBR
 				vorbis_encode_setup_init(&vi));
 	
 	*********************************************************************/
-	
-	ret = vorbis_encode_init_vbr(&vi, 2, 44100, 0.1);
-	
-	/* do not continue if setup failed; this can happen if we ask for a
-		mode that libVorbis does not support (eg, too low a bitrate, etc,
-											  will return 'OV_EIMPL') */
-	
-	if(ret) {
-		@throw [IOException exceptionWithReason:@"fnord" userInfo:nil];
-	}
 	
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 

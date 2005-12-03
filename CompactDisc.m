@@ -21,8 +21,11 @@
 #import "CompactDisc.h"
 
 #import "MallocException.h"
+#import "IOException.h"
 #import "ParanoiaException.h"
 #import "FreeDBException.h"
+
+#include <sys/disk.h>
 
 @implementation CompactDisc
 
@@ -156,6 +159,13 @@
 - (cddb_disc_t *) getFreeDBDisc
 {
 	return _freeDBDisc;
+}
+
+- (void) eject
+{
+	if(-1 == ioctl(_drive->fd, DKIOCEJECT, NULL)) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to eject disc (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	}
 }
 
 @end
