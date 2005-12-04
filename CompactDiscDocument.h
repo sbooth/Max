@@ -74,6 +74,7 @@
 - (IBAction)		encode:(id) sender;
 - (IBAction)		eject:(id) sender;
 - (IBAction)		queryFreeDB:(id) sender;
+- (IBAction)		toggleTrackInformation:(id) sender;
 
 - (void)			clearFreeDBData;
 - (void)			updateDiscFromFreeDB:(FreeDBMatch *) info;

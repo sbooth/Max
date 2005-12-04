@@ -20,6 +20,7 @@
 
 #import "CompactDiscDocument.h"
 
+#import "CompactDiscDocumentToolbar.h"
 #import "CompactDiscController.h"
 #import "Track.h"
 #import "Track.h"
@@ -28,19 +29,20 @@
 #import "Genres.h"
 #import "TaskMaster.h"
 #import "Encoder.h"
+#import "MediaController.h"
 
 #import "MallocException.h"
 #import "IOException.h"
 #import "FreeDBException.h"
 #import "EmptySelectionException.h"
 #import "MissingResourceException.h"
-#import "ActiveTaskException.h"
 
 #import "UtilityFunctions.h"
-#import "CompactDiscDocumentToolbar.h"
 
-#import "MediaController.h"
-
+#define kEncodeMenuItemTag			0
+#define kTrackInfoMenuItemTag		1
+#define kQueryFreeDBMenuItemTag		2
+#define kEjectDiscMenuItemTag		3
 
 @interface CompactDiscDocument (Private)
 - (NSString *)		basenameForTrack:(Track *)track;
@@ -98,21 +100,16 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	// Encode
-	if(1 == [item tag]) {
-		return [self encodeAllowed];
+	BOOL result;
+	
+	switch([item tag]) {
+		default:						result = [super validateMenuItem:item];			break;
+		case kEncodeMenuItemTag:		result = [self encodeAllowed];					break;
+		case kQueryFreeDBMenuItemTag:	result = [self queryFreeDBAllowed];				break;
+		case kEjectDiscMenuItemTag:		result = [self ejectDiscAllowed];				break;
 	}
-	// Query FreeDB
-	else if(2 == [item tag]) {
-		return [self queryFreeDBAllowed];
-	}
-	// Eject
-	else if(1 == [item tag]) {
-		return ([self discInDrive] && (NO == [self ripInProgress]));
-	}
-	else {
-		return [super validateMenuItem:item];
-	}
+	
+	return result;
 }
 
 
@@ -564,7 +561,7 @@
 			@throw [EmptySelectionException exceptionWithReason:@"Please select one or more tracks to encode." userInfo:nil];
 		}
 		else if([self ripInProgress] || [self encodeInProgress]) {
-			@throw [ActiveTaskException exceptionWithReason:@"A rip or encode operation is already in progress." userInfo:nil];
+			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:@"A rip or encode operation is already in progress." userInfo:nil];
 		}
 		
 		// Iterate through the selected tracks and rip/encode them
@@ -696,6 +693,11 @@
 }
 
 #pragma mark Miscellaneous
+
+- (IBAction) toggleTrackInformation:(id) sender
+{
+	[_trackDrawer toggle:sender];
+}
 
 - (NSString *)		length			{ return [NSString stringWithFormat:@"%u:%.02u", [_disc length] / 60, [_disc length] % 60]; }
 

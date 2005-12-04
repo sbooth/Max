@@ -99,8 +99,8 @@
 		8CEA9158094372B600207809 /* EjectDiscToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */; };
 		8CEA91B40943778C00207809 /* EncodeToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91B30943778C00207809 /* EncodeToolbarImage.png */; };
 		8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */; };
-		8CEA92490943846F00207809 /* ActiveTaskException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA92470943846F00207809 /* ActiveTaskException.m */; };
 		8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */; };
+		8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
@@ -298,10 +298,9 @@
 		8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EjectDiscToolbarImage.png; sourceTree = "<group>"; };
 		8CEA91B30943778C00207809 /* EncodeToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeToolbarImage.png; sourceTree = "<group>"; };
 		8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrackInfoToolbarImage.png; sourceTree = "<group>"; };
-		8CEA92460943846F00207809 /* ActiveTaskException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActiveTaskException.h; sourceTree = "<group>"; };
-		8CEA92470943846F00207809 /* ActiveTaskException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActiveTaskException.m; sourceTree = "<group>"; };
 		8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
 		8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
+		8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
@@ -416,6 +415,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */,
 				8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */,
 				8CEA91B30943778C00207809 /* EncodeToolbarImage.png */,
 				8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */,
@@ -599,8 +599,6 @@
 				8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */,
 				8CB0AED7093AE96C00968F66 /* FLACException.h */,
 				8CB0AED8093AE96C00968F66 /* FLACException.m */,
-				8CEA92460943846F00207809 /* ActiveTaskException.h */,
-				8CEA92470943846F00207809 /* ActiveTaskException.m */,
 			);
 			name = Exceptions;
 			sourceTree = "<group>";
@@ -734,6 +732,7 @@
 				8CEA9158094372B600207809 /* EjectDiscToolbarImage.png in Resources */,
 				8CEA91B40943778C00207809 /* EncodeToolbarImage.png in Resources */,
 				8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */,
+				8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,7 +792,6 @@
 				8CB861A4093F0E4700A60FC1 /* VorbisEncoder.m in Sources */,
 				8CB861FE093F177200A60FC1 /* VorbisEncoderTask.mm in Sources */,
 				8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */,
-				8CEA92490943846F00207809 /* ActiveTaskException.m in Sources */,
 				8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

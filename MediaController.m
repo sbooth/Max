@@ -23,6 +23,7 @@
 #import "IOException.h"
 #import "CompactDisc.h"
 #import "CompactDiscDocument.h"
+#import "MissingResourceException.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <DiskArbitration/DiskArbitration.h>
@@ -76,6 +77,26 @@ static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * conte
 static MediaController *sharedController = nil;
 
 @implementation MediaController
+
++ (void) initialize
+{
+	NSString				*defaultsValuesPath;
+    NSDictionary			*defaultsValuesDictionary;
+    
+	@try {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"MediaControllerDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load MediaControllerDefaults.plist." userInfo:nil];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+	}
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+	@finally {
+	}
+}
 
 + (MediaController *) sharedController
 {

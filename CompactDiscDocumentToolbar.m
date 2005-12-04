@@ -55,18 +55,10 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 	
 	while((item = [enumerator nextObject])) {
 		switch([item tag]) {
-			default:
-				[item setEnabled:YES];
-				break;
-			case kEncodeToolbarItemTag:
-				[item setEnabled:[_document encodeAllowed]];
-				break;
-			case kQueryFreeDBToolbarItemTag:
-				[item setEnabled:[_document queryFreeDBAllowed]];
-				break;
-			case kEjectDiscToolbarItemTag:
-				[item setEnabled:[_document ejectDiscAllowed]];
-				break;
+			default:							[item setEnabled:YES];								break;
+			case kEncodeToolbarItemTag:			[item setEnabled:[_document encodeAllowed]];		break;
+			case kQueryFreeDBToolbarItemTag:	[item setEnabled:[_document queryFreeDBAllowed]];	break;
+			case kEjectDiscToolbarItemTag:		[item setEnabled:[_document ejectDiscAllowed]];		break;
 		}
 	}
 }

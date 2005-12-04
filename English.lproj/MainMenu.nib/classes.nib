@@ -16,7 +16,13 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {"" = id; eject = id; encode = id; queryFreeDB = id; }; 
+            ACTIONS = {
+                "" = id; 
+                eject = id; 
+                encode = id; 
+                queryFreeDB = id; 
+                toggleTrackInformation = id; 
+            }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 

@@ -35,7 +35,6 @@
 
 - (IBAction) refreshList:(id)sender
 {
-	NSLog(@"refreshList");
 	@try {
 		// Get mirror list
 		FreeDB *freeDB = [[[FreeDB alloc] init] autorelease];

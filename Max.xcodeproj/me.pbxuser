@@ -25,7 +25,7 @@
 			8CB863D4093F371500A60FC1 /* VorbisEncoder.m:251 */,
 			8CB863D8093F374100A60FC1 /* VorbisEncoder.m:276 */,
 			8CEA8CC6094290BF00207809 /* CompactDisc.m:169 */,
-			8CEA921F0943811700207809 /* CompactDiscDocument.m:102 */,
+			8CEA921F0943811700207809 /* CompactDiscDocument.m:111 */,
 		);
 		breakpointsGroup = 8C191A5C08C516BE00CB7453 /* XCBreakpointsBucket */;
 		codeSenseManager = 8C02E09208C0160A000288FA /* Code sense */;
@@ -582,6 +582,22 @@
 			8CEA93CA0943972300207809 /* PBXTextBookmark */ = 8CEA93CA0943972300207809 /* PBXTextBookmark */;
 			8CEA93CE0943976100207809 /* PBXTextBookmark */ = 8CEA93CE0943976100207809 /* PBXTextBookmark */;
 			8CEA93CF0943976100207809 /* PBXTextBookmark */ = 8CEA93CF0943976100207809 /* PBXTextBookmark */;
+			8CEA941309439C5300207809 /* PBXBookmark */ = 8CEA941309439C5300207809 /* PBXBookmark */;
+			8CEA941B09439C9400207809 /* PBXTextBookmark */ = 8CEA941B09439C9400207809 /* PBXTextBookmark */;
+			8CEA943109439DE200207809 /* PBXTextBookmark */ = 8CEA943109439DE200207809 /* PBXTextBookmark */;
+			8CEA943209439DE200207809 /* PBXTextBookmark */ = 8CEA943209439DE200207809 /* PBXTextBookmark */;
+			8CEA943309439DE200207809 /* PBXTextBookmark */ = 8CEA943309439DE200207809 /* PBXTextBookmark */;
+			8CEA943409439DE200207809 /* PBXTextBookmark */ = 8CEA943409439DE200207809 /* PBXTextBookmark */;
+			8CEA943609439DE400207809 /* PBXTextBookmark */ = 8CEA943609439DE400207809 /* PBXTextBookmark */;
+			8CEA943A09439E4B00207809 /* PBXTextBookmark */ = 8CEA943A09439E4B00207809 /* PBXTextBookmark */;
+			8CEA944409439EE400207809 /* PBXTextBookmark */ = 8CEA944409439EE400207809 /* PBXTextBookmark */;
+			8CEA94490943A02F00207809 /* PBXTextBookmark */ = 8CEA94490943A02F00207809 /* PBXTextBookmark */;
+			8CEA94500943A06800207809 /* PBXBookmark */ = 8CEA94500943A06800207809 /* PBXBookmark */;
+			8CEA94770943A1A400207809 /* PBXTextBookmark */ = 8CEA94770943A1A400207809 /* PBXTextBookmark */;
+			8CEA947E0943A28300207809 /* PBXTextBookmark */ = 8CEA947E0943A28300207809 /* PBXTextBookmark */;
+			8CEA94810943A2FD00207809 /* PBXTextBookmark */ = 8CEA94810943A2FD00207809 /* PBXTextBookmark */;
+			8CEA94820943A2FD00207809 /* PBXTextBookmark */ = 8CEA94820943A2FD00207809 /* PBXTextBookmark */;
+			8CEA94830943A2FD00207809 /* PBXTextBookmark */ = 8CEA94830943A2FD00207809 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
 			8CFDCBD008ECA53C00EBB077 = 8CFDCBD008ECA53C00EBB077 /* PBXTextBookmark */;
 		};
@@ -808,9 +824,9 @@
 	};
 	8C4D4656093E7A6100A88927 /* FreeDBPreferencesController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {938, 1008}}";
-			sepNavSelRange = "{1473, 0}";
-			sepNavVisRect = "{{0, 504}, {776, 295}}";
+			sepNavIntBoundsRect = "{{0, 0}, {938, 994}}";
+			sepNavSelRange = "{1174, 0}";
+			sepNavVisRect = "{{0, 469}, {742, 338}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -1001,17 +1017,17 @@
 	};
 	8C76E43208C6DE1A00F4F9A1 /* CompactDiscDocument.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {875, 1316}}";
-			sepNavSelRange = "{1808, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {875, 1330}}";
+			sepNavSelRange = "{2073, 0}";
 			sepNavVisRect = "{{0, 522}, {875, 731}}";
 			sepNavWindowFrame = "{{15, 23}, {920, 804}}";
 		};
 	};
 	8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1148, 10766}}";
-			sepNavSelRange = "{1352, 0}";
-			sepNavVisRect = "{{0, 344}, {776, 709}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1148, 10780}}";
+			sepNavSelRange = "{20679, 0}";
+			sepNavVisRect = "{{0, 9397}, {776, 709}}";
 			sepNavWindowFrame = "{{33, 38}, {821, 782}}";
 		};
 	};
@@ -1042,16 +1058,16 @@
 	8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {711, 2730}}";
-			sepNavSelRange = "{2754, 0}";
-			sepNavVisRect = "{{0, 930}, {711, 715}}";
+			sepNavSelRange = "{2699, 0}";
+			sepNavVisRect = "{{0, 47}, {711, 715}}";
 			sepNavWindowFrame = "{{22, 35}, {756, 788}}";
 		};
 	};
 	8C7C897808EC435700F6FCB1 /* MediaController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1070, 2870}}";
-			sepNavSelRange = "{6527, 0}";
-			sepNavVisRect = "{{0, 2156}, {830, 700}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1070, 3178}}";
+			sepNavSelRange = "{6376, 0}";
+			sepNavVisRect = "{{0, 2168}, {830, 700}}";
 			sepNavWindowFrame = "{{38, 59}, {875, 773}}";
 		};
 	};
@@ -1124,8 +1140,8 @@
 	8CA522770938E44100250BE8 /* LogController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1088, 1652}}";
-			sepNavSelRange = "{1389, 0}";
-			sepNavVisRect = "{{0, 422}, {830, 700}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {830, 700}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -1156,8 +1172,8 @@
 	8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1052, 5096}}";
-			sepNavSelRange = "{2730, 0}";
-			sepNavVisRect = "{{0, 968}, {830, 700}}";
+			sepNavSelRange = "{1766, 0}";
+			sepNavVisRect = "{{0, 484}, {830, 700}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -1220,8 +1236,8 @@
 	8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {836, 2674}}";
-			sepNavSelRange = "{5598, 206}";
-			sepNavVisRect = "{{0, 1906}, {830, 700}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 1597}, {830, 700}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -1421,9 +1437,9 @@
 	};
 	8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {908, 2996}}";
-			sepNavSelRange = "{6339, 0}";
-			sepNavVisRect = "{{0, 2059}, {719, 713}}";
+			sepNavIntBoundsRect = "{{0, 0}, {908, 2940}}";
+			sepNavSelRange = "{1179, 0}";
+			sepNavVisRect = "{{0, 0}, {719, 713}}";
 			sepNavWindowFrame = "{{38, 20}, {764, 786}}";
 		};
 	};
@@ -1462,7 +1478,7 @@
 	8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {719, 713}}";
-			sepNavSelRange = "{0, 568}";
+			sepNavSelRange = "{550, 0}";
 			sepNavVisRect = "{{0, 0}, {719, 713}}";
 			sepNavWindowFrame = "{{15, 41}, {764, 786}}";
 		};
@@ -1697,7 +1713,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 196";
 		rLen = 0;
-		rLoc = 4483;
+		rLoc = 5172;
 		rType = 0;
 		vrLen = 1654;
 		vrLoc = 5284;
@@ -1717,7 +1733,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 196";
 		rLen = 0;
-		rLoc = 4483;
+		rLoc = 5172;
 		rType = 0;
 		vrLen = 1654;
 		vrLoc = 5284;
@@ -1737,7 +1753,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 196";
 		rLen = 0;
-		rLoc = 4483;
+		rLoc = 5172;
 		rType = 0;
 		vrLen = 1654;
 		vrLoc = 5284;
@@ -1923,7 +1939,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 202";
 		rLen = 0;
-		rLoc = 4483;
+		rLoc = 5172;
 		rType = 0;
 		vrLen = 1717;
 		vrLoc = 5042;
@@ -1953,7 +1969,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 202";
 		rLen = 0;
-		rLoc = 4483;
+		rLoc = 5172;
 		rType = 0;
 		vrLen = 1593;
 		vrLoc = 5650;
@@ -2288,7 +2304,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 161";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3852;
 		rType = 0;
 		vrLen = 1433;
 		vrLoc = 1033;
@@ -2372,7 +2388,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 164";
 		rLen = 0;
-		rLoc = 3834;
+		rLoc = 4523;
 		rType = 0;
 		vrLen = 1364;
 		vrLoc = 4104;
@@ -2418,7 +2434,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = DARegisterDiskAppearedCallback;
 		rLen = 0;
-		rLoc = 3834;
+		rLoc = 4523;
 		rType = 0;
 		vrLen = 1280;
 		vrLoc = 4104;
@@ -2438,7 +2454,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 165";
 		rLen = 0;
-		rLoc = 3834;
+		rLoc = 4523;
 		rType = 0;
 		vrLen = 1510;
 		vrLoc = 4556;
@@ -2458,7 +2474,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 163";
 		rLen = 0;
-		rLoc = 3834;
+		rLoc = 4523;
 		rType = 0;
 		vrLen = 1530;
 		vrLoc = 4400;
@@ -2468,7 +2484,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 43";
 		rLen = 0;
-		rLoc = 1269;
+		rLoc = 1306;
 		rType = 0;
 		vrLen = 1334;
 		vrLoc = 449;
@@ -2478,7 +2494,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 167";
 		rLen = 0;
-		rLoc = 3635;
+		rLoc = 4324;
 		rType = 0;
 		vrLen = 1663;
 		vrLoc = 4360;
@@ -2488,7 +2504,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 47";
 		rLen = 0;
-		rLoc = 1269;
+		rLoc = 1306;
 		rType = 0;
 		vrLen = 1418;
 		vrLoc = 879;
@@ -2498,7 +2514,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 52";
 		rLen = 0;
-		rLoc = 1269;
+		rLoc = 1306;
 		rType = 0;
 		vrLen = 1406;
 		vrLoc = 1202;
@@ -2508,7 +2524,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 184";
 		rLen = 0;
-		rLoc = 3637;
+		rLoc = 4326;
 		rType = 0;
 		vrLen = 1710;
 		vrLoc = 4956;
@@ -2528,7 +2544,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 183";
 		rLen = 0;
-		rLoc = 3635;
+		rLoc = 4324;
 		rType = 0;
 		vrLen = 1712;
 		vrLoc = 4956;
@@ -2548,7 +2564,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 183";
 		rLen = 0;
-		rLoc = 3635;
+		rLoc = 4324;
 		rType = 0;
 		vrLen = 1712;
 		vrLoc = 4956;
@@ -2568,7 +2584,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 181";
 		rLen = 0;
-		rLoc = 3222;
+		rLoc = 3911;
 		rType = 0;
 		vrLen = 1709;
 		vrLoc = 4856;
@@ -2605,7 +2621,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 186";
 		rLen = 0;
-		rLoc = 3700;
+		rLoc = 4389;
 		rType = 0;
 		vrLen = 1708;
 		vrLoc = 4856;
@@ -2642,7 +2658,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 181";
 		rLen = 0;
-		rLoc = 3222;
+		rLoc = 3911;
 		rType = 0;
 		vrLen = 1724;
 		vrLoc = 4856;
@@ -2662,7 +2678,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 182";
 		rLen = 0;
-		rLoc = 3359;
+		rLoc = 4048;
 		rType = 0;
 		vrLen = 1787;
 		vrLoc = 4856;
@@ -2702,7 +2718,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 187";
 		rLen = 0;
-		rLoc = 3700;
+		rLoc = 4389;
 		rType = 0;
 		vrLen = 1788;
 		vrLoc = 4856;
@@ -2732,7 +2748,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 182";
 		rLen = 0;
-		rLoc = 3484;
+		rLoc = 4173;
 		rType = 0;
 		vrLen = 1744;
 		vrLoc = 4856;
@@ -2772,7 +2788,7 @@
 		comments = "warning: passing argument 1 of 'arrayWithObjects:' from incompatible pointer type";
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		rLen = 1;
-		rLoc = 103;
+		rLoc = 124;
 		rType = 1;
 	};
 	8CEA8E6C0942B2B200207809 /* PBXTextBookmark */ = {
@@ -2790,7 +2806,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: allocWithZone:";
 		rLen = 0;
-		rLoc = 3132;
+		rLoc = 3821;
 		rType = 0;
 		vrLen = 909;
 		vrLoc = 5186;
@@ -2800,7 +2816,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 182";
 		rLen = 0;
-		rLoc = 3359;
+		rLoc = 4048;
 		rType = 0;
 		vrLen = 1744;
 		vrLoc = 4856;
@@ -2820,7 +2836,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: allocWithZone:";
 		rLen = 0;
-		rLoc = 3132;
+		rLoc = 3821;
 		rType = 0;
 		vrLen = 909;
 		vrLoc = 5186;
@@ -2830,7 +2846,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 181";
 		rLen = 0;
-		rLoc = 3322;
+		rLoc = 4011;
 		rType = 0;
 		vrLen = 1788;
 		vrLoc = 4856;
@@ -2850,7 +2866,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: allocWithZone:";
 		rLen = 0;
-		rLoc = 3132;
+		rLoc = 3821;
 		rType = 0;
 		vrLen = 953;
 		vrLoc = 5186;
@@ -2860,7 +2876,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 186";
 		rLen = 0;
-		rLoc = 3635;
+		rLoc = 4324;
 		rType = 0;
 		vrLen = 1556;
 		vrLoc = 4856;
@@ -2880,7 +2896,7 @@
 		comments = "error: 'disc' undeclared (first use in this function)";
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		rLen = 0;
-		rLoc = 39;
+		rLoc = 40;
 		rType = 1;
 	};
 	8CEA8E9F0942B6AD00207809 /* PBXTextBookmark */ = {
@@ -2888,7 +2904,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 64";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 501;
 		vrLoc = 1895;
@@ -2898,7 +2914,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 217";
 		rLen = 0;
-		rLoc = 3969;
+		rLoc = 4658;
 		rType = 0;
 		vrLen = 1920;
 		vrLoc = 5593;
@@ -2918,7 +2934,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 64";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 501;
 		vrLoc = 1895;
@@ -2928,7 +2944,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 64";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 1421;
 		vrLoc = 1428;
@@ -2948,7 +2964,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 65";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 584;
 		vrLoc = 1895;
@@ -2958,7 +2974,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 65";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 584;
 		vrLoc = 1895;
@@ -2968,7 +2984,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 64";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 1453;
 		vrLoc = 1428;
@@ -2988,7 +3004,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 64";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 1447;
 		vrLoc = 1428;
@@ -3008,7 +3024,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 65";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 610;
 		vrLoc = 1895;
@@ -3018,7 +3034,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 65";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 610;
 		vrLoc = 1895;
@@ -3028,7 +3044,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 64";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 1509;
 		vrLoc = 1428;
@@ -3048,7 +3064,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 66";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 671;
 		vrLoc = 1895;
@@ -3058,7 +3074,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 64";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 1510;
 		vrLoc = 1428;
@@ -3078,7 +3094,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 66";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 672;
 		vrLoc = 1895;
@@ -3088,7 +3104,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 66";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 672;
 		vrLoc = 1895;
@@ -3124,7 +3140,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "{";
 		rLen = 2;
-		rLoc = 4480;
+		rLoc = 5169;
 		rType = 0;
 		vrLen = 876;
 		vrLoc = 3765;
@@ -3142,7 +3158,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 47";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 539;
 		vrLoc = 1826;
@@ -3162,7 +3178,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 95";
 		rLen = 0;
-		rLoc = 3421;
+		rLoc = 4110;
 		rType = 0;
 		vrLen = 743;
 		vrLoc = 2679;
@@ -3188,7 +3204,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "{";
 		rLen = 2;
-		rLoc = 4480;
+		rLoc = 5169;
 		rType = 0;
 		vrLen = 876;
 		vrLoc = 3765;
@@ -3228,7 +3244,7 @@
 		comments = "warning: passing argument 2 of 'DARegisterDiskDisappearedCallback' from incompatible pointer type";
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		rLen = 1;
-		rLoc = 109;
+		rLoc = 130;
 		rType = 1;
 	};
 	8CEA8F010942BAD200207809 /* PBXTextBookmark */ = {
@@ -3256,7 +3272,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 99";
 		rLen = 0;
-		rLoc = 3695;
+		rLoc = 4384;
 		rType = 0;
 		vrLen = 939;
 		vrLoc = 2717;
@@ -3276,7 +3292,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 93";
 		rLen = 0;
-		rLoc = 3206;
+		rLoc = 3895;
 		rType = 0;
 		vrLen = 956;
 		vrLoc = 2717;
@@ -3294,7 +3310,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 123";
 		rLen = 0;
-		rLoc = 4435;
+		rLoc = 5124;
 		rType = 0;
 		vrLen = 1785;
 		vrLoc = 3096;
@@ -3314,7 +3330,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 52";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 1539;
 		vrLoc = 1058;
@@ -3334,7 +3350,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 57";
 		rLen = 0;
-		rLoc = 1518;
+		rLoc = 1555;
 		rType = 0;
 		vrLen = 1460;
 		vrLoc = 1058;
@@ -3354,7 +3370,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 87";
 		rLen = 0;
-		rLoc = 3206;
+		rLoc = 3895;
 		rType = 0;
 		vrLen = 838;
 		vrLoc = 2758;
@@ -3364,7 +3380,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 56";
 		rLen = 0;
-		rLoc = 1518;
+		rLoc = 1555;
 		rType = 0;
 		vrLen = 1455;
 		vrLoc = 1058;
@@ -3384,7 +3400,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 56";
 		rLen = 0;
-		rLoc = 1518;
+		rLoc = 1555;
 		rType = 0;
 		vrLen = 1477;
 		vrLoc = 1005;
@@ -3394,7 +3410,7 @@
 		comments = "error: parse error before 'session'";
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		rLen = 0;
-		rLoc = 172;
+		rLoc = 193;
 		rType = 1;
 	};
 	8CEA8F4B0942BD0C00207809 /* PBXTextBookmark */ = {
@@ -3402,7 +3418,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "DADiskRef disk = DADiskCreateFromBSDName(kCFAllocatorDefault, _session session, \"disk1\");";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 753;
 		vrLoc = 5073;
@@ -3412,7 +3428,7 @@
 		comments = "error: parse error before 'session'";
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		rLen = 0;
-		rLoc = 172;
+		rLoc = 193;
 		rType = 1;
 	};
 	8CEA8F570942BD3700207809 /* PBXTextBookmark */ = {
@@ -3420,7 +3436,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "DADiskRef disk = DADiskCreateFromBSDName(kCFAllocatorDefault, _session session, \"disk1\");";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 774;
 		vrLoc = 5073;
@@ -3430,7 +3446,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: disk";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 1639;
 		vrLoc = 4244;
@@ -3440,7 +3456,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 78";
 		rLen = 0;
-		rLoc = 3082;
+		rLoc = 3771;
 		rType = 0;
 		vrLen = 1584;
 		vrLoc = 1775;
@@ -3450,7 +3466,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 88";
 		rLen = 0;
-		rLoc = 3319;
+		rLoc = 4008;
 		rType = 0;
 		vrLen = 1612;
 		vrLoc = 2288;
@@ -3460,7 +3476,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 34";
 		rLen = 0;
-		rLoc = 1084;
+		rLoc = 1121;
 		rType = 0;
 		vrLen = 1832;
 		vrLoc = 0;
@@ -3470,7 +3486,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 156";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 551;
 		vrLoc = 4886;
@@ -3480,7 +3496,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: stringWithUTF8String";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1227;
 		vrLoc = 1088;
@@ -3490,7 +3506,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 165";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 734;
 		vrLoc = 4723;
@@ -3500,7 +3516,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: nextObject";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1375;
 		vrLoc = 1088;
@@ -3510,7 +3526,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 56";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1420;
 		vrLoc = 768;
@@ -3520,7 +3536,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 155";
 		rLen = 0;
-		rLoc = 5340;
+		rLoc = 6029;
 		rType = 0;
 		vrLen = 1805;
 		vrLoc = 3972;
@@ -3530,7 +3546,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 174";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 638;
 		vrLoc = 4802;
@@ -3540,7 +3556,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 58";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1194;
 		vrLoc = 1222;
@@ -3584,7 +3600,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: NSLog";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1264;
 		vrLoc = 1222;
@@ -3594,7 +3610,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 58";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1194;
 		vrLoc = 1222;
@@ -3604,7 +3620,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: disk";
 		rLen = 0;
-		rLoc = 5340;
+		rLoc = 6029;
 		rType = 0;
 		vrLen = 1663;
 		vrLoc = 3733;
@@ -3614,7 +3630,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: NSLog";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1429;
 		vrLoc = 1125;
@@ -3624,7 +3640,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: DADiskEject";
 		rLen = 0;
-		rLoc = 5340;
+		rLoc = 6029;
 		rType = 0;
 		vrLen = 1821;
 		vrLoc = 3981;
@@ -3634,7 +3650,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 63";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1375;
 		vrLoc = 1217;
@@ -3644,7 +3660,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 65";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1375;
 		vrLoc = 1217;
@@ -3654,7 +3670,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 65";
 		rLen = 0;
-		rLoc = 2667;
+		rLoc = 2704;
 		rType = 0;
 		vrLen = 1336;
 		vrLoc = 1088;
@@ -3668,7 +3684,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 173";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 554;
 		vrLoc = 4738;
@@ -3678,7 +3694,7 @@
 		comments = "error: 'MediaController' undeclared (first use in this function)";
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		rLen = 0;
-		rLoc = 615;
+		rLoc = 612;
 		rType = 1;
 	};
 	8CEA903B0943602D00207809 /* PBXTextBookmark */ = {
@@ -3686,7 +3702,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 173";
 		rLen = 0;
-		rLoc = 5832;
+		rLoc = 6521;
 		rType = 0;
 		vrLen = 554;
 		vrLoc = 4738;
@@ -3706,7 +3722,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 40";
 		rLen = 0;
-		rLoc = 1348;
+		rLoc = 1319;
 		rType = 0;
 		vrLen = 1274;
 		vrLoc = 854;
@@ -3716,7 +3732,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 152";
 		rLen = 0;
-		rLoc = 5340;
+		rLoc = 6029;
 		rType = 0;
 		vrLen = 1606;
 		vrLoc = 4166;
@@ -3726,7 +3742,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 29";
 		rLen = 0;
-		rLoc = 1049;
+		rLoc = 1086;
 		rType = 0;
 		vrLen = 1723;
 		vrLoc = 0;
@@ -3736,7 +3752,7 @@
 		comments = "error: 'dictionary' undeclared (first use in this function)";
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		rLen = 0;
-		rLoc = 615;
+		rLoc = 612;
 		rType = 1;
 	};
 	8CEA90590943618800207809 /* PBXTextBookmark */ = {
@@ -3744,7 +3760,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "NSURL *volumePath = [dictionary valueForKey:(NSString *)kDADiskDescriptionVolumePathKey];";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 560;
 		vrLoc = 17090;
@@ -3754,7 +3770,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 546";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1532;
 		vrLoc = 16508;
@@ -3764,7 +3780,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 29";
 		rLen = 0;
-		rLoc = 1049;
+		rLoc = 1086;
 		rType = 0;
 		vrLen = 1723;
 		vrLoc = 0;
@@ -3774,7 +3790,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 546";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1462;
 		vrLoc = 16789;
@@ -3784,7 +3800,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 47";
 		rLen = 0;
-		rLoc = 2666;
+		rLoc = 2703;
 		rType = 0;
 		vrLen = 1335;
 		vrLoc = 1085;
@@ -3794,7 +3810,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1398;
 		vrLoc = 16789;
@@ -3804,7 +3820,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 50";
 		rLen = 0;
-		rLoc = 1518;
+		rLoc = 1555;
 		rType = 0;
 		vrLen = 1348;
 		vrLoc = 1123;
@@ -3814,7 +3830,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 87";
 		rLen = 0;
-		rLoc = 3700;
+		rLoc = 4389;
 		rType = 0;
 		vrLen = 1585;
 		vrLoc = 2141;
@@ -3824,7 +3840,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1398;
 		vrLoc = 16789;
@@ -3834,7 +3850,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 43";
 		rLen = 0;
-		rLoc = 1337;
+		rLoc = 1374;
 		rType = 0;
 		vrLen = 1686;
 		vrLoc = 378;
@@ -3844,7 +3860,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1398;
 		vrLoc = 16789;
@@ -3854,7 +3870,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 87";
 		rLen = 0;
-		rLoc = 3678;
+		rLoc = 4367;
 		rType = 0;
 		vrLen = 1601;
 		vrLoc = 2096;
@@ -3864,7 +3880,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1398;
 		vrLoc = 16789;
@@ -3874,7 +3890,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1398;
 		vrLoc = 16789;
@@ -3884,7 +3900,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 548";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 598;
 		vrLoc = 17090;
@@ -3894,7 +3910,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 546";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1400;
 		vrLoc = 16789;
@@ -3904,7 +3920,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 548";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1478;
 		vrLoc = 16789;
@@ -3914,7 +3930,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 678;
 		vrLoc = 17090;
@@ -3924,7 +3940,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 548";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1478;
 		vrLoc = 16789;
@@ -3934,7 +3950,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 550";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1504;
 		vrLoc = 16789;
@@ -3944,7 +3960,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 551";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1530;
 		vrLoc = 16789;
@@ -3954,7 +3970,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 549";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 745;
 		vrLoc = 17090;
@@ -3964,7 +3980,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 549";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1530;
 		vrLoc = 16789;
@@ -3974,7 +3990,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 745;
 		vrLoc = 17090;
@@ -3994,7 +4010,7 @@
 		comments = "warning: passing argument 2 of 'DADiskCreateFromBSDName' from incompatible pointer type";
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		rLen = 0;
-		rLoc = 615;
+		rLoc = 612;
 		rType = 1;
 	};
 	8CEA90BA094365BA00207809 /* PBXTextBookmark */ = {
@@ -4002,7 +4018,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 547";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 728;
 		vrLoc = 17090;
@@ -4022,7 +4038,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "DADiskRef disk = DADiskCreateFromBSDName(kCFAllocatorDefault, [[MediaController sharedController] DASession], /*bsdName*/\"/dev/disk1\");";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 727;
 		vrLoc = 17092;
@@ -4032,7 +4048,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 556";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1513;
 		vrLoc = 16925;
@@ -4052,7 +4068,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "DADiskRef disk = DADiskCreateFromBSDName(kCFAllocatorDefault, [[MediaController sharedController] DASession], /*bsdName*/\"/dev/disk1\");";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 729;
 		vrLoc = 17092;
@@ -4062,7 +4078,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 549";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1419;
 		vrLoc = 16886;
@@ -4072,7 +4088,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 74";
 		rLen = 0;
-		rLoc = 1449;
+		rLoc = 1548;
 		rType = 0;
 		vrLen = 1804;
 		vrLoc = 1500;
@@ -4086,7 +4102,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 571";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1373;
 		vrLoc = 17403;
@@ -4096,7 +4112,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: 166";
 		rLen = 0;
-		rLoc = 6370;
+		rLoc = 7059;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 4203;
@@ -4106,7 +4122,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 570";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1379;
 		vrLoc = 17167;
@@ -4116,7 +4132,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 565";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1403;
 		vrLoc = 17199;
@@ -4126,7 +4142,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 567";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 599;
 		vrLoc = 17078;
@@ -4136,7 +4152,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 568";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1435;
 		vrLoc = 17199;
@@ -4146,7 +4162,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 564";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 1331;
 		vrLoc = 17199;
@@ -4160,7 +4176,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: DASession";
 		rLen = 0;
-		rLoc = 4435;
+		rLoc = 5124;
 		rType = 0;
 		vrLen = 1557;
 		vrLoc = 2759;
@@ -4170,7 +4186,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 73";
 		rLen = 0;
-		rLoc = 1449;
+		rLoc = 1548;
 		rType = 0;
 		vrLen = 1294;
 		vrLoc = 2388;
@@ -4180,7 +4196,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 73";
 		rLen = 0;
-		rLoc = 1449;
+		rLoc = 1548;
 		rType = 0;
 		vrLen = 1294;
 		vrLoc = 2388;
@@ -4190,7 +4206,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: sharedController";
 		rLen = 0;
-		rLoc = 2959;
+		rLoc = 3648;
 		rType = 0;
 		vrLen = 1730;
 		vrLoc = 3;
@@ -4200,7 +4216,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 85";
 		rLen = 0;
-		rLoc = 1636;
+		rLoc = 1735;
 		rType = 0;
 		vrLen = 1294;
 		vrLoc = 2388;
@@ -4210,7 +4226,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: sharedController";
 		rLen = 0;
-		rLoc = 2959;
+		rLoc = 3648;
 		rType = 0;
 		vrLen = 1730;
 		vrLoc = 3;
@@ -4220,7 +4236,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: EncodeToolbarItemIdentifier";
 		rLen = 0;
-		rLoc = 1353;
+		rLoc = 1452;
 		rType = 0;
 		vrLen = 1870;
 		vrLoc = 1048;
@@ -4230,7 +4246,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: sharedController";
 		rLen = 0;
-		rLoc = 2959;
+		rLoc = 3648;
 		rType = 0;
 		vrLen = 1730;
 		vrLoc = 3;
@@ -4240,7 +4256,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 245";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1929;
 		vrLoc = 6284;
@@ -4250,7 +4266,7 @@
 		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
 		name = "MediaController.m: sharedController";
 		rLen = 0;
-		rLoc = 2959;
+		rLoc = 3648;
 		rType = 0;
 		vrLen = 1730;
 		vrLoc = 3;
@@ -4260,7 +4276,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 556";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 514;
 		vrLoc = 17358;
@@ -4278,7 +4294,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 556";
 		rLen = 0;
-		rLoc = 18756;
+		rLoc = 18915;
 		rType = 0;
 		vrLen = 514;
 		vrLoc = 17358;
@@ -4318,7 +4334,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: dealloc";
 		rLen = 0;
-		rLoc = 2641;
+		rLoc = 2740;
 		rType = 0;
 		vrLen = 1290;
 		vrLoc = 3550;
@@ -4338,7 +4354,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: dealloc";
 		rLen = 0;
-		rLoc = 2641;
+		rLoc = 2740;
 		rType = 0;
 		vrLen = 1290;
 		vrLoc = 3550;
@@ -4348,7 +4364,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 276";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1500;
 		vrLoc = 3818;
@@ -4358,7 +4374,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 243";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 2014;
 		vrLoc = 6691;
@@ -4378,7 +4394,7 @@
 		comments = "error: 'NSToolbarCustomizeItemIdentifier' undeclared (first use in this function)";
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		rLen = 0;
-		rLoc = 195;
+		rLoc = 192;
 		rType = 1;
 	};
 	8CEA91BE0943783700207809 /* PBXTextBookmark */ = {
@@ -4396,7 +4412,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeItemIdentifier, nil];";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 751;
 		vrLoc = 8187;
@@ -4406,7 +4422,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 276";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1733;
 		vrLoc = 7562;
@@ -4416,7 +4432,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 276";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1797;
 		vrLoc = 7562;
@@ -4426,7 +4442,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 380";
 		rLen = 0;
-		rLoc = 7612;
+		rLoc = 7751;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 11004;
@@ -4436,7 +4452,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 380";
 		rLen = 0;
-		rLoc = 7612;
+		rLoc = 7751;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 11004;
@@ -4446,7 +4462,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 246";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 2149;
 		vrLoc = 6616;
@@ -4456,7 +4472,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 248";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 2186;
 		vrLoc = 6566;
@@ -4466,7 +4482,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 282";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1490;
 		vrLoc = 8675;
@@ -4476,7 +4492,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 648";
 		rLen = 0;
-		rLoc = 17588;
+		rLoc = 17747;
 		rType = 0;
 		vrLen = 1220;
 		vrLoc = 20736;
@@ -4486,7 +4502,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 646";
 		rLen = 0;
-		rLoc = 17507;
+		rLoc = 17613;
 		rType = 0;
 		vrLen = 1332;
 		vrLoc = 20736;
@@ -4496,7 +4512,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 646";
 		rLen = 0;
-		rLoc = 17507;
+		rLoc = 17613;
 		rType = 0;
 		vrLen = 1332;
 		vrLoc = 20736;
@@ -4506,7 +4522,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 673";
 		rLen = 0;
-		rLoc = 18134;
+		rLoc = 18293;
 		rType = 0;
 		vrLen = 1264;
 		vrLoc = 21398;
@@ -4516,7 +4532,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 283";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 705;
 		vrLoc = 8291;
@@ -4526,7 +4542,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 113";
 		rLen = 0;
-		rLoc = 2470;
+		rLoc = 2569;
 		rType = 0;
 		vrLen = 1463;
 		vrLoc = 2898;
@@ -4536,7 +4552,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 283";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 705;
 		vrLoc = 8317;
@@ -4546,7 +4562,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 640";
 		rLen = 0;
-		rLoc = 17205;
+		rLoc = 17344;
 		rType = 0;
 		vrLen = 1518;
 		vrLoc = 20580;
@@ -4556,7 +4572,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 135";
 		rLen = 0;
-		rLoc = 3030;
+		rLoc = 3169;
 		rType = 0;
 		vrLen = 1340;
 		vrLoc = 3704;
@@ -4566,12 +4582,12 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 136";
 		rLen = 0;
-		rLoc = 2787;
+		rLoc = 3151;
 		rType = 0;
 		vrLen = 1423;
 		vrLoc = 3704;
 	};
-	8CEA921F0943811700207809 /* CompactDiscDocument.m:102 */ = {
+	8CEA921F0943811700207809 /* CompactDiscDocument.m:111 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -4580,7 +4596,7 @@
 		fileReference = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		functionName = "-validateMenuItem:";
 		hitCount = 1;
-		lineNumber = 102;
+		lineNumber = 111;
 		modificationTime = 155421705.057633;
 		state = 1;
 	};
@@ -4589,7 +4605,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 136";
 		rLen = 0;
-		rLoc = 2787;
+		rLoc = 3151;
 		rType = 0;
 		vrLen = 1423;
 		vrLoc = 3704;
@@ -4599,7 +4615,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 292";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 895;
 		vrLoc = 8106;
@@ -4609,7 +4625,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 136";
 		rLen = 0;
-		rLoc = 2787;
+		rLoc = 3151;
 		rType = 0;
 		vrLen = 1423;
 		vrLoc = 3704;
@@ -4619,7 +4635,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 136";
 		rLen = 0;
-		rLoc = 2766;
+		rLoc = 3151;
 		rType = 0;
 		vrLen = 1456;
 		vrLoc = 3704;
@@ -4633,33 +4649,17 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 296";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1920;
 		vrLoc = 8315;
-	};
-	8CEA92460943846F00207809 /* ActiveTaskException.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {699, 637}}";
-			sepNavSelRange = "{894, 0}";
-			sepNavVisRect = "{{0, 0}, {699, 637}}";
-			sepNavWindowFrame = "{{15, 117}, {744, 710}}";
-		};
-	};
-	8CEA92470943846F00207809 /* ActiveTaskException.m */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {699, 637}}";
-			sepNavSelRange = "{960, 0}";
-			sepNavVisRect = "{{0, 0}, {699, 637}}";
-			sepNavWindowFrame = "{{38, 96}, {744, 710}}";
-		};
 	};
 	8CEA925C094384F900207809 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: runModal";
 		rLen = 0;
-		rLoc = 18476;
+		rLoc = 18635;
 		rType = 0;
 		vrLen = 1255;
 		vrLoc = 22185;
@@ -4669,7 +4669,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 303";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1001;
 		vrLoc = 7823;
@@ -4679,7 +4679,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 303";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1001;
 		vrLoc = 7823;
@@ -4697,7 +4697,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 303";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1001;
 		vrLoc = 7823;
@@ -4765,7 +4765,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: sharedController";
 		rLen = 0;
-		rLoc = 18593;
+		rLoc = 18752;
 		rType = 0;
 		vrLen = 1324;
 		vrLoc = 22185;
@@ -4822,7 +4822,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -4842,7 +4842,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -4862,7 +4862,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -4882,7 +4882,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -4912,7 +4912,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -4942,7 +4942,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -5000,7 +5000,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -5030,7 +5030,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -5050,7 +5050,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = removeRippingTasksForCompactDiscDocument;
 		rLen = 40;
-		rLoc = 18623;
+		rLoc = 18782;
 		rType = 0;
 		vrLen = 1285;
 		vrLoc = 22285;
@@ -5060,7 +5060,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 705";
 		rLen = 0;
-		rLoc = 18475;
+		rLoc = 18634;
 		rType = 0;
 		vrLen = 1699;
 		vrLoc = 19322;
@@ -5075,9 +5075,9 @@
 	};
 	8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {956, 2100}}";
-			sepNavSelRange = "{1925, 0}";
-			sepNavVisRect = "{{0, 632}, {699, 637}}";
+			sepNavIntBoundsRect = "{{0, 0}, {956, 1988}}";
+			sepNavSelRange = "{2163, 0}";
+			sepNavVisRect = "{{0, 708}, {699, 637}}";
 			sepNavWindowFrame = "{{84, 54}, {744, 710}}";
 		};
 	};
@@ -5090,7 +5090,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = toolbar;
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1746;
 		vrLoc = 6497;
@@ -5110,7 +5110,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscToolbar.m: 16";
 		rLen = 0;
-		rLoc = 2191;
+		rLoc = 2177;
 		rType = 0;
 		vrLen = 285;
 		vrLoc = 0;
@@ -5120,7 +5120,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscToolbar.m: 16";
 		rLen = 0;
-		rLoc = 2191;
+		rLoc = 2177;
 		rType = 0;
 		vrLen = 285;
 		vrLoc = 0;
@@ -5130,7 +5130,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscToolbar.m: 18";
 		rLen = 0;
-		rLoc = 2191;
+		rLoc = 2177;
 		rType = 0;
 		vrLen = 373;
 		vrLoc = 0;
@@ -5150,7 +5150,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 239";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1962;
 		vrLoc = 6445;
@@ -5160,7 +5160,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscToolbar.m: 22";
 		rLen = 0;
-		rLoc = 2188;
+		rLoc = 2174;
 		rType = 0;
 		vrLen = 555;
 		vrLoc = 0;
@@ -5170,7 +5170,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscToolbar.m: 26";
 		rLen = 0;
-		rLoc = 2191;
+		rLoc = 2177;
 		rType = 0;
 		vrLen = 524;
 		vrLoc = 0;
@@ -5180,7 +5180,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 239";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1962;
 		vrLoc = 6445;
@@ -5260,7 +5260,7 @@
 		comments = "error: 'CompactDiscToolbar' undeclared (first use in this function)";
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		rLen = 1;
-		rLoc = 130;
+		rLoc = 127;
 		rType = 1;
 	};
 	8CEA9387094393E000207809 /* PBXTextBookmark */ = {
@@ -5278,7 +5278,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 161";
 		rLen = 0;
-		rLoc = 3653;
+		rLoc = 3792;
 		rType = 0;
 		vrLen = 903;
 		vrLoc = 4196;
@@ -5288,7 +5288,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscDocumentToolbar.m: 42";
 		rLen = 0;
-		rLoc = 2193;
+		rLoc = 2179;
 		rType = 0;
 		vrLen = 1292;
 		vrLoc = 410;
@@ -5298,7 +5298,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscDocumentToolbar.m: 57";
 		rLen = 0;
-		rLoc = 2162;
+		rLoc = 2151;
 		rType = 0;
 		vrLen = 1234;
 		vrLoc = 818;
@@ -5318,7 +5318,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: controlTextDidEndEditing:";
 		rLen = 0;
-		rLoc = 5299;
+		rLoc = 5438;
 		rType = 0;
 		vrLen = 1020;
 		vrLoc = 6047;
@@ -5328,7 +5328,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 576";
 		rLen = 0;
-		rLoc = 16930;
+		rLoc = 17069;
 		rType = 0;
 		vrLen = 1215;
 		vrLoc = 16999;
@@ -5348,7 +5348,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 576";
 		rLen = 0;
-		rLoc = 16930;
+		rLoc = 17069;
 		rType = 0;
 		vrLen = 1215;
 		vrLoc = 16999;
@@ -5358,7 +5358,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 566";
 		rLen = 0;
-		rLoc = 16681;
+		rLoc = 16820;
 		rType = 0;
 		vrLen = 1215;
 		vrLoc = 16999;
@@ -5368,7 +5368,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: windowForSheet";
 		rLen = 0;
-		rLoc = 17964;
+		rLoc = 18123;
 		rType = 0;
 		vrLen = 1398;
 		vrLoc = 18116;
@@ -5382,7 +5382,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 568";
 		rLen = 0;
-		rLoc = 16681;
+		rLoc = 16820;
 		rType = 0;
 		vrLen = 1334;
 		vrLoc = 17078;
@@ -5392,7 +5392,7 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscDocumentToolbar.m: 61";
 		rLen = 0;
-		rLoc = 1925;
+		rLoc = 1930;
 		rType = 0;
 		vrLen = 1497;
 		vrLoc = 1610;
@@ -5402,7 +5402,7 @@
 		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
 		name = "CompactDiscDocument.m: 567";
 		rLen = 0;
-		rLoc = 16681;
+		rLoc = 16820;
 		rType = 0;
 		vrLen = 1288;
 		vrLoc = 17115;
@@ -5412,10 +5412,161 @@
 		fRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */;
 		name = "CompactDiscDocumentToolbar.m: 61";
 		rLen = 0;
-		rLoc = 1925;
+		rLoc = 1930;
 		rType = 0;
 		vrLen = 1497;
 		vrLoc = 1610;
+	};
+	8CEA941309439C5300207809 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+	};
+	8CEA941B09439C9400207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = "CompactDiscDocument.m: kEncodeMenuItemTag";
+		rLen = 0;
+		rLoc = 1349;
+		rType = 0;
+		vrLen = 1537;
+		vrLoc = 1045;
+	};
+	8CEA943109439DE200207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = "CompactDiscDocument.m: 765";
+		rLen = 0;
+		rLoc = 23246;
+		rType = 0;
+		vrLen = 563;
+		vrLoc = 4478;
+	};
+	8CEA943209439DE200207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: declaration of 'id' shadows a global declaration";
+		fRef = 8CEA8DEB0942AA9F00207809 /* cddb_disc.h */;
+		rLen = 1;
+		rLoc = 173;
+		rType = 1;
+	};
+	8CEA943309439DE200207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = "CompactDiscDocument.m: 765";
+		rLen = 0;
+		rLoc = 23246;
+		rType = 0;
+		vrLen = 563;
+		vrLoc = 4478;
+	};
+	8CEA943409439DE200207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEA8DEB0942AA9F00207809 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEA943609439DE400207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = ActiveTask;
+		rLen = 10;
+		rLoc = 17645;
+		rType = 0;
+		vrLen = 1249;
+		vrLoc = 17011;
+	};
+	8CEA943A09439E4B00207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = ActiveTask;
+		rLen = 10;
+		rLoc = 17645;
+		rType = 0;
+		vrLen = 1249;
+		vrLoc = 17011;
+	};
+	8CEA944409439EE400207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = "CompactDiscDocument.m: 699";
+		rLen = 0;
+		rLoc = 20737;
+		rType = 0;
+		vrLen = 1190;
+		vrLoc = 20254;
+	};
+	8CEA94490943A02F00207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = "CompactDiscDocument.m: toggleTrackInformation:";
+		rLen = 0;
+		rLoc = 20679;
+		rType = 0;
+		vrLen = 1190;
+		vrLoc = 20254;
+	};
+	8CEA94500943A06800207809 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
+	};
+	8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {699, 637}}";
+			sepNavSelRange = "{330, 0}";
+			sepNavVisRect = "{{0, 0}, {699, 637}}";
+			sepNavWindowFrame = "{{107, 33}, {744, 710}}";
+		};
+	};
+	8CEA94770943A1A400207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
+		name = "MediaController.m: standardUserDefaults";
+		rLen = 0;
+		rLoc = 6376;
+		rType = 0;
+		vrLen = 1712;
+		vrLoc = 5257;
+	};
+	8CEA947E0943A28300207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */;
+		name = "MediaController.m: standardUserDefaults";
+		rLen = 0;
+		rLoc = 6376;
+		rType = 0;
+		vrLen = 1712;
+		vrLoc = 5257;
+	};
+	8CEA94810943A2FD00207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEA8DEB0942AA9F00207809 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEA94820943A2FD00207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C4D4656093E7A6100A88927 /* FreeDBPreferencesController.m */;
+		rLen = 0;
+		rLoc = 1174;
+		rType = 0;
+	};
+	8CEA94830943A2FD00207809 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C4D4656093E7A6100A88927 /* FreeDBPreferencesController.m */;
+		name = "FreeDBPreferencesController.m: 38";
+		rLen = 0;
+		rLoc = 1174;
+		rType = 0;
+		vrLen = 554;
+		vrLoc = 1133;
 	};
 	8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {
 		uiCtxt = {
@@ -5467,9 +5618,9 @@
 	};
 	8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1310, 3542}}";
-			sepNavSelRange = "{1020, 0}";
-			sepNavVisRect = "{{0, 0}, {987, 702}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1448, 3542}}";
+			sepNavSelRange = "{2087, 0}";
+			sepNavVisRect = "{{0, 457}, {987, 702}}";
 			sepNavWindowFrame = "{{14, 43}, {1032, 775}}";
 		};
 	};
