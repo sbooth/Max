@@ -26,7 +26,6 @@
 {
 	NSNumber				*_ripInProgress;
 	unsigned				_activeEncoders;
-//	NSNumber				*_encodeInProgress;
 	CompactDiscDocument		*_disc;
 
 	// View properties
@@ -62,7 +61,7 @@
 
 - (void)					clearFreeDBData;
 
-- (CompactDiscDocument *)	getDiscDocument;
+- (CompactDiscDocument *)	getCompactDiscDocument;
 
 - (void)					encodeStarted;
 - (void)					encodeCompleted;

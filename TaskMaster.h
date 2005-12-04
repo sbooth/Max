@@ -34,22 +34,24 @@
 	NSMutableArray			*_encodingTasks;
 }
 
-+ (TaskMaster *) sharedController;
++ (TaskMaster *)	sharedController;
 
-- (BOOL) hasActiveTasks;
-- (void) removeAllTasks;
+- (BOOL)			hasActiveTasks;
+- (void)			removeAllTasks;
 
-- (void) encodeTrack:(Track *)track outputBasename:(NSString *)basename;
+- (void)			removeRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
 
-- (void) displayExceptionSheet:(NSException *) exception;
-- (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
+- (void)			encodeTrack:(Track *)track outputBasename:(NSString *)basename;
 
-- (void) ripDidStart:(RipperTask *) task;
-- (void) ripDidStop:(RipperTask *) task;
-- (void) ripDidComplete:(RipperTask *) task;
+- (void)			displayExceptionSheet:(NSException *) exception;
+- (void)			alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
 
-- (void) encodeDidStart:(EncoderTask *) task;
-- (void) encodeDidStop:(EncoderTask *) task;
-- (void) encodeDidComplete:(EncoderTask *) task;
+- (void)			ripDidStart:(RipperTask *) task;
+- (void)			ripDidStop:(RipperTask *) task;
+- (void)			ripDidComplete:(RipperTask *) task;
+
+- (void)			encodeDidStart:(EncoderTask *) task;
+- (void)			encodeDidStop:(EncoderTask *) task;
+- (void)			encodeDidComplete:(EncoderTask *) task;
 
 @end

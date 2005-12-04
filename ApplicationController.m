@@ -64,7 +64,7 @@
 	return NO;
 }
 
-- (IBAction)showPreferences:(id)sender
+- (IBAction) showPreferences:(id)sender
 {
 	[[PreferencesController sharedPreferences] showWindow:self];
 }
@@ -74,14 +74,10 @@
 	[[AcknowledgmentsController sharedController] showWindow:self];
 }
 
-- (IBAction)scanForMedia:(id)sender
+- (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	[[MediaController sharedController] scanForMedia];
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-	[[MediaController sharedController] scanForMedia];
+	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
+	[MediaController sharedController];
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender

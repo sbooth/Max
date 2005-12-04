@@ -73,7 +73,6 @@
 
 - (void) dealloc
 {
-	[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
 	[_track release];
 	
 	// Delete output file
@@ -94,6 +93,7 @@
 	@try {
 		// Start ripping
 		[_ripper ripToFile:_out];
+		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
 	}
 	
 	@catch(StopException *exception) {
@@ -117,6 +117,11 @@
 - (void) stop
 {
 	[_ripper requestStop];
+}
+
+- (Track *) getTrack
+{
+	return _track;
 }
 
 @end

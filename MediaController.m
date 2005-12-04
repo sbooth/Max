@@ -19,93 +19,58 @@
  */
 
 #import "MediaController.h"
-#import "IOException.h"
 
+#import "IOException.h"
 #import "CompactDisc.h"
 #import "CompactDiscDocument.h"
 
 #include <CoreFoundation/CoreFoundation.h>
+#include <DiskArbitration/DiskArbitration.h>
+#include <DiskArbitration/DADisk.h>
 
-#include <IOKit/IOKitLib.h>
-#include <IOKit/IOBSD.h>
-#include <IOKit/storage/IOMedia.h>
-#include <IOKit/storage/IOCDMedia.h>
-#include <IOKit/storage/IOCDTypes.h>
+@interface MediaController (Private)
+- (void) volumeMounted: (NSString *)bsdName;
+- (void) volumeUnmounted: (NSString *)bsdName;
+@end
 
-#include <paths.h>			// _PATH_DEV
-#include <sys/param.h>		// MAXPATHLEN
+#pragma mark DiskArbitration callback functions
 
-
-// ==================================================
-// From Apple's CDROMSample.c
-// ==================================================
-static kern_return_t 
-findEjectableCDMedia(io_iterator_t *mediaIterator)
+static void diskAppearedCallback(DADiskRef disk, void * context)
 {
-    kern_return_t				kernResult; 
-    mach_port_t					masterPort;
-    CFMutableDictionaryRef		classesToMatch;
-	
-    kernResult = IOMasterPort(MACH_PORT_NULL, &masterPort);
-    if(KERN_SUCCESS != kernResult) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"IOMasterPort returned %d", kernResult] userInfo:nil];
-    }
-
-    classesToMatch = IOServiceMatching(kIOCDMediaClass); 
-    if(NULL == classesToMatch) {
-		@throw [IOException exceptionWithReason:@"IOServiceMatching returned a NULL dictionary." userInfo:nil];
-    }
-    else {
-		CFDictionarySetValue(classesToMatch, CFSTR(kIOMediaEjectableKey), kCFBooleanTrue); 
-    }
-    
-    kernResult = IOServiceGetMatchingServices(masterPort, classesToMatch, mediaIterator);    
-    if(KERN_SUCCESS != kernResult) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"IOServiceGetMatchingServices returned %d", kernResult] userInfo:nil];
-    }
-    
-    return kernResult;
+	[[MediaController sharedController] volumeMounted:[NSString stringWithUTF8String:DADiskGetBSDName(disk)]];
 }
-// ==================================================
-// End Apple code
-// ==================================================
 
-static NSString *
-getBSDName(io_object_t media)
+static void diskDisappearedCallback(DADiskRef disk, void * context)
 {
-	char			bsdPath[ MAXPATHLEN ];
-	ssize_t			devPathLength;
-	CFTypeRef		deviceNameAsCFString;
-	
-	@try {
-		deviceNameAsCFString = IORegistryEntryCreateCFProperty(media, CFSTR(kIOBSDNameKey), kCFAllocatorDefault, 0);
-		if(NULL == deviceNameAsCFString) {
-			@throw [IOException exceptionWithReason:@"IORegistryEntryCreateCFProperty returned NULL." userInfo:nil];
+	[[MediaController sharedController] volumeUnmounted:[NSString stringWithUTF8String:DADiskGetBSDName(disk)]];
+}
+
+static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * context)
+{
+	if(NULL != dissenter) {
+		DAReturn status = DADissenterGetStatus(dissenter);
+		if(unix_err(status)) {
+			int code = err_get_code(status);
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to unmount disc (%i:%s)", code, strerror(code)] userInfo:nil];
 		}
-		
-		strcpy(bsdPath, _PATH_DEV);
-		
-		/* Add "r" before the BSD node name from the I/O Registry to specify the raw disk
-			node. The raw disk nodes receive I/O requests directly and do not go through
-			the buffer cache. */	
-		strcat(bsdPath, "r");
-		
-		devPathLength = strlen(bsdPath);
-		
-		if(FALSE == CFStringGetCString(deviceNameAsCFString, bsdPath + devPathLength, MAXPATHLEN - devPathLength, kCFStringEncodingASCII)) {
-			@throw [IOException exceptionWithReason:@"CFStringGetCString returned FALSE." userInfo:nil];
+		else {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to unmount disc (0x%.8x)", status] userInfo:nil];
 		}
 	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
+}
 
-	@finally {
-		CFRelease(deviceNameAsCFString);
+static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * context)
+{
+	if(NULL != dissenter) {
+		DAReturn status = DADissenterGetStatus(dissenter);
+		if(unix_err(status)) {
+			int code = err_get_code(status);
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to eject disc (%i:%s)", code, strerror(code)] userInfo:nil];
+		}
+		else {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to eject disc (0x%.8x)", status] userInfo:nil];
+		}
 	}
-
-	return [NSString stringWithUTF8String:(const char *)bsdPath];
 }
 
 static MediaController *sharedController = nil;
@@ -134,21 +99,26 @@ static MediaController *sharedController = nil;
 
 - (id) init
 {
-	NSNotificationCenter	*notificationCenter;
-
 	if((self = [super init])) {
-		// Register to receive mount/unmount notifications
-		notificationCenter = [[NSWorkspace sharedWorkspace] notificationCenter];
-		[notificationCenter addObserver:self selector:@selector(volumeMounted:) name:@"NSWorkspaceDidMountNotification" object:nil];
-		[notificationCenter addObserver:self selector:@selector(volumeUnmounted:) name:@"NSWorkspaceWillUnmountNotification" object:nil];		
+		// Only request mount/unmount information for audio CDs
+		NSDictionary *match = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"IOCDMedia", [NSNumber numberWithBool:YES], nil] 
+														  forKeys:[NSArray arrayWithObjects:(NSString *)kDADiskDescriptionMediaKindKey, kDADiskDescriptionMediaWholeKey, nil]];
+		
+		_session = DASessionCreate(kCFAllocatorDefault);
+		DASessionScheduleWithRunLoop(_session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+		DARegisterDiskAppearedCallback(_session, (CFDictionaryRef)match, diskAppearedCallback, NULL);
+		DARegisterDiskDisappearedCallback(_session, (CFDictionaryRef)match, diskDisappearedCallback, NULL);
 	}
 	return self;
 }
 
 - (void) dealloc
 {
-	[[[NSWorkspace sharedWorkspace] notificationCenter] removeObserver:self];
-	
+	DAUnregisterCallback(_session, diskAppearedCallback, NULL);
+	DAUnregisterCallback(_session, diskDisappearedCallback, NULL);
+	DASessionUnscheduleFromRunLoop(_session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+	CFRelease(_session);
+		
 	[super dealloc];
 }
 
@@ -158,101 +128,78 @@ static MediaController *sharedController = nil;
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 
-- (void) scanForMedia
+- (void) volumeMounted: (NSString *) bsdName
 {
-	[self volumeMounted:nil];
-}
-
-// We don't actually use the notification, it is just a convenient hook
-- (void) volumeMounted: (NSNotification *) notification
-{
-	kern_return_t	kernResult;
-	io_iterator_t	mediaIterator;
-	io_object_t		nextMedia;
+	CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
+	NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
+	NSURL					*url		= [NSURL fileURLWithPath:filename];
+	CompactDiscDocument		*doc		= nil;
+	NSError					*err		= nil;
+	BOOL					newDisc		= NO;
 	
-	kernResult = findEjectableCDMedia(&mediaIterator);
+	// Ugly hack to avoid letting the user specify the save filename
+	if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+		[[NSFileManager defaultManager] createFileAtPath:filename contents:nil attributes:nil];
+		newDisc = YES;
+	}
+
+	doc	= [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:NO error:&err];
 	
-	while((nextMedia = IOIteratorNext(mediaIterator))) {
-
-		NSString				*bsdName	= getBSDName(nextMedia);
-		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
-
-		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
-		NSURL					*url		= [NSURL fileURLWithPath:filename];
-		CompactDiscDocument		*doc		= nil;
-		NSError					*err		= nil;
-		BOOL					newDisc		= NO;
+	if(nil != doc) {
+		[doc setDisc:disc];
 		
-		// Ugly hack to avoid letting the user specify the save filename
-		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
-			[[NSFileManager defaultManager] createFileAtPath:filename contents:nil attributes:nil];
-			newDisc = YES;
+		if(0 == [[doc windowControllers] count]) {
+			[doc makeWindowControllers];
+			[doc showWindows];		
 		}
-
-		doc	= [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:NO error:&err];
 		
-		if(nil != doc && nil == [doc getDisc]) {
-			[doc setDisc:disc];
+		if(newDisc) {
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
+				[doc queryFreeDB:self];
+			}				
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"]) {
+				[doc selectAll:self];
+				[doc encode:self];
+			}
 			
-			if(0 == [[doc windowControllers] count]) {
-				[doc makeWindowControllers];
-				[doc showWindows];		
-			}
-
-			if(newDisc) {
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
-					[doc getCDInformation:self];
-				}				
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"]) {
-					[doc selectAll:self];
-					[doc encode:self];
-				}
-				
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
-					[[doc getDisc] eject];
-				}
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
+				[[doc getDisc] eject];
 			}
 		}
-		else {
-			[[NSDocumentController sharedDocumentController] presentError:err];
-		}		
 	}
-	
-	kernResult = IOObjectRelease(mediaIterator);
-    if(KERN_SUCCESS != kernResult) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"IOObjectRelease returned %d", kernResult] userInfo:nil];
-    }
+	else {
+		[[NSDocumentController sharedDocumentController] presentError:err];
+	}
 }
 
-// We don't actually use the notification, it is just a convenient hook
-- (void) volumeUnmounted: (NSNotification *) notification
+- (void) volumeUnmounted: (NSString *) bsdName
 {
-	kern_return_t	kernResult;
-	io_iterator_t	mediaIterator;
-	io_object_t		nextMedia;
+	NSArray					*documents				= [[NSDocumentController sharedDocumentController] documents];
+	NSEnumerator			*documentEnumerator		= [documents objectEnumerator];
+	CompactDiscDocument		*document;
+	CompactDisc				*disc;
 	
-	kernResult = findEjectableCDMedia(&mediaIterator);
-    if(KERN_SUCCESS != kernResult) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"findEjectableCDMedia returned %d", kernResult] userInfo:nil];
-    }
-	
-	while((nextMedia = IOIteratorNext(mediaIterator))) {
-		NSString				*bsdName	= getBSDName(nextMedia);
-		CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
-		
-		NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
-		NSURL					*url		= [NSURL fileURLWithPath:filename];
-		CompactDiscDocument		*doc		= [[NSDocumentController sharedDocumentController] documentForURL:url];
-		
-		if(nil != doc) {
-			[doc discEjected];
+	while((document = [documentEnumerator nextObject])) {
+		disc = [document getDisc];
+		// If disc is nil, disc was unmounted by another agency (most likely user pressed eject key)
+		if(nil != disc && [[disc bsdName] isEqualToString:bsdName]) {
+			[document discEjected];
 		}
 	}
+}
+
+- (void) ejectDiscForCompactDiscDocument:(CompactDiscDocument *)document
+{
+	NSString	*bsdName	= [[document getDisc] bsdName];
+	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [bsdName UTF8String]);
 	
-	kernResult = IOObjectRelease(mediaIterator);
-    if(KERN_SUCCESS != kernResult) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"IOObjectRelease returned %d", kernResult] userInfo:nil];
-    }	
+	// Close all open connections to the drive
+	[document discEjected];
+	
+	DADiskUnmount(disk, kDADiskUnmountOptionDefault, unmountCallback, NULL);
+	DADiskEject(disk, kDADiskEjectOptionDefault, ejectCallback, NULL);
+	
+	CFRelease(disk);
 }
 
 @end

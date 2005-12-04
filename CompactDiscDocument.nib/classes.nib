@@ -1,7 +1,7 @@
 {
     IBClasses = (
         {
-            ACTIONS = {encode = id; getCDInformation = id; selectAll = id; selectNone = id; }; 
+            ACTIONS = {eject = id; encode = id; queryFreeDB = id; selectAll = id; selectNone = id; }; 
             CLASS = CompactDiscDocument; 
             LANGUAGE = ObjC; 
             OUTLETS = {"_trackDrawer" = NSDrawer; "_trackInfoButton" = NSButton; }; 

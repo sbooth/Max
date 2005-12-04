@@ -34,12 +34,16 @@
 #import "FreeDBException.h"
 #import "EmptySelectionException.h"
 #import "MissingResourceException.h"
+#import "ActiveTaskException.h"
 
 #import "UtilityFunctions.h"
+#import "CompactDiscDocumentToolbar.h"
+
+#import "MediaController.h"
 
 
 @interface CompactDiscDocument (Private)
-- (NSString *) basenameForTrack:(Track *)track;
+- (NSString *)		basenameForTrack:(Track *)track;
 @end
 
 @implementation CompactDiscDocument
@@ -70,7 +74,7 @@
 {
 	if((self = [super init])) {
 		_tracks			= [[NSMutableArray alloc] initWithCapacity:20];
-		_discInDrive	= NO;
+		_discInDrive	= [NSNumber numberWithBool:NO];
 		_disc			= nil;
 		
 		return self;
@@ -92,6 +96,26 @@
 
 #pragma mark NSDocument overrides
 
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	// Encode
+	if(1 == [item tag]) {
+		return [self encodeAllowed];
+	}
+	// Query FreeDB
+	else if(2 == [item tag]) {
+		return [self queryFreeDBAllowed];
+	}
+	// Eject
+	else if(1 == [item tag]) {
+		return ([self discInDrive] && (NO == [self ripInProgress]));
+	}
+	else {
+		return [super validateMenuItem:item];
+	}
+}
+
+
 - (void) makeWindowControllers 
 {
 	CompactDiscController *controller = [[CompactDiscController alloc] initWithWindowNibName:@"CompactDiscDocument" owner:self];
@@ -103,6 +127,17 @@
 {
 	[controller setShouldCascadeWindows:NO];
 	[controller setWindowFrameAutosaveName:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [self discID]]];
+	
+	NSToolbar *toolbar = [[[CompactDiscDocumentToolbar alloc] initWithCompactDiscDocument:self] autorelease];
+    
+    [toolbar setAllowsUserCustomization: YES];
+    [toolbar setAutosavesConfiguration: YES];
+    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    
+    [toolbar setDelegate:toolbar];
+	
+    [[controller window] setToolbar:toolbar];
+	
 }
 
 - (NSData *) dataOfType:(NSString *) typeName error:(NSError **) outError
@@ -156,20 +191,6 @@
 - (void) controlTextDidEndEditing:(NSNotification *)notification
 {
 	[self updateChangeCount:NSChangeDone];
-}
-
-- (void) drawerDidClose:(NSNotification *)notification
-{
-	if([notification object] == _trackDrawer) {
-		[_trackInfoButton setTitle:@"Show Track Info"];
-	}
-}
-
-- (void) drawerDidOpen:(NSNotification *)notification
-{
-	if([notification object] == _trackDrawer) {
-		[_trackInfoButton setTitle:@"Hide Track Info"];
-	}
 }
 
 #pragma mark Exception Display
@@ -258,7 +279,35 @@
 	}
 }
 
-#pragma mark Track selection
+#pragma mark Track information
+
+- (BOOL) ripInProgress
+{
+	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
+	Track			*track;
+	
+	while((track = [enumerator nextObject])) {
+		if([[track valueForKey:@"ripInProgress"] boolValue]) {
+			return YES;
+		}
+	}
+	
+	return NO;
+}
+
+- (BOOL) encodeInProgress
+{
+	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
+	Track			*track;
+	
+	while((track = [enumerator nextObject])) {
+		if([[track valueForKey:@"encodeInProgress"] boolValue]) {
+			return YES;
+		}
+	}
+	
+	return NO;
+}
 
 - (NSArray *) selectedTracks
 {
@@ -301,8 +350,6 @@
 		}
 	}
 }
-
-#pragma mark Actions
 
 - (NSString *) basenameForTrack:(Track *)track
 {
@@ -482,6 +529,25 @@
 	return basename;
 }
 
+#pragma mark State
+
+- (BOOL) encodeAllowed
+{
+	return ([self discInDrive] && (NO == [self emptySelection]) && (NO == [self ripInProgress]) && (NO == [self encodeInProgress]));
+}
+
+- (BOOL) queryFreeDBAllowed
+{
+	return [self discInDrive];
+}
+
+- (BOOL) ejectDiscAllowed
+{
+	return [self discInDrive];	
+}
+
+#pragma mark Actions
+
 - (IBAction) encode:(id) sender
 {
 	Track			*track;
@@ -490,9 +556,15 @@
 	NSString		*basename;
 	
 	@try {
-		// Do nothing for empty selection
-		if([self emptySelection]) {
+		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
+		if(NO == [self discInDrive]) {
+			return;
+		}
+		else if([self emptySelection]) {
 			@throw [EmptySelectionException exceptionWithReason:@"Please select one or more tracks to encode." userInfo:nil];
+		}
+		else if([self ripInProgress] || [self encodeInProgress]) {
+			@throw [ActiveTaskException exceptionWithReason:@"A rip or encode operation is already in progress." userInfo:nil];
 		}
 		
 		// Iterate through the selected tracks and rip/encode them
@@ -517,6 +589,32 @@
 	}
 }
 
+- (IBAction) eject:(id) sender
+{
+	if(NO == [self discInDrive]) {
+		return;
+	}
+	
+	if([self ripInProgress]) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:@"OK"];
+		[alert addButtonWithTitle:@"Cancel"];
+		[alert setMessageText:@"Really eject the disc?"];
+		[alert setInformativeText:@"There are active ripping tasks."];
+		[alert setAlertStyle:NSWarningAlertStyle];
+		
+		if(NSAlertSecondButtonReturn == [alert runModal]) {
+			return;
+		}
+		// Stop all associated rip tasks
+		else {
+			[[TaskMaster sharedController] removeRippingTasksForCompactDiscDocument:self];
+		}
+	}
+	
+	[[MediaController sharedController] ejectDiscForCompactDiscDocument:self];
+}
+
 #pragma mark FreeDB Functionality
 
 - (void) clearFreeDBData
@@ -537,13 +635,17 @@
 	}
 }
 
-- (IBAction)getCDInformation:(id)sender
+- (IBAction) queryFreeDB:(id)sender
 {
 	FreeDB				*freeDB				= nil;
 	NSArray				*matches			= nil;
 	FreeDBMatchSheet	*sheet				= nil;
 	
 	@try {
+		if(NO == [self discInDrive]) {
+			return;
+		}
+		
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
 		matches = [freeDB fetchMatches];
@@ -593,8 +695,7 @@
 	
 }
 
-
-#pragma mark -
+#pragma mark Miscellaneous
 
 - (NSString *)		length			{ return [NSString stringWithFormat:@"%u:%.02u", [_disc length] / 60, [_disc length] % 60]; }
 
@@ -635,7 +736,7 @@
 	unsigned				i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
 	
-	if(_discInDrive && [tracks count] != [_tracks count]) {
+	if([self discInDrive] && [tracks count] != [_tracks count]) {
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
 	}
 	else if(0 == [_tracks count]) {

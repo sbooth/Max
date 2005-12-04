@@ -26,10 +26,9 @@
 - (NSString *) windowTitleForDocumentDisplayName:(NSString *)displayName
 {
 	NSString *title = [[self document] valueForKey:@"title"];
-
+	
 	if(nil == title) {
-		CompactDiscDocument *document = [self document];
-		return [NSString stringWithFormat: @"Compact Disc 0x%.8x", [document discID]];
+		return [NSString stringWithFormat: @"Compact Disc 0x%.8x", [[self document] discID]];
 	}
 	else {
 		return title;

@@ -95,7 +95,12 @@
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
 		8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CE6F51D08CD60970028DA37 /* Credits.rtf */; };
-		8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
+		8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA8CF00942939800207809 /* DiskArbitration.framework */; };
+		8CEA9158094372B600207809 /* EjectDiscToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */; };
+		8CEA91B40943778C00207809 /* EncodeToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91B30943778C00207809 /* EncodeToolbarImage.png */; };
+		8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */; };
+		8CEA92490943846F00207809 /* ActiveTaskException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA92470943846F00207809 /* ActiveTaskException.m */; };
+		8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
@@ -289,6 +294,14 @@
 		8CE1687C0934681C00A99A68 /* ParanoiaException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParanoiaException.m; sourceTree = "<group>"; };
 		8CE6F51D08CD60970028DA37 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		8CE9B39708CF7937007FCDB3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		8CEA8CF00942939800207809 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
+		8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EjectDiscToolbarImage.png; sourceTree = "<group>"; };
+		8CEA91B30943778C00207809 /* EncodeToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeToolbarImage.png; sourceTree = "<group>"; };
+		8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrackInfoToolbarImage.png; sourceTree = "<group>"; };
+		8CEA92460943846F00207809 /* ActiveTaskException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActiveTaskException.h; sourceTree = "<group>"; };
+		8CEA92470943846F00207809 /* ActiveTaskException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActiveTaskException.m; sourceTree = "<group>"; };
+		8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
+		8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
@@ -306,7 +319,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				8CE9B39808CF7937007FCDB3 /* IOKit.framework in Frameworks */,
 				8CA382F00924598D00BDFD02 /* libtag.a in Frameworks */,
 				8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */,
 				8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */,
@@ -317,6 +329,7 @@
 				8CB8622C093F186100A60FC1 /* libogg.a in Frameworks */,
 				8CB8622D093F186100A60FC1 /* libvorbis.a in Frameworks */,
 				8CB8622E093F186100A60FC1 /* libvorbisenc.a in Frameworks */,
+				8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +416,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */,
+				8CEA91B30943778C00207809 /* EncodeToolbarImage.png */,
+				8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */,
 				8CB86246093F18CF00A60FC1 /* VorbisDefaults.plist */,
 				8CB8603C093EE8A100A60FC1 /* FreeDBToolbarImage.png */,
 				8CB86029093EE7E200A60FC1 /* RipperToolbarImage.png */,
@@ -445,6 +461,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8CEA8CF00942939800207809 /* DiskArbitration.framework */,
 				8C9A24A30925ACD100FB244D /* Growl.framework */,
 				8CE9B39708CF7937007FCDB3 /* IOKit.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
@@ -509,6 +526,8 @@
 				8C76E43908C6DE3900F4F9A1 /* Track.h */,
 				8C76E43A08C6DE3900F4F9A1 /* Track.m */,
 				8CE165B60933FAD400A99A68 /* CompactDisc.h */,
+				8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */,
+				8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */,
 			);
 			name = "Compact Disc";
 			sourceTree = "<group>";
@@ -580,6 +599,8 @@
 				8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */,
 				8CB0AED7093AE96C00968F66 /* FLACException.h */,
 				8CB0AED8093AE96C00968F66 /* FLACException.m */,
+				8CEA92460943846F00207809 /* ActiveTaskException.h */,
+				8CEA92470943846F00207809 /* ActiveTaskException.m */,
 			);
 			name = Exceptions;
 			sourceTree = "<group>";
@@ -710,6 +731,9 @@
 				8CB8603D093EE8A100A60FC1 /* FreeDBToolbarImage.png in Resources */,
 				8CB860DF093EF46D00A60FC1 /* VorbisPreferences.nib in Resources */,
 				8CB86247093F18CF00A60FC1 /* VorbisDefaults.plist in Resources */,
+				8CEA9158094372B600207809 /* EjectDiscToolbarImage.png in Resources */,
+				8CEA91B40943778C00207809 /* EncodeToolbarImage.png in Resources */,
+				8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -769,6 +793,8 @@
 				8CB861A4093F0E4700A60FC1 /* VorbisEncoder.m in Sources */,
 				8CB861FE093F177200A60FC1 /* VorbisEncoderTask.mm in Sources */,
 				8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */,
+				8CEA92490943846F00207809 /* ActiveTaskException.m in Sources */,
+				8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

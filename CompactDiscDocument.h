@@ -60,13 +60,22 @@
 - (void)			displayException:(NSException *)exception;
 
 - (NSArray *)		selectedTracks;
+
+- (BOOL)			encodeAllowed;
+- (BOOL)			queryFreeDBAllowed;
+- (BOOL)			ejectDiscAllowed;
+
 - (BOOL)			emptySelection;
+- (BOOL)			ripInProgress;
+- (BOOL)			encodeInProgress;
+
 - (IBAction)		selectAll:(id) sender;
 - (IBAction)		selectNone:(id) sender;
 - (IBAction)		encode:(id) sender;
+- (IBAction)		eject:(id) sender;
+- (IBAction)		queryFreeDB:(id) sender;
 
 - (void)			clearFreeDBData;
-- (IBAction)		getCDInformation:(id) sender;
 - (void)			updateDiscFromFreeDB:(FreeDBMatch *) info;
 
 - (int)				discID;

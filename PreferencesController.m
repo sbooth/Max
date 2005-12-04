@@ -109,7 +109,6 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 - (void) awakeFromNib
 {
 	[self setShouldCascadeWindows:NO];
-//	[self setWindowFrameAutosaveName:@"Preferences"];
 
     NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"Max Preferences Toolbar"] autorelease];
     

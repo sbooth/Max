@@ -134,6 +134,19 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
+- (void) removeRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document
+{
+	RipperTask		*ripperTask;
+	int				i;
+	
+	for(i = [_rippingTasks count] - 1; 0 <= i; --i) {
+		ripperTask = [_rippingTasks objectAtIndex:i];
+		if([document isEqual:[[ripperTask getTrack] getCompactDiscDocument]]) {
+			[ripperTask stop];
+		}
+	}
+}
+
 - (void) encodeTrack:(Track *)track outputBasename:(NSString *)basename
 {
 	RipperTask	*ripperTask		= nil;
@@ -196,9 +209,9 @@ static TaskMaster *sharedController = nil;
 		[task removeObserver:self forKeyPath:@"ripper.started"];
 		[task removeObserver:self forKeyPath:@"ripper.completed"];
 		[task removeObserver:self forKeyPath:@"ripper.stopped"];
-
+		
 		[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
-
+		
 		if(0 == [_rippingTasks count]) {
 			[_ripperStatusTextField setHidden:YES];
 		}

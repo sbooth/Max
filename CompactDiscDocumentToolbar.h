@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: CompactDisc.h 122 2005-11-18 21:57:28Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,22 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Ripper.h"
-#import "Track.h"
+#import "CompactDiscDocument.h"
 
-@interface RipperTask : NSObject 
+@interface CompactDiscDocumentToolbar : NSToolbar 
 {
-	NSString			*_path;
-	int					_out;
-	Ripper				*_ripper;
-	Track				*_track;
-	NSString			*_basename;
+	CompactDiscDocument		*_document;
 }
 
-- (id)			initWithTrack:(Track *)track;
-- (void)		run:(id)object;
-- (void)		stop;
-
-- (Track *)		getTrack;
+- (id) initWithCompactDiscDocument:(CompactDiscDocument *)document;
 
 @end

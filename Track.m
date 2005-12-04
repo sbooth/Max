@@ -164,7 +164,7 @@
 	[self setValue:nil forKey:@"genre"];
 }
 
-- (CompactDiscDocument *) getDiscDocument
+- (CompactDiscDocument *) getCompactDiscDocument
 {
 	return _disc;
 }

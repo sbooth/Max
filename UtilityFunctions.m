@@ -30,6 +30,7 @@
 #import "ParanoiaException.h"
 #import "FLACException.h"
 #import "VorbisException.h"
+#import "ActiveTaskException.h"
 
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;
@@ -177,6 +178,9 @@ displayExceptionSheet(NSException	*exception,
 	}
 	else if([exception isKindOfClass:[VorbisException class]]) {
 		[alert setMessageText: @"Ogg Vorbis Error"];
+	}
+	else if([exception isKindOfClass:[ActiveTaskException class]]) {
+		[alert setMessageText: @"Task Already Active"];
 	}
 	else {
 		[alert setMessageText: @"Unknown Error"];

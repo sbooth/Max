@@ -33,6 +33,8 @@
 
 - (id)					initWithBSDName:(NSString *)bsdName;
 
+- (NSString *)			bsdName;
+
 // Physical disc properties
 - (unsigned long)		firstSector;
 - (unsigned long)		lastSector;
@@ -55,8 +57,5 @@
 
 - (cdrom_drive *)		getDrive;
 - (cddb_disc_t *)		getFreeDBDisc;
-
-// Actions
-- (void)				eject;
 
 @end

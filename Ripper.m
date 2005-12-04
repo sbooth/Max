@@ -315,7 +315,7 @@ enum {
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
 		
 		// Setup cdparanoia
-		_drive		= [[[_track getDiscDocument] getDisc] getDrive];
+		_drive		= [[[_track getCompactDiscDocument] getDisc] getDrive];
 		_paranoia	= paranoia_init(_drive);
 
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {

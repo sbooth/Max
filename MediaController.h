@@ -20,15 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import <DiskArbitration/DASession.h>
+
+#import "CompactDiscDocument.h"
+
 @interface MediaController : NSObject
 {
+	DASessionRef		_session;
 }
 
-+ (MediaController *) sharedController;
-
-- (void) scanForMedia;
-
-- (void) volumeMounted: (NSNotification *) notification;
-- (void) volumeUnmounted: (NSNotification *) notification;
++ (MediaController *)		sharedController;
+- (void)					ejectDiscForCompactDiscDocument:(CompactDiscDocument *)document;
 
 @end

@@ -6,7 +6,6 @@
                 aboutLAME = id; 
                 checkForUpdate = id; 
                 openHomeURL = id; 
-                scanForMedia = id; 
                 showAcknowledgments = id; 
                 showPreferences = id; 
                 toggleLogPanel = id; 
@@ -17,7 +16,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {"" = id; }; 
+            ACTIONS = {"" = id; eject = id; encode = id; queryFreeDB = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 

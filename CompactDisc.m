@@ -25,7 +25,7 @@
 #import "ParanoiaException.h"
 #import "FreeDBException.h"
 
-#include <sys/disk.h>
+#include <paths.h>			// _PATH_DEV
 
 @implementation CompactDisc
 
@@ -34,11 +34,12 @@
 	if((self = [super init])) {
 		unsigned			i;
 		unsigned long		discLength	= 150;
+		NSString			*bsdPath	= [NSString stringWithFormat:@"%@r%@", [NSString stringWithUTF8String:_PATH_DEV], bsdName];
 
 		_bsdName	= [bsdName retain];
 		
 		// cdparanoia setup
-		_drive		= cdda_identify([_bsdName UTF8String], 0, NULL);
+		_drive		= cdda_identify([bsdPath UTF8String], 0, NULL);
 		if(NULL == _drive) {
 			@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
 		}
@@ -89,6 +90,11 @@
 	}
 	
 	[super dealloc];
+}
+
+- (NSString *) bsdName
+{
+	return _bsdName;
 }
 
 - (unsigned) trackCount
@@ -159,13 +165,6 @@
 - (cddb_disc_t *) getFreeDBDisc
 {
 	return _freeDBDisc;
-}
-
-- (void) eject
-{
-	if(-1 == ioctl(_drive->fd, DKIOCEJECT, NULL)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to eject disc (%i:%s)", errno, strerror(errno)] userInfo:nil];
-	}
 }
 
 @end
