@@ -79,8 +79,6 @@ enum {
 	[super dealloc];
 }
 
-#define READ 1024
-
 - (ssize_t) encodeToFile:(NSString *) filename
 {
 	ogg_packet					header;
@@ -101,8 +99,10 @@ enum {
 	
 	float						*left,				*right;
 	int16_t						*buf,				*limit;
-	
+		
 	NSString					*bundleVersion;
+
+	BOOL						eos											= NO;
 	
 	ssize_t						bytesRead									= 0;
 	ssize_t						currentBytesWritten							= 0;
@@ -245,8 +245,8 @@ example: 44kHz stereo coupled, average 128kbps VBR
 	}
 	
 	// Iteratively get the PCM data and encode it
-	while(0 < bytesToRead) {
-		
+	while(NO == eos) {
+
 		// Check if we should stop, and if so throw an exception
 		if([_shouldStop boolValue]) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
@@ -272,6 +272,9 @@ example: 44kHz stereo coupled, average 128kbps VBR
 			*right++	= *buf++ / 32768.0f;
 		}
 		
+		if(0 == bytesRead) {
+			NSLog(@"zero");
+		}
 		// Tell the library how much data we actually submitted
 		vorbis_analysis_wrote(&vd, bytesRead / 4);
 		
@@ -292,7 +295,7 @@ example: 44kHz stereo coupled, average 128kbps VBR
 				ogg_stream_packetin(&os, &op);
 				
 				// Write out pages (if any)
-				for(;;) {
+				while(NO == eos) {
 
 					if(0 == ogg_stream_pageout(&os, &og)) {
 						break;
@@ -313,7 +316,7 @@ example: 44kHz stereo coupled, average 128kbps VBR
 					bytesWritten += currentBytesWritten;
 
 					if(ogg_page_eos(&og)) {
-						break;			
+						eos = YES;
 					}
 				}
 			}
