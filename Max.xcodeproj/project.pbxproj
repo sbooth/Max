@@ -92,6 +92,7 @@
 		8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */; };
 		8CC111C408CA4538008BB9B0 /* CompactDiscDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */; };
 		8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED19C0935AA5E00413C0A /* CompactDisc.m */; };
+		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
 		8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164600933D42700A99A68 /* libcdda_paranoia.a */; };
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
@@ -102,7 +103,6 @@
 		8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */; };
 		8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */; };
 		8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */; };
-		8CEA95B90943BA3900207809 /* CD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA95B80943BA3900207809 /* CD.icns */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
@@ -289,6 +289,7 @@
 		8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
 		8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CompactDiscDocument.nib; sourceTree = "<group>"; };
 		8CCED19C0935AA5E00413C0A /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
+		8CDD2B9109442A9100D2DD96 /* CDInfo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CDInfo.icns; sourceTree = "<group>"; };
 		8CE164600933D42700A99A68 /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
 		8CE164610933D42700A99A68 /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
 		8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
@@ -303,7 +304,6 @@
 		8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
 		8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
 		8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
-		8CEA95B80943BA3900207809 /* CD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CD.icns; sourceTree = "<group>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
@@ -419,7 +419,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8CEA95B80943BA3900207809 /* CD.icns */,
+				8CDD2B9109442A9100D2DD96 /* CDInfo.icns */,
 				8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */,
 				8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */,
 				8CEA91B30943778C00207809 /* EncodeToolbarImage.png */,
@@ -738,7 +738,7 @@
 				8CEA91B40943778C00207809 /* EncodeToolbarImage.png in Resources */,
 				8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */,
 				8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */,
-				8CEA95B90943BA3900207809 /* CD.icns in Resources */,
+				8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

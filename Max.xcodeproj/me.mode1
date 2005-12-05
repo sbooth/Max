@@ -218,6 +218,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -258,7 +260,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>1</integer>
+									<integer>12</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -343,8 +345,6 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -381,9 +381,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>8CDD28360943E8BB00D2DD96</string>
+				<string>8C1F492309442B83004B9168</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>8CDD28370943E8BB00D2DD96</string>
+				<string>8C1F492409442B83004B9168</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -563,7 +563,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 30}, {823, 206}}</string>
+								<string>{{0, 5}, {823, 231}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -601,7 +601,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>8C191A4608C515A500CB7453</string>
-				<string>8CDD28380943E8BB00D2DD96</string>
+				<string>8C1F492509442B83004B9168</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -961,9 +961,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>8CDD28390943E8BB00D2DD96</string>
+				<string>8C1F492609442B83004B9168</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>8CDD283A0943E8BB00D2DD96</string>
+				<string>8C1F492709442B83004B9168</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>

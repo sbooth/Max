@@ -5,7 +5,7 @@
 	<key>vorbisMode</key>
 	<integer>0</integer>
 	<key>vorbisQuality</key>
-	<real>0.5</real>
+	<real>0.3</real>
 	<key>vorbisBitrate</key>
 	<real>6</real>
 	<key>vorbisUseConstantBitrate</key>

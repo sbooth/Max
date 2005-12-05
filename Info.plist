@@ -13,7 +13,7 @@
 				<string>cdinfo</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>CD</string>
+			<string>CDInfo</string>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>text/plain</string>
