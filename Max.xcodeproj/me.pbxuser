@@ -201,25 +201,16 @@
 			PBXWorkspaceStateSaveDate = 155465135;
 		};
 		perUserProjectItems = {
-			8C124A1B08C5B455008C8FBD = 8C124A1B08C5B455008C8FBD /* PBXTextBookmark */;
-			8C124A1C08C5B455008C8FBD = 8C124A1C08C5B455008C8FBD /* PBXTextBookmark */;
-			8C124A2508C5B455008C8FBD = 8C124A2508C5B455008C8FBD /* PBXTextBookmark */;
-			8C75068C0944A336000EFA2E /* PBXTextBookmark */ = 8C75068C0944A336000EFA2E /* PBXTextBookmark */;
-			8C75068D0944A336000EFA2E /* PBXTextBookmark */ = 8C75068D0944A336000EFA2E /* PBXTextBookmark */;
-			8C75068F0944A336000EFA2E /* PBXTextBookmark */ = 8C75068F0944A336000EFA2E /* PBXTextBookmark */;
-			8C7506910944A336000EFA2E /* PBXTextBookmark */ = 8C7506910944A336000EFA2E /* PBXTextBookmark */;
-			8C7506920944A336000EFA2E /* PBXTextBookmark */ = 8C7506920944A336000EFA2E /* PBXTextBookmark */;
-			8C7506A80944A642000EFA2E /* PBXTextBookmark */ = 8C7506A80944A642000EFA2E /* PBXTextBookmark */;
-			8C7506A90944A642000EFA2E /* PBXTextBookmark */ = 8C7506A90944A642000EFA2E /* PBXTextBookmark */;
-			8C7506AA0944A642000EFA2E /* PBXTextBookmark */ = 8C7506AA0944A642000EFA2E /* PBXTextBookmark */;
-			8C7506AB0944A642000EFA2E /* PBXTextBookmark */ = 8C7506AB0944A642000EFA2E /* PBXTextBookmark */;
-			8C752A8D08C50983001F588B = 8C752A8D08C50983001F588B /* PBXTextBookmark */;
-			8C752A8E08C50983001F588B = 8C752A8E08C50983001F588B /* PBXTextBookmark */;
-			8C9D204D08C5379E00D95535 = 8C9D204D08C5379E00D95535 /* PBXTextBookmark */;
-			8CBEC73508ED8D980064F794 = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
-			8CBEC73708ED8D980064F794 = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
-			8CFDCBCE08ECA53C00EBB077 = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
-			8CFDCBD008ECA53C00EBB077 = 8CFDCBD008ECA53C00EBB077 /* PBXTextBookmark */;
+			8C124A1B08C5B455008C8FBD /* PBXTextBookmark */ = 8C124A1B08C5B455008C8FBD /* PBXTextBookmark */;
+			8C124A1C08C5B455008C8FBD /* PBXTextBookmark */ = 8C124A1C08C5B455008C8FBD /* PBXTextBookmark */;
+			8C124A2508C5B455008C8FBD /* PBXTextBookmark */ = 8C124A2508C5B455008C8FBD /* PBXTextBookmark */;
+			8C752A8D08C50983001F588B /* PBXTextBookmark */ = 8C752A8D08C50983001F588B /* PBXTextBookmark */;
+			8C752A8E08C50983001F588B /* PBXTextBookmark */ = 8C752A8E08C50983001F588B /* PBXTextBookmark */;
+			8C9D204D08C5379E00D95535 /* PBXTextBookmark */ = 8C9D204D08C5379E00D95535 /* PBXTextBookmark */;
+			8CBEC73508ED8D980064F794 /* PBXTextBookmark */ = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
+			8CBEC73708ED8D980064F794 /* PBXTextBookmark */ = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
+			8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */ = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
+			8CFDCBD008ECA53C00EBB077 /* PBXTextBookmark */ = 8CFDCBD008ECA53C00EBB077 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 8C02E09108C0160A000288FA /* Source Control */;
 		userBuildSettings = {
@@ -600,117 +591,6 @@
 			sepNavVisRect = "{{0, 389}, {762, 715}}";
 			sepNavWindowFrame = "{{15, 39}, {807, 788}}";
 		};
-	};
-	8C75068C0944A336000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */;
-		name = "Ripper.m: 35";
-		rLen = 0;
-		rLoc = 1193;
-		rType = 0;
-		vrLen = 767;
-		vrLoc = 2036;
-	};
-	8C75068D0944A336000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "warning: declaration of 'id' shadows a global declaration";
-		fRef = 8C75068E0944A336000EFA2E /* cddb_disc.h */;
-		rLen = 1;
-		rLoc = 173;
-		rType = 1;
-	};
-	8C75068E0944A336000EFA2E /* cddb_disc.h */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.h;
-		name = cddb_disc.h;
-		path = /Users/me/Development/Max/include/cddb/cddb_disc.h;
-		sourceTree = "<absolute>";
-	};
-	8C75068F0944A336000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8C7506900944A336000EFA2E /* cddb_disc.h */;
-		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
-		rLen = 63;
-		rLoc = 4941;
-		rType = 0;
-		vrLen = 741;
-		vrLoc = 4618;
-	};
-	8C7506900944A336000EFA2E /* cddb_disc.h */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.h;
-		name = cddb_disc.h;
-		path = /Users/me/Development/Max/include/cddb/cddb_disc.h;
-		sourceTree = "<absolute>";
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {776, 6104}}";
-			sepNavSelRange = "{4941, 63}";
-			sepNavVisRect = "{{0, 2282}, {776, 295}}";
-		};
-	};
-	8C7506910944A336000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */;
-		name = "Ripper.m: 35";
-		rLen = 0;
-		rLoc = 1193;
-		rType = 0;
-		vrLen = 767;
-		vrLoc = 2036;
-	};
-	8C7506920944A336000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8C7506930944A336000EFA2E /* cddb_disc.h */;
-		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
-		rLen = 63;
-		rLoc = 4941;
-		rType = 0;
-		vrLen = 741;
-		vrLoc = 4618;
-	};
-	8C7506930944A336000EFA2E /* cddb_disc.h */ = {
-		isa = PBXFileReference;
-		name = cddb_disc.h;
-		path = /Users/me/Development/Max/include/cddb/cddb_disc.h;
-		sourceTree = "<absolute>";
-	};
-	8C7506A80944A642000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8C7506900944A336000EFA2E /* cddb_disc.h */;
-		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
-		rLen = 63;
-		rLoc = 4941;
-		rType = 0;
-		vrLen = 741;
-		vrLoc = 4618;
-	};
-	8C7506A90944A642000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "warning: passing argument 2 of 'FLAC__file_encoder_process' from incompatible pointer type";
-		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
-		rLen = 1;
-		rLoc = 195;
-		rType = 1;
-	};
-	8C7506AA0944A642000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8C7506900944A336000EFA2E /* cddb_disc.h */;
-		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
-		rLen = 63;
-		rLoc = 4941;
-		rType = 0;
-		vrLen = 741;
-		vrLoc = 4618;
-	};
-	8C7506AB0944A642000EFA2E /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
-		name = "FLACEncoder.m: 197";
-		rLen = 0;
-		rLoc = 7193;
-		rType = 0;
-		vrLen = 843;
-		vrLoc = 6606;
 	};
 	8C752A8208C507CE001F588B /* Genres.h */ = {
 		uiCtxt = {
