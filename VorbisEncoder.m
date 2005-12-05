@@ -272,9 +272,6 @@ example: 44kHz stereo coupled, average 128kbps VBR
 			*right++	= *buf++ / 32768.0f;
 		}
 		
-		if(0 == bytesRead) {
-			NSLog(@"zero");
-		}
 		// Tell the library how much data we actually submitted
 		vorbis_analysis_wrote(&vd, bytesRead / 4);
 		
