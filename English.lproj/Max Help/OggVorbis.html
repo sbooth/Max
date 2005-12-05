@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Ogg Vorbis Encoder Information</title>
+  <link rel="stylesheet" href="helpstyle.css" type="text/css">
+</head>
+<body>
+<h2>Configuring Ogg Vorbis Output</h2>
+<h3>Generating VBR Output</h3>
+<p>
+<strong>Note</strong>: VBR is the preferred encoding method for Ogg Vorbis.  It is highly recommended to use this setting for most applications.<br /><br />To generate a variable bitrate file (VBR) file, set the Target to Quality and choose the desired quality using the slider.  Quality settings of 5-6 should produce transparent encodings.</p>
+<p align="center"><img src="images/OggVorbis-VBR.png" height="335" width="466"></p>
+
+<h2>Ogg Vorbis Playback Information</h2>
+<p>While Ogg Vorbis is not yet supported natively on Mac OS X, the <a href="http://www.xiph.org/quicktime/">XiphQT</a> components allow Ogg Vorbis playback from any Quicktime&#8482;-enabled application such as iTunes&#8482;.</p>
+
+<h2>Ogg Vorbis Encoder Information</h2>
+<p>Max uses the <a href="http://www.xiph.org/vorbis/">libVorbis</a> encoding engine to generate Ogg Vorbis files.  Ogg Vorbis is an high-quality, open-source audio format.</p>
+
+<p>The following information was taken from the <a href="http://vorbis.com/faq/">Vorbis FAQ</a>.</p>
+
+<h3>Audio Quality</h3>
+<ul>
+  <li><a href="#lossy" id="_lossy">I've heard that Vorbis is a "lossy" codec.
+  What does this mean?</a></li>
+  <li><a href="#sound" id="_sound">Does Ogg Vorbis sound better than MP3?</a></li>
+  <li><a href="#other" id="_other">Why is Ogg Vorbis better than the other "New MP3"
+  codecs that are available?</a></li>
+  <li><a href="#transcode" id="_transcode">Can I convert my MP3 collection to
+  the Ogg Vorbis format?</a></li>
+  <li><a href="#test" id="_test">You're claiming that Vorbis has great audio quality.
+  Have you done any listening tests to back this up?</a></li>
+  <li><a href="#bugs" id="_bugs">I've heard some test samples that had audible
+  artifacts. Why did this happen?</a></li>
+  <li><a href="#quality" id="_quality">What does the "Quality" setting mean?</a></li>
+  <li><a href="#speech" id="_speech">How does Vorbis fare for speech compression?</a></li>
+</ul>
+
+<dl>
+  <dt><a href="#_lossy" id="lossy">I've heard that Vorbis is a &#x201c;lossy&#x201d;
+  codec. What does this mean?</a></dt>
+  <dd><p>There are two broad classes of compression algorithms:</p>
+  <dl>
+    <dt><dfn>lossy</dfn></dt>
+    <dd>Lossy compression algorithms <em>discard</em> data in order to compress it
+    better than would normally be possible. Examples include <abbr>JPEG</abbr>,
+    Vorbis, and <abbr>MP3</abbr> compression.</dd>
+
+    <dt><dfn>lossless</dfn></dt>
+    <dd>Lossless compression algorithms produce compressed data that can be decoded to
+    output that is identical to the original. Zip is a common general-purpose lossless
+    compression format; <a href="http://flac.sourceforge.net/">FLAC</a> is a lossless
+    compression format that is specifically designed for audio.</dd>
+  </dl><p/>
+  </dd>
+
+  <dt><a href="#_sound" id="sound">Does Ogg Vorbis sound better than MP3?</a></dt>
+  <dd><p>Yes, definitely. Naturally, we invite you to judge this for yourself;
+  please see our <a href='http://www.xiph.org/vorbis/listen.html'>Dare to Compare</a>
+  page for at least some of our listening samples.</p></dd>
+
+  <dt><a href="#_other" id="other">Why is Ogg Vorbis better than the other "New MP3"
+  codecs that are available?</a></dt>
+  <dd><p>Vorbis sounds better. Vorbis is open, so you're free to use it on your favorite
+  platform. Vorbis doesn't have intellectual property restrictions to get in the way.
+  And Vorbis doesn't just try to sound better, it tries to do things fundamentally better
+  in all the ways that it can.</p>
+  </dd>
+
+  <dt><a href="#_transcode" id="transcode">Can I convert my MP3 collection to the Ogg
+  Vorbis format?</a></dt>
+  <dd><p>You can convert any audio format to Ogg Vorbis. However, converting from one
+  lossy format, like MP3, to another lossy format, like Vorbis, is generally a bad idea.
+  Both MP3 and Vorbis encoders achieve high compression ratios by throwing away parts
+  of the audio waveform that you probably won't hear. However, the MP3 and Vorbis
+  codecs are very different, so they each will throw away different parts of the audio,
+  although there certainly is some overlap. Converting a MP3 to Vorbis involves decoding
+  the MP3 file back to an uncompressed format, like WAV, and recompressing it using the Ogg
+  Vorbis encoder. The decoded MP3 will be missing the parts of the original audio that
+  the MP3 encoder chose to discard. The Ogg Vorbis encoder will then discard other audio
+  components when it compresses the data. At best, the result will be an Ogg file that
+  sounds the same as your original MP3, but it is most likely that the resulting file will
+  sound worse than your original MP3. In no case will you get a file that sounds better
+  than the original MP3.</p>
+  <p>Since many music players can play both MP3 <em>and</em> Ogg files, there is no reason
+  that you should have to switch all of your files to one format or the other. If you like
+  Ogg Vorbis, then we would encourage you to use it when you encode from original, lossless
+  audio sources (like CDs). When encoding from originals, you will find that you can make
+  Ogg files that are smaller or of better quality (or both) than your MP3s.</p>
+  <p>(If you must absolutely must convert from MP3 to Ogg, there are several conversion
+  scripts available on <a href="http://freshmeat.net/search/?q=convert%20ogg%20mp3">Freshmeat</a>
+  .)</p>
+  </dd>
+
+  <dt><a href="#_test" id="test">You're claiming that Vorbis has great audio quality.
+  Have you done any listening tests to back this up?</a></dt>
+  <dd><p>Yes. Have a look at our <a href='http://www.xiph.org/vorbis/listen.html'>Dare
+  to Compare</a> page.</p>
+  <p>Further, the German magazine c't published the results of a
+  <a hreflang='de' href='http://www.heise.de/newsticker/data/anw-08.09.02-000/'>listening test</a>
+  which found that Vorbis sounded better than MP3 at lower bitrates/quality settings
+  (around 64kbit/sec).</p>
+  </dd>
+
+  <dt><a href="#_bugs" id="bugs">I've heard some test samples that had audible
+  artifacts. Why did this happen?</a></dt>
+  <dd><p>While the Vorbis file format is standardized, the Vorbis encoder has
+  undergone several beta and prerelease testing cycles. If the files you heard were
+  encoded using an earlier version encoder, they might contain serious audio quality bugs
+  that have already been fixed. Try re-encoding from the source audio using the latest
+  encoder. If you still think you've got a bug that produces unreasonable artifacts, please
+  e-mail the vorbis-dev list with the details.</p>
+  </dd>
+
+  <dt><a href="#_quality" id="quality">What does the &#x201c;Quality&#x201d; setting mean?</a></dt>
+  <dd><p>Vorbis' audio quality is not <em>best</em> measured in kilobits per second, but
+  on a scale from -1 to 10 called "quality". This change in terminology was brought about
+  by a tuning of the variable-bitrate algorithm that produces better sound quality for a
+  given average bitrate, but which does not adhere as strictly to that average as a target.</p>
+  <p>This new scale of measurement is not tied to a quantifiable characteristic of the
+  stream, like bitrate, so it's a fairly subjective metric, but provides a more stable
+  basis of comparison to other codecs and is relatively future-proof. As Segher Boessenkool
+  explained, &#x201c;if you upgrade to a new vorbis encoder, and you keep the same quality
+  setting, you will get smaller files which sound the same. If you keep the same nominal
+  bitrate, you get about the same size files, which sound somewhat better.&#x201d; The
+  former behavior is the aim of the quality metric, so encoding to a target bitrate is
+  now officially deprecated for all uses except streaming over bandwidth-critical
+  connections.</p>
+  <p>For now, quality 0 is roughly equivalent to 64kbps average, 5 is roughly 160kbps,
+  and 10 gives about 400kbps. Most people seeking very-near-CD-quality audio encode at
+  a quality of 5 or, for lossless stereo coupling, 6. The default setting is quality
+  3, which at approximately 110kbps gives a smaller filesize and significantly better
+  fidelity than .mp3 compression at 128kbps.</p>
+  <p>As always, if you need CD-quality sound, neither Vorbis nor MP3 (nor any other
+  lossy audio codec) can provide <em>exact</em> reproduction; instead, consider using
+  a lossless audio compression scheme like <a href='http://flac.sourceforge.net'>FLAC</a>.</p>
+  </dd>
+
+  <dt><a href="#_speech" id="speech">How does Vorbis fare for speech compression?</a></dt>
+  <dd><p>It works well, but is generally not the optimal solution. Vorbis is designed
+  for the compression of music and general purpose audio. Special purpose codecs can
+  achieve much greater compression of speech than Vorbis. Vorbis also tends to have a
+  latency that is too high for telephony, a common use of speech codecs. Read the
+  <a href="http://www.speech.cs.cmu.edu/comp.speech/FAQ3.html">Speech Coding and Compression
+  FAQ</a> for more details. Those looking for an pen-source, patent-free speech codec
+  should take a look at <a href="http://www.speex.org/">Speex</a>.</p>
+  </dd>
+</dl>
+
+
+
+</body>
+</html>
