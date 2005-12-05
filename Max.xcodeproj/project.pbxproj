@@ -912,10 +912,7 @@
 		8C1919E008C50B7A00CB7453 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = ppc;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(SRCROOT)",

@@ -197,8 +197,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 155462514;
-			PBXWorkspaceStateSaveDate = 155462514;
+			PBXPerProjectTemplateStateSaveDate = 155465135;
+			PBXWorkspaceStateSaveDate = 155465135;
 		};
 		perUserProjectItems = {
 			8C124A1B08C5B455008C8FBD = 8C124A1B08C5B455008C8FBD /* PBXTextBookmark */;
@@ -949,7 +949,7 @@
 	8CB86246093F18CF00A60FC1 /* VorbisDefaults.plist */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {699, 637}}";
-			sepNavSelRange = "{294, 0}";
+			sepNavSelRange = "{305, 0}";
 			sepNavVisRect = "{{0, 0}, {699, 637}}";
 			sepNavWindowFrame = "{{38, 96}, {744, 710}}";
 		};
@@ -1337,8 +1337,8 @@
 	8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {956, 1988}}";
-			sepNavSelRange = "{4555, 0}";
-			sepNavVisRect = "{{0, 1158}, {699, 637}}";
+			sepNavSelRange = "{1756, 13}";
+			sepNavVisRect = "{{0, 513}, {699, 637}}";
 			sepNavWindowFrame = "{{84, 54}, {744, 710}}";
 		};
 	};

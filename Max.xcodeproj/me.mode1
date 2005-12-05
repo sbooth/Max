@@ -218,8 +218,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -345,6 +343,8 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -518,8 +518,8 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>733 278 520 548 0 0 1280 832 </string>

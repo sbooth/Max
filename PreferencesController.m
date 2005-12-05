@@ -117,6 +117,7 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
     [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
     
     [toolbar setDelegate:self];
+	[toolbar setSelectedItemIdentifier:GeneralPreferencesToolbarItemIdentifier];
 	
     [[self window] setToolbar:toolbar];
 	[[self window] center];
@@ -214,6 +215,13 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 		nil];
 }
 
+- (NSArray *) toolbarSelectableItemIdentifiers: (NSToolbar *)toolbar
+{
+    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
+		nil];
+}
+
 - (void) selectPrefsPane:(id)sender
 {
 	NSToolbar				*toolbar;
@@ -226,7 +234,7 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 
 	
 	toolbar					= [[self window] toolbar];
-	itemIdentifier			= [sender itemIdentifier];
+	itemIdentifier			= [toolbar selectedItemIdentifier];
 	prefPaneClass			= NSClassFromString([itemIdentifier stringByAppendingString:@"Controller"]);
 	prefPaneObject			= [[prefPaneClass alloc] init];
 	prefView				= [[prefPaneObject window] contentView];
