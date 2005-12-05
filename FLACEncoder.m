@@ -79,7 +79,6 @@
 
 - (ssize_t) encodeToFile:(NSString *) filename
 {
-	FLAC__FileEncoderState		state				= FLAC__FILE_ENCODER_UNINITIALIZED;
 	ssize_t						bytesRead			= 0;
 	ssize_t						bytesWritten		= 0;
 	ssize_t						bytesToRead			= 0;

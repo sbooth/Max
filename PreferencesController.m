@@ -175,8 +175,8 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
     else if([itemIdentifier isEqualToString:LAMEPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"LAME"];
-		[toolbarItem setPaletteLabel: @"LAME"];
+		[toolbarItem setLabel: @"MP3"];
+		[toolbarItem setPaletteLabel: @"MP3"];
 		[toolbarItem setToolTip: @"LAME mp3 encoder preferences"];
 		[toolbarItem setImage: [NSImage imageNamed:@"LAMEToolbarImage"]];
 		
