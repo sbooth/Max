@@ -18,7 +18,7 @@
         {
             ACTIONS = {
                 "" = id; 
-                eject = id; 
+                ejectDisc = id; 
                 encode = id; 
                 queryFreeDB = id; 
                 toggleTrackInformation = id; 

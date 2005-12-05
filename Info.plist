@@ -22,15 +22,8 @@
 			<string>Max CD Information</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>XML</string>
-				<string>Property</string>
-				<string>List</string>
-				<string>File</string>
-			</array>
 			<key>LSTypeIsPackage</key>
-			<false/>
+			<true/>
 			<key>NSDocumentClass</key>
 			<string>CompactDiscDocument</string>
 			<key>NSPersistentStoreTypeKey</key>
@@ -54,7 +47,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>0.3</string>
 	<key>CFBundleSignature</key>
-	<string>MaxX</string>
+	<string>Maxx</string>
 	<key>CFBundleVersion</key>
 	<string>0.3</string>
 	<key>NSMainNibFile</key>

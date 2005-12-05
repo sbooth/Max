@@ -39,6 +39,7 @@
 - (BOOL)			hasActiveTasks;
 - (void)			removeAllTasks;
 
+- (BOOL)			compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document;
 - (void)			removeRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
 
 - (void)			encodeTrack:(Track *)track outputBasename:(NSString *)basename;

@@ -47,6 +47,7 @@
 		8C8B0EC9092E710200418C45 /* UpdateChecker.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0EC8092E710200418C45 /* UpdateChecker.nib */; };
 		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9A24B40925ADB200FB244D /* Growl.framework in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
+		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
 		8CA382F00924598D00BDFD02 /* libtag.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382ED0924598D00BDFD02 /* libtag.a */; };
 		8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EE0924598D00BDFD02 /* libmp3lame.a */; };
 		8CA522790938E44100250BE8 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA522770938E44100250BE8 /* LogController.m */; };
@@ -101,6 +102,7 @@
 		8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */; };
 		8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */; };
 		8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */; };
+		8CEA95B90943BA3900207809 /* CD.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA95B80943BA3900207809 /* CD.icns */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
@@ -301,6 +303,7 @@
 		8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
 		8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
 		8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
+		8CEA95B80943BA3900207809 /* CD.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CD.icns; sourceTree = "<group>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
@@ -329,6 +332,7 @@
 				8CB8622D093F186100A60FC1 /* libvorbis.a in Frameworks */,
 				8CB8622E093F186100A60FC1 /* libvorbisenc.a in Frameworks */,
 				8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */,
+				8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +419,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CEA95B80943BA3900207809 /* CD.icns */,
 				8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */,
 				8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */,
 				8CEA91B30943778C00207809 /* EncodeToolbarImage.png */,
@@ -733,6 +738,7 @@
 				8CEA91B40943778C00207809 /* EncodeToolbarImage.png in Resources */,
 				8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */,
 				8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */,
+				8CEA95B90943BA3900207809 /* CD.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -892,6 +898,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				OTHER_LDFLAGS = (
 					"-liconv",
 					"-lz",
@@ -922,6 +929,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				OTHER_LDFLAGS = (
 					"-liconv",
 					"-lz",

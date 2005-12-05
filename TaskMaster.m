@@ -134,6 +134,20 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
+- (BOOL) compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document
+{
+	NSEnumerator	*enumerator		= [_rippingTasks objectEnumerator];
+	RipperTask		*ripperTask;
+	
+	while((ripperTask = [enumerator nextObject])) {
+		if([document isEqual:[[ripperTask getTrack] getCompactDiscDocument]]) {
+			return YES;
+		}
+	}
+	
+	return NO;
+}
+
 - (void) removeRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document
 {
 	RipperTask		*ripperTask;
@@ -196,7 +210,7 @@ static TaskMaster *sharedController = nil;
 		[self performSelectorOnMainThread:@selector(encodeDidStop:) withObject:context waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqualToString:@"encoder.completed"]) {
-		[self performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:context waitUntilDone:YES];
 	}
 }
 
@@ -260,6 +274,9 @@ static TaskMaster *sharedController = nil;
 	int				alertResult		= 0;
 	BOOL			createFile		= YES;
 
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"ripDidComplete" object:nil];
+	
 	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip completed for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:trackName
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];

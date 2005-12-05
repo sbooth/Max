@@ -93,7 +93,6 @@
 	@try {
 		// Start ripping
 		[_ripper ripToFile:_out];
-		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
 	}
 	
 	@catch(StopException *exception) {
@@ -104,6 +103,8 @@
 	}
 	
 	@finally {
+		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+
 		// Close output file
 		if(-1 == close(_out)) {
 			// Just ignore it for now

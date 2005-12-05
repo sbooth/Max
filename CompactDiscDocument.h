@@ -28,30 +28,25 @@
 @interface CompactDiscDocument : NSDocument 
 {
     IBOutlet NSDrawer				*_trackDrawer;
-    IBOutlet NSButton				*_trackInfoButton;
 
-	// Related data structures
-	NSNumber						*_discInDrive;
 	CompactDisc						*_disc;
-	
-	// ID3 tags
-	NSString						*_title;			// TALB
-	NSString						*_artist;			// TPE1
-	NSNumber						*_year;				// TYER
-	NSString						*_genre;			// TCON
-	NSString						*_comment;			// COMM
-	
-	NSNumber						*_partOfSet;		// TPOS
+	NSNumber						*_discInDrive;
+	NSNumber						*_discID;
+	NSNumber						*_freeDBQueryInProgress;
+		
+	// Disc information
+	NSString						*_title;
+	NSString						*_artist;
+	NSNumber						*_year;
+	NSString						*_genre;
+	NSString						*_comment;
+	NSNumber						*_partOfSet;
 
 	// Other disc info
 	NSNumber						*_discNumber;
 	NSNumber						*_discsInSet;
 	NSNumber						*_multiArtist;
 	
-	NSNumber						*_discID;
-	
-	NSNumber						*_stop;
-
 	// Array of audio tracks
 	NSMutableArray					*_tracks;
 }
@@ -61,6 +56,7 @@
 
 - (NSArray *)		selectedTracks;
 
+// Toolbar/menu item enabling utility methods
 - (BOOL)			encodeAllowed;
 - (BOOL)			queryFreeDBAllowed;
 - (BOOL)			ejectDiscAllowed;
@@ -69,10 +65,11 @@
 - (BOOL)			ripInProgress;
 - (BOOL)			encodeInProgress;
 
+// Action methods
 - (IBAction)		selectAll:(id) sender;
 - (IBAction)		selectNone:(id) sender;
 - (IBAction)		encode:(id) sender;
-- (IBAction)		eject:(id) sender;
+- (IBAction)		ejectDisc:(id) sender;
 - (IBAction)		queryFreeDB:(id) sender;
 - (IBAction)		toggleTrackInformation:(id) sender;
 

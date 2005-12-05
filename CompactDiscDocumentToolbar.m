@@ -115,7 +115,7 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 		[toolbarItem setImage: [NSImage imageNamed:@"EjectDiscToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
-		[toolbarItem setAction:@selector(eject:)];
+		[toolbarItem setAction:@selector(ejectDisc:)];
 	}
 	else {
 		toolbarItem = nil;

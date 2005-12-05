@@ -20,9 +20,10 @@
 
 #import "MediaController.h"
 
-#import "IOException.h"
 #import "CompactDisc.h"
 #import "CompactDiscDocument.h"
+#import "TaskMaster.h"
+#import "IOException.h"
 #import "MissingResourceException.h"
 
 #include <CoreFoundation/CoreFoundation.h>
@@ -152,7 +153,7 @@ static MediaController *sharedController = nil;
 - (void) volumeMounted: (NSString *) bsdName
 {
 	CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
-	NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.xml", getApplicationDataDirectory(), [disc discID]];
+	NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
 	NSURL					*url		= [NSURL fileURLWithPath:filename];
 	CompactDiscDocument		*doc		= nil;
 	NSError					*err		= nil;
@@ -171,20 +172,13 @@ static MediaController *sharedController = nil;
 		
 		if(0 == [[doc windowControllers] count]) {
 			[doc makeWindowControllers];
-			[doc showWindows];		
+			[doc showWindows];
 		}
 		
 		if(newDisc) {
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
+				[doc addObserver:self forKeyPath:@"freeDBQueryInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
 				[doc queryFreeDB:self];
-			}				
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"]) {
-				[doc selectAll:self];
-				[doc encode:self];
-			}
-			
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
-				[[doc getDisc] eject];
 			}
 		}
 	}
@@ -223,4 +217,35 @@ static MediaController *sharedController = nil;
 	CFRelease(disk);
 }
 
+// This elaborate scheme is necessary since multiple threads are going at the same time
+- (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
+{
+	CompactDiscDocument *doc = (CompactDiscDocument *)context;
+	
+	if([keyPath isEqualToString:@"freeDBQueryInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"]) {
+			[doc removeObserver:self forKeyPath:@"freeDBQueryInProgress"];
+			[doc selectAll:self];
+			//[[[doc valueForKey:@"tracks"] objectAtIndex:0] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
+			[doc encode:self];
+			
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
+				NSArray			*tracks		= [doc valueForKey:@"tracks"];
+				NSIndexSet		*indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
+				
+				[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
+			}
+		}
+	}
+	else if([keyPath isEqualToString:@"ripInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
+		if(NO == [[TaskMaster sharedController] compactDiscDocumentHasRippingTasks:doc]) {
+			NSArray			*tracks		= [doc valueForKey:@"tracks"];
+			NSIndexSet		*indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
+			
+			[tracks removeObserver:self fromObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress"];
+			[doc ejectDisc:self];
+		}
+	}
+}
+	
 @end

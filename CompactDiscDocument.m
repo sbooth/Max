@@ -39,10 +39,10 @@
 
 #import "UtilityFunctions.h"
 
-#define kEncodeMenuItemTag			0
-#define kTrackInfoMenuItemTag		1
-#define kQueryFreeDBMenuItemTag		2
-#define kEjectDiscMenuItemTag		3
+#define kEncodeMenuItemTag			1
+#define kTrackInfoMenuItemTag		2
+#define kQueryFreeDBMenuItemTag		3
+#define kEjectDiscMenuItemTag		4
 
 @interface CompactDiscDocument (Private)
 - (NSString *)		basenameForTrack:(Track *)track;
@@ -154,9 +154,7 @@
 	return nil;
 }
 
-- (BOOL) readFromData:(NSData *) data 
-			   ofType:(NSString *) typeName 
-				error:(NSError **) outError
+- (BOOL) readFromData:(NSData *) data ofType:(NSString *) typeName error:(NSError **) outError
 {    
 	if([typeName isEqualToString:@"Max CD Information"]) {
 		NSDictionary			*dictionary;
@@ -174,7 +172,6 @@
 	}
     return NO;
 }
-
 #pragma mark Delegate methods
 
 - (void) windowWillClose:(NSNotification *)notification
@@ -586,7 +583,7 @@
 	}
 }
 
-- (IBAction) eject:(id) sender
+- (IBAction) ejectDisc:(id) sender
 {
 	if(NO == [self discInDrive]) {
 		return;
@@ -643,6 +640,7 @@
 			return;
 		}
 		
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"freeDBQueryInProgress"];
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
 		matches = [freeDB fetchMatches];
@@ -661,6 +659,7 @@
 	}
 	
 	@catch(NSException *exception) {
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"freeDBQueryInProgress"];
 		[self displayException:exception];
 	}
 	
@@ -687,6 +686,7 @@
 	}
 	
 	@finally {
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"freeDBQueryInProgress"];
 		[freeDB release];		
 	}
 	
