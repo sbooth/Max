@@ -2,11 +2,10 @@
     IBClasses = (
         {
             ACTIONS = {
-                aboutFLAC = id; 
-                aboutLAME = id; 
                 checkForUpdate = id; 
                 openHomeURL = id; 
                 showAcknowledgments = id; 
+                showComponentVersions = id; 
                 showPreferences = id; 
                 toggleLogPanel = id; 
                 toggleTasksPanel = id; 

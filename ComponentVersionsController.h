@@ -1,5 +1,5 @@
 /*
- *  $Id: ApplicationController.h 202 2005-12-04 21:50:52Z me $
+ *  $Id: ApplicationController.h 178 2005-11-26 20:27:04Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,22 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <Growl/GrowlApplicationBridge.h>
-
-@interface ApplicationController : NSObject < GrowlApplicationBridgeDelegate >
+@interface ComponentVersionsController : NSWindowController
 {
+	NSString		*_flacVersion;
+	NSString		*_lameVersion;
+	NSString		*_libsndfileVersion;
 }
 
-- (IBAction)			showPreferences:(id)sender;
-- (IBAction)			showAcknowledgments:(id)sender;
-- (IBAction)			showComponentVersions:(id)sender;
-
-- (IBAction)			toggleTasksPanel:(id)sender;
-- (IBAction)			toggleLogPanel:(id)sender;
-
-- (IBAction)			checkForUpdate:(id)sender;
-- (IBAction)			openHomeURL:(id)sender;
-
--(NSDictionary *)		registrationDictionaryForGrowl;
++ (ComponentVersionsController *)		sharedController;
 
 @end

@@ -39,7 +39,6 @@
 		8C752A8408C507CE001F588B /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C752A8308C507CE001F588B /* Genres.m */; };
 		8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */; };
 		8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */; };
-		8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
 		8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */; };
 		8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0CC1092E5DAA00418C45 /* Max Help */; };
 		8C8B0D22092E617B00418C45 /* MacPADSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0D20092E617B00418C45 /* MacPADSocket.m */; };
@@ -98,6 +97,11 @@
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
 		8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CE6F51D08CD60970028DA37 /* Credits.rtf */; };
+		8CE9743F09461DB6000127B6 /* ComponentVersionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE9743D09461DB6000127B6 /* ComponentVersionsController.m */; };
+		8CE9744909461DE2000127B6 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
+		8CE9746309461F35000127B6 /* ComponentVersions.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE9746209461F35000127B6 /* ComponentVersions.nib */; };
+		8CE974770946262B000127B6 /* FLAC.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE974760946262B000127B6 /* FLAC.png */; };
+		8CE9747909462638000127B6 /* libsndfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE9747809462638000127B6 /* libsndfile.png */; };
 		8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA8CF00942939800207809 /* DiskArbitration.framework */; };
 		8CEA9158094372B600207809 /* EjectDiscToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */; };
 		8CEA91B40943778C00207809 /* EncodeToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91B30943778C00207809 /* EncodeToolbarImage.png */; };
@@ -302,6 +306,11 @@
 		8CE1687B0934681C00A99A68 /* ParanoiaException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParanoiaException.h; sourceTree = "<group>"; };
 		8CE1687C0934681C00A99A68 /* ParanoiaException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParanoiaException.m; sourceTree = "<group>"; };
 		8CE6F51D08CD60970028DA37 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		8CE9743C09461DB6000127B6 /* ComponentVersionsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentVersionsController.h; sourceTree = "<group>"; };
+		8CE9743D09461DB6000127B6 /* ComponentVersionsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentVersionsController.m; sourceTree = "<group>"; };
+		8CE9746209461F35000127B6 /* ComponentVersions.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ComponentVersions.nib; sourceTree = "<group>"; };
+		8CE974760946262B000127B6 /* FLAC.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FLAC.png; sourceTree = "<group>"; };
+		8CE9747809462638000127B6 /* libsndfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = libsndfile.png; sourceTree = "<group>"; };
 		8CE9B39708CF7937007FCDB3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		8CEA8CF00942939800207809 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
 		8CEA9157094372B600207809 /* EjectDiscToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EjectDiscToolbarImage.png; sourceTree = "<group>"; };
@@ -437,6 +446,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CE9747809462638000127B6 /* libsndfile.png */,
+				8CE974760946262B000127B6 /* FLAC.png */,
 				8CF4D52309455D2300385BE4 /* FormatsPreferences.nib */,
 				8CF4D4E00945531F00385BE4 /* FormatsToolbarImage.png */,
 				8CDD2B9109442A9100D2DD96 /* CDInfo.icns */,
@@ -479,6 +490,7 @@
 				8CB0AF3A093AEAEE00968F66 /* FLACDefaults.plist */,
 				8C4D489F093E932600A88927 /* Acknowledgments.nib */,
 				8CB860DE093EF46D00A60FC1 /* VorbisPreferences.nib */,
+				8CE9746209461F35000127B6 /* ComponentVersions.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -570,6 +582,8 @@
 				8CA522770938E44100250BE8 /* LogController.m */,
 				8C4D48A5093E93AC00A88927 /* AcknowledgmentsController.h */,
 				8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */,
+				8CE9743C09461DB6000127B6 /* ComponentVersionsController.h */,
+				8CE9743D09461DB6000127B6 /* ComponentVersionsController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -766,6 +780,9 @@
 				8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */,
 				8CF4D4E10945531F00385BE4 /* FormatsToolbarImage.png in Resources */,
 				8CF4D52809455D2300385BE4 /* FormatsPreferences.nib in Resources */,
+				8CE9746309461F35000127B6 /* ComponentVersions.nib in Resources */,
+				8CE974770946262B000127B6 /* FLAC.png in Resources */,
+				8CE9747909462638000127B6 /* libsndfile.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -784,7 +801,6 @@
 				8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */,
 				8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */,
 				8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */,
-				8C7C891408EC3EC500F6FCB1 /* ApplicationController.m in Sources */,
 				8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */,
 				8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */,
 				8C73004E08ECAA5B0008D7E0 /* FreeDBMatchSheet.m in Sources */,
@@ -829,6 +845,8 @@
 				8CF4D3F70945138900385BE4 /* SndFileEncoder.m in Sources */,
 				8CF4D47509454CD700385BE4 /* SndFileEncoderTask.m in Sources */,
 				8CF4D51109455C7800385BE4 /* FormatsPreferencesController.m in Sources */,
+				8CE9743F09461DB6000127B6 /* ComponentVersionsController.m in Sources */,
+				8CE9744909461DE2000127B6 /* ApplicationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: ApplicationController.m 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -22,6 +22,7 @@
 
 #import "PreferencesController.h"
 #import "AcknowledgmentsController.h"
+#import "ComponentVersionsController.h"
 #import "MediaController.h"
 #import "TaskMaster.h"
 #import "LogController.h"
@@ -30,9 +31,6 @@
 #import "FreeDBProtocolValueTransformer.h";
 #import "BooleanArrayValueTransformer.h";
 #import "NegateBooleanArrayValueTransformer.h";
-
-#include "lame/lame.h"
-#include "flac/format.h"
 
 @implementation ApplicationController
 
@@ -102,30 +100,9 @@
 	return NSTerminateNow;
 }
 
-- (IBAction) aboutLAME:(id)sender
+- (IBAction) showComponentVersions:(id)sender
 {
-	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-	[alert addButtonWithTitle:@"OK"];
-	[alert setMessageText:@"About LAME"];
-	[alert setInformativeText:[NSString stringWithFormat:@"LAME %s", get_lame_version()]];
-	[alert setAlertStyle:NSWarningAlertStyle];
-	
-	if([alert runModal] == NSAlertFirstButtonReturn) {
-		// do nothing
-	} 
-}
-
-- (IBAction) aboutFLAC:(id)sender
-{
-	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-	[alert addButtonWithTitle:@"OK"];
-	[alert setMessageText:@"About FLAC"];
-	[alert setInformativeText:[NSString stringWithFormat:@"FLAC %s", FLAC__VERSION_STRING]];
-	[alert setAlertStyle:NSWarningAlertStyle];
-	
-	if([alert runModal] == NSAlertFirstButtonReturn) {
-		// do nothing
-	} 
+	[[ComponentVersionsController sharedController] showWindow:self];
 }
 
 - (IBAction) toggleTasksPanel:(id)sender

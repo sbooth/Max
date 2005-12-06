@@ -187,8 +187,6 @@
 		
 		free(intBuffer);
 	}
-	
-		
 		
 	// Update status
 	bytesToRead -= bytesRead;
