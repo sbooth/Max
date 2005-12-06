@@ -933,7 +933,7 @@
 	8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {830, 1624}}";
-			sepNavSelRange = "{0, 3177}";
+			sepNavSelRange = "{1011, 0}";
 			sepNavVisRect = "{{0, 0}, {830, 700}}";
 			sepNavWindowFrame = "{{15, 54}, {875, 773}}";
 		};
@@ -2262,9 +2262,9 @@
 	};
 	8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {944, 1414}}";
-			sepNavSelRange = "{1983, 0}";
-			sepNavVisRect = "{{0, 714}, {830, 700}}";
+			sepNavIntBoundsRect = "{{0, 0}, {944, 1428}}";
+			sepNavSelRange = "{1970, 0}";
+			sepNavVisRect = "{{0, 607}, {830, 700}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -2303,8 +2303,8 @@
 	8CF4D3F50945138900385BE4 /* SndFileEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1028, 3038}}";
-			sepNavSelRange = "{2509, 0}";
-			sepNavVisRect = "{{0, 1059}, {699, 637}}";
+			sepNavSelRange = "{2817, 13}";
+			sepNavVisRect = "{{0, 831}, {699, 637}}";
 			sepNavWindowFrame = "{{61, 75}, {744, 710}}";
 		};
 	};
