@@ -201,7 +201,6 @@
 	
 	// Close the input file
 	if(-1 == close(_source)) {
-		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
