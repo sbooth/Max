@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: TaskMaster.m 205 2005-12-05 06:04:34Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -24,6 +24,7 @@
 #import "MPEGEncoderTask.h"
 #import "FLACEncoderTask.h"
 #import "VorbisEncoderTask.h"
+#import "SndFileEncoderTask.h"
 #import "MissingResourceException.h"
 #import "IOException.h"
 #import "UtilityFunctions.h"
@@ -266,6 +267,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidComplete:(RipperTask* ) task
 {
+	NSArray			*sndfileFormats = [[NSUserDefaults standardUserDefaults] objectForKey:@"sndfileOutputFormats"];
 	Track			*track			= [task valueForKey:@"track"];
 	NSString		*trackName		= [track description];
 	NSString		*basename		= [task valueForKey:@"basename"];
@@ -421,7 +423,7 @@ static TaskMaster *sharedController = nil;
 			}
 			else if(NSAlertThirdButtonReturn == alertResult) {
 				NSSavePanel *panel = [NSSavePanel savePanel];
-				[panel setRequiredFileType:@"flac"];
+				[panel setRequiredFileType:@"ogg"];
 				if(NSFileHandlingPanelOKButton == [panel runModal]) {
 					filename = [panel filename];
 					// Remove the file if it exists
@@ -446,6 +448,67 @@ static TaskMaster *sharedController = nil;
 			[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
 			[_encoderStatusTextField setHidden:NO];
 			[self spawnEncoderThreads];			
+		}
+	}
+	
+	if(nil != sndfileFormats && 0 < [sndfileFormats count]) {
+		NSEnumerator	*formats		= [sndfileFormats objectEnumerator];
+		NSDictionary	*formatInfo;
+		
+		while((formatInfo = [formats nextObject])) {
+
+			createFile	= YES;
+			filename	= [NSString stringWithFormat:@"%@.%@", basename, [formatInfo valueForKey:@"extension"]];
+			
+			// Check if the output file exists
+			if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+				NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+				[alert addButtonWithTitle:@"Yes"];
+				[alert addButtonWithTitle:@"No"];
+				[alert addButtonWithTitle:@"Save AsÉ"];
+				[alert setMessageText:@"Overwrite existing file?"];
+				[alert setInformativeText:[NSString stringWithFormat:@"The file '%@' already exists.  Do you wish to replace it?", filename]];
+				[alert setAlertStyle:NSCriticalAlertStyle];
+				
+				alertResult = [alert runModal];
+				
+				if(NSAlertFirstButtonReturn == alertResult) {
+					// Remove the file
+					if(-1 == unlink([filename UTF8String])) {
+						@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+					}
+				}
+				else if(NSAlertSecondButtonReturn == alertResult) {
+					createFile = NO;
+				}
+				else if(NSAlertThirdButtonReturn == alertResult) {
+					NSSavePanel *panel = [NSSavePanel savePanel];
+					[panel setRequiredFileType:[formatInfo valueForKey:@"extension"]];
+					if(NSFileHandlingPanelOKButton == [panel runModal]) {
+						filename = [panel filename];
+						// Remove the file if it exists
+						if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+							if(-1 == unlink([filename UTF8String])) {
+								@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+							}
+						}
+					}
+				}
+			}
+			
+			// Encode the file
+			if(createFile) {
+				encoderTask = [[SndFileEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
+				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
+
+				// Add the encoder to our list of encoding tasks
+				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
+				[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
+				[_encoderStatusTextField setHidden:NO];
+				[self spawnEncoderThreads];
+			}
 		}
 	}
 }

@@ -71,6 +71,7 @@
 	}
 	
 	@catch(StopException *exception) {
+		[self removeOutputFile];
 	}
 	
 	@catch(NSException *exception) {

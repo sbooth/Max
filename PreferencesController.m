@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: PreferencesController.m 212 2005-12-05 16:47:24Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -27,6 +27,7 @@
 static PreferencesController	*sharedPreferences					= nil;
 
 static NSString		*GeneralPreferencesToolbarItemIdentifier		= @"GeneralPreferences";
+static NSString		*FormatsPreferencesToolbarItemIdentifier		= @"FormatsPreferences";
 static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences";
 static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences";
 static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences";
@@ -139,12 +140,23 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	}
+    else if([itemIdentifier isEqualToString:FormatsPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"Formats"];
+		[toolbarItem setPaletteLabel: @"Formats"];
+		[toolbarItem setToolTip: @"Select desired output formats"];
+		[toolbarItem setImage: [NSImage imageNamed:@"FormatsToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
+	}
     else if([itemIdentifier isEqualToString:OutputPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: @"Output"];
 		[toolbarItem setPaletteLabel: @"Output"];
-		[toolbarItem setToolTip: @"Output preferences"];
+		[toolbarItem setToolTip: @"Output file naming and location preferences"];
 		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -203,21 +215,24 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
-    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
+		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
 		nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
 {
-    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
+		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
 		nil];
 }
 
 - (NSArray *) toolbarSelectableItemIdentifiers: (NSToolbar *)toolbar
 {
-    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
+		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
 		nil];
 }

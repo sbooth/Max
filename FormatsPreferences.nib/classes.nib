@@ -1,0 +1,17 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {addFormat = id; removeFormat = id; }; 
+            CLASS = FormatsPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_selectedFormatsController" = NSArrayController; 
+                "_subtypesController" = NSArrayController; 
+                "_typesController" = NSArrayController; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

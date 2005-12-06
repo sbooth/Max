@@ -14,6 +14,7 @@
 		8C206F150929486C00793FD0 /* TaskMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C206F130929486C00793FD0 /* TaskMaster.m */; };
 		8C22FA27092DA69800566739 /* libcddb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EC0924598D00BDFD02 /* libcddb.a */; };
 		8C3101280931297C000A50FC /* Max.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8C3101270931297C000A50FC /* Max.icns */; };
+		8C3A88330945756C00B438D5 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF4D3F00945137100385BE4 /* libsndfile.a */; };
 		8C440DC0092E8B3000A053AA /* FreeDBMatches.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */; };
 		8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DC1092E8B3C00A053AA /* Tasks.nib */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
@@ -106,6 +107,11 @@
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
+		8CF4D3F70945138900385BE4 /* SndFileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D3F50945138900385BE4 /* SndFileEncoder.m */; };
+		8CF4D47509454CD700385BE4 /* SndFileEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D47309454CD700385BE4 /* SndFileEncoderTask.m */; };
+		8CF4D4E10945531F00385BE4 /* FormatsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF4D4E00945531F00385BE4 /* FormatsToolbarImage.png */; };
+		8CF4D51109455C7800385BE4 /* FormatsPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */; };
+		8CF4D52809455D2300385BE4 /* FormatsPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF4D52309455D2300385BE4 /* FormatsPreferences.nib */; };
 		8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -309,6 +315,15 @@
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
 		8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooleanArrayValueTransformer.m; sourceTree = "<group>"; };
+		8CF4D3F00945137100385BE4 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
+		8CF4D3F40945138900385BE4 /* SndFileEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SndFileEncoder.h; sourceTree = "<group>"; };
+		8CF4D3F50945138900385BE4 /* SndFileEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SndFileEncoder.m; sourceTree = "<group>"; };
+		8CF4D47209454CD700385BE4 /* SndFileEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SndFileEncoderTask.h; sourceTree = "<group>"; };
+		8CF4D47309454CD700385BE4 /* SndFileEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SndFileEncoderTask.m; sourceTree = "<group>"; };
+		8CF4D4E00945531F00385BE4 /* FormatsToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FormatsToolbarImage.png; sourceTree = "<group>"; };
+		8CF4D50E09455C7800385BE4 /* FormatsPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatsPreferencesController.h; sourceTree = "<group>"; };
+		8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormatsPreferencesController.m; sourceTree = "<group>"; };
+		8CF4D52309455D2300385BE4 /* FormatsPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FormatsPreferences.nib; sourceTree = "<group>"; };
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -333,6 +348,7 @@
 				8CB8622E093F186100A60FC1 /* libvorbisenc.a in Frameworks */,
 				8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */,
 				8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */,
+				8C3A88330945756C00B438D5 /* libsndfile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +368,8 @@
 				8C752A8308C507CE001F588B /* Genres.m */,
 				8C4D3E2E093DE4C300A88927 /* VorbisEncoder.h */,
 				8C4D3E2F093DE4C300A88927 /* VorbisEncoder.m */,
+				8CF4D3F40945138900385BE4 /* SndFileEncoder.h */,
+				8CF4D3F50945138900385BE4 /* SndFileEncoder.m */,
 			);
 			name = Encoder;
 			sourceTree = "<group>";
@@ -419,6 +437,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CF4D52309455D2300385BE4 /* FormatsPreferences.nib */,
+				8CF4D4E00945531F00385BE4 /* FormatsToolbarImage.png */,
 				8CDD2B9109442A9100D2DD96 /* CDInfo.icns */,
 				8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */,
 				8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */,
@@ -501,6 +521,8 @@
 				8C4D4536093E6D7D00A88927 /* GeneralPreferencesController.m */,
 				8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */,
 				8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */,
+				8CF4D50E09455C7800385BE4 /* FormatsPreferencesController.h */,
+				8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -566,6 +588,7 @@
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8CF4D3F00945137100385BE4 /* libsndfile.a */,
 				8CB86229093F186100A60FC1 /* libogg.a */,
 				8CB8622A093F186100A60FC1 /* libvorbis.a */,
 				8CB8622B093F186100A60FC1 /* libvorbisenc.a */,
@@ -636,6 +659,8 @@
 				8C040A2F092AB41A0052D881 /* RipperTask.m */,
 				8CB861FB093F177200A60FC1 /* VorbisEncoderTask.h */,
 				8CB861FC093F177200A60FC1 /* VorbisEncoderTask.mm */,
+				8CF4D47209454CD700385BE4 /* SndFileEncoderTask.h */,
+				8CF4D47309454CD700385BE4 /* SndFileEncoderTask.m */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";
@@ -739,6 +764,8 @@
 				8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */,
 				8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */,
 				8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */,
+				8CF4D4E10945531F00385BE4 /* FormatsToolbarImage.png in Resources */,
+				8CF4D52809455D2300385BE4 /* FormatsPreferences.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,6 +826,9 @@
 				8CB861FE093F177200A60FC1 /* VorbisEncoderTask.mm in Sources */,
 				8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */,
 				8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */,
+				8CF4D3F70945138900385BE4 /* SndFileEncoder.m in Sources */,
+				8CF4D47509454CD700385BE4 /* SndFileEncoderTask.m in Sources */,
+				8CF4D51109455C7800385BE4 /* FormatsPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
