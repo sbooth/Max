@@ -56,14 +56,13 @@
 
 - (IBAction) selectMirror:(id)sender
 {
-	NSLog(@"selectMirror");
 	NSArray *selectedObjects = [_mirrorsController selectedObjects];
 	if(0 < [selectedObjects count]) {
 		FreeDBSite					*mirror					= [selectedObjects objectAtIndex:0];
 		NSUserDefaultsController	*defaultsController		= [NSUserDefaultsController sharedUserDefaultsController];
-		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"server"];
-		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"port"];
-		[[defaultsController values] setValue:[mirror valueForKey:@"protocol"] forKey:@"protocol"];
+		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"freeDBServer"];
+		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"freeDBPort"];
+		[[defaultsController values] setValue:[mirror valueForKey:@"protocol"] forKey:@"freeDBProtocol"];
 	}
 }
 
