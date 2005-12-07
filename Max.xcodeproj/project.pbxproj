@@ -33,8 +33,6 @@
 		8C4D48DB093E957300A88927 /* Acknowledgments.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D48DA093E957300A88927 /* Acknowledgments.rtf */; };
 		8C6EC5C2092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */; };
 		8C73004E08ECAA5B0008D7E0 /* FreeDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* FreeDBMatchSheet.m */; };
-		8C7300A708ECB1E80008D7E0 /* FreeDBMatch.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7300A608ECB1E80008D7E0 /* FreeDBMatch.m */; };
-		8C73021008ECD4AD0008D7E0 /* FreeDBSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73020F08ECD4AD0008D7E0 /* FreeDBSite.m */; };
 		8C73033E08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */; };
 		8C752A8408C507CE001F588B /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C752A8308C507CE001F588B /* Genres.m */; };
 		8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */; };
@@ -93,6 +91,7 @@
 		8CC111C408CA4538008BB9B0 /* CompactDiscDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */; };
 		8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED19C0935AA5E00413C0A /* CompactDisc.m */; };
 		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
+		8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */; };
 		8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164600933D42700A99A68 /* libcdda_paranoia.a */; };
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
@@ -300,6 +299,7 @@
 		8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CompactDiscDocument.nib; sourceTree = "<group>"; };
 		8CCED19C0935AA5E00413C0A /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
 		8CDD2B9109442A9100D2DD96 /* CDInfo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CDInfo.icns; sourceTree = "<group>"; };
+		8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SubmitToFreeDBToolbarImage.png; sourceTree = "<group>"; };
 		8CE164600933D42700A99A68 /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
 		8CE164610933D42700A99A68 /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
 		8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
@@ -446,6 +446,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */,
 				8CE9747809462638000127B6 /* libsndfile.png */,
 				8CE974760946262B000127B6 /* FLAC.png */,
 				8CF4D52309455D2300385BE4 /* FormatsPreferences.nib */,
@@ -783,6 +784,7 @@
 				8CE9746309461F35000127B6 /* ComponentVersions.nib in Resources */,
 				8CE974770946262B000127B6 /* FLAC.png in Resources */,
 				8CE9747909462638000127B6 /* libsndfile.png in Resources */,
+				8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,8 +806,6 @@
 				8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */,
 				8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */,
 				8C73004E08ECAA5B0008D7E0 /* FreeDBMatchSheet.m in Sources */,
-				8C7300A708ECB1E80008D7E0 /* FreeDBMatch.m in Sources */,
-				8C73021008ECD4AD0008D7E0 /* FreeDBSite.m in Sources */,
 				8C73033E08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m in Sources */,
 				8CBEC4F008ED6F770064F794 /* FreeDBException.m in Sources */,
 				8CBEC55608ED74E90064F794 /* MallocException.m in Sources */,

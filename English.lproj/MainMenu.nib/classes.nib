@@ -20,6 +20,7 @@
                 ejectDisc = id; 
                 encode = id; 
                 queryFreeDB = id; 
+                submitToFreeDB = id; 
                 toggleTrackInformation = id; 
             }; 
             CLASS = FirstResponder; 

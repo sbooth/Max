@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: FreeDB.m 200 2005-12-03 10:34:47Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,8 +20,6 @@
 
 #import "FreeDB.h"
 
-#import "FreeDBSite.h"
-#import "FreeDBMatch.h"
 #import "MallocException.h"
 #import "FreeDBException.h"
 #import "MissingResourceException.h"
@@ -99,8 +97,13 @@
 - (NSArray *) fetchSites
 {
 	const cddb_site_t		*site			= NULL;
-	NSMutableArray			*result			= [[NSMutableArray alloc] initWithCapacity:20];
-
+	NSMutableArray			*sites			= [[NSMutableArray alloc] initWithCapacity:20];
+	const char				*tempString;
+	unsigned int			i;
+	float					latitude, longitude;
+	NSMutableDictionary		*currentSite;
+	
+	
 	cddb_sites(_freeDB);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	if(FALSE == cddb_sites(_freeDB)) {
@@ -109,11 +112,29 @@
 	
 	site = cddb_first_site(_freeDB);
 	while(NULL != site) {
-		[result addObject:[FreeDBSite createFromFreeDBSite:site]];
+		currentSite = [NSMutableDictionary dictionaryWithCapacity:20];
+		
+		if(CDDB_ERR_OK == cddb_site_get_address(site, &tempString, &i)) {
+			[currentSite setValue:[NSString stringWithCString:tempString] forKey:@"address"];
+			[currentSite setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"port"];
+		}
+		
+		[currentSite setValue:[NSNumber numberWithInt:cddb_site_get_protocol(site)] forKey:@"protocol"];
+		
+		if(CDDB_ERR_OK == cddb_site_get_description(site, &tempString)) {
+			[currentSite setValue:[NSString stringWithCString:tempString] forKey:@"siteDescription"];
+		}
+		
+		if(CDDB_ERR_OK == cddb_site_get_location(site, &latitude, &longitude)) {
+			[currentSite setValue:[NSNumber numberWithFloat:latitude] forKey:@"latitude"];
+			[currentSite setValue:[NSNumber numberWithFloat:longitude] forKey:@"longitude"];
+		}
+		
+		[sites addObject:currentSite];
 		site = cddb_next_site(_freeDB);
 	}
 	
-	return [[result retain] autorelease];
+	return [[sites retain] autorelease];
 }
 
 - (NSArray *) fetchMatches
@@ -121,6 +142,7 @@
 	NSMutableArray			*result			= [[NSMutableArray alloc] initWithCapacity:10];
 	cddb_disc_t				*freeDBDisc		= [[_disc getDisc] getFreeDBDisc];
 	int						matches;
+	NSMutableDictionary		*currentMatch;
 	
 
 	// Run query to find matches
@@ -130,7 +152,16 @@
 	}
 
 	while(matches > 0) {
-		[result addObject:[FreeDBMatch createFromFreeDBDisc:freeDBDisc]];
+		currentMatch = [NSMutableDictionary dictionaryWithCapacity:6];
+		
+		[currentMatch setValue:[NSString stringWithCString:cddb_disc_get_artist(freeDBDisc)] forKey:@"artist"];
+		[currentMatch setValue:[NSString stringWithCString:cddb_disc_get_title(freeDBDisc)] forKey:@"title"];
+		[currentMatch setValue:[NSNumber numberWithUnsignedInt:cddb_disc_get_year(freeDBDisc)] forKey:@"year"];
+		[currentMatch setValue:[NSString stringWithCString:cddb_disc_get_genre(freeDBDisc)] forKey:@"genre"];
+		[currentMatch setValue:[NSNumber numberWithInt:cddb_disc_get_category(freeDBDisc)] forKey:@"category"];
+		[currentMatch setValue:[NSNumber numberWithUnsignedInt:cddb_disc_get_discid(freeDBDisc)] forKey:@"discid"];
+
+		[result addObject:currentMatch];
 		
 		--matches;
 		if(0 < matches) {
@@ -143,7 +174,7 @@
 	return [[result retain] autorelease];
 }
 
-- (void) updateDisc:(FreeDBMatch *)info
+- (void) updateDisc:(NSDictionary *)info
 {
 	cddb_disc_t				*disc			= NULL;
 	cddb_track_t			*track			= NULL;

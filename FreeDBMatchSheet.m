@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: FreeDBMatchSheet.m 205 2005-12-05 06:04:34Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,7 +20,6 @@
 
 #import "FreeDBMatchSheet.h"
 
-#import "FreeDBMatch.h"
 #import "MissingResourceException.h"
 
 @implementation FreeDBMatchSheet

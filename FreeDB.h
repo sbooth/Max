@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: FreeDB.h 175 2005-11-25 04:56:46Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -21,7 +21,6 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CompactDiscDocument.h"
-#import "FreeDBMatch.h"
 
 #include "cddb/cddb.h"
 
@@ -34,6 +33,6 @@
 - (NSArray *)	fetchSites;
 - (NSArray *)	fetchMatches;
 
-- (void)		updateDisc:(FreeDBMatch *)info;
+- (void)		updateDisc:(NSDictionary *)info;
 
 @end

@@ -23,12 +23,14 @@
 static NSString		*EncodeToolbarItemIdentifier			= @"Encode";
 static NSString		*TrackInfoToolbarItemIdentifier			= @"TrackInfo";
 static NSString		*QueryFreeDBToolbarItemIdentifier		= @"QueryFreeDB";
+static NSString		*SubmitToFreeDBToolbarItemIdentifier	= @"SubmitToFreeDB";
 static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 
-#define kEncodeToolbarItemTag		0
-#define kTrackInfoToolbarItemTag	1
-#define kQueryFreeDBToolbarItemTag	2
-#define kEjectDiscToolbarItemTag	3
+#define kEncodeToolbarItemTag			1
+#define kTrackInfoToolbarItemTag		2
+#define kQueryFreeDBToolbarItemTag		3
+#define kSubmitToFreeDBToolbarItemTag	4
+#define kEjectDiscToolbarItemTag		5
 
 @implementation CompactDiscDocumentToolbar
 
@@ -55,10 +57,11 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 	
 	while((item = [enumerator nextObject])) {
 		switch([item tag]) {
-			default:							[item setEnabled:YES];								break;
-			case kEncodeToolbarItemTag:			[item setEnabled:[_document encodeAllowed]];		break;
-			case kQueryFreeDBToolbarItemTag:	[item setEnabled:[_document queryFreeDBAllowed]];	break;
-			case kEjectDiscToolbarItemTag:		[item setEnabled:[_document ejectDiscAllowed]];		break;
+			default:							[item setEnabled:YES];									break;
+			case kEncodeToolbarItemTag:			[item setEnabled:[_document encodeAllowed]];			break;
+			case kQueryFreeDBToolbarItemTag:	[item setEnabled:[_document queryFreeDBAllowed]];		break;
+			case kSubmitToFreeDBToolbarItemTag:	[item setEnabled:[_document submitToFreeDBAllowed]];	break;
+			case kEjectDiscToolbarItemTag:		[item setEnabled:[_document ejectDiscAllowed]];			break;
 		}
 	}
 }
@@ -105,6 +108,18 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(queryFreeDB:)];
 	}
+    else if([itemIdentifier isEqualToString:SubmitToFreeDBToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setTag:kSubmitToFreeDBToolbarItemTag];
+		[toolbarItem setLabel: @"Submit"];
+		[toolbarItem setPaletteLabel: @"Submit"];
+		[toolbarItem setToolTip: @"Submit album information to FreeDB"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SubmitToFreeDBToolbarImage"]];
+		
+		[toolbarItem setTarget:_document];
+		[toolbarItem setAction:@selector(submitToFreeDB:)];
+	}
     else if([itemIdentifier isEqualToString:EjectDiscToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
@@ -127,15 +142,17 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
     return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, TrackInfoToolbarItemIdentifier, 
-		QueryFreeDBToolbarItemIdentifier, NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
+		QueryFreeDBToolbarItemIdentifier, SubmitToFreeDBToolbarItemIdentifier,
+		NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
 {
-    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, TrackInfoToolbarItemIdentifier,
-		QueryFreeDBToolbarItemIdentifier, EjectDiscToolbarItemIdentifier, 
-		NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
+    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, TrackInfoToolbarItemIdentifier, 
+		QueryFreeDBToolbarItemIdentifier, SubmitToFreeDBToolbarItemIdentifier,
+		NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
 }
 
 @end

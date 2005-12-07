@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: CompactDiscDocument.h 205 2005-12-05 06:04:34Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -22,7 +22,6 @@
 
 #import "CompactDisc.h"
 #import "Track.h"
-#import "FreeDBMatch.h"
 
 
 @interface CompactDiscDocument : NSDocument 
@@ -59,6 +58,7 @@
 // Toolbar/menu item enabling utility methods
 - (BOOL)			encodeAllowed;
 - (BOOL)			queryFreeDBAllowed;
+- (BOOL)			submitToFreeDBAllowed;
 - (BOOL)			ejectDiscAllowed;
 
 - (BOOL)			emptySelection;
@@ -71,10 +71,11 @@
 - (IBAction)		encode:(id) sender;
 - (IBAction)		ejectDisc:(id) sender;
 - (IBAction)		queryFreeDB:(id) sender;
+- (IBAction)		submitToFreeDB:(id) sender;
 - (IBAction)		toggleTrackInformation:(id) sender;
 
 - (void)			clearFreeDBData;
-- (void)			updateDiscFromFreeDB:(FreeDBMatch *) info;
+- (void)			updateDiscFromFreeDB:(NSDictionary *) info;
 
 - (int)				discID;
 

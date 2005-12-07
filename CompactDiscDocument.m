@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: CompactDiscDocument.m 205 2005-12-05 06:04:34Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -39,10 +39,11 @@
 
 #import "UtilityFunctions.h"
 
-#define kEncodeMenuItemTag			1
-#define kTrackInfoMenuItemTag		2
-#define kQueryFreeDBMenuItemTag		3
-#define kEjectDiscMenuItemTag		4
+#define kEncodeMenuItemTag				1
+#define kTrackInfoMenuItemTag			2
+#define kQueryFreeDBMenuItemTag			3
+#define kEjectDiscMenuItemTag			4
+#define kSubmitToFreeDBMenuItemTag		5
 
 @interface CompactDiscDocument (Private)
 - (NSString *)		basenameForTrack:(Track *)track;
@@ -103,10 +104,11 @@
 	BOOL result;
 	
 	switch([item tag]) {
-		default:						result = [super validateMenuItem:item];			break;
-		case kEncodeMenuItemTag:		result = [self encodeAllowed];					break;
-		case kQueryFreeDBMenuItemTag:	result = [self queryFreeDBAllowed];				break;
-		case kEjectDiscMenuItemTag:		result = [self ejectDiscAllowed];				break;
+		default:							result = [super validateMenuItem:item];			break;
+		case kEncodeMenuItemTag:			result = [self encodeAllowed];					break;
+		case kQueryFreeDBMenuItemTag:		result = [self queryFreeDBAllowed];				break;
+		case kSubmitToFreeDBMenuItemTag:	result = [self submitToFreeDBAllowed];			break;
+		case kEjectDiscMenuItemTag:			result = [self ejectDiscAllowed];				break;
 	}
 	
 	return result;
@@ -535,6 +537,11 @@
 	return [self discInDrive];
 }
 
+- (BOOL) submitToFreeDBAllowed
+{
+	return [self discInDrive];
+}
+
 - (BOOL) ejectDiscAllowed
 {
 	return [self discInDrive];	
@@ -668,7 +675,13 @@
 	}
 }
 
-- (void) updateDiscFromFreeDB:(FreeDBMatch *)info
+- (IBAction) submitToFreeDB:(id) sender
+{
+	NSLog(@"foo");
+	
+}
+
+- (void) updateDiscFromFreeDB:(NSDictionary *)info
 {
 	FreeDB *freeDB;
 	

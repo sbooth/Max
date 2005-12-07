@@ -21,7 +21,6 @@
 #import "FreeDBPreferencesController.h"
 #import "PreferencesController.h"
 #import "FreeDB.h"
-#import "FreeDBSite.h"
 
 @implementation FreeDBPreferencesController
 
@@ -58,7 +57,7 @@
 {
 	NSArray *selectedObjects = [_mirrorsController selectedObjects];
 	if(0 < [selectedObjects count]) {
-		FreeDBSite					*mirror					= [selectedObjects objectAtIndex:0];
+		NSDictionary				*mirror					= [selectedObjects objectAtIndex:0];
 		NSUserDefaultsController	*defaultsController		= [NSUserDefaultsController sharedUserDefaultsController];
 		[[defaultsController values] setValue:[mirror valueForKey:@"address"] forKey:@"freeDBServer"];
 		[[defaultsController values] setValue:[mirror valueForKey:@"port"] forKey:@"freeDBPort"];
