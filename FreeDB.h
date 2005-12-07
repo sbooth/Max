@@ -30,9 +30,10 @@
 	cddb_conn_t				*_freeDB;
 }
 
-- (NSArray *)	fetchSites;
-- (NSArray *)	fetchMatches;
+- (NSArray *)		fetchSites;
+- (NSArray *)		fetchMatches;
 
-- (void)		updateDisc:(NSDictionary *)info;
+- (void)			updateDisc:(NSDictionary *)info;
+- (void)			submitDisc;
 
 @end

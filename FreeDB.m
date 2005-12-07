@@ -56,6 +56,8 @@
 
 - (id) init
 {
+	NSString *bundleVersion;
+	
 	if((self = [super init])) {
 		_freeDB = cddb_new();
 		if(NULL == _freeDB) {
@@ -72,6 +74,11 @@
 		
 		cddb_cache_disable(_freeDB);
 
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+
+		cddb_set_client(_freeDB, "Max", [bundleVersion UTF8String]);
+		cddb_set_email_address(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"emailAddress"] UTF8String]);
+		
 		return self;
 	}
 	return nil;
@@ -115,14 +122,14 @@
 		currentSite = [NSMutableDictionary dictionaryWithCapacity:20];
 		
 		if(CDDB_ERR_OK == cddb_site_get_address(site, &tempString, &i)) {
-			[currentSite setValue:[NSString stringWithCString:tempString] forKey:@"address"];
+			[currentSite setValue:[NSString stringWithUTF8String:tempString] forKey:@"address"];
 			[currentSite setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"port"];
 		}
 		
 		[currentSite setValue:[NSNumber numberWithInt:cddb_site_get_protocol(site)] forKey:@"protocol"];
 		
 		if(CDDB_ERR_OK == cddb_site_get_description(site, &tempString)) {
-			[currentSite setValue:[NSString stringWithCString:tempString] forKey:@"siteDescription"];
+			[currentSite setValue:[NSString stringWithUTF8String:tempString] forKey:@"siteDescription"];
 		}
 		
 		if(CDDB_ERR_OK == cddb_site_get_location(site, &latitude, &longitude)) {
@@ -154,10 +161,10 @@
 	while(matches > 0) {
 		currentMatch = [NSMutableDictionary dictionaryWithCapacity:6];
 		
-		[currentMatch setValue:[NSString stringWithCString:cddb_disc_get_artist(freeDBDisc)] forKey:@"artist"];
-		[currentMatch setValue:[NSString stringWithCString:cddb_disc_get_title(freeDBDisc)] forKey:@"title"];
+		[currentMatch setValue:[NSString stringWithUTF8String:cddb_disc_get_artist(freeDBDisc)] forKey:@"artist"];
+		[currentMatch setValue:[NSString stringWithUTF8String:cddb_disc_get_title(freeDBDisc)] forKey:@"title"];
 		[currentMatch setValue:[NSNumber numberWithUnsignedInt:cddb_disc_get_year(freeDBDisc)] forKey:@"year"];
-		[currentMatch setValue:[NSString stringWithCString:cddb_disc_get_genre(freeDBDisc)] forKey:@"genre"];
+		[currentMatch setValue:[NSString stringWithUTF8String:cddb_disc_get_genre(freeDBDisc)] forKey:@"genre"];
 		[currentMatch setValue:[NSNumber numberWithInt:cddb_disc_get_category(freeDBDisc)] forKey:@"category"];
 		[currentMatch setValue:[NSNumber numberWithUnsignedInt:cddb_disc_get_discid(freeDBDisc)] forKey:@"discid"];
 
@@ -196,17 +203,17 @@
 
 	tempString = cddb_disc_get_title(disc);
 	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithCString:tempString] forKey:@"title"];
+		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"title"];
 	}
 	
 	tempString = cddb_disc_get_artist(disc);
 	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithCString:tempString] forKey:@"artist"];		
+		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"artist"];		
 	}
 	
 	tempString = cddb_disc_get_genre(disc);
 	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithCString:tempString] forKey:@"genre"];		
+		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"genre"];		
 	}
 	
 	tempInt = cddb_disc_get_year(disc);
@@ -216,7 +223,7 @@
 
 	tempString = cddb_disc_get_ext_data(disc);
 	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithCString:tempString] forKey:@"comment"];		
+		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"comment"];		
 	}
 	
 	track = cddb_disc_get_track_first(disc);
@@ -224,18 +231,97 @@
 		
 		tempString = cddb_track_get_title(track);
 		if(NULL != tempString) {
-			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithCString:tempString] forKey:@"title"];
+			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithUTF8String:tempString] forKey:@"title"];
 		}
 
 		tempString = cddb_track_get_artist(track);
-		if(NULL != tempString && NO == [[NSString stringWithCString:tempString] isEqualToString:[_disc valueForKey:@"artist"]]) {
+		if(NULL != tempString && NO == [[NSString stringWithUTF8String:tempString] isEqualToString:[_disc valueForKey:@"artist"]]) {
 			[_disc setValue:[NSNumber numberWithBool:YES] forKey:@"multiArtist"];
-			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithCString:tempString] forKey:@"artist"];
+			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithUTF8String:tempString] forKey:@"artist"];
 		}
 		
 		track = cddb_disc_get_track_next(disc);
 	}
 
+	cddb_disc_destroy(disc);
+}
+
+- (void) submitDisc
+{
+	cddb_disc_t			*disc;
+	id					temp;
+	NSArray				*tracks;
+	cddb_track_t		*track;
+	Track				*currentTrack;
+	unsigned			i;
+
+	
+	disc = cddb_disc_clone([[_disc getDisc] getFreeDBDisc]);
+	if(NULL == disc) {
+		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+	}
+
+	temp = [_disc valueForKey:@"genre"];
+	if(nil != temp) {
+		cddb_disc_set_category_str(disc, [[temp lowercaseString] UTF8String]);
+	}
+	else {
+		cddb_disc_set_category(disc, CDDB_CAT_MISC);
+	}
+	
+	// Fill in the cddb_disc_t with data from the CompactDiscDocument
+	temp = [_disc valueForKey:@"title"];
+	if(nil != temp) {
+		cddb_disc_set_title(disc, [temp UTF8String]);
+	}
+
+	temp = [_disc valueForKey:@"artist"];
+	if(nil != temp) {
+		cddb_disc_set_artist(disc, [temp UTF8String]);
+	}
+
+	temp = [_disc valueForKey:@"genre"];
+	if(nil != temp) {
+		cddb_disc_set_genre(disc, [temp UTF8String]);
+	}
+
+	temp = [_disc valueForKey:@"year"];
+	if(nil != temp) {
+		cddb_disc_set_year(disc, [temp unsignedIntValue]);
+	}
+
+	temp = [_disc valueForKey:@"comment"];
+	if(nil != temp) {
+		cddb_disc_set_ext_data(disc, [temp UTF8String]);
+	}
+			
+	tracks = [_disc valueForKey:@"tracks"];
+	for(i = 0; i < [tracks count]; ++i) {
+		currentTrack	= [tracks objectAtIndex:i];
+		track			= cddb_disc_get_track(disc, i);
+
+		temp = [currentTrack valueForKey:@"title"];
+		if(nil != temp) {
+			cddb_track_set_title(track, [temp UTF8String]);
+		}
+
+		if([[_disc valueForKey:@"multiArtist"] boolValue]) {
+			temp = [currentTrack valueForKey:@"artist"];
+		}
+		else {
+			temp = [_disc valueForKey:@"artist"];
+		}
+
+		if(nil != temp) {
+			cddb_track_set_artist(track, [temp UTF8String]);
+		}
+	}
+
+	if(0 == cddb_write(_freeDB, disc)) {
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
+	}
+	
+	// Clean up
 	cddb_disc_destroy(disc);
 }
 

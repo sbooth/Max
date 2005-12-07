@@ -539,7 +539,18 @@
 
 - (BOOL) submitToFreeDBAllowed
 {
-	return [self discInDrive];
+	NSEnumerator	*enumerator				= [_tracks objectEnumerator];
+	Track			*track;
+	BOOL			trackTitlesValid		= YES;
+	
+	while((track = [enumerator nextObject])) {
+		if(nil == [track valueForKey:@"title"]) {
+			trackTitlesValid = NO;
+			break;
+		}
+	}
+	
+	return ([self discInDrive] && (nil != _title) && (nil != _artist) && (nil != _genre) && trackTitlesValid);
 }
 
 - (BOOL) ejectDiscAllowed
@@ -642,11 +653,11 @@
 	NSArray				*matches			= nil;
 	FreeDBMatchSheet	*sheet				= nil;
 	
+	if(NO == [self queryFreeDBAllowed]) {
+		return;
+	}
+
 	@try {
-		if(NO == [self discInDrive]) {
-			return;
-		}
-		
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"freeDBQueryInProgress"];
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
@@ -677,8 +688,24 @@
 
 - (IBAction) submitToFreeDB:(id) sender
 {
-	NSLog(@"foo");
+	FreeDB				*freeDB				= nil;
 	
+	if(NO == [self submitToFreeDBAllowed]) {
+		return;
+	}
+
+	@try {
+		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];		
+		[freeDB submitDisc];
+	}
+	
+	@catch(NSException *exception) {
+		[self displayException:exception];
+	}
+	
+	@finally {
+		[freeDB release];
+	}
 }
 
 - (void) updateDiscFromFreeDB:(NSDictionary *)info

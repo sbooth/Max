@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Track.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -32,11 +32,11 @@
 	NSNumber				*_selected;
 	NSColor					*_color;
 	
-	// ID3 tags
-	NSString				*_title;			// TALB
-	NSString				*_artist;			// TPE1
-	NSNumber				*_year;				// TYER
-	NSString				*_genre;			// TCON
+	// Metadata
+	NSString				*_title;
+	NSString				*_artist;
+	NSNumber				*_year;
+	NSString				*_genre;
 	
 	// Physical track properties
 	NSNumber				*_number;

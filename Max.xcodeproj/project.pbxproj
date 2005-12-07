@@ -208,10 +208,6 @@
 		8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NegateBooleanArrayValueTransformer.m; sourceTree = "<group>"; };
 		8C73004C08ECAA5B0008D7E0 /* FreeDBMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FreeDBMatchSheet.h; sourceTree = "<group>"; };
 		8C73004D08ECAA5B0008D7E0 /* FreeDBMatchSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FreeDBMatchSheet.m; sourceTree = "<group>"; };
-		8C7300A508ECB1E80008D7E0 /* FreeDBMatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDBMatch.h; sourceTree = "<group>"; };
-		8C7300A608ECB1E80008D7E0 /* FreeDBMatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDBMatch.m; sourceTree = "<group>"; };
-		8C73020E08ECD4AD0008D7E0 /* FreeDBSite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDBSite.h; sourceTree = "<group>"; };
-		8C73020F08ECD4AD0008D7E0 /* FreeDBSite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDBSite.m; sourceTree = "<group>"; };
 		8C73033C08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDBProtocolValueTransformer.h; sourceTree = "<group>"; };
 		8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDBProtocolValueTransformer.m; sourceTree = "<group>"; };
 		8C752A8208C507CE001F588B /* Genres.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genres.h; sourceTree = "<group>"; };
@@ -545,12 +541,8 @@
 			children = (
 				8C08573708DE90DD004B42F0 /* FreeDB.h */,
 				8C08573808DE90DD004B42F0 /* FreeDB.m */,
-				8C7300A508ECB1E80008D7E0 /* FreeDBMatch.h */,
-				8C7300A608ECB1E80008D7E0 /* FreeDBMatch.m */,
 				8C73004C08ECAA5B0008D7E0 /* FreeDBMatchSheet.h */,
 				8C73004D08ECAA5B0008D7E0 /* FreeDBMatchSheet.m */,
-				8C73020E08ECD4AD0008D7E0 /* FreeDBSite.h */,
-				8C73020F08ECD4AD0008D7E0 /* FreeDBSite.m */,
 			);
 			name = FreeDB;
 			sourceTree = "<group>";

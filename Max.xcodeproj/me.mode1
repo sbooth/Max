@@ -190,24 +190,24 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>8CDD675209467B6B00DE4137</string>
+				<string>8CDD685E0946B0FF00DE4137</string>
 				<key>PBXProjectModuleLabel</key>
-				<string>CompactDiscDocument.m</string>
+				<string>FreeDB.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
 				<dict>
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>8CDD675309467B6B00DE4137</string>
+						<string>8CDD685F0946B0FF00DE4137</string>
 						<key>PBXProjectModuleLabel</key>
-						<string>CompactDiscDocument.m</string>
+						<string>FreeDB.m</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>8CDD675509467B6B00DE4137</string>
+						<string>8CDD68600946B0FF00DE4137</string>
 						<key>history</key>
 						<array>
-							<string>8CDD675409467B6B00DE4137</string>
+							<string>8CDD685A0946B0ED00DE4137</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -223,7 +223,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>33 38 821 782 0 0 1280 832 </string>
+				<string>15 45 821 782 0 0 1280 832 </string>
 			</dict>
 		</dict>
 	</array>
@@ -299,7 +299,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>12</integer>
+									<integer>6</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -560,8 +560,8 @@
 	<array>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>8CDD675209467B6B00DE4137</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
+		<string>8CDD685E0946B0FF00DE4137</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 	</array>
 	<key>WindowString</key>
@@ -581,14 +581,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>FreeDBPreferencesController.m</string>
+								<string>cddb_disc.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -605,6 +603,8 @@
 							<string>327pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
