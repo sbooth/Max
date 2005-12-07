@@ -17,6 +17,9 @@
 		8C3A88330945756C00B438D5 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF4D3F00945137100385BE4 /* libsndfile.a */; };
 		8C440DC0092E8B3000A053AA /* FreeDBMatches.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */; };
 		8C440DC6092E8B3C00A053AA /* Tasks.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C440DC1092E8B3C00A053AA /* Tasks.nib */; };
+		8C4961EB09472D70006E1765 /* libOggFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4961EA09472D70006E1765 /* libOggFLAC.a */; };
+		8C4961F309472D95006E1765 /* OggFLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4961F109472D95006E1765 /* OggFLACEncoder.m */; };
+		8C49625009473168006E1765 /* OggFLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C49624E09473168006E1765 /* OggFLACEncoderTask.m */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4538093E6D7D00A88927 /* GeneralPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D4536093E6D7D00A88927 /* GeneralPreferencesController.m */; };
 		8C4D461D093E75E100A88927 /* LAMEPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D461B093E75E100A88927 /* LAMEPreferencesController.m */; };
@@ -183,6 +186,11 @@
 		8C3101270931297C000A50FC /* Max.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Max.icns; sourceTree = "<group>"; };
 		8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FreeDBMatches.nib; sourceTree = "<group>"; };
 		8C440DC1092E8B3C00A053AA /* Tasks.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Tasks.nib; sourceTree = "<group>"; };
+		8C4961EA09472D70006E1765 /* libOggFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOggFLAC.a; sourceTree = "<group>"; };
+		8C4961F009472D95006E1765 /* OggFLACEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoder.h; sourceTree = "<group>"; };
+		8C4961F109472D95006E1765 /* OggFLACEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACEncoder.m; sourceTree = "<group>"; };
+		8C49624D09473168006E1765 /* OggFLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoderTask.h; sourceTree = "<group>"; };
+		8C49624E09473168006E1765 /* OggFLACEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACEncoderTask.m; sourceTree = "<group>"; };
 		8C4D3E2E093DE4C300A88927 /* VorbisEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VorbisEncoder.h; sourceTree = "<group>"; };
 		8C4D3E2F093DE4C300A88927 /* VorbisEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VorbisEncoder.m; sourceTree = "<group>"; };
 		8C4D452F093E6CB200A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
@@ -354,6 +362,7 @@
 				8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */,
 				8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */,
 				8C3A88330945756C00B438D5 /* libsndfile.a in Frameworks */,
+				8C4961EB09472D70006E1765 /* libOggFLAC.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +372,8 @@
 		080E96DDFE201D6D7F000001 /* Encoder */ = {
 			isa = PBXGroup;
 			children = (
+				8C4961F009472D95006E1765 /* OggFLACEncoder.h */,
+				8C4961F109472D95006E1765 /* OggFLACEncoder.m */,
 				8CB0AE61093AE12000968F66 /* FLACEncoder.h */,
 				8CB0AE62093AE12000968F66 /* FLACEncoder.m */,
 				8CA8C03B093A5F2B00FDA506 /* MPEGEncoder.h */,
@@ -595,6 +606,7 @@
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8C4961EA09472D70006E1765 /* libOggFLAC.a */,
 				8CF4D3F00945137100385BE4 /* libsndfile.a */,
 				8CB86229093F186100A60FC1 /* libogg.a */,
 				8CB8622A093F186100A60FC1 /* libvorbis.a */,
@@ -668,6 +680,8 @@
 				8CB861FC093F177200A60FC1 /* VorbisEncoderTask.mm */,
 				8CF4D47209454CD700385BE4 /* SndFileEncoderTask.h */,
 				8CF4D47309454CD700385BE4 /* SndFileEncoderTask.m */,
+				8C49624D09473168006E1765 /* OggFLACEncoderTask.h */,
+				8C49624E09473168006E1765 /* OggFLACEncoderTask.m */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";
@@ -839,6 +853,8 @@
 				8CF4D51109455C7800385BE4 /* FormatsPreferencesController.m in Sources */,
 				8CE9743F09461DB6000127B6 /* ComponentVersionsController.m in Sources */,
 				8CE9744909461DE2000127B6 /* ApplicationController.m in Sources */,
+				8C4961F309472D95006E1765 /* OggFLACEncoder.m in Sources */,
+				8C49625009473168006E1765 /* OggFLACEncoderTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,6 +951,7 @@
 					./include,
 					./include/taglib,
 					./include/FLAC,
+					./include/OggFLAC,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";

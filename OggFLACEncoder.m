@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "FLACEncoder.h"
+#import "OggFLACEncoder.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "FLACException.h"
@@ -30,19 +30,21 @@
 #include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
 
-@interface FLACEncoder (Private)
+@interface OggFLACEncoder (Private)
 - (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
 @end
 
-@implementation FLACEncoder
+@implementation OggFLACEncoder
 
 - (id) initWithSource:(NSString *) source
 {
 	if((self = [super initWithSource:source])) {
-		_flac = FLAC__file_encoder_new();
+		_flac = OggFLAC__file_encoder_new();
 		if(NULL == _flac) {
-			@throw [MallocException exceptionWithReason:@"Unable to create FLAC encoder" userInfo:nil];
+			@throw [MallocException exceptionWithReason:@"Unable to create OggFLAC encoder" userInfo:nil];
 		}
+		srand(time(NULL));
+		OggFLAC__file_encoder_set_serial_number(_flac, rand());
 		return self;
 	}
 	return nil;
@@ -50,7 +52,7 @@
 
 - (void) dealloc
 {
-	FLAC__file_encoder_delete(_flac);
+	OggFLAC__file_encoder_delete(_flac);
 	free(_buf);
 	
 	[super dealloc];
@@ -81,7 +83,7 @@
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
-		
+	
 	// Allocate the buffer
 	_buflen			= 1024 * 512;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
@@ -93,15 +95,15 @@
 	totalBytes		= sourceStat.st_size;
 	bytesToRead		= totalBytes;
 	
-	// Initialize the FLAC encoder
-	if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
-		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+	// Initialize the OggFLAC encoder
+	if(NO == OggFLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
-	if(NO == FLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
-		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+	if(NO == OggFLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
-	if(FLAC__FILE_ENCODER_OK != FLAC__file_encoder_init(_flac)) {
-		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+	if(OggFLAC__FILE_ENCODER_OK != OggFLAC__file_encoder_init(_flac)) {
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	
 	// Iteratively get the PCM data and encode it
@@ -131,14 +133,14 @@
 	}
 	
 	// Finish up the encoding process
-	FLAC__file_encoder_finish(_flac);
+	OggFLAC__file_encoder_finish(_flac);
 	
 	// Close the input file
 	if(-1 == close(_source)) {
 		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
-		
+	
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
 	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
 	
@@ -172,11 +174,11 @@
 		}
 		
 		// Encode the chunk
-		flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);
+		flacResult = OggFLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);
 		
 		if(NO == flacResult) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 	}
 	

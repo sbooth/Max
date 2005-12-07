@@ -23,6 +23,7 @@
 #import "RipperTask.h"
 #import "MPEGEncoderTask.h"
 #import "FLACEncoderTask.h"
+#import "OggFLACEncoderTask.h"
 #import "VorbisEncoderTask.h"
 #import "SndFileEncoderTask.h"
 #import "MissingResourceException.h"
@@ -385,6 +386,60 @@ static TaskMaster *sharedController = nil;
 		// Encode the file
 		if(createFile) {
 			encoderTask = [[FLACEncoderTask alloc] initWithSource:task target:filename track:track];
+			[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+			[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+			[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
+			
+			// Add the encoder to our list of encoding tasks
+			[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
+			[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
+			[_encoderStatusTextField setHidden:NO];
+			[self spawnEncoderThreads];			
+		}
+	}
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"]) {
+		createFile	= YES;
+		filename	= [basename stringByAppendingString:@".oggflac"];
+		
+		// Check if the output file exists
+		if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			[alert addButtonWithTitle:@"Yes"];
+			[alert addButtonWithTitle:@"No"];
+			[alert addButtonWithTitle:@"Save As…"];
+			[alert setMessageText:@"Overwrite existing file?"];
+			[alert setInformativeText:[NSString stringWithFormat:@"The file '%@' already exists.  Do you wish to replace it?", filename]];
+			[alert setAlertStyle:NSCriticalAlertStyle];
+			
+			alertResult = [alert runModal];
+			
+			if(NSAlertFirstButtonReturn == alertResult) {
+				// Remove the file
+				if(-1 == unlink([filename UTF8String])) {
+					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+				}
+			}
+			else if(NSAlertSecondButtonReturn == alertResult) {
+				createFile = NO;
+			}
+			else if(NSAlertThirdButtonReturn == alertResult) {
+				NSSavePanel *panel = [NSSavePanel savePanel];
+				[panel setRequiredFileType:@"oggflac"];
+				if(NSFileHandlingPanelOKButton == [panel runModal]) {
+					filename = [panel filename];
+					// Remove the file if it exists
+					if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+						if(-1 == unlink([filename UTF8String])) {
+							@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+						}
+					}
+				}
+			}
+		}
+		
+		// Encode the file
+		if(createFile) {
+			encoderTask = [[OggFLACEncoderTask alloc] initWithSource:task target:filename track:track];
 			[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 			[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 			[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
