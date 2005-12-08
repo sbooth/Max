@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface VorbisPreferencesController : NSWindowController
+@interface AACPreferencesController : NSWindowController
 {
 }
 

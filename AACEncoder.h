@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.h 184 2005-11-30 05:39:33Z me $
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -21,25 +21,20 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Encoder.h"
-#import "Track.h"
-#import "RipperTask.h"
+#include "faac.h"
 
-@interface EncoderTask : NSObject 
+@interface AACEncoder : Encoder
 {
-	NSString			*_target;
-	Encoder				*_encoder;
-	Track				*_track;
-	RipperTask			*_source;
+	int16_t					*_buf;
+	ssize_t					_buflen;
+	
+	unsigned long			_inputSamples;
+	unsigned long			_maxOutputBytes;
+
+	faacEncHandle			_faac;
+	int						_out;
 }
 
-- (id)				initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
-
-- (void)			run:(id) object;
-- (void)			stop;
-- (void)			removeOutputFile;
-
-- (void)			writeTags;
-
-- (NSString *)		getType;
+- (id) initWithSource:(NSString *)source;
 
 @end

@@ -32,7 +32,8 @@ static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences
 static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences";
 static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences";
 static NSString		*LAMEPreferencesToolbarItemIdentifier			= @"LAMEPreferences";
-static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences";
+static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPreferences";
+static NSString		*AACPreferencesToolbarItemIdentifier			= @"AACPreferences";
 
 @interface PreferencesController (Private)
 - (void) setupToolbar;
@@ -53,7 +54,7 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 
 	@try {
 		defaultsDictionary	= [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
-		defaultFiles		= [NSArray arrayWithObjects:@"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"VorbisDefaults", nil];
+		defaultFiles		= [NSArray arrayWithObjects:@"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"OggVorbisDefaults", @"AACDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -195,13 +196,24 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	} 
-    else if([itemIdentifier isEqualToString:VorbisPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:OggVorbisPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Vorbis"];
-		[toolbarItem setPaletteLabel: @"Vorbis"];
+		[toolbarItem setLabel: @"Ogg Vorbis"];
+		[toolbarItem setPaletteLabel: @"Ogg Vorbis"];
 		[toolbarItem setToolTip: @"Ogg Vorbis encoder preferences"];
-		[toolbarItem setImage: [NSImage imageNamed:@"VorbisToolbarImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"OggVorbisToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
+	} 
+    else if([itemIdentifier isEqualToString:AACPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"AAC"];
+		[toolbarItem setPaletteLabel: @"AAC"];
+		[toolbarItem setToolTip: @"Advanced Audio Coding encoder preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"AACToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
@@ -217,7 +229,8 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
+		OggVorbisPreferencesToolbarItemIdentifier, AACPreferencesToolbarItemIdentifier,
 		nil];
 }
 
@@ -225,7 +238,8 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
+		OggVorbisPreferencesToolbarItemIdentifier, AACPreferencesToolbarItemIdentifier,
 		nil];
 }
 
@@ -233,7 +247,8 @@ static NSString		*VorbisPreferencesToolbarItemIdentifier			= @"VorbisPreferences
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, VorbisPreferencesToolbarItemIdentifier,
+		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
+		OggVorbisPreferencesToolbarItemIdentifier, AACPreferencesToolbarItemIdentifier,
 		nil];
 }
 

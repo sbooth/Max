@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.m 175 2005-11-25 04:56:46Z me $
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,157 +18,94 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "MPEGEncoder.h"
+#import "AACEncoder.h"
+
 #import "MallocException.h"
 #import "IOException.h"
-#import "LAMEException.h"
 #import "StopException.h"
-#import "MissingResourceException.h"
 
-#import "UtilityFunctions.h"
+#include "faac.h"
+#include "faaccfg.h"
 
 #include <fcntl.h>		// open, write
-#include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
 
-// Bitrates supported for 44.1 kHz audio
-static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
+// My (semi-arbitrary) list of supported AAC bitrates
+static int sAACBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
 
-@interface MPEGEncoder (Private)
+// Tag values for NSPopupButton
+enum {
+	FAAC_MODE_QUALITY						= 0,
+	FAAC_MODE_BITRATE						= 1,
+	
+	FAAC_SHORT_CONTROL_BOTH					= 1,
+	FAAC_SHORT_CONTROL_SHORT_ONLY			= 2,
+	FAAC_SHORT_CONTROL_LONG_ONLY			= 3
+};
+
+@interface AACEncoder (Private)
 - (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
 - (ssize_t) finishEncode;
 @end
 
-// Tag values for NSPopupButton
-enum {
-	LAME_TARGET_BITRATE						= 0,
-	LAME_TARGET_QUALITY						= 1,
-	
-	LAME_ENCODING_ENGINE_QUALITY_FAST		= 0,
-	LAME_ENCODING_ENGINE_QUALITY_STANDARD	= 1,
-	LAME_ENCODING_ENGINE_QUALITY_HIGH		= 2,
-	
-	LAME_VARIABLE_BITRATE_MODE_STANDARD		= 0,
-	LAME_VARIABLE_BITRATE_MODE_FAST			= 1
-};
+@implementation AACEncoder
 
-@implementation MPEGEncoder
-
-+ (void) initialize
-{
-	NSString				*lameDefaultsValuesPath;
-    NSDictionary			*lameDefaultsValuesDictionary;
-    
-	@try {
-		lameDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"LAMEDefaults" ofType:@"plist"];
-		if(nil == lameDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load LAMEDefaults.plist." userInfo:nil];
-		}
-		lameDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:lameDefaultsValuesPath];
-		[[NSUserDefaults standardUserDefaults] registerDefaults:lameDefaultsValuesDictionary];
-	}
-	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
-	}
-	@finally {
-	}
-}
-
-- (id) initWithSource:(NSString *) source
-{
-	int			quality;
-	int			bitrate;
-	int			lameResult;
+- (id) initWithSource:(NSString *)source
+{	
+	faacEncConfigurationPtr		faacConf;
 	
-	
-	_gfp				= 0;
-	
-	@try {
-		if((self = [super initWithSource:source])) {
-			
-			// LAME setup
-			_gfp = lame_init();
-			if(NULL == _gfp) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-			
-			// We know the input is coming from a CD
-			lame_set_num_channels(_gfp, 2);
-			lame_set_in_samplerate(_gfp, 44100);
-			
-			// Write the Xing VBR tag
-			lame_set_bWriteVbrTag(_gfp, 1);
-			
-			// Set encoding properties from user defaults
-			lame_set_mode(_gfp, [[NSUserDefaults standardUserDefaults] boolForKey:@"lameMonoEncoding"] ? MONO : JOINT_STEREO);
-			
-			quality = [[NSUserDefaults standardUserDefaults] integerForKey:@"lameEncodingEngineQuality"];
-			if(LAME_ENCODING_ENGINE_QUALITY_FAST == quality) {
-				lame_set_quality(_gfp, 7);
-			}
-			else if(LAME_ENCODING_ENGINE_QUALITY_STANDARD == quality) {
-				lame_set_quality(_gfp, 5);
-			}
-			else if(LAME_ENCODING_ENGINE_QUALITY_HIGH == quality) {
-				lame_set_quality(_gfp, 2);
-			}
-			
-			// Target is bitrate
-			if(LAME_TARGET_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
-				bitrate = sLAMEBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"lameBitrate"]];
-				lame_set_brate(_gfp, bitrate);
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"lameUseConstantBitrate"]) {
-					lame_set_VBR(_gfp, vbr_off);
-				}
-				else {
-					lame_set_VBR(_gfp, vbr_default);
-					lame_set_VBR_min_bitrate_kbps(_gfp, bitrate);
-				}
-			}
-			// Target is quality
-			else if(LAME_TARGET_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
-				lame_set_VBR(_gfp, LAME_VARIABLE_BITRATE_MODE_FAST == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVariableBitrateMode"] ? vbr_mtrh : vbr_rh);
-				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
-			}
-			else {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME mode" userInfo:nil];
-			}
-			
-			lameResult = lame_init_params(_gfp);
-			if(-1 == lameResult) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [LAMEException exceptionWithReason:@"Failure initializing LAME library" userInfo:nil];
-			}
-		}
-	}
-	@catch(NSException *exception) {
-		
-		if(0 != _gfp) {
-			lame_close(_gfp);
+	if((self = [super initWithSource:source])) {
+		_faac = faacEncOpen(44100, 2, &_inputSamples, &_maxOutputBytes);
+		if(NULL == _faac) {
+			@throw [MallocException exceptionWithReason:@"Unable to create AAC encoder" userInfo:nil];
 		}
 		
-		@throw;
+		faacConf					= faacEncGetCurrentConfiguration(_faac);
+		faacConf->inputFormat		= FAAC_INPUT_16BIT;
+		faacConf->aacObjectType		= LOW;
+		faacConf->mpegVersion		= MPEG2;
+		
+		faacConf->useTns			= [[NSUserDefaults standardUserDefaults] boolForKey:@"faacEnableTNS"];
+		faacConf->allowMidside		= [[NSUserDefaults standardUserDefaults] boolForKey:@"faacEnableMidside"];
+
+		switch([[NSUserDefaults standardUserDefaults] integerForKey:@"faacShortControl"]) {
+			case FAAC_SHORT_CONTROL_BOTH:			faacConf->shortctl = SHORTCTL_NORMAL;		break;
+			case FAAC_SHORT_CONTROL_LONG_ONLY:		faacConf->shortctl = SHORTCTL_NOSHORT;		break;
+			case FAAC_SHORT_CONTROL_SHORT_ONLY:		faacConf->shortctl = SHORTCTL_NOLONG;		break;
+		}
+
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"faacUseCustomLowpass"]) {
+			faacConf->bandWidth = [[NSUserDefaults standardUserDefaults] integerForKey:@"faacCustomLowpass"];
+		}
+		
+		
+		// Use quality-based VBR
+		if(FAAC_MODE_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"faacMode"]) {
+			faacConf->quantqual = [[NSUserDefaults standardUserDefaults] integerForKey:@"faacQuality"];
+		}
+		else if(FAAC_MODE_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"faacMode"]) {
+			int bitrate = sAACBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"faacBitrate"]] * 1000;
+			faacConf->bitRate = bitrate / 2; // numChannels
+		}
+		else {
+			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized faac mode" userInfo:nil];
+		}
+		
+		faacEncSetConfiguration(_faac, faacConf);
+		
+		return self;
 	}
-	
-	@finally {
-	}
-	
-	return self;
+	return nil;
 }
 
 - (void) dealloc
 {
-	lame_close(_gfp);	
-	free(_buf);
-	
+	faacEncClose(_faac);
 	[super dealloc];
 }
 
 - (ssize_t) encodeToFile:(NSString *) filename
 {
-	FILE		*file;
 	ssize_t		bytesRead			= 0;
 	ssize_t		bytesWritten		= 0;
 	ssize_t		bytesToRead			= 0;
@@ -194,7 +131,7 @@ enum {
 	}
 	
 	// Allocate the buffer
-	_buflen			= 1024 * 512;
+	_buflen			= _inputSamples;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
@@ -228,7 +165,7 @@ enum {
 		
 		// Encode the PCM data
 		bytesWritten += [self encodeChunk:_buf numSamples:bytesRead / 2];
-		
+				
 		// Update status
 		bytesToRead -= bytesRead;
 		[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
@@ -237,7 +174,7 @@ enum {
 		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 	}
 	
-	// Flush the last MP3 frames (maybe)
+	// Flush the last frames
 	bytesWritten += [self finishEncode];
 	
 	// Close the input file
@@ -251,19 +188,7 @@ enum {
 		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
-	
-	// Write the Xing VBR tag
-	file = fopen([filename UTF8String], "r+");
-	if(NULL == file) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-	}
-	lame_mp3_tags_fid(_gfp, file);
-	if(EOF == fclose(file)) {
-		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-	}
-	
+		
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
 	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
 	
@@ -274,29 +199,29 @@ enum {
 {
 	u_int8_t		*buf;
 	int				bufSize;
-
-	int				lameResult;
+	
+	int				faacResult;
 	long			bytesWritten;
 	
 	
 	buf = NULL;
 	
 	@try {
-		// Allocate the MP3 buffer using LAME guide for size
-		bufSize = 1.25 * numSamples + 7200;
+		// Allocate the buffer
+		bufSize = _maxOutputBytes;
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
-		
-		lameResult = lame_encode_buffer_interleaved(_gfp, chunk, numSamples / 2, buf, bufSize);
-		if(0 > lameResult) {
+				
+		faacResult = faacEncEncode(_faac, (int32_t *)chunk, numSamples, buf, bufSize);
+		if(0 > faacResult) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [LAMEException exceptionWithReason:@"LAME encoding error" userInfo:nil];
+			@throw [IOException exceptionWithReason:@"FAAC encoding error" userInfo:nil];
 		}
 		
-		bytesWritten = write(_out, buf, lameResult);
+		bytesWritten = write(_out, buf, faacResult);
 		if(-1 == bytesWritten) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
@@ -319,33 +244,33 @@ enum {
 	u_int8_t		*buf;
 	int				bufSize;
 	
-	int				lameResult;
+	int				faacResult;
 	ssize_t			bytesWritten;
 	
 	
 	buf = NULL;
 	
 	@try {
-		// Allocate the MP3 buffer using LAME guide for size
-		bufSize = 7200;
+		// Allocate the buffer
+		bufSize = _maxOutputBytes;
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
-		// Flush the mp3 buffer
-		lameResult = lame_encode_flush(_gfp, buf, bufSize);
-		if(-1 == lameResult) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [LAMEException exceptionWithReason:@"LAME unable to flush buffers" userInfo:nil];
-		}
-		
-		// And write any frames it returns
-		bytesWritten = write(_out, buf, lameResult);
-		if(-1 == bytesWritten) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		// Flush the buffer
+		while((faacResult = faacEncEncode(_faac, NULL, 0, buf, bufSize))) {
+			if(0 > faacResult) {
+				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				@throw [IOException exceptionWithReason:@"FAAC encoding error" userInfo:nil];
+			}
+			
+			bytesWritten = write(_out, buf, faacResult);
+			if(-1 == bytesWritten) {
+				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			}
 		}
 	}
 	

@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: UtilityFunctions.h 175 2005-11-25 04:56:46Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -32,6 +32,10 @@ void createDirectoryStructure(NSString *path);
 	
 // Remove /: characters and replace with _
 NSString * makeStringSafeForFilename(NSString *string);
+
+// Return a unique filename based on basename and extension
+NSString * generateUniqueFilename(NSString *basename, 
+								  NSString *extension);
 
 // Create path if it does not exist; throw an exception if it exists and is a file
 void validateAndCreateDirectory(NSString *path);

@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Ripper.m 212 2005-12-05 16:47:24Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -58,11 +58,6 @@ enum {
 	}
 	@finally {
 	}
-}
-
-- (id) init
-{
-	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Ripper::init called" userInfo:nil];
 }
 
 - (id) initWithTrack:(Track *)track

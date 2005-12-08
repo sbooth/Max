@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.h 180 2005-11-27 22:04:47Z me $
+ *  $Id: EncoderTask.m 181 2005-11-28 08:38:43Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,14 +18,34 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import <Cocoa/Cocoa.h>
+#import "AACEncoderTask.h"
+#import "AACEncoder.h"
 
-#import "EncoderTask.h"
 
-@interface VorbisEncoderTask : EncoderTask 
+@implementation AACEncoderTask
+
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track
+{
+	if((self = [super initWithSource:source target:target track:track])) {
+		_encoder = [[AACEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
+		return self;
+	}
+	return nil;
+}
+
+- (void) dealloc
+{
+	[_encoder release];
+	[super dealloc];
+}
+
+- (void) writeTags
 {
 }
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
+- (NSString *) getType
+{
+	return @"AAC";
+}
 
 @end

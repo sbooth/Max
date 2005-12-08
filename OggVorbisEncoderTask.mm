@@ -18,18 +18,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "VorbisEncoderTask.h"
-#import "VorbisEncoder.h"
+#import "OggVorbisEncoderTask.h"
+#import "OggVorbisEncoder.h"
 
 #include "fileref.h"					// TagLib::File
 #include "tag.h"						// TagLib::Tag
 
-@implementation VorbisEncoderTask
+@implementation OggVorbisEncoderTask
 
 - (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track
 {
 	if((self = [super initWithSource:source target:target track:track])) {
-		_encoder = [[VorbisEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
+		_encoder = [[OggVorbisEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
 		return self;
 	}
 	return nil;

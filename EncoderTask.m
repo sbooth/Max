@@ -28,13 +28,15 @@
 
 - (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
 {
+	int fd;
+	
 	if((self = [super init])) {
 		_target = [target retain];
 		_track	= [track retain];
 		_source = [source retain];
 
 		[_track encodeStarted];
-
+		
 		return self;
 	}
 	return nil;

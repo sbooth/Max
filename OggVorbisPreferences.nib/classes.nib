@@ -7,7 +7,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            CLASS = VorbisPreferencesController; 
+            CLASS = OggVorbisPreferencesController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSWindowController; 
         }

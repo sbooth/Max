@@ -8,7 +8,9 @@
 	<false/>
 	<key>outputOggFLAC</key>
 	<false/>
-	<key>outputVorbis</key>
+	<key>outputOggVorbis</key>
+	<false/>
+	<key>outputAAC</key>
 	<false/>
 	<key>customNamingUseFallback</key>
 	<false/>

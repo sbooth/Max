@@ -1,5 +1,5 @@
 /*
- *  $Id: PreferencesController.h 189 2005-12-01 01:55:55Z me $
+ *  $Id: EncoderTask.h 180 2005-11-27 22:04:47Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,16 +18,14 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "VorbisPreferencesController.h"
+#import <Cocoa/Cocoa.h>
 
-@implementation VorbisPreferencesController
+#import "EncoderTask.h"
 
-- (id) init
+@interface OggVorbisEncoderTask : EncoderTask 
 {
-	if((self = [super initWithWindowNibName:@"VorbisPreferences"])) {
-		return self;		
-	}
-	return nil;
 }
+
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
 
 @end

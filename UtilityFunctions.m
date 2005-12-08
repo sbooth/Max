@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: UtilityFunctions.m 203 2005-12-04 22:20:50Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -110,6 +110,25 @@ makeStringSafeForFilename(NSString *string)
 	while(range.location != NSNotFound && range.length != 0) {
 		[result replaceCharactersInRange:range withString:@"_"];
 		range = [result rangeOfCharacterFromSet:characterSet];		
+	}
+	
+	return [[result retain] autorelease];
+}
+
+NSString * 
+generateUniqueFilename(NSString *basename, NSString *extension)
+{
+	NSFileManager		*manager			= [NSFileManager defaultManager];
+	unsigned			num					= 1;
+	NSString			*result;
+	
+	result = [NSString stringWithFormat:@"%@.%@", basename, extension];
+	for(;;) {
+		if(NO == [manager fileExistsAtPath:result]) {
+			break;
+		}
+		result = [NSString stringWithFormat:@"%@-%u.%@", basename, num, extension];
+		++num;
 	}
 	
 	return [[result retain] autorelease];

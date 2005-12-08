@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.h 184 2005-11-30 05:39:33Z me $
+ *  $Id: PreferencesController.h 189 2005-12-01 01:55:55Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,28 +18,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import <Cocoa/Cocoa.h>
+#import "AACPreferencesController.h"
 
-#import "Encoder.h"
-#import "Track.h"
-#import "RipperTask.h"
+@implementation AACPreferencesController
 
-@interface EncoderTask : NSObject 
+- (id) init
 {
-	NSString			*_target;
-	Encoder				*_encoder;
-	Track				*_track;
-	RipperTask			*_source;
+	if((self = [super initWithWindowNibName:@"AACPreferences"])) {
+		return self;		
+	}
+	return nil;
 }
-
-- (id)				initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
-
-- (void)			run:(id) object;
-- (void)			stop;
-- (void)			removeOutputFile;
-
-- (void)			writeTags;
-
-- (NSString *)		getType;
 
 @end

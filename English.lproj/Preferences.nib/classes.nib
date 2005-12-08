@@ -8,10 +8,8 @@
         }, 
         {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
-            ACTIONS = {}; 
             CLASS = PreferencesController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {}; 
             SUPERCLASS = NSWindowController; 
         }
     ); 
