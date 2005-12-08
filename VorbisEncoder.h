@@ -22,7 +22,7 @@
 
 #import "Encoder.h"
 
-@interface VorbisEncoder : Encoder
+@interface OggVorbisEncoder : Encoder
 {
 	int16_t					*_buf;
 	ssize_t					_buflen;

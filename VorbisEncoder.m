@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "VorbisEncoder.h"
+#import "OggVorbisEncoder.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
@@ -42,7 +42,7 @@ enum {
 	VORBIS_MODE_BITRATE						= 1,
 };
 
-@implementation VorbisEncoder
+@implementation OggVorbisEncoder
 
 + (void) initialize
 {
