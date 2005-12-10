@@ -50,9 +50,9 @@ enum {
     NSDictionary			*vorbisDefaultsValuesDictionary;
     
 	@try {
-		vorbisDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"VorbisDefaults" ofType:@"plist"];
+		vorbisDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"OggVorbisDefaults" ofType:@"plist"];
 		if(nil == vorbisDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load VorbisDefaults.plist." userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load OggVorbisDefaults.plist." userInfo:nil];
 		}
 		vorbisDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:vorbisDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:vorbisDefaultsValuesDictionary];

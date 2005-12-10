@@ -524,8 +524,8 @@
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>8CEDBAF7094B3B850023DD01</string>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>717 276 520 548 0 0 1280 832 </string>
@@ -944,18 +944,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {740, 531}}</string>
+								<string>{{0, 0}, {586, 159}}</string>
 								<key>RubberWindowFrame</key>
-								<string>500 115 740 572 0 0 1280 832 </string>
+								<string>660 61 586 200 0 0 1280 832 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXRunSessionModule</string>
 							<key>Proportion</key>
-							<string>531pt</string>
+							<string>159pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>531pt</string>
+					<string>159pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -976,7 +976,7 @@
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>
 			<key>WindowString</key>
-			<string>500 115 740 572 0 0 1280 832 </string>
+			<string>660 61 586 200 0 0 1280 832 </string>
 			<key>WindowToolGUID</key>
 			<string>1C0AD2B3069F1EA900FABCE6</string>
 			<key>WindowToolIsVisible</key>

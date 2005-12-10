@@ -512,7 +512,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1322, 3528}}";
 			sepNavSelRange = "{4995, 21}";
-			sepNavVisRect = "{{0, 1705}, {791, 637}}";
+			sepNavVisRect = "{{0, 1647}, {791, 637}}";
 			sepNavWindowFrame = "{{15, 117}, {836, 710}}";
 		};
 	};
@@ -3344,8 +3344,8 @@
 		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {791, 6692}}";
-			sepNavSelRange = "{9073, 0}";
-			sepNavVisRect = "{{0, 2938}, {791, 637}}";
+			sepNavSelRange = "{5908, 0}";
+			sepNavVisRect = "{{0, 496}, {791, 637}}";
 			sepNavWindowFrame = "{{84, 54}, {836, 710}}";
 		};
 	};
