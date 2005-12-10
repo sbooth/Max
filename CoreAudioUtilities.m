@@ -161,12 +161,11 @@ getCoreAudioFileDataFormats(OSType filetype)
 					bitratesA		= [NSMutableArray arrayWithCapacity:bitrateCount];
 					for(n = 0; n < bitrateCount; ++n) {
 						unsigned long minRate = (unsigned long) bitrates[n].mMinimum;
-						//					unsigned long maxRate = (unsigned long) bitrates[n].mMaximum;
 						if(0 != minRate) {
 							[bitratesA addObject:[NSNumber numberWithUnsignedLong: minRate / 1000]];
 						}
-						//					[bitratesA addObject:[NSString stringWithFormat:@"%i - %i", minRate, maxRate]];
 					}
+					
 					// For some reason some codec return {0.,0.} as bitrates multiple times (alac)
 					if(0 != [bitratesA count]) {
 						[d setValue:bitratesA forKey:@"bitrates"];

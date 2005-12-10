@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		8C040A31092AB41A0052D881 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */; };
 		8C04524A0947F0EC0041AAA8 /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */; };
-		8C0452590947F1D50041AAA8 /* libfaac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0452580947F1D40041AAA8 /* libfaac.a */; };
 		8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* FreeDB.m */; };
 		8C1A6C52093ED45A006176C4 /* LAMEToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */; };
 		8C1A6C59093ED65F006176C4 /* OggVorbisToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */; };
@@ -183,7 +182,6 @@
 		8C040A2F092AB41A0052D881 /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C0452470947F0EC0041AAA8 /* CoreAudioEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoder.h; sourceTree = "<group>"; };
 		8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoder.m; sourceTree = "<group>"; };
-		8C0452580947F1D40041AAA8 /* libfaac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfaac.a; sourceTree = "<group>"; };
 		8C08573708DE90DD004B42F0 /* FreeDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDB.h; sourceTree = "<group>"; };
 		8C08573808DE90DD004B42F0 /* FreeDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDB.m; sourceTree = "<group>"; };
 		8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LAMEToolbarImage.png; sourceTree = "<group>"; };
@@ -375,7 +373,6 @@
 				8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */,
 				8C3A88330945756C00B438D5 /* libsndfile.a in Frameworks */,
 				8C4961EB09472D70006E1765 /* libOggFLAC.a in Frameworks */,
-				8C0452590947F1D50041AAA8 /* libfaac.a in Frameworks */,
 				8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -625,7 +622,6 @@
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				8C0452580947F1D40041AAA8 /* libfaac.a */,
 				8C4961EA09472D70006E1765 /* libOggFLAC.a */,
 				8CF4D3F00945137100385BE4 /* libsndfile.a */,
 				8CB86229093F186100A60FC1 /* libogg.a */,

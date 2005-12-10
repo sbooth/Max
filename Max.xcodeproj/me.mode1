@@ -523,9 +523,9 @@
 		<string>8C9D1F4208C5287A00D95535</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>8CEDBAF7094B3B850023DD01</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>8C191A4608C515A500CB7453</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
+		<string>1C0AD2B3069F1EA900FABCE6</string>
 	</array>
 	<key>WindowString</key>
 	<string>717 276 520 548 0 0 1280 832 </string>
@@ -551,7 +551,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>CoreAudioEncoder.m</string>
+								<string>CoreAudioEncoderTask.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -980,7 +980,7 @@
 			<key>WindowToolGUID</key>
 			<string>1C0AD2B3069F1EA900FABCE6</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
