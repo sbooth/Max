@@ -21,18 +21,17 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Encoder.h"
-#include "faac.h"
+
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
 
 @interface AACEncoder : Encoder
 {
-	int16_t					*_buf;
-	ssize_t					_buflen;
+	int16_t							*_buf;
+	ssize_t							_buflen;
 	
-	unsigned long			_inputSamples;
-	unsigned long			_maxOutputBytes;
-
-	faacEncHandle			_faac;
-	int						_out;
+	AudioStreamBasicDescription		_inputASBD;
+	AudioStreamBasicDescription		_outputASBD;
 }
 
 - (id) initWithSource:(NSString *)source;

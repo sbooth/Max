@@ -101,7 +101,7 @@ NSString *
 makeStringSafeForFilename(NSString *string)
 {
 	NSCharacterSet		*characterSet		= [NSCharacterSet characterSetWithCharactersInString:@"/:"];
-	NSMutableString		*result				= [[[NSMutableString alloc] initWithCapacity:[string length]] autorelease];
+	NSMutableString		*result				= [NSMutableString stringWithCapacity:[string length]];
 	NSRange				range;
 	
 	[result setString:string];

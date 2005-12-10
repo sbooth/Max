@@ -76,7 +76,7 @@
 - (id) init
 {
 	if((self = [super init])) {
-		_tracks			= [[NSMutableArray alloc] initWithCapacity:20];
+		_tracks			= [NSMutableArray arrayWithCapacity:20];
 		_discInDrive	= [NSNumber numberWithBool:NO];
 		_disc			= nil;
 		
@@ -307,7 +307,7 @@
 
 - (NSArray *) selectedTracks
 {
-	NSMutableArray	*result			= [[NSMutableArray alloc] initWithCapacity:[_disc trackCount]];
+	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[_disc trackCount]];
 	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
 	Track			*track;
 	
@@ -359,7 +359,7 @@
 	// Use custom naming scheme
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomNaming"]) {
 		
-		NSMutableString		*customPath			= [[NSMutableString alloc] initWithCapacity:100];
+		NSMutableString		*customPath			= [NSMutableString stringWithCapacity:100];
 		NSString			*customNamingScheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"customNamingScheme"];
 		
 		// Get the elements needed to build the pathname
@@ -752,7 +752,7 @@
 {
 	unsigned				i;
 	NSMutableDictionary		*result		= [[NSMutableDictionary alloc] init];
-	NSMutableArray			*tracks		= [[[NSMutableArray alloc] initWithCapacity:[_tracks count]] autorelease];
+	NSMutableArray			*tracks		= [[NSMutableArray arrayWithCapacity:[_tracks count]] autorelease];
 		
 	[result setValue:_title forKey:@"title"];
 	[result setValue:_artist forKey:@"artist"];

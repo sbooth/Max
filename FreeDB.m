@@ -104,7 +104,7 @@
 - (NSArray *) fetchSites
 {
 	const cddb_site_t		*site			= NULL;
-	NSMutableArray			*sites			= [[NSMutableArray alloc] initWithCapacity:20];
+	NSMutableArray			*sites			= [NSMutableArray arrayWithCapacity:20];
 	const char				*tempString;
 	unsigned int			i;
 	float					latitude, longitude;
@@ -146,7 +146,7 @@
 
 - (NSArray *) fetchMatches
 {
-	NSMutableArray			*result			= [[NSMutableArray alloc] initWithCapacity:10];
+	NSMutableArray			*result			= [NSMutableArray arrayWithCapacity:10];
 	cddb_disc_t				*freeDBDisc		= [[_disc getDisc] getFreeDBDisc];
 	int						matches;
 	NSMutableDictionary		*currentMatch;

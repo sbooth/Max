@@ -22,14 +22,22 @@
 
 @interface FormatsPreferencesController : NSWindowController 
 {
-	NSMutableArray					*_formats;
+	NSMutableArray					*_libsndfileFormats;
+	NSMutableArray					*_CAFormats;
 	
-	IBOutlet NSArrayController		*_typesController;
-	IBOutlet NSArrayController		*_subtypesController;
-	IBOutlet NSArrayController		*_selectedFormatsController;
+	IBOutlet NSArrayController		*_libsndfileTypesController;
+	IBOutlet NSArrayController		*_libsndfileSubtypesController;
+	IBOutlet NSArrayController		*_libsndfileSelectedFormatsController;
+
+	IBOutlet NSArrayController		*_CATypesController;
+	IBOutlet NSArrayController		*_CASubtypesController;
+	IBOutlet NSArrayController		*_CASelectedFormatsController;
 }
 
-- (IBAction)		addFormat:(id)sender;
-- (IBAction)		removeFormat:(id)sender;
+- (IBAction)		addlibsndfileFormat:(id)sender;
+- (IBAction)		removelibsndfileFormat:(id)sender;
+
+- (IBAction)		addCAFormat:(id)sender;
+- (IBAction)		removeCAFormat:(id)sender;
 
 @end

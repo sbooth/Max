@@ -28,11 +28,9 @@
 #import "LogController.h"
 #import "UpdateChecker.h"
 #import "IOException.h"
-#import "FreeDBProtocolValueTransformer.h";
-#import "BooleanArrayValueTransformer.h";
-#import "NegateBooleanArrayValueTransformer.h";
-
-#include "AudioToolbox/AudioFile.h";
+#import "FreeDBProtocolValueTransformer.h"
+#import "BooleanArrayValueTransformer.h"
+#import "NegateBooleanArrayValueTransformer.h"
 
 @implementation ApplicationController
 
@@ -76,39 +74,6 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	
-	OSStatus err;
-	UInt32 propertySize;
-	
-	err = AudioFileGetGlobalInfoSize(
-									 kAudioFileGlobalInfo_WritableTypes, 0, NULL, &propertySize);
-	if (err) return err;
-	
-	OSType *types = (OSType*)malloc(propertySize);
-	err = AudioFileGetGlobalInfo(
-								 kAudioFileGlobalInfo_WritableTypes, 0, NULL, &propertySize,  types);
-	if (err) return err;
-	
-	UInt32 numTypes = propertySize / sizeof(OSType);
-	UInt32 i;
-	for (i=0; i<numTypes; ++i)
-	{
-		CFStringRef name;
-		UInt32 outSize = sizeof(name);
-		err = AudioFileGetGlobalInfo(
-									 kAudioFileGlobalInfo_FileTypeName, sizeof(OSType), types+i, &outSize,  &name);
-		if (err) return err;
-		
-		NSArray *extensions;
-		outSize = sizeof(extensions);
-		err = AudioFileGetGlobalInfo(
-									 kAudioFileGlobalInfo_ExtensionsForType, sizeof(OSType), types+i, &outSize,  &extensions);
-		if (err) return err;
-
-			
-		NSLog(@"%@ %@", name, extensions);
-	}
-	
 	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
 	[MediaController sharedController];
 }

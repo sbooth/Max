@@ -118,7 +118,7 @@
 		return;
 	}
 	
-	NSMutableString *sample = [[[NSMutableString alloc] initWithCapacity:[scheme length]] autorelease];
+	NSMutableString *sample = [NSMutableString stringWithCapacity:[scheme length]];
 	[sample setString:scheme];		
 	
 	[sample replaceOccurrencesOfString:@"{discNumber}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];

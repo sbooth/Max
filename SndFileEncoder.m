@@ -57,7 +57,7 @@
 	const char					*string				= NULL;
 	int							i;
 	int							err					= 0 ;
-	int							bufferLen			= 1024 * 512;
+	int							bufferLen			= 1024 * 10;
 	int							*intBuffer			= NULL;
 	double						*doubleBuffer		= NULL;
 	double						maxSignal;

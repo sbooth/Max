@@ -7,13 +7,21 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {addFormat = id; removeFormat = id; }; 
+            ACTIONS = {
+                addCAFormat = id; 
+                addlibsndfileFormat = id; 
+                removeCAFormat = id; 
+                removelibsndfileFormat = id; 
+            }; 
             CLASS = FormatsPreferencesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                "_selectedFormatsController" = NSArrayController; 
-                "_subtypesController" = NSArrayController; 
-                "_typesController" = NSArrayController; 
+                "_CASelectedFormatsController" = NSArrayController; 
+                "_CASubtypesController" = NSArrayController; 
+                "_CATypesController" = NSArrayController; 
+                "_libsndfileSelectedFormatsController" = NSArrayController; 
+                "_libsndfileSubtypesController" = NSArrayController; 
+                "_libsndfileTypesController" = NSArrayController; 
             }; 
             SUPERCLASS = NSWindowController; 
         }

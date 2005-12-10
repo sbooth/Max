@@ -85,7 +85,7 @@
 	}
 	
 	// Allocate the buffer
-	_buflen			= 1024 * 512;
+	_buflen			= 1024 * 10;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];

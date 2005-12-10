@@ -162,7 +162,7 @@ enum {
 		}
 		
 		// Read a chunk
-		buf = paranoia_read_limited(_paranoia, NULL, (-1 == _maximumRetries ? 20 : _maximumRetries));
+		buf = paranoia_read_limited(_paranoia, NULL, NULL, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [ParanoiaException exceptionWithReason:@"Skip tolerance exceeded/Unable to access CD" userInfo:nil];

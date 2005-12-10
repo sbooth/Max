@@ -33,7 +33,6 @@ static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences
 static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences";
 static NSString		*LAMEPreferencesToolbarItemIdentifier			= @"LAMEPreferences";
 static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPreferences";
-static NSString		*AACPreferencesToolbarItemIdentifier			= @"AACPreferences";
 
 @interface PreferencesController (Private)
 - (void) setupToolbar;
@@ -53,8 +52,8 @@ static NSString		*AACPreferencesToolbarItemIdentifier			= @"AACPreferences";
 	unsigned				i;
 
 	@try {
-		defaultsDictionary	= [[[NSMutableDictionary alloc] initWithCapacity:20] autorelease];
-		defaultFiles		= [NSArray arrayWithObjects:@"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"OggVorbisDefaults", @"AACDefaults", nil];
+		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
+		defaultFiles		= [NSArray arrayWithObjects:@"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"OggVorbisDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -207,17 +206,6 @@ static NSString		*AACPreferencesToolbarItemIdentifier			= @"AACPreferences";
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	} 
-    else if([itemIdentifier isEqualToString:AACPreferencesToolbarItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: @"AAC"];
-		[toolbarItem setPaletteLabel: @"AAC"];
-		[toolbarItem setToolTip: @"Advanced Audio Coding encoder preferences"];
-		[toolbarItem setImage: [NSImage imageNamed:@"AACToolbarImage"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
-	} 
 	else {
 		toolbarItem = nil;
     }
@@ -230,7 +218,7 @@ static NSString		*AACPreferencesToolbarItemIdentifier			= @"AACPreferences";
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
-		OggVorbisPreferencesToolbarItemIdentifier, AACPreferencesToolbarItemIdentifier,
+		OggVorbisPreferencesToolbarItemIdentifier,
 		nil];
 }
 
@@ -239,7 +227,7 @@ static NSString		*AACPreferencesToolbarItemIdentifier			= @"AACPreferences";
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
-		OggVorbisPreferencesToolbarItemIdentifier, AACPreferencesToolbarItemIdentifier,
+		OggVorbisPreferencesToolbarItemIdentifier,
 		nil];
 }
 
@@ -248,7 +236,7 @@ static NSString		*AACPreferencesToolbarItemIdentifier			= @"AACPreferences";
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
-		OggVorbisPreferencesToolbarItemIdentifier, AACPreferencesToolbarItemIdentifier,
+		OggVorbisPreferencesToolbarItemIdentifier,
 		nil];
 }
 

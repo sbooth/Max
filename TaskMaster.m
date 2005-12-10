@@ -69,8 +69,8 @@ static TaskMaster *sharedController = nil;
 - (id) init
 {
 	if((self = [super initWithWindowNibName:@"Tasks"])) {
-		_rippingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
-		_encodingTasks	= [[NSMutableArray alloc] initWithCapacity:20];
+		_rippingTasks	= [NSMutableArray arrayWithCapacity:20];
+		_encodingTasks	= [NSMutableArray arrayWithCapacity:20];
 
 		return self;
 	}
@@ -287,47 +287,55 @@ static TaskMaster *sharedController = nil;
 	[self spawnRipperThreads];
 
 	// Create encoder tasks for the rip that just completed
-	
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"]) {
-		filename = generateUniqueFilename(basename, @"mp3");
-		[self runEncoder:[MPEGEncoderTask class] filename:filename source:task track:track];
-	}
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"]) {
-		filename = generateUniqueFilename(basename, @"flac");
-		[self runEncoder:[FLACEncoderTask class] filename:filename source:task track:track];
-	}
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"]) {
-		filename = generateUniqueFilename(basename, @"oggflac");
-		[self runEncoder:[OggFLACEncoderTask class] filename:filename source:task track:track];
-	}
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"]) {
-		filename = generateUniqueFilename(basename, @"ogg");
-		[self runEncoder:[OggVorbisEncoderTask class] filename:filename source:task track:track];
-	}
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputAAC"]) {
-		filename = generateUniqueFilename(basename, @"aac");
-		[self runEncoder:[AACEncoderTask class] filename:filename source:task track:track];
-	}
-	
-	if(nil != sndfileFormats && 0 < [sndfileFormats count]) {
-		NSEnumerator	*formats		= [sndfileFormats objectEnumerator];
-		NSDictionary	*formatInfo;
-		
-		while((formatInfo = [formats nextObject])) {
-			filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
-
-			EncoderTask *encoderTask = [[SndFileEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
-
-			[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
-			[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
-			[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
-
-			// Add the encoder to our list of encoding tasks
-			[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
-			[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
-			[_encoderStatusTextField setHidden:NO];
-			[self spawnEncoderThreads];
+	@try {
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"]) {
+			filename = generateUniqueFilename(basename, @"mp3");
+			[self runEncoder:[MPEGEncoderTask class] filename:filename source:task track:track];
 		}
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"]) {
+			filename = generateUniqueFilename(basename, @"flac");
+			[self runEncoder:[FLACEncoderTask class] filename:filename source:task track:track];
+		}
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"]) {
+			filename = generateUniqueFilename(basename, @"oggflac");
+			[self runEncoder:[OggFLACEncoderTask class] filename:filename source:task track:track];
+		}
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"]) {
+			filename = generateUniqueFilename(basename, @"ogg");
+			[self runEncoder:[OggVorbisEncoderTask class] filename:filename source:task track:track];
+		}
+		if(YES || [[NSUserDefaults standardUserDefaults] boolForKey:@"outputAAC"]) {
+			filename = generateUniqueFilename(basename, @"aac");
+			[self runEncoder:[AACEncoderTask class] filename:filename source:task track:track];
+		}
+		
+		if(nil != sndfileFormats && 0 < [sndfileFormats count]) {
+			NSEnumerator	*formats		= [sndfileFormats objectEnumerator];
+			NSDictionary	*formatInfo;
+			
+			while((formatInfo = [formats nextObject])) {
+				filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
+				
+				EncoderTask *encoderTask = [[SndFileEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
+				
+				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
+				
+				// Add the encoder to our list of encoding tasks
+				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
+				[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
+				[_encoderStatusTextField setHidden:NO];
+				[self spawnEncoderThreads];
+			}
+		}
+	}
+	
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+
+	@finally {
 	}
 }
 

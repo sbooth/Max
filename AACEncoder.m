@@ -24,75 +24,38 @@
 #import "IOException.h"
 #import "StopException.h"
 
-#include "faac.h"
-#include "faaccfg.h"
-
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
 
-// My (semi-arbitrary) list of supported AAC bitrates
-static int sAACBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
-
-// Tag values for NSPopupButton
-enum {
-	FAAC_MODE_QUALITY						= 0,
-	FAAC_MODE_BITRATE						= 1,
-	
-	FAAC_SHORT_CONTROL_BOTH					= 1,
-	FAAC_SHORT_CONTROL_SHORT_ONLY			= 2,
-	FAAC_SHORT_CONTROL_LONG_ONLY			= 3
-};
-
-@interface AACEncoder (Private)
-- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
-- (ssize_t) finishEncode;
-@end
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
 
 @implementation AACEncoder
 
 - (id) initWithSource:(NSString *)source
 {	
-	faacEncConfigurationPtr		faacConf;
-	
 	if((self = [super initWithSource:source])) {
-		_faac = faacEncOpen(44100, 2, &_inputSamples, &_maxOutputBytes);
-		if(NULL == _faac) {
-			@throw [MallocException exceptionWithReason:@"Unable to create AAC encoder" userInfo:nil];
-		}
 		
-		faacConf					= faacEncGetCurrentConfiguration(_faac);
-		faacConf->inputFormat		= FAAC_INPUT_16BIT;
-		faacConf->aacObjectType		= LOW;
-		faacConf->mpegVersion		= MPEG2;
+		bzero(&_inputASBD, sizeof(AudioStreamBasicDescription));
+		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
 		
-		faacConf->useTns			= [[NSUserDefaults standardUserDefaults] boolForKey:@"faacEnableTNS"];
-		faacConf->allowMidside		= [[NSUserDefaults standardUserDefaults] boolForKey:@"faacEnableMidside"];
+		// Interleaved 16-bit PCM audio
+		_inputASBD.mSampleRate			= 44100.f;
+		_inputASBD.mFormatID			= kAudioFormatLinearPCM;
+		_inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+		_inputASBD.mBytesPerPacket		= 4;
+		_inputASBD.mFramesPerPacket		= 1;
+		_inputASBD.mBytesPerFrame		= 4;
+		_inputASBD.mChannelsPerFrame	= 2;
+		_inputASBD.mBitsPerChannel		= 16;
 
-		switch([[NSUserDefaults standardUserDefaults] integerForKey:@"faacShortControl"]) {
-			case FAAC_SHORT_CONTROL_BOTH:			faacConf->shortctl = SHORTCTL_NORMAL;		break;
-			case FAAC_SHORT_CONTROL_LONG_ONLY:		faacConf->shortctl = SHORTCTL_NOSHORT;		break;
-			case FAAC_SHORT_CONTROL_SHORT_ONLY:		faacConf->shortctl = SHORTCTL_NOLONG;		break;
-		}
-
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"faacUseCustomLowpass"]) {
-			faacConf->bandWidth = [[NSUserDefaults standardUserDefaults] integerForKey:@"faacCustomLowpass"];
-		}
-		
-		
-		// Use quality-based VBR
-		if(FAAC_MODE_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"faacMode"]) {
-			faacConf->quantqual = [[NSUserDefaults standardUserDefaults] integerForKey:@"faacQuality"];
-		}
-		else if(FAAC_MODE_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"faacMode"]) {
-			int bitrate = sAACBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"faacBitrate"]] * 1000;
-			faacConf->bitRate = bitrate / 2; // numChannels
-		}
-		else {
-			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized faac mode" userInfo:nil];
-		}
-		
-		faacEncSetConfiguration(_faac, faacConf);
-		
+		// Desired output
+		_outputASBD.mSampleRate			= 44100.f;
+		_outputASBD.mFormatID			= kAudioFormatMPEG4AAC;
+		_outputASBD.mChannelsPerFrame	= 2;
+				
 		return self;
 	}
 	return nil;
@@ -100,22 +63,29 @@ enum {
 
 - (void) dealloc
 {
-	faacEncClose(_faac);
+	free(_buf);
 	[super dealloc];
 }
 
 - (ssize_t) encodeToFile:(NSString *) filename
 {
-	ssize_t		bytesRead			= 0;
-	ssize_t		bytesWritten		= 0;
-	ssize_t		bytesToRead			= 0;
-	ssize_t		totalBytes			= 0;
-	NSDate		*startTime			= [NSDate date];
+	OSStatus			err;
+	AudioBufferList		bufferList;
+	UInt32				frameCount;
+	ssize_t				bytesWritten		= 0;
+	ssize_t				bytesRead			= 0;
+	ssize_t				bytesToRead			= 0;
+	ssize_t				totalBytes			= 0;
+	NSString			*file, *path;
+	FSRef				ref;
+	ExtAudioFileRef		extAudioFileRef;
+	NSDate				*startTime			= [NSDate date];
+	
 	
 	// Tell our owner we are starting
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
 	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
-	
+
 	// Open the input file
 	_source = open([_sourceFilename UTF8String], O_RDONLY);
 	if(-1 == _source) {
@@ -130,8 +100,8 @@ enum {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
-	// Allocate the buffer
-	_buflen			= _inputSamples;
+	// Allocate the input buffer
+	_buflen			= 1024;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
@@ -142,10 +112,23 @@ enum {
 	bytesToRead		= totalBytes;
 	
 	// Create the output file
-	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	if(-1 == _out) {
+	path = [filename stringByDeletingLastPathComponent];
+	file = [filename lastPathComponent];
+	
+	err = FSPathMakeRef([path UTF8String], &ref, NULL);
+	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}
+	err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, kAudioFileMPEG4Type, &_outputASBD, NULL, &extAudioFileRef);
+	if(noErr != err) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}
+	err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(_inputASBD), &_inputASBD);
+	if(noErr != err) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set output file properties (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	
 	// Iteratively get the PCM data and encode it
@@ -155,7 +138,7 @@ enum {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
-		
+				
 		// Read a chunk of PCM input
 		bytesRead = read(_source, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
@@ -163,9 +146,21 @@ enum {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
-		// Encode the PCM data
-		bytesWritten += [self encodeChunk:_buf numSamples:bytesRead / 2];
-				
+		// Put the data in an AudioFileBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mData				= _buf;
+		bufferList.mBuffers[0].mDataByteSize		= bytesRead;
+		bufferList.mBuffers[0].mNumberChannels		= 2;
+		
+		frameCount									= bytesRead / _inputASBD.mBytesPerPacket;
+		
+		// Write the data, encoding/converting in the process
+		err = ExtAudioFileWrite(extAudioFileRef, frameCount, &bufferList);
+		if(noErr != err) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [NSException exceptionWithName:@"CAException" reason:[NSString stringWithFormat:@"ExtAudioFileWrite failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}
+
 		// Update status
 		bytesToRead -= bytesRead;
 		[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
@@ -174,9 +169,6 @@ enum {
 		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 	}
 	
-	// Flush the last frames
-	bytesWritten += [self finishEncode];
-	
 	// Close the input file
 	if(-1 == close(_source)) {
 		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
@@ -184,103 +176,14 @@ enum {
 	}
 	
 	// Close the output file
-	if(-1 == close(_out)) {
-		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+	err = ExtAudioFileDispose(extAudioFileRef);
+	if(noErr != err) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 		
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
 	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	
-	return bytesWritten;
-}
-
-- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
-{
-	u_int8_t		*buf;
-	int				bufSize;
-	
-	int				faacResult;
-	long			bytesWritten;
-	
-	
-	buf = NULL;
-	
-	@try {
-		// Allocate the buffer
-		bufSize = _maxOutputBytes;
-		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
-		if(NULL == buf) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}
-				
-		faacResult = faacEncEncode(_faac, (int32_t *)chunk, numSamples, buf, bufSize);
-		if(0 > faacResult) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [IOException exceptionWithReason:@"FAAC encoding error" userInfo:nil];
-		}
-		
-		bytesWritten = write(_out, buf, faacResult);
-		if(-1 == bytesWritten) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}
-	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
-	@finally {
-		free(buf);
-	}
-	
-	return bytesWritten;
-}
-
-- (ssize_t) finishEncode
-{
-	u_int8_t		*buf;
-	int				bufSize;
-	
-	int				faacResult;
-	ssize_t			bytesWritten;
-	
-	
-	buf = NULL;
-	
-	@try {
-		// Allocate the buffer
-		bufSize = _maxOutputBytes;
-		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
-		if(NULL == buf) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
-		}
-		
-		// Flush the buffer
-		while((faacResult = faacEncEncode(_faac, NULL, 0, buf, bufSize))) {
-			if(0 > faacResult) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [IOException exceptionWithReason:@"FAAC encoding error" userInfo:nil];
-			}
-			
-			bytesWritten = write(_out, buf, faacResult);
-			if(-1 == bytesWritten) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
-			}
-		}
-	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
-	@finally {
-		free(buf);
-	}
 	
 	return bytesWritten;
 }
