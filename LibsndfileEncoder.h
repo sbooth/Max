@@ -22,18 +22,11 @@
 
 #import "Encoder.h"
 
-#include <AudioToolbox/AudioFormat.h>
-#include <AudioToolbox/AudioConverter.h>
-
-@interface AACEncoder : Encoder
+@interface LibsndfileEncoder : Encoder
 {
-	int16_t							*_buf;
-	ssize_t							_buflen;
-	
-	AudioStreamBasicDescription		_inputASBD;
-	AudioStreamBasicDescription		_outputASBD;
+	int		_format;
 }
 
-- (id) initWithSource:(NSString *)source;
+- (id) initWithSource:(NSString *)source format:(int)format;
 
 @end

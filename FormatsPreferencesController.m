@@ -224,7 +224,7 @@ getCAOutputFormats()
 
 	if((self = [super initWithWindowNibName:@"FormatsPreferences"])) {
 		
-		_CAFormats			= getCAWritableTypes();
+		_coreAudioFormats			= getCAWritableTypes();
 		_libsndfileFormats	= [NSMutableArray arrayWithCapacity:20];
 		
 		sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
@@ -275,17 +275,17 @@ getCAOutputFormats()
 	return nil;
 }
 
-- (IBAction) addlibsndfileFormat:(id)sender
+- (IBAction) addLibsndfileFormat:(id)sender
 {
 	NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:4];
 	
 	NSArray *types = [_libsndfileTypesController selectedObjects];
 	if(0 < [types count]) {
 		NSDictionary *type = [types objectAtIndex:0];
-		[result addEntriesFromDictionary:type];
-//		[result setValue:[type valueForKey:@"sndfileFormat"] forKey:@"sndfileFormat"];
-//		[result setValue:[type valueForKey:@"type"] forKey:@"type"];
-//		[result setValue:[type valueForKey:@"extension"] forKey:@"extension"];
+//		[result addEntriesFromDictionary:type];
+		[result setValue:[type valueForKey:@"sndfileFormat"] forKey:@"sndfileFormat"];
+		[result setValue:[type valueForKey:@"type"] forKey:@"type"];
+		[result setValue:[type valueForKey:@"extension"] forKey:@"extension"];
 
 		NSArray *subtypes = [_libsndfileSubtypesController selectedObjects];
 		if(0 < [subtypes count]) {
@@ -301,26 +301,26 @@ getCAOutputFormats()
 	}
 }
 
-- (IBAction) removelibsndfileFormat:(id)sender
+- (IBAction) removeLibsndfileFormat:(id)sender
 {
 	if(NSNotFound != [_libsndfileSelectedFormatsController selectionIndex]) {
 		[_libsndfileSelectedFormatsController removeObjectAtArrangedObjectIndex:[_libsndfileSelectedFormatsController selectionIndex]];
 	}
 }
 
-- (IBAction) addCAFormat:(id)sender
+- (IBAction) addCoreAudioFormat:(id)sender
 {
 	NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:4];
 	
-	NSArray *types = [_CATypesController selectedObjects];
+	NSArray *types = [_coreAudioTypesController selectedObjects];
 	if(0 < [types count]) {
 		NSDictionary *type = [types objectAtIndex:0];
-		[result addEntriesFromDictionary:type];
-//		[result setValue:[type valueForKey:@"fileType"] forKey:@"fileType"];
-//		[result setValue:[type valueForKey:@"fileTypeName"] forKey:@"type"];
-//		[result setValue:[type valueForKey:@"extension"] forKey:@"extension"];
+//		[result addEntriesFromDictionary:type];
+		[result setValue:[type valueForKey:@"fileType"] forKey:@"fileType"];
+		[result setValue:[type valueForKey:@"fileTypeName"] forKey:@"fileTypeName"];
+		[result setValue:[type valueForKey:@"extensionsForType"] forKey:@"extensionsForType"];
 		
-		NSArray *subtypes = [_CASubtypesController selectedObjects];
+		NSArray *subtypes = [_coreAudioSubtypesController selectedObjects];
 		if(0 < [subtypes count]) {
 			NSDictionary *subtype = [subtypes objectAtIndex:0];
 			[result addEntriesFromDictionary:subtype];
@@ -329,15 +329,15 @@ getCAOutputFormats()
 		}
 	}
 	NSLog(@"%@", result);
-	if(NO == [[_CASelectedFormatsController arrangedObjects] containsObject:result]) {
-		[_CASelectedFormatsController addObject:result];
+	if(NO == [[_coreAudioSelectedFormatsController arrangedObjects] containsObject:result]) {
+		[_coreAudioSelectedFormatsController addObject:result];
 	}
 }
 
-- (IBAction) removeCAFormat:(id)sender
+- (IBAction) removeCoreAudioFormat:(id)sender
 {
-	if(NSNotFound != [_CASelectedFormatsController selectionIndex]) {
-		[_CASelectedFormatsController removeObjectAtArrangedObjectIndex:[_CASelectedFormatsController selectionIndex]];
+	if(NSNotFound != [_coreAudioSelectedFormatsController selectionIndex]) {
+		[_coreAudioSelectedFormatsController removeObjectAtArrangedObjectIndex:[_coreAudioSelectedFormatsController selectionIndex]];
 	}
 }
 

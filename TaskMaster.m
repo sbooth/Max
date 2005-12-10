@@ -25,8 +25,8 @@
 #import "FLACEncoderTask.h"
 #import "OggFLACEncoderTask.h"
 #import "OggVorbisEncoderTask.h"
-#import "AACEncoderTask.h"
-#import "SndFileEncoderTask.h"
+#import "CoreAudioEncoderTask.h"
+#import "LibsndfileEncoderTask.h"
 #import "MissingResourceException.h"
 #import "IOException.h"
 #import "UtilityFunctions.h"
@@ -270,11 +270,12 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidComplete:(RipperTask* ) task
 {
-	NSArray			*sndfileFormats = [[NSUserDefaults standardUserDefaults] objectForKey:@"sndfileOutputFormats"];
-	Track			*track			= [task valueForKey:@"track"];
-	NSString		*trackName		= [track description];
-	NSString		*basename		= [task valueForKey:@"basename"];
-	NSString		*filename		= nil;
+	NSArray			*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
+	NSArray			*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
+	Track			*track				= [task valueForKey:@"track"];
+	NSString		*trackName			= [track description];
+	NSString		*basename			= [task valueForKey:@"basename"];
+	NSString		*filename			= nil;
 
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"ripDidComplete" object:nil];
@@ -304,13 +305,31 @@ static TaskMaster *sharedController = nil;
 			filename = generateUniqueFilename(basename, @"ogg");
 			[self runEncoder:[OggVorbisEncoderTask class] filename:filename source:task track:track];
 		}
-		if(YES || [[NSUserDefaults standardUserDefaults] boolForKey:@"outputAAC"]) {
-			filename = generateUniqueFilename(basename, @"aac");
-			[self runEncoder:[AACEncoderTask class] filename:filename source:task track:track];
+		
+		
+		if(nil != coreAudioFormats && 0 < [coreAudioFormats count]) {
+			NSEnumerator	*formats		= [coreAudioFormats objectEnumerator];
+			NSDictionary	*formatInfo;
+			
+			while((formatInfo = [formats nextObject])) {
+				filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
+				
+				EncoderTask *encoderTask = [[CoreAudioEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
+				
+				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
+				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
+				
+				// Add the encoder to our list of encoding tasks
+				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
+				[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
+				[_encoderStatusTextField setHidden:NO];
+				[self spawnEncoderThreads];
+			}
 		}
 		
-		if(nil != sndfileFormats && 0 < [sndfileFormats count]) {
-			NSEnumerator	*formats		= [sndfileFormats objectEnumerator];
+		if(nil != libsndfileFormats && 0 < [libsndfileFormats count]) {
+			NSEnumerator	*formats		= [libsndfileFormats objectEnumerator];
 			NSDictionary	*formatInfo;
 			
 			while((formatInfo = [formats nextObject])) {

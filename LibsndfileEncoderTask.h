@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.m 181 2005-11-28 08:38:43Z me $
+ *  $Id: EncoderTask.h 180 2005-11-27 22:04:47Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,35 +18,15 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "SndFileEncoderTask.h"
-#import "SndFileEncoder.h"
+#import <Cocoa/Cocoa.h>
 
-@implementation SndFileEncoderTask
+#import "EncoderTask.h"
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track formatInfo:(NSDictionary *)formatInfo
+@interface LibsndfileEncoderTask : EncoderTask 
 {
-	if((self = [super initWithSource:source target:target track:track])) {
-		_formatInfo = [formatInfo retain];
-		_encoder	= [[SndFileEncoder alloc] initWithSource:[_source valueForKey:@"path"] format:[[_formatInfo valueForKey:@"sndfileFormat"] intValue]];
-		return self;
-	}
-	return nil;
+	NSDictionary	*_formatInfo;
 }
 
-- (void) dealloc
-{
-	[_formatInfo release];
-	[_encoder release];
-	[super dealloc];
-}
-
-- (void) writeTags
-{
-}
-
-- (NSString *) getType
-{
-	return [_formatInfo valueForKey:@"type"];
-}
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track formatInfo:(NSDictionary *)formatInfo;
 
 @end

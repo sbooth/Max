@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "AACEncoder.h"
+#import "CoreAudioEncoder.h"
 
 #import "MallocException.h"
 #import "IOException.h"
@@ -32,12 +32,15 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-@implementation AACEncoder
+@implementation CoreAudioEncoder
 
-- (id) initWithSource:(NSString *)source
+- (id) initWithSource:(NSString *)source fileType:(AudioFileTypeID)fileType formatID:(UInt32)formatID
 {	
 	if((self = [super initWithSource:source])) {
-		
+	
+		_fileType						= fileType;
+		_formatID						= formatID;
+				
 		bzero(&_inputASBD, sizeof(AudioStreamBasicDescription));
 		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
 		
@@ -53,7 +56,7 @@
 
 		// Desired output
 		_outputASBD.mSampleRate			= 44100.f;
-		_outputASBD.mFormatID			= kAudioFormatMPEG4AAC;
+		_outputASBD.mFormatID			= _formatID;
 		_outputASBD.mChannelsPerFrame	= 2;
 				
 		return self;
@@ -120,7 +123,7 @@
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
-	err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, kAudioFileMPEG4Type, &_outputASBD, NULL, &extAudioFileRef);
+	err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, _fileType, &_outputASBD, NULL, &extAudioFileRef);
 	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];

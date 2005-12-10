@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "SndFileEncoder.h"
+#import "LibsndfileEncoder.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "FLACException.h"
@@ -33,7 +33,7 @@
 #include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
 
-@implementation SndFileEncoder
+@implementation LibsndfileEncoder
 
 - (id) initWithSource:(NSString *) source format:(int)format
 {

@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.m 181 2005-11-28 08:38:43Z me $
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,34 +18,25 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "AACEncoderTask.h"
-#import "AACEncoder.h"
+#import <Cocoa/Cocoa.h>
 
+#import "Encoder.h"
 
-@implementation AACEncoderTask
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track
+@interface CoreAudioEncoder : Encoder
 {
-	if((self = [super initWithSource:source target:target track:track])) {
-		_encoder = [[AACEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
-		return self;
-	}
-	return nil;
+	int16_t							*_buf;
+	ssize_t							_buflen;
+	
+	AudioStreamBasicDescription		_inputASBD;
+	AudioStreamBasicDescription		_outputASBD;
+	
+	AudioFileTypeID					_fileType;
+	UInt32							_formatID;
 }
 
-- (void) dealloc
-{
-	[_encoder release];
-	[super dealloc];
-}
-
-- (void) writeTags
-{
-}
-
-- (NSString *) getType
-{
-	return @"AAC";
-}
+- (id) initWithSource:(NSString *)source fileType:(AudioFileTypeID)fileType formatID:(UInt32)formatID;
 
 @end

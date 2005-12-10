@@ -23,21 +23,21 @@
 @interface FormatsPreferencesController : NSWindowController 
 {
 	NSMutableArray					*_libsndfileFormats;
-	NSMutableArray					*_CAFormats;
+	NSMutableArray					*_coreAudioFormats;
 	
 	IBOutlet NSArrayController		*_libsndfileTypesController;
 	IBOutlet NSArrayController		*_libsndfileSubtypesController;
 	IBOutlet NSArrayController		*_libsndfileSelectedFormatsController;
 
-	IBOutlet NSArrayController		*_CATypesController;
-	IBOutlet NSArrayController		*_CASubtypesController;
-	IBOutlet NSArrayController		*_CASelectedFormatsController;
+	IBOutlet NSArrayController		*_coreAudioTypesController;
+	IBOutlet NSArrayController		*_coreAudioSubtypesController;
+	IBOutlet NSArrayController		*_coreAudioSelectedFormatsController;
 }
 
-- (IBAction)		addlibsndfileFormat:(id)sender;
-- (IBAction)		removelibsndfileFormat:(id)sender;
+- (IBAction)		addLibsndfileFormat:(id)sender;
+- (IBAction)		removeLibsndfileFormat:(id)sender;
 
-- (IBAction)		addCAFormat:(id)sender;
-- (IBAction)		removeCAFormat:(id)sender;
+- (IBAction)		addCoreAudioFormat:(id)sender;
+- (IBAction)		removeCoreAudioFormat:(id)sender;
 
 @end

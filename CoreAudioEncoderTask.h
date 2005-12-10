@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
+ *  $Id: EncoderTask.h 180 2005-11-27 22:04:47Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,13 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
+#import "EncoderTask.h"
 
-@interface SndFileEncoder : Encoder
+@interface CoreAudioEncoderEncoderTask : EncoderTask 
 {
-	int		_format;
-}
+	NSDictionary	*_formatInfo;
+}}
 
-- (id) initWithSource:(NSString *)source format:(int)format;
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track formatInfo:(NSDictionary *)formatInfo;
 
 @end

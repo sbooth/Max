@@ -8,17 +8,17 @@
         }, 
         {
             ACTIONS = {
-                addCAFormat = id; 
-                addlibsndfileFormat = id; 
-                removeCAFormat = id; 
-                removelibsndfileFormat = id; 
+                addCoreAudioFormat = id; 
+                addLibsndfileFormat = id; 
+                removeCoreAudioFormat = id; 
+                removeLibsndfileFormat = id; 
             }; 
             CLASS = FormatsPreferencesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                "_CASelectedFormatsController" = NSArrayController; 
-                "_CASubtypesController" = NSArrayController; 
-                "_CATypesController" = NSArrayController; 
+                "_coreAudioSelectedFormatsController" = NSArrayController; 
+                "_coreAudioSubtypesController" = NSArrayController; 
+                "_coreAudioTypesController" = NSArrayController; 
                 "_libsndfileSelectedFormatsController" = NSArrayController; 
                 "_libsndfileSubtypesController" = NSArrayController; 
                 "_libsndfileTypesController" = NSArrayController; 
