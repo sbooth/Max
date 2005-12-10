@@ -335,7 +335,7 @@ static TaskMaster *sharedController = nil;
 			while((formatInfo = [formats nextObject])) {
 				filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
 				
-				EncoderTask *encoderTask = [[SndFileEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
+				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	

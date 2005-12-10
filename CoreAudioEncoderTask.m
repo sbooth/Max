@@ -28,7 +28,7 @@
 {
 	if((self = [super initWithSource:source target:target track:track])) {
 		_formatInfo	= [formatInfo retain];
-		_encoder	= [[CoreAudioEncoder alloc] initWithSource:[_source valueForKey:@"path"] fileType:[[_formatInfo valueForKey:@"fileType"] unsignedLongValue] formatID:[[_formatInfo valueForKey:@"formatID"] unsignedLongValue]];
+		_encoder	= [[CoreAudioEncoder alloc] initWithSource:[_source valueForKey:@"path"] formatInfo:formatInfo];
 		return self;
 	}
 	return nil;

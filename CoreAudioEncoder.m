@@ -34,12 +34,11 @@
 
 @implementation CoreAudioEncoder
 
-- (id) initWithSource:(NSString *)source fileType:(AudioFileTypeID)fileType formatID:(UInt32)formatID
+- (id) initWithSource:(NSString *)source formatInfo:(NSDictionary *)formatInfo
 {	
 	if((self = [super initWithSource:source])) {
 	
-		_fileType						= fileType;
-		_formatID						= formatID;
+		_formatInfo						= [formatInfo retain];
 				
 		bzero(&_inputASBD, sizeof(AudioStreamBasicDescription));
 		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
@@ -55,9 +54,19 @@
 		_inputASBD.mBitsPerChannel		= 16;
 
 		// Desired output
-		_outputASBD.mSampleRate			= 44100.f;
-		_outputASBD.mFormatID			= _formatID;
-		_outputASBD.mChannelsPerFrame	= 2;
+		_outputASBD.mSampleRate			= [[_formatInfo valueForKey:@"sampleRate"] doubleValue];
+		_outputASBD.mFormatID			= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
+		_outputASBD.mFormatFlags		= [[_formatInfo valueForKey:@"formatFlags"] unsignedLongValue];
+		_outputASBD.mFormatID			= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
+		_outputASBD.mBitsPerChannel		= [[_formatInfo valueForKey:@"bitsPerChannel"] unsignedLongValue];
+
+		// Flesh out structure for PCM formats
+		if(kAudioFormatLinearPCM == _outputASBD.mFormatID) {
+			_outputASBD.mChannelsPerFrame	= 2;
+			_outputASBD.mFramesPerPacket	= 1;
+			_outputASBD.mBytesPerPacket		= (_outputASBD.mBitsPerChannel * _outputASBD.mChannelsPerFrame) / 8;
+			_outputASBD.mBytesPerFrame		= _outputASBD.mBytesPerPacket;
+		}
 				
 		return self;
 	}
@@ -67,6 +76,7 @@
 - (void) dealloc
 {
 	free(_buf);
+	[_formatInfo release];
 	[super dealloc];
 }
 
@@ -123,7 +133,7 @@
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
-	err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, _fileType, &_outputASBD, NULL, &extAudioFileRef);
+	err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, [[_formatInfo valueForKey:@"fileType"] doubleValue], &_outputASBD, NULL, &extAudioFileRef);
 	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];

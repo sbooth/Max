@@ -22,10 +22,10 @@
 
 #import "EncoderTask.h"
 
-@interface CoreAudioEncoderEncoderTask : EncoderTask 
+@interface CoreAudioEncoderTask : EncoderTask 
 {
 	NSDictionary	*_formatInfo;
-}}
+}
 
 - (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track formatInfo:(NSDictionary *)formatInfo;
 

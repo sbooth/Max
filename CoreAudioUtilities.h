@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
+ *  $Id: UtilityFunctions.h 175 2005-11-25 04:56:46Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,22 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
-
-#include <CoreAudio/CoreAudioTypes.h>
-#include <AudioToolbox/AudioFile.h>
-
-@interface CoreAudioEncoder : Encoder
-{
-	int16_t							*_buf;
-	ssize_t							_buflen;
+#ifdef __cplusplus
+extern "C" {
+#endif
 	
-	AudioStreamBasicDescription		_inputASBD;
-	AudioStreamBasicDescription		_outputASBD;
+// Return an array of information on valid formats for output
+NSMutableArray * getCoreAudioWritableTypes();
 	
-	NSDictionary					*_formatInfo;
+#ifdef __cplusplus
 }
-
-- (id) initWithSource:(NSString *)source formatInfo:(NSDictionary *)formatInfo;
-
-@end
+#endif
