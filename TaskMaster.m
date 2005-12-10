@@ -121,21 +121,32 @@ static TaskMaster *sharedController = nil;
 	return (0 != [_rippingTasks count] || 0 != [_encodingTasks count]);
 }
 
-- (void) removeAllTasks
+- (IBAction) stopAllRippingTasks:(id)sender
 {
 	NSEnumerator	*enumerator;
 	RipperTask		*ripperTask;
-	EncoderTask		*encoderTask;
 	
 	enumerator = [_rippingTasks objectEnumerator];
 	while((ripperTask = [enumerator nextObject])) {
 		[ripperTask stop];
 	}
+}
 
+- (IBAction) stopAllEncodingTasks:(id)sender
+{
+	NSEnumerator	*enumerator;
+	EncoderTask		*encoderTask;
+	
 	enumerator = [_encodingTasks objectEnumerator];
 	while((encoderTask = [enumerator nextObject])) {
 		[encoderTask stop];
 	}
+}
+
+- (IBAction) stopAllTasks:(id)sender
+{
+	[self stopAllRippingTasks:sender];
+	[self stopAllEncodingTasks:sender];
 }
 
 - (BOOL) compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document
@@ -308,13 +319,23 @@ static TaskMaster *sharedController = nil;
 		
 		
 		if(nil != coreAudioFormats && 0 < [coreAudioFormats count]) {
+			EncoderTask		*encoderTask;
 			NSEnumerator	*formats		= [coreAudioFormats objectEnumerator];
 			NSDictionary	*formatInfo;
+			id				extensions;
+			NSString		*extension;
 			
 			while((formatInfo = [formats nextObject])) {
-				filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
+				extensions		= [formatInfo valueForKey:@"extensionsForType"];
+				if([extensions isKindOfClass:[NSArray class]]) {
+					extension = [extensions objectAtIndex:0];
+				}
+				else {
+					extension = extensions;
+				}
 				
-				EncoderTask *encoderTask = [[CoreAudioEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
+				filename		= generateUniqueFilename(basename, extension);
+				encoderTask		= [[CoreAudioEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	

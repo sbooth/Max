@@ -93,7 +93,7 @@
 		}
 		// Remove all tasks
 		else {
-			[[TaskMaster sharedController] removeAllTasks];
+			[[TaskMaster sharedController] stopAllTasks:self];
 		}
 	}
 	

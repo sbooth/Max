@@ -29,6 +29,7 @@
 
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
@@ -84,15 +85,16 @@
 {
 	OSStatus			err;
 	AudioBufferList		bufferList;
-	UInt32				frameCount;
-	ssize_t				bytesWritten		= 0;
-	ssize_t				bytesRead			= 0;
-	ssize_t				bytesToRead			= 0;
-	ssize_t				totalBytes			= 0;
+	UInt32				frameCount, size, bitrate, quality;
+	ssize_t				bytesWritten						= 0;
+	ssize_t				bytesRead							= 0;
+	ssize_t				bytesToRead							= 0;
+	ssize_t				totalBytes							= 0;
 	NSString			*file, *path;
 	FSRef				ref;
 	ExtAudioFileRef		extAudioFileRef;
-	NSDate				*startTime			= [NSDate date];
+	AudioConverterRef	converter;
+	NSDate				*startTime							= [NSDate date];
 	
 	
 	// Tell our owner we are starting
@@ -133,16 +135,61 @@
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
+	
 	err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, [[_formatInfo valueForKey:@"fileType"] doubleValue], &_outputASBD, NULL, &extAudioFileRef);
 	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
+	
 	err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(_inputASBD), &_inputASBD);
 	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set output file properties (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
+	
+	// Tweak converter settings
+	size = sizeof(converter);
+	err = ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_AudioConverter, &size, &converter);
+	if(noErr != err) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to get AudioConverter (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}
+
+	// Bitrate
+	if(nil != [_formatInfo objectForKey:@"bitrate"]) {
+		bitrate		= [[_formatInfo objectForKey:@"bitrate"] intValue] * 1000;
+		err			= AudioConverterSetProperty(converter, kAudioConverterEncodeBitRate, sizeof(bitrate), &bitrate);
+		if(noErr != err) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioConverter bitrate (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}		
+	}
+
+	// Quality
+	if(nil != [_formatInfo objectForKey:@"quality"]) {
+		quality		= [[_formatInfo objectForKey:@"quality"] intValue];
+		err			= AudioConverterSetProperty(converter, kAudioConverterCodecQuality, sizeof(quality), &quality);
+		if(noErr != err) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioConverter quality (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}		
+	}
+	
+	// Force update
+	CFArrayRef arrayRef;
+	size = sizeof(arrayRef);
+	err = AudioConverterGetProperty(converter, kAudioConverterPropertySettings, &size, &arrayRef);
+	if(noErr != err) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to get AudioConverter property settings (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}		
+
+	err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ConverterConfig, size, &arrayRef);
+	if(noErr != err) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioFile converter configuration (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}		
 	
 	// Iteratively get the PCM data and encode it
 	while(0 < bytesToRead) {

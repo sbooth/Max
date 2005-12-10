@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: TaskMaster.h 205 2005-12-05 06:04:34Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -37,7 +37,9 @@
 + (TaskMaster *)	sharedController;
 
 - (BOOL)			hasActiveTasks;
-- (void)			removeAllTasks;
+- (IBAction)		stopAllRippingTasks:(id)sender;
+- (IBAction)		stopAllEncodingTasks:(id)sender;
+- (IBAction)		stopAllTasks:(id)sender;
 
 - (BOOL)			compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document;
 - (void)			removeRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
