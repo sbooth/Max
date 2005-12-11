@@ -20,6 +20,7 @@
 
 #import "Ripper.h"
 #import "Track.h"
+#import "LogController.h"
 #import "CompactDiscDocument.h"
 #import "CompactDisc.h"
 #import "MallocException.h"
@@ -37,6 +38,36 @@ enum {
 	PARANOIA_LEVEL_FULL					= 0,
 	PARANOIA_LEVEL_OVERLAP_CHECKING		= 1
 };
+
+
+// cdparanoia callback
+static char *callback_strings[15] = {
+	"wrote",
+	"finished",
+	"read",
+	"verify",
+	"jitter",
+	"correction",
+	"scratch",
+	"scratch repair",
+	"skip",
+	"drift",
+	"backoff",
+	"overlap",
+	"dropped",
+	"duped",
+	"transport error"
+};
+
+static void 
+callback(long inpos, int function, void *userdata)
+{
+	Ripper *ripper = (Ripper *)userdata;
+	
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"]) {
+		[LogController logMessage:[NSString stringWithFormat:@"Rip status: %s sector %ld (%ld)", (function >= -2 && function <= 13 ? callback_strings[function + 2] : ""), inpos / CD_FRAMEWORDS, inpos]];
+	}	
+}
 
 @implementation Ripper
 
@@ -106,6 +137,9 @@ enum {
 		_firstSector	= [[_track valueForKey:@"firstSector"] unsignedLongValue];
 		_lastSector		= [[_track valueForKey:@"lastSector"] unsignedLongValue];
 		
+		[self setValue:[NSNumber numberWithUnsignedLong:(_lastSector - _firstSector)] forKey:@"totalSectors"];
+		[self setValue:[NSNumber numberWithUnsignedLong:0] forKey:@"currentSector"];
+		
 		// Go to the track's first sector in preparation for reading
 		long where = paranoia_seek(_paranoia, _firstSector, SEEK_SET);   	    
 		if(-1 == where) {
@@ -162,7 +196,7 @@ enum {
 		}
 		
 		// Read a chunk
-		buf = paranoia_read_limited(_paranoia, NULL, NULL, (-1 == _maximumRetries ? 20 : _maximumRetries));
+		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [ParanoiaException exceptionWithReason:@"Skip tolerance exceeded/Unable to access CD" userInfo:nil];
@@ -171,6 +205,7 @@ enum {
 		// Update status
 		sectorsToRead--;
 		if(0 == sectorsToRead % 10) {
+			[self setValue:[NSNumber numberWithUnsignedLong:(totalSectors - sectorsToRead)] forKey:@"currentSector"];
 			[self setValue:[NSNumber numberWithDouble:((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0] forKey:@"percentComplete"];
 			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 			unsigned int timeRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;

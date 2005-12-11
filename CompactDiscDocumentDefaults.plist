@@ -10,15 +10,19 @@
 	<false/>
 	<key>outputOggVorbis</key>
 	<false/>
-	<key>outputAAC</key>
-	<false/>
-	<key>customNamingUseFallback</key>
-	<false/>
+	<key>libsndfileOutputFormats</key>
+	<array/>
+	<key>coreAudioOutputFormats</key>
+	<array/>
 	<key>outputDirectory</key>
 	<string>~/Music/</string>
 	<key>useCustomNaming</key>
 	<false/>
 	<key>customNamingScheme</key>
 	<string></string>
+	<key>customNamingUseFallback</key>
+	<false/>
+	<key>customNamingUseTwoDigitTrackNumbers</key>
+	<false/>
 </dict>
 </plist>

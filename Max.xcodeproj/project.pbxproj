@@ -64,7 +64,7 @@
 		8CB0B088093AFBF300968F66 /* MPEGEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */; };
 		8CB0B38E093B301400968F66 /* FLACEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
-		8CB6E20108DACB8100345B8F /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING */; };
+		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
 		8CB86020093EE76D00A60FC1 /* GeneralToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB8601F093EE76D00A60FC1 /* GeneralToolbarImage.png */; };
 		8CB86028093EE79800A60FC1 /* OutputToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB86027093EE79800A60FC1 /* OutputToolbarImage.png */; };
 		8CB8602A093EE7E200A60FC1 /* RipperToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB86029093EE7E200A60FC1 /* RipperToolbarImage.png */; };
@@ -271,7 +271,7 @@
 		8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FLACEncoderTask.mm; sourceTree = "<group>"; };
 		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
 		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
-		8CB6E20008DACB8100345B8F /* COPYING */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		8CB6E20008DACB8100345B8F /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = file; path = COPYING.txt; sourceTree = "<group>"; };
 		8CB8601F093EE76D00A60FC1 /* GeneralToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GeneralToolbarImage.png; sourceTree = "<group>"; };
 		8CB86027093EE79800A60FC1 /* OutputToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OutputToolbarImage.png; sourceTree = "<group>"; };
 		8CB86029093EE7E200A60FC1 /* RipperToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RipperToolbarImage.png; sourceTree = "<group>"; };
@@ -507,7 +507,7 @@
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */,
 				8C4D464F093E776500A88927 /* Preferences.nib */,
-				8CB6E20008DACB8100345B8F /* COPYING */,
+				8CB6E20008DACB8100345B8F /* COPYING.txt */,
 				8CE6F51D08CD60970028DA37 /* Credits.rtf */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -782,7 +782,7 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				8CC111C408CA4538008BB9B0 /* CompactDiscDocument.nib in Resources */,
 				8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */,
-				8CB6E20108DACB8100345B8F /* COPYING in Resources */,
+				8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */,
 				8C4D4650093E776500A88927 /* Preferences.nib in Resources */,
 				8CBB8BA408EFAE53007197C3 /* TrackDefaults.plist in Resources */,
 				8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */,

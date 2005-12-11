@@ -81,7 +81,7 @@
 		[info setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
 		
 		// Album title
-		album = [[_track valueForKey:@"disc"] valueForKey:@"title"];
+		album = [_track valueForKeyPath:@"disc.title"];
 		if(nil != album) {
 			[info setValue:album forKey:@kAFInfoDictionary_Album];
 		}
@@ -89,7 +89,7 @@
 		// Artist (fall back to disc)
 		artist = [_track valueForKey:@"artist"];
 		if(nil == artist) {
-			artist = [[_track valueForKey:@"disc"] valueForKey:@"artist"];
+			artist = [_track valueForKeyPath:@"disc.artist"];
 		}
 		if(nil != artist) {
 			[info setValue:artist forKey:@kAFInfoDictionary_Artist];
@@ -98,7 +98,7 @@
 		// Genre (fall back to disc)
 		genre = [_track valueForKey:@"genre"];
 		if(nil == genre) {
-			genre = [[_track valueForKey:@"disc"] valueForKey:@"genre"];
+			genre = [_track valueForKeyPath:@"disc.genre"];
 		}
 		if(nil != genre) {
 			[info setValue:genre forKey:@kAFInfoDictionary_Genre];
@@ -107,14 +107,14 @@
 		// Year (fall back to disc)
 		year = [_track valueForKey:@"year"];
 		if(nil == year) {
-			year = [[_track valueForKey:@"disc"] valueForKey:@"year"];
+			year = [_track valueForKeyPath:@"disc.year"];
 		}
 		if(nil != year) {
 			[info setValue:year forKey:@kAFInfoDictionary_Year];
 		}
 		
 		// Comment
-		comment = [[_track valueForKey:@"disc"] valueForKey:@"comment"];
+		comment = [_track valueForKeyPath:@"disc.comment"];
 		if(nil != comment) {
 			[info setValue:comment forKey:@kAFInfoDictionary_Comments];
 		}
@@ -129,6 +129,12 @@
 		trackNumber = [_track valueForKey:@"number"];
 		if(nil != trackNumber) {
 			[info setValue:trackNumber forKey:@kAFInfoDictionary_TrackNumber];
+		}
+		
+		size = sizeof(info);
+		err = AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, &info);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set info dictionary (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 	}
 	

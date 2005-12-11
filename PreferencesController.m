@@ -147,7 +147,7 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 		
 		[toolbarItem setLabel: @"Formats"];
 		[toolbarItem setPaletteLabel: @"Formats"];
-		[toolbarItem setToolTip: @"Select desired output formats"];
+		[toolbarItem setToolTip: @"Output file format preferences"];
 		[toolbarItem setImage: [NSImage imageNamed:@"FormatsToolbarImage"]];
 		
 		[toolbarItem setTarget:self];

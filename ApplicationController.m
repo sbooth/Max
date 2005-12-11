@@ -29,6 +29,7 @@
 #import "EncoderController.h"
 #import "LogController.h"
 #import "UpdateChecker.h"
+#import "MacPADSocket.h"
 #import "IOException.h"
 #import "FreeDBProtocolValueTransformer.h"
 #import "BooleanArrayValueTransformer.h"
@@ -76,8 +77,32 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+	NSString		*bundleVersion;
+	MacPADSocket	*macPAD;
+	
 	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
 	[MediaController sharedController];
+	
+	// Check for new version
+	bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+	macPAD			= [[MacPADSocket alloc] init];
+
+	[macPAD setDelegate:self];
+	[macPAD performCheck:[NSURL URLWithString:@"http://sbooth.org/Max/Max.plist"] withVersion:bundleVersion];
+	[[macPAD retain] autorelease];
+}
+
+- (void) macPADCheckFinished:(NSNotification *) aNotification
+{
+	if(kMacPADResultNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue]) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle: @"OK"];
+		[alert setMessageText: @"Newer version available"];
+		[alert setInformativeText: [NSString stringWithFormat:@"Max %@ is available.", [[aNotification object] newVersion]]];
+		[alert setAlertStyle: NSInformationalAlertStyle];
+		
+		[alert runModal];
+	}
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender

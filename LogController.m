@@ -64,6 +64,11 @@ static LogController *sharedLog = nil;
 	[self setWindowFrameAutosaveName:@"Log"];	
 }
 
++ (void) logMessage:(NSString *)message
+{
+	[[LogController sharedController] logMessage:message];
+}
+
 - (IBAction) clear:(id)sender
 {
 	[[_logTextView textStorage] deleteCharactersInRange:NSMakeRange(0, [[_logTextView textStorage] length])];
@@ -103,7 +108,7 @@ static LogController *sharedLog = nil;
 	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@": "];
 	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:message];
 	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
-
+	
 	// Apply styles
 	[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
 	

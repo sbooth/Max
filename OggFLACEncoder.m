@@ -97,12 +97,15 @@
 	
 	// Initialize the OggFLAC encoder
 	if(NO == OggFLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(NO == OggFLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(OggFLAC__FILE_ENCODER_OK != OggFLAC__file_encoder_init(_flac)) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	

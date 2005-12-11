@@ -36,6 +36,9 @@
 	
 	unsigned long			_firstSector;
 	unsigned long			_lastSector;
+
+	NSNumber				*_totalSectors;
+	NSNumber				*_currentSector;
 	
 	NSNumber				*_started;
 	NSNumber				*_completed;

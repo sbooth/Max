@@ -435,7 +435,12 @@
 			[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
 		}
 		else {
-			[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[trackNumber stringValue] options:nil range:NSMakeRange(0, [customPath length])];
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"customNamingUseTwoDigitTrackNumbers"]) {
+				[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[NSString stringWithFormat:@"%02u", [trackNumber intValue]] options:nil range:NSMakeRange(0, [customPath length])];
+			}
+			else {
+				[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[trackNumber stringValue] options:nil range:NSMakeRange(0, [customPath length])];
+			}
 		}
 		if(nil == trackArtist) {
 			[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:@"Unknown Artist" options:nil range:NSMakeRange(0, [customPath length])];
@@ -463,7 +468,6 @@
 		}
 		
 		basename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
-		[customPath release];
 	}
 	// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
 	else if([_multiArtist boolValue]) {
@@ -521,8 +525,8 @@
 			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [_discNumber intValue], [[track valueForKey:@"number"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 	}
-	
-	return basename;
+
+	return [[basename retain] autorelease];
 }
 
 #pragma mark State
@@ -585,7 +589,7 @@
 		
 		while((track = [enumerator nextObject])) {
 			
-			basename = [self basenameForTrack:track];			
+			basename = [self basenameForTrack:track];
 			createDirectoryStructure(basename);
 			
 			[[TaskMaster sharedController] encodeTrack:track outputBasename:basename];

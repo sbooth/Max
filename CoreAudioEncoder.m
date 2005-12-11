@@ -94,6 +94,7 @@
 	FSRef				ref;
 	ExtAudioFileRef		extAudioFileRef;
 	AudioConverterRef	converter;
+	CFArrayRef			converterPropertySettings;
 	NSDate				*startTime							= [NSDate date];
 	
 	
@@ -176,16 +177,15 @@
 		}		
 	}
 	
-	// Force update
-	CFArrayRef arrayRef;
-	size = sizeof(arrayRef);
-	err = AudioConverterGetProperty(converter, kAudioConverterPropertySettings, &size, &arrayRef);
+	// Update
+	size = sizeof(converterPropertySettings);
+	err = AudioConverterGetProperty(converter, kAudioConverterPropertySettings, &size, &converterPropertySettings);
 	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to get AudioConverter property settings (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}		
 
-	err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ConverterConfig, size, &arrayRef);
+	err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ConverterConfig, size, &converterPropertySettings);
 	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioFile converter configuration (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];

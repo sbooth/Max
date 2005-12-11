@@ -1,6 +1,7 @@
 {
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {CLASS = RipperController; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }
     ); 
     IBVersion = 1; 

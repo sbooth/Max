@@ -26,6 +26,7 @@
 }
 
 + (LogController *)		sharedController;
++ (void)				logMessage:(NSString *)message;
 
 - (IBAction)			clear:(id)sender;
 - (IBAction)			save:(id)sender;

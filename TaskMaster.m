@@ -197,7 +197,7 @@ static TaskMaster *sharedController = nil;
 	[ripperTask addObserver:self forKeyPath:@"ripper.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
 		
 	// Show the ripper window if it is hidden
-	[[_ripperController window] makeKeyAndOrderFront:self];
+	[[_ripperController window] orderFront:self];
 	
 	// Add the ripper to our list of ripping tasks
 	[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[ripperTask autorelease]];
@@ -266,7 +266,7 @@ static TaskMaster *sharedController = nil;
 {
 	NSString *trackName = [[task valueForKey:@"track"] description];
 	
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip started for %@", trackName]];
+	[LogController logMessage:[NSString stringWithFormat:@"Rip started for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip started" description:trackName
 						   notificationName:@"Rip started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
@@ -275,7 +275,7 @@ static TaskMaster *sharedController = nil;
 {
 	NSString *trackName = [[task valueForKey:@"track"] description];
 
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip stopped for %@", trackName]];
+	[LogController logMessage:[NSString stringWithFormat:@"Rip stopped for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip stopped" description:trackName
 						   notificationName:@"Rip stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
@@ -293,7 +293,7 @@ static TaskMaster *sharedController = nil;
 	NSString		*filename			= nil;
 
 		
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip completed for %@", trackName]];
+	[LogController logMessage:[NSString stringWithFormat:@"Rip completed for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:trackName
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
@@ -344,7 +344,7 @@ static TaskMaster *sharedController = nil;
 				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
 				
 				// Show the encoder window if it is hidden
-				[[_encoderController window] makeKeyAndOrderFront:self];
+				[[_encoderController window] orderFront:self];
 				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
@@ -367,7 +367,7 @@ static TaskMaster *sharedController = nil;
 				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
 				
 				// Show the encoder window if it is hidden
-				[[_encoderController window] makeKeyAndOrderFront:self];
+				[[_encoderController window] orderFront:self];
 				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
@@ -396,7 +396,7 @@ static TaskMaster *sharedController = nil;
 	[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
 	
 	// Show the encoder window if it is hidden
-	[[_encoderController window] makeKeyAndOrderFront:self];
+	[[_encoderController window] orderFront:self];
 	
 	// Add the encoder to our list of encoding tasks
 	[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
@@ -443,7 +443,7 @@ static TaskMaster *sharedController = nil;
 	NSString	*trackName		= [[task valueForKey:@"track"] description];
 	NSString	*type			= [task getType];
 
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode started for %@ [%@]", trackName, type]];
+	[LogController logMessage:[NSString stringWithFormat:@"Encode started for %@ [%@]", trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
@@ -453,7 +453,7 @@ static TaskMaster *sharedController = nil;
 	NSString	*trackName		= [[task valueForKey:@"track"] description];
 	NSString	*type			= [task getType];
 
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode stopped for %@ [%@]", trackName, type]];
+	[LogController logMessage:[NSString stringWithFormat:@"Encode stopped for %@ [%@]", trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
@@ -466,7 +466,7 @@ static TaskMaster *sharedController = nil;
 	NSString	*trackName		= [[task valueForKey:@"track"] description];
 	NSString	*type			= [task getType];
 	
-	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];
+	[LogController logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
