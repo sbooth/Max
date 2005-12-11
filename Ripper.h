@@ -32,6 +32,8 @@
 	cdrom_paranoia			*_paranoia;
 	cdrom_drive				*_drive;
 	
+	BOOL					_logActivity;
+	
 	int						_maximumRetries;
 	
 	unsigned long			_firstSector;

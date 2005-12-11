@@ -9,7 +9,7 @@
 		};
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = Release;
 		activeBuildStyle = 4A9504CCFFE6A4B311CA0CBA /* Development */;
 		activeExecutable = 8C02E08608C01606000288FA /* Max */;
 		activeTarget = 8D1107260486CEB800E47090 /* Max */;
@@ -192,8 +192,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 156008941;
-			PBXWorkspaceStateSaveDate = 156008941;
+			PBXPerProjectTemplateStateSaveDate = 156035347;
+			PBXWorkspaceStateSaveDate = 156035347;
 		};
 		perUserProjectItems = {
 			8C124A1B08C5B455008C8FBD /* PBXTextBookmark */ = 8C124A1B08C5B455008C8FBD /* PBXTextBookmark */;
@@ -375,8 +375,8 @@
 	8C206F130929486C00793FD0 /* TaskMaster.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1052, 6692}}";
-			sepNavSelRange = "{13815, 0}";
-			sepNavVisRect = "{{0, 5223}, {719, 713}}";
+			sepNavSelRange = "{6678, 0}";
+			sepNavVisRect = "{{0, 2904}, {742, 338}}";
 			sepNavWindowFrame = "{{15, 41}, {764, 786}}";
 		};
 	};
@@ -1009,17 +1009,17 @@
 	};
 	8CBB3C5608D8CC7A005266A8 /* Ripper.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {762, 812}}";
-			sepNavSelRange = "{1241, 0}";
-			sepNavVisRect = "{{0, 25}, {762, 715}}";
+			sepNavIntBoundsRect = "{{0, 0}, {762, 840}}";
+			sepNavSelRange = "{1093, 0}";
+			sepNavVisRect = "{{0, 97}, {762, 715}}";
 			sepNavWindowFrame = "{{15, 44}, {807, 788}}";
 		};
 	};
 	8CBB3C5708D8CC7A005266A8 /* Ripper.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1232, 3220}}";
-			sepNavSelRange = "{1962, 0}";
-			sepNavVisRect = "{{0, 1120}, {776, 295}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1640, 3374}}";
+			sepNavSelRange = "{2181, 0}";
+			sepNavVisRect = "{{0, 1256}, {907, 724}}";
 			sepNavWindowFrame = "{{15, 30}, {952, 797}}";
 		};
 	};
