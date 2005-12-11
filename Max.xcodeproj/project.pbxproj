@@ -197,7 +197,6 @@
 		8C4015730948E433003413BE /* CoreAudioEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoderTask.m; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FreeDBMatches.nib; sourceTree = "<group>"; };
-		8C440DC1092E8B3C00A053AA /* Tasks.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Tasks.nib; sourceTree = "<group>"; };
 		8C4961EA09472D70006E1765 /* libOggFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOggFLAC.a; sourceTree = "<group>"; };
 		8C4961F009472D95006E1765 /* OggFLACEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoder.h; sourceTree = "<group>"; };
 		8C4961F109472D95006E1765 /* OggFLACEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACEncoder.m; sourceTree = "<group>"; };
@@ -504,7 +503,6 @@
 				8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */,
 				8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */,
 				8C3101270931297C000A50FC /* Max.icns */,
-				8C440DC1092E8B3C00A053AA /* Tasks.nib */,
 				8C440DBB092E8B3000A053AA /* FreeDBMatches.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */,

@@ -113,7 +113,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) dealloc
 {
-	[self stopAllTasks];
+	[self stopAllTasks:self];
 
 	[_ripperController release];
 	[_encoderController release];
@@ -130,7 +130,7 @@ static TaskMaster *sharedController = nil;
 - (BOOL)		hasRippingTasks								{ return (0 != [_rippingTasks count]); }
 - (BOOL)		hasEncodingTasks							{ return (0 != [_encodingTasks count]);	 }
 
-- (void) stopAllRippingTasks
+- (IBAction) stopAllRippingTasks:(id)sender
 {
 	NSEnumerator	*enumerator;
 	RipperTask		*ripperTask;
@@ -141,7 +141,7 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
-- (void) stopAllEncodingTasks
+- (IBAction) stopAllEncodingTasks:(id)sender
 {
 	NSEnumerator	*enumerator;
 	EncoderTask		*encoderTask;
@@ -152,10 +152,10 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
-- (void) stopAllTasks
+- (IBAction) stopAllTasks:(id)sender
 {
-	[self stopAllRippingTasks];
-	[self stopAllEncodingTasks];
+	[self stopAllRippingTasks:sender];
+	[self stopAllEncodingTasks:sender];
 }
 
 - (BOOL) compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document
@@ -196,6 +196,9 @@ static TaskMaster *sharedController = nil;
 	[ripperTask addObserver:self forKeyPath:@"ripper.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
 	[ripperTask addObserver:self forKeyPath:@"ripper.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
 		
+	// Show the ripper window if it is hidden
+	[[_ripperController window] makeKeyAndOrderFront:self];
+	
 	// Add the ripper to our list of ripping tasks
 	[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[ripperTask autorelease]];
 	[self spawnRipperThreads];
@@ -254,10 +257,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) spawnRipperThreads
 {
-	if(0 != [_rippingTasks count] && NO == [[[[_rippingTasks objectAtIndex:0] valueForKey:@"ripper"] valueForKey:@"started"] boolValue]) {
-		// Show the ripper window if it is hidden
-		[[_ripperController window] makeKeyAndOrderFront:self];
-		
+	if(0 != [_rippingTasks count] && NO == [[[_rippingTasks objectAtIndex:0] valueForKeyPath:@"ripper.started"] boolValue]) {
 		[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
 	}
 }
@@ -343,6 +343,9 @@ static TaskMaster *sharedController = nil;
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
 				
+				// Show the encoder window if it is hidden
+				[[_encoderController window] makeKeyAndOrderFront:self];
+				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
 				[self spawnEncoderThreads];
@@ -362,6 +365,9 @@ static TaskMaster *sharedController = nil;
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
+				
+				// Show the encoder window if it is hidden
+				[[_encoderController window] makeKeyAndOrderFront:self];
 				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
@@ -388,6 +394,9 @@ static TaskMaster *sharedController = nil;
 	[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 	[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 	[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
+	
+	// Show the encoder window if it is hidden
+	[[_encoderController window] makeKeyAndOrderFront:self];
 	
 	// Add the encoder to our list of encoding tasks
 	[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
@@ -424,9 +433,6 @@ static TaskMaster *sharedController = nil;
 	// Start encoding the next track(s)
 	for(i = 0; i < limit; ++i) {
 		if(NO == [[[[_encodingTasks objectAtIndex:i] valueForKey:@"encoder"] valueForKey:@"started"] boolValue]) {
-			// Show the encoder window if it is hidden
-			[[_encoderController window] makeKeyAndOrderFront:self];
-			
 			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
 		}
 	}	

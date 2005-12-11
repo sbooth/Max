@@ -68,7 +68,7 @@
 	
 	
 	// Album title
-	album = [[_track valueForKey:@"disc"] valueForKey:@"title"];
+	album = [_track valueForKeyPath:@"disc.title"];
 	if(nil != album) {
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
@@ -76,7 +76,7 @@
 	// Artist (fall back to disc)
 	artist = [_track valueForKey:@"artist"];
 	if(nil == artist) {
-		artist = [[_track valueForKey:@"disc"] valueForKey:@"artist"];
+		artist = [_track valueForKeyPath:@"disc.artist"];
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
@@ -85,7 +85,7 @@
 	// Genre (fall back to disc)
 	genre = [_track valueForKey:@"genre"];
 	if(nil == genre) {
-		genre = [[_track valueForKey:@"disc"] valueForKey:@"genre"];
+		genre = [_track valueForKeyPath:@"disc.genre"];
 	}
 	if(nil != genre) {
 		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
@@ -94,14 +94,14 @@
 	// Year (fall back to disc)
 	year = [_track valueForKey:@"year"];
 	if(nil == year) {
-		year = [[_track valueForKey:@"disc"] valueForKey:@"year"];
+		year = [_track valueForKeyPath:@"disc.year"];
 	}
 	if(nil != year) {
 		f.tag()->setYear([year intValue]);
 	}
 	
 	// Comment
-	comment = [[_track valueForKey:@"disc"] valueForKey:@"comment"];
+	comment = [_track valueForKeyPath:@"disc.comment"];
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
@@ -114,7 +114,7 @@
 	
 	// Track number
 	trackNumber = [_track valueForKey:@"number"];
-	totalTracks = [[[_track valueForKey:@"disc"] valueForKey:@"tracks"] count];
+	totalTracks = [[_track valueForKeyPath:@"disc.tracks"] count];
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
 	if(nil == frame) {
 		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
@@ -123,8 +123,8 @@
 	f.ID3v2Tag()->addFrame(frame);
 	
 	// Disc number
-	discNumber = [[_track valueForKey:@"disc"] valueForKey:@"discNumber"];
-	discsInSet = [[_track valueForKey:@"disc"] valueForKey:@"discsInSet"];
+	discNumber = [_track valueForKeyPath:@"disc.discNumber"];
+	discsInSet = [_track valueForKeyPath:@"disc.discsInSet"];
 	
 	if(nil != discNumber && nil != discsInSet) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);

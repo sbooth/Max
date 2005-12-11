@@ -51,7 +51,7 @@ getCoreAudioEncodeFormats()
 	err					= AudioFormatGetPropertyInfo(kAudioFormatProperty_EncodeFormatIDs, 0, NULL, &size);
 	writableFormats		= malloc(size);
 	if(NULL == writableFormats) {
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	numWritableFormats	= size / sizeof(UInt32);
 	result				= [NSMutableArray arrayWithCapacity:numWritableFormats];
@@ -93,7 +93,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 	numDataFormats	= size / sizeof(OSType);
 	formatIDs		= malloc(size);
 	if(NULL == formatIDs) {
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	err				= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AvailableFormatIDs, sizeof(UInt32), &filetype, &size, formatIDs);
 	result			= [NSMutableArray arrayWithCapacity:numDataFormats];
@@ -110,7 +110,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 		err				= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(AudioFileTypeAndFormatID), &tf, &size);
 		variants		= malloc(size);
 		if(NULL == variants) {
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		numVariants		= size / sizeof(AudioStreamBasicDescription);
 		variantsA		= [NSMutableArray arrayWithCapacity:numVariants];
@@ -153,7 +153,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 				err			= AudioConverterGetPropertyInfo(dummyConverter, kAudioConverterApplicableEncodeBitRates, &size, NULL);
 				bitrates	= malloc(size);
 				if(NULL == bitrates) {
-					@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+					@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 				}
 				err			= AudioConverterGetProperty(dummyConverter, kAudioConverterApplicableEncodeBitRates, &size, bitrates);
 				if(noErr == err) {
@@ -257,7 +257,7 @@ getCoreAudioWritableTypes()
 	err					= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size);
 	fileFormats			= malloc(size);
 	if(NULL == fileFormats) {
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	numFileFormats		= size / sizeof(UInt32);
 	result				= [NSMutableArray arrayWithCapacity:numFileFormats];

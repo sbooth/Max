@@ -90,7 +90,7 @@ enum {
 			_gfp = lame_init();
 			if(NULL == _gfp) {
 				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 			}
 			
 			// We know the input is coming from a CD
@@ -183,14 +183,14 @@ enum {
 	_source = open([_sourceFilename UTF8String], O_RDONLY);
 	if(-1 == _source) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_source, &sourceStat)) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Allocate the buffer
@@ -198,7 +198,7 @@ enum {
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	totalBytes		= sourceStat.st_size;
@@ -208,7 +208,7 @@ enum {
 	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if(-1 == _out) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Iteratively get the PCM data and encode it
@@ -223,7 +223,7 @@ enum {
 		bytesRead = read(_source, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		// Encode the PCM data
@@ -243,25 +243,25 @@ enum {
 	// Close the input file
 	if(-1 == close(_source)) {
 		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Close the output file
 	if(-1 == close(_out)) {
 		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Write the Xing VBR tag
 	file = fopen([filename UTF8String], "r+");
 	if(NULL == file) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	lame_mp3_tags_fid(_gfp, file);
 	if(EOF == fclose(file)) {
 		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
@@ -287,7 +287,7 @@ enum {
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		lameResult = lame_encode_buffer_interleaved(_gfp, chunk, numSamples / 2, buf, bufSize);
@@ -299,7 +299,7 @@ enum {
 		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 	}
 	
@@ -331,7 +331,7 @@ enum {
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		// Flush the mp3 buffer
@@ -345,7 +345,7 @@ enum {
 		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 	}
 	

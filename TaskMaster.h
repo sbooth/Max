@@ -42,9 +42,9 @@
 - (BOOL)			hasRippingTasks;
 - (BOOL)			hasEncodingTasks;
 
-- (void)			stopAllRippingTasks;
-- (void)			stopAllEncodingTasks;
-- (void)			stopAllTasks;
+- (IBAction)		stopAllRippingTasks:(id)sender;
+- (IBAction)		stopAllEncodingTasks:(id)sender;
+- (IBAction)		stopAllTasks:(id)sender;
 
 - (BOOL)			compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document;
 - (void)			stopRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;

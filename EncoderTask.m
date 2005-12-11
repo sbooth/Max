@@ -57,7 +57,7 @@
 - (void) removeOutputFile
 {
 	if(-1 == unlink([_target UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}	
 }
 

@@ -17,9 +17,7 @@
 			8D1107260486CEB800E47090 /* Max */,
 		);
 		breakpoints = (
-			8CEDBEC9094B7D080023DD01 /* CoreAudioEncoder.m:152 */,
-			8CEDBF79094B85AF0023DD01 /* CoreAudioEncoderTask.m:75 */,
-			8CEDC1C3094BF60D0023DD01 /* TaskMaster.m:288 */,
+			8CEDC344094C05EB0023DD01 /* TaskMaster.m:190 */,
 		);
 		breakpointsGroup = 8C191A5C08C516BE00CB7453 /* XCBreakpointsBucket */;
 		codeSenseManager = 8C02E09208C0160A000288FA /* Code sense */;
@@ -554,6 +552,64 @@
 			8CEDC22A094BFC890023DD01 /* PBXTextBookmark */ = 8CEDC22A094BFC890023DD01 /* PBXTextBookmark */;
 			8CEDC22B094BFC890023DD01 /* PBXTextBookmark */ = 8CEDC22B094BFC890023DD01 /* PBXTextBookmark */;
 			8CEDC22C094BFC890023DD01 /* PBXTextBookmark */ = 8CEDC22C094BFC890023DD01 /* PBXTextBookmark */;
+			8CEDC2C5094BFDDF0023DD01 /* PBXTextBookmark */ = 8CEDC2C5094BFDDF0023DD01 /* PBXTextBookmark */;
+			8CEDC2C6094BFDDF0023DD01 /* PBXTextBookmark */ = 8CEDC2C6094BFDDF0023DD01 /* PBXTextBookmark */;
+			8CEDC2C7094BFDDF0023DD01 /* PBXTextBookmark */ = 8CEDC2C7094BFDDF0023DD01 /* PBXTextBookmark */;
+			8CEDC2C8094BFDDF0023DD01 /* PBXTextBookmark */ = 8CEDC2C8094BFDDF0023DD01 /* PBXTextBookmark */;
+			8CEDC2C9094BFDDF0023DD01 /* PBXTextBookmark */ = 8CEDC2C9094BFDDF0023DD01 /* PBXTextBookmark */;
+			8CEDC2CC094BFE280023DD01 /* PBXBookmark */ = 8CEDC2CC094BFE280023DD01 /* PBXBookmark */;
+			8CEDC2D3094BFEE40023DD01 /* PBXTextBookmark */ = 8CEDC2D3094BFEE40023DD01 /* PBXTextBookmark */;
+			8CEDC2DB094BFFD10023DD01 /* PBXTextBookmark */ = 8CEDC2DB094BFFD10023DD01 /* PBXTextBookmark */;
+			8CEDC2DC094C00120023DD01 /* PBXTextBookmark */ = 8CEDC2DC094C00120023DD01 /* PBXTextBookmark */;
+			8CEDC2DD094C00120023DD01 /* PBXTextBookmark */ = 8CEDC2DD094C00120023DD01 /* PBXTextBookmark */;
+			8CEDC2E2094C002E0023DD01 /* PBXTextBookmark */ = 8CEDC2E2094C002E0023DD01 /* PBXTextBookmark */;
+			8CEDC2F5094C02900023DD01 /* PBXTextBookmark */ = 8CEDC2F5094C02900023DD01 /* PBXTextBookmark */;
+			8CEDC2F6094C02900023DD01 /* PBXTextBookmark */ = 8CEDC2F6094C02900023DD01 /* PBXTextBookmark */;
+			8CEDC2F7094C02900023DD01 /* PBXTextBookmark */ = 8CEDC2F7094C02900023DD01 /* PBXTextBookmark */;
+			8CEDC2F8094C02900023DD01 /* PBXTextBookmark */ = 8CEDC2F8094C02900023DD01 /* PBXTextBookmark */;
+			8CEDC2F9094C02900023DD01 /* PBXTextBookmark */ = 8CEDC2F9094C02900023DD01 /* PBXTextBookmark */;
+			8CEDC2FA094C02900023DD01 /* PBXTextBookmark */ = 8CEDC2FA094C02900023DD01 /* PBXTextBookmark */;
+			8CEDC2FB094C02900023DD01 /* PBXTextBookmark */ = 8CEDC2FB094C02900023DD01 /* PBXTextBookmark */;
+			8CEDC302094C02B60023DD01 /* PBXTextBookmark */ = 8CEDC302094C02B60023DD01 /* PBXTextBookmark */;
+			8CEDC303094C02B60023DD01 /* PBXTextBookmark */ = 8CEDC303094C02B60023DD01 /* PBXTextBookmark */;
+			8CEDC304094C02B60023DD01 /* PBXTextBookmark */ = 8CEDC304094C02B60023DD01 /* PBXTextBookmark */;
+			8CEDC305094C02B60023DD01 /* PBXTextBookmark */ = 8CEDC305094C02B60023DD01 /* PBXTextBookmark */;
+			8CEDC306094C02B60023DD01 /* PBXTextBookmark */ = 8CEDC306094C02B60023DD01 /* PBXTextBookmark */;
+			8CEDC307094C02B60023DD01 /* PBXTextBookmark */ = 8CEDC307094C02B60023DD01 /* PBXTextBookmark */;
+			8CEDC308094C02B60023DD01 /* PBXTextBookmark */ = 8CEDC308094C02B60023DD01 /* PBXTextBookmark */;
+			8CEDC30D094C03110023DD01 /* PBXTextBookmark */ = 8CEDC30D094C03110023DD01 /* PBXTextBookmark */;
+			8CEDC30E094C03110023DD01 /* PBXTextBookmark */ = 8CEDC30E094C03110023DD01 /* PBXTextBookmark */;
+			8CEDC314094C03730023DD01 /* PBXTextBookmark */ = 8CEDC314094C03730023DD01 /* PBXTextBookmark */;
+			8CEDC315094C03730023DD01 /* PBXTextBookmark */ = 8CEDC315094C03730023DD01 /* PBXTextBookmark */;
+			8CEDC319094C03DA0023DD01 /* PBXTextBookmark */ = 8CEDC319094C03DA0023DD01 /* PBXTextBookmark */;
+			8CEDC31A094C03DA0023DD01 /* PBXTextBookmark */ = 8CEDC31A094C03DA0023DD01 /* PBXTextBookmark */;
+			8CEDC328094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC328094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC329094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC329094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC32A094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC32A094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC32B094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC32B094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC32C094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC32C094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC32D094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC32D094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC32E094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC32E094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC32F094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC32F094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC330094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC330094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC331094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC331094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC332094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC332094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC333094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC333094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC334094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC334094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC335094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC335094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC336094C05C20023DD01 /* PBXTextBookmark */ = 8CEDC336094C05C20023DD01 /* PBXTextBookmark */;
+			8CEDC33A094C05CE0023DD01 /* PBXTextBookmark */ = 8CEDC33A094C05CE0023DD01 /* PBXTextBookmark */;
+			8CEDC33B094C05CE0023DD01 /* PBXTextBookmark */ = 8CEDC33B094C05CE0023DD01 /* PBXTextBookmark */;
+			8CEDC33C094C05CE0023DD01 /* PBXTextBookmark */ = 8CEDC33C094C05CE0023DD01 /* PBXTextBookmark */;
+			8CEDC33D094C05CE0023DD01 /* PBXTextBookmark */ = 8CEDC33D094C05CE0023DD01 /* PBXTextBookmark */;
+			8CEDC33E094C05CE0023DD01 /* PBXTextBookmark */ = 8CEDC33E094C05CE0023DD01 /* PBXTextBookmark */;
+			8CEDC342094C05E30023DD01 /* PBXBookmark */ = 8CEDC342094C05E30023DD01 /* PBXBookmark */;
+			8CEDC347094C05F70023DD01 /* PBXTextBookmark */ = 8CEDC347094C05F70023DD01 /* PBXTextBookmark */;
+			8CEDC348094C05F70023DD01 /* PBXTextBookmark */ = 8CEDC348094C05F70023DD01 /* PBXTextBookmark */;
+			8CEDC34C094C06000023DD01 /* PBXTextBookmark */ = 8CEDC34C094C06000023DD01 /* PBXTextBookmark */;
+			8CEDC34E094C06A10023DD01 /* PBXTextBookmark */ = 8CEDC34E094C06A10023DD01 /* PBXTextBookmark */;
+			8CEDC34F094C06A10023DD01 /* PBXTextBookmark */ = 8CEDC34F094C06A10023DD01 /* PBXTextBookmark */;
+			8CEDC353094C06E60023DD01 /* PBXTextBookmark */ = 8CEDC353094C06E60023DD01 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
 			8CFDCBD008ECA53C00EBB077 = 8CFDCBD008ECA53C00EBB077 /* PBXTextBookmark */;
 		};
@@ -626,9 +682,9 @@
 	};
 	8C040A2F092AB41A0052D881 /* RipperTask.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1034, 1792}}";
-			sepNavSelRange = "{2726, 0}";
-			sepNavVisRect = "{{0, 1168}, {742, 338}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1190, 1848}}";
+			sepNavSelRange = "{2878, 0}";
+			sepNavVisRect = "{{0, 1214}, {747, 528}}";
 			sepNavWindowFrame = "{{15, 41}, {764, 786}}";
 		};
 	};
@@ -643,8 +699,8 @@
 	8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1322, 3528}}";
-			sepNavSelRange = "{4995, 21}";
-			sepNavVisRect = "{{0, 1647}, {791, 637}}";
+			sepNavSelRange = "{9800, 0}";
+			sepNavVisRect = "{{0, 2893}, {747, 528}}";
 			sepNavWindowFrame = "{{15, 117}, {836, 710}}";
 		};
 	};
@@ -698,9 +754,7 @@
 		isa = XCBreakpointsBucket;
 		name = "Project Breakpoints";
 		objects = (
-			8CEDBEC9094B7D080023DD01 /* CoreAudioEncoder.m:152 */,
-			8CEDBF79094B85AF0023DD01 /* CoreAudioEncoderTask.m:75 */,
-			8CEDC1C3094BF60D0023DD01 /* TaskMaster.m:288 */,
+			8CEDC344094C05EB0023DD01 /* TaskMaster.m:190 */,
 		);
 	};
 	8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */ = {
@@ -723,9 +777,9 @@
 	};
 	8C206F130929486C00793FD0 /* TaskMaster.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1052, 6608}}";
-			sepNavSelRange = "{2486, 10}";
-			sepNavVisRect = "{{0, 846}, {742, 338}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1052, 6692}}";
+			sepNavSelRange = "{15913, 0}";
+			sepNavVisRect = "{{0, 5616}, {719, 713}}";
 			sepNavWindowFrame = "{{15, 41}, {764, 786}}";
 		};
 	};
@@ -841,8 +895,8 @@
 	8C4D4656093E7A6100A88927 /* FreeDBPreferencesController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {938, 966}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRect = "{{0, 141}, {776, 295}}";
+			sepNavSelRange = "{1987, 11}";
+			sepNavVisRect = "{{0, 628}, {742, 338}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -1013,8 +1067,8 @@
 	8C76E43A08C6DE3900F4F9A1 /* Track.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {854, 3276}}";
-			sepNavSelRange = "{4948, 0}";
-			sepNavVisRect = "{{0, 2171}, {711, 715}}";
+			sepNavSelRange = "{6536, 11}";
+			sepNavVisRect = "{{0, 2938}, {742, 338}}";
 			sepNavWindowFrame = "{{90, 30}, {756, 788}}";
 		};
 	};
@@ -1029,7 +1083,7 @@
 	8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {776, 2590}}";
-			sepNavSelRange = "{3256, 0}";
+			sepNavSelRange = "{3261, 0}";
 			sepNavVisRect = "{{0, 1218}, {776, 295}}";
 			sepNavWindowFrame = "{{15, 117}, {836, 710}}";
 		};
@@ -1199,8 +1253,8 @@
 	8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {836, 2674}}";
-			sepNavSelRange = "{5598, 0}";
-			sepNavVisRect = "{{0, 1819}, {830, 700}}";
+			sepNavSelRange = "{4100, 0}";
+			sepNavVisRect = "{{4, 2336}, {742, 338}}";
 			sepNavWindowFrame = "{{38, 33}, {875, 773}}";
 		};
 	};
@@ -1214,9 +1268,9 @@
 	};
 	8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {830, 1624}}";
-			sepNavSelRange = "{1371, 0}";
-			sepNavVisRect = "{{0, 273}, {830, 700}}";
+			sepNavIntBoundsRect = "{{0, 0}, {742, 1624}}";
+			sepNavSelRange = "{2590, 0}";
+			sepNavVisRect = "{{0, 1137}, {742, 338}}";
 			sepNavWindowFrame = "{{15, 54}, {875, 773}}";
 		};
 	};
@@ -1290,9 +1344,9 @@
 	};
 	8CB861FC093F177200A60FC1 /* OggVorbisEncoderTask.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {699, 1624}}";
-			sepNavSelRange = "{892, 0}";
-			sepNavVisRect = "{{0, 0}, {699, 637}}";
+			sepNavIntBoundsRect = "{{0, 0}, {742, 1624}}";
+			sepNavSelRange = "{2640, 0}";
+			sepNavVisRect = "{{0, 1286}, {742, 338}}";
 			sepNavWindowFrame = "{{130, 12}, {744, 710}}";
 		};
 	};
@@ -1314,9 +1368,9 @@
 	};
 	8CBB3C5708D8CC7A005266A8 /* Ripper.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {980, 2730}}";
-			sepNavSelRange = "{5035, 0}";
-			sepNavVisRect = "{{0, 2006}, {907, 724}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1148, 2730}}";
+			sepNavSelRange = "{4982, 0}";
+			sepNavVisRect = "{{0, 1899}, {747, 528}}";
 			sepNavWindowFrame = "{{15, 30}, {952, 797}}";
 		};
 	};
@@ -1668,7 +1722,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 316";
 		rLen = 0;
-		rLoc = 11571;
+		rLoc = 11619;
 		rType = 0;
 		vrLen = 1272;
 		vrLoc = 10724;
@@ -1678,7 +1732,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 316";
 		rLen = 0;
-		rLoc = 11571;
+		rLoc = 11619;
 		rType = 0;
 		vrLen = 1272;
 		vrLoc = 10724;
@@ -1696,7 +1750,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 316";
 		rLen = 0;
-		rLoc = 11571;
+		rLoc = 11619;
 		rType = 0;
 		vrLen = 1272;
 		vrLoc = 10724;
@@ -1744,7 +1798,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: err";
 		rLen = 0;
-		rLoc = 4703;
+		rLoc = 4787;
 		rType = 0;
 		vrLen = 1204;
 		vrLoc = 3537;
@@ -1754,7 +1808,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: err";
 		rLen = 0;
-		rLoc = 4703;
+		rLoc = 4787;
 		rType = 0;
 		vrLen = 1204;
 		vrLoc = 3537;
@@ -1764,7 +1818,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: err";
 		rLen = 0;
-		rLoc = 4703;
+		rLoc = 4787;
 		rType = 0;
 		vrLen = 1191;
 		vrLoc = 3769;
@@ -1782,7 +1836,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: err";
 		rLen = 0;
-		rLoc = 4703;
+		rLoc = 4787;
 		rType = 0;
 		vrLen = 1191;
 		vrLoc = 3769;
@@ -1830,7 +1884,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1246;
 		vrLoc = 3856;
@@ -1858,7 +1912,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: valueForKey";
 		rLen = 0;
-		rLoc = 5068;
+		rLoc = 5152;
 		rType = 0;
 		vrLen = 1400;
 		vrLoc = 1798;
@@ -1894,7 +1948,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1246;
 		vrLoc = 3856;
@@ -1904,7 +1958,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1246;
 		vrLoc = 3856;
@@ -1922,7 +1976,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1246;
 		vrLoc = 3856;
@@ -1950,7 +2004,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10245;
@@ -1970,7 +2024,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 233";
 		rLen = 0;
-		rLoc = 9763;
+		rLoc = 9875;
 		rType = 0;
 		vrLen = 1752;
 		vrLoc = 9384;
@@ -1984,7 +2038,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10248;
@@ -2014,7 +2068,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10248;
@@ -2028,7 +2082,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 324";
 		rLen = 0;
-		rLoc = 11488;
+		rLoc = 11536;
 		rType = 0;
 		vrLen = 2578;
 		vrLoc = 9816;
@@ -2038,7 +2092,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 319";
 		rLen = 0;
-		rLoc = 11435;
+		rLoc = 11483;
 		rType = 0;
 		vrLen = 2560;
 		vrLoc = 9816;
@@ -2048,7 +2102,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 319";
 		rLen = 0;
-		rLoc = 11435;
+		rLoc = 11483;
 		rType = 0;
 		vrLen = 2560;
 		vrLoc = 9816;
@@ -2058,7 +2112,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10248;
@@ -2068,7 +2122,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 319";
 		rLen = 0;
-		rLoc = 11435;
+		rLoc = 11483;
 		rType = 0;
 		vrLen = 2560;
 		vrLoc = 9816;
@@ -2078,7 +2132,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 319";
 		rLen = 0;
-		rLoc = 11435;
+		rLoc = 11483;
 		rType = 0;
 		vrLen = 2560;
 		vrLoc = 9816;
@@ -2088,7 +2142,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10248;
@@ -2098,7 +2152,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10248;
@@ -2125,7 +2179,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10248;
@@ -2159,7 +2213,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "for(j = 0; j < [dataFormats count]; ++j) {";
 		rLen = 45;
-		rLoc = 10759;
+		rLoc = 10899;
 		rType = 0;
 		vrLen = 888;
 		vrLoc = 10248;
@@ -2191,7 +2245,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 96";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 530;
 		vrLoc = 2835;
@@ -2211,7 +2265,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 96";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 530;
 		vrLoc = 2835;
@@ -2221,7 +2275,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: err";
 		rLen = 0;
-		rLoc = 6286;
+		rLoc = 6370;
 		rType = 0;
 		vrLen = 2432;
 		vrLoc = 4537;
@@ -2231,7 +2285,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: 164";
 		rLen = 0;
-		rLoc = 6286;
+		rLoc = 6370;
 		rType = 0;
 		vrLen = 2432;
 		vrLoc = 4537;
@@ -2241,7 +2295,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: NSLog";
 		rLen = 0;
-		rLoc = 6286;
+		rLoc = 6370;
 		rType = 0;
 		vrLen = 2367;
 		vrLoc = 4537;
@@ -2251,7 +2305,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 96";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 530;
 		vrLoc = 2835;
@@ -2297,7 +2351,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: 160";
 		rLen = 0;
-		rLoc = 6286;
+		rLoc = 6370;
 		rType = 0;
 		vrLen = 2395;
 		vrLoc = 4717;
@@ -2311,7 +2365,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: NSLog";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2410;
 		vrLoc = 4307;
@@ -2321,7 +2375,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 96";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 530;
 		vrLoc = 2835;
@@ -2331,7 +2385,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 96";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 530;
 		vrLoc = 2835;
@@ -2341,7 +2395,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4236;
@@ -2359,7 +2413,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 96";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 530;
 		vrLoc = 2835;
@@ -2369,7 +2423,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4236;
@@ -2379,7 +2433,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "err = AudioFormatGetPropertyInfo(kAudioFormatProperty_AvailableEncodeBitRates, sizeof(desc->mFormatID), desc->mFormatID, &size);";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1277;
 		vrLoc = 4670;
@@ -2397,7 +2451,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "int j;";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1291;
 		vrLoc = 4758;
@@ -2407,7 +2461,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 136";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2457;
 		vrLoc = 4244;
@@ -2434,7 +2488,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: n";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2455;
 		vrLoc = 4244;
@@ -2461,7 +2515,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 130";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2428;
 		vrLoc = 4183;
@@ -2481,7 +2535,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 130";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2428;
 		vrLoc = 4183;
@@ -2501,7 +2555,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 140";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1257;
 		vrLoc = 4758;
@@ -2511,7 +2565,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 130";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2428;
 		vrLoc = 4183;
@@ -2531,7 +2585,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: NSLog";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2313;
 		vrLoc = 4497;
@@ -2551,7 +2605,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 130";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2282;
 		vrLoc = 4497;
@@ -2579,7 +2633,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "AudioFormatGetPropertyInfo(kAudioFormatProperty_FormatName, sizeof(desc), &desc, ds);";
 		rLen = 192;
-		rLoc = 8019;
+		rLoc = 8131;
 		rType = 0;
 		vrLen = 1111;
 		vrLoc = 4758;
@@ -2589,7 +2643,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: AudioFormatGetProperty";
 		rLen = 0;
-		rLoc = 8136;
+		rLoc = 8248;
 		rType = 0;
 		vrLen = 2243;
 		vrLoc = 4183;
@@ -2599,7 +2653,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: AudioFormatGetProperty";
 		rLen = 0;
-		rLoc = 8051;
+		rLoc = 8163;
 		rType = 0;
 		vrLen = 1119;
 		vrLoc = 4758;
@@ -2609,7 +2663,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: AudioFormatGetProperty";
 		rLen = 0;
-		rLoc = 8136;
+		rLoc = 8248;
 		rType = 0;
 		vrLen = 2267;
 		vrLoc = 4758;
@@ -2619,7 +2673,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: AudioFormatGetProperty";
 		rLen = 0;
-		rLoc = 8051;
+		rLoc = 8163;
 		rType = 0;
 		vrLen = 1120;
 		vrLoc = 4758;
@@ -2629,7 +2683,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 145";
 		rLen = 0;
-		rLoc = 8202;
+		rLoc = 8314;
 		rType = 0;
 		vrLen = 2243;
 		vrLoc = 4758;
@@ -2639,7 +2693,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8051;
+		rLoc = 8163;
 		rType = 0;
 		vrLen = 1169;
 		vrLoc = 4758;
@@ -2649,7 +2703,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 143";
 		rLen = 0;
-		rLoc = 8163;
+		rLoc = 8275;
 		rType = 0;
 		vrLen = 2243;
 		vrLoc = 4758;
@@ -2659,7 +2713,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 145";
 		rLen = 0;
-		rLoc = 8202;
+		rLoc = 8314;
 		rType = 0;
 		vrLen = 2254;
 		vrLoc = 4758;
@@ -2677,7 +2731,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "err = AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(desc), desc, sizeof(ds), &ds);";
 		rLen = 131;
-		rLoc = 8019;
+		rLoc = 8131;
 		rType = 0;
 		vrLen = 1179;
 		vrLoc = 4758;
@@ -2687,7 +2741,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8133;
+		rLoc = 8245;
 		rType = 0;
 		vrLen = 2258;
 		vrLoc = 4758;
@@ -2697,7 +2751,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8122;
+		rLoc = 8234;
 		rType = 0;
 		vrLen = 2260;
 		vrLoc = 4758;
@@ -2707,7 +2761,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8119;
+		rLoc = 8231;
 		rType = 0;
 		vrLen = 2199;
 		vrLoc = 4501;
@@ -2717,7 +2771,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8129;
+		rLoc = 8241;
 		rType = 0;
 		vrLen = 2199;
 		vrLoc = 4501;
@@ -2727,7 +2781,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8122;
+		rLoc = 8234;
 		rType = 0;
 		vrLen = 2223;
 		vrLoc = 4501;
@@ -2737,7 +2791,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: NSLog";
 		rLen = 0;
-		rLoc = 8150;
+		rLoc = 8262;
 		rType = 0;
 		vrLen = 2223;
 		vrLoc = 4501;
@@ -2747,7 +2801,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8122;
+		rLoc = 8234;
 		rType = 0;
 		vrLen = 2222;
 		vrLoc = 4501;
@@ -2757,7 +2811,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: err";
 		rLen = 0;
-		rLoc = 8150;
+		rLoc = 8262;
 		rType = 0;
 		vrLen = 2367;
 		vrLoc = 4674;
@@ -2775,7 +2829,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "//\t\t\t\tNSLog(@\"name = %@\",ds);";
 		rLen = 0;
-		rLoc = 8202;
+		rLoc = 8314;
 		rType = 0;
 		vrLen = 844;
 		vrLoc = 5590;
@@ -2785,7 +2839,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 147";
 		rLen = 0;
-		rLoc = 8206;
+		rLoc = 8318;
 		rType = 0;
 		vrLen = 2337;
 		vrLoc = 4674;
@@ -2803,7 +2857,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "[bitrates addObject:[NSDictionary dictionaryWithValues:[NSNumber numberWithFloat:ranges[n].mMinimum], [NSNumber numberWithFloat:ranges[n].mMaximum], nil forKeys:@\"minimum\", @\"maximum\", nil]];";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1088;
 		vrLoc = 5661;
@@ -2821,7 +2875,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "[bitrates addObject:[NSDictionary dictionaryWithObjects:[NSNumber numberWithFloat:ranges[n].mMinimum], [NSNumber numberWithFloat:ranges[n].mMaximum], nil forKeys:@\"minimum\", @\"maximum\", nil]];";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1089;
 		vrLoc = 5661;
@@ -2831,7 +2885,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: setValue";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2487;
 		vrLoc = 4532;
@@ -2841,7 +2895,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: addObject";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1017;
 		vrLoc = 5661;
@@ -2851,7 +2905,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: setValue";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2487;
 		vrLoc = 4532;
@@ -2861,7 +2915,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 242";
 		rLen = 0;
-		rLoc = 9412;
+		rLoc = 9524;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 9994;
@@ -2871,7 +2925,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 242";
 		rLen = 0;
-		rLoc = 9411;
+		rLoc = 9523;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 9994;
@@ -2881,7 +2935,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: addObject";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1017;
 		vrLoc = 5659;
@@ -2891,7 +2945,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 242";
 		rLen = 0;
-		rLoc = 9411;
+		rLoc = 9523;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 9992;
@@ -2901,7 +2955,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 242";
 		rLen = 0;
-		rLoc = 9411;
+		rLoc = 9523;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 10001;
@@ -2911,7 +2965,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: addObject";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1017;
 		vrLoc = 5668;
@@ -2921,7 +2975,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 242";
 		rLen = 0;
-		rLoc = 9411;
+		rLoc = 9523;
 		rType = 0;
 		vrLen = 1680;
 		vrLoc = 10001;
@@ -2931,7 +2985,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 145";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 1155;
 		vrLoc = 5475;
@@ -2945,7 +2999,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: addObject";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2436;
 		vrLoc = 4035;
@@ -2955,7 +3009,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: exceptionWithReason";
 		rLen = 0;
-		rLoc = 6144;
+		rLoc = 6228;
 		rType = 0;
 		vrLen = 2237;
 		vrLoc = 4909;
@@ -2965,7 +3019,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: exceptionWithReason";
 		rLen = 0;
-		rLoc = 6144;
+		rLoc = 6228;
 		rType = 0;
 		vrLen = 2253;
 		vrLoc = 5344;
@@ -2975,7 +3029,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: addObject";
 		rLen = 0;
-		rLoc = 7988;
+		rLoc = 8100;
 		rType = 0;
 		vrLen = 2436;
 		vrLoc = 4035;
@@ -2993,7 +3047,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "AudioConverterRef\t\t\t\tdummyConverter;";
 		rLen = 40;
-		rLoc = 4703;
+		rLoc = 4787;
 		rType = 0;
 		vrLen = 1144;
 		vrLoc = 4186;
@@ -3011,7 +3065,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "err = AudioConverterNew(inputASBD, *desc, dummyConverter);";
 		rLen = 63;
-		rLoc = 5890;
+		rLoc = 5974;
 		rType = 0;
 		vrLen = 1165;
 		vrLoc = 5502;
@@ -3029,7 +3083,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "@throw [IOException exceptionWithReason:[NSString stringWithFormat:@\"AudioConverterNew failed (%s: %s)\", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];";
 		rLen = 0;
-		rLoc = 5976;
+		rLoc = 6060;
 		rType = 0;
 		vrLen = 1165;
 		vrLoc = 5502;
@@ -3049,7 +3103,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 152";
 		rLen = 0;
-		rLoc = 5953;
+		rLoc = 6037;
 		rType = 0;
 		vrLen = 2389;
 		vrLoc = 5747;
@@ -3059,7 +3113,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 157";
 		rLen = 0;
-		rLoc = 5979;
+		rLoc = 6063;
 		rType = 0;
 		vrLen = 2409;
 		vrLoc = 5712;
@@ -3069,7 +3123,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 162";
 		rLen = 0;
-		rLoc = 5979;
+		rLoc = 6063;
 		rType = 0;
 		vrLen = 2411;
 		vrLoc = 5712;
@@ -3079,7 +3133,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: addObject";
 		rLen = 0;
-		rLoc = 6815;
+		rLoc = 6927;
 		rType = 0;
 		vrLen = 2067;
 		vrLoc = 5399;
@@ -3089,7 +3143,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: addObject";
 		rLen = 0;
-		rLoc = 6815;
+		rLoc = 6927;
 		rType = 0;
 		vrLen = 2194;
 		vrLoc = 5399;
@@ -3099,7 +3153,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 165";
 		rLen = 0;
-		rLoc = 6702;
+		rLoc = 6814;
 		rType = 0;
 		vrLen = 2204;
 		vrLoc = 5399;
@@ -3109,7 +3163,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 173";
 		rLen = 0;
-		rLoc = 6995;
+		rLoc = 7107;
 		rType = 0;
 		vrLen = 2088;
 		vrLoc = 5399;
@@ -3119,7 +3173,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 180";
 		rLen = 0;
-		rLoc = 7153;
+		rLoc = 7265;
 		rType = 0;
 		vrLen = 1917;
 		vrLoc = 6169;
@@ -3129,7 +3183,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: setValue";
 		rLen = 0;
-		rLoc = 7348;
+		rLoc = 7460;
 		rType = 0;
 		vrLen = 1786;
 		vrLoc = 6349;
@@ -3139,7 +3193,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 181";
 		rLen = 0;
-		rLoc = 7228;
+		rLoc = 7340;
 		rType = 0;
 		vrLen = 1792;
 		vrLoc = 6349;
@@ -3149,7 +3203,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 160";
 		rLen = 0;
-		rLoc = 6394;
+		rLoc = 6506;
 		rType = 0;
 		vrLen = 2060;
 		vrLoc = 5754;
@@ -3159,7 +3213,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 186";
 		rLen = 0;
-		rLoc = 7697;
+		rLoc = 7809;
 		rType = 0;
 		vrLen = 2068;
 		vrLoc = 6029;
@@ -3169,7 +3223,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: setValue";
 		rLen = 0;
-		rLoc = 7693;
+		rLoc = 7805;
 		rType = 0;
 		vrLen = 1988;
 		vrLoc = 6526;
@@ -3179,7 +3233,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: setValue";
 		rLen = 0;
-		rLoc = 7601;
+		rLoc = 7713;
 		rType = 0;
 		vrLen = 1806;
 		vrLoc = 6702;
@@ -3193,7 +3247,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: objectForKey";
 		rLen = 0;
-		rLoc = 6349;
+		rLoc = 6433;
 		rType = 0;
 		vrLen = 2436;
 		vrLoc = 4557;
@@ -3203,7 +3257,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 177";
 		rLen = 0;
-		rLoc = 7176;
+		rLoc = 7288;
 		rType = 0;
 		vrLen = 2174;
 		vrLoc = 5976;
@@ -3213,7 +3267,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 196";
 		rLen = 0;
-		rLoc = 7981;
+		rLoc = 8093;
 		rType = 0;
 		vrLen = 1044;
 		vrLoc = 5482;
@@ -3231,7 +3285,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 196";
 		rLen = 0;
-		rLoc = 7981;
+		rLoc = 8093;
 		rType = 0;
 		vrLen = 1044;
 		vrLoc = 5482;
@@ -3241,7 +3295,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3259,7 +3313,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3269,7 +3323,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: exceptionWithReason";
 		rLen = 0;
-		rLoc = 8119;
+		rLoc = 8203;
 		rType = 0;
 		vrLen = 2698;
 		vrLoc = 5134;
@@ -3279,7 +3333,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 185";
 		rLen = 0;
-		rLoc = 7435;
+		rLoc = 7547;
 		rType = 0;
 		vrLen = 2174;
 		vrLoc = 5976;
@@ -3289,30 +3343,17 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
-	};
-	8CEDBEC9094B7D080023DD01 /* CoreAudioEncoder.m:152 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		continueAfterActions = 0;
-		delayBeforeContinue = 0;
-		fileReference = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
-		functionName = "-encodeToFile:";
-		hitCount = 1;
-		lineNumber = 152;
-		modificationTime = 155974439.194685;
-		state = 2;
 	};
 	8CEDBECB094B7D100023DD01 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: exceptionWithReason";
 		rLen = 0;
-		rLoc = 8119;
+		rLoc = 8203;
 		rType = 0;
 		vrLen = 2536;
 		vrLoc = 5413;
@@ -3322,7 +3363,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 185";
 		rLen = 0;
-		rLoc = 7435;
+		rLoc = 7547;
 		rType = 0;
 		vrLen = 2174;
 		vrLoc = 5976;
@@ -3332,7 +3373,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: exceptionWithReason";
 		rLen = 0;
-		rLoc = 8119;
+		rLoc = 8203;
 		rType = 0;
 		vrLen = 2536;
 		vrLoc = 5413;
@@ -3342,7 +3383,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 185";
 		rLen = 0;
-		rLoc = 7435;
+		rLoc = 7547;
 		rType = 0;
 		vrLen = 2174;
 		vrLoc = 5976;
@@ -3352,7 +3393,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3362,7 +3403,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: objectForKey";
 		rLen = 0;
-		rLoc = 6393;
+		rLoc = 6477;
 		rType = 0;
 		vrLen = 2518;
 		vrLoc = 5413;
@@ -3372,7 +3413,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 185";
 		rLen = 0;
-		rLoc = 7435;
+		rLoc = 7547;
 		rType = 0;
 		vrLen = 2174;
 		vrLoc = 5976;
@@ -3382,7 +3423,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3392,7 +3433,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: 180";
 		rLen = 0;
-		rLoc = 7900;
+		rLoc = 7984;
 		rType = 0;
 		vrLen = 2373;
 		vrLoc = 6537;
@@ -3402,7 +3443,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 185";
 		rLen = 0;
-		rLoc = 7435;
+		rLoc = 7547;
 		rType = 0;
 		vrLen = 2174;
 		vrLoc = 5976;
@@ -3412,7 +3453,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3430,7 +3471,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3440,7 +3481,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "CoreAudioEncoder.m: 187";
 		rLen = 0;
-		rLoc = 7808;
+		rLoc = 7892;
 		rType = 0;
 		vrLen = 2500;
 		vrLoc = 5830;
@@ -3522,7 +3563,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = "CoreAudioUtilities.m: 185";
 		rLen = 0;
-		rLoc = 7435;
+		rLoc = 7547;
 		rType = 0;
 		vrLen = 2174;
 		vrLoc = 5976;
@@ -3532,7 +3573,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3542,7 +3583,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3552,7 +3593,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3566,7 +3607,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3584,7 +3625,7 @@
 		fRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */;
 		name = "err = FSPathMakeRef([path UTF8String], &ref, NULL);";
 		rLen = 53;
-		rLoc = 4651;
+		rLoc = 4735;
 		rType = 0;
 		vrLen = 1108;
 		vrLoc = 4310;
@@ -3656,19 +3697,6 @@
 		rType = 0;
 		vrLen = 1839;
 		vrLoc = 1496;
-	};
-	8CEDBF79094B85AF0023DD01 /* CoreAudioEncoderTask.m:75 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		continueAfterActions = 0;
-		delayBeforeContinue = 0;
-		fileReference = 8C4015730948E433003413BE /* CoreAudioEncoderTask.m */;
-		functionName = "-writeTags";
-		hitCount = 1;
-		lineNumber = 75;
-		modificationTime = 155974625.722694;
-		state = 1;
 	};
 	8CEDBF7B094B85B90023DD01 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -3883,7 +3911,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 454";
 		rLen = 0;
-		rLoc = 15050;
+		rLoc = 15428;
 		rType = 0;
 		vrLen = 2177;
 		vrLoc = 4667;
@@ -4057,7 +4085,7 @@
 		comments = "error: '_encoderStatusTextField' undeclared (first use in this function)";
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		rLen = 1;
-		rLoc = 347;
+		rLoc = 350;
 		rType = 1;
 	};
 	8CEDC08B094BE8B00023DD01 /* PBXTextBookmark */ = {
@@ -4075,7 +4103,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 366";
 		rLen = 0;
-		rLoc = 12319;
+		rLoc = 12480;
 		rType = 0;
 		vrLen = 1262;
 		vrLoc = 11829;
@@ -4085,7 +4113,7 @@
 		comments = "error: '_encoderStatusTextField' undeclared (first use in this function)";
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		rLen = 1;
-		rLoc = 367;
+		rLoc = 373;
 		rType = 1;
 	};
 	8CEDC091094BE8BC0023DD01 /* PBXTextBookmark */ = {
@@ -4093,7 +4121,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: setHidden";
 		rLen = 0;
-		rLoc = 13454;
+		rLoc = 13728;
 		rType = 0;
 		vrLen = 1152;
 		vrLoc = 13091;
@@ -4103,7 +4131,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 377";
 		rLen = 0;
-		rLoc = 13454;
+		rLoc = 13728;
 		rType = 0;
 		vrLen = 526;
 		vrLoc = 14084;
@@ -4121,7 +4149,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 377";
 		rLen = 0;
-		rLoc = 13454;
+		rLoc = 13728;
 		rType = 0;
 		vrLen = 526;
 		vrLoc = 14084;
@@ -4151,7 +4179,7 @@
 		comments = "warning: 'TaskMaster' may not respond to '-window'";
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		rLen = 1;
-		rLoc = 205;
+		rLoc = 208;
 		rType = 1;
 	};
 	8CEDC0B4094BE9910023DD01 /* PBXTextBookmark */ = {
@@ -4169,7 +4197,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 202";
 		rLen = 0;
-		rLoc = 6049;
+		rLoc = 6215;
 		rType = 0;
 		vrLen = 795;
 		vrLoc = 7060;
@@ -4179,7 +4207,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 197";
 		rLen = 0;
-		rLoc = 5957;
+		rLoc = 6123;
 		rType = 0;
 		vrLen = 2181;
 		vrLoc = 4557;
@@ -4193,7 +4221,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 126";
 		rLen = 0;
-		rLoc = 3876;
+		rLoc = 3881;
 		rType = 0;
 		vrLen = 1096;
 		vrLoc = 3654;
@@ -4203,7 +4231,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 197";
 		rLen = 0;
-		rLoc = 5957;
+		rLoc = 6123;
 		rType = 0;
 		vrLen = 2181;
 		vrLoc = 4557;
@@ -4229,7 +4257,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 202";
 		rLen = 0;
-		rLoc = 6049;
+		rLoc = 6215;
 		rType = 0;
 		vrLen = 795;
 		vrLoc = 7062;
@@ -4247,7 +4275,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 202";
 		rLen = 0;
-		rLoc = 6049;
+		rLoc = 6215;
 		rType = 0;
 		vrLen = 795;
 		vrLoc = 7062;
@@ -4267,7 +4295,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 197";
 		rLen = 0;
-		rLoc = 5957;
+		rLoc = 6123;
 		rType = 0;
 		vrLen = 2181;
 		vrLoc = 4557;
@@ -4301,7 +4329,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 197";
 		rLen = 0;
-		rLoc = 5957;
+		rLoc = 6123;
 		rType = 0;
 		vrLen = 2181;
 		vrLoc = 4557;
@@ -4311,7 +4339,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 197";
 		rLen = 0;
-		rLoc = 5957;
+		rLoc = 6123;
 		rType = 0;
 		vrLen = 2181;
 		vrLoc = 4557;
@@ -4411,7 +4439,7 @@
 		comments = "warning: 'TaskMaster' may not respond to '-hasEncodingTasks'";
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		rLen = 1;
-		rLoc = 408;
+		rLoc = 417;
 		rType = 1;
 	};
 	8CEDC131094BEF600023DD01 /* PBXTextBookmark */ = {
@@ -4429,7 +4457,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 405";
 		rLen = 0;
-		rLoc = 14905;
+		rLoc = 15283;
 		rType = 0;
 		vrLen = 589;
 		vrLoc = 14570;
@@ -4439,7 +4467,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 407";
 		rLen = 0;
-		rLoc = 14972;
+		rLoc = 15350;
 		rType = 0;
 		vrLen = 583;
 		vrLoc = 14534;
@@ -4449,7 +4477,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 407";
 		rLen = 0;
-		rLoc = 14972;
+		rLoc = 15350;
 		rType = 0;
 		vrLen = 583;
 		vrLoc = 14532;
@@ -4459,7 +4487,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 407";
 		rLen = 0;
-		rLoc = 14972;
+		rLoc = 15350;
 		rType = 0;
 		vrLen = 583;
 		vrLoc = 14532;
@@ -4487,7 +4515,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 407";
 		rLen = 0;
-		rLoc = 14972;
+		rLoc = 15350;
 		rType = 0;
 		vrLen = 583;
 		vrLoc = 14532;
@@ -4506,7 +4534,7 @@
 		isa = PBXTextBookmark;
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "[[TaskMaster sharedController] stopAllTasks:self];";
-		rLen = 49;
+		rLen = 54;
 		rLoc = 3210;
 		rType = 0;
 		vrLen = 530;
@@ -4534,7 +4562,7 @@
 		isa = PBXTextBookmark;
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "[[TaskMaster sharedController] stopAllTasks:self];";
-		rLen = 49;
+		rLen = 54;
 		rLoc = 3210;
 		rType = 0;
 		vrLen = 565;
@@ -4554,7 +4582,7 @@
 		isa = PBXTextBookmark;
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "[[TaskMaster sharedController] stopAllTasks:self];";
-		rLen = 49;
+		rLen = 54;
 		rLoc = 3210;
 		rType = 0;
 		vrLen = 530;
@@ -4565,7 +4593,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4575,7 +4603,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4589,7 +4617,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4609,7 +4637,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4642,25 +4670,12 @@
 		vrLen = 1690;
 		vrLoc = 0;
 	};
-	8CEDC1C3094BF60D0023DD01 /* TaskMaster.m:288 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		continueAfterActions = 0;
-		delayBeforeContinue = 0;
-		fileReference = 8C206F130929486C00793FD0 /* TaskMaster.m */;
-		functionName = "-ripDidComplete:";
-		hitCount = 1;
-		lineNumber = 288;
-		modificationTime = 155974442.132697;
-		state = 1;
-	};
 	8CEDC1C5094BF6260023DD01 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 294";
 		rLen = 0;
-		rLoc = 9654;
+		rLoc = 9702;
 		rType = 0;
 		vrLen = 2447;
 		vrLoc = 8289;
@@ -4670,7 +4685,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4680,7 +4695,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 294";
 		rLen = 0;
-		rLoc = 9654;
+		rLoc = 9702;
 		rType = 0;
 		vrLen = 2447;
 		vrLoc = 8289;
@@ -4690,7 +4705,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 294";
 		rLen = 0;
-		rLoc = 9654;
+		rLoc = 9702;
 		rType = 0;
 		vrLen = 2447;
 		vrLoc = 8289;
@@ -4700,7 +4715,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4740,7 +4755,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4760,7 +4775,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4770,7 +4785,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4780,7 +4795,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4836,7 +4851,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 74;
-		rLoc = 6622;
+		rLoc = 6790;
 		rType = 0;
 		vrLen = 572;
 		vrLoc = 6436;
@@ -4846,7 +4861,7 @@
 		fRef = 8C4D3E2F093DE4C300A88927 /* OggVorbisEncoder.m */;
 		name = "vorbis_comment_add_tag(&vc, \"ENCODER\", [[NSString stringWithFormat:@\"Max %@\", bundleVersion] UTF8String]);";
 		rLen = 108;
-		rLoc = 7458;
+		rLoc = 7570;
 		rType = 0;
 		vrLen = 775;
 		vrLoc = 7090;
@@ -4864,7 +4879,7 @@
 		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
 		name = "ApplicationController.m: 98";
 		rLen = 0;
-		rLoc = 3256;
+		rLoc = 3261;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 2888;
@@ -4946,7 +4961,7 @@
 		fRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */;
 		name = "flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);";
 		rLen = 74;
-		rLoc = 6622;
+		rLoc = 6790;
 		rType = 0;
 		vrLen = 572;
 		vrLoc = 6436;
@@ -4956,7 +4971,7 @@
 		fRef = 8C4D3E2F093DE4C300A88927 /* OggVorbisEncoder.m */;
 		name = "vorbis_comment_add_tag(&vc, \"ENCODER\", [[NSString stringWithFormat:@\"Max %@\", bundleVersion] UTF8String]);";
 		rLen = 108;
-		rLoc = 7458;
+		rLoc = 7570;
 		rType = 0;
 		vrLen = 775;
 		vrLoc = 7090;
@@ -5000,7 +5015,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 119";
 		rLen = 0;
-		rLoc = 3615;
+		rLoc = 3620;
 		rType = 0;
 		vrLen = 1133;
 		vrLoc = 3498;
@@ -5010,7 +5025,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 119";
 		rLen = 0;
-		rLoc = 3615;
+		rLoc = 3620;
 		rType = 0;
 		vrLen = 1133;
 		vrLoc = 3516;
@@ -5030,7 +5045,7 @@
 		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
 		name = "TaskMaster.m: 119";
 		rLen = 0;
-		rLoc = 3615;
+		rLoc = 3620;
 		rType = 0;
 		vrLen = 1133;
 		vrLoc = 3512;
@@ -5080,7 +5095,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = arrayWithC;
 		rLen = 10;
-		rLoc = 3490;
+		rLoc = 3546;
 		rType = 0;
 		vrLen = 735;
 		vrLoc = 7982;
@@ -5127,7 +5142,7 @@
 		fRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */;
 		name = arrayWithC;
 		rLen = 10;
-		rLoc = 3490;
+		rLoc = 3546;
 		rType = 0;
 		vrLen = 735;
 		vrLoc = 7982;
@@ -5141,6 +5156,575 @@
 		rType = 0;
 		vrLen = 622;
 		vrLoc = 2914;
+	};
+	8CEDC2C5094BFDDF0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */;
+		name = "LibsndfileEncoder.m: 68";
+		rLen = 0;
+		rLoc = 1817;
+		rType = 0;
+		vrLen = 807;
+		vrLoc = 1647;
+	};
+	8CEDC2C6094BFDDF0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */;
+		name = "FormatsPreferencesController.m: 91";
+		rLen = 0;
+		rLoc = 3084;
+		rType = 0;
+		vrLen = 622;
+		vrLoc = 2914;
+	};
+	8CEDC2C7094BFDDF0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		rLen = 27;
+		rLoc = 1999;
+		rType = 0;
+	};
+	8CEDC2C8094BFDDF0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */;
+		name = "FormatsPreferencesController.m: 91";
+		rLen = 0;
+		rLoc = 3084;
+		rType = 0;
+		vrLen = 622;
+		vrLoc = 2914;
+	};
+	8CEDC2C9094BFDDF0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 111";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 988;
+		vrLoc = 1200;
+	};
+	8CEDC2CC094BFE280023DD01 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+	};
+	8CEDC2D3094BFEE40023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 51";
+		rLen = 0;
+		rLoc = 1877;
+		rType = 0;
+		vrLen = 1437;
+		vrLoc = 845;
+	};
+	8CEDC2DB094BFFD10023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 45";
+		rLen = 0;
+		rLoc = 1543;
+		rType = 0;
+		vrLen = 1373;
+		vrLoc = 944;
+	};
+	8CEDC2DC094C00120023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */;
+		name = "LibsndfileEncoder.m: 68";
+		rLen = 0;
+		rLoc = 1817;
+		rType = 0;
+		vrLen = 807;
+		vrLoc = 1647;
+	};
+	8CEDC2DD094C00120023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 112";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 1018;
+		vrLoc = 1204;
+	};
+	8CEDC2E2094C002E0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 50";
+		rLen = 0;
+		rLoc = 1863;
+		rType = 0;
+		vrLen = 1433;
+		vrLoc = 944;
+	};
+	8CEDC2F5094C02900023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */;
+		name = "LibsndfileEncoder.m: 68";
+		rLen = 0;
+		rLoc = 1817;
+		rType = 0;
+		vrLen = 807;
+		vrLoc = 1647;
+	};
+	8CEDC2F6094C02900023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEDC2F7094C02900023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: 'TaskMaster' may not respond to '-stopAllTasks'";
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		rLen = 1;
+		rLoc = 115;
+		rType = 1;
+	};
+	8CEDC2F8094C02900023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */;
+		name = "LibsndfileEncoder.m: 68";
+		rLen = 0;
+		rLoc = 1817;
+		rType = 0;
+		vrLen = 807;
+		vrLoc = 1647;
+	};
+	8CEDC2F9094C02900023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEDC2FA094C02900023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 116";
+		rLen = 0;
+		rLoc = 3556;
+		rType = 0;
+		vrLen = 521;
+		vrLoc = 3207;
+	};
+	8CEDC2FB094C02900023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 114";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 968;
+		vrLoc = 1271;
+	};
+	8CEDC302094C02B60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 116";
+		rLen = 0;
+		rLoc = 3556;
+		rType = 0;
+		vrLen = 521;
+		vrLoc = 3207;
+	};
+	8CEDC303094C02B60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEDC304094C02B60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: 'TaskMaster' may not respond to '-stopAllTasks'";
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		rLen = 1;
+		rLoc = 97;
+		rType = 1;
+	};
+	8CEDC305094C02B60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 116";
+		rLen = 0;
+		rLoc = 3556;
+		rType = 0;
+		vrLen = 521;
+		vrLoc = 3207;
+	};
+	8CEDC306094C02B60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEDC307094C02B60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		name = "ApplicationController.m: 98";
+		rLen = 0;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 530;
+		vrLoc = 2888;
+	};
+	8CEDC308094C02B60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 114";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 968;
+		vrLoc = 1271;
+	};
+	8CEDC30D094C03110023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		name = "ApplicationController.m: 98";
+		rLen = 0;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 530;
+		vrLoc = 2888;
+	};
+	8CEDC30E094C03110023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 114";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 968;
+		vrLoc = 1271;
+	};
+	8CEDC314094C03730023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		name = "ApplicationController.m: 98";
+		rLen = 0;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 530;
+		vrLoc = 2888;
+	};
+	8CEDC315094C03730023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 114";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 968;
+		vrLoc = 1271;
+	};
+	8CEDC319094C03DA0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		name = "ApplicationController.m: 98";
+		rLen = 0;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 530;
+		vrLoc = 2888;
+	};
+	8CEDC31A094C03DA0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 114";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 968;
+		vrLoc = 1271;
+	};
+	8CEDC328094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		name = "ApplicationController.m: 98";
+		rLen = 0;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 530;
+		vrLoc = 2888;
+	};
+	8CEDC329094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 114";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 968;
+		vrLoc = 1271;
+	};
+	8CEDC32A094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 6536;
+		rType = 0;
+		vrLen = 1061;
+		vrLoc = 5990;
+	};
+	8CEDC32B094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */;
+		name = "FLACEncoderTask.mm: 90";
+		rLen = 0;
+		rLoc = 2590;
+		rType = 0;
+		vrLen = 613;
+		vrLoc = 2435;
+	};
+	8CEDC32C094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */;
+		name = "MPEGEncoderTask.mm: 127";
+		rLen = 0;
+		rLoc = 4100;
+		rType = 0;
+		vrLen = 651;
+		vrLoc = 5954;
+	};
+	8CEDC32D094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB861FC093F177200A60FC1 /* OggVorbisEncoderTask.mm */;
+		name = "OggVorbisEncoderTask.mm: 90";
+		rLen = 0;
+		rLoc = 2640;
+		rType = 0;
+		vrLen = 466;
+		vrLoc = 2673;
+	};
+	8CEDC32E094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C4D4656093E7A6100A88927 /* FreeDBPreferencesController.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 1987;
+		rType = 0;
+		vrLen = 759;
+		vrLoc = 1480;
+	};
+	8CEDC32F094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */;
+		rLen = 11;
+		rLoc = 4858;
+		rType = 0;
+	};
+	8CEDC330094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */;
+		name = "RipperTask.m: 114";
+		rLen = 0;
+		rLoc = 3390;
+		rType = 0;
+		vrLen = 968;
+		vrLoc = 1271;
+	};
+	8CEDC331094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 6536;
+		rType = 0;
+		vrLen = 1061;
+		vrLoc = 5990;
+	};
+	8CEDC332094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */;
+		name = "FLACEncoderTask.mm: 90";
+		rLen = 0;
+		rLoc = 2590;
+		rType = 0;
+		vrLen = 613;
+		vrLoc = 2435;
+	};
+	8CEDC333094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */;
+		name = "MPEGEncoderTask.mm: 127";
+		rLen = 0;
+		rLoc = 4100;
+		rType = 0;
+		vrLen = 651;
+		vrLoc = 5954;
+	};
+	8CEDC334094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CB861FC093F177200A60FC1 /* OggVorbisEncoderTask.mm */;
+		name = "OggVorbisEncoderTask.mm: 90";
+		rLen = 0;
+		rLoc = 2640;
+		rType = 0;
+		vrLen = 466;
+		vrLoc = 2673;
+	};
+	8CEDC335094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C4D4656093E7A6100A88927 /* FreeDBPreferencesController.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 1987;
+		rType = 0;
+		vrLen = 759;
+		vrLoc = 1480;
+	};
+	8CEDC336094C05C20023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 4858;
+		rType = 0;
+		vrLen = 1009;
+		vrLoc = 4450;
+	};
+	8CEDC33A094C05CE0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		name = "ApplicationController.m: 98";
+		rLen = 0;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 530;
+		vrLoc = 2888;
+	};
+	8CEDC33B094C05CE0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: declaration of 'id' shadows a global declaration";
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		rLen = 1;
+		rLoc = 173;
+		rType = 1;
+	};
+	8CEDC33C094C05CE0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */;
+		name = "ApplicationController.m: 98";
+		rLen = 0;
+		rLoc = 3261;
+		rType = 0;
+		vrLen = 530;
+		vrLoc = 2888;
+	};
+	8CEDC33D094C05CE0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEDC33E094C05CE0023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 4858;
+		rType = 0;
+		vrLen = 1009;
+		vrLoc = 4450;
+	};
+	8CEDC342094C05E30023DD01 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+	};
+	8CEDC344094C05EB0023DD01 /* TaskMaster.m:190 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		continueAfterActions = 0;
+		delayBeforeContinue = 0;
+		fileReference = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		functionName = "-encodeTrack:outputBasename:";
+		hitCount = 2;
+		lineNumber = 190;
+		modificationTime = 155977284.801999;
+		state = 1;
+	};
+	8CEDC347094C05F70023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEDC348094C05F70023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 4858;
+		rType = 0;
+		vrLen = 1009;
+		vrLoc = 4450;
+	};
+	8CEDC34C094C06000023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 193";
+		rLen = 0;
+		rLoc = 5367;
+		rType = 0;
+		vrLen = 2222;
+		vrLoc = 4955;
+	};
+	8CEDC34E094C06A10023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDBC40094B53900023DD01 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
+	};
+	8CEDC34F094C06A10023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */;
+		name = valueForKey;
+		rLen = 11;
+		rLoc = 4858;
+		rType = 0;
+		vrLen = 1009;
+		vrLoc = 4450;
+	};
+	8CEDC353094C06E60023DD01 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C206F130929486C00793FD0 /* TaskMaster.m */;
+		name = "TaskMaster.m: 436";
+		rLen = 0;
+		rLoc = 15913;
+		rType = 0;
+		vrLen = 1899;
+		vrLoc = 14766;
 	};
 	8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {
 		uiCtxt = {
@@ -5192,7 +5776,7 @@
 	};
 	8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1028, 2982}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1142, 2982}}";
 			sepNavSelRange = "{1817, 0}";
 			sepNavVisRect = "{{0, 844}, {776, 295}}";
 			sepNavWindowFrame = "{{130, 12}, {836, 710}}";
@@ -5230,8 +5814,8 @@
 	8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1502, 2282}}";
-			sepNavSelRange = "{3084, 0}";
-			sepNavVisRect = "{{0, 1115}, {742, 338}}";
+			sepNavSelRange = "{4858, 11}";
+			sepNavVisRect = "{{0, 1756}, {742, 338}}";
 			sepNavWindowFrame = "{{15, 117}, {744, 710}}";
 		};
 	};

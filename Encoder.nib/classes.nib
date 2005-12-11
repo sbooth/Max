@@ -1,6 +1,11 @@
 {
     IBClasses = (
-        {CLASS = EncoderController; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }, 
+        {
+            ACTIONS = {s = id; }; 
+            CLASS = EncoderController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
     ); 
     IBVersion = 1; 

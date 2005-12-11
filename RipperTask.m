@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: RipperTask.m 205 2005-12-05 06:04:34Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -27,13 +27,15 @@
 #include <paths.h>			//_PATH_TMP
 #include <unistd.h>			// mkstemp, unlink
 
-#define TEMPFILE_PATTERN	"MaxXXXXXX"
+#define TEMPFILE_PATTERN	"MaxXXXXXX.raw"
 
 @implementation RipperTask
 
 - (id) initWithTrack:(Track *)track
 {
-	char *path = NULL;
+	char		*path			= NULL;
+	ssize_t		slashTmpLen		= strlen(_PATH_TMP);
+	ssize_t		patternLen		= strlen(TEMPFILE_PATTERN);
 
 	if((self = [super init])) {
 		@try {
@@ -41,16 +43,17 @@
 			[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
 			
 			// Create and open the output file
-			path = malloc((strlen(_PATH_TMP) + strlen(TEMPFILE_PATTERN) + 1) *  sizeof(char));
+			path = malloc((slashTmpLen + patternLen + 1) *  sizeof(char));
 			if(NULL == path) {
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s)", errno, strerror(errno)] userInfo:nil];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 			}
-			memcpy(path, _PATH_TMP, strlen(_PATH_TMP));
-			memcpy(path + strlen(_PATH_TMP), TEMPFILE_PATTERN, strlen(TEMPFILE_PATTERN));
+			memcpy(path, _PATH_TMP, slashTmpLen);
+			memcpy(path + slashTmpLen, TEMPFILE_PATTERN, patternLen);
+			path[slashTmpLen + patternLen] = '\0';
 			
-			_out = mkstemp(path);
+			_out = mkstemps(path, 4);
 			if(-1 == _out) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 			}
 			
 			_path	= [[NSString stringWithUTF8String:path] retain];
@@ -108,7 +111,7 @@
 		// Close output file
 		if(-1 == close(_out)) {
 			// Just ignore it for now
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		[pool release];
