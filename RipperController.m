@@ -66,6 +66,7 @@ static RipperController *sharedController = nil;
 {
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"Ripper"];
+	[[self window] setExcludedFromWindowsMenu:YES];
 }
 
 @end

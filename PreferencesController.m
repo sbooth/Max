@@ -108,8 +108,6 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 
 - (void) awakeFromNib
 {
-	[self setShouldCascadeWindows:NO];
-
     NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"Max Preferences Toolbar"] autorelease];
     
     [toolbar setAllowsUserCustomization: NO];
@@ -120,8 +118,13 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 	[toolbar setSelectedItemIdentifier:GeneralPreferencesToolbarItemIdentifier];
 	
     [[self window] setToolbar:toolbar];
-	[[self window] center];
 	[self selectPrefsPane:[[toolbar items] objectAtIndex:0]];
+}
+
+- (void) windowDidLoad
+{
+	[self setShouldCascadeWindows:NO];
+	[[self window] center];
 }
 
 - (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag 

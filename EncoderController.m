@@ -66,6 +66,7 @@ static EncoderController *sharedController = nil;
 {
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"Encoder"];
+	[[self window] setExcludedFromWindowsMenu:YES];
 }
 
 @end

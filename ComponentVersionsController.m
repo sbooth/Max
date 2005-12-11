@@ -66,7 +66,7 @@ static ComponentVersionsController *sharedController = nil;
 - (void) windowDidLoad
 {
 	[self setShouldCascadeWindows:NO];
-	[self setWindowFrameAutosaveName:@"Component Versions"];		
+	[[self window] center];
 }
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }

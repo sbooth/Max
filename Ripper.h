@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Ripper.h 182 2005-11-28 12:32:41Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -36,7 +36,7 @@
 	
 	unsigned long			_firstSector;
 	unsigned long			_lastSector;
-		
+	
 	NSNumber				*_started;
 	NSNumber				*_completed;
 	NSNumber				*_stopped;
