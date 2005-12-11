@@ -36,7 +36,8 @@ static NSMutableDictionary *	getCoreAudioFileTypeInfo(OSType filetype);
 
 #pragma mark Implementation
 
-static NSArray *sEncodeFormats = nil;
+static NSArray *sEncodeFormats		= nil;
+static NSArray *sWritableTypes		= nil;
 
 // Returns an array of valid formatIDs for encoding
 static NSMutableArray *
@@ -74,9 +75,8 @@ formatIDValidForOutput(UInt32 formatID)
 			sEncodeFormats = [getCoreAudioEncodeFormats() retain];
 		}
 	}
-	
+
 	return (kAudioFormatLinearPCM == formatID || [sEncodeFormats containsObject:[NSNumber numberWithUnsignedLong:formatID]]);
-	
 }
 
 static NSMutableArray *
@@ -245,7 +245,7 @@ getCoreAudioFileTypeInfo(OSType filetype)
 }
 
 // Return an array of information on valid formats for output
-NSMutableArray *
+NSArray *
 getCoreAudioWritableTypes()
 {
 	OSStatus			err;
@@ -253,34 +253,56 @@ getCoreAudioWritableTypes()
 	UInt32				*fileFormats;
 	unsigned			numFileFormats, i, j;
 	NSMutableArray		*result;
+	NSSortDescriptor	*sd;
 	
-	err					= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size);
-	fileFormats			= malloc(size);
-	if(NULL == fileFormats) {
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-	}
-	numFileFormats		= size / sizeof(UInt32);
-	result				= [NSMutableArray arrayWithCapacity:numFileFormats];
-	err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size, fileFormats);
-	
-	for(i = 0; i < numFileFormats; ++i) {
-		NSMutableDictionary		*d				= [NSMutableDictionary dictionaryWithCapacity:3];
-		NSArray					*dataFormats;
-		
-		[d setValue:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
-		[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];
-		
-		// Only add this file type if one of more of the dataFormats are writable
-		dataFormats = [d valueForKey:@"dataFormats"];
-		for(j = 0; j < [dataFormats count]; ++j) {
-			if([[[dataFormats objectAtIndex:j] valueForKey:@"writable"] boolValue]) {
-				[result addObject:d];		
-				break;
+	@synchronized(sWritableTypes) {
+		if(nil == sWritableTypes) {
+			
+			err					= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size);
+			fileFormats			= malloc(size);
+			if(NULL == fileFormats) {
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 			}
+			numFileFormats		= size / sizeof(UInt32);
+			result				= [NSMutableArray arrayWithCapacity:numFileFormats];
+			err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size, fileFormats);
+			
+			for(i = 0; i < numFileFormats; ++i) {
+				NSMutableDictionary		*d					= [NSMutableDictionary dictionaryWithCapacity:3];
+				NSMutableArray			*dataFormats;
+				NSMutableIndexSet		*indexesToRemove	= [NSMutableIndexSet indexSet];
+				BOOL					writable			= NO;
+				unsigned				dataFormatsCount;
+				
+				[d setValue:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
+				[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];
+				
+				dataFormats			= [d valueForKey:@"dataFormats"];
+				dataFormatsCount	= [dataFormats count];
+				
+				// Iterate through dataFormats and remove non-writable ones
+				for(j = 0; j < dataFormatsCount; ++j) {
+					if(NO == [[[dataFormats objectAtIndex:j] valueForKey:@"writable"] boolValue]) {
+						[indexesToRemove addIndex:j];
+					}
+					else {
+						writable = YES;
+					}
+				}
+				
+				[dataFormats removeObjectsAtIndexes:indexesToRemove];
+				
+				// Only add this file type if one of more of the dataFormats are writable
+				if(writable) {
+					[result addObject:d];		
+				}
+			}
+			
+			free(fileFormats);
+			sd				= [[[NSSortDescriptor alloc] initWithKey:@"fileTypeName" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+			sWritableTypes	= [result sortedArrayUsingDescriptors:[NSArray arrayWithObjects:sd, nil]];
 		}
 	}
 	
-	free(fileFormats);
-	NSSortDescriptor *sd = [[[NSSortDescriptor alloc] initWithKey:@"fileTypeName" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	return [[[result sortedArrayUsingDescriptors:[NSArray arrayWithObjects:sd, nil]] retain] autorelease];
+	return sWritableTypes;
 }

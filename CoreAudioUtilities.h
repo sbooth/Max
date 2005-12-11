@@ -25,7 +25,7 @@ extern "C" {
 #endif
 	
 // Return an array of information on valid formats for output
-NSMutableArray * getCoreAudioWritableTypes();
+NSArray * getCoreAudioWritableTypes();
 	
 #ifdef __cplusplus
 }
