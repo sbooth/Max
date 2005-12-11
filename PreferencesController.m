@@ -47,7 +47,6 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 	NSString				*defaultsPath;
     NSMutableDictionary		*defaultsDictionary;
     NSDictionary			*initialValuesDictionary;
-    NSArray					*resettableUserDefaultsKeys;
 	NSArray					*defaultFiles;
 	unsigned				i;
 

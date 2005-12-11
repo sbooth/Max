@@ -68,9 +68,17 @@ static TaskMaster *sharedController = nil;
 
 - (id) init
 {
-	if((self = [super initWithWindowNibName:@"Tasks"])) {
-		_rippingTasks	= [NSMutableArray arrayWithCapacity:20];
-		_encodingTasks	= [NSMutableArray arrayWithCapacity:20];
+	if((self = [super init])) {
+		
+		_rippingTasks		= [[NSMutableArray arrayWithCapacity:20] retain];
+		_encodingTasks		= [[NSMutableArray arrayWithCapacity:20] retain];
+
+		_ripperController	= [[RipperController sharedController] retain];
+		_encoderController	= [[EncoderController sharedController] retain];
+
+		// Avoid infinite loops in init
+		[_ripperController setValue:self forKey:@"taskMaster"];
+		[_encoderController setValue:self forKey:@"taskMaster"];
 
 		return self;
 	}
@@ -97,31 +105,32 @@ static TaskMaster *sharedController = nil;
     return sharedController;
 }
 
-- (id) copyWithZone:(NSZone *)zone								{ return self; }
-- (id) retain													{ return self; }
-- (unsigned) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void) release												{ /* do nothing */ }
-- (id) autorelease												{ return self; }
+- (id)			copyWithZone:(NSZone *)zone						{ return self; }
+- (id)			retain											{ return self; }
+- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (void)		release											{ /* do nothing */ }
+- (id)			autorelease										{ return self; }
 
 - (void) dealloc
 {
+	[self stopAllTasks];
+
+	[_ripperController release];
+	[_encoderController release];
+	
 	[_rippingTasks release];
 	[_encodingTasks release];
+	
 	[super dealloc];
 }
 
-- (void) windowDidLoad
-{
-	[self setShouldCascadeWindows:NO];
-	[self setWindowFrameAutosaveName:@"TaskMaster"];	
-}
+#pragma mark Task Management
 
-- (BOOL) hasActiveTasks
-{
-	return (0 != [_rippingTasks count] || 0 != [_encodingTasks count]);
-}
+- (BOOL)		hasTasks									{ return ([self hasRippingTasks] || [self hasEncodingTasks]); }
+- (BOOL)		hasRippingTasks								{ return (0 != [_rippingTasks count]); }
+- (BOOL)		hasEncodingTasks							{ return (0 != [_encodingTasks count]);	 }
 
-- (IBAction) stopAllRippingTasks:(id)sender
+- (void) stopAllRippingTasks
 {
 	NSEnumerator	*enumerator;
 	RipperTask		*ripperTask;
@@ -132,7 +141,7 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
-- (IBAction) stopAllEncodingTasks:(id)sender
+- (void) stopAllEncodingTasks
 {
 	NSEnumerator	*enumerator;
 	EncoderTask		*encoderTask;
@@ -143,10 +152,10 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
-- (IBAction) stopAllTasks:(id)sender
+- (void) stopAllTasks
 {
-	[self stopAllRippingTasks:sender];
-	[self stopAllEncodingTasks:sender];
+	[self stopAllRippingTasks];
+	[self stopAllEncodingTasks];
 }
 
 - (BOOL) compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document
@@ -163,7 +172,7 @@ static TaskMaster *sharedController = nil;
 	return NO;
 }
 
-- (void) removeRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document
+- (void) stopRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document
 {
 	RipperTask		*ripperTask;
 	int				i;
@@ -180,9 +189,6 @@ static TaskMaster *sharedController = nil;
 {
 	RipperTask	*ripperTask		= nil;
 	
-	// Show the tasks window if it is hidden
-	[[self window] makeKeyAndOrderFront:self];
-
 	// Start rip
 	ripperTask = [[RipperTask alloc] initWithTrack:track];
 	[ripperTask setValue:basename forKey:@"basename"];
@@ -192,14 +198,12 @@ static TaskMaster *sharedController = nil;
 		
 	// Add the ripper to our list of ripping tasks
 	[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[ripperTask autorelease]];
-	[_ripperStatusTextField setStringValue:[NSString stringWithFormat:@"Ripper Tasks: %u", [_rippingTasks count]]];
-	[_ripperStatusTextField setHidden:NO];
 	[self spawnRipperThreads];
 }
 
 - (void) displayExceptionSheet:(NSException *) exception
 {
-	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+//	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
 }
 
 - (void)alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo
@@ -241,12 +245,9 @@ static TaskMaster *sharedController = nil;
 		
 		[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
 		
-		if(0 == [_rippingTasks count]) {
-			[_ripperStatusTextField setHidden:YES];
-		}
-		else {
-			[_ripperStatusTextField setStringValue:[NSString stringWithFormat:@"Ripper Tasks: %u", [_rippingTasks count]]];
-			[_ripperStatusTextField setHidden:NO];
+		// Hide the ripper window if no more tasks
+		if(NO == [self hasRippingTasks]) {
+			[[_ripperController window] performClose:self];
 		}
 	}
 }
@@ -254,6 +255,9 @@ static TaskMaster *sharedController = nil;
 - (void) spawnRipperThreads
 {
 	if(0 != [_rippingTasks count] && NO == [[[[_rippingTasks objectAtIndex:0] valueForKey:@"ripper"] valueForKey:@"started"] boolValue]) {
+		// Show the ripper window if it is hidden
+		[[_ripperController window] makeKeyAndOrderFront:self];
+		
 		[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
 	}
 }
@@ -288,9 +292,7 @@ static TaskMaster *sharedController = nil;
 	NSString		*basename			= [task valueForKey:@"basename"];
 	NSString		*filename			= nil;
 
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"ripDidComplete" object:nil];
-	
+		
 	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Rip completed for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:trackName
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
@@ -317,7 +319,7 @@ static TaskMaster *sharedController = nil;
 			[self runEncoder:[OggVorbisEncoderTask class] filename:filename source:task track:track];
 		}
 		
-		
+		// Core Audio encoders
 		if(nil != coreAudioFormats && 0 < [coreAudioFormats count]) {
 			EncoderTask		*encoderTask;
 			NSEnumerator	*formats		= [coreAudioFormats objectEnumerator];
@@ -343,12 +345,11 @@ static TaskMaster *sharedController = nil;
 				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
-				[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
-				[_encoderStatusTextField setHidden:NO];
 				[self spawnEncoderThreads];
 			}
 		}
 		
+		// libsndfile encoders
 		if(nil != libsndfileFormats && 0 < [libsndfileFormats count]) {
 			NSEnumerator	*formats		= [libsndfileFormats objectEnumerator];
 			NSDictionary	*formatInfo;
@@ -364,8 +365,6 @@ static TaskMaster *sharedController = nil;
 				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
-				[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
-				[_encoderStatusTextField setHidden:NO];
 				[self spawnEncoderThreads];
 			}
 		}
@@ -392,8 +391,6 @@ static TaskMaster *sharedController = nil;
 	
 	// Add the encoder to our list of encoding tasks
 	[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
-	[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
-	[_encoderStatusTextField setHidden:NO];
 	[self spawnEncoderThreads];			
 	
 }
@@ -408,22 +405,11 @@ static TaskMaster *sharedController = nil;
 
 		[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:task];
 
-		if(0 == [_encodingTasks count]) {
-			[_encoderStatusTextField setHidden:YES];
-		}
-		else {
-			[_encoderStatusTextField setStringValue:[NSString stringWithFormat:@"Encoder Tasks: %u", [_encodingTasks count]]];
-			[_encoderStatusTextField setHidden:NO];
+		// Hide the encoder window if no more tasks
+		if(NO == [self hasEncodingTasks]) {
+			[[_encoderController window] performClose:self];
 		}
 	}	
-
-	// Close the tasks window if this is the last task
-	if(NO == [self hasActiveTasks]) {
-		NSWindow *tasksWindow = [self window];
-		if([tasksWindow isVisible]) {
-			[tasksWindow performClose:self];
-		}
-	}
 }
 
 - (void) spawnEncoderThreads
@@ -438,6 +424,9 @@ static TaskMaster *sharedController = nil;
 	// Start encoding the next track(s)
 	for(i = 0; i < limit; ++i) {
 		if(NO == [[[[_encodingTasks objectAtIndex:i] valueForKey:@"encoder"] valueForKey:@"started"] boolValue]) {
+			// Show the encoder window if it is hidden
+			[[_encoderController window] makeKeyAndOrderFront:self];
+			
 			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
 		}
 	}	
@@ -474,7 +463,6 @@ static TaskMaster *sharedController = nil;
 	[[LogController sharedController] logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-	
 
 	[self removeEncodingTask:task];
 	[self spawnEncoderThreads];

@@ -1,5 +1,5 @@
 /*
- *  $Id: ApplicationController.h 178 2005-11-26 20:27:04Z me $
+ *  $Id: MediaController.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,17 +18,25 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "ComponentVersionsController.h"
+#import "RipperController.h"
 
-#include "lame/lame.h"
-#include "flac/format.h"
-#include "sndfile.h"
+#import "TaskMaster.h"
 
-static ComponentVersionsController *sharedController = nil;
+static RipperController *sharedController = nil;
 
-@implementation ComponentVersionsController
+@implementation RipperController
 
-+ (ComponentVersionsController *) sharedController
+- (id) init
+{
+	if((self = [super initWithWindowNibName:@"Ripper"])) {
+
+		return self;
+	}
+	
+	return nil;
+}
+
++ (RipperController *) sharedController
 {
 	@synchronized(self) {
 		if(nil == sharedController) {
@@ -48,31 +56,16 @@ static ComponentVersionsController *sharedController = nil;
     return sharedController;
 }
 
-- (id)init
-{
-	if((self = [super initWithWindowNibName:@"ComponentVersions"])) {
-		char  buffer [128] ;
-		sf_command(NULL, SFC_GET_LIB_VERSION, buffer, sizeof(buffer));
-		
-		_flacVersion		= [NSString stringWithFormat:@"FLAC %s", FLAC__VERSION_STRING];
-		_lameVersion		= [NSString stringWithFormat:@"LAME %s", get_lame_version()];
-		_libsndfileVersion	= [NSString stringWithUTF8String:buffer];
-		
-		return self;
-	}
-	return nil;
-}
-
-- (void) windowDidLoad
-{
-	[self setShouldCascadeWindows:NO];
-	[self setWindowFrameAutosaveName:@"Component Versions"];		
-}
-
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
 - (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
+
+- (void) windowDidLoad
+{
+	[self setShouldCascadeWindows:NO];
+	[self setWindowFrameAutosaveName:@"Ripper"];
+}
 
 @end

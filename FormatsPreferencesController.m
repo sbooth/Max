@@ -35,8 +35,8 @@
 
 	if((self = [super initWithWindowNibName:@"FormatsPreferences"])) {
 		
-		_coreAudioFormats			= getCoreAudioWritableTypes();
-		_libsndfileFormats			= [NSMutableArray arrayWithCapacity:20];
+		_coreAudioFormats			= [getCoreAudioWritableTypes() retain];
+		_libsndfileFormats			= [[NSMutableArray arrayWithCapacity:20] retain];
 		
 		sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
 		sf_command(NULL, SFC_GET_FORMAT_SUBTYPE_COUNT, &subtypeCount, sizeof(int)) ;
@@ -84,6 +84,13 @@
 		return self;		
 	}
 	return nil;
+}
+
+- (void) dealloc
+{
+	[_coreAudioFormats release];
+	[_libsndfileFormats release];
+	[super dealloc];
 }
 
 - (IBAction) addLibsndfileFormat:(id)sender

@@ -95,12 +95,15 @@
 	
 	// Initialize the FLAC encoder
 	if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(NO == FLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(FLAC__FILE_ENCODER_OK != FLAC__file_encoder_init(_flac)) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	

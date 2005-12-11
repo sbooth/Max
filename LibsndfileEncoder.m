@@ -65,7 +65,6 @@
 	int							readCount;
 	
 	ssize_t						bytesRead			= 0;
-	ssize_t						bytesWritten		= 0;
 	ssize_t						bytesToRead			= 0;
 	ssize_t						totalBytes			= 0;
 	NSDate						*startTime			= [NSDate date];

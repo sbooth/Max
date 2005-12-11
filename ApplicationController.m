@@ -25,6 +25,8 @@
 #import "ComponentVersionsController.h"
 #import "MediaController.h"
 #import "TaskMaster.h"
+#import "RipperController.h"
+#import "EncoderController.h"
 #import "LogController.h"
 #import "UpdateChecker.h"
 #import "IOException.h"
@@ -80,7 +82,7 @@
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
 {
-	if([[TaskMaster sharedController] hasActiveTasks]) {
+	if([[TaskMaster sharedController] hasTasks]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:@"OK"];
 		[alert addButtonWithTitle:@"Cancel"];
@@ -93,7 +95,7 @@
 		}
 		// Remove all tasks
 		else {
-			[[TaskMaster sharedController] stopAllTasks:self];
+			[[TaskMaster sharedController] stopAllTasks];
 		}
 	}
 	
@@ -105,18 +107,29 @@
 	[[ComponentVersionsController sharedController] showWindow:self];
 }
 
-- (IBAction) toggleTasksPanel:(id)sender
+- (IBAction) toggleRipperWindow:(id)sender
 {
-	NSWindow *tasksWindow = [[TaskMaster sharedController] window];
-	if([tasksWindow isVisible]) {
-		[tasksWindow performClose:self];
+	NSWindow *ripperWindow = [[RipperController sharedController] window];
+	if([ripperWindow isVisible]) {
+		[ripperWindow performClose:self];
 	}
 	else {
-		[tasksWindow makeKeyAndOrderFront:self];
+		[ripperWindow makeKeyAndOrderFront:self];
 	}
 }
 
-- (IBAction) toggleLogPanel:(id)sender
+- (IBAction) toggleEncoderWindow:(id)sender
+{
+	NSWindow *encoderWindow = [[EncoderController sharedController] window];
+	if([encoderWindow isVisible]) {
+		[encoderWindow performClose:self];
+	}
+	else {
+		[encoderWindow makeKeyAndOrderFront:self];
+	}
+}
+
+- (IBAction) toggleLogWindow:(id)sender
 {
 	NSWindow *logWindow = [[LogController sharedController] window];
 	if([logWindow isVisible]) {

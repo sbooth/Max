@@ -54,9 +54,6 @@ static AcknowledgmentsController *sharedController = nil;
 
 - (void) awakeFromNib
 {
-	[self setShouldCascadeWindows:NO];
-	[self setWindowFrameAutosaveName:@"Acknowledgments"];	
-
 	NSBundle	*bundle		= [NSBundle bundleForClass:[self class]];
 	NSString	*path		= [bundle pathForResource:@"Acknowledgments" ofType:@"rtf"];
 	if(nil != path) {
@@ -64,10 +61,16 @@ static AcknowledgmentsController *sharedController = nil;
 	}	
 }
 
-- (id) copyWithZone:(NSZone *)zone								{ return self; }
-- (id) retain													{ return self; }
-- (unsigned) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void) release												{ /* do nothing */ }
-- (id) autorelease												{ return self; }
+- (void) windowDidLoad
+{
+	[self setShouldCascadeWindows:NO];
+	[self setWindowFrameAutosaveName:@"Acknowledgments"];	
+}
+
+- (id)			copyWithZone:(NSZone *)zone						{ return self; }
+- (id)			retain											{ return self; }
+- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (void)		release											{ /* do nothing */ }
+- (id)			autorelease										{ return self; }
 
 @end

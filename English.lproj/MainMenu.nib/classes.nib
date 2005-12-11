@@ -7,8 +7,9 @@
                 showAcknowledgments = id; 
                 showComponentVersions = id; 
                 showPreferences = id; 
-                toggleLogPanel = id; 
-                toggleTasksPanel = id; 
+                toggleEncoderWindow = id; 
+                toggleLogWindow = id; 
+                toggleRipperWindow = id; 
             }; 
             CLASS = ApplicationController; 
             LANGUAGE = ObjC; 

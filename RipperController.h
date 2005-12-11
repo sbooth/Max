@@ -1,5 +1,5 @@
 /*
- *  $Id: ApplicationController.h 202 2005-12-04 21:50:52Z me $
+ *  $Id: MediaController.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,23 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <Growl/GrowlApplicationBridge.h>
+@class TaskMaster;
 
-@interface ApplicationController : NSObject < GrowlApplicationBridgeDelegate >
+@interface RipperController : NSWindowController
 {
+	TaskMaster		*_taskMaster;
 }
 
-- (IBAction)			showPreferences:(id)sender;
-- (IBAction)			showAcknowledgments:(id)sender;
-- (IBAction)			showComponentVersions:(id)sender;
-
-- (IBAction)			toggleRipperWindow:(id)sender;
-- (IBAction)			toggleEncoderWindow:(id)sender;
-- (IBAction)			toggleLogWindow:(id)sender;
-
-- (IBAction)			checkForUpdate:(id)sender;
-- (IBAction)			openHomeURL:(id)sender;
-
--(NSDictionary *)		registrationDictionaryForGrowl;
++ (RipperController *)	sharedController;
 
 @end

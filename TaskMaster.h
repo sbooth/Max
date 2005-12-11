@@ -24,11 +24,13 @@
 #import "CompactDiscDocument.h"
 #import "RipperTask.h"
 #import "EncoderTask.h"
+#import "RipperController.h"
+#import "EncoderController.h"
 
-@interface TaskMaster : NSWindowController
+@interface TaskMaster : NSObject
 {
-    IBOutlet NSTextField	*_ripperStatusTextField;
-    IBOutlet NSTextField	*_encoderStatusTextField;
+	RipperController		*_ripperController;
+	EncoderController		*_encoderController;
 	
 	NSMutableArray			*_rippingTasks;
 	NSMutableArray			*_encodingTasks;
@@ -36,13 +38,16 @@
 
 + (TaskMaster *)	sharedController;
 
-- (BOOL)			hasActiveTasks;
-- (IBAction)		stopAllRippingTasks:(id)sender;
-- (IBAction)		stopAllEncodingTasks:(id)sender;
-- (IBAction)		stopAllTasks:(id)sender;
+- (BOOL)			hasTasks;
+- (BOOL)			hasRippingTasks;
+- (BOOL)			hasEncodingTasks;
+
+- (void)			stopAllRippingTasks;
+- (void)			stopAllEncodingTasks;
+- (void)			stopAllTasks;
 
 - (BOOL)			compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document;
-- (void)			removeRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
+- (void)			stopRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
 
 - (void)			encodeTrack:(Track *)track outputBasename:(NSString *)basename;
 

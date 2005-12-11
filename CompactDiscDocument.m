@@ -76,7 +76,7 @@
 - (id) init
 {
 	if((self = [super init])) {
-		_tracks			= [NSMutableArray arrayWithCapacity:20];
+		_tracks			= [[NSMutableArray arrayWithCapacity:20] retain];
 		_discInDrive	= [NSNumber numberWithBool:NO];
 		_disc			= nil;
 		
@@ -620,7 +620,7 @@
 		}
 		// Stop all associated rip tasks
 		else {
-			[[TaskMaster sharedController] removeRippingTasksForCompactDiscDocument:self];
+			[[TaskMaster sharedController] stopRippingTasksForCompactDiscDocument:self];
 		}
 	}
 	
@@ -752,7 +752,7 @@
 {
 	unsigned				i;
 	NSMutableDictionary		*result		= [[NSMutableDictionary alloc] init];
-	NSMutableArray			*tracks		= [[NSMutableArray arrayWithCapacity:[_tracks count]] autorelease];
+	NSMutableArray			*tracks		= [NSMutableArray arrayWithCapacity:[_tracks count]];
 		
 	[result setValue:_title forKey:@"title"];
 	[result setValue:_artist forKey:@"artist"];
