@@ -39,6 +39,9 @@ enum {
 	PARANOIA_LEVEL_OVERLAP_CHECKING		= 1
 };
 
+@interface Ripper(Private)
+- (BOOL) logActivity;
+@end
 
 // cdparanoia callback
 static char *callback_strings[15] = {
@@ -64,8 +67,8 @@ callback(long inpos, int function, void *userdata)
 {
 	Ripper *ripper = (Ripper *)userdata;
 	
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"]) {
-		[LogController logMessage:[NSString stringWithFormat:@"Rip status: %s sector %ld (%ld)", (function >= -2 && function <= 13 ? callback_strings[function + 2] : ""), inpos / CD_FRAMEWORDS, inpos]];
+	if([ripper logActivity]) {
+		[LogController performSelectorOnMainThread:@selector(logMessage:) withObject:[NSString stringWithFormat:@"Rip status: %s sector %ld (%ld)", (function >= -2 && function <= 13 ? callback_strings[function + 2] : ""), inpos / CD_FRAMEWORDS, inpos] waitUntilDone:NO];
 	}	
 }
 
@@ -148,6 +151,9 @@ callback(long inpos, int function, void *userdata)
 			@throw [ParanoiaException exceptionWithReason:@"Unable to access CD" userInfo:nil];
 		}
 		
+		// Setup logging
+		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
+
 		return self;
 	}
 	
@@ -173,6 +179,11 @@ callback(long inpos, int function, void *userdata)
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		}
 	}
+}
+
+- (BOOL) logActivity
+{
+	return _logActivity;
 }
 
 - (void) ripToFile:(int) file
