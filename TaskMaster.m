@@ -197,7 +197,9 @@ static TaskMaster *sharedController = nil;
 	[ripperTask addObserver:self forKeyPath:@"ripper.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
 		
 	// Show the ripper window if it is hidden
-	[[_ripperController window] orderFront:self];
+	if(NO == [[NSApplication sharedApplication] isHidden]) {
+		[[_ripperController window] orderFront:self];
+	}
 	
 	// Add the ripper to our list of ripping tasks
 	[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[ripperTask autorelease]];
@@ -344,7 +346,9 @@ static TaskMaster *sharedController = nil;
 				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
 				
 				// Show the encoder window if it is hidden
-				[[_encoderController window] orderFront:self];
+				if(NO == [[NSApplication sharedApplication] isHidden]) {					
+					[[_encoderController window] orderFront:self];
+				}
 				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
@@ -367,7 +371,9 @@ static TaskMaster *sharedController = nil;
 				[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
 				
 				// Show the encoder window if it is hidden
-				[[_encoderController window] orderFront:self];
+				if(NO == [[NSApplication sharedApplication] isHidden]) {					
+					[[_encoderController window] orderFront:self];
+				}
 				
 				// Add the encoder to our list of encoding tasks
 				[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
@@ -396,7 +402,9 @@ static TaskMaster *sharedController = nil;
 	[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];
 	
 	// Show the encoder window if it is hidden
-	[[_encoderController window] orderFront:self];
+	if(NO == [[NSApplication sharedApplication] isHidden]) {					
+		[[_encoderController window] orderFront:self];
+	}
 	
 	// Add the encoder to our list of encoding tasks
 	[[self mutableArrayValueForKey:@"encodingTasks"] addObject:[encoderTask autorelease]];
