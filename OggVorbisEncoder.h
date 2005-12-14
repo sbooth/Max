@@ -28,6 +28,12 @@
 	ssize_t					_buflen;
 	
 	int						_out;
+	
+	// Settings flags
+	int						_mode;
+	float					_quality;
+	long					_bitrate;
+	BOOL					_cbr;
 }
 
 - (id) initWithSource:(NSString *)source;

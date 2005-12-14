@@ -38,6 +38,8 @@ static NSMutableDictionary *	getCoreAudioFileTypeInfo(OSType filetype);
 
 static NSArray *sEncodeFormats		= nil;
 static NSArray *sWritableTypes		= nil;
+static NSArray *sReadableTypes		= nil;
+static NSArray *sAudioExtensions	= nil;
 
 // Returns an array of valid formatIDs for encoding
 static NSMutableArray *
@@ -228,13 +230,19 @@ getCoreAudioFileTypeInfo(OSType filetype)
 	// file type name
 	size = sizeof(fileTypeName);
 	err = AudioFileGetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, sizeof(UInt32), &filetype, &size, &fileTypeName);
+	if(noErr != err) {
+		@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}
 	if(fileTypeName) {
 		[result setValue:fileTypeName forKey:@"fileTypeName"];
 	}
 	
 	// file extensions
-	size = sizeof(NSArray *);
+	size = sizeof(extensions);
 	err = AudioFileGetGlobalInfo(kAudioFileGlobalInfo_ExtensionsForType, sizeof(OSType), &filetype, &size, &extensions);
+	if(noErr != err) {
+		@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}
 	if(extensions) {
 		[result setValue:(1 == [extensions count] ? [extensions objectAtIndex:0] : extensions) forKey:@"extensionsForType"];
 	}
@@ -259,6 +267,9 @@ getCoreAudioWritableTypes()
 		if(nil == sWritableTypes) {
 			
 			err					= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size);
+			if(noErr != err) {
+				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			}
 			fileFormats			= malloc(size);
 			if(NULL == fileFormats) {
 				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
@@ -266,6 +277,9 @@ getCoreAudioWritableTypes()
 			numFileFormats		= size / sizeof(UInt32);
 			result				= [NSMutableArray arrayWithCapacity:numFileFormats];
 			err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size, fileFormats);
+			if(noErr != err) {
+				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			}
 			
 			for(i = 0; i < numFileFormats; ++i) {
 				NSMutableDictionary		*d					= [NSMutableDictionary dictionaryWithCapacity:3];
@@ -305,4 +319,73 @@ getCoreAudioWritableTypes()
 	}
 	
 	return sWritableTypes;
+}
+
+// Return an array of information on valid formats for input
+NSArray *
+getCoreAudioReadableTypes()
+{
+	OSStatus			err;
+	UInt32				size;
+	UInt32				*fileFormats;
+	unsigned			numFileFormats, i;
+	NSMutableArray		*result;
+	NSSortDescriptor	*sd;
+	
+	@synchronized(sReadableTypes) {
+		if(nil == sReadableTypes) {
+			
+			err					= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_ReadableTypes, 0, NULL, &size);
+			if(noErr != err) {
+				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			}
+			fileFormats			= malloc(size);
+			if(NULL == fileFormats) {
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			}
+			numFileFormats		= size / sizeof(UInt32);
+			result				= [NSMutableArray arrayWithCapacity:numFileFormats];
+			err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size, fileFormats);
+			if(noErr != err) {
+				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			}
+			
+			for(i = 0; i < numFileFormats; ++i) {
+				NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:3];
+				
+				[d setValue:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
+				[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];
+				
+				[result addObject:d];		
+			}
+			
+			free(fileFormats);
+			sd				= [[[NSSortDescriptor alloc] initWithKey:@"fileTypeName" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+			sReadableTypes	= [result sortedArrayUsingDescriptors:[NSArray arrayWithObjects:sd, nil]];
+		}
+	}
+
+	return sReadableTypes;
+}
+
+// Return an array of valid audio file extensions recognized by Core Audio
+NSArray *
+getCoreAudioExtensions()
+{
+	OSStatus			err;
+	UInt32				size;
+	
+	@synchronized(sAudioExtensions) {
+		if(nil == sAudioExtensions) {
+			
+			size	= sizeof(sAudioExtensions);
+			err		= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AllExtensions, 0, NULL, &size, &sAudioExtensions);
+			if(noErr != err) {
+				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			}
+			
+		}
+	}
+	
+	return sAudioExtensions;
 }

@@ -39,6 +39,7 @@
 	NSNumber				*_grandTotalSectors;
 	NSNumber				*_sectorsRead;
 	NSNumber				*_sectorsWritten;
+
 	NSDate					*_startTime;
 	NSDate					*_endTime;
 	

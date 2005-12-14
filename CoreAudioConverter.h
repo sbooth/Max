@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.h 185 2005-11-30 05:55:13Z me $
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,23 +20,37 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface Encoder : NSObject 
+#import "Encoder.h"
+
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+#include <AudioToolbox/AudioFile.h>
+
+@interface CoreAudioConverter : NSObject
 {
-	NSString				*_sourceFilename;	
-	int						_source;
-		
-	NSNumber				*_started;
-	NSNumber				*_completed;
-	NSNumber				*_stopped;
-	NSNumber				*_percentComplete;
-	NSNumber				*_shouldStop;
-	NSNumber				*_timeRemaining;
+	NSString						*_filename;
+	ExtAudioFileRef					_in;
+
+	AudioBufferList					_buf;
+	ssize_t							_buflen;
+	
+	AudioStreamBasicDescription		_outputASBD;
+	
+	NSDate							*_startTime;
+	NSDate							*_endTime;
+	
+	NSNumber						*_started;
+	NSNumber						*_completed;
+	NSNumber						*_stopped;
+	NSNumber						*_percentComplete;
+	NSNumber						*_shouldStop;
+	NSString						*_timeRemaining;
 }
 
-- (id)				initWithSource:(NSString *)source;
+- (id)		initWithFilename:(NSString *)filename;
 
-- (ssize_t)			encodeToFile:(NSString *)filename;
+- (void)	requestStop;
 
-- (void)			requestStop;
+- (void)	convertToFile:(int)file;
 
 @end

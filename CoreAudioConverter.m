@@ -1,0 +1,200 @@
+/*
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
+ *
+ *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#import "CoreAudioConverter.h"
+
+#import "MallocException.h"
+#import "IOException.h"
+#import "StopException.h"
+
+#include <fcntl.h>		// open, write
+#include <sys/stat.h>	// stat
+
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
+@implementation CoreAudioConverter
+
+- (id) initWithFilename:(NSString *)filename
+{
+	OSStatus			err;
+	FSRef				ref;
+
+	if((self = [super init])) {
+		
+		_filename		= [filename retain];
+		
+		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
+		
+		// Desired output is interleaved 16-bit PCM audio
+		_outputASBD.mSampleRate			= 44100.f;
+		_outputASBD.mFormatID			= kAudioFormatLinearPCM;
+		_outputASBD.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+		_outputASBD.mBytesPerPacket		= 4;
+		_outputASBD.mFramesPerPacket	= 1;
+		_outputASBD.mBytesPerFrame		= 4;
+		_outputASBD.mChannelsPerFrame	= 2;
+		_outputASBD.mBitsPerChannel		= 16;
+		
+		// Open the output file
+		err = FSPathMakeRef([_filename UTF8String], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate input file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}
+		
+		err = ExtAudioFileOpen(&ref, &_in);
+		if(noErr != err) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"ExtAudioFileOpen failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}
+		
+		err = ExtAudioFileSetProperty(_in, kExtAudioFileProperty_ClientDataFormat, sizeof(_outputASBD), &_outputASBD);
+		if(noErr != err) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"ExtAudioFileSetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}
+		
+		return self;
+	}
+	return nil;
+}
+
+- (void) dealloc
+{
+	OSStatus			err;
+
+	// Close the input file
+	err = ExtAudioFileDispose(_in);
+	if(noErr != err) {
+		@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"ExtAudioFileDispose failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+	}
+	
+	[_filename release];
+	
+	[_startTime release];
+	[_endTime release];
+		
+	[super dealloc];
+}
+
+- (void) convertToFile:(int)file
+{
+	OSStatus			err;
+	UInt32				frameCount;
+	
+	
+	// Tell our owner we are starting
+	_startTime = [[NSDate date] retain];
+	
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	
+	// Get input file information
+//	struct stat sourceStat;
+//	if(-1 == fstat(_source, &sourceStat)) {
+//		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+//		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+//	}
+	
+	// Allocate the input buffer
+	_buflen								= 1024;
+	_buf.mNumberBuffers					= 1;
+	_buf.mBuffers[0].mNumberChannels	= 2;
+	_buf.mBuffers[0].mDataByteSize		= _buflen * sizeof(int16_t);
+	_buf.mBuffers[0].mData				= calloc(_buflen, sizeof(int16_t));;
+	if(NULL == _buf.mBuffers[0].mData) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+	}
+	
+	
+//	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
+//	if(NULL == _buf) {
+//		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+//		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+//	}
+	
+//	totalBytes		= sourceStat.st_size;
+//	bytesToRead		= totalBytes;
+	
+	// Iteratively get the PCM data and encode it
+	while(YES/*0 < bytesToRead*/) {
+		// Check if we should stop, and if so throw an exception
+		if([_shouldStop boolValue]) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+		}
+		
+		// Read a chunk of PCM input (converted from whatever)
+		frameCount	= _buf.mBuffers[0].mDataByteSize / _outputASBD.mBytesPerPacket;
+		err			= ExtAudioFileRead(_in, &frameCount, &_buf);
+		if(err != noErr) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		}
+		if(0 == frameCount) {
+			break;
+		}
+		
+		// Write the PCM data
+		// Write data to file
+		if(-1 == write(file, _buf.mBuffers[0].mData, frameCount * _outputASBD.mBytesPerPacket)) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		}
+		
+		// Update status
+//		bytesToRead -= bytesRead;
+//		[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+//		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+//		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+//		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+	}
+	
+
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
+	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	
+	_endTime = [[NSDate date] retain];
+	
+//	return bytesWritten;
+}
+
+- (void) requestStop
+{
+	@synchronized(self) {
+		if([_started boolValue]) {
+			_shouldStop = [NSNumber numberWithBool:YES];			
+		}
+		else {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		}
+	}
+}
+
+- (NSString *) description
+{
+	return [_filename lastPathComponent];
+}
+
+@end

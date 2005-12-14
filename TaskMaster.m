@@ -21,6 +21,7 @@
 #import "TaskMaster.h"
 #import "LogController.h"
 #import "RipperTask.h"
+#import "CoreAudioConverterTask.h"
 #import "MPEGEncoderTask.h"
 #import "FLACEncoderTask.h"
 #import "OggFLACEncoderTask.h"
@@ -211,9 +212,31 @@ static TaskMaster *sharedController = nil;
 	[self spawnRipperThreads];
 }
 
+- (void) encodeFile:(NSString *)filename outputBasename:(NSString *)basename
+{
+	CoreAudioConverterTask	*converterTask		= nil;
+	
+	// Start conversion
+	converterTask = [[CoreAudioConverterTask alloc] initWithFilename:filename];
+	[converterTask setValue:basename forKey:@"basename"];
+	[converterTask addObserver:self forKeyPath:@"converter.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
+	[converterTask addObserver:self forKeyPath:@"converter.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
+	[converterTask addObserver:self forKeyPath:@"converter.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
+	
+	// Show the ripper window if it is hidden
+//	if(NO == [[NSApplication sharedApplication] isHidden]) {
+//		[[_ripperController window] orderFront:self];
+//	}
+	
+	// Add the ripper to our list of ripping tasks
+//	[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[converterTask autorelease]];
+//	[self spawnRipperThreads];
+	[NSThread detachNewThreadSelector:@selector(run:) toTarget:converterTask withObject:self];	
+}
+
 - (void) displayExceptionSheet:(NSException *) exception
 {
-//	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
 }
 
 - (void)alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo
@@ -231,6 +254,15 @@ static TaskMaster *sharedController = nil;
 	}
 	else if([keyPath isEqualToString:@"ripper.completed"]) {
 		[self performSelectorOnMainThread:@selector(ripDidComplete:) withObject:context waitUntilDone:TRUE];
+	}
+	else if([keyPath isEqualToString:@"converter.started"]) {
+		[self performSelectorOnMainThread:@selector(convertDidStart:) withObject:context waitUntilDone:TRUE];
+	}
+	else if([keyPath isEqualToString:@"converter.stopped"]) {
+		[self performSelectorOnMainThread:@selector(convertDidStop:) withObject:context waitUntilDone:TRUE];
+	}
+	else if([keyPath isEqualToString:@"converter.completed"]) {
+		[self performSelectorOnMainThread:@selector(convertDidComplete:) withObject:context waitUntilDone:TRUE];
 	}
 	else if([keyPath isEqualToString:@"encoder.started"]) {
 		[self performSelectorOnMainThread:@selector(encodeDidStart:) withObject:context waitUntilDone:TRUE];
@@ -395,6 +427,41 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
+#pragma mark Converting Functionality
+
+- (void) convertDidStart:(CoreAudioConverterTask* ) task
+{
+	NSString	*trackName		= [task description];
+	
+	[LogController logMessage:[NSString stringWithFormat:@"Convert started for %@", trackName]];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert started" description:trackName
+						   notificationName:@"Convert started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+}
+
+- (void) convertDidStop:(CoreAudioConverterTask* ) task
+{
+	NSString	*trackName		= [task description];
+	
+	[LogController logMessage:[NSString stringWithFormat:@"Convert stopped for %@", trackName]];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert stopped" description:trackName
+						   notificationName:@"Convert stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	
+	//	[self removeConvertingTask:task];
+	//	[self spawnConverterThreads];
+}
+
+- (void) convertDidComplete:(CoreAudioConverterTask* ) task
+{
+	NSString	*trackName		= [task description];
+	
+	[LogController logMessage:[NSString stringWithFormat:@"Convert completed for %@", trackName]];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert completed" description:trackName
+						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	
+	//	[self removeConvertingTask:task];
+	//	[self spawnConverterThreads];
+}
+
 #pragma mark Encoding functionality
 
 - (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(RipperTask *)task tracks:(NSArray *)track
@@ -455,8 +522,12 @@ static TaskMaster *sharedController = nil;
 {
 	NSString	*trackName		= [task description];
 	NSString	*type			= [task getType];
+	NSString	*settings		= [task valueForKeyPath:@"encoder.description"];
 
 	[LogController logMessage:[NSString stringWithFormat:@"Encode started for %@ [%@]", trackName, type]];
+	if(nil != settings) {
+		[LogController logMessage:settings];
+	}
 	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }

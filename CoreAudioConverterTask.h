@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.h 185 2005-11-30 05:55:13Z me $
+ *  $Id: RipperTask.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,23 +20,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface Encoder : NSObject 
+#import "CoreAudioConverter.h"
+
+@interface CoreAudioConverterTask : NSObject 
 {
-	NSString				*_sourceFilename;	
-	int						_source;
-		
-	NSNumber				*_started;
-	NSNumber				*_completed;
-	NSNumber				*_stopped;
-	NSNumber				*_percentComplete;
-	NSNumber				*_shouldStop;
-	NSNumber				*_timeRemaining;
+	NSString				*_path;
+	int						_out;
+	CoreAudioConverter		*_converter;
+	NSString				*_basename;
 }
 
-- (id)				initWithSource:(NSString *)source;
+- (id)			initWithFilename:(NSString *)filename;
 
-- (ssize_t)			encodeToFile:(NSString *)filename;
-
-- (void)			requestStop;
+- (void)		run:(id)object;
+- (void)		stop;
 
 @end

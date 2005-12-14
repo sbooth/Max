@@ -37,6 +37,8 @@
 - (IBAction)			checkForUpdate:(id)sender;
 - (IBAction)			openHomeURL:(id)sender;
 
+- (IBAction)			encodeFile:(id)sender;
+
 -(NSDictionary *)		registrationDictionaryForGrowl;
 
 @end

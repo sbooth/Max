@@ -26,5 +26,7 @@
 	<false/>
 	<key>customNamingUseTwoDigitTrackNumbers</key>
 	<false/>
+	<key>saveEncoderSettingsInComment</key>
+	<false/>
 </dict>
 </plist>

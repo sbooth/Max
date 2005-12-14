@@ -248,4 +248,32 @@
 	return bytesWritten;
 }
 
+- (NSString *) description
+{
+	NSString		*bitrateString;
+	NSString		*qualityString;
+	int				bitrate			= -1;
+	int				quality			= -1;
+	
+	// Bitrate
+	if(nil != [_formatInfo objectForKey:@"bitrate"]) {
+		bitrate		= [[_formatInfo objectForKey:@"bitrate"] intValue];
+	}
+	
+	// Quality
+	if(nil != [_formatInfo objectForKey:@"quality"]) {
+		quality		= [[_formatInfo objectForKey:@"quality"] intValue];
+	}
+	
+	bitrateString = (-1 == bitrate ? @"" : [NSString stringWithFormat:@"bitrate=%u", bitrate]);
+	qualityString = (-1 == quality ? @"" : [NSString stringWithFormat:@"quality=%u", quality]);
+
+	if(-1 == bitrate && -1 == quality) {
+		return nil;
+	}
+	else {
+		return [NSString stringWithFormat:@"Core Audio settings('%@' codec): %@ %@", UTCreateStringForOSType([[_formatInfo valueForKey:@"formatID"] unsignedLongValue]), bitrateString, qualityString];
+	}
+}
+
 @end

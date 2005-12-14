@@ -122,6 +122,9 @@
 		
 		// Comment
 		comment = [track valueForKeyPath:@"disc.comment"];
+		if(_writeSettingsToComment) {
+			comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+		}
 		if(nil != comment) {
 			[info setValue:comment forKey:@kAFInfoDictionary_Comments];
 		}

@@ -30,6 +30,7 @@
 	Encoder				*_encoder;
 	NSArray				*_tracks;
 	RipperTask			*_source;
+	BOOL				_writeSettingsToComment;
 }
 
 - (id)				initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)track;

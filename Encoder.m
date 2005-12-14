@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Encoder.m 180 2005-11-27 22:04:47Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -57,6 +57,11 @@
 - (ssize_t) encodeToFile:(NSString *) filename
 {
 	return 0;
+}
+
+- (NSString *) description
+{
+	return nil;
 }
 
 @end

@@ -41,6 +41,8 @@
 			[track encodeStarted];
 		}
 		
+		_writeSettingsToComment = [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
+			
 		return self;
 	}
 	return nil;
@@ -113,7 +115,6 @@
 
 - (void) writeTags
 {
-	return;
 }
 
 - (NSString *) getType

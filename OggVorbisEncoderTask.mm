@@ -94,6 +94,9 @@
 	}
 	
 	// Comment
+	if(_writeSettingsToComment) {
+		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+	}
 	comment = [track valueForKeyPath:@"disc.comment"];
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));

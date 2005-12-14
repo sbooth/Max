@@ -95,6 +95,8 @@
 		8CC111C408CA4538008BB9B0 /* CompactDiscDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */; };
 		8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED19C0935AA5E00413C0A /* CompactDisc.m */; };
 		8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD7B0CC094E7F2600BA2427 /* SectorRange.m */; };
+		8CD9ECBE094FE19000F67AC8 /* CoreAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */; };
+		8CD9ED95094FEB6700F67AC8 /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */; };
 		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
 		8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */; };
 		8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164600933D42700A99A68 /* libcdda_paranoia.a */; };
@@ -317,6 +319,10 @@
 		8CD7AF1E094E6B8700BA2427 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		8CD7B0CB094E7F2600BA2427 /* SectorRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectorRange.h; sourceTree = "<group>"; };
 		8CD7B0CC094E7F2600BA2427 /* SectorRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectorRange.m; sourceTree = "<group>"; };
+		8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
+		8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverter.m; sourceTree = "<group>"; };
+		8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterTask.h; sourceTree = "<group>"; };
+		8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterTask.m; sourceTree = "<group>"; };
 		8CDD2B9109442A9100D2DD96 /* CDInfo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CDInfo.icns; sourceTree = "<group>"; };
 		8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SubmitToFreeDBToolbarImage.png; sourceTree = "<group>"; };
 		8CE164600933D42700A99A68 /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
@@ -449,7 +455,7 @@
 				8C7C894308EC3FFE00F6FCB1 /* Compact Disc */,
 				8C7C897408EC42BC00F6FCB1 /* Controllers */,
 				8CDB0A19092D78C60080A0D8 /* Tasks */,
-				8C0408DA092A89770052D881 /* Ripper */,
+				8C0408DA092A89770052D881 /* Ripper/Converter */,
 				080E96DDFE201D6D7F000001 /* Encoder */,
 				8C7300B808ECB21B0008D7E0 /* FreeDB */,
 				8CBEC4EB08ED6F640064F794 /* Exceptions */,
@@ -547,15 +553,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		8C0408DA092A89770052D881 /* Ripper */ = {
+		8C0408DA092A89770052D881 /* Ripper/Converter */ = {
 			isa = PBXGroup;
 			children = (
+				8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */,
+				8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */,
 				8CD7B0CB094E7F2600BA2427 /* SectorRange.h */,
 				8CD7B0CC094E7F2600BA2427 /* SectorRange.m */,
 				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
 				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
 			);
-			name = Ripper;
+			name = Ripper/Converter;
 			sourceTree = "<group>";
 		};
 		8C4D4265093E0E5F00A88927 /* Preferences */ = {
@@ -704,6 +712,8 @@
 		8CDB0A19092D78C60080A0D8 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */,
+				8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */,
 				8CB0B38B093B301400968F66 /* FLACEncoderTask.h */,
 				8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */,
 				8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */,
@@ -901,6 +911,8 @@
 				8CEDC02B094BE6E10023DD01 /* RipperController.m in Sources */,
 				8CEDC0E5094BEB8D0023DD01 /* EncoderController.m in Sources */,
 				8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */,
+				8CD9ECBE094FE19000F67AC8 /* CoreAudioConverter.m in Sources */,
+				8CD9ED95094FEB6700F67AC8 /* CoreAudioConverterTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

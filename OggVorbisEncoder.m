@@ -67,6 +67,11 @@ enum {
 - (id) initWithSource:(NSString *) source
 {
 	if((self = [super initWithSource:source])) {
+		_mode		= [[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisMode"];
+		_quality	= [[NSUserDefaults standardUserDefaults] floatForKey:@"vorbisQuality"];
+		_bitrate	= sVorbisBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisBitrate"]] * 1000;
+		_cbr		= [[NSUserDefaults standardUserDefaults] boolForKey:@"vorbisUseConstantBitrate"];
+
 		return self;
 	}
 	return nil;
@@ -94,7 +99,7 @@ enum {
 	
 	vorbis_dsp_state			vd;
 	vorbis_block				vb;
-	
+		
 	float						**buffer;
 	
 	float						*left,				*right;
@@ -157,17 +162,15 @@ enum {
 	vorbis_info_init(&vi);
 
 	// Use quality-based VBR
-	if(VORBIS_MODE_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisMode"]) {
-		if(vorbis_encode_init_vbr(&vi, 2, 44100, [[NSUserDefaults standardUserDefaults] floatForKey:@"vorbisQuality"])) {
+	
+	if(VORBIS_MODE_QUALITY == _mode) {
+		if(vorbis_encode_init_vbr(&vi, 2, 44100, _quality)) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
 		}
 	}
-	else if(VORBIS_MODE_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisMode"]) {
-		long	bitrate		= sVorbisBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"vorbisBitrate"]] * 1000;
-		BOOL	cbr			= [[NSUserDefaults standardUserDefaults] boolForKey:@"vorbisUseConstantBitrate"];
-
-		if(vorbis_encode_init(&vi, 2, 44100, cbr ? bitrate : -1, bitrate, cbr ? bitrate : -1)) {
+	else if(VORBIS_MODE_BITRATE == _mode) {
+		if(vorbis_encode_init(&vi, 2, 44100, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
 		}
@@ -176,35 +179,6 @@ enum {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
 	}
-
-		/* choose an encoding mode.  A few possibilities commented out, one
-		actually used: */
-	
-	/*********************************************************************
-		Encoding using a VBR quality mode.  The usable range is -.1
-		(lowest quality, smallest file) to 1. (highest quality, largest file).
-		Example quality mode .4: 44kHz stereo coupled, roughly 128kbps VBR 
-		
-		ret = vorbis_encode_init_vbr(&vi,2,44100,.4);
-	
-	---------------------------------------------------------------------
-		
-		Encoding using an average bitrate mode (ABR).
-example: 44kHz stereo coupled, average 128kbps VBR 
-		
-		ret = vorbis_encode_init(&vi,2,44100,-1,128000,-1);
-	
-	---------------------------------------------------------------------
-		
-		Encode using a quality mode, but select that quality mode by asking for
-		an approximate bitrate.  This is not ABR, it is true VBR, but selected
-		using the bitrate interface, and then turning bitrate management off:
-		
-		ret = ( vorbis_encode_setup_managed(&vi,2,44100,-1,128000,-1) ||
-				vorbis_encode_ctl(&vi,OV_ECTL_RATEMANAGE2_SET,NULL) ||
-				vorbis_encode_setup_init(&vi));
-	
-	*********************************************************************/
 	
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 
@@ -343,6 +317,19 @@ example: 44kHz stereo coupled, average 128kbps VBR
 	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
 	
 	return bytesWritten;
+}
+
+- (NSString *) description
+{
+	if(VORBIS_MODE_QUALITY == _mode) {
+		return [NSString stringWithFormat:@"libVorbis settings: VBR(q=%f)", _quality * 10.f];
+	}
+	else if(VORBIS_MODE_BITRATE == _mode) {
+		return [NSString stringWithFormat:@"libVorbis settings: %@(%l kbps)", (_cbr ? @"CBR" : @"VBR"), _bitrate / 1000];
+	}
+	else {
+		return nil;
+	}
 }
 
 @end

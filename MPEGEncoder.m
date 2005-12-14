@@ -27,6 +27,8 @@
 
 #import "UtilityFunctions.h"
 
+#include "lame/lame.h"
+
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
@@ -358,6 +360,33 @@ enum {
 	}
 	
 	return bytesWritten;
+}
+
+- (NSString *) description
+{
+	NSString *bitrateString;
+	NSString *qualityString;
+		
+	switch(lame_get_VBR(_gfp)) {
+		case vbr_mt:
+		case vbr_rh:
+		case vbr_mtrh:
+//			appendix = "ca. ";
+			bitrateString = [NSString stringWithFormat:@"VBR(q=%i)", lame_get_VBR_q(_gfp)];;
+			break;
+		case vbr_abr:
+			bitrateString = [NSString stringWithFormat:@"average %d kbps", lame_get_VBR_mean_bitrate_kbps(_gfp)];;
+			break;
+		default:
+			bitrateString = [NSString stringWithFormat:@"%3d kbps", lame_get_brate(_gfp)];;
+			break;
+	}
+	
+//			0.1 * (int) (10. * lame_get_compression_ratio(_gfp) + 0.5),
+
+	qualityString = [NSString stringWithFormat:@"qval=%i", lame_get_quality(_gfp)];
+	
+	return [NSString stringWithFormat:@"LAME settings: %@ %@", bitrateString, qualityString];
 }
 
 @end

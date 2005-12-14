@@ -28,6 +28,7 @@
 #import "RipperController.h"
 #import "EncoderController.h"
 #import "LogController.h"
+#import "CoreAudioUtilities.h"
 #import "UpdateChecker.h"
 #import "MacPADSocket.h"
 #import "IOException.h"
@@ -127,6 +128,24 @@
 	return NSTerminateNow;
 }
 
+- (IBAction) encodeFile:(id)sender
+{
+	NSOpenPanel		*panel			= [NSOpenPanel openPanel];
+
+	[panel setAllowsMultipleSelection:YES];
+	[panel setCanChooseDirectories:NO];
+	
+	if(NSOKButton == [panel runModalForTypes:getCoreAudioExtensions()]) {
+		NSArray		*filenames		= [panel filenames];
+		unsigned	i;
+		
+		for(i = 0; i < [filenames count]; ++i) {
+			NSString *filename = [filenames objectAtIndex:i];
+			[[TaskMaster sharedController] encodeFile:filename outputBasename:[filename stringByDeletingPathExtension]];
+		}
+	}
+}
+
 - (IBAction) showComponentVersions:(id)sender
 {
 	[[ComponentVersionsController sharedController] showWindow:self];
@@ -181,6 +200,9 @@
 		@"Rip started",
 		@"Rip completed",
 		@"Rip stopped",
+		@"Convert started",
+		@"Convert completed",
+		@"Convert stopped",
 		@"Encode started",
 		@"Encode completed",
 		@"Encode stopped",
@@ -191,6 +213,9 @@
 		@"Rip started",
 		@"Rip completed",
 		@"Rip stopped",
+		@"Convert started",
+		@"Convert completed",
+		@"Convert stopped",
 		@"Encode started",
 		@"Encode completed",
 		@"Encode stopped",

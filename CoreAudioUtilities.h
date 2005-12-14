@@ -26,7 +26,13 @@ extern "C" {
 	
 // Return an array of information on valid formats for output
 NSArray * getCoreAudioWritableTypes();
-	
+
+// Return an array of information on valid formats for input
+NSArray * getCoreAudioReadableTypes();
+
+// Return an array of valid audio file extensions recognized by Core Audio
+NSArray * getCoreAudioExtensions();
+
 #ifdef __cplusplus
 }
 #endif
