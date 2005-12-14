@@ -20,6 +20,7 @@
 
 #import "Ripper.h"
 #import "Track.h"
+#import "SectorRange.h"
 #import "LogController.h"
 #import "CompactDiscDocument.h"
 #import "CompactDisc.h"
@@ -40,7 +41,8 @@ enum {
 };
 
 @interface Ripper(Private)
-- (BOOL) logActivity;
+- (BOOL)	logActivity;
+- (void)	ripSectorRange:(SectorRange *)range toFile:(int)file;
 @end
 
 // cdparanoia callback
@@ -94,20 +96,21 @@ callback(long inpos, int function, void *userdata)
 	}
 }
 
-- (id) initWithTrack:(Track *)track
+- (id) initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive
 {
 	if((self = [super init])) {
 		int paranoiaLevel	= 0;
 		int paranoiaMode	= PARANOIA_MODE_DISABLE;
-		
-		_track	= [track retain];
-		
+				
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"started"];
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"completed"];
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
 		
+		// Setup logging
+		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
+				
 		// Setup cdparanoia
-		_drive		= [[[_track getCompactDiscDocument] getDisc] getDrive];
+		_drive		= drive;
 		_paranoia	= paranoia_init(_drive);
 
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
@@ -136,24 +139,11 @@ callback(long inpos, int function, void *userdata)
 
 		paranoia_modeset(_paranoia, paranoiaMode);
 		
-		// Determine the size of the track we are ripping
-		_firstSector	= [[_track valueForKey:@"firstSector"] unsignedLongValue];
-		_lastSector		= [[_track valueForKey:@"lastSector"] unsignedLongValue];
+		_sectors		= [sectors retain];
 		
-		[self setValue:[NSNumber numberWithUnsignedLong:(_lastSector - _firstSector)] forKey:@"totalSectors"];
-		[self setValue:[NSNumber numberWithUnsignedLong:0] forKey:@"currentSector"];
-		
-		// Go to the track's first sector in preparation for reading
-		long where = paranoia_seek(_paranoia, _firstSector, SEEK_SET);   	    
-		if(-1 == where) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			paranoia_free(_paranoia);
-			@throw [ParanoiaException exceptionWithReason:@"Unable to access CD" userInfo:nil];
-		}
-		
-		// Setup logging
-		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
-
+		// Determine the size of the track(s) we are ripping
+		[self setValue:[_sectors valueForKeyPath:@"@sum.totalSectors"] forKey:@"grandTotalSectors"];
+				
 		return self;
 	}
 	
@@ -163,8 +153,11 @@ callback(long inpos, int function, void *userdata)
 - (void) dealloc
 {
 	paranoia_free(_paranoia);
-	
-	[_track release];
+
+	[_sectors release];
+
+	[_startTime release];
+	[_endTime release];
 	
 	[super dealloc];
 }
@@ -186,20 +179,50 @@ callback(long inpos, int function, void *userdata)
 	return _logActivity;
 }
 
-- (void) ripToFile:(int) file
+- (void) ripToFile:(int)file
 {
-	unsigned long		cursor				= _firstSector;
-	int16_t				*buf				= NULL;
-	NSDate				*startTime			= [NSDate date];
-	unsigned long		totalSectors		= _lastSector - _firstSector + 1;
-	unsigned long		sectorsToRead		= totalSectors;
+	NSEnumerator		*enumerator;
+	SectorRange			*range;
 	
 	// Tell our owner we are starting
+	_startTime = [[NSDate date] retain];
+	
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
 	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
-	while(cursor <= _lastSector) {
+	enumerator = [_sectors objectEnumerator];
+	
+	while((range = [enumerator nextObject])) {
+		[self ripSectorRange:range toFile:file];
+		_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range totalSectors]];
+	}
+	
+	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
+	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	
+	_endTime = [[NSDate date] retain];
+}
 
+- (void) ripSectorRange:(SectorRange *)range toFile:(int)file
+{
+	unsigned long		cursor				= [range firstSector];
+	unsigned long		lastSector			= [range lastSector];
+	int16_t				*buf				= NULL;
+	unsigned long		totalSectors		= [range totalSectors];
+	unsigned long		grandTotalSectors	= [_grandTotalSectors unsignedLongValue];
+	unsigned long		sectorsToRead		= grandTotalSectors - [_sectorsRead unsignedLongValue];
+	long				where;
+	
+	// Go to the range's first sector in preparation for reading
+	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
+	if(-1 == where) {
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		@throw [ParanoiaException exceptionWithReason:@"Unable to access CD" userInfo:nil];
+	}
+
+	// Rip the track
+	while(cursor <= lastSector) {
+		
 		// Check if we should stop, and if so throw an exception
 		if([_shouldStop boolValue]) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
@@ -212,14 +235,13 @@ callback(long inpos, int function, void *userdata)
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [ParanoiaException exceptionWithReason:@"Skip tolerance exceeded/Unable to access CD" userInfo:nil];
 		}
-				
+		
 		// Update status
 		sectorsToRead--;
 		if(0 == sectorsToRead % 10) {
-			[self setValue:[NSNumber numberWithUnsignedLong:(totalSectors - sectorsToRead)] forKey:@"currentSector"];
-			[self setValue:[NSNumber numberWithDouble:((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0] forKey:@"percentComplete"];
-			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-			unsigned int timeRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
+			[self setValue:[NSNumber numberWithDouble:((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0] forKey:@"percentComplete"];
+			NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
+			unsigned int timeRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
 			[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 		}
 		
@@ -232,9 +254,6 @@ callback(long inpos, int function, void *userdata)
 		// Advance cursor
 		++cursor;
 	}
-	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
 }
 
 @end

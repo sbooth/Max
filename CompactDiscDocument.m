@@ -585,14 +585,34 @@
 		
 		// Iterate through the selected tracks and rip/encode them
 		selectedTracks	= [self selectedTracks];
-		enumerator		= [selectedTracks objectEnumerator];
 		
-		while((track = [enumerator nextObject])) {
+		// Create one single file
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"]) {
 			
-			basename = [self basenameForTrack:track];
+			Track *copy = [[selectedTracks objectAtIndex:0] copy];
+			
+			[copy setValue:[NSNumber numberWithInt:0] forKey:@"number"];
+			[copy setValue:@"Multiple Tracks" forKey:@"title"];
+			[copy setValue:nil forKey:@"artist"];
+			[copy setValue:nil forKey:@"genre"];
+			[copy setValue:nil forKey:@"year"];
+			
+			basename = [self basenameForTrack:copy];
 			createDirectoryStructure(basename);
 			
-			[[TaskMaster sharedController] encodeTrack:track outputBasename:basename];
+			[[TaskMaster sharedController] encodeTracks:selectedTracks outputBasename:basename];
+		}
+		// Create one file per track
+		else {			
+			enumerator		= [selectedTracks objectEnumerator];
+			
+			while((track = [enumerator nextObject])) {
+				
+				basename = [self basenameForTrack:track];
+				createDirectoryStructure(basename);
+				
+				[[TaskMaster sharedController] encodeTrack:track outputBasename:basename];
+			}
 		}
 	}
 	

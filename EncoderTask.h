@@ -28,11 +28,11 @@
 {
 	NSString			*_target;
 	Encoder				*_encoder;
-	Track				*_track;
+	NSArray				*_tracks;
 	RipperTask			*_source;
 }
 
-- (id)				initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
+- (id)				initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)track;
 
 - (void)			run:(id) object;
 - (void)			stop;

@@ -26,9 +26,9 @@
 
 @implementation FLACEncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks
 {
-	if((self = [super initWithSource:source target:target track:track])) {
+	if((self = [super initWithSource:source target:target tracks:tracks])) {
 		_encoder = [[FLACEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
 		return self;
 	}
@@ -51,59 +51,85 @@
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	TagLib::FileRef								f						([_target UTF8String], false);
-	
+	Track										*track					= [_tracks objectAtIndex:0];
+
 	
 	// Album title
-	album = [_track valueForKeyPath:@"disc.title"];
+	album = [track valueForKeyPath:@"disc.title"];
 	if(nil != album) {
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
-	// Artist (fall back to disc)
-	artist = [_track valueForKey:@"artist"];
+	// Artist
+	if(1 == [_tracks count]) {
+		artist = [track valueForKey:@"artist"];
+	}
 	if(nil == artist) {
-		artist = [_track valueForKeyPath:@"disc.artist"];
+		artist = [track valueForKeyPath:@"disc.artist"];
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 	
-	// Genre (fall back to disc)
-	genre = [_track valueForKey:@"genre"];
+	// Genre
+	if(1 == [_tracks count]) {
+		genre = [track valueForKey:@"genre"];
+	}
 	if(nil == genre) {
-		genre = [_track valueForKeyPath:@"disc.genre"];
+		genre = [track valueForKeyPath:@"disc.genre"];
 	}
 	if(nil != genre) {
 		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
-	// Year (fall back to disc)
-	year = [_track valueForKey:@"year"];
+	// Year
+	if(1 == [_tracks count]) {
+		year = [track valueForKey:@"year"];
+	}
 	if(nil == year) {
-		year = [_track valueForKeyPath:@"disc.year"];
+		year = [track valueForKeyPath:@"disc.year"];
 	}
 	if(nil != year) {
 		f.tag()->setYear([year intValue]);
 	}
 	
 	// Comment
-	comment = [_track valueForKeyPath:@"disc.comment"];
+	comment = [track valueForKeyPath:@"disc.comment"];
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
 	
-	// Track title
-	title = [_track valueForKey:@"title"];
-	if(nil != title) {
-		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
+	if(1 == [_tracks count]) {
+		// Track title
+		title = [track valueForKey:@"title"];
+		if(nil != title) {
+			f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
+		}
+		
+		// Track number
+		trackNumber = [track valueForKey:@"number"];
+		if(nil != trackNumber) {
+			f.tag()->setTrack([trackNumber unsignedIntValue]);
+		}
+	}
+	else {
+		NSEnumerator	*enumerator;
+		Track			*temp;
+		
+		enumerator	= [_tracks objectEnumerator];
+		temp		= [enumerator nextObject];
+		
+		title		= [temp valueForKey:@"title"];
+		
+		while((temp = [enumerator nextObject])) {
+			title = [title stringByAppendingString:[NSString stringWithFormat:@", %@", [temp valueForKey:@"title"]]];
+		}
+
+		if(nil != title) {
+			f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
+		}
 	}
 	
-	// Track number
-	trackNumber = [_track valueForKey:@"number"];
-	if(nil != trackNumber) {
-		f.tag()->setTrack([trackNumber unsignedIntValue]);
-	}
-
 	f.save();
 }
 

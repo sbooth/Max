@@ -50,6 +50,7 @@
 - (void)			stopRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
 
 - (void)			encodeTrack:(Track *)track outputBasename:(NSString *)basename;
+- (void)			encodeTracks:(NSArray *)tracks outputBasename:(NSString *)basename;
 
 - (void)			displayExceptionSheet:(NSException *) exception;
 - (void)			alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;

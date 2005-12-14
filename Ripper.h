@@ -27,8 +27,6 @@
 
 @interface Ripper : NSObject 
 {
-	Track					*_track;
-
 	cdrom_paranoia			*_paranoia;
 	cdrom_drive				*_drive;
 	
@@ -36,11 +34,13 @@
 	
 	int						_maximumRetries;
 	
-	unsigned long			_firstSector;
-	unsigned long			_lastSector;
+	NSArray					*_sectors;
 
-	NSNumber				*_totalSectors;
-	NSNumber				*_currentSector;
+	NSNumber				*_grandTotalSectors;
+	NSNumber				*_sectorsRead;
+	NSNumber				*_sectorsWritten;
+	NSDate					*_startTime;
+	NSDate					*_endTime;
 	
 	NSNumber				*_started;
 	NSNumber				*_completed;
@@ -50,7 +50,7 @@
 	NSString				*_timeRemaining;
 }
 
-- (id)		initWithTrack:(Track *)track;
+- (id)		initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive;
 
 - (void)	requestStop;
 

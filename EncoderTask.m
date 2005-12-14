@@ -26,14 +26,20 @@
 
 @implementation EncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track;
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks;
 {
+	NSEnumerator	*enumerator;
+	Track			*track;
+	
 	if((self = [super init])) {
-		_target = [target retain];
-		_track	= [track retain];
-		_source = [source retain];
-
-		[_track encodeStarted];
+		_target			= [target retain];
+		_tracks			= [tracks retain];
+		_source			= [source retain];
+		enumerator		= [_tracks objectEnumerator];
+		
+		while((track = [enumerator nextObject])) {
+			[track encodeStarted];
+		}
 		
 		return self;
 	}
@@ -42,16 +48,33 @@
 
 - (void) dealloc
 {
-	[_track encodeCompleted];
-	if(NO == [[_track encodeInProgress] boolValue]) {
-		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+	NSEnumerator	*enumerator;
+	Track			*track;
+
+	enumerator		= [_tracks objectEnumerator];
+	
+	while((track = [enumerator nextObject])) {
+		[track encodeCompleted];
+		if(NO == [[track encodeInProgress] boolValue]) {
+			[track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+		}
 	}
 	
 	[_target release];
-	[_track release];
+	[_tracks release];
 	[_source release];
 	
 	[super dealloc];
+}
+
+- (NSString *) description
+{
+	if(1 == [_tracks count]) {
+		return [[_tracks objectAtIndex:0] description];
+	}
+	else {
+		return @"Multiple tracks";
+	}
 }
 
 - (void) removeOutputFile

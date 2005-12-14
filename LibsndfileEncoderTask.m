@@ -23,9 +23,9 @@
 
 @implementation LibsndfileEncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track formatInfo:(NSDictionary *)formatInfo
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks formatInfo:(NSDictionary *)formatInfo
 {
-	if((self = [super initWithSource:source target:target track:track])) {
+	if((self = [super initWithSource:source target:target tracks:tracks])) {
 		_formatInfo = [formatInfo retain];
 		_encoder	= [[LibsndfileEncoder alloc] initWithSource:[_source valueForKey:@"path"] format:[[_formatInfo valueForKey:@"sndfileFormat"] intValue]];
 		return self;

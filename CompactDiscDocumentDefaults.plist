@@ -16,6 +16,8 @@
 	<array/>
 	<key>outputDirectory</key>
 	<string>~/Music/</string>
+	<key>singleFileOutput</key>
+	<false/>
 	<key>useCustomNaming</key>
 	<false/>
 	<key>customNamingScheme</key>

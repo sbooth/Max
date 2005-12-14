@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: RipperTask.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -25,17 +25,16 @@
 
 @interface RipperTask : NSObject 
 {
-	NSString			*_path;
-	int					_out;
-	Ripper				*_ripper;
-	Track				*_track;
-	NSString			*_basename;
+	NSString		*_path;
+	int				_out;
+	Ripper			*_ripper;
+	NSArray			*_tracks;
+	NSString		*_basename;
 }
 
-- (id)			initWithTrack:(Track *)track;
+- (id)			initWithTracks:(NSArray *)tracks;
+
 - (void)		run:(id)object;
 - (void)		stop;
-
-- (Track *)		getTrack;
 
 @end

@@ -41,7 +41,7 @@ static TaskMaster *sharedController = nil;
 - (void) spawnRipperThreads;
 - (void) removeRippingTask:(RipperTask *) task;
 - (void) removeEncodingTask:(EncoderTask *) task;
-- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(RipperTask *)task track:(Track *)track;
+- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(RipperTask *)task tracks:(NSArray *)track;
 @end
 
 @implementation TaskMaster
@@ -164,7 +164,7 @@ static TaskMaster *sharedController = nil;
 	RipperTask		*ripperTask;
 	
 	while((ripperTask = [enumerator nextObject])) {
-		if([document isEqual:[[ripperTask getTrack] getCompactDiscDocument]]) {
+		if([document isEqual:[[[ripperTask valueForKey:@"tracks"] objectAtIndex:0] getCompactDiscDocument]]) {
 			return YES;
 		}
 	}
@@ -179,7 +179,7 @@ static TaskMaster *sharedController = nil;
 	
 	for(i = [_rippingTasks count] - 1; 0 <= i; --i) {
 		ripperTask = [_rippingTasks objectAtIndex:i];
-		if([document isEqual:[[ripperTask getTrack] getCompactDiscDocument]]) {
+		if([document isEqual:[[[ripperTask valueForKey:@"tracks"] objectAtIndex:0] getCompactDiscDocument]]) {
 			[ripperTask stop];
 		}
 	}
@@ -187,15 +187,20 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeTrack:(Track *)track outputBasename:(NSString *)basename
 {
+	[self encodeTracks:[NSArray arrayWithObjects:track, nil] outputBasename:basename];
+}
+
+- (void) encodeTracks:(NSArray *)tracks outputBasename:(NSString *)basename
+{
 	RipperTask	*ripperTask		= nil;
 	
 	// Start rip
-	ripperTask = [[RipperTask alloc] initWithTrack:track];
+	ripperTask = [[RipperTask alloc] initWithTracks:tracks];
 	[ripperTask setValue:basename forKey:@"basename"];
 	[ripperTask addObserver:self forKeyPath:@"ripper.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
 	[ripperTask addObserver:self forKeyPath:@"ripper.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
 	[ripperTask addObserver:self forKeyPath:@"ripper.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
-		
+	
 	// Show the ripper window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden]) {
 		[[_ripperController window] orderFront:self];
@@ -266,7 +271,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidStart:(RipperTask* ) task
 {
-	NSString *trackName = [[task valueForKey:@"track"] description];
+	NSString *trackName = [task description];
 	
 	[LogController logMessage:[NSString stringWithFormat:@"Rip started for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip started" description:trackName
@@ -275,7 +280,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidStop:(RipperTask* ) task
 {
-	NSString *trackName = [[task valueForKey:@"track"] description];
+	NSString *trackName = [task description];
 
 	[LogController logMessage:[NSString stringWithFormat:@"Rip stopped for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip stopped" description:trackName
@@ -289,8 +294,8 @@ static TaskMaster *sharedController = nil;
 {
 	NSArray			*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
 	NSArray			*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
-	Track			*track				= [task valueForKey:@"track"];
-	NSString		*trackName			= [track description];
+	NSArray			*tracks				= [task valueForKey:@"tracks"];
+	NSString		*trackName			= [task description];
 	NSString		*basename			= [task valueForKey:@"basename"];
 	NSString		*filename			= nil;
 
@@ -306,19 +311,19 @@ static TaskMaster *sharedController = nil;
 	@try {
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"]) {
 			filename = generateUniqueFilename(basename, @"mp3");
-			[self runEncoder:[MPEGEncoderTask class] filename:filename source:task track:track];
+			[self runEncoder:[MPEGEncoderTask class] filename:filename source:task tracks:tracks];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"]) {
 			filename = generateUniqueFilename(basename, @"flac");
-			[self runEncoder:[FLACEncoderTask class] filename:filename source:task track:track];
+			[self runEncoder:[FLACEncoderTask class] filename:filename source:task tracks:tracks];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"]) {
 			filename = generateUniqueFilename(basename, @"oggflac");
-			[self runEncoder:[OggFLACEncoderTask class] filename:filename source:task track:track];
+			[self runEncoder:[OggFLACEncoderTask class] filename:filename source:task tracks:tracks];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"]) {
 			filename = generateUniqueFilename(basename, @"ogg");
-			[self runEncoder:[OggVorbisEncoderTask class] filename:filename source:task track:track];
+			[self runEncoder:[OggVorbisEncoderTask class] filename:filename source:task tracks:tracks];
 		}
 		
 		// Core Audio encoders
@@ -339,7 +344,7 @@ static TaskMaster *sharedController = nil;
 				}
 				
 				filename		= generateUniqueFilename(basename, extension);
-				encoderTask		= [[CoreAudioEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
+				encoderTask		= [[CoreAudioEncoderTask alloc] initWithSource:task target:filename tracks:tracks formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -364,7 +369,7 @@ static TaskMaster *sharedController = nil;
 			while((formatInfo = [formats nextObject])) {
 				filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
 				
-				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithSource:task target:filename track:track formatInfo:formatInfo];
+				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithSource:task target:filename tracks:tracks formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -392,10 +397,10 @@ static TaskMaster *sharedController = nil;
 
 #pragma mark Encoding functionality
 
-- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(RipperTask *)task track:(Track *)track
+- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(RipperTask *)task tracks:(NSArray *)track
 {
 	// Create the encoder
-	EncoderTask *encoderTask = [[encoderClass alloc] initWithSource:task target:filename track:track];
+	EncoderTask *encoderTask = [[encoderClass alloc] initWithSource:task target:filename tracks:track];
 	
 	[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 	[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -448,7 +453,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeDidStart:(EncoderTask* ) task
 {
-	NSString	*trackName		= [[task valueForKey:@"track"] description];
+	NSString	*trackName		= [task description];
 	NSString	*type			= [task getType];
 
 	[LogController logMessage:[NSString stringWithFormat:@"Encode started for %@ [%@]", trackName, type]];
@@ -458,7 +463,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeDidStop:(EncoderTask* ) task
 {
-	NSString	*trackName		= [[task valueForKey:@"track"] description];
+	NSString	*trackName		= [task description];
 	NSString	*type			= [task getType];
 
 	[LogController logMessage:[NSString stringWithFormat:@"Encode stopped for %@ [%@]", trackName, type]];
@@ -471,7 +476,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeDidComplete:(EncoderTask* ) task
 {
-	NSString	*trackName		= [[task valueForKey:@"track"] description];
+	NSString	*trackName		= [task description];
 	NSString	*type			= [task getType];
 	
 	[LogController logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];

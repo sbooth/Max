@@ -27,6 +27,6 @@
 	NSDictionary	*_formatInfo;
 }
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target track:(Track *)track formatInfo:(NSDictionary *)formatInfo;
+- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks formatInfo:(NSDictionary *)formatInfo;
 
 @end

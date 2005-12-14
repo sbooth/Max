@@ -94,6 +94,7 @@
 		8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */; };
 		8CC111C408CA4538008BB9B0 /* CompactDiscDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */; };
 		8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED19C0935AA5E00413C0A /* CompactDisc.m */; };
+		8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD7B0CC094E7F2600BA2427 /* SectorRange.m */; };
 		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
 		8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */; };
 		8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164600933D42700A99A68 /* libcdda_paranoia.a */; };
@@ -313,6 +314,9 @@
 		8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
 		8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CompactDiscDocument.nib; sourceTree = "<group>"; };
 		8CCED19C0935AA5E00413C0A /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
+		8CD7AF1E094E6B8700BA2427 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		8CD7B0CB094E7F2600BA2427 /* SectorRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectorRange.h; sourceTree = "<group>"; };
+		8CD7B0CC094E7F2600BA2427 /* SectorRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectorRange.m; sourceTree = "<group>"; };
 		8CDD2B9109442A9100D2DD96 /* CDInfo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CDInfo.icns; sourceTree = "<group>"; };
 		8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SubmitToFreeDBToolbarImage.png; sourceTree = "<group>"; };
 		8CE164600933D42700A99A68 /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
@@ -359,7 +363,7 @@
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -524,6 +528,7 @@
 				8CE9746209461F35000127B6 /* ComponentVersions.nib */,
 				8CEDC010094BE2D70023DD01 /* Ripper.nib */,
 				8CEDC16A094BF05B0023DD01 /* Encoder.nib */,
+				8CD7AF1E094E6B8700BA2427 /* TODO */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -545,6 +550,8 @@
 		8C0408DA092A89770052D881 /* Ripper */ = {
 			isa = PBXGroup;
 			children = (
+				8CD7B0CB094E7F2600BA2427 /* SectorRange.h */,
+				8CD7B0CC094E7F2600BA2427 /* SectorRange.m */,
 				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
 				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
 			);
@@ -893,6 +900,7 @@
 				8CEDBB73094B47B20023DD01 /* CoreAudioUtilities.m in Sources */,
 				8CEDC02B094BE6E10023DD01 /* RipperController.m in Sources */,
 				8CEDC0E5094BEB8D0023DD01 /* EncoderController.m in Sources */,
+				8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

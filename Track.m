@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id: Track.m 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -228,6 +228,30 @@
 	[self setValue:[properties valueForKey:@"channels"] forKey:@"channels"];
 	[self setValue:[properties valueForKey:@"preEmphasis"] forKey:@"preEmphasis"];
 	[self setValue:[properties valueForKey:@"copyPermitted"] forKey:@"copyPermitted"];
+}
+
+- (id) copyWithZone:(NSZone *)zone
+{
+	Track *copy = [[Track allocWithZone:zone] init];
+	
+	[copy setValue:_disc forKey:@"disc"];
+	
+	[copy setValue:_selected forKey:@"selected"];
+	[copy setValue:_color forKey:@"color"];
+	
+	[copy setValue:_title forKey:@"title"];
+	[copy setValue:_artist forKey:@"artist"];
+	[copy setValue:_year forKey:@"year"];;
+	[copy setValue:_genre forKey:@"genre"];
+	
+	[copy setValue:_number forKey:@"number"];
+	[copy setValue:_firstSector forKey:@"firstSector"];
+	[copy setValue:_lastSector forKey:@"lastSector"];
+	[copy setValue:_channels forKey:@"channels"];
+	[copy setValue:_preEmphasis forKey:@"preEmphasis"];
+	[copy setValue:_copyPermitted forKey:@"copyPermitted"];
+
+	return [[copy retain] autorelease];
 }
 
 @end

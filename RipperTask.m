@@ -20,9 +20,12 @@
 
 #import "RipperTask.h"
 #import "TaskMaster.h"
+#import "SectorRange.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
+
+#include "cdparanoia/interface/cdda_interface.h"
 
 #include <paths.h>			//_PATH_TMP
 #include <unistd.h>			// mkstemp, unlink
@@ -31,16 +34,24 @@
 
 @implementation RipperTask
 
-- (id) initWithTrack:(Track *)track
+- (id) initWithTracks:(NSArray *)tracks
 {
-	char		*path			= NULL;
-	ssize_t		slashTmpLen		= strlen(_PATH_TMP);
-	ssize_t		patternLen		= strlen(TEMPFILE_PATTERN);
+	NSMutableArray		*sectors;
+	SectorRange			*range;
+	NSEnumerator		*enumerator;
+	Track				*track;
+	unsigned long		firstSector, lastSector;
+	cdrom_drive			*drive;
+	char				*path			= NULL;
+	ssize_t				slashTmpLen		= strlen(_PATH_TMP);
+	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
+
+	if(0 == [tracks count]) {
+		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"empty array passed to RipperTask::initWithTracks" userInfo:nil];
+	}
 
 	if((self = [super init])) {
 		@try {
-			_track = [track retain];
-			[_track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
 			
 			// Create and open the output file
 			path = malloc((slashTmpLen + patternLen + 1) *  sizeof(char));
@@ -56,9 +67,23 @@
 				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 			}
 			
-			_path	= [[NSString stringWithUTF8String:path] retain];
+			_tracks			= [tracks retain];
+			_path			= [[NSString stringWithUTF8String:path] retain];
+			drive			= [[[[_tracks objectAtIndex:0] getCompactDiscDocument] getDisc] getDrive];
+			sectors			= [NSMutableArray arrayWithCapacity:[tracks count]];
+			enumerator		= [_tracks objectEnumerator];
 			
-			_ripper = [[Ripper alloc] initWithTrack:track];
+			while((track = [enumerator nextObject])) {
+				[track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+
+				firstSector		= [[track valueForKey:@"firstSector"] unsignedLongValue];
+				lastSector		= [[track valueForKey:@"lastSector"] unsignedLongValue];
+				range			= [SectorRange rangeWithFirstSector:firstSector lastSector:lastSector];
+
+				[sectors addObject:range];
+			}
+
+			_ripper = [[Ripper alloc] initWithSectors:sectors drive:drive];
 		}
 		
 		@catch(NSException *exception) {
@@ -76,25 +101,35 @@
 
 - (void) dealloc
 {
-	[_track release];
-	
 	// Delete output file
 	if(-1 == unlink([_path UTF8String])) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _path, errno, strerror(errno)] userInfo:nil];
 	}	
 
+	[_tracks release];	
 	[_path release];	
 	[_ripper release];
 	
 	[super dealloc];
 }
 
+- (NSString *) description
+{
+	if(1 == [_tracks count]) {
+		return [[_tracks objectAtIndex:0] description];
+	}
+	else {
+		return @"Multiple tracks";
+	}
+}
+
 - (void) run:(id)object
 {
-	NSAutoreleasePool	*pool	= [[NSAutoreleasePool alloc] init];
+	NSAutoreleasePool	*pool			= [[NSAutoreleasePool alloc] init];
+	NSEnumerator		*enumerator;
+	Track				*track;
 
 	@try {
-		// Start ripping
 		[_ripper ripToFile:_out];
 	}
 	
@@ -106,11 +141,13 @@
 	}
 	
 	@finally {
-		[_track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+		enumerator = [_tracks objectEnumerator];		
+		while((track = [enumerator nextObject])) {
+			[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+		}
 
 		// Close output file
 		if(-1 == close(_out)) {
-			// Just ignore it for now
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -121,11 +158,6 @@
 - (void) stop
 {
 	[_ripper requestStop];
-}
-
-- (Track *) getTrack
-{
-	return _track;
 }
 
 @end
