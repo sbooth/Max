@@ -86,37 +86,41 @@ static LogController *sharedLog = nil;
 - (void) savePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
     if(NSOKButton == returnCode) {
-		NSString		*filename		= [sheet filename];
-		NSTextStorage	*storage		= [_logTextView textStorage];
-		NSData			*rtf			= [storage RTFFromRange:NSMakeRange(0, [storage length]) documentAttributes:nil];
-		
-		if(NO == [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil]) {
-			// what to do
-		}
-	}	
+		@synchronized(_logTextView) {
+			NSString		*filename		= [sheet filename];
+			NSTextStorage	*storage		= [_logTextView textStorage];
+			NSData			*rtf			= [storage RTFFromRange:NSMakeRange(0, [storage length]) documentAttributes:nil];
+			
+			if(NO == [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil]) {
+				// what to do
+			}
+		}	
+	}
 }
 
 - (void) logMessage:(NSString *)message
 {
-	NSTextStorage					*storage		= [_logTextView textStorage];
-	NSRange							range			= NSMakeRange([storage length], 0);
-	NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
-	NSDate							*now			= [NSDate date];
-	
-	// Build the string
-	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[NSString stringWithFormat:@"%@", now]];
-	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@": "];
-	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:message];
-	[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
-	
-	// Apply styles
-	[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
-	
-	[storage beginEditing];
-	[storage replaceCharactersInRange:range withAttributedString:logMessage];
-	[storage endEditing];
-	
-	[logMessage release];
+	@synchronized(_logTextView) {
+		NSTextStorage					*storage		= [_logTextView textStorage];
+		NSRange							range			= NSMakeRange([storage length], 0);
+		NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
+		NSDate							*now			= [NSDate date];
+		
+		// Build the string
+		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[NSString stringWithFormat:@"%@", now]];
+		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@": "];
+		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:message];
+		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
+		
+		// Apply styles
+		[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
+		
+		[storage beginEditing];
+		[storage replaceCharactersInRange:range withAttributedString:logMessage];
+		[storage endEditing];
+		
+		[logMessage release];
+	}
 }
 
 @end
