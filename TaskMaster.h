@@ -23,16 +23,20 @@
 #import "Track.h"
 #import "CompactDiscDocument.h"
 #import "RipperTask.h"
+#import "ConverterTask.h"
 #import "EncoderTask.h"
 #import "RipperController.h"
+#import "ConverterController.h"
 #import "EncoderController.h"
 
 @interface TaskMaster : NSObject
 {
 	RipperController		*_ripperController;
+	ConverterController		*_converterController;
 	EncoderController		*_encoderController;
 	
 	NSMutableArray			*_rippingTasks;
+	NSMutableArray			*_convertingTasks;
 	NSMutableArray			*_encodingTasks;
 }
 
@@ -40,9 +44,11 @@
 
 - (BOOL)			hasTasks;
 - (BOOL)			hasRippingTasks;
+- (BOOL)			hasConvertingTasks;
 - (BOOL)			hasEncodingTasks;
 
 - (IBAction)		stopAllRippingTasks:(id)sender;
+- (IBAction)		stopAllConvertingTasks:(id)sender;
 - (IBAction)		stopAllEncodingTasks:(id)sender;
 - (IBAction)		stopAllTasks:(id)sender;
 
@@ -52,12 +58,18 @@
 - (void)			encodeTrack:(Track *)track outputBasename:(NSString *)basename;
 - (void)			encodeTracks:(NSArray *)tracks outputBasename:(NSString *)basename;
 
+- (void)			encodeFile:(NSString *)filename outputBasename:(NSString *)basename;
+
 - (void)			displayExceptionSheet:(NSException *) exception;
 - (void)			alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
 
 - (void)			ripDidStart:(RipperTask *) task;
 - (void)			ripDidStop:(RipperTask *) task;
 - (void)			ripDidComplete:(RipperTask *) task;
+
+- (void)			convertDidStart:(ConverterTask *) task;
+- (void)			convertDidStop:(ConverterTask *) task;
+- (void)			convertDidComplete:(ConverterTask *) task;
 
 - (void)			encodeDidStart:(EncoderTask *) task;
 - (void)			encodeDidStop:(EncoderTask *) task;

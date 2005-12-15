@@ -251,7 +251,30 @@
 	[copy setValue:_preEmphasis forKey:@"preEmphasis"];
 	[copy setValue:_copyPermitted forKey:@"copyPermitted"];
 
-	return [[copy retain] autorelease];
+	return copy;
 }
+
+#pragma mark Metadata Source Protocol
+
+// Track information
+- (NSNumber *)		trackNumber						{ return _number; }
+- (NSString *)		trackTitle						{ return _title; }
+- (NSString *)		trackArtist						{ return _artist; }
+- (NSNumber *)		trackYear						{ return _year; }
+- (NSString *)		trackGenre						{ return _genre; }
+- (NSString *)		trackComment					{ return nil/*_comment*/; }
+
+	// Album information
+- (NSNumber *)		albumTrackCount					{ return [NSNumber numberWithInt:[[_disc valueForKey:@"tracks"] count]]; }
+- (NSString *)		albumTitle;						{ return [_disc valueForKey:@"title"]; }
+- (NSString *)		albumArtist						{ return [_disc valueForKey:@"artist"]; }
+- (NSNumber *)		albumYear						{ return [_disc valueForKey:@"year"]; }
+- (NSString *)		albumGenre						{ return [_disc valueForKey:@"genre"]; }
+- (NSString *)		albumComment					{ return [_disc valueForKey:@"comment"]; }
+
+	// Disc Information
+- (NSNumber *)		discNumber						{ return [_disc valueForKey:@"discNumber"]; }
+- (NSNumber *)		discsInSet						{ return [_disc valueForKey:@"discsInSet"]; }
+- (NSNumber *)		multipleArtists					{ return [_disc valueForKey:@"multiArtist"]; }
 
 @end

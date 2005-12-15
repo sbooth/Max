@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.h 180 2005-11-27 22:04:47Z me $
+ *  $Id: Track.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,10 +20,27 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "EncoderTask.h"
+@protocol MetadataSource
 
-@interface MPEGEncoderTask : EncoderTask 
-{
-}
+// Track information
+- (NSNumber *)		trackNumber;
+- (NSString *)		trackTitle;
+- (NSString *)		trackArtist;
+- (NSNumber *)		trackYear;
+- (NSString *)		trackGenre;
+- (NSString *)		trackComment;
+
+// Album information
+- (NSNumber *)		albumTrackCount;
+- (NSString *)		albumTitle;
+- (NSString *)		albumArtist;
+- (NSNumber *)		albumYear;
+- (NSString *)		albumGenre;
+- (NSString *)		albumComment;
+
+// Disc Information
+- (NSNumber *)		multipleArtists;
+- (NSNumber *)		discNumber;
+- (NSNumber *)		discsInSet;
 
 @end

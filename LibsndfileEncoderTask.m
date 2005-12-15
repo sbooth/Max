@@ -23,11 +23,11 @@
 
 @implementation LibsndfileEncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks formatInfo:(NSDictionary *)formatInfo
+- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target formatInfo:(NSDictionary *)formatInfo
 {
-	if((self = [super initWithSource:source target:target tracks:tracks])) {
+	if((self = [super initWithTarget:target])) {
 		_formatInfo = [formatInfo retain];
-		_encoder	= [[LibsndfileEncoder alloc] initWithSource:[_source valueForKey:@"path"] format:[[_formatInfo valueForKey:@"sndfileFormat"] intValue]];
+		_encoder	= [[LibsndfileEncoder alloc] initWithSource:[source outputFilename] format:[[_formatInfo valueForKey:@"sndfileFormat"] intValue]];
 		return self;
 	}
 	return nil;

@@ -20,9 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "MetadataSource.h"
+
 @class CompactDiscDocument;
 
-@interface Track : NSObject 
+@interface Track : NSObject <MetadataSource>
 {
 	NSNumber				*_ripInProgress;
 	unsigned				_activeEncoders;
@@ -32,7 +34,7 @@
 	NSNumber				*_selected;
 	NSColor					*_color;
 	
-	// Metadata
+	// Metadata information
 	NSString				*_title;
 	NSString				*_artist;
 	NSNumber				*_year;

@@ -38,11 +38,14 @@
 static TaskMaster *sharedController = nil;
 
 @interface TaskMaster (Private)
-- (void) spawnEncoderThreads;
 - (void) spawnRipperThreads;
+- (void) spawnConverterThreads;
+- (void) spawnEncoderThreads;
 - (void) removeRippingTask:(RipperTask *) task;
+- (void) removeConvertingTask:(ConverterTask *) task;
 - (void) removeEncodingTask:(EncoderTask *) task;
-- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(RipperTask *)task tracks:(NSArray *)track;
+- (void) runEncodersForBasename:(NSString *)basename source:(id <PCMGenerating>)task tracks:(NSArray *)tracks;
+- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(id <PCMGenerating>)task tracks:(NSArray *)track;
 @end
 
 @implementation TaskMaster
@@ -71,14 +74,17 @@ static TaskMaster *sharedController = nil;
 {
 	if((self = [super init])) {
 		
-		_rippingTasks		= [[NSMutableArray arrayWithCapacity:20] retain];
-		_encodingTasks		= [[NSMutableArray arrayWithCapacity:20] retain];
+		_rippingTasks			= [[NSMutableArray arrayWithCapacity:20] retain];
+		_convertingTasks		= [[NSMutableArray arrayWithCapacity:20] retain];
+		_encodingTasks			= [[NSMutableArray arrayWithCapacity:20] retain];
 
-		_ripperController	= [[RipperController sharedController] retain];
-		_encoderController	= [[EncoderController sharedController] retain];
+		_ripperController		= [[RipperController sharedController] retain];
+		_converterController	= [[ConverterController sharedController] retain];
+		_encoderController		= [[EncoderController sharedController] retain];
 
 		// Avoid infinite loops in init
 		[_ripperController setValue:self forKey:@"taskMaster"];
+		[_converterController setValue:self forKey:@"taskMaster"];
 		[_encoderController setValue:self forKey:@"taskMaster"];
 
 		return self;
@@ -117,9 +123,11 @@ static TaskMaster *sharedController = nil;
 	[self stopAllTasks:self];
 
 	[_ripperController release];
+	[_converterController release];
 	[_encoderController release];
 	
 	[_rippingTasks release];
+	[_convertingTasks release];
 	[_encodingTasks release];
 	
 	[super dealloc];
@@ -127,8 +135,9 @@ static TaskMaster *sharedController = nil;
 
 #pragma mark Task Management
 
-- (BOOL)		hasTasks									{ return ([self hasRippingTasks] || [self hasEncodingTasks]); }
+- (BOOL)		hasTasks									{ return ([self hasRippingTasks] || [self hasConvertingTasks] || [self hasEncodingTasks]); }
 - (BOOL)		hasRippingTasks								{ return (0 != [_rippingTasks count]); }
+- (BOOL)		hasConvertingTasks							{ return (0 != [_convertingTasks count]); }
 - (BOOL)		hasEncodingTasks							{ return (0 != [_encodingTasks count]);	 }
 
 - (IBAction) stopAllRippingTasks:(id)sender
@@ -139,6 +148,17 @@ static TaskMaster *sharedController = nil;
 	enumerator = [_rippingTasks objectEnumerator];
 	while((ripperTask = [enumerator nextObject])) {
 		[ripperTask stop];
+	}
+}
+
+- (IBAction) stopAllConvertingTasks:(id)sender
+{
+	NSEnumerator	*enumerator;
+	ConverterTask	*converterTask;
+	
+	enumerator = [_convertingTasks objectEnumerator];
+	while((converterTask = [enumerator nextObject])) {
+		[converterTask stop];
 	}
 }
 
@@ -156,6 +176,7 @@ static TaskMaster *sharedController = nil;
 - (IBAction) stopAllTasks:(id)sender
 {
 	[self stopAllRippingTasks:sender];
+	[self stopAllConvertingTasks:sender];
 	[self stopAllEncodingTasks:sender];
 }
 
@@ -214,7 +235,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeFile:(NSString *)filename outputBasename:(NSString *)basename
 {
-	CoreAudioConverterTask	*converterTask		= nil;
+	ConverterTask	*converterTask		= nil;
 	
 	// Start conversion
 	converterTask = [[CoreAudioConverterTask alloc] initWithFilename:filename];
@@ -223,20 +244,20 @@ static TaskMaster *sharedController = nil;
 	[converterTask addObserver:self forKeyPath:@"converter.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
 	[converterTask addObserver:self forKeyPath:@"converter.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
 	
-	// Show the ripper window if it is hidden
-//	if(NO == [[NSApplication sharedApplication] isHidden]) {
-//		[[_ripperController window] orderFront:self];
-//	}
+	// Show the converter window if it is hidden
+	if(NO == [[NSApplication sharedApplication] isHidden]) {
+		[[_converterController window] orderFront:self];
+	}
 	
-	// Add the ripper to our list of ripping tasks
-//	[[self mutableArrayValueForKey:@"rippingTasks"] addObject:[converterTask autorelease]];
-//	[self spawnRipperThreads];
-	[NSThread detachNewThreadSelector:@selector(run:) toTarget:converterTask withObject:self];	
+	// Add the converter to our list of converting tasks
+	[[self mutableArrayValueForKey:@"convertingTasks"] addObject:[converterTask autorelease]];
+	[self spawnConverterThreads];
 }
 
 - (void) displayExceptionSheet:(NSException *) exception
 {
-	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+	displayExceptionAlert(exception);
+	//	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
 }
 
 - (void)alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo
@@ -324,13 +345,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidComplete:(RipperTask* ) task
 {
-	NSArray			*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
-	NSArray			*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
-	NSArray			*tracks				= [task valueForKey:@"tracks"];
 	NSString		*trackName			= [task description];
-	NSString		*basename			= [task valueForKey:@"basename"];
-	NSString		*filename			= nil;
-
 		
 	[LogController logMessage:[NSString stringWithFormat:@"Rip completed for %@", trackName]];
 	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:trackName
@@ -338,6 +353,88 @@ static TaskMaster *sharedController = nil;
 
 	[self removeRippingTask:task];
 	[self spawnRipperThreads];
+
+	[self runEncodersForBasename:[task valueForKey:@"basename"] source:task tracks:[task valueForKey:@"tracks"]];
+}
+
+#pragma mark Converting Functionality
+
+- (void) removeConvertingTask:(ConverterTask *) task
+{
+	// Remove from the list of converting tasks
+	if([_convertingTasks containsObject:task]) {
+		[task removeObserver:self forKeyPath:@"converter.started"];
+		[task removeObserver:self forKeyPath:@"converter.completed"];
+		[task removeObserver:self forKeyPath:@"converter.stopped"];
+		
+		[[self mutableArrayValueForKey:@"convertingTasks"] removeObject:task];
+		
+		// Hide the converter window if no more tasks
+		if(NO == [self hasConvertingTasks]) {
+			[[_converterController window] performClose:self];
+		}
+	}
+}
+
+- (void) spawnConverterThreads
+{
+	unsigned	i;
+	unsigned	limit;
+	unsigned	maxConverterThreads;
+	
+	maxConverterThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
+	limit = (maxConverterThreads < [_convertingTasks count] ? maxConverterThreads : [_convertingTasks count]);
+	
+	// Start converting the next file(s)
+	for(i = 0; i < limit; ++i) {
+		if(NO == [[[_convertingTasks objectAtIndex:i] valueForKeyPath:@"converter.started"] boolValue]) {
+			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_convertingTasks objectAtIndex:i] withObject:self];
+		}
+	}	
+}
+
+- (void) convertDidStart:(ConverterTask* ) task
+{
+	NSString	*filename		= [task description];
+	
+	[LogController logMessage:[NSString stringWithFormat:@"Convert started for %@", filename]];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert started" description:filename
+						   notificationName:@"Convert started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+}
+
+- (void) convertDidStop:(ConverterTask* ) task
+{
+	NSString	*filename		= [task description];
+	
+	[LogController logMessage:[NSString stringWithFormat:@"Convert stopped for %@", filename]];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert stopped" description:filename
+						   notificationName:@"Convert stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	
+	[self removeConvertingTask:task];
+	[self spawnConverterThreads];
+}
+
+- (void) convertDidComplete:(ConverterTask* ) task
+{
+	NSString	*filename		= [task description];
+	
+	[LogController logMessage:[NSString stringWithFormat:@"Convert completed for %@", filename]];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert completed" description:filename
+						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	
+	[self removeConvertingTask:task];
+	[self spawnConverterThreads];
+	
+	[self runEncodersForBasename:[task valueForKey:@"basename"] source:task tracks:nil];
+}
+
+#pragma mark Encoding functionality
+
+- (void) runEncodersForBasename:(NSString *)basename source:(id <PCMGenerating>)task tracks:(NSArray *)tracks
+{
+	NSArray			*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
+	NSArray			*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
+	NSString		*filename			= nil;
 
 	// Create encoder tasks for the rip that just completed
 	@try {
@@ -376,7 +473,7 @@ static TaskMaster *sharedController = nil;
 				}
 				
 				filename		= generateUniqueFilename(basename, extension);
-				encoderTask		= [[CoreAudioEncoderTask alloc] initWithSource:task target:filename tracks:tracks formatInfo:formatInfo];
+				encoderTask		= [[CoreAudioEncoderTask alloc] initWithSource:task target:filename formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -401,7 +498,7 @@ static TaskMaster *sharedController = nil;
 			while((formatInfo = [formats nextObject])) {
 				filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
 				
-				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithSource:task target:filename tracks:tracks formatInfo:formatInfo];
+				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithSource:task target:filename formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -422,52 +519,20 @@ static TaskMaster *sharedController = nil;
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
 	}
-
+	
 	@finally {
 	}
 }
 
-#pragma mark Converting Functionality
-
-- (void) convertDidStart:(CoreAudioConverterTask* ) task
-{
-	NSString	*trackName		= [task description];
-	
-	[LogController logMessage:[NSString stringWithFormat:@"Convert started for %@", trackName]];
-	[GrowlApplicationBridge notifyWithTitle:@"Convert started" description:trackName
-						   notificationName:@"Convert started" iconData:nil priority:0 isSticky:NO clickContext:nil];
-}
-
-- (void) convertDidStop:(CoreAudioConverterTask* ) task
-{
-	NSString	*trackName		= [task description];
-	
-	[LogController logMessage:[NSString stringWithFormat:@"Convert stopped for %@", trackName]];
-	[GrowlApplicationBridge notifyWithTitle:@"Convert stopped" description:trackName
-						   notificationName:@"Convert stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
-	
-	//	[self removeConvertingTask:task];
-	//	[self spawnConverterThreads];
-}
-
-- (void) convertDidComplete:(CoreAudioConverterTask* ) task
-{
-	NSString	*trackName		= [task description];
-	
-	[LogController logMessage:[NSString stringWithFormat:@"Convert completed for %@", trackName]];
-	[GrowlApplicationBridge notifyWithTitle:@"Convert completed" description:trackName
-						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-	
-	//	[self removeConvertingTask:task];
-	//	[self spawnConverterThreads];
-}
-
-#pragma mark Encoding functionality
-
-- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(RipperTask *)task tracks:(NSArray *)track
+- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(id <PCMGenerating>)task tracks:(NSArray *)tracks
 {
 	// Create the encoder
-	EncoderTask *encoderTask = [[encoderClass alloc] initWithSource:task target:filename tracks:track];
+	EncoderTask *encoderTask = [[encoderClass alloc] initWithSource:task target:filename];
+	
+	if(nil != tracks) {
+		[encoderTask setTracks:tracks];
+		[encoderTask setMetadataSource:[tracks objectAtIndex:0]];
+	}
 	
 	[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 	[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -512,7 +577,7 @@ static TaskMaster *sharedController = nil;
 	
 	// Start encoding the next track(s)
 	for(i = 0; i < limit; ++i) {
-		if(NO == [[[[_encodingTasks objectAtIndex:i] valueForKey:@"encoder"] valueForKey:@"started"] boolValue]) {
+		if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"encoder.started"] boolValue]) {
 			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
 		}
 	}	

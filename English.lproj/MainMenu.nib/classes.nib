@@ -8,6 +8,7 @@
                 showAcknowledgments = id; 
                 showComponentVersions = id; 
                 showPreferences = id; 
+                toggleConverterWindow = id; 
                 toggleEncoderWindow = id; 
                 toggleLogWindow = id; 
                 toggleRipperWindow = id; 

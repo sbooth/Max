@@ -589,7 +589,7 @@
 		// Create one single file
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"]) {
 			
-			Track *copy = [[selectedTracks objectAtIndex:0] copy];
+			Track *copy = [[[selectedTracks objectAtIndex:0] copy] autorelease];
 			
 			[copy setValue:[NSNumber numberWithInt:0] forKey:@"number"];
 			[copy setValue:@"Multiple Tracks" forKey:@"title"];

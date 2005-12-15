@@ -20,10 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "PCMGenerating.h"
 #import "Ripper.h"
 #import "Track.h"
 
-@interface RipperTask : NSObject 
+@interface RipperTask : NSObject <PCMGenerating>
 {
 	NSString		*_path;
 	int				_out;
@@ -36,5 +37,7 @@
 
 - (void)		run:(id)object;
 - (void)		stop;
+
+- (NSString *)	outputFilename;
 
 @end

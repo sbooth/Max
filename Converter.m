@@ -1,5 +1,5 @@
 /*
- *  $Id: RipperTask.m 205 2005-12-05 06:04:34Z me $
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -18,15 +18,27 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CoreAudioConverterTask.h"
-#import "CoreAudioConverter.h"
+#import "Converter.h"
 
-@implementation CoreAudioConverterTask
+#import "MallocException.h"
+#import "IOException.h"
+#import "StopException.h"
+
+#include <fcntl.h>		// open, write
+#include <sys/stat.h>	// stat
+
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
+@implementation Converter
 
 - (id) initWithFilename:(NSString *)filename
 {
-	if((self = [super initWithFilename:filename])) {
-		_converter	= [[CoreAudioConverter alloc] initWithFilename:filename];
+	if((self = [super init])) {
+		_filename		= [filename retain];		
 		return self;
 	}
 	return nil;
@@ -34,13 +46,33 @@
 
 - (void) dealloc
 {
-	[_converter release];	
+	[_filename release];
+	
+	[_startTime release];
+	[_endTime release];
+	
 	[super dealloc];
+}
+
+- (void) convertToFile:(int)file
+{
+}
+
+- (void) requestStop
+{
+	@synchronized(self) {
+		if([_started boolValue]) {
+			_shouldStop = [NSNumber numberWithBool:YES];			
+		}
+		else {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		}
+	}
 }
 
 - (NSString *) description
 {
-	return [[_converter valueForKey:@"filename"] lastPathComponent];
+	return [_filename lastPathComponent];
 }
 
 @end

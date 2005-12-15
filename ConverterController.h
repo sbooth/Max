@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.h 180 2005-11-27 22:04:47Z me $
+ *  $Id: MediaController.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,10 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "EncoderTask.h"
+@class TaskMaster;
 
-@interface MPEGEncoderTask : EncoderTask 
+@interface ConverterController : NSWindowController
 {
+	TaskMaster		*_taskMaster;
 }
+
++ (ConverterController *)	sharedController;
 
 @end

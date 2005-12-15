@@ -26,6 +26,4 @@
 {
 }
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks;
-
 @end

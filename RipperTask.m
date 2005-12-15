@@ -113,6 +113,8 @@
 	[super dealloc];
 }
 
+- (NSString *) outputFilename						{ return _path; }
+
 - (NSString *) description
 {
 	if(1 == [_tracks count]) {

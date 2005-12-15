@@ -26,6 +26,7 @@
 #import "MediaController.h"
 #import "TaskMaster.h"
 #import "RipperController.h"
+#import "ConverterController.h"
 #import "EncoderController.h"
 #import "LogController.h"
 #import "CoreAudioUtilities.h"
@@ -80,7 +81,7 @@
 {
 	NSString		*bundleVersion;
 	MacPADSocket	*macPAD;
-	
+		
 	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
 	[MediaController sharedController];
 	
@@ -159,6 +160,17 @@
 	}
 	else {
 		[ripperWindow makeKeyAndOrderFront:self];
+	}
+}
+
+- (IBAction) toggleConverterWindow:(id)sender
+{
+	NSWindow *converterWindow = [[ConverterController sharedController] window];
+	if([converterWindow isVisible]) {
+		[converterWindow performClose:self];
+	}
+	else {
+		[converterWindow makeKeyAndOrderFront:self];
 	}
 }
 

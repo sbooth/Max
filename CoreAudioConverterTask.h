@@ -20,19 +20,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CoreAudioConverter.h"
+#import "ConverterTask.h"
 
-@interface CoreAudioConverterTask : NSObject 
+@interface CoreAudioConverterTask : ConverterTask 
 {
-	NSString				*_path;
-	int						_out;
-	CoreAudioConverter		*_converter;
-	NSString				*_basename;
 }
 
 - (id)			initWithFilename:(NSString *)filename;
-
-- (void)		run:(id)object;
-- (void)		stop;
 
 @end

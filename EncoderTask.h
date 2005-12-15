@@ -22,18 +22,22 @@
 
 #import "Encoder.h"
 #import "Track.h"
-#import "RipperTask.h"
+#import "PCMGenerating.h"
+#import "MetadataSource.h"
 
-@interface EncoderTask : NSObject 
+@interface EncoderTask : NSObject
 {
-	NSString			*_target;
-	Encoder				*_encoder;
-	NSArray				*_tracks;
-	RipperTask			*_source;
-	BOOL				_writeSettingsToComment;
+	NSString				*_target;
+	Encoder					*_encoder;
+	NSArray					*_tracks;
+	id <MetadataSource>		_metadata;
+	BOOL					_writeSettingsToComment;
 }
 
-- (id)				initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)track;
+- (id)				initWithTarget:(NSString *)target;
+
+- (void)			setMetadataSource:(id <MetadataSource>)metadata;
+- (void)			setTracks:(NSArray *)tracks;
 
 - (void)			run:(id) object;
 - (void)			stop;

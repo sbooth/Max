@@ -26,21 +26,12 @@
 
 @implementation EncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks;
+- (id) initWithTarget:(NSString *)target
 {
-	NSEnumerator	*enumerator;
-	Track			*track;
-	
 	if((self = [super init])) {
-		_target			= [target retain];
-		_tracks			= [tracks retain];
-		_source			= [source retain];
-		enumerator		= [_tracks objectEnumerator];
-		
-		while((track = [enumerator nextObject])) {
-			[track encodeStarted];
-		}
-		
+		_target					= [target retain];
+		_tracks					= nil;
+		_metadata				= nil;
 		_writeSettingsToComment = [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
 		return self;
@@ -53,29 +44,62 @@
 	NSEnumerator	*enumerator;
 	Track			*track;
 
-	enumerator		= [_tracks objectEnumerator];
+	if(nil != _tracks) {
+		enumerator		= [_tracks objectEnumerator];
 	
-	while((track = [enumerator nextObject])) {
-		[track encodeCompleted];
-		if(NO == [[track encodeInProgress] boolValue]) {
-			[track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+		while((track = [enumerator nextObject])) {
+			[track encodeCompleted];
+			if(NO == [[track encodeInProgress] boolValue]) {
+				[track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+			}
 		}
+
+		[_tracks release];
 	}
 	
 	[_target release];
-	[_tracks release];
-	[_source release];
 	
 	[super dealloc];
 }
 
+- (void) setMetadataSource:(id <MetadataSource>)metadata
+{
+	if(nil != _metadata) {
+		[_metadata release];
+	}
+
+	_metadata = [metadata retain];
+}
+
+- (void) setTracks:(NSArray *)tracks
+{
+	NSEnumerator	*enumerator;
+	Track			*track;
+
+	if(nil != _tracks) {
+		[_tracks release];
+	}
+	
+	_tracks			= [tracks retain];
+	enumerator		= [_tracks objectEnumerator];
+	
+	while((track = [enumerator nextObject])) {
+		[track encodeStarted];
+	}
+}
+
 - (NSString *) description
 {
-	if(1 == [_tracks count]) {
-		return [[_tracks objectAtIndex:0] description];
+	if(nil != _tracks) {
+		if([[_metadata multipleArtists] boolValue]) {
+			return [NSString stringWithFormat:@"%@ - %@", [_metadata trackArtist], [_metadata trackTitle]];
+		}
+	   else {
+		   return [_metadata trackTitle];
+	   }
 	}
 	else {
-		return @"Multiple tracks";
+		return @"fnord";
 	}
 }
 
@@ -92,7 +116,9 @@
 	
 	@try {
 		[_encoder encodeToFile:_target];
-		[self writeTags];
+		if(nil != _metadata) {
+			[self writeTags];
+		}
 	}
 	
 	@catch(StopException *exception) {
@@ -108,18 +134,8 @@
 	}
 }
 
-- (void) stop
-{
-	[_encoder requestStop];
-}
-
-- (void) writeTags
-{
-}
-
-- (NSString *) getType
-{
-	return nil;
-}
+- (void) stop									{ [_encoder requestStop]; }
+- (void) writeTags								{}
+- (NSString *) getType							{ return nil; }
 
 @end

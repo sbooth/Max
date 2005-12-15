@@ -1,5 +1,5 @@
 /*
- *  $Id: EncoderTask.h 180 2005-11-27 22:04:47Z me $
+ *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,10 +20,25 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "EncoderTask.h"
-
-@interface MPEGEncoderTask : EncoderTask 
+@interface Converter : NSObject
 {
+	NSString						*_filename;
+	
+	NSDate							*_startTime;
+	NSDate							*_endTime;
+	
+	NSNumber						*_started;
+	NSNumber						*_completed;
+	NSNumber						*_stopped;
+	NSNumber						*_percentComplete;
+	NSNumber						*_shouldStop;
+	NSString						*_timeRemaining;
 }
+
+- (id)		initWithFilename:(NSString *)filename;
+
+- (void)	requestStop;
+
+- (void)	convertToFile:(int)file;
 
 @end

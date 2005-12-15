@@ -20,37 +20,22 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
+#import "Converter.h"
 
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 #include <AudioToolbox/AudioFile.h>
 
-@interface CoreAudioConverter : NSObject
+@interface CoreAudioConverter : Converter
 {
-	NSString						*_filename;
 	ExtAudioFileRef					_in;
 
 	AudioBufferList					_buf;
 	ssize_t							_buflen;
 	
 	AudioStreamBasicDescription		_outputASBD;
-	
-	NSDate							*_startTime;
-	NSDate							*_endTime;
-	
-	NSNumber						*_started;
-	NSNumber						*_completed;
-	NSNumber						*_stopped;
-	NSNumber						*_percentComplete;
-	NSNumber						*_shouldStop;
-	NSString						*_timeRemaining;
 }
 
 - (id)		initWithFilename:(NSString *)filename;
-
-- (void)	requestStop;
-
-- (void)	convertToFile:(int)file;
 
 @end

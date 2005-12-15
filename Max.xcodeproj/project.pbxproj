@@ -99,6 +99,10 @@
 		8CD9ED95094FEB6700F67AC8 /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */; };
 		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
 		8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */; };
+		8CE098FE095107DD0020C8B1 /* ConverterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE098FC095107DD0020C8B1 /* ConverterController.m */; };
+		8CE0990E095108300020C8B1 /* Converter.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE0990D095108300020C8B1 /* Converter.nib */; };
+		8CE099180951089A0020C8B1 /* ConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE099160951089A0020C8B1 /* ConverterTask.m */; };
+		8CE09954095109BF0020C8B1 /* Converter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE09952095109BF0020C8B1 /* Converter.m */; };
 		8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164600933D42700A99A68 /* libcdda_paranoia.a */; };
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
@@ -325,6 +329,15 @@
 		8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterTask.m; sourceTree = "<group>"; };
 		8CDD2B9109442A9100D2DD96 /* CDInfo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CDInfo.icns; sourceTree = "<group>"; };
 		8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SubmitToFreeDBToolbarImage.png; sourceTree = "<group>"; };
+		8CE098FB095107DD0020C8B1 /* ConverterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverterController.h; sourceTree = "<group>"; };
+		8CE098FC095107DD0020C8B1 /* ConverterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverterController.m; sourceTree = "<group>"; };
+		8CE0990D095108300020C8B1 /* Converter.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Converter.nib; sourceTree = "<group>"; };
+		8CE099150951089A0020C8B1 /* ConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverterTask.h; sourceTree = "<group>"; };
+		8CE099160951089A0020C8B1 /* ConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConverterTask.m; sourceTree = "<group>"; };
+		8CE09951095109BF0020C8B1 /* Converter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Converter.h; sourceTree = "<group>"; };
+		8CE09952095109BF0020C8B1 /* Converter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Converter.m; sourceTree = "<group>"; };
+		8CE09AED095130AA0020C8B1 /* PCMGenerating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCMGenerating.h; sourceTree = "<group>"; };
+		8CE09C1D09513ED90020C8B1 /* MetadataSource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MetadataSource.h; sourceTree = "<group>"; };
 		8CE164600933D42700A99A68 /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
 		8CE164610933D42700A99A68 /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
 		8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
@@ -455,7 +468,8 @@
 				8C7C894308EC3FFE00F6FCB1 /* Compact Disc */,
 				8C7C897408EC42BC00F6FCB1 /* Controllers */,
 				8CDB0A19092D78C60080A0D8 /* Tasks */,
-				8C0408DA092A89770052D881 /* Ripper/Converter */,
+				8C0408DA092A89770052D881 /* Ripper */,
+				8CE09A0009510EED0020C8B1 /* Converter */,
 				080E96DDFE201D6D7F000001 /* Encoder */,
 				8C7300B808ECB21B0008D7E0 /* FreeDB */,
 				8CBEC4EB08ED6F640064F794 /* Exceptions */,
@@ -535,6 +549,7 @@
 				8CEDC010094BE2D70023DD01 /* Ripper.nib */,
 				8CEDC16A094BF05B0023DD01 /* Encoder.nib */,
 				8CD7AF1E094E6B8700BA2427 /* TODO */,
+				8CE0990D095108300020C8B1 /* Converter.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -553,17 +568,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		8C0408DA092A89770052D881 /* Ripper/Converter */ = {
+		8C0408DA092A89770052D881 /* Ripper */ = {
 			isa = PBXGroup;
 			children = (
-				8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */,
-				8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */,
 				8CD7B0CB094E7F2600BA2427 /* SectorRange.h */,
 				8CD7B0CC094E7F2600BA2427 /* SectorRange.m */,
 				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
 				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
 			);
-			name = Ripper/Converter;
+			name = Ripper;
 			sourceTree = "<group>";
 		};
 		8C4D4265093E0E5F00A88927 /* Preferences */ = {
@@ -613,6 +626,7 @@
 				8CE165B60933FAD400A99A68 /* CompactDisc.h */,
 				8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */,
 				8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */,
+				8CE09C1D09513ED90020C8B1 /* MetadataSource.h */,
 			);
 			name = "Compact Disc";
 			sourceTree = "<group>";
@@ -620,6 +634,8 @@
 		8C7C897408EC42BC00F6FCB1 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8CE098FB095107DD0020C8B1 /* ConverterController.h */,
+				8CE098FC095107DD0020C8B1 /* ConverterController.m */,
 				8CEDC0E4094BEB8D0023DD01 /* EncoderController.m */,
 				8CEDC0DB094BEB710023DD01 /* EncoderController.h */,
 				8C7C891208EC3EC500F6FCB1 /* ApplicationController.h */,
@@ -712,6 +728,7 @@
 		8CDB0A19092D78C60080A0D8 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				8CE09AED095130AA0020C8B1 /* PCMGenerating.h */,
 				8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */,
 				8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */,
 				8CB0B38B093B301400968F66 /* FLACEncoderTask.h */,
@@ -732,8 +749,21 @@
 				8C49624E09473168006E1765 /* OggFLACEncoderTask.m */,
 				8C4015720948E433003413BE /* CoreAudioEncoderTask.h */,
 				8C4015730948E433003413BE /* CoreAudioEncoderTask.m */,
+				8CE099150951089A0020C8B1 /* ConverterTask.h */,
+				8CE099160951089A0020C8B1 /* ConverterTask.m */,
 			);
 			name = Tasks;
+			sourceTree = "<group>";
+		};
+		8CE09A0009510EED0020C8B1 /* Converter */ = {
+			isa = PBXGroup;
+			children = (
+				8CE09951095109BF0020C8B1 /* Converter.h */,
+				8CE09952095109BF0020C8B1 /* Converter.m */,
+				8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */,
+				8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */,
+			);
+			name = Converter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -841,6 +871,7 @@
 				8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */,
 				8CEDC011094BE2D70023DD01 /* Ripper.nib in Resources */,
 				8CEDC16B094BF05C0023DD01 /* Encoder.nib in Resources */,
+				8CE0990E095108300020C8B1 /* Converter.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,6 +944,9 @@
 				8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */,
 				8CD9ECBE094FE19000F67AC8 /* CoreAudioConverter.m in Sources */,
 				8CD9ED95094FEB6700F67AC8 /* CoreAudioConverterTask.m in Sources */,
+				8CE098FE095107DD0020C8B1 /* ConverterController.m in Sources */,
+				8CE099180951089A0020C8B1 /* ConverterTask.m in Sources */,
+				8CE09954095109BF0020C8B1 /* Converter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

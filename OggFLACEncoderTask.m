@@ -23,10 +23,10 @@
 
 @implementation OggFLACEncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks
+- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target
 {
-	if((self = [super initWithSource:source target:target tracks:tracks])) {
-		_encoder = [[OggFLACEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
+	if((self = [super initWithTarget:target])) {
+		_encoder = [[OggFLACEncoder alloc] initWithSource:[source outputFilename]];
 		return self;
 	}
 	return nil;

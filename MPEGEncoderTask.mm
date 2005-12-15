@@ -33,10 +33,10 @@
 
 @implementation MPEGEncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks
+- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target
 {
-	if((self = [super initWithSource:source target:target tracks:tracks])) {
-		_encoder = [[MPEGEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
+	if((self = [super initWithTarget:target])) {
+		_encoder = [[MPEGEncoder alloc] initWithSource:[source outputFilename]];
 		return self;
 	}
 	return nil;
@@ -65,49 +65,42 @@
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	NSString									*timestamp				= nil;
-	Track										*track					= [_tracks objectAtIndex:0];
 	
 	// Album title
-	album = [track valueForKeyPath:@"disc.title"];
+	album = [_metadata albumTitle];
 	if(nil != album) {
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Artist
-	if(1 == [_tracks count]) {
-		artist = [track valueForKey:@"artist"];
-	}
+	artist = [_metadata trackArtist];
 	if(nil == artist) {
-		artist = [track valueForKeyPath:@"disc.artist"];
+		artist = [_metadata albumArtist];
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
-	if(1 == [_tracks count]) {
-		genre = [track valueForKey:@"genre"];
-	}
+	genre = [_metadata trackGenre];
 	if(nil == genre) {
-		genre = [track valueForKeyPath:@"disc.genre"];
+		genre = [_metadata albumGenre];
 	}
 	if(nil != genre) {
 		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year
-	if(1 == [_tracks count]) {
-		year = [track valueForKey:@"year"];
-	}
+	year = [_metadata trackYear];
 	if(nil == year) {
-		year = [track valueForKeyPath:@"disc.year"];
+		year = [_metadata albumYear];
 	}
 	if(nil != year) {
 		f.tag()->setYear([year intValue]);
 	}
 	
 	// Comment
-	comment = [track valueForKeyPath:@"disc.comment"];
+	comment = [_metadata albumComment];
 	if(_writeSettingsToComment) {
 		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
 	}
@@ -115,44 +108,25 @@
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
 	
-	if(1 == [_tracks count]) {
-		// Track title
-		title = [track valueForKey:@"title"];
-		if(nil != title) {
-			f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
-		}
-		
-		// Track number
-		trackNumber = [track valueForKey:@"number"];
-		totalTracks = [[track valueForKeyPath:@"disc.tracks"] count];
-		frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
-		if(nil == frame) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
-		}
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"%@/%u", trackNumber, totalTracks] UTF8String], TagLib::String::UTF8));
-		f.ID3v2Tag()->addFrame(frame);
+	// Track title
+	title = [_metadata trackTitle];
+	if(nil != title) {
+		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
 	}
-	else {
-		NSEnumerator	*enumerator;
-		Track			*temp;
-		
-		enumerator	= [_tracks objectEnumerator];
-		temp		= [enumerator nextObject];
-		
-		title		= [temp valueForKey:@"title"];
-		
-		while((temp = [enumerator nextObject])) {
-			title = [title stringByAppendingString:[NSString stringWithFormat:@", %@", [temp valueForKey:@"title"]]];
-		}
-
-		if(nil != title) {
-			f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
-		}
+	
+	// Track number
+	trackNumber = [_metadata trackNumber];
+	totalTracks = [[_metadata albumTrackCount] intValue];
+	frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
+	if(nil == frame) {
+		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
 	}
+	frame->setText(TagLib::String([[NSString stringWithFormat:@"%@/%u", trackNumber, totalTracks] UTF8String], TagLib::String::UTF8));
+	f.ID3v2Tag()->addFrame(frame);
 		
 	// Disc number
-	discNumber = [track valueForKeyPath:@"disc.discNumber"];
-	discsInSet = [track valueForKeyPath:@"disc.discsInSet"];
+	discNumber = [_metadata discNumber];
+	discsInSet = [_metadata discsInSet];
 	
 	if(nil != discNumber && nil != discsInSet) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);

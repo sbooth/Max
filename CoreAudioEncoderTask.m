@@ -26,11 +26,11 @@
 
 @implementation CoreAudioEncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks formatInfo:(NSDictionary *)formatInfo
+- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target formatInfo:(NSDictionary *)formatInfo
 {
-	if((self = [super initWithSource:source target:target tracks:tracks])) {
+	if((self = [super initWithTarget:target])) {
 		_formatInfo	= [formatInfo retain];
-		_encoder	= [[CoreAudioEncoder alloc] initWithSource:[_source valueForKey:@"path"] formatInfo:formatInfo];
+		_encoder	= [[CoreAudioEncoder alloc] initWithSource:[source outputFilename] formatInfo:formatInfo];
 		return self;
 	}
 	return nil;
@@ -58,7 +58,6 @@
 	NSNumber				*year					= nil;
 	NSString				*genre					= nil;
 	NSString				*comment				= nil;
-	Track					*track					= [_tracks objectAtIndex:0];
 	
 	
 	// Open the file
@@ -82,17 +81,15 @@
 		[info setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
 		
 		// Album title
-		album = [track valueForKeyPath:@"disc.title"];
+		album = [_metadata albumTitle];
 		if(nil != album) {
 			[info setValue:album forKey:@kAFInfoDictionary_Album];
 		}
 		
 		// Artist
-		if(1 == [_tracks count]) {
-			artist = [track valueForKey:@"artist"];
-		}
+		artist = [_metadata trackArtist];
 		if(nil == artist) {
-			artist = [track valueForKeyPath:@"disc.artist"];
+			artist = [_metadata albumArtist];
 		}
 		if(nil != artist) {
 			[info setValue:artist forKey:@kAFInfoDictionary_Artist];
@@ -100,28 +97,26 @@
 		
 		// Genre
 		if(1 == [_tracks count]) {
-			genre = [track valueForKey:@"genre"];
+			genre = [_metadata trackGenre];
 		}
 		if(nil == genre) {
-			genre = [track valueForKeyPath:@"disc.genre"];
+			genre = [_metadata albumGenre];
 		}
 		if(nil != genre) {
 			[info setValue:genre forKey:@kAFInfoDictionary_Genre];
 		}
 		
 		// Year
-		if(1 == [_tracks count]) {
-			year = [track valueForKey:@"year"];
-		}
+		year = [_metadata trackYear];
 		if(nil == year) {
-			year = [track valueForKeyPath:@"disc.year"];
+			year = [_metadata albumYear];
 		}
 		if(nil != year) {
 			[info setValue:year forKey:@kAFInfoDictionary_Year];
 		}
 		
 		// Comment
-		comment = [track valueForKeyPath:@"disc.comment"];
+		comment = [_metadata albumComment];
 		if(_writeSettingsToComment) {
 			comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
 		}
@@ -129,35 +124,16 @@
 			[info setValue:comment forKey:@kAFInfoDictionary_Comments];
 		}
 		
-		if(1 == [_tracks count]) {
-			// Track title
-			title = [track valueForKey:@"title"];
-			if(nil != title) {
-				[info setValue:title forKey:@kAFInfoDictionary_Title];
-			}
-			
-			// Track number
-			trackNumber = [track valueForKey:@"number"];
-			if(nil != trackNumber) {
-				[info setValue:trackNumber forKey:@kAFInfoDictionary_TrackNumber];
-			}
+		// Track title
+		title = [_metadata trackTitle];
+		if(nil != title) {
+			[info setValue:title forKey:@kAFInfoDictionary_Title];
 		}
-		else {
-			NSEnumerator	*enumerator;
-			Track			*temp;
-			
-			enumerator	= [_tracks objectEnumerator];
-			temp		= [enumerator nextObject];
-			
-			title		= [temp valueForKey:@"title"];
-			
-			while((temp = [enumerator nextObject])) {
-				title = [title stringByAppendingString:[NSString stringWithFormat:@", %@", [temp valueForKey:@"title"]]];
-			}
-
-			if(nil != title) {
-				[info setValue:title forKey:@kAFInfoDictionary_Title];
-			}
+		
+		// Track number
+		trackNumber = [_metadata trackNumber];
+		if(nil != trackNumber) {
+			[info setValue:trackNumber forKey:@kAFInfoDictionary_TrackNumber];
 		}
 		
 		size = sizeof(info);

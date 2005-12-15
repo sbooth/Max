@@ -26,10 +26,10 @@
 
 @implementation OggVorbisEncoderTask
 
-- (id) initWithSource:(RipperTask *)source target:(NSString *)target tracks:(NSArray *)tracks
+- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target
 {
-	if((self = [super initWithSource:source target:target tracks:tracks])) {
-		_encoder = [[OggVorbisEncoder alloc] initWithSource:[_source valueForKey:@"path"]];
+	if((self = [super initWithTarget:target])) {
+		_encoder = [[OggVorbisEncoder alloc] initWithSource:[source outputFilename]];
 		return self;
 	}
 	return nil;
@@ -51,43 +51,36 @@
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	TagLib::FileRef								f						([_target UTF8String], false);
-	Track										*track					= [_tracks objectAtIndex:0];
 
 	
 	// Album title
-	album = [track valueForKeyPath:@"disc.title"];
+	album = [_metadata albumTitle];
 	if(nil != album) {
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Artist
-	if(1 == [_tracks count]) {
-		artist = [track valueForKey:@"artist"];
-	}
+	artist = [_metadata trackArtist];
 	if(nil == artist) {
-		artist = [track valueForKeyPath:@"disc.artist"];
+		artist = [_metadata albumArtist];
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
-	if(1 == [_tracks count]) {
-		genre = [track valueForKey:@"genre"];
-	}
+	genre = [_metadata trackGenre];
 	if(nil == genre) {
-		genre = [track valueForKeyPath:@"disc.genre"];
+		genre = [_metadata albumGenre];
 	}
 	if(nil != genre) {
 		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year
-	if(1 == [_tracks count]) {
-		year = [track valueForKey:@"year"];
-	}
+	year = [_metadata trackYear];
 	if(nil == year) {
-		year = [track valueForKeyPath:@"disc.year"];
+		year = [_metadata albumYear];
 	}
 	if(nil != year) {
 		f.tag()->setYear([year intValue]);
@@ -97,42 +90,23 @@
 	if(_writeSettingsToComment) {
 		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
 	}
-	comment = [track valueForKeyPath:@"disc.comment"];
+	comment = [_metadata albumComment];
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
 	
-	if(1 == [_tracks count]) {
-		// Track title
-		title = [track valueForKey:@"title"];
-		if(nil != title) {
-			f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
-		}
-		
-		// Track number
-		trackNumber = [track valueForKey:@"number"];
-		if(nil != trackNumber) {
-			f.tag()->setTrack([trackNumber unsignedIntValue]);
-		}
+	// Track title
+	title = [_metadata trackTitle];
+	if(nil != title) {
+		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
 	}
-	else {
-		NSEnumerator	*enumerator;
-		Track			*temp;
-		
-		enumerator	= [_tracks objectEnumerator];
-		temp		= [enumerator nextObject];
-		
-		title		= [temp valueForKey:@"title"];
-		
-		while((temp = [enumerator nextObject])) {
-			title = [title stringByAppendingString:[NSString stringWithFormat:@", %@", [temp valueForKey:@"title"]]];
-		}
+	
+	// Track number
+	trackNumber = [_metadata trackNumber];
+	if(nil != trackNumber) {
+		f.tag()->setTrack([trackNumber unsignedIntValue]);
+	}
 
-		if(nil != title) {
-			f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
-		}
-		
-	}
 	f.save();
 }
 
