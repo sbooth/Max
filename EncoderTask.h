@@ -22,21 +22,19 @@
 
 #import "Encoder.h"
 #import "Track.h"
-#import "PCMGenerating.h"
-#import "MetadataSource.h"
+#import "AudioMetadata.h"
 
 @interface EncoderTask : NSObject
 {
-	NSString				*_target;
+	NSString				*_outputFilename;
 	Encoder					*_encoder;
 	NSArray					*_tracks;
-	id <MetadataSource>		_metadata;
+	AudioMetadata			*_metadata;
 	BOOL					_writeSettingsToComment;
 }
 
-- (id)				initWithTarget:(NSString *)target;
+- (id)				initWithOutputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata;
 
-- (void)			setMetadataSource:(id <MetadataSource>)metadata;
 - (void)			setTracks:(NSArray *)tracks;
 
 - (void)			run:(id) object;

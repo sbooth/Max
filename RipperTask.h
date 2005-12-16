@@ -20,24 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "PCMGenerating.h"
+#import "PCMGeneratingTask.h"
 #import "Ripper.h"
 #import "Track.h"
 
-@interface RipperTask : NSObject <PCMGenerating>
+@interface RipperTask : PCMGeneratingTask
 {
-	NSString		*_path;
-	int				_out;
 	Ripper			*_ripper;
 	NSArray			*_tracks;
-	NSString		*_basename;
 }
 
-- (id)			initWithTracks:(NSArray *)tracks;
-
-- (void)		run:(id)object;
-- (void)		stop;
-
-- (NSString *)	outputFilename;
+- (id)			initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
 
 @end

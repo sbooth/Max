@@ -23,10 +23,10 @@
 
 @implementation OggFLACEncoderTask
 
-- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target
+- (id) initWithInputFilename:(NSString *)inputFilename outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
-	if((self = [super initWithTarget:target])) {
-		_encoder = [[OggFLACEncoder alloc] initWithSource:[source outputFilename]];
+	if((self = [super initWithOutputFilename:outputFilename metadata:metadata])) {
+		_encoder = [[OggFLACEncoder alloc] initWithSource:inputFilename];
 		return self;
 	}
 	return nil;

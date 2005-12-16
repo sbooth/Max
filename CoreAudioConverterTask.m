@@ -23,10 +23,10 @@
 
 @implementation CoreAudioConverterTask
 
-- (id) initWithFilename:(NSString *)filename
+- (id) initWithInputFilename:(NSString *)inputFilename
 {
-	if((self = [super initWithFilename:filename])) {
-		_converter	= [[CoreAudioConverter alloc] initWithFilename:filename];
+	if((self = [super initWithInputFilename:inputFilename])) {
+		_converter	= [[CoreAudioConverter alloc] initWithInputFilename:inputFilename];
 		return self;
 	}
 	return nil;
@@ -34,13 +34,8 @@
 
 - (void) dealloc
 {
-	[_converter release];	
+	[_converter release];
 	[super dealloc];
-}
-
-- (NSString *) description
-{
-	return [[_converter valueForKey:@"filename"] lastPathComponent];
 }
 
 @end

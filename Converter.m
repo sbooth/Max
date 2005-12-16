@@ -35,10 +35,10 @@
 
 @implementation Converter
 
-- (id) initWithFilename:(NSString *)filename
+- (id) initWithInputFilename:(NSString *)inputFilename
 {
 	if((self = [super init])) {
-		_filename		= [filename retain];		
+		_inputFilename = [_inputFilename retain];		
 		return self;
 	}
 	return nil;
@@ -46,7 +46,7 @@
 
 - (void) dealloc
 {
-	[_filename release];
+	[_inputFilename release];
 	
 	[_startTime release];
 	[_endTime release];
@@ -54,9 +54,7 @@
 	[super dealloc];
 }
 
-- (void) convertToFile:(int)file
-{
-}
+- (void) convertToFile:(int)file					{}
 
 - (void) requestStop
 {
@@ -70,9 +68,6 @@
 	}
 }
 
-- (NSString *) description
-{
-	return [_filename lastPathComponent];
-}
+- (NSString *) description							{ return [_inputFilename lastPathComponent]; }
 
 @end

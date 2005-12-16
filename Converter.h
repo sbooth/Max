@@ -22,7 +22,7 @@
 
 @interface Converter : NSObject
 {
-	NSString						*_filename;
+	NSString						*_inputFilename;
 	
 	NSDate							*_startTime;
 	NSDate							*_endTime;
@@ -35,7 +35,7 @@
 	NSString						*_timeRemaining;
 }
 
-- (id)		initWithFilename:(NSString *)filename;
+- (id)		initWithInputFilename:(NSString *)inputFilename;
 
 - (void)	requestStop;
 

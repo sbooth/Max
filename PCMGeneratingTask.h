@@ -1,5 +1,5 @@
 /*
- *  $Id: Track.h 202 2005-12-04 21:50:52Z me $
+ *  $Id: RipperTask.h 202 2005-12-04 21:50:52Z me $
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -20,25 +20,22 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AudioMetadata : NSObject
+#import "AudioMetadata.h"
+
+@interface PCMGeneratingTask : NSObject 
 {
-	NSNumber		*_trackNumber;
-	NSString		*_trackTitle;
-	NSString		*_trackArtist;
-	NSNumber		*_trackYear;
-	NSString		*_trackGenre;
-	NSString		*_trackComment;
-
-	NSNumber		*_albumTrackCount;
-	NSString		*_albumTitle;
-	NSString		*_albumArtist;
-	NSNumber		*_albumYear;
-	NSString		*_albumGenre;
-	NSString		*_albumComment;
-
-	NSNumber		*_multipleArtists;
-	NSNumber		*_discNumber;
-	NSNumber		*_discsInSet;
+	NSString			*_basename;
+	NSString			*_outputFilename;
+	int					_out;
+	AudioMetadata		*_metadata;
 }
+
+- (id)						initWithMetadata:(AudioMetadata *)metadata;
+
+- (void)					run:(id)object;
+- (void)					stop;
+
+- (AudioMetadata *)			metadata;
+- (NSString *)				outputFilename;
 
 @end

@@ -26,12 +26,12 @@
 
 @implementation EncoderTask
 
-- (id) initWithTarget:(NSString *)target
+- (id) initWithOutputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super init])) {
-		_target					= [target retain];
+		_outputFilename			= [outputFilename retain];
 		_tracks					= nil;
-		_metadata				= nil;
+		_metadata				= [metadata retain];
 		_writeSettingsToComment = [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
 		return self;
@@ -57,18 +57,9 @@
 		[_tracks release];
 	}
 	
-	[_target release];
+	[_outputFilename release];
 	
 	[super dealloc];
-}
-
-- (void) setMetadataSource:(id <MetadataSource>)metadata
-{
-	if(nil != _metadata) {
-		[_metadata release];
-	}
-
-	_metadata = [metadata retain];
 }
 
 - (void) setTracks:(NSArray *)tracks
@@ -90,22 +81,11 @@
 
 - (NSString *) description
 {
-	if(nil != _tracks) {
-		if([[_metadata multipleArtists] boolValue]) {
-			return [NSString stringWithFormat:@"%@ - %@", [_metadata trackArtist], [_metadata trackTitle]];
-		}
-	   else {
-		   return [_metadata trackTitle];
-	   }
-	}
-	else {
-		return @"fnord";
-	}
 }
 
 - (void) removeOutputFile
 {
-	if(-1 == unlink([_target UTF8String])) {
+	if(-1 == unlink([_outputFilename UTF8String])) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}	
 }
@@ -115,7 +95,7 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	@try {
-		[_encoder encodeToFile:_target];
+		[_encoder encodeToFile:_outputFilename];
 		if(nil != _metadata) {
 			[self writeTags];
 		}

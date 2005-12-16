@@ -22,6 +22,7 @@
 
 #import "Track.h"
 #import "CompactDiscDocument.h"
+#import "AudioMetadata.h"
 #import "RipperTask.h"
 #import "ConverterTask.h"
 #import "EncoderTask.h"
@@ -55,13 +56,10 @@
 - (BOOL)			compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document;
 - (void)			stopRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
 
-- (void)			encodeTrack:(Track *)track outputBasename:(NSString *)basename;
-- (void)			encodeTracks:(NSArray *)tracks outputBasename:(NSString *)basename;
+- (void)			encodeTrack:(Track *)track outputBasename:(NSString *)outputBasename;
+- (void)			encodeTracks:(NSArray *)tracks outputBasename:(NSString *)outputBasename metadata:(AudioMetadata *)metadata;
 
-- (void)			encodeFile:(NSString *)filename outputBasename:(NSString *)basename;
-
-- (void)			displayExceptionSheet:(NSException *) exception;
-- (void)			alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
+- (void)			encodeFile:(NSString *)filename outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata;
 
 - (void)			ripDidStart:(RipperTask *) task;
 - (void)			ripDidStop:(RipperTask *) task;

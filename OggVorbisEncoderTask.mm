@@ -26,10 +26,10 @@
 
 @implementation OggVorbisEncoderTask
 
-- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target
+- (id) initWithInputFilename:(NSString *)inputFilename outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
-	if((self = [super initWithTarget:target])) {
-		_encoder = [[OggVorbisEncoder alloc] initWithSource:[source outputFilename]];
+	if((self = [super initWithOutputFilename:outputFilename metadata:metadata])) {
+		_encoder = [[OggVorbisEncoder alloc] initWithSource:inputFilename];
 		return self;
 	}
 	return nil;
@@ -50,37 +50,37 @@
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
-	TagLib::FileRef								f						([_target UTF8String], false);
+	TagLib::FileRef								f						([_outputFilename UTF8String], false);
 
 	
 	// Album title
-	album = [_metadata albumTitle];
+	album = [_metadata valueForKey:@"albumTitle"];
 	if(nil != album) {
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Artist
-	artist = [_metadata trackArtist];
+	artist = [_metadata valueForKey:@"trackArtist"];
 	if(nil == artist) {
-		artist = [_metadata albumArtist];
+		artist = [_metadata valueForKey:@"albumArtist"];
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
-	genre = [_metadata trackGenre];
+	genre = [_metadata valueForKey:@"trackGenre"];
 	if(nil == genre) {
-		genre = [_metadata albumGenre];
+		genre = [_metadata valueForKey:@"albumGenre"];
 	}
 	if(nil != genre) {
 		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year
-	year = [_metadata trackYear];
+	year = [_metadata valueForKey:@"trackYear"];
 	if(nil == year) {
-		year = [_metadata albumYear];
+		year = [_metadata valueForKey:@"albumYear"];
 	}
 	if(nil != year) {
 		f.tag()->setYear([year intValue]);
@@ -90,19 +90,19 @@
 	if(_writeSettingsToComment) {
 		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
 	}
-	comment = [_metadata albumComment];
+	comment = [_metadata valueForKey:@"albumComment"];
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track title
-	title = [_metadata trackTitle];
+	title = [_metadata valueForKey:@"trackTitle"];
 	if(nil != title) {
 		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track number
-	trackNumber = [_metadata trackNumber];
+	trackNumber = [_metadata valueForKey:@"trackNumber"];
 	if(nil != trackNumber) {
 		f.tag()->setTrack([trackNumber unsignedIntValue]);
 	}

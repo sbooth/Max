@@ -35,12 +35,12 @@
 
 @implementation CoreAudioConverter
 
-- (id) initWithFilename:(NSString *)filename
+- (id) initWithInputFilename:(NSString *)inputFilename
 {
 	OSStatus			err;
 	FSRef				ref;
 
-	if((self = [super initWithFilename:filename])) {
+	if((self = [super initWithInputFilename:inputFilename])) {
 		
 		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
 		
@@ -55,7 +55,7 @@
 		_outputASBD.mBitsPerChannel		= 16;
 		
 		// Open the output file
-		err = FSPathMakeRef([_filename UTF8String], &ref, NULL);
+		err = FSPathMakeRef([_inputFilename UTF8String], &ref, NULL);
 		if(noErr != err) {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate input file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}

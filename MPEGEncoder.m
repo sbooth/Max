@@ -43,8 +43,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 // Tag values for NSPopupButton
 enum {
-	LAME_TARGET_BITRATE						= 0,
-	LAME_TARGET_QUALITY						= 1,
+	LAME_out_BITRATE						= 0,
+	LAME_out_QUALITY						= 1,
 	
 	LAME_ENCODING_ENGINE_QUALITY_FAST		= 0,
 	LAME_ENCODING_ENGINE_QUALITY_STANDARD	= 1,
@@ -117,7 +117,7 @@ enum {
 			}
 			
 			// Target is bitrate
-			if(LAME_TARGET_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
+			if(LAME_out_BITRATE == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
 				bitrate = sLAMEBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"lameBitrate"]];
 				lame_set_brate(_gfp, bitrate);
 				if([[NSUserDefaults standardUserDefaults] boolForKey:@"lameUseConstantBitrate"]) {
@@ -129,7 +129,7 @@ enum {
 				}
 			}
 			// Target is quality
-			else if(LAME_TARGET_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
+			else if(LAME_out_QUALITY == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameTarget"]) {
 				lame_set_VBR(_gfp, LAME_VARIABLE_BITRATE_MODE_FAST == [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVariableBitrateMode"] ? vbr_mtrh : vbr_rh);
 				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
 			}

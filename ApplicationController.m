@@ -30,6 +30,7 @@
 #import "EncoderController.h"
 #import "LogController.h"
 #import "CoreAudioUtilities.h"
+#import "UtilityFunctions.h"
 #import "UpdateChecker.h"
 #import "MacPADSocket.h"
 #import "IOException.h"
@@ -137,12 +138,16 @@
 	[panel setCanChooseDirectories:NO];
 	
 	if(NSOKButton == [panel runModalForTypes:getCoreAudioExtensions()]) {
-		NSArray		*filenames		= [panel filenames];
-		unsigned	i;
+		NSArray			*filenames		= [panel filenames];
+		unsigned		i;
 		
 		for(i = 0; i < [filenames count]; ++i) {
-			NSString *filename = [filenames objectAtIndex:i];
-			[[TaskMaster sharedController] encodeFile:filename outputBasename:[filename stringByDeletingPathExtension]];
+			NSString		*filename	= [filenames objectAtIndex:i];
+			AudioMetadata	*metadata	= [[[AudioMetadata alloc] init] autorelease];
+			
+			// TODO: fill in metadata!
+			
+			[[TaskMaster sharedController] encodeFile:filename outputBasename:basenameForMetadata(metadata) metadata:metadata];
 		}
 	}
 }

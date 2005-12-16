@@ -26,11 +26,11 @@
 
 @implementation CoreAudioEncoderTask
 
-- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target formatInfo:(NSDictionary *)formatInfo
+- (id) initWithInputFilename:(NSString *)inputFilename outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata formatInfo:(NSDictionary *)formatInfo
 {
-	if((self = [super initWithTarget:target])) {
+	if((self = [super initWithOutputFilename:outputFilename metadata:metadata])) {
 		_formatInfo	= [formatInfo retain];
-		_encoder	= [[CoreAudioEncoder alloc] initWithSource:[source outputFilename] formatInfo:formatInfo];
+		_encoder	= [[CoreAudioEncoder alloc] initWithSource:inputFilename formatInfo:formatInfo];
 		return self;
 	}
 	return nil;
@@ -61,7 +61,7 @@
 	
 	
 	// Open the file
-	err = FSPathMakeRef([_target UTF8String], &ref, NULL);
+	err = FSPathMakeRef([_outputFilename UTF8String], &ref, NULL);
 	if(noErr != err) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
@@ -81,15 +81,15 @@
 		[info setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
 		
 		// Album title
-		album = [_metadata albumTitle];
+		album = [_metadata valueForKey:@"albumTitle"];
 		if(nil != album) {
 			[info setValue:album forKey:@kAFInfoDictionary_Album];
 		}
 		
 		// Artist
-		artist = [_metadata trackArtist];
+		artist = [_metadata valueForKey:@"trackArtist"];
 		if(nil == artist) {
-			artist = [_metadata albumArtist];
+			artist = [_metadata valueForKey:@"albumArtist"];
 		}
 		if(nil != artist) {
 			[info setValue:artist forKey:@kAFInfoDictionary_Artist];
@@ -97,26 +97,26 @@
 		
 		// Genre
 		if(1 == [_tracks count]) {
-			genre = [_metadata trackGenre];
+			genre = [_metadata valueForKey:@"trackGenre"];
 		}
 		if(nil == genre) {
-			genre = [_metadata albumGenre];
+			genre = [_metadata valueForKey:@"albumGenre"];
 		}
 		if(nil != genre) {
 			[info setValue:genre forKey:@kAFInfoDictionary_Genre];
 		}
 		
 		// Year
-		year = [_metadata trackYear];
+		year = [_metadata valueForKey:@"trackYear"];
 		if(nil == year) {
-			year = [_metadata albumYear];
+			year = [_metadata valueForKey:@"albumYear"];
 		}
 		if(nil != year) {
 			[info setValue:year forKey:@kAFInfoDictionary_Year];
 		}
 		
 		// Comment
-		comment = [_metadata albumComment];
+		comment = [_metadata valueForKey:@"albumComment"];
 		if(_writeSettingsToComment) {
 			comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
 		}
@@ -125,13 +125,13 @@
 		}
 		
 		// Track title
-		title = [_metadata trackTitle];
+		title = [_metadata valueForKey:@"trackTitle"];
 		if(nil != title) {
 			[info setValue:title forKey:@kAFInfoDictionary_Title];
 		}
 		
 		// Track number
-		trackNumber = [_metadata trackNumber];
+		trackNumber = [_metadata valueForKey:@"trackNumber"];
 		if(nil != trackNumber) {
 			[info setValue:trackNumber forKey:@kAFInfoDictionary_TrackNumber];
 		}

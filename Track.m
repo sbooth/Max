@@ -254,27 +254,31 @@
 	return copy;
 }
 
-#pragma mark Metadata Source Protocol
+- (AudioMetadata *) metadata
+{
+	AudioMetadata *result = [[AudioMetadata alloc] init];
 
-// Track information
-- (NSNumber *)		trackNumber						{ return _number; }
-- (NSString *)		trackTitle						{ return _title; }
-- (NSString *)		trackArtist						{ return _artist; }
-- (NSNumber *)		trackYear						{ return _year; }
-- (NSString *)		trackGenre						{ return _genre; }
-- (NSString *)		trackComment					{ return nil/*_comment*/; }
+	[result setValue:_number forKey:@"trackNumber"];
+	[result setValue:_title forKey:@"trackTitle"];
+	[result setValue:_artist forKey:@"trackArtist"];
+	[result setValue:_year forKey:@"trackYear"];
+	[result setValue:_genre forKey:@"trackGenre"];
+	//[result setValue:nil_comment forKey:@"trackComment"];
+		
+	[result setValue:[NSNumber numberWithInt:[[_disc valueForKey:@"tracks"] count]] forKey:@"albumTrackCount"];
+	[result setValue:[_disc valueForKey:@"title"] forKey:@"albumTitle"];
+	[result setValue:[_disc valueForKey:@"artist"] forKey:@"albumArtist"];
+	[result setValue:[_disc valueForKey:@"year"] forKey:@"albumYear"];
+	[result setValue:[_disc valueForKey:@"genre"] forKey:@"albumGenre"];
+	[result setValue:[_disc valueForKey:@"comment"] forKey:@"albumComment"];
+		
+	[result setValue:[_disc valueForKey:@"discNumber"] forKey:@"discNumber"];
+	[result setValue:[_disc valueForKey:@"discsInSet"] forKey:@"discsInSet"];
+	[result setValue:[_disc valueForKey:@"multiArtist"] forKey:@"multipleArtists"];
+	
+	
+	return [result autorelease];
+}
 
-	// Album information
-- (NSNumber *)		albumTrackCount					{ return [NSNumber numberWithInt:[[_disc valueForKey:@"tracks"] count]]; }
-- (NSString *)		albumTitle;						{ return [_disc valueForKey:@"title"]; }
-- (NSString *)		albumArtist						{ return [_disc valueForKey:@"artist"]; }
-- (NSNumber *)		albumYear						{ return [_disc valueForKey:@"year"]; }
-- (NSString *)		albumGenre						{ return [_disc valueForKey:@"genre"]; }
-- (NSString *)		albumComment					{ return [_disc valueForKey:@"comment"]; }
-
-	// Disc Information
-- (NSNumber *)		discNumber						{ return [_disc valueForKey:@"discNumber"]; }
-- (NSNumber *)		discsInSet						{ return [_disc valueForKey:@"discsInSet"]; }
-- (NSNumber *)		multipleArtists					{ return [_disc valueForKey:@"multiArtist"]; }
 
 @end

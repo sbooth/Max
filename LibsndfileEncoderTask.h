@@ -27,6 +27,6 @@
 	NSDictionary	*_formatInfo;
 }
 
-- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target formatInfo:(NSDictionary *)formatInfo;
+- (id) initWithInputFilename:(NSString *)inputFilename outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata formatInfo:(NSDictionary *)formatInfo;
 
 @end

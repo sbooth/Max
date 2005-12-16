@@ -70,7 +70,7 @@ callback(long inpos, int function, void *userdata)
 	Ripper *ripper = (Ripper *)userdata;
 	
 	if([ripper logActivity]) {
-		[LogController performSelectorOnMainThread:@selector(logMessage:) withObject:[NSString stringWithFormat:@"Rip status: %s sector %ld (%ld)", (function >= -2 && function <= 13 ? callback_strings[function + 2] : ""), inpos / CD_FRAMEWORDS, inpos] waitUntilDone:NO];
+		[[LogController sharedController] performSelectorOnMainThread:@selector(logMessage:) withObject:[NSString stringWithFormat:@"Rip status: %s sector %ld (%ld)", (function >= -2 && function <= 13 ? callback_strings[function + 2] : ""), inpos / CD_FRAMEWORDS, inpos] waitUntilDone:NO];
 	}	
 }
 

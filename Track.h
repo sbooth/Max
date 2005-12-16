@@ -20,11 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "MetadataSource.h"
+#import "AudioMetadata.h"
 
 @class CompactDiscDocument;
 
-@interface Track : NSObject <MetadataSource>
+@interface Track : NSObject
 {
 	NSNumber				*_ripInProgress;
 	unsigned				_activeEncoders;
@@ -68,6 +68,9 @@
 - (void)					encodeStarted;
 - (void)					encodeCompleted;
 - (NSNumber *)				encodeInProgress;
+
+
+- (AudioMetadata *)			metadata;
 
 // Save/Restore
 - (NSDictionary *)	getDictionary;

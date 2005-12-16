@@ -44,8 +44,8 @@ static TaskMaster *sharedController = nil;
 - (void) removeRippingTask:(RipperTask *) task;
 - (void) removeConvertingTask:(ConverterTask *) task;
 - (void) removeEncodingTask:(EncoderTask *) task;
-- (void) runEncodersForBasename:(NSString *)basename source:(id <PCMGenerating>)task tracks:(NSArray *)tracks;
-- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(id <PCMGenerating>)task tracks:(NSArray *)track;
+- (void) runEncodersForTask:(PCMGeneratingTask *)task;
+- (void) runEncoder:(Class)encoderClass outputFilename:(NSString *)outputFilename task:(PCMGeneratingTask *)task;
 @end
 
 @implementation TaskMaster
@@ -209,15 +209,15 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeTrack:(Track *)track outputBasename:(NSString *)basename
 {
-	[self encodeTracks:[NSArray arrayWithObjects:track, nil] outputBasename:basename];
+	[self encodeTracks:[NSArray arrayWithObjects:track, nil] outputBasename:basename metadata:[track metadata]];
 }
 
-- (void) encodeTracks:(NSArray *)tracks outputBasename:(NSString *)basename
+- (void) encodeTracks:(NSArray *)tracks outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata
 {
 	RipperTask	*ripperTask		= nil;
 	
 	// Start rip
-	ripperTask = [[RipperTask alloc] initWithTracks:tracks];
+	ripperTask = [[RipperTask alloc] initWithTracks:tracks metadata:metadata];
 	[ripperTask setValue:basename forKey:@"basename"];
 	[ripperTask addObserver:self forKeyPath:@"ripper.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
 	[ripperTask addObserver:self forKeyPath:@"ripper.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:ripperTask];	
@@ -233,12 +233,12 @@ static TaskMaster *sharedController = nil;
 	[self spawnRipperThreads];
 }
 
-- (void) encodeFile:(NSString *)filename outputBasename:(NSString *)basename
+- (void) encodeFile:(NSString *)filename outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata
 {
 	ConverterTask	*converterTask		= nil;
 	
 	// Start conversion
-	converterTask = [[CoreAudioConverterTask alloc] initWithFilename:filename];
+	converterTask = [[CoreAudioConverterTask alloc] initWithInputFilename:filename];
 	[converterTask setValue:basename forKey:@"basename"];
 	[converterTask addObserver:self forKeyPath:@"converter.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
 	[converterTask addObserver:self forKeyPath:@"converter.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
@@ -252,17 +252,6 @@ static TaskMaster *sharedController = nil;
 	// Add the converter to our list of converting tasks
 	[[self mutableArrayValueForKey:@"convertingTasks"] addObject:[converterTask autorelease]];
 	[self spawnConverterThreads];
-}
-
-- (void) displayExceptionSheet:(NSException *) exception
-{
-	displayExceptionAlert(exception);
-	//	displayExceptionSheet(exception, [self window], self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
-}
-
-- (void)alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo
-{
-	// Nothing for now
 }
 
 - (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
@@ -354,7 +343,7 @@ static TaskMaster *sharedController = nil;
 	[self removeRippingTask:task];
 	[self spawnRipperThreads];
 
-	[self runEncodersForBasename:[task valueForKey:@"basename"] source:task tracks:[task valueForKey:@"tracks"]];
+	[self runEncodersForTask:task];
 }
 
 #pragma mark Converting Functionality
@@ -425,34 +414,34 @@ static TaskMaster *sharedController = nil;
 	[self removeConvertingTask:task];
 	[self spawnConverterThreads];
 	
-	[self runEncodersForBasename:[task valueForKey:@"basename"] source:task tracks:nil];
+	[self runEncodersForTask:task];
 }
 
 #pragma mark Encoding functionality
 
-- (void) runEncodersForBasename:(NSString *)basename source:(id <PCMGenerating>)task tracks:(NSArray *)tracks
+- (void) runEncodersForTask:(PCMGeneratingTask *)task
 {
 	NSArray			*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
 	NSArray			*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
-	NSString		*filename			= nil;
+	NSString		*outputFilename		= nil;
 
 	// Create encoder tasks for the rip that just completed
 	@try {
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"]) {
-			filename = generateUniqueFilename(basename, @"mp3");
-			[self runEncoder:[MPEGEncoderTask class] filename:filename source:task tracks:tracks];
+			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"mp3");
+			[self runEncoder:[MPEGEncoderTask class] outputFilename:outputFilename task:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"]) {
-			filename = generateUniqueFilename(basename, @"flac");
-			[self runEncoder:[FLACEncoderTask class] filename:filename source:task tracks:tracks];
+			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"flac");
+			[self runEncoder:[FLACEncoderTask class] outputFilename:outputFilename task:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"]) {
-			filename = generateUniqueFilename(basename, @"oggflac");
-			[self runEncoder:[OggFLACEncoderTask class] filename:filename source:task tracks:tracks];
+			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"oggflac");
+			[self runEncoder:[OggFLACEncoderTask class] outputFilename:outputFilename task:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"]) {
-			filename = generateUniqueFilename(basename, @"ogg");
-			[self runEncoder:[OggVorbisEncoderTask class] filename:filename source:task tracks:tracks];
+			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"ogg");
+			[self runEncoder:[OggVorbisEncoderTask class] outputFilename:outputFilename task:task];
 		}
 		
 		// Core Audio encoders
@@ -472,8 +461,8 @@ static TaskMaster *sharedController = nil;
 					extension = extensions;
 				}
 				
-				filename		= generateUniqueFilename(basename, extension);
-				encoderTask		= [[CoreAudioEncoderTask alloc] initWithSource:task target:filename formatInfo:formatInfo];
+				outputFilename	= generateUniqueFilename([task valueForKey:@"basename"], extension);
+				encoderTask		= [[CoreAudioEncoderTask alloc] initWithInputFilename:[task outputFilename] outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -496,9 +485,9 @@ static TaskMaster *sharedController = nil;
 			NSDictionary	*formatInfo;
 			
 			while((formatInfo = [formats nextObject])) {
-				filename = generateUniqueFilename(basename, [formatInfo valueForKey:@"extension"]);
+				outputFilename			= generateUniqueFilename([task valueForKey:@"basename"], [formatInfo valueForKey:@"extension"]);
 				
-				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithSource:task target:filename formatInfo:formatInfo];
+				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithInputFilename:[task outputFilename] outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -524,16 +513,15 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
-- (void) runEncoder:(Class)encoderClass filename:(NSString *)filename source:(id <PCMGenerating>)task tracks:(NSArray *)tracks
+- (void) runEncoder:(Class)encoderClass outputFilename:(NSString *)outputFilename task:(PCMGeneratingTask *)task
 {
 	// Create the encoder
-	EncoderTask *encoderTask = [[encoderClass alloc] initWithSource:task target:filename];
-	
-	if(nil != tracks) {
-		[encoderTask setTracks:tracks];
-		[encoderTask setMetadataSource:[tracks objectAtIndex:0]];
+	EncoderTask *encoderTask = [[encoderClass alloc] initWithOutputFilename:outputFilename metadata:[task metadata]];
+		
+	if([task isKindOfClass:[RipperTask class]]) {
+		[encoderTask setTracks:[task valueForKey:@"tracks"]];
 	}
-	
+
 	[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 	[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 	[encoderTask addObserver:self forKeyPath:@"encoder.stopped" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];

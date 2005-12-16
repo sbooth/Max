@@ -20,12 +20,17 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "AudioMetadata.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Get data directory (~/Application Support/Max/)
 NSString * getApplicationDataDirectory();
+
+// Create ouput file's basename using metadata
+NSString * basenameForMetadata(AudioMetadata *metadata);
 
 // Create directory structure for path
 void createDirectoryStructure(NSString *path);

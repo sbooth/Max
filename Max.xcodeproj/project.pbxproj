@@ -55,6 +55,8 @@
 		8CA382F10924598D00BDFD02 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA382EE0924598D00BDFD02 /* libmp3lame.a */; };
 		8CA522790938E44100250BE8 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA522770938E44100250BE8 /* LogController.m */; };
 		8CA5229F0938E5DD00250BE8 /* Log.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA5229E0938E5DD00250BE8 /* Log.nib */; };
+		8CA5C39C09526FA9006FB5B7 /* AudioMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA5C39B09526FA9006FB5B7 /* AudioMetadata.m */; };
+		8CA5C444095277F7006FB5B7 /* PCMGeneratingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA5C442095277F7006FB5B7 /* PCMGeneratingTask.m */; };
 		8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA660650941A87B00CC84F2 /* VorbisException.m */; };
 		8CA8C03E093A5F2B00FDA506 /* MPEGEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */; };
 		8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */; };
@@ -262,6 +264,9 @@
 		8CA522760938E44100250BE8 /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogController.h; sourceTree = "<group>"; };
 		8CA522770938E44100250BE8 /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogController.m; sourceTree = "<group>"; };
 		8CA5229E0938E5DD00250BE8 /* Log.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Log.nib; sourceTree = "<group>"; };
+		8CA5C39B09526FA9006FB5B7 /* AudioMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioMetadata.m; sourceTree = "<group>"; };
+		8CA5C441095277F7006FB5B7 /* PCMGeneratingTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCMGeneratingTask.h; sourceTree = "<group>"; };
+		8CA5C442095277F7006FB5B7 /* PCMGeneratingTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCMGeneratingTask.m; sourceTree = "<group>"; };
 		8CA660640941A87B00CC84F2 /* VorbisException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VorbisException.h; sourceTree = "<group>"; };
 		8CA660650941A87B00CC84F2 /* VorbisException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VorbisException.m; sourceTree = "<group>"; };
 		8CA8C03B093A5F2B00FDA506 /* MPEGEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEGEncoder.h; sourceTree = "<group>"; };
@@ -337,7 +342,7 @@
 		8CE09951095109BF0020C8B1 /* Converter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Converter.h; sourceTree = "<group>"; };
 		8CE09952095109BF0020C8B1 /* Converter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Converter.m; sourceTree = "<group>"; };
 		8CE09AED095130AA0020C8B1 /* PCMGenerating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCMGenerating.h; sourceTree = "<group>"; };
-		8CE09C1D09513ED90020C8B1 /* MetadataSource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MetadataSource.h; sourceTree = "<group>"; };
+		8CE09C1D09513ED90020C8B1 /* AudioMetadata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AudioMetadata.h; sourceTree = "<group>"; };
 		8CE164600933D42700A99A68 /* libcdda_paranoia.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_paranoia.a; sourceTree = "<group>"; };
 		8CE164610933D42700A99A68 /* libcdda_interface.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcdda_interface.a; sourceTree = "<group>"; };
 		8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
@@ -616,6 +621,7 @@
 		8C7C894308EC3FFE00F6FCB1 /* Compact Disc */ = {
 			isa = PBXGroup;
 			children = (
+				8CA5C39B09526FA9006FB5B7 /* AudioMetadata.m */,
 				8CCED19C0935AA5E00413C0A /* CompactDisc.m */,
 				8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */,
 				8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */,
@@ -626,7 +632,7 @@
 				8CE165B60933FAD400A99A68 /* CompactDisc.h */,
 				8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */,
 				8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */,
-				8CE09C1D09513ED90020C8B1 /* MetadataSource.h */,
+				8CE09C1D09513ED90020C8B1 /* AudioMetadata.h */,
 			);
 			name = "Compact Disc";
 			sourceTree = "<group>";
@@ -728,6 +734,8 @@
 		8CDB0A19092D78C60080A0D8 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				8CA5C441095277F7006FB5B7 /* PCMGeneratingTask.h */,
+				8CA5C442095277F7006FB5B7 /* PCMGeneratingTask.m */,
 				8CE09AED095130AA0020C8B1 /* PCMGenerating.h */,
 				8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */,
 				8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */,
@@ -947,6 +955,8 @@
 				8CE098FE095107DD0020C8B1 /* ConverterController.m in Sources */,
 				8CE099180951089A0020C8B1 /* ConverterTask.m in Sources */,
 				8CE09954095109BF0020C8B1 /* Converter.m in Sources */,
+				8CA5C39C09526FA9006FB5B7 /* AudioMetadata.m in Sources */,
+				8CA5C444095277F7006FB5B7 /* PCMGeneratingTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

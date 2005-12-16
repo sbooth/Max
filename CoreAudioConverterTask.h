@@ -26,6 +26,6 @@
 {
 }
 
-- (id)			initWithFilename:(NSString *)filename;
+- (id)			initWithInputFilename:(NSString *)inputFilename;
 
 @end

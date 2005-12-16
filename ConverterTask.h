@@ -20,10 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-@protocol PCMGenerating
+#import "PCMGeneratingTask.h"
+#import "Converter.h"
 
-- (void)		run:(id)object;
-- (void)		stop;
-- (NSString *)	outputFilename;
+@interface ConverterTask : PCMGeneratingTask
+{
+	NSString				*_inputFilename;
+	NSString				*_basename;
+	Converter				*_converter;
+}
+
+- (id)			initWithInputFilename:(NSString *)inputFilename;
 
 @end

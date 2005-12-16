@@ -33,10 +33,10 @@
 
 @implementation MPEGEncoderTask
 
-- (id) initWithSource:(id <PCMGenerating>)source target:(NSString *)target
+- (id) initWithInputFilename:(NSString *)inputFilename outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
-	if((self = [super initWithTarget:target])) {
-		_encoder = [[MPEGEncoder alloc] initWithSource:[source outputFilename]];
+	if((self = [super initWithOutputFilename:outputFilename metadata:metadata])) {
+		_encoder = [[MPEGEncoder alloc] initWithSource:inputFilename];
 		return self;
 	}
 	return nil;
@@ -61,46 +61,46 @@
 	NSNumber									*discNumber				= nil;
 	NSNumber									*discsInSet				= nil;
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= nil;
-	TagLib::MPEG::File							f						([_target UTF8String], false);
+	TagLib::MPEG::File							f						([_outputFilename UTF8String], false);
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	NSString									*timestamp				= nil;
 	
 	// Album title
-	album = [_metadata albumTitle];
+	album = [_metadata valueForKey:@"albumTitle"];
 	if(nil != album) {
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Artist
-	artist = [_metadata trackArtist];
+	artist = [_metadata valueForKey:@"trackArtist"];
 	if(nil == artist) {
-		artist = [_metadata albumArtist];
+		artist = [_metadata valueForKey:@"albumArtist"];
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
-	genre = [_metadata trackGenre];
+	genre = [_metadata valueForKey:@"trackGenre"];
 	if(nil == genre) {
-		genre = [_metadata albumGenre];
+		genre = [_metadata valueForKey:@"albumGenre"];
 	}
 	if(nil != genre) {
 		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year
-	year = [_metadata trackYear];
+	year = [_metadata valueForKey:@"trackYear"];
 	if(nil == year) {
-		year = [_metadata albumYear];
+		year = [_metadata valueForKey:@"albumYear"];
 	}
 	if(nil != year) {
 		f.tag()->setYear([year intValue]);
 	}
 	
 	// Comment
-	comment = [_metadata albumComment];
+	comment = [_metadata valueForKey:@"albumComment"];
 	if(_writeSettingsToComment) {
 		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
 	}
@@ -109,14 +109,14 @@
 	}
 	
 	// Track title
-	title = [_metadata trackTitle];
+	title = [_metadata valueForKey:@"trackTitle"];
 	if(nil != title) {
 		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track number
-	trackNumber = [_metadata trackNumber];
-	totalTracks = [[_metadata albumTrackCount] intValue];
+	trackNumber = [_metadata valueForKey:@"trackNumber"];
+	totalTracks = [[_metadata valueForKey:@"albumTrackCount"] intValue];
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
 	if(nil == frame) {
 		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
@@ -125,8 +125,8 @@
 	f.ID3v2Tag()->addFrame(frame);
 		
 	// Disc number
-	discNumber = [_metadata discNumber];
-	discsInSet = [_metadata discsInSet];
+	discNumber = [_metadata valueForKey:@"discNumber"];
+	discsInSet = [_metadata valueForKey:@"discsInSet"];
 	
 	if(nil != discNumber && nil != discsInSet) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);

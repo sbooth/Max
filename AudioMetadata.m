@@ -22,4 +22,17 @@
 
 @implementation AudioMetadata
 
+- (NSString *) description
+{
+	if(nil != _multipleArtists && [_multipleArtists boolValue]) {
+		return [NSString stringWithFormat:@"%@ - %@", _trackArtist, _trackTitle];
+	}
+	else if(nil != _trackTitle) {
+		return [NSString stringWithFormat:@"%@", _trackTitle];
+	}
+	else {
+		return @"Unknown track";
+	}
+}
+
 @end
