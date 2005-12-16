@@ -31,6 +31,9 @@
 #import "FLACException.h"
 #import "VorbisException.h"
 
+#include "fileref.h"					// TagLib::File
+#include "tag.h"						// TagLib::Tag
+
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;
 
@@ -245,6 +248,57 @@ basenameForMetadata(AudioMetadata *metadata)
 	}
 	
 	return [[basename retain] autorelease];
+}
+
+AudioMetadata * 
+readMetadataFromFilename(NSString *filename)
+{
+	AudioMetadata				*result				= [[AudioMetadata alloc] init];
+	TagLib::FileRef				f					([filename UTF8String]);
+	TagLib::String				s;
+
+	
+	// Album title
+	s = f.tag()->album();
+	if(TagLib::String::Null == s) {
+		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumTitle"];
+	}
+	
+	// Artist
+	s = f.tag()->artist();
+	if(TagLib::String::Null == s) {
+		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumArtist"];
+	}
+
+	// Genre
+	s = f.tag()->genre();
+	if(TagLib::String::Null == s) {
+		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumGenre"];
+	}
+	
+	// Year
+	if(0 != f.tag()->year()) {
+		[metadata setValue:[NSNumber numberWithUnsignedInt:f.tag()->year()] forKey:@"albumYear"];
+	}
+
+	// Comment
+	s = f.tag()->comment();
+	if(TagLib::String::Null == s) {
+		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumComment"];
+	}
+
+	// Track title
+	s = f.tag()->title();
+	if(TagLib::String::Null == s) {
+		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
+	}
+
+	// Track number
+	if(0 != f.tag()->track()) {
+		[metadata setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
+	}
+	
+	return [[result retain] autorelease];
 }
 
 void 
