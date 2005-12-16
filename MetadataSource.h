@@ -20,27 +20,25 @@
 
 #import <Cocoa/Cocoa.h>
 
-@protocol MetadataSource
+@interface AudioMetadata : NSObject
+{
+	NSNumber		*_trackNumber;
+	NSString		*_trackTitle;
+	NSString		*_trackArtist;
+	NSNumber		*_trackYear;
+	NSString		*_trackGenre;
+	NSString		*_trackComment;
 
-// Track information
-- (NSNumber *)		trackNumber;
-- (NSString *)		trackTitle;
-- (NSString *)		trackArtist;
-- (NSNumber *)		trackYear;
-- (NSString *)		trackGenre;
-- (NSString *)		trackComment;
+	NSNumber		*_albumTrackCount;
+	NSString		*_albumTitle;
+	NSString		*_albumArtist;
+	NSNumber		*_albumYear;
+	NSString		*_albumGenre;
+	NSString		*_albumComment;
 
-// Album information
-- (NSNumber *)		albumTrackCount;
-- (NSString *)		albumTitle;
-- (NSString *)		albumArtist;
-- (NSNumber *)		albumYear;
-- (NSString *)		albumGenre;
-- (NSString *)		albumComment;
-
-// Disc Information
-- (NSNumber *)		multipleArtists;
-- (NSNumber *)		discNumber;
-- (NSNumber *)		discsInSet;
+	NSNumber		*_multipleArtists;
+	NSNumber		*_discNumber;
+	NSNumber		*_discsInSet;
+}
 
 @end
