@@ -26,10 +26,10 @@
 
 @implementation OggVorbisEncoderTask
 
-- (id) initWithInputFilename:(NSString *)inputFilename outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
-	if((self = [super initWithOutputFilename:outputFilename metadata:metadata])) {
-		_encoder = [[OggVorbisEncoder alloc] initWithSource:inputFilename];
+	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
+		_encoder = [[OggVorbisEncoder alloc] initWithPCMFilename:[_task outputFilename]];
 		return self;
 	}
 	return nil;

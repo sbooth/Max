@@ -31,9 +31,9 @@
 
 @implementation ConverterTask
 
-- (id) initWithInputFilename:(NSString *)inputFilename
+- (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
-	if((self = [super init])) {
+	if((self = [super initWithMetadata:metadata])) {
 		_inputFilename		= [inputFilename retain];
 		return self;
 	}
@@ -42,18 +42,10 @@
 
 - (void) dealloc
 {
-	// Delete output file
-	if(-1 == unlink([_outputFilename UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _outputFilename, errno, strerror(errno)] userInfo:nil];
-	}	
-	
 	[_inputFilename release];	
-	[_outputFilename release];	
-	
 	[super dealloc];
 }
 
-- (NSString *) outputFilename						{ return _outputFilename; }
 - (NSString *) description							{ return [_inputFilename lastPathComponent]; }
 
 - (void) run:(id)object

@@ -35,9 +35,9 @@
 
 @implementation LibsndfileEncoder
 
-- (id) initWithSource:(NSString *) source format:(int)format
+- (id) initWithPCMFilename:(NSString *)pcmFilename format:(int)format
 {
-	if((self = [super initWithSource:source])) {
+	if((self = [super initWithPCMFilename:pcmFilename])) {
 		_format = format;
 		return self;
 	}
@@ -74,15 +74,15 @@
 	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
 	// Open the input file
-	_source = open([_sourceFilename UTF8String], O_RDONLY);
-	if(-1 == _source) {
+	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+	if(-1 == _pcm) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
-	if(-1 == fstat(_source, &sourceStat)) {
+	if(-1 == fstat(_pcm, &sourceStat)) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
@@ -91,7 +91,7 @@
 	info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 	info.samplerate		= 44100;
 	info.channels		= 2;
-	in					= sf_open_fd(_source, SFM_READ, &info, NO);
+	in					= sf_open_fd(_pcm, SFM_READ, &info, NO);
 	if(NULL == in) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
@@ -199,7 +199,7 @@
 	sf_close(out);
 	
 	// Close the input file
-	if(-1 == close(_source)) {
+	if(-1 == close(_pcm)) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	

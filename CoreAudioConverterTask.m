@@ -23,9 +23,9 @@
 
 @implementation CoreAudioConverterTask
 
-- (id) initWithInputFilename:(NSString *)inputFilename
+- (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
-	if((self = [super initWithInputFilename:inputFilename])) {
+	if((self = [super initWithInputFilename:inputFilename metadata:metadata])) {
 		_converter	= [[CoreAudioConverter alloc] initWithInputFilename:inputFilename];
 		return self;
 	}

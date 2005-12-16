@@ -23,6 +23,7 @@
 #import "Encoder.h"
 #import "Track.h"
 #import "AudioMetadata.h"
+#import "PCMGeneratingTask.h"
 
 @interface EncoderTask : NSObject
 {
@@ -30,10 +31,11 @@
 	Encoder					*_encoder;
 	NSArray					*_tracks;
 	AudioMetadata			*_metadata;
+	PCMGeneratingTask		*_task;
 	BOOL					_writeSettingsToComment;
 }
 
-- (id)				initWithOutputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata;
+- (id)				initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata;
 
 - (void)			setTracks:(NSArray *)tracks;
 

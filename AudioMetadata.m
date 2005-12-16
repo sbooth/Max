@@ -31,7 +31,7 @@
 		return [NSString stringWithFormat:@"%@", _trackTitle];
 	}
 	else {
-		return @"Unknown track";
+		return @"Unknown Track";
 	}
 }
 

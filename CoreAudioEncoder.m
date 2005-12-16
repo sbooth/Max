@@ -35,9 +35,9 @@
 
 @implementation CoreAudioEncoder
 
-- (id) initWithSource:(NSString *)source formatInfo:(NSDictionary *)formatInfo
+- (id) initWithPCMFilename:(NSString *)pcmFilename formatInfo:(NSDictionary *)formatInfo
 {	
-	if((self = [super initWithSource:source])) {
+	if((self = [super initWithPCMFilename:pcmFilename])) {
 	
 		_formatInfo						= [formatInfo retain];
 				
@@ -103,15 +103,15 @@
 	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 
 	// Open the input file
-	_source = open([_sourceFilename UTF8String], O_RDONLY);
-	if(-1 == _source) {
+	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+	if(-1 == _pcm) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
-	if(-1 == fstat(_source, &sourceStat)) {
+	if(-1 == fstat(_pcm, &sourceStat)) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
@@ -200,7 +200,7 @@
 		}
 				
 		// Read a chunk of PCM input
-		bytesRead = read(_source, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
@@ -230,7 +230,7 @@
 	}
 	
 	// Close the input file
-	if(-1 == close(_source)) {
+	if(-1 == close(_pcm)) {
 		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}

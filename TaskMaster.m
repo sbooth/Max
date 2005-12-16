@@ -46,6 +46,7 @@ static TaskMaster *sharedController = nil;
 - (void) removeEncodingTask:(EncoderTask *) task;
 - (void) runEncodersForTask:(PCMGeneratingTask *)task;
 - (void) runEncoder:(Class)encoderClass outputFilename:(NSString *)outputFilename task:(PCMGeneratingTask *)task;
+- (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
 @end
 
 @implementation TaskMaster
@@ -132,6 +133,14 @@ static TaskMaster *sharedController = nil;
 	
 	[super dealloc];
 }
+
+- (void) displayExceptionSheet:(NSException *) exception
+{
+	displayExceptionAlert(exception);
+}
+
+- (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo
+{}
 
 #pragma mark Task Management
 
@@ -238,7 +247,7 @@ static TaskMaster *sharedController = nil;
 	ConverterTask	*converterTask		= nil;
 	
 	// Start conversion
-	converterTask = [[CoreAudioConverterTask alloc] initWithInputFilename:filename];
+	converterTask = [[CoreAudioConverterTask alloc] initWithInputFilename:filename metadata:metadata];
 	[converterTask setValue:basename forKey:@"basename"];
 	[converterTask addObserver:self forKeyPath:@"converter.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
 	[converterTask addObserver:self forKeyPath:@"converter.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
@@ -462,7 +471,7 @@ static TaskMaster *sharedController = nil;
 				}
 				
 				outputFilename	= generateUniqueFilename([task valueForKey:@"basename"], extension);
-				encoderTask		= [[CoreAudioEncoderTask alloc] initWithInputFilename:[task outputFilename] outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
+				encoderTask		= [[CoreAudioEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -487,7 +496,7 @@ static TaskMaster *sharedController = nil;
 			while((formatInfo = [formats nextObject])) {
 				outputFilename			= generateUniqueFilename([task valueForKey:@"basename"], [formatInfo valueForKey:@"extension"]);
 				
-				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithInputFilename:[task outputFilename] outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
+				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
 				
 				[encoderTask addObserver:self forKeyPath:@"encoder.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
 				[encoderTask addObserver:self forKeyPath:@"encoder.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:encoderTask];	
@@ -515,8 +524,8 @@ static TaskMaster *sharedController = nil;
 
 - (void) runEncoder:(Class)encoderClass outputFilename:(NSString *)outputFilename task:(PCMGeneratingTask *)task
 {
-	// Create the encoder
-	EncoderTask *encoderTask = [[encoderClass alloc] initWithOutputFilename:outputFilename metadata:[task metadata]];
+	// Create the encoder (relies on each subclass having the same method signature)
+	EncoderTask *encoderTask = [[encoderClass alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata]];
 		
 	if([task isKindOfClass:[RipperTask class]]) {
 		[encoderTask setTracks:[task valueForKey:@"tracks"]];

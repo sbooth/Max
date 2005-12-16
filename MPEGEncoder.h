@@ -32,6 +32,6 @@
 	lame_global_flags		*_gfp;
 }
 
-- (id) initWithSource:(NSString *)source;
+- (id) initWithPCMFilename:(NSString *)pcmFilename;
 
 @end

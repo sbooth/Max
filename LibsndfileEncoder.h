@@ -27,6 +27,6 @@
 	int		_format;
 }
 
-- (id) initWithSource:(NSString *)source format:(int)format;
+- (id) initWithPCMFilename:(NSString *)pcmFilename format:(int)format;
 
 @end

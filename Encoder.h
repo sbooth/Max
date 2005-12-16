@@ -22,8 +22,8 @@
 
 @interface Encoder : NSObject 
 {
-	NSString				*_sourceFilename;	
-	int						_source;
+	NSString				*_pcmFilename;	
+	int						_pcm;
 		
 	NSNumber				*_started;
 	NSNumber				*_completed;
@@ -33,7 +33,7 @@
 	NSNumber				*_timeRemaining;
 }
 
-- (id)				initWithSource:(NSString *)source;
+- (id)				initWithPCMFilename:(NSString *)pcmFilename;
 
 - (ssize_t)			encodeToFile:(NSString *)filename;
 

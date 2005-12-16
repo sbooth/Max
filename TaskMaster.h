@@ -61,6 +61,8 @@
 
 - (void)			encodeFile:(NSString *)filename outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata;
 
+- (void)			displayExceptionSheet:(NSException *) exception;
+
 - (void)			ripDidStart:(RipperTask *) task;
 - (void)			ripDidStop:(RipperTask *) task;
 - (void)			ripDidComplete:(RipperTask *) task;

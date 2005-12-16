@@ -26,13 +26,15 @@
 
 @implementation EncoderTask
 
-- (id) initWithOutputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super init])) {
-		_outputFilename			= [outputFilename retain];
-		_tracks					= nil;
-		_metadata				= [metadata retain];
-		_writeSettingsToComment = [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
+		_task						= [task retain];
+		_outputFilename				= [outputFilename retain];
+		_metadata					= [metadata retain];
+		_tracks						= nil;
+		_encoder					= nil;
+		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
 		return self;
 	}
@@ -57,6 +59,7 @@
 		[_tracks release];
 	}
 	
+	[_task release];
 	[_outputFilename release];
 	
 	[super dealloc];
@@ -77,10 +80,6 @@
 	while((track = [enumerator nextObject])) {
 		[track encodeStarted];
 	}
-}
-
-- (NSString *) description
-{
 }
 
 - (void) removeOutputFile
@@ -114,8 +113,9 @@
 	}
 }
 
-- (void) stop									{ [_encoder requestStop]; }
-- (void) writeTags								{}
-- (NSString *) getType							{ return nil; }
+- (void)		stop							{ [_encoder requestStop]; }
+- (void)		writeTags						{}
+- (NSString *)	description						{ return (nil == _metadata ? @"Unknown fnord" : [_metadata description]); }
+- (NSString *)	getType							{ return nil; }
 
 @end

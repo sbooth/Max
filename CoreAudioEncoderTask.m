@@ -26,11 +26,11 @@
 
 @implementation CoreAudioEncoderTask
 
-- (id) initWithInputFilename:(NSString *)inputFilename outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata formatInfo:(NSDictionary *)formatInfo
+- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata formatInfo:(NSDictionary *)formatInfo
 {
-	if((self = [super initWithOutputFilename:outputFilename metadata:metadata])) {
+	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
 		_formatInfo	= [formatInfo retain];
-		_encoder	= [[CoreAudioEncoder alloc] initWithSource:inputFilename formatInfo:formatInfo];
+		_encoder	= [[CoreAudioEncoder alloc] initWithPCMFilename:[_task outputFilename] formatInfo:formatInfo];
 		return self;
 	}
 	return nil;

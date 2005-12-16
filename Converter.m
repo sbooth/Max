@@ -38,7 +38,7 @@
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
 	if((self = [super init])) {
-		_inputFilename = [_inputFilename retain];		
+		_inputFilename = [inputFilename retain];		
 		return self;
 	}
 	return nil;

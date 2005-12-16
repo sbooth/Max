@@ -31,6 +31,6 @@
 	FLAC__FileEncoder		*_flac;
 }
 
-- (id) initWithSource:(NSString *)source;
+- (id) initWithPCMFilename:(NSString *)pcmFilename;
 
 @end

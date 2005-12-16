@@ -144,10 +144,14 @@
 		for(i = 0; i < [filenames count]; ++i) {
 			NSString		*filename	= [filenames objectAtIndex:i];
 			AudioMetadata	*metadata	= [[[AudioMetadata alloc] init] autorelease];
+			NSString		*basename;
 			
 			// TODO: fill in metadata!
-			
-			[[TaskMaster sharedController] encodeFile:filename outputBasename:basenameForMetadata(metadata) metadata:metadata];
+
+			basename = basenameForMetadata(metadata);
+			createDirectoryStructure(basename);
+
+			[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];
 		}
 	}
 }

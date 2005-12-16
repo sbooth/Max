@@ -26,6 +26,6 @@
 {
 }
 
-- (id)			initWithInputFilename:(NSString *)inputFilename;
+- (id)			initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
 
 @end

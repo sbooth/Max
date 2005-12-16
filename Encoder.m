@@ -22,15 +22,10 @@
 
 @implementation Encoder
 
-- (id) init
-{
-	@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Encoder::init called" userInfo:nil];
-}
-
-- (id) initWithSource:(NSString *) source
+- (id) initWithPCMFilename:(NSString *)pcmFilename
 {
 	if((self = [super init])) {
-		_sourceFilename = [source retain];
+		_pcmFilename = [pcmFilename retain];
 		return self;
 	}
 	return nil;
@@ -38,7 +33,7 @@
 
 - (void) dealloc
 {
-	[_sourceFilename release];
+	[_pcmFilename release];
 	[super dealloc];
 }
 
@@ -54,14 +49,7 @@
 	}
 }
 
-- (ssize_t) encodeToFile:(NSString *) filename
-{
-	return 0;
-}
-
-- (NSString *) description
-{
-	return nil;
-}
+- (ssize_t)		encodeToFile:(NSString *) filename			{ return 0; }
+- (NSString *)	description									{ return @"fnord"; }
 
 @end
