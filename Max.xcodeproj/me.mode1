@@ -185,7 +185,48 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>8CE0B1B90952AEF4000955AD</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>ApplicationController.m</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>8CE0B1BA0952AEF4000955AD</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>ApplicationController.m</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>8CE0B1D50952AFD7000955AD</string>
+						<key>history</key>
+						<array>
+							<string>8CE0B1760952AAD7000955AD</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {840, 807}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>121 151 840 848 0 0 1920 1178 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -258,7 +299,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
+									<integer>10</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -524,8 +565,9 @@
 		<string>8C191A4608C515A500CB7453</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>8CE0B02009529E99000955AD</string>
-		<string>/Users/me/Development/Max/Max.xcodeproj</string>
+		<string>8CE0B1B90952AEF4000955AD</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/me/Development/Max/Max.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>1319 612 520 548 0 0 1920 1178 </string>
@@ -544,8 +586,6 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -568,6 +608,8 @@
 							<string>327pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>

@@ -299,7 +299,7 @@
 		8CB86246093F18CF00A60FC1 /* OggVorbisDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = OggVorbisDefaults.plist; sourceTree = "<group>"; };
 		8CBB3C5608D8CC7A005266A8 /* Ripper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ripper.h; sourceTree = "<group>"; };
 		8CBB3C5708D8CC7A005266A8 /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
-		8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UtilityFunctions.m; sourceTree = "<group>"; };
+		8CBB881C08EE57A6007197C3 /* UtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file; path = UtilityFunctions.m; sourceTree = "<group>"; };
 		8CBB882208EE57D4007197C3 /* UtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityFunctions.h; sourceTree = "<group>"; };
 		8CBB892B08EEEFE0007197C3 /* CustomNamingException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNamingException.h; sourceTree = "<group>"; };
 		8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNamingException.m; sourceTree = "<group>"; };

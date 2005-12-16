@@ -143,7 +143,7 @@
 		
 		for(i = 0; i < [filenames count]; ++i) {
 			NSString		*filename	= [filenames objectAtIndex:i];
-			AudioMetadata	*metadata	= [[[AudioMetadata alloc] init] autorelease];
+			AudioMetadata	*metadata	= readMetadataFromFilename(filename);
 			NSString		*basename;
 			
 			// TODO: fill in metadata!
