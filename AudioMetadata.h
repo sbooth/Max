@@ -41,4 +41,10 @@
 	NSNumber		*_discsInSet;
 }
 
+// Attempt to parse metadata from filename
++ (AudioMetadata *)		metadataFromFilename:(NSString *)filename;
+
+// Create output file's basename
+- (NSString *)			outputBasename;
+
 @end

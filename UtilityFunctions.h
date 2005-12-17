@@ -29,12 +29,6 @@ extern "C" {
 // Get data directory (~/Application Support/Max/)
 NSString * getApplicationDataDirectory();
 
-// Create ouput file's basename using metadata
-NSString * basenameForMetadata(AudioMetadata *metadata);
-
-// Attempt to parse metadata from filename
-AudioMetadata * readMetadataFromFilename(NSString *filename);
-
 // Create directory structure for path
 void createDirectoryStructure(NSString *path);
 	

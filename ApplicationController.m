@@ -143,12 +143,9 @@
 		
 		for(i = 0; i < [filenames count]; ++i) {
 			NSString		*filename	= [filenames objectAtIndex:i];
-			AudioMetadata	*metadata	= readMetadataFromFilename(filename);
-			NSString		*basename;
+			AudioMetadata	*metadata	= [AudioMetadata metadataFromFilename:filename];
+			NSString		*basename	= [metadata outputBasename];
 			
-			// TODO: fill in metadata!
-
-			basename = basenameForMetadata(metadata);
 			createDirectoryStructure(basename);
 
 			[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];

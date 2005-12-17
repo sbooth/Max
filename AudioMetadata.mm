@@ -20,6 +20,8 @@
 
 #import "AudioMetadata.h"
 
+#import "UtilityFunctions.h"
+
 #include "fileref.h"					// TagLib::File
 #include "tag.h"						// TagLib::Tag
 
@@ -45,52 +47,51 @@
 	TagLib::FileRef				f					([filename UTF8String]);
 	TagLib::String				s;
 
-	
 	// Album title
 	s = f.tag()->album();
-	if(TagLib::String::Null == s) {
-		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumTitle"];
+	if(false == s.isNull()) {
+		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumTitle"];
 	}
 	
 	// Artist
 	s = f.tag()->artist();
-	if(TagLib::String::Null == s) {
-		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumArtist"];
+	if(false == s.isNull()) {
+		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumArtist"];
 	}
 
 	// Genre
 	s = f.tag()->genre();
-	if(TagLib::String::Null == s) {
-		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumGenre"];
+	if(false == s.isNull()) {
+		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumGenre"];
 	}
 	
 	// Year
 	if(0 != f.tag()->year()) {
-		[metadata setValue:[NSNumber numberWithUnsignedInt:f.tag()->year()] forKey:@"albumYear"];
+		[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->year()] forKey:@"albumYear"];
 	}
 
 	// Comment
 	s = f.tag()->comment();
-	if(TagLib::String::Null == s) {
-		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumComment"];
+	if(false == s.isNull()) {
+		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumComment"];
 	}
 
 	// Track title
 	s = f.tag()->title();
-	if(TagLib::String::Null == s) {
-		[metadata setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
+	if(false == s.isNull()) {
+		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
 	}
 
 	// Track number
 	if(0 != f.tag()->track()) {
-		[metadata setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
+		[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
 	}
 	
-	return [[result retain] autorelease];
+	return [result autorelease];
 }
 
 // Create output file's basename
-- (NSString *) basename
+- (NSString *) outputBasename
 {
 	NSString		*basename;
 	NSString		*outputDirectory;
@@ -106,17 +107,17 @@
 		NSString			*customNamingScheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"customNamingScheme"];
 		
 		// Get the elements needed to build the pathname
-		NSNumber			*discNumber			= [metadata valueForKey:@"discNumber"];
-		NSNumber			*discsInSet			= [metadata valueForKey:@"discsInSet"];
-		NSString			*discArtist			= [metadata valueForKey:@"albumArtist"];
-		NSString			*discTitle			= [metadata valueForKey:@"albumTitle"];
-		NSString			*discGenre			= [metadata valueForKey:@"albumGenre"];
-		NSNumber			*discYear			= [metadata valueForKey:@"albumYear"];
-		NSNumber			*trackNumber		= [metadata valueForKey:@"trackNumber"];
-		NSString			*trackArtist		= [metadata valueForKey:@"trackArtist"];
-		NSString			*trackTitle			= [metadata valueForKey:@"trackTitle"];
-		NSString			*trackGenre			= [metadata valueForKey:@"trackGenre"];
-		NSNumber			*trackYear			= [metadata valueForKey:@"trackYear"];
+		NSNumber			*discNumber			= [self valueForKey:@"discNumber"];
+		NSNumber			*discsInSet			= [self valueForKey:@"discsInSet"];
+		NSString			*discArtist			= [self valueForKey:@"albumArtist"];
+		NSString			*discTitle			= [self valueForKey:@"albumTitle"];
+		NSString			*discGenre			= [self valueForKey:@"albumGenre"];
+		NSNumber			*discYear			= [self valueForKey:@"albumYear"];
+		NSNumber			*trackNumber		= [self valueForKey:@"trackNumber"];
+		NSString			*trackArtist		= [self valueForKey:@"trackArtist"];
+		NSString			*trackTitle			= [self valueForKey:@"trackTitle"];
+		NSString			*trackGenre			= [self valueForKey:@"trackGenre"];
+		NSNumber			*trackYear			= [self valueForKey:@"trackYear"];
 		
 		// Fallback to disc if specified in preferences
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"customNamingUseFallback"]) {
@@ -213,11 +214,11 @@
 		basename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
 	}
 	// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
-	else if([[metadata valueForKey:@"multipleArtists"] boolValue]) {
+	else if([[self valueForKey:@"multipleArtists"] boolValue]) {
 		NSString			*path;
 		
-		NSString			*discTitle			= [metadata valueForKey:@"albumTitle"];
-		NSString			*trackTitle			= [metadata valueForKey:@"trackTitle"];
+		NSString			*discTitle			= [self valueForKey:@"albumTitle"];
+		NSString			*trackTitle			= [self valueForKey:@"trackTitle"];
 		
 		if(nil == discTitle) {
 			discTitle = @"Unknown Album";
@@ -228,22 +229,22 @@
 		
 		path = [NSString stringWithFormat:@"%@/Compilations/%@", outputDirectory, makeStringSafeForFilename(discTitle)]; 
 		
-		if(nil == [metadata valueForKey:@"discNumber"]) {
-			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[metadata valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+		if(nil == [self valueForKey:@"discNumber"]) {
+			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[self valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 		else {
-			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[metadata valueForKey:@"discNumber"] intValue], [[metadata valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[self valueForKey:@"discNumber"] intValue], [[self valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 	}
 	// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
 	else {
 		NSString			*path;
 		
-		NSString			*discArtist			= [metadata valueForKey:@"albumArtist"];
-		NSString			*trackArtist		= [metadata valueForKey:@"trackArtist"];
+		NSString			*discArtist			= [self valueForKey:@"albumArtist"];
+		NSString			*trackArtist		= [self valueForKey:@"trackArtist"];
 		NSString			*artist;
-		NSString			*discTitle			= [metadata valueForKey:@"albumTitle"];
-		NSString			*trackTitle			= [metadata valueForKey:@"trackTitle"];
+		NSString			*discTitle			= [self valueForKey:@"albumTitle"];
+		NSString			*trackTitle			= [self valueForKey:@"trackTitle"];
 		
 		artist = trackArtist;
 		if(nil == artist) {
@@ -261,11 +262,11 @@
 		
 		path = [NSString stringWithFormat:@"%@/%@/%@", outputDirectory, makeStringSafeForFilename(artist), makeStringSafeForFilename(discTitle)]; 
 		
-		if(nil == [metadata valueForKey:@"discNumber"]) {
-			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[metadata valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+		if(nil == [self valueForKey:@"discNumber"]) {
+			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[self valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 		else {
-					basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[metadata valueForKey:@"discNumber"] intValue], [[metadata valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+					basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[self valueForKey:@"discNumber"] intValue], [[self valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 	}
 	

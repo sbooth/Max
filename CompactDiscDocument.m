@@ -411,7 +411,7 @@
 			[metadata setValue:nil forKey:@"trackGenre"];
 			[metadata setValue:nil forKey:@"trackYear"];
 			
-			basename = basenameForMetadata(metadata);
+			basename = [metadata outputBasename];
 			createDirectoryStructure(basename);
 			
 			[[TaskMaster sharedController] encodeTracks:selectedTracks outputBasename:basename metadata:metadata];
@@ -422,7 +422,7 @@
 			
 			while((track = [enumerator nextObject])) {
 				
-				basename = basenameForMetadata([track metadata]);
+				basename = [[track metadata] outputBasename];
 				createDirectoryStructure(basename);
 				
 				[[TaskMaster sharedController] encodeTrack:track outputBasename:basename];
