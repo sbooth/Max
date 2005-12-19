@@ -42,6 +42,9 @@ NSString * generateUniqueFilename(NSString *basename,
 // Create path if it does not exist; throw an exception if it exists and is a file
 void validateAndCreateDirectory(NSString *path);
 
+// Get an array of file types supported by libsndfile
+NSArray * getLibsndfileExtensions();
+
 // Get a timestamp in the ID3v2 format
 NSString * getID3v2Timestamp();
 

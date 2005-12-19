@@ -31,6 +31,8 @@
 #import "FLACException.h"
 #import "VorbisException.h"
 
+#include "sndfile.h"
+
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;
 
@@ -148,6 +150,32 @@ validateAndCreateDirectory(NSString *path)
 	else if(FALSE == isDir) {
 		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"Unable to create directory" userInfo:nil];
 	}	
+}
+
+NSArray *
+getLibsndfileExtensions()
+{
+	NSMutableArray			*result;
+	SF_FORMAT_INFO			formatInfo;
+	SF_INFO					info;
+	int						i, majorCount;
+
+	sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
+
+	result = [NSMutableArray arrayWithCapacity:majorCount];
+	
+	// Generic defaults
+	info.channels		= 1 ;
+	info.samplerate		= 0;
+	
+	// Loop through each major mode
+	for(i = 0; i < majorCount; ++i) {	
+		formatInfo.format = i;
+		sf_command(NULL, SFC_GET_FORMAT_MAJOR, &formatInfo, sizeof(formatInfo));
+		[result addObject:[NSString stringWithUTF8String:formatInfo.extension]];
+	}
+
+	return [[result retain] autorelease];
 }
 
 void

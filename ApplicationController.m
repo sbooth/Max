@@ -132,12 +132,19 @@
 
 - (IBAction) encodeFile:(id)sender
 {
-	NSOpenPanel		*panel			= [NSOpenPanel openPanel];
-
+	NSOpenPanel			*panel			= [NSOpenPanel openPanel];
+	NSMutableArray		*types;
+	
 	[panel setAllowsMultipleSelection:YES];
 	[panel setCanChooseDirectories:NO];
 	
-	if(NSOKButton == [panel runModalForTypes:getCoreAudioExtensions()]) {
+	// Allowable file types
+	types = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
+	[types addObjectsFromArray:getLibsndfileExtensions()];
+	[types addObjectsFromArray:[NSArray arrayWithObjects:@"flac", nil]];
+	//	[types addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", nil]];
+	
+	if(NSOKButton == [panel runModalForTypes:types]) {
 		NSArray			*filenames		= [panel filenames];
 		unsigned		i;
 		

@@ -41,6 +41,10 @@
 		8C73033E08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */; };
 		8C752A8408C507CE001F588B /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C752A8308C507CE001F588B /* Genres.m */; };
 		8C75C81D09538A4B00A923AD /* UtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75C81C09538A4B00A923AD /* UtilityFunctions.m */; };
+		8C75CA23095393EC00A923AD /* LibsndfileConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CA21095393EC00A923AD /* LibsndfileConverterTask.m */; };
+		8C75CA3F0953985B00A923AD /* LibsndfileConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CA3D0953985B00A923AD /* LibsndfileConverter.m */; };
+		8C75CAA30953B72C00A923AD /* FLACConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CAA10953B72C00A923AD /* FLACConverter.m */; };
+		8C75CB6E0953C36900A923AD /* FLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CB6C0953C36900A923AD /* FLACConverterTask.m */; };
 		8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */; };
 		8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */; };
 		8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */; };
@@ -242,6 +246,14 @@
 		8C752A8208C507CE001F588B /* Genres.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genres.h; sourceTree = "<group>"; };
 		8C752A8308C507CE001F588B /* Genres.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genres.m; sourceTree = "<group>"; };
 		8C75C81C09538A4B00A923AD /* UtilityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = UtilityFunctions.m; sourceTree = "<group>"; };
+		8C75CA20095393EC00A923AD /* LibsndfileConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibsndfileConverterTask.h; sourceTree = "<group>"; };
+		8C75CA21095393EC00A923AD /* LibsndfileConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibsndfileConverterTask.m; sourceTree = "<group>"; };
+		8C75CA3C0953985B00A923AD /* LibsndfileConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibsndfileConverter.h; sourceTree = "<group>"; };
+		8C75CA3D0953985B00A923AD /* LibsndfileConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibsndfileConverter.m; sourceTree = "<group>"; };
+		8C75CAA00953B72C00A923AD /* FLACConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACConverter.h; sourceTree = "<group>"; };
+		8C75CAA10953B72C00A923AD /* FLACConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACConverter.m; sourceTree = "<group>"; };
+		8C75CB6B0953C36900A923AD /* FLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACConverterTask.h; sourceTree = "<group>"; };
+		8C75CB6C0953C36900A923AD /* FLACConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACConverterTask.m; sourceTree = "<group>"; };
 		8C76E43208C6DE1A00F4F9A1 /* CompactDiscDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocument.h; sourceTree = "<group>"; };
 		8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocument.m; sourceTree = "<group>"; };
 		8C76E43908C6DE3900F4F9A1 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
@@ -471,7 +483,8 @@
 			children = (
 				8C7C894308EC3FFE00F6FCB1 /* Compact Disc */,
 				8C7C897408EC42BC00F6FCB1 /* Controllers */,
-				8CDB0A19092D78C60080A0D8 /* Tasks */,
+				8C75CA6A09539CFA00A923AD /* Converter Tasks */,
+				8C75CA6B09539D1F00A923AD /* Encoder Tasks */,
 				8C0408DA092A89770052D881 /* Ripper */,
 				8CE09A0009510EED0020C8B1 /* Converter */,
 				080E96DDFE201D6D7F000001 /* Encoder */,
@@ -617,6 +630,46 @@
 			name = FreeDB;
 			sourceTree = "<group>";
 		};
+		8C75CA6A09539CFA00A923AD /* Converter Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				8C75CB6B0953C36900A923AD /* FLACConverterTask.h */,
+				8C75CB6C0953C36900A923AD /* FLACConverterTask.m */,
+				8CA5C441095277F7006FB5B7 /* PCMGeneratingTask.h */,
+				8CA5C442095277F7006FB5B7 /* PCMGeneratingTask.m */,
+				8C040A2E092AB41A0052D881 /* RipperTask.h */,
+				8C040A2F092AB41A0052D881 /* RipperTask.m */,
+				8CE099150951089A0020C8B1 /* ConverterTask.h */,
+				8CE099160951089A0020C8B1 /* ConverterTask.m */,
+				8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */,
+				8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */,
+				8C75CA20095393EC00A923AD /* LibsndfileConverterTask.h */,
+				8C75CA21095393EC00A923AD /* LibsndfileConverterTask.m */,
+			);
+			name = "Converter Tasks";
+			sourceTree = "<group>";
+		};
+		8C75CA6B09539D1F00A923AD /* Encoder Tasks */ = {
+			isa = PBXGroup;
+			children = (
+				8C4015720948E433003413BE /* CoreAudioEncoderTask.h */,
+				8C4015730948E433003413BE /* CoreAudioEncoderTask.m */,
+				8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */,
+				8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */,
+				8CB0B38B093B301400968F66 /* FLACEncoderTask.h */,
+				8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */,
+				8CF4D47209454CD700385BE4 /* LibsndfileEncoderTask.h */,
+				8CF4D47309454CD700385BE4 /* LibsndfileEncoderTask.m */,
+				8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */,
+				8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */,
+				8C49624D09473168006E1765 /* OggFLACEncoderTask.h */,
+				8C49624E09473168006E1765 /* OggFLACEncoderTask.m */,
+				8CB861FB093F177200A60FC1 /* OggVorbisEncoderTask.h */,
+				8CB861FC093F177200A60FC1 /* OggVorbisEncoderTask.mm */,
+			);
+			name = "Encoder Tasks";
+			sourceTree = "<group>";
+		};
 		8C7C894308EC3FFE00F6FCB1 /* Compact Disc */ = {
 			isa = PBXGroup;
 			children = (
@@ -639,6 +692,8 @@
 		8C7C897408EC42BC00F6FCB1 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8C206F120929486C00793FD0 /* TaskMaster.h */,
+				8C206F130929486C00793FD0 /* TaskMaster.m */,
 				8CE098FB095107DD0020C8B1 /* ConverterController.h */,
 				8CE098FC095107DD0020C8B1 /* ConverterController.m */,
 				8CEDC0E4094BEB8D0023DD01 /* EncoderController.m */,
@@ -730,37 +785,6 @@
 			name = ValueTransformers;
 			sourceTree = "<group>";
 		};
-		8CDB0A19092D78C60080A0D8 /* Tasks */ = {
-			isa = PBXGroup;
-			children = (
-				8CA5C441095277F7006FB5B7 /* PCMGeneratingTask.h */,
-				8CA5C442095277F7006FB5B7 /* PCMGeneratingTask.m */,
-				8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */,
-				8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */,
-				8CB0B38B093B301400968F66 /* FLACEncoderTask.h */,
-				8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */,
-				8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */,
-				8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */,
-				8C206F120929486C00793FD0 /* TaskMaster.h */,
-				8C206F130929486C00793FD0 /* TaskMaster.m */,
-				8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */,
-				8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */,
-				8C040A2E092AB41A0052D881 /* RipperTask.h */,
-				8C040A2F092AB41A0052D881 /* RipperTask.m */,
-				8CB861FB093F177200A60FC1 /* OggVorbisEncoderTask.h */,
-				8CB861FC093F177200A60FC1 /* OggVorbisEncoderTask.mm */,
-				8CF4D47209454CD700385BE4 /* LibsndfileEncoderTask.h */,
-				8CF4D47309454CD700385BE4 /* LibsndfileEncoderTask.m */,
-				8C49624D09473168006E1765 /* OggFLACEncoderTask.h */,
-				8C49624E09473168006E1765 /* OggFLACEncoderTask.m */,
-				8C4015720948E433003413BE /* CoreAudioEncoderTask.h */,
-				8C4015730948E433003413BE /* CoreAudioEncoderTask.m */,
-				8CE099150951089A0020C8B1 /* ConverterTask.h */,
-				8CE099160951089A0020C8B1 /* ConverterTask.m */,
-			);
-			name = Tasks;
-			sourceTree = "<group>";
-		};
 		8CE09A0009510EED0020C8B1 /* Converter */ = {
 			isa = PBXGroup;
 			children = (
@@ -768,6 +792,10 @@
 				8CE09952095109BF0020C8B1 /* Converter.m */,
 				8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */,
 				8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */,
+				8C75CA3C0953985B00A923AD /* LibsndfileConverter.h */,
+				8C75CA3D0953985B00A923AD /* LibsndfileConverter.m */,
+				8C75CAA00953B72C00A923AD /* FLACConverter.h */,
+				8C75CAA10953B72C00A923AD /* FLACConverter.m */,
 			);
 			name = Converter;
 			sourceTree = "<group>";
@@ -955,6 +983,10 @@
 				8CA5C39C09526FA9006FB5B7 /* AudioMetadata.mm in Sources */,
 				8CA5C444095277F7006FB5B7 /* PCMGeneratingTask.m in Sources */,
 				8C75C81D09538A4B00A923AD /* UtilityFunctions.m in Sources */,
+				8C75CA23095393EC00A923AD /* LibsndfileConverterTask.m in Sources */,
+				8C75CA3F0953985B00A923AD /* LibsndfileConverter.m in Sources */,
+				8C75CAA30953B72C00A923AD /* FLACConverter.m in Sources */,
+				8C75CB6E0953C36900A923AD /* FLACConverterTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

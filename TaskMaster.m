@@ -22,6 +22,8 @@
 #import "LogController.h"
 #import "RipperTask.h"
 #import "CoreAudioConverterTask.h"
+#import "LibsndfileConverterTask.h"
+#import "FLACConverterTask.h"
 #import "MPEGEncoderTask.h"
 #import "FLACEncoderTask.h"
 #import "OggFLACEncoderTask.h"
@@ -31,6 +33,7 @@
 #import "MissingResourceException.h"
 #import "IOException.h"
 #import "UtilityFunctions.h"
+#import "CoreAudioUtilities.h"
 
 #import <Growl/GrowlApplicationBridge.h>
 
@@ -244,10 +247,25 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeFile:(NSString *)filename outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata
 {
-	ConverterTask	*converterTask		= nil;
+	ConverterTask	*converterTask			= nil;
+	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
+	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
+	NSString		*extension				= [filename pathExtension];
 	
-	// Start conversion
-	converterTask = [[CoreAudioConverterTask alloc] initWithInputFilename:filename metadata:metadata];
+	// Determine which type of converter to use and create it
+	if([coreAudioExtensions containsObject:extension]) {
+		converterTask = [[CoreAudioConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+	}
+	else if([libsndfileExtensions containsObject:extension]) {
+		converterTask = [[LibsndfileConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"flac"]) {
+		converterTask = [[FLACConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+	}
+	else {
+		@throw [NSException exceptionWithName:@"FileFormatNotSupportedException" reason:@"File format not supported" userInfo:nil];
+	}
+
 	[converterTask setValue:basename forKey:@"basename"];
 	[converterTask addObserver:self forKeyPath:@"converter.started" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
 	[converterTask addObserver:self forKeyPath:@"converter.completed" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:converterTask];	
