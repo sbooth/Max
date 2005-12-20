@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C0230950956848A005D8698 /* OggFLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230930956848A005D8698 /* OggFLACConverterTask.m */; };
+		8C0230A8095684BF005D8698 /* OggFLACConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230A6095684BF005D8698 /* OggFLACConverter.m */; };
+		8C0230F909570F26005D8698 /* OggVorbisConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230F709570F26005D8698 /* OggVorbisConverterTask.m */; };
+		8C02310D09570F9D005D8698 /* OggVorbisConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C02310B09570F9D005D8698 /* OggVorbisConverter.m */; };
 		8C040A31092AB41A0052D881 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */; };
 		8C04524A0947F0EC0041AAA8 /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */; };
 		8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* FreeDB.m */; };
@@ -195,6 +199,14 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
+		8C0230920956848A005D8698 /* OggFLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACConverterTask.h; sourceTree = "<group>"; };
+		8C0230930956848A005D8698 /* OggFLACConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACConverterTask.m; sourceTree = "<group>"; };
+		8C0230A5095684BF005D8698 /* OggFLACConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACConverter.h; sourceTree = "<group>"; };
+		8C0230A6095684BF005D8698 /* OggFLACConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACConverter.m; sourceTree = "<group>"; };
+		8C0230F609570F26005D8698 /* OggVorbisConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggVorbisConverterTask.h; sourceTree = "<group>"; };
+		8C0230F709570F26005D8698 /* OggVorbisConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggVorbisConverterTask.m; sourceTree = "<group>"; };
+		8C02310A09570F9D005D8698 /* OggVorbisConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggVorbisConverter.h; sourceTree = "<group>"; };
+		8C02310B09570F9D005D8698 /* OggVorbisConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggVorbisConverter.m; sourceTree = "<group>"; };
 		8C040A2E092AB41A0052D881 /* RipperTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperTask.h; sourceTree = "<group>"; };
 		8C040A2F092AB41A0052D881 /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C0452470947F0EC0041AAA8 /* CoreAudioEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoder.h; sourceTree = "<group>"; };
@@ -645,6 +657,10 @@
 				8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */,
 				8C75CA20095393EC00A923AD /* LibsndfileConverterTask.h */,
 				8C75CA21095393EC00A923AD /* LibsndfileConverterTask.m */,
+				8C0230920956848A005D8698 /* OggFLACConverterTask.h */,
+				8C0230930956848A005D8698 /* OggFLACConverterTask.m */,
+				8C0230F609570F26005D8698 /* OggVorbisConverterTask.h */,
+				8C0230F709570F26005D8698 /* OggVorbisConverterTask.m */,
 			);
 			name = "Converter Tasks";
 			sourceTree = "<group>";
@@ -796,6 +812,10 @@
 				8C75CA3D0953985B00A923AD /* LibsndfileConverter.m */,
 				8C75CAA00953B72C00A923AD /* FLACConverter.h */,
 				8C75CAA10953B72C00A923AD /* FLACConverter.m */,
+				8C0230A5095684BF005D8698 /* OggFLACConverter.h */,
+				8C0230A6095684BF005D8698 /* OggFLACConverter.m */,
+				8C02310A09570F9D005D8698 /* OggVorbisConverter.h */,
+				8C02310B09570F9D005D8698 /* OggVorbisConverter.m */,
 			);
 			name = Converter;
 			sourceTree = "<group>";
@@ -987,6 +1007,10 @@
 				8C75CA3F0953985B00A923AD /* LibsndfileConverter.m in Sources */,
 				8C75CAA30953B72C00A923AD /* FLACConverter.m in Sources */,
 				8C75CB6E0953C36900A923AD /* FLACConverterTask.m in Sources */,
+				8C0230950956848A005D8698 /* OggFLACConverterTask.m in Sources */,
+				8C0230A8095684BF005D8698 /* OggFLACConverter.m in Sources */,
+				8C0230F909570F26005D8698 /* OggVorbisConverterTask.m in Sources */,
+				8C02310D09570F9D005D8698 /* OggVorbisConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

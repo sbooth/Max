@@ -23,7 +23,9 @@
 #import "RipperTask.h"
 #import "CoreAudioConverterTask.h"
 #import "LibsndfileConverterTask.h"
+#import "OggVorbisConverterTask.h"
 #import "FLACConverterTask.h"
+#import "OggFLACConverterTask.h"
 #import "MPEGEncoderTask.h"
 #import "FLACEncoderTask.h"
 #import "OggFLACEncoderTask.h"
@@ -259,8 +261,14 @@ static TaskMaster *sharedController = nil;
 	else if([libsndfileExtensions containsObject:extension]) {
 		converterTask = [[LibsndfileConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
 	}
+	else if([extension isEqualToString:@"ogg"]) {
+		converterTask = [[OggVorbisConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+	}
 	else if([extension isEqualToString:@"flac"]) {
 		converterTask = [[FLACConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"oggflac"]) {
+		converterTask = [[OggFLACConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
 	}
 	else {
 		@throw [NSException exceptionWithName:@"FileFormatNotSupportedException" reason:@"File format not supported" userInfo:nil];

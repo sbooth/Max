@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "FLACConverter.h"
+#import "OggFLACConverter.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
@@ -27,14 +27,14 @@
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
 
-@interface FLACConverter (Private)
+@interface OggFLACConverter (Private)
 - (void) writeFrame:(const FLAC__Frame *)frame buffer:(const FLAC__int32 * const [])buffer;
 @end
 
 FLAC__StreamDecoderWriteStatus 
-writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
+writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
 {
-	FLACConverter *converter = (FLACConverter *) client_data;
+	OggFLACConverter *converter = (OggFLACConverter *) client_data;
 	[converter writeFrame:frame buffer:buffer];
 	
 	// Always return continue; an exception will be thrown if this isn't the case
@@ -42,60 +42,60 @@ writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const 
 }
 
 void
-metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
+metadataCallback(const OggFLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
-	FLACConverter *converter = (FLACConverter *) client_data;
-
+	OggFLACConverter *converter = (OggFLACConverter *) client_data;
+	
 	// Only accept 16-bit 2-channel FLAC files
 	if(FLAC__METADATA_TYPE_STREAMINFO == metadata->type) {
 		if(16 != metadata->data.stream_info.bits_per_sample && 2 != metadata->data.stream_info.channels) {
 			[converter setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [FLACException exceptionWithReason:@"FLAC stream is not 16-bit stereo" userInfo:nil];
+			@throw [FLACException exceptionWithReason:@"OggFLAC stream is not 16-bit stereo" userInfo:nil];
 		}
 	}
 }
 
 void
-errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
+errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
-	FLACConverter *converter = (FLACConverter *) client_data;
-
+	OggFLACConverter *converter = (OggFLACConverter *) client_data;
+	
 	NSLog(@"errorCallback");
 	
 	[converter setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-	@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(decoder)]] userInfo:nil];
+	@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(decoder)]] userInfo:nil];
 }
 
-@implementation FLACConverter
+@implementation OggFLACConverter
 
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
 	if((self = [super initWithInputFilename:inputFilename])) {	
-
+		
 		_fd  = -1;
 		
 		// Create and setup FLAC decoder
-		_flac = FLAC__file_decoder_new();
+		_flac = OggFLAC__file_decoder_new();
 		if(NULL == _flac) {
 			@throw [MallocException exceptionWithReason:@"Unable to create FLAC decoder" userInfo:nil];
 		}
 		
-		if(NO == FLAC__file_decoder_set_filename(_flac, [_inputFilename UTF8String])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		if(NO == OggFLAC__file_decoder_set_filename(_flac, [_inputFilename UTF8String])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
 		
 		// Setup callbacks
-		if(NO == FLAC__file_decoder_set_write_callback(_flac, writeCallback)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		if(NO == OggFLAC__file_decoder_set_write_callback(_flac, writeCallback)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
-		if(NO == FLAC__file_decoder_set_metadata_callback(_flac, metadataCallback)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		if(NO == OggFLAC__file_decoder_set_metadata_callback(_flac, metadataCallback)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
-		if(NO == FLAC__file_decoder_set_error_callback(_flac, errorCallback)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		if(NO == OggFLAC__file_decoder_set_error_callback(_flac, errorCallback)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
-		if(NO == FLAC__file_decoder_set_client_data(_flac, self)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		if(NO == OggFLAC__file_decoder_set_client_data(_flac, self)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
 		
 		return self;
@@ -105,7 +105,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 
 - (void) dealloc
 {
-	FLAC__file_decoder_delete(_flac);
+	OggFLAC__file_decoder_delete(_flac);
 	[super dealloc];
 }
 
@@ -114,7 +114,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	FLAC__uint64		bytesRead			= 0;
 	FLAC__uint64		bytesToRead			= 0;
 	FLAC__uint64		totalBytes			= 0;
-		
+	
 	
 	// Tell our owner we are starting
 	_startTime = [[NSDate date] retain];
@@ -135,9 +135,9 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	bytesToRead		= totalBytes;
 	
 	// Initialize decoder
-	if(FLAC__FILE_DECODER_OK != FLAC__file_decoder_init(_flac)) {
+	if(OggFLAC__FILE_DECODER_OK != OggFLAC__file_decoder_init(_flac)) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 	}
 	
 	for(;;) {
@@ -148,20 +148,20 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		}
 		
 		// Decode the data
-		if(NO == FLAC__file_decoder_process_single(_flac)) {
+		if(NO == OggFLAC__file_decoder_process_single(_flac)) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
-
+		
 		// EOF?
-		if(FLAC__FILE_DECODER_END_OF_FILE == FLAC__file_decoder_get_state(_flac)) {
+		if(OggFLAC__FILE_DECODER_END_OF_FILE == OggFLAC__file_decoder_get_state(_flac)) {
 			break;
 		}
 		
 		// Determine bytes processed
-		if(NO == FLAC__file_decoder_get_decode_position(_flac, &bytesRead)) {
+		if(NO == OggFLAC__file_decoder_get_decode_position(_flac, &bytesRead)) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
 		
 		
@@ -174,14 +174,14 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	}
 	
 	// Flush buffers
-	if(NO == FLAC__file_decoder_finish(_flac)) {
+	if(NO == OggFLAC__file_decoder_finish(_flac)) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 	}
-
+	
 	// Finish up
 	_fd  = -1;
-
+	
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
 	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
 	
@@ -201,7 +201,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [MallocException exceptionWithReason:@"Unable to create buffer" userInfo:nil];
 	}
-
+	
 	// Interleave (16-bit sample size hard-coded)
 	leftPCM			= (FLAC__int32 *)buffer[0];
 	rightPCM		= (FLAC__int32 *)buffer[1];

@@ -218,8 +218,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -260,7 +258,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
+									<integer>6</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -345,6 +343,8 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -517,6 +517,11 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>8C0231CA0957FAF8005D8698</string>
+		<string>8C0231CB0957FAF8005D8698</string>
+		<string>8C9D1F4208C5287A00D95535</string>
+		<string>1CD10A99069EF8BA00B06720</string>
+		<string>8C0231C70957FAF6005D8698</string>
 		<string>8C191A4608C515A500CB7453</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
@@ -543,7 +548,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>stream_decoder.h</string>
+								<string>cddb_disc.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -643,8 +648,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {185, 222}}</string>
-											<string>{{185, 0}, {1095, 222}}</string>
+											<string>{{0, 0}, {179, 219}}</string>
+											<string>{{179, 0}, {1101, 219}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -659,8 +664,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {1280, 222}}</string>
-											<string>{{0, 222}, {1280, 509}}</string>
+											<string>{{0, 0}, {1280, 219}}</string>
+											<string>{{0, 219}, {1280, 512}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -684,7 +689,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1280, 731}}</string>
 								<key>RubberWindowFrame</key>
-								<string>0 60 1280 772 0 0 1280 832 </string>
+								<string>456 377 1280 772 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugSessionModule</string>
@@ -707,19 +712,19 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>8CDA84600955D98700B8CE41</string>
+				<string>8C0231C10957FAF6005D8698</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>8CDA84610955D98700B8CE41</string>
-				<string>8CDA84620955D98700B8CE41</string>
-				<string>8CDA84630955D98700B8CE41</string>
-				<string>8CDA84640955D98700B8CE41</string>
-				<string>8CDA84650955D98700B8CE41</string>
-				<string>8CDA84660955D98700B8CE41</string>
+				<string>8C0231C20957FAF6005D8698</string>
+				<string>8C0231C30957FAF6005D8698</string>
+				<string>8C0231C40957FAF6005D8698</string>
+				<string>8C0231C50957FAF6005D8698</string>
+				<string>8C0231C60957FAF6005D8698</string>
+				<string>8C0231C70957FAF6005D8698</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>
 			<key>WindowString</key>
-			<string>0 60 1280 772 0 0 1280 832 </string>
+			<string>456 377 1280 772 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
 			<string>1CD10A99069EF8BA00B06720</string>
 			<key>WindowToolIsVisible</key>
@@ -845,7 +850,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {756, 423}}</string>
 								<key>RubberWindowFrame</key>
-								<string>381 242 756 464 0 0 1280 832 </string>
+								<string>846 470 756 464 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugCLIModule</string>
@@ -868,11 +873,11 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>8C9D1F4208C5287A00D95535</string>
-				<string>8CDA84670955D98700B8CE41</string>
+				<string>8C0231C80957FAF6005D8698</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>WindowString</key>
-			<string>381 242 756 464 0 0 1280 832 </string>
+			<string>846 470 756 464 0 0 1920 1178 </string>
 			<key>WindowToolGUID</key>
 			<string>8C9D1F4208C5287A00D95535</string>
 			<key>WindowToolIsVisible</key>
