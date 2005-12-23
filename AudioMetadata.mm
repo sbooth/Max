@@ -47,44 +47,46 @@
 	TagLib::FileRef				f					([filename UTF8String]);
 	TagLib::String				s;
 
-	// Album title
-	s = f.tag()->album();
-	if(false == s.isNull()) {
-		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumTitle"];
-	}
-	
-	// Artist
-	s = f.tag()->artist();
-	if(false == s.isNull()) {
-		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumArtist"];
-	}
-
-	// Genre
-	s = f.tag()->genre();
-	if(false == s.isNull()) {
-		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumGenre"];
-	}
-	
-	// Year
-	if(0 != f.tag()->year()) {
-		[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->year()] forKey:@"albumYear"];
-	}
-
-	// Comment
-	s = f.tag()->comment();
-	if(false == s.isNull()) {
-		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumComment"];
-	}
-
-	// Track title
-	s = f.tag()->title();
-	if(false == s.isNull()) {
-		[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
-	}
-
-	// Track number
-	if(0 != f.tag()->track()) {
-		[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
+	if(false == f.isNull()) {
+		// Album title
+		s = f.tag()->album();
+		if(false == s.isNull()) {
+			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumTitle"];
+		}
+		
+		// Artist
+		s = f.tag()->artist();
+		if(false == s.isNull()) {
+			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumArtist"];
+		}
+		
+		// Genre
+		s = f.tag()->genre();
+		if(false == s.isNull()) {
+			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumGenre"];
+		}
+		
+		// Year
+		if(0 != f.tag()->year()) {
+			[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->year()] forKey:@"albumYear"];
+		}
+		
+		// Comment
+		s = f.tag()->comment();
+		if(false == s.isNull()) {
+			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumComment"];
+		}
+		
+		// Track title
+		s = f.tag()->title();
+		if(false == s.isNull()) {
+			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
+		}
+		
+		// Track number
+		if(0 != f.tag()->track()) {
+			[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
+		}
 	}
 	
 	return [result autorelease];
