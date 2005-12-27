@@ -258,7 +258,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>24</integer>
+									<integer>5</integer>
+									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
@@ -517,8 +518,8 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
+		<string>1C0AD2B3069F1EA900FABCE6</string>
 	</array>
 	<key>WindowString</key>
 	<string>1319 612 520 548 0 0 1920 1178 </string>
@@ -537,14 +538,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>CoreAudioEncoder.m</string>
+								<string>cdda_interface.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -561,6 +560,8 @@
 							<string>327pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
