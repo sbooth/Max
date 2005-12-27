@@ -149,7 +149,7 @@
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
 					20,
-					144,
+					49,
 					20,
 					48,
 					43,
@@ -298,6 +298,10 @@
 			8CEDCC6409613676009CFC49 /* PBXTextBookmark */ = 8CEDCC6409613676009CFC49 /* PBXTextBookmark */;
 			8CEDCC6509613676009CFC49 /* PBXTextBookmark */ = 8CEDCC6509613676009CFC49 /* PBXTextBookmark */;
 			8CEDCC6709613676009CFC49 /* PBXTextBookmark */ = 8CEDCC6709613676009CFC49 /* PBXTextBookmark */;
+			8CEDCC80096138C4009CFC49 /* PBXTextBookmark */ = 8CEDCC80096138C4009CFC49 /* PBXTextBookmark */;
+			8CEDCC81096138C4009CFC49 /* PBXTextBookmark */ = 8CEDCC81096138C4009CFC49 /* PBXTextBookmark */;
+			8CEDCC82096138C4009CFC49 /* PBXTextBookmark */ = 8CEDCC82096138C4009CFC49 /* PBXTextBookmark */;
+			8CEDCC83096138C4009CFC49 /* PBXTextBookmark */ = 8CEDCC83096138C4009CFC49 /* PBXTextBookmark */;
 			8CFDCBCE08ECA53C00EBB077 = 8CFDCBCE08ECA53C00EBB077 /* PBXTextBookmark */;
 			8CFDCBD008ECA53C00EBB077 = 8CFDCBD008ECA53C00EBB077 /* PBXTextBookmark */;
 		};
@@ -2620,6 +2624,11 @@
 		name = cdda_interface.h;
 		path = /Users/me/Development/Max/include/cdparanoia/interface/cdda_interface.h;
 		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {776, 3052}}";
+			sepNavSelRange = "{4788, 29}";
+			sepNavVisRect = "{{0, 2296}, {776, 295}}";
+		};
 	};
 	8CEDCC6209613676009CFC49 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -2682,6 +2691,44 @@
 		name = cdda_interface.h;
 		path = /Users/me/Development/Max/include/cdparanoia/interface/cdda_interface.h;
 		sourceTree = "<absolute>";
+	};
+	8CEDCC80096138C4009CFC49 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDCC6109613676009CFC49 /* cdda_interface.h */;
+		name = "static char *strerror_tr[]={";
+		rLen = 29;
+		rLoc = 4788;
+		rType = 0;
+		vrLen = 845;
+		vrLoc = 4336;
+	};
+	8CEDCC81096138C4009CFC49 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: declaration of 'id' shadows a global declaration";
+		fRef = 8C02319C0957F962005D8698 /* cddb_disc.h */;
+		rLen = 1;
+		rLoc = 173;
+		rType = 1;
+	};
+	8CEDCC82096138C4009CFC49 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CEDCC6109613676009CFC49 /* cdda_interface.h */;
+		name = "static char *strerror_tr[]={";
+		rLen = 29;
+		rLoc = 4788;
+		rType = 0;
+		vrLen = 845;
+		vrLoc = 4336;
+	};
+	8CEDCC83096138C4009CFC49 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C02319C0957F962005D8698 /* cddb_disc.h */;
+		name = "void cddb_disc_set_discid(cddb_disc_t *disc, unsigned int id);";
+		rLen = 63;
+		rLoc = 4941;
+		rType = 0;
+		vrLen = 741;
+		vrLoc = 4618;
 	};
 	8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {
 		uiCtxt = {

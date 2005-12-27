@@ -258,7 +258,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>5</integer>
+									<integer>14</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -538,12 +538,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>cdda_interface.h</string>
+								<string>cddb_disc.h</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -560,8 +562,6 @@
 							<string>327pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
