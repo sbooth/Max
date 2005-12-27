@@ -134,6 +134,11 @@
 		8CEDC02B094BE6E10023DD01 /* RipperController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDC029094BE6E10023DD01 /* RipperController.m */; };
 		8CEDC0E5094BEB8D0023DD01 /* EncoderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDC0E4094BEB8D0023DD01 /* EncoderController.m */; };
 		8CEDC16B094BF05C0023DD01 /* Encoder.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CEDC16A094BF05B0023DD01 /* Encoder.nib */; };
+		8CEDCB9B0961333A009CFC49 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CEDCB9A0961333A009CFC49 /* ApplicationControllerDefaults.plist */; };
+		8CEDCB9D0961334E009CFC49 /* libmp4v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEDCB9C0961334E009CFC49 /* libmp4v2.a */; };
+		8CEDCBA1096133A4009CFC49 /* ConverterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCB9F096133A4009CFC49 /* ConverterWindow.m */; };
+		8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA309613414009CFC49 /* CoreAudioException.m */; };
+		8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
@@ -393,6 +398,14 @@
 		8CEDC0DB094BEB710023DD01 /* EncoderController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderController.h; sourceTree = "<group>"; };
 		8CEDC0E4094BEB8D0023DD01 /* EncoderController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderController.m; sourceTree = "<group>"; };
 		8CEDC16A094BF05B0023DD01 /* Encoder.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Encoder.nib; sourceTree = "<group>"; };
+		8CEDCB9A0961333A009CFC49 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
+		8CEDCB9C0961334E009CFC49 /* libmp4v2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp4v2.a; sourceTree = "<group>"; };
+		8CEDCB9E096133A4009CFC49 /* ConverterWindow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ConverterWindow.h; sourceTree = "<group>"; };
+		8CEDCB9F096133A4009CFC49 /* ConverterWindow.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ConverterWindow.m; sourceTree = "<group>"; };
+		8CEDCBA209613414009CFC49 /* CoreAudioException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioException.h; sourceTree = "<group>"; };
+		8CEDCBA309613414009CFC49 /* CoreAudioException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioException.m; sourceTree = "<group>"; };
+		8CEDCBA7096134AD009CFC49 /* FileFormatNotSupportedException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileFormatNotSupportedException.h; sourceTree = "<group>"; };
+		8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileFormatNotSupportedException.m; sourceTree = "<group>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
@@ -435,6 +448,7 @@
 				8C4961EB09472D70006E1765 /* libOggFLAC.a in Frameworks */,
 				8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */,
 				8CEDBFFF094B8ECE0023DD01 /* AudioToolbox.framework in Frameworks */,
+				8CEDCB9D0961334E009CFC49 /* libmp4v2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +545,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CEDCB9A0961333A009CFC49 /* ApplicationControllerDefaults.plist */,
 				8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */,
 				8CE9747809462638000127B6 /* libsndfile.png */,
 				8CE974760946262B000127B6 /* FLAC.png */,
@@ -708,6 +723,8 @@
 		8C7C897408EC42BC00F6FCB1 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8CEDCB9E096133A4009CFC49 /* ConverterWindow.h */,
+				8CEDCB9F096133A4009CFC49 /* ConverterWindow.m */,
 				8C206F120929486C00793FD0 /* TaskMaster.h */,
 				8C206F130929486C00793FD0 /* TaskMaster.m */,
 				8CE098FB095107DD0020C8B1 /* ConverterController.h */,
@@ -744,6 +761,7 @@
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8CEDCB9C0961334E009CFC49 /* libmp4v2.a */,
 				8C4961EA09472D70006E1765 /* libOggFLAC.a */,
 				8CF4D3F00945137100385BE4 /* libsndfile.a */,
 				8CB86229093F186100A60FC1 /* libogg.a */,
@@ -762,6 +780,10 @@
 		8CBEC4EB08ED6F640064F794 /* Exceptions */ = {
 			isa = PBXGroup;
 			children = (
+				8CEDCBA7096134AD009CFC49 /* FileFormatNotSupportedException.h */,
+				8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */,
+				8CEDCBA209613414009CFC49 /* CoreAudioException.h */,
+				8CEDCBA309613414009CFC49 /* CoreAudioException.m */,
 				8CA660640941A87B00CC84F2 /* VorbisException.h */,
 				8CA660650941A87B00CC84F2 /* VorbisException.m */,
 				8CE1687B0934681C00A99A68 /* ParanoiaException.h */,
@@ -926,6 +948,7 @@
 				8CEDC011094BE2D70023DD01 /* Ripper.nib in Resources */,
 				8CEDC16B094BF05C0023DD01 /* Encoder.nib in Resources */,
 				8CE0990E095108300020C8B1 /* Converter.nib in Resources */,
+				8CEDCB9B0961333A009CFC49 /* ApplicationControllerDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1011,6 +1034,9 @@
 				8C0230A8095684BF005D8698 /* OggFLACConverter.m in Sources */,
 				8C0230F909570F26005D8698 /* OggVorbisConverterTask.m in Sources */,
 				8C02310D09570F9D005D8698 /* OggVorbisConverter.m in Sources */,
+				8CEDCBA1096133A4009CFC49 /* ConverterWindow.m in Sources */,
+				8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */,
+				8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

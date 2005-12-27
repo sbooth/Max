@@ -1,5 +1,5 @@
 /*
- *  $Id: Track.h 202 2005-12-04 21:50:52Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -24,6 +24,7 @@
 
 #include "fileref.h"					// TagLib::File
 #include "tag.h"						// TagLib::Tag
+#include "mp4.h"
 
 @implementation AudioMetadata
 
@@ -45,9 +46,12 @@
 {
 	AudioMetadata				*result				= [[AudioMetadata alloc] init];
 	TagLib::FileRef				f					([filename UTF8String]);
-	TagLib::String				s;
+	MP4FileHandle				mp4FileHandle		= MP4Read([filename UTF8String], 0);
 
+	// Try TagLib first
 	if(false == f.isNull()) {
+		TagLib::String			s;
+		
 		// Album title
 		s = f.tag()->album();
 		if(false == s.isNull()) {
@@ -87,6 +91,76 @@
 		if(0 != f.tag()->track()) {
 			[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
 		}
+	}
+	// Try mp4v2 second
+	else if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
+		char			*s;
+		u_int16_t		trackNumber, totalTracks;
+		u_int16_t		discNumber, discsInSet;
+		u_int8_t		multipleArtists;
+		
+		// Album title
+		MP4GetMetadataAlbum(mp4FileHandle, &s);
+		if(0 != s) {
+			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumTitle"];
+		}
+		
+		// Artist
+		MP4GetMetadataArtist(mp4FileHandle, &s);
+		if(0 != s) {
+			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumArtist"];
+		}
+		
+		// Genre
+		MP4GetMetadataGenre(mp4FileHandle, &s);
+		if(0 != s) {
+			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumGenre"];
+		}
+		
+		// Year
+		MP4GetMetadataYear(mp4FileHandle, &s);
+		if(0 != s) {
+			// Avoid atoi()
+			[result setValue:[NSNumber numberWithInt:[[NSString stringWithUTF8String:s] intValue]] forKey:@"albumYear"];
+		}
+		
+		// Comment
+		MP4GetMetadataComment(mp4FileHandle, &s);
+		if(0 != s) {
+			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumComment"];
+		}
+		
+		// Track title
+		MP4GetMetadataName(mp4FileHandle, &s);
+		if(0 != s) {
+			[result setValue:[NSString stringWithUTF8String:s] forKey:@"trackTitle"];
+		}
+		
+		// Track number
+		MP4GetMetadataTrack(mp4FileHandle, &trackNumber, &totalTracks);
+		if(0 != trackNumber) {
+			[result setValue:[NSNumber numberWithUnsignedShort:trackNumber] forKey:@"trackNumber"];
+		}
+		if(0 != totalTracks) {
+			[result setValue:[NSNumber numberWithUnsignedShort:totalTracks] forKey:@"albumTrackCount"];
+		}
+		
+		// Disc number
+		MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discsInSet);
+		if(0 != discNumber) {
+			[result setValue:[NSNumber numberWithUnsignedShort:discNumber] forKey:@"discNumber"];
+		}
+		if(0 != discsInSet) {
+			[result setValue:[NSNumber numberWithUnsignedShort:discsInSet] forKey:@"discsInSet"];
+		}
+		
+		// Compilation
+		MP4GetMetadataCompilation(mp4FileHandle, &multipleArtists);
+		if(0xFF != multipleArtists) {
+			[result setValue:[NSNumber numberWithBool:YES] forKey:@"multipleArtists"];
+		}
+		
+		MP4Close(mp4FileHandle);
 	}
 	
 	return [result autorelease];

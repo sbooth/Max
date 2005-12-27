@@ -1,5 +1,5 @@
 /*
- *  $Id: PreferencesController.m 212 2005-12-05 16:47:24Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -52,7 +52,7 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 
 	@try {
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
-		defaultFiles		= [NSArray arrayWithObjects:@"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"OggVorbisDefaults", nil];
+		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"OggVorbisDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];

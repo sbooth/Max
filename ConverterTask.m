@@ -1,5 +1,5 @@
 /*
- *  $Id: RipperTask.m 205 2005-12-05 06:04:34Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -24,11 +24,6 @@
 #import "IOException.h"
 #import "StopException.h"
 
-#include <paths.h>			//_PATH_TMP
-#include <unistd.h>			// mkstemp, unlink
-
-#define TEMPFILE_PATTERN	"MaxXXXXXX.raw"
-
 @implementation ConverterTask
 
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
@@ -46,7 +41,17 @@
 	[super dealloc];
 }
 
-- (NSString *) description							{ return [_inputFilename lastPathComponent]; }
+- (NSString *) description 
+{ 
+	NSString *description = [_metadata description];
+	
+	if([description isEqualToString:@"Unknown Track"]) {
+		return [_inputFilename lastPathComponent]; 
+	}
+	else {
+		return [[description retain] autorelease];
+	}
+}
 
 - (void) run:(id)object
 {

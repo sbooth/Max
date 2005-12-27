@@ -1,5 +1,5 @@
 /*
- *  $Id: TaskMaster.m 205 2005-12-05 06:04:34Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -34,6 +34,7 @@
 #import "LibsndfileEncoderTask.h"
 #import "MissingResourceException.h"
 #import "IOException.h"
+#import "FileFormatNotSupportedException.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioUtilities.h"
 
@@ -271,7 +272,7 @@ static TaskMaster *sharedController = nil;
 		converterTask = [[OggFLACConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
 	}
 	else {
-		@throw [NSException exceptionWithName:@"FileFormatNotSupportedException" reason:@"File format not supported" userInfo:nil];
+		@throw [FileFormatNotSupportedException exceptionWithReason:@"File format not supported" userInfo:nil];
 	}
 
 	[converterTask setValue:basename forKey:@"basename"];

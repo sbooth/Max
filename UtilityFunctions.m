@@ -1,5 +1,5 @@
 /*
- *  $Id: UtilityFunctions.m 203 2005-12-04 22:20:50Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -30,6 +30,8 @@
 #import "ParanoiaException.h"
 #import "FLACException.h"
 #import "VorbisException.h"
+#import "FileFormatNotSupportedException.h"
+#import "CoreAudioException.h"
 
 #include "sndfile.h"
 
@@ -224,6 +226,12 @@ displayExceptionSheet(NSException	*exception,
 	}
 	else if([exception isKindOfClass:[VorbisException class]]) {
 		[alert setMessageText: @"Ogg Vorbis Error"];
+	}
+	else if([exception isKindOfClass:[FileFormatNotSupportedException class]]) {
+		[alert setMessageText: @"File Format Error"];
+	}
+	else if([exception isKindOfClass:[CoreAudioException class]]) {
+		[alert setMessageText: @"Core Audio Error"];
 	}
 	else {
 		[alert setMessageText: @"Unknown Error"];

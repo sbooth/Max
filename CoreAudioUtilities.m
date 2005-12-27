@@ -1,5 +1,5 @@
 /*
- *  $Id: UtilityFunctions.h 175 2005-11-25 04:56:46Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -19,8 +19,10 @@
  */
 
 #import "CoreAudioUtilities.h"
+
 #import "MallocException.h"
 #import "IOException.h"
+#import "CoreAudioException.h"
 
 #include <CoreAudio/CoreAudioTypes.h>
 #include <CoreServices/CoreServices.h>
@@ -204,7 +206,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 			}
 			
 			[d setValue:description forKey:@"description"];
-			
+						
 			[variantsA addObject:d];
 		}			
 		
@@ -231,7 +233,7 @@ getCoreAudioFileTypeInfo(OSType filetype)
 	size = sizeof(fileTypeName);
 	err = AudioFileGetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, sizeof(UInt32), &filetype, &size, &fileTypeName);
 	if(noErr != err) {
-		@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	if(fileTypeName) {
 		[result setValue:fileTypeName forKey:@"fileTypeName"];
@@ -241,7 +243,7 @@ getCoreAudioFileTypeInfo(OSType filetype)
 	size = sizeof(extensions);
 	err = AudioFileGetGlobalInfo(kAudioFileGlobalInfo_ExtensionsForType, sizeof(OSType), &filetype, &size, &extensions);
 	if(noErr != err) {
-		@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	if(extensions) {
 		[result setValue:(1 == [extensions count] ? [extensions objectAtIndex:0] : extensions) forKey:@"extensionsForType"];
@@ -268,7 +270,7 @@ getCoreAudioWritableTypes()
 			
 			err					= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size);
 			if(noErr != err) {
-				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 			}
 			fileFormats			= malloc(size);
 			if(NULL == fileFormats) {
@@ -278,7 +280,7 @@ getCoreAudioWritableTypes()
 			result				= [NSMutableArray arrayWithCapacity:numFileFormats];
 			err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size, fileFormats);
 			if(noErr != err) {
-				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 			}
 			
 			for(i = 0; i < numFileFormats; ++i) {
@@ -337,7 +339,7 @@ getCoreAudioReadableTypes()
 			
 			err					= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_ReadableTypes, 0, NULL, &size);
 			if(noErr != err) {
-				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 			}
 			fileFormats			= malloc(size);
 			if(NULL == fileFormats) {
@@ -347,7 +349,7 @@ getCoreAudioReadableTypes()
 			result				= [NSMutableArray arrayWithCapacity:numFileFormats];
 			err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size, fileFormats);
 			if(noErr != err) {
-				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 			}
 			
 			for(i = 0; i < numFileFormats; ++i) {
@@ -381,7 +383,7 @@ getCoreAudioExtensions()
 			size	= sizeof(sAudioExtensions);
 			err		= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AllExtensions, 0, NULL, &size, &sAudioExtensions);
 			if(noErr != err) {
-				@throw [NSException exceptionWithName:@"CoreAudioException" reason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"AudioFileGetGlobalInfoSize failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 			}
 			
 		}

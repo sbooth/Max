@@ -1,5 +1,5 @@
 /*
- *  $Id: ApplicationController.m 202 2005-12-04 21:50:52Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -34,6 +34,7 @@
 #import "UpdateChecker.h"
 #import "MacPADSocket.h"
 #import "IOException.h"
+#import "MissingResourceException.h"
 #import "FreeDBProtocolValueTransformer.h"
 #import "BooleanArrayValueTransformer.h"
 #import "NegateBooleanArrayValueTransformer.h"
@@ -44,6 +45,9 @@
 {
 	// Set up the ValueTransformers
 	NSValueTransformer			*transformer;
+	NSString					*defaultsValuesPath;
+    NSDictionary				*defaultsValuesDictionary;
+    
 	
 	transformer = [[[FreeDBProtocolValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"FreeDBProtocolValueTransformer"];
@@ -53,6 +57,20 @@
 
 	transformer = [[[NegateBooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"NegateBooleanArrayValueTransformer"];
+	
+	@try {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:@"Unable to load ApplicationControllerDefaults.plist." userInfo:nil];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+	}
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+	@finally {
+	}	
 }
 
 - (void) awakeFromNib
@@ -87,12 +105,14 @@
 	[MediaController sharedController];
 	
 	// Check for new version
-	bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-	macPAD			= [[MacPADSocket alloc] init];
-
-	[macPAD setDelegate:self];
-	[macPAD performCheck:[NSURL URLWithString:@"http://sbooth.org/Max/Max.plist"] withVersion:bundleVersion];
-	[[macPAD retain] autorelease];
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"startupVersionCheck"]) {
+		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		macPAD			= [[MacPADSocket alloc] init];
+		
+		[macPAD setDelegate:self];
+		[macPAD performCheck:[NSURL URLWithString:@"http://sbooth.org/Max/Max.plist"] withVersion:bundleVersion];
+		[[macPAD retain] autorelease];
+	}
 }
 
 - (void) macPADCheckFinished:(NSNotification *) aNotification

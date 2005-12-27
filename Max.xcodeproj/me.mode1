@@ -258,7 +258,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>6</integer>
+									<integer>9</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -381,9 +381,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>8C02306209567EE4005D8698</string>
+				<string>8CEDCB83096131C4009CFC49</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>8C02306309567EE4005D8698</string>
+				<string>8CEDCB84096131C4009CFC49</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -517,11 +517,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>8C0231CA0957FAF8005D8698</string>
-		<string>8C0231CB0957FAF8005D8698</string>
-		<string>8C9D1F4208C5287A00D95535</string>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>8C0231C70957FAF6005D8698</string>
 		<string>8C191A4608C515A500CB7453</string>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
@@ -543,12 +538,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>cddb_disc.h</string>
+								<string>CoreAudioConverter.m</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -565,8 +562,6 @@
 							<string>327pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -606,7 +601,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>8C191A4608C515A500CB7453</string>
-				<string>8C02307609568261005D8698</string>
+				<string>8CEDCB85096131C4009CFC49</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -968,9 +963,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>8C02306609567EE4005D8698</string>
+				<string>8CEDCB86096131C4009CFC49</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>8C02306709567EE4005D8698</string>
+				<string>8CEDCB87096131C4009CFC49</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>

@@ -1,5 +1,5 @@
 /*
- *  $Id: MediaController.h 202 2005-12-04 21:50:52Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -67,6 +67,8 @@ static ConverterController *sharedController = nil;
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"Converter"];
 	[[self window] setExcludedFromWindowsMenu:YES];
+
+	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
 }
 
 @end
