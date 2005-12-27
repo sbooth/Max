@@ -1,5 +1,5 @@
 /*
- *  $Id: Ripper.m 212 2005-12-05 16:47:24Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -208,7 +208,6 @@ callback(long inpos, int function, void *userdata)
 	unsigned long		cursor				= [range firstSector];
 	unsigned long		lastSector			= [range lastSector];
 	int16_t				*buf				= NULL;
-	unsigned long		totalSectors		= [range totalSectors];
 	unsigned long		grandTotalSectors	= [_grandTotalSectors unsignedLongValue];
 	unsigned long		sectorsToRead		= grandTotalSectors - [_sectorsRead unsignedLongValue];
 	long				where;
