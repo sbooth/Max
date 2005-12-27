@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -31,7 +31,7 @@
 - (void) writeFrame:(const FLAC__Frame *)frame buffer:(const FLAC__int32 * const [])buffer;
 @end
 
-FLAC__StreamDecoderWriteStatus 
+static FLAC__StreamDecoderWriteStatus 
 writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
 {
 	FLACConverter *converter = (FLACConverter *) client_data;
@@ -41,7 +41,7 @@ writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const 
 	return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
-void
+static void
 metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
 	FLACConverter *converter = (FLACConverter *) client_data;
@@ -55,7 +55,7 @@ metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *m
 	}
 }
 
-void
+static void
 errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
 	FLACConverter *converter = (FLACConverter *) client_data;

@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -31,7 +31,7 @@
 - (void) writeFrame:(const FLAC__Frame *)frame buffer:(const FLAC__int32 * const [])buffer;
 @end
 
-FLAC__StreamDecoderWriteStatus 
+static FLAC__StreamDecoderWriteStatus 
 writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
 {
 	OggFLACConverter *converter = (OggFLACConverter *) client_data;
@@ -41,7 +41,7 @@ writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, con
 	return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
 
-void
+static void
 metadataCallback(const OggFLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
 	OggFLACConverter *converter = (OggFLACConverter *) client_data;
@@ -55,7 +55,7 @@ metadataCallback(const OggFLAC__FileDecoder *decoder, const FLAC__StreamMetadata
 	}
 }
 
-void
+static void
 errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
 	OggFLACConverter *converter = (OggFLACConverter *) client_data;
@@ -158,7 +158,8 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 			break;
 		}
 		
-		// Determine bytes processed
+		// Determine bytes processed (TBD)
+		/*
 		if(NO == OggFLAC__file_decoder_get_decode_position(_flac, &bytesRead)) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(_flac)]] userInfo:nil];
@@ -171,6 +172,7 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 		NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
 		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
 		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		*/
 	}
 	
 	// Flush buffers
