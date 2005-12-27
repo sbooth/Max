@@ -55,7 +55,7 @@
 		_outputASBD.mBitsPerChannel		= 16;
 		
 		// Open the output file
-		err = FSPathMakeRef([_inputFilename UTF8String], &ref, NULL);
+		err = FSPathMakeRef((const UInt8 *)[_inputFilename UTF8String], &ref, NULL);
 		if(noErr != err) {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate input file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}

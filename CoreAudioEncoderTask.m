@@ -61,7 +61,7 @@
 	
 	
 	// Open the file
-	err = FSPathMakeRef([_outputFilename UTF8String], &ref, NULL);
+	err = FSPathMakeRef((const UInt8 *)[_outputFilename UTF8String], &ref, NULL);
 	if(noErr != err) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}

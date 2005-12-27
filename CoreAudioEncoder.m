@@ -131,7 +131,7 @@
 	path = [filename stringByDeletingLastPathComponent];
 	file = [filename lastPathComponent];
 	
-	err = FSPathMakeRef([path UTF8String], &ref, NULL);
+	err = FSPathMakeRef((const UInt8 *)[path UTF8String], &ref, NULL);
 	if(noErr != err) {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
