@@ -11,12 +11,14 @@
 	<key>lameQuality</key>
 	<real>4</real>
 	<key>lameTarget</key>
-	<integer>0</integer>
+	<integer>1</integer>
 	<key>lameUseConstantBitrate</key>
 	<false/>
 	<key>lameVBRQuality</key>
 	<real>80</real>
 	<key>lameVariableBitrateMode</key>
 	<integer>1</integer>
+	<key>lameUserPreset</key>
+	<integer>2</integer>
 </dict>
 </plist>

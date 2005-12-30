@@ -1,5 +1,5 @@
 /*
- *  $Id: PreferencesController.h 189 2005-12-01 01:55:55Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -23,5 +23,7 @@
 @interface LAMEPreferencesController : NSWindowController 
 {
 }
+
+- (IBAction) userSelectedPreset:(id)sender;
 
 @end

@@ -7,6 +7,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
+            ACTIONS = {userSelectedPreset = id; }; 
             CLASS = LAMEPreferencesController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSWindowController; 

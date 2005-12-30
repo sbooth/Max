@@ -1,5 +1,5 @@
 /*
- *  $Id: Encoder.h 153 2005-11-23 22:13:56Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -22,6 +22,24 @@
 
 #import "Encoder.h"
 #include "lame/lame.h"
+
+// Tag values for NSPopupButton
+enum {
+	LAME_TARGET_BITRATE						= 0,
+	LAME_TARGET_QUALITY						= 1,
+	
+	LAME_ENCODING_ENGINE_QUALITY_FAST		= 0,
+	LAME_ENCODING_ENGINE_QUALITY_STANDARD	= 1,
+	LAME_ENCODING_ENGINE_QUALITY_HIGH		= 2,
+	
+	LAME_VARIABLE_BITRATE_MODE_STANDARD		= 0,
+	LAME_VARIABLE_BITRATE_MODE_FAST			= 1,
+	
+	LAME_USER_PRESET_BEST					= 1,
+	LAME_USER_PRESET_TRANSPARENT			= 2,
+	LAME_USER_PRESET_PORTABLE				= 3,
+	LAME_USER_PRESET_CUSTOM					= 0	
+};
 
 @interface MPEGEncoder : Encoder
 {

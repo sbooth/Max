@@ -1,5 +1,5 @@
 /*
- *  $Id: PreferencesController.h 189 2005-12-01 01:55:55Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -19,6 +19,7 @@
  */
 
 #import "LAMEPreferencesController.h"
+#import "MPEGEncoder.h"
 
 @implementation LAMEPreferencesController
 
@@ -28,6 +29,49 @@
 		return self;		
 	}
 	return nil;
+}
+
+- (IBAction) userSelectedPreset:(id)sender
+{
+	switch([[sender selectedCell] tag]) {
+
+		// 320 kbps CBR (-b 320)
+		case LAME_USER_PRESET_BEST:
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_TARGET_BITRATE					forKey:@"lameTarget"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_ENCODING_ENGINE_QUALITY_HIGH		forKey:@"lameEncodingEngineQuality"];
+			[[NSUserDefaults standardUserDefaults] setInteger:13									forKey:@"lameBitrate"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES										forKey:@"lameUseConstantBitrate"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO										forKey:@"lameMonoEncoding"];
+			break;
+
+		/*
+		 Quality 70, Fast mode (-V 3 --vbr-new) (~175 kbps)
+		 Quality 80, Fast mode (-V 2 --vbr-new) (~190 kbps)
+		 Quality 90, Fast mode (-V 1 --vbr-new) (~210 kbps)
+		 Quality 100, Fast mode (-V 0 --vbr-new) (~230 kbps)
+		*/
+		case LAME_USER_PRESET_TRANSPARENT:
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_TARGET_QUALITY					forKey:@"lameTarget"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_ENCODING_ENGINE_QUALITY_HIGH		forKey:@"lameEncodingEngineQuality"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_VARIABLE_BITRATE_MODE_FAST		forKey:@"lameVariableBitrateMode"];
+			[[NSUserDefaults standardUserDefaults] setFloat:80.0									forKey:@"lameVBRQuality"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO										forKey:@"lameMonoEncoding"];
+			break;
+
+		/*
+		 Quality 40, Fast mode (-V6 --vbr-new) (~115 kbps)
+		 Quality 50, Fast mode (-V5 --vbr-new) (~130 kbps)
+		 Quality 60, Fast mode (-V4 --vbr-new) (~160 kbps)
+		 */
+		case LAME_USER_PRESET_PORTABLE:
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_TARGET_QUALITY					forKey:@"lameTarget"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_ENCODING_ENGINE_QUALITY_HIGH		forKey:@"lameEncodingEngineQuality"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_VARIABLE_BITRATE_MODE_FAST		forKey:@"lameVariableBitrateMode"];
+			[[NSUserDefaults standardUserDefaults] setFloat:50.0									forKey:@"lameVBRQuality"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO										forKey:@"lameMonoEncoding"];
+			break;
+			
+	}
 }
 
 @end
