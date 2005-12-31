@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>flacCompressionRatio</key>
+	<integer>6</integer>
+	<key>flacExhaustiveModelSearch</key>
+	<false/>
+	<key>flacEnableMidSide</key>
+	<true/>
+	<key>flacEnableLooseMidSide</key>
+	<false/>
+	<key>flacQLPCoeffPrecision</key>
+	<real>0</real>
+	<key>flacMinPartitionOrder</key>
+	<real>0</real>
+	<key>flacMaxPartitionOrder</key>
+	<real>4</real>
+	<key>flacMaxLPCOrder</key>
+	<real>8</real>
+</dict>
+</plist>

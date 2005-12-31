@@ -33,7 +33,7 @@
 
 - (IBAction) userSelectedPreset:(id)sender
 {
-	switch([[sender selectedCell] tag]) {
+	switch([sender selectedTag]) {
 
 		// 320 kbps CBR (-b 320)
 		case LAME_USER_PRESET_BEST:

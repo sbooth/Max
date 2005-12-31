@@ -1,0 +1,17 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {userSelectedCompressionRatio = id; }; 
+            CLASS = FLACPreferencesController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

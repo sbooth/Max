@@ -40,6 +40,7 @@
 		8C4D48A0093E932600A88927 /* Acknowledgments.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D489F093E932600A88927 /* Acknowledgments.nib */; };
 		8C4D48A8093E93AC00A88927 /* AcknowledgmentsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */; };
 		8C4D48DB093E957300A88927 /* Acknowledgments.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D48DA093E957300A88927 /* Acknowledgments.rtf */; };
+		8C4E51550961B4A400F06F00 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4E51540961B4A400F06F00 /* libvorbisfile.a */; };
 		8C6EC5C2092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */; };
 		8C73004E08ECAA5B0008D7E0 /* FreeDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* FreeDBMatchSheet.m */; };
 		8C73033E08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */; };
@@ -142,6 +143,12 @@
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
+		8CF1EC5C096664EE0058BE92 /* FLACPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */; };
+		8CF1EC810966665C0058BE92 /* FLACPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1EC800966665C0058BE92 /* FLACPreferences.nib */; };
+		8CF1EC9E09666E690058BE92 /* FLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */; };
+		8CF1ED2C096676D10058BE92 /* OggFLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1ED2B096676D10058BE92 /* OggFLACDefaults.plist */; };
+		8CF1ED35096676FD0058BE92 /* OggFLACPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1ED34096676FD0058BE92 /* OggFLACPreferences.nib */; };
+		8CF1ED400966780B0058BE92 /* OggFLACPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1ED3E0966780B0058BE92 /* OggFLACPreferencesController.m */; };
 		8CF4D3F70945138900385BE4 /* LibsndfileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */; };
 		8CF4D47509454CD700385BE4 /* LibsndfileEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D47309454CD700385BE4 /* LibsndfileEncoderTask.m */; };
 		8CF4D4E10945531F00385BE4 /* FormatsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF4D4E00945531F00385BE4 /* FormatsToolbarImage.png */; };
@@ -253,6 +260,7 @@
 		8C4D48A5093E93AC00A88927 /* AcknowledgmentsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AcknowledgmentsController.h; sourceTree = "<group>"; };
 		8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AcknowledgmentsController.m; sourceTree = "<group>"; };
 		8C4D48DA093E957300A88927 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
+		8C4E51540961B4A400F06F00 /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbisfile.a; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		8C6EC5BF092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NegateBooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NegateBooleanArrayValueTransformer.m; sourceTree = "<group>"; };
@@ -354,7 +362,6 @@
 		8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
 		8CC111C308CA4538008BB9B0 /* CompactDiscDocument.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CompactDiscDocument.nib; sourceTree = "<group>"; };
 		8CCED19C0935AA5E00413C0A /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
-		8CD7AF1E094E6B8700BA2427 /* TODO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		8CD7B0CB094E7F2600BA2427 /* SectorRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectorRange.h; sourceTree = "<group>"; };
 		8CD7B0CC094E7F2600BA2427 /* SectorRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectorRange.m; sourceTree = "<group>"; };
 		8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
@@ -411,6 +418,14 @@
 		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
 		8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooleanArrayValueTransformer.m; sourceTree = "<group>"; };
+		8CF1EC59096664EE0058BE92 /* FLACPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACPreferencesController.h; sourceTree = "<group>"; };
+		8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACPreferencesController.m; sourceTree = "<group>"; };
+		8CF1EC800966665C0058BE92 /* FLACPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FLACPreferences.nib; sourceTree = "<group>"; };
+		8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = FLACDefaults.plist; sourceTree = "<group>"; };
+		8CF1ED2B096676D10058BE92 /* OggFLACDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = OggFLACDefaults.plist; sourceTree = "<group>"; };
+		8CF1ED34096676FD0058BE92 /* OggFLACPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = OggFLACPreferences.nib; sourceTree = "<group>"; };
+		8CF1ED3D0966780B0058BE92 /* OggFLACPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACPreferencesController.h; sourceTree = "<group>"; };
+		8CF1ED3E0966780B0058BE92 /* OggFLACPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACPreferencesController.m; sourceTree = "<group>"; };
 		8CF4D3F00945137100385BE4 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
 		8CF4D3F40945138900385BE4 /* LibsndfileEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibsndfileEncoder.h; sourceTree = "<group>"; };
 		8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibsndfileEncoder.m; sourceTree = "<group>"; };
@@ -449,6 +464,7 @@
 				8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */,
 				8CEDBFFF094B8ECE0023DD01 /* AudioToolbox.framework in Frameworks */,
 				8CEDCB9D0961334E009CFC49 /* libmp4v2.a in Frameworks */,
+				8C4E51550961B4A400F06F00 /* libvorbisfile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +561,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CF1ED2B096676D10058BE92 /* OggFLACDefaults.plist */,
+				8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */,
 				8CEDCB9A0961333A009CFC49 /* ApplicationControllerDefaults.plist */,
 				8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */,
 				8CE9747809462638000127B6 /* libsndfile.png */,
@@ -592,8 +610,9 @@
 				8CE9746209461F35000127B6 /* ComponentVersions.nib */,
 				8CEDC010094BE2D70023DD01 /* Ripper.nib */,
 				8CEDC16A094BF05B0023DD01 /* Encoder.nib */,
-				8CD7AF1E094E6B8700BA2427 /* TODO */,
 				8CE0990D095108300020C8B1 /* Converter.nib */,
+				8CF1EC800966665C0058BE92 /* FLACPreferences.nib */,
+				8CF1ED34096676FD0058BE92 /* OggFLACPreferences.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -642,6 +661,10 @@
 				8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */,
 				8CF4D50E09455C7800385BE4 /* FormatsPreferencesController.h */,
 				8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */,
+				8CF1EC59096664EE0058BE92 /* FLACPreferencesController.h */,
+				8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */,
+				8CF1ED3D0966780B0058BE92 /* OggFLACPreferencesController.h */,
+				8CF1ED3E0966780B0058BE92 /* OggFLACPreferencesController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -761,6 +784,7 @@
 		8CA382DB0924589D00BDFD02 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8C4E51540961B4A400F06F00 /* libvorbisfile.a */,
 				8CEDCB9C0961334E009CFC49 /* libmp4v2.a */,
 				8C4961EA09472D70006E1765 /* libOggFLAC.a */,
 				8CF4D3F00945137100385BE4 /* libsndfile.a */,
@@ -949,6 +973,10 @@
 				8CEDC16B094BF05C0023DD01 /* Encoder.nib in Resources */,
 				8CE0990E095108300020C8B1 /* Converter.nib in Resources */,
 				8CEDCB9B0961333A009CFC49 /* ApplicationControllerDefaults.plist in Resources */,
+				8CF1EC810966665C0058BE92 /* FLACPreferences.nib in Resources */,
+				8CF1EC9E09666E690058BE92 /* FLACDefaults.plist in Resources */,
+				8CF1ED2C096676D10058BE92 /* OggFLACDefaults.plist in Resources */,
+				8CF1ED35096676FD0058BE92 /* OggFLACPreferences.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1037,6 +1065,8 @@
 				8CEDCBA1096133A4009CFC49 /* ConverterWindow.m in Sources */,
 				8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */,
 				8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */,
+				8CF1EC5C096664EE0058BE92 /* FLACPreferencesController.m in Sources */,
+				8CF1ED400966780B0058BE92 /* OggFLACPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
