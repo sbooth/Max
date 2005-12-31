@@ -29,6 +29,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/AudioFormat.h>
 #include <AudioToolbox/AudioConverter.h>
+#include <AudioUnit/AudioCodec.h>
 
 // Prototypes
 static NSMutableArray *			getCoreAudioEncodeFormats();
@@ -138,7 +139,11 @@ getCoreAudioFileDataFormats(OSType filetype)
 			[d setValue:[NSNumber numberWithUnsignedLong:desc->mBitsPerChannel] forKey:@"bitsPerChannel"];
 			[d setValue:[NSNumber numberWithBool:formatIDValidForOutput(desc->mFormatID)] forKey:@"writable"];
 			
-			
+			// FIXME: Hack for AAC VBR mode
+			if(kAudioFormatMPEG4AAC == desc->mFormatID) {
+				[d setValue:[NSNumber numberWithBool:YES] forKey:@"vbrAvailable"];
+			}
+						
 			// Interleaved 16-bit PCM audio
 			inputASBD.mSampleRate			= 44100.f;
 			inputASBD.mFormatID				= kAudioFormatLinearPCM;
@@ -191,7 +196,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 				if(noErr == err) {
 					[d setValue:[NSNumber numberWithUnsignedLong:defaultQuality] forKey:@"quality"];
 				}
-				
+
 				// Cleanup
 				err = AudioConverterDispose(dummyConverter);
 				if(noErr != err) {

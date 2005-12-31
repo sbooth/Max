@@ -32,6 +32,7 @@
 #include <AudioToolbox/AudioConverter.h>
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
+#include <AudioUnit/AudioCodec.h>
 
 @implementation CoreAudioEncoder
 
@@ -84,7 +85,7 @@
 {
 	OSStatus			err;
 	AudioBufferList		bufferList;
-	UInt32				frameCount, size, bitrate, quality;
+	UInt32				frameCount, size, bitrate, quality, mode;
 	ssize_t				bytesWritten						= 0;
 	ssize_t				bytesRead							= 0;
 	ssize_t				bytesToRead							= 0;
@@ -173,6 +174,16 @@
 		if(noErr != err) {
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioConverter quality (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}		
+	}
+	
+	// Bitrate mode (this is a semi-hack)
+	if(nil != [_formatInfo objectForKey:@"vbrAvailable"]) {
+		mode		= [[_formatInfo objectForKey:@"useVBR"] boolValue] ? kAudioCodecBitRateFormat_VBR : kAudioCodecBitRateFormat_CBR;
+		err			= AudioConverterSetProperty(converter, kAudioCodecBitRateFormat, sizeof(mode), &mode);
+		if(noErr != err) {
+			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioConverter to VBR (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}		
 	}
 	

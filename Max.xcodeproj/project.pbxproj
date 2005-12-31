@@ -426,6 +426,7 @@
 		8CF1ED34096676FD0058BE92 /* OggFLACPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = OggFLACPreferences.nib; sourceTree = "<group>"; };
 		8CF1ED3D0966780B0058BE92 /* OggFLACPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACPreferencesController.h; sourceTree = "<group>"; };
 		8CF1ED3E0966780B0058BE92 /* OggFLACPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACPreferencesController.m; sourceTree = "<group>"; };
+		8CF1EF7A09668A8B0058BE92 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		8CF4D3F00945137100385BE4 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
 		8CF4D3F40945138900385BE4 /* LibsndfileEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibsndfileEncoder.h; sourceTree = "<group>"; };
 		8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibsndfileEncoder.m; sourceTree = "<group>"; };
@@ -620,6 +621,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8CF1EF7A09668A8B0058BE92 /* AudioUnit.framework */,
 				8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */,
 				8C401716094901A6003413BE /* CoreAudio.framework */,
 				8CEA8CF00942939800207809 /* DiskArbitration.framework */,
