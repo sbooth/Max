@@ -1,5 +1,5 @@
 /*
- *  $Id: LAMEPreferencesController.h 283 2005-12-30 19:11:43Z sbooth $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -24,6 +24,7 @@
 {
 }
 
-- (IBAction) userSelectedCompressionRatio:(id)sender;
+- (IBAction) userSelectedFLACCompressionLevel:(id)sender;
+- (IBAction) userSelectedOggFLACCompressionLevel:(id)sender;
 
 @end

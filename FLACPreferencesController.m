@@ -1,5 +1,5 @@
 /*
- *  $Id: LAMEPreferencesController.m 283 2005-12-30 19:11:43Z sbooth $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -21,16 +21,27 @@
 #import "FLACPreferencesController.h"
 
 enum {
-	FLAC_COMPRESSION_RATIO_0			= 1,
-	FLAC_COMPRESSION_RATIO_1			= 2,
-	FLAC_COMPRESSION_RATIO_2			= 3,
-	FLAC_COMPRESSION_RATIO_3			= 4,
-	FLAC_COMPRESSION_RATIO_4			= 5,
-	FLAC_COMPRESSION_RATIO_5			= 6,
-	FLAC_COMPRESSION_RATIO_6			= 7,
-	FLAC_COMPRESSION_RATIO_7			= 8,
-	FLAC_COMPRESSION_RATIO_8			= 9,
-	FLAC_COMPRESSION_RATIO_CUSTOM		= 0
+	FLAC_COMPRESSION_LEVEL_0			= 1,
+	FLAC_COMPRESSION_LEVEL_1			= 2,
+	FLAC_COMPRESSION_LEVEL_2			= 3,
+	FLAC_COMPRESSION_LEVEL_3			= 4,
+	FLAC_COMPRESSION_LEVEL_4			= 5,
+	FLAC_COMPRESSION_LEVEL_5			= 6,
+	FLAC_COMPRESSION_LEVEL_6			= 7,
+	FLAC_COMPRESSION_LEVEL_7			= 8,
+	FLAC_COMPRESSION_LEVEL_8			= 9,
+	FLAC_COMPRESSION_LEVEL_CUSTOM		= 0,
+	
+	OGGFLAC_COMPRESSION_RATIO_0			= 1,
+	OGGFLAC_COMPRESSION_RATIO_1			= 2,
+	OGGFLAC_COMPRESSION_RATIO_2			= 3,
+	OGGFLAC_COMPRESSION_RATIO_3			= 4,
+	OGGFLAC_COMPRESSION_RATIO_4			= 5,
+	OGGFLAC_COMPRESSION_RATIO_5			= 6,
+	OGGFLAC_COMPRESSION_RATIO_6			= 7,
+	OGGFLAC_COMPRESSION_RATIO_7			= 8,
+	OGGFLAC_COMPRESSION_RATIO_8			= 9,
+	OGGFLAC_COMPRESSION_RATIO_CUSTOM	= 0
 };
 
 @implementation FLACPreferencesController
@@ -43,11 +54,11 @@ enum {
 	return nil;
 }
 
-- (IBAction) userSelectedCompressionRatio:(id)sender
+- (IBAction) userSelectedFLACCompressionLevel:(id)sender
 {
 	// All compression ratio stuff "borrowed" from FLAC's main.c
 	switch([sender selectedTag]) {
-		case FLAC_COMPRESSION_RATIO_0:
+		case FLAC_COMPRESSION_LEVEL_0:
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableLooseMidSide"];
@@ -57,7 +68,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"flacMaxLPCOrder"];
 			break;
 			
-		case FLAC_COMPRESSION_RATIO_1:
+		case FLAC_COMPRESSION_LEVEL_1:
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableLooseMidSide"];
@@ -67,7 +78,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"flacMaxLPCOrder"];
 			break;
 
-		case FLAC_COMPRESSION_RATIO_2:
+		case FLAC_COMPRESSION_LEVEL_2:
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableLooseMidSide"];
@@ -77,7 +88,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"flacMaxLPCOrder"];
 			break;
 
-		case FLAC_COMPRESSION_RATIO_3:
+		case FLAC_COMPRESSION_LEVEL_3:
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableLooseMidSide"];
@@ -87,7 +98,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:6				forKey:@"flacMaxLPCOrder"];
 			break;
 
-		case FLAC_COMPRESSION_RATIO_4:
+		case FLAC_COMPRESSION_LEVEL_4:
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableLooseMidSide"];
@@ -97,7 +108,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"flacMaxLPCOrder"];
 			break;
 
-		case FLAC_COMPRESSION_RATIO_5:
+		case FLAC_COMPRESSION_LEVEL_5:
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableLooseMidSide"];
@@ -107,7 +118,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"flacMaxLPCOrder"];
 			break;
 
-		case FLAC_COMPRESSION_RATIO_6:
+		case FLAC_COMPRESSION_LEVEL_6:
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableLooseMidSide"];
@@ -117,7 +128,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"flacMaxLPCOrder"];
 			break;
 
-		case FLAC_COMPRESSION_RATIO_7:
+		case FLAC_COMPRESSION_LEVEL_7:
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableLooseMidSide"];
@@ -127,7 +138,7 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"flacMaxLPCOrder"];
 			break;
 
-		case FLAC_COMPRESSION_RATIO_8:
+		case FLAC_COMPRESSION_LEVEL_8:
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacExhaustiveModelSearch"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"flacEnableMidSide"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"flacEnableLooseMidSide"];
@@ -135,6 +146,102 @@ enum {
 			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"flacMinPartitionOrder"];
 			[[NSUserDefaults standardUserDefaults] setInteger:6				forKey:@"flacMaxPartitionOrder"];
 			[[NSUserDefaults standardUserDefaults] setInteger:12			forKey:@"flacMaxLPCOrder"];
+			break;
+	}
+}
+
+- (IBAction) userSelectedOggFLACCompressionLevel:(id)sender
+{
+	// All compression ratio stuff "borrowed" from FLAC's main.c
+	switch([sender selectedTag]) {
+		case OGGFLAC_COMPRESSION_RATIO_0:
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:2				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:2				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_1:
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:2				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:2				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_2:
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:3				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_3:
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:3				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:3				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:6				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_4:
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:3				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:3				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_5:
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:3				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:3				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_6:
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:4				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_7:
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:6				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:8				forKey:@"oggFLACMaxLPCOrder"];
+			break;
+			
+		case OGGFLAC_COMPRESSION_RATIO_8:
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACExhaustiveModelSearch"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES				forKey:@"oggFLACEnableMidSide"];
+			[[NSUserDefaults standardUserDefaults] setBool:NO				forKey:@"oggFLACEnableLooseMidSide"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACQLPCoeffPrecision"];
+			[[NSUserDefaults standardUserDefaults] setInteger:0				forKey:@"oggFLACMinPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:6				forKey:@"oggFLACMaxPartitionOrder"];
+			[[NSUserDefaults standardUserDefaults] setInteger:12			forKey:@"oggFLACMaxLPCOrder"];
 			break;
 	}
 }

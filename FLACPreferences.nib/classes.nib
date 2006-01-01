@@ -1,7 +1,10 @@
 {
     IBClasses = (
         {
-            ACTIONS = {userSelectedCompressionRatio = id; }; 
+            ACTIONS = {
+                userSelectedFLACCompressionLevel = id; 
+                userSelectedOggFLACCompressionLevel = id; 
+            }; 
             CLASS = FLACPreferencesController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSWindowController; 

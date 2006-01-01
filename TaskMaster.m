@@ -342,8 +342,14 @@ static TaskMaster *sharedController = nil;
 
 - (void) spawnRipperThreads
 {
-	if(0 != [_rippingTasks count] && NO == [[[_rippingTasks objectAtIndex:0] valueForKeyPath:@"ripper.started"] boolValue]) {
-		[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
+	NSMutableArray *activeDrives = [NSMutableArray arrayWithCapacity:4];
+	
+	@synchronized(_rippingTasks) {
+		
+		
+		if(0 != [_rippingTasks count] && NO == [[[_rippingTasks objectAtIndex:0] valueForKeyPath:@"ripper.started"] boolValue]) {
+			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
+		}
 	}
 }
 
@@ -407,15 +413,17 @@ static TaskMaster *sharedController = nil;
 	unsigned	limit;
 	unsigned	maxConverterThreads;
 	
-	maxConverterThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
-	limit = (maxConverterThreads < [_convertingTasks count] ? maxConverterThreads : [_convertingTasks count]);
-	
-	// Start converting the next file(s)
-	for(i = 0; i < limit; ++i) {
-		if(NO == [[[_convertingTasks objectAtIndex:i] valueForKeyPath:@"converter.started"] boolValue]) {
-			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_convertingTasks objectAtIndex:i] withObject:self];
-		}
-	}	
+	@synchronized(_convertingTasks) {
+		maxConverterThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
+		limit = (maxConverterThreads < [_convertingTasks count] ? maxConverterThreads : [_convertingTasks count]);
+		
+		// Start converting the next file(s)
+		for(i = 0; i < limit; ++i) {
+			if(NO == [[[_convertingTasks objectAtIndex:i] valueForKeyPath:@"converter.started"] boolValue]) {
+				[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_convertingTasks objectAtIndex:i] withObject:self];
+			}
+		}	
+	}
 }
 
 - (void) convertDidStart:(ConverterTask* ) task
@@ -596,15 +604,17 @@ static TaskMaster *sharedController = nil;
 	unsigned	limit;
 	unsigned	maxEncoderThreads;
 	
-	maxEncoderThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"];
-	limit = (maxEncoderThreads < [_encodingTasks count] ? maxEncoderThreads : [_encodingTasks count]);
-	
-	// Start encoding the next track(s)
-	for(i = 0; i < limit; ++i) {
-		if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"encoder.started"] boolValue]) {
-			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
-		}
-	}	
+	@synchronized(_encodingTasks) {
+		maxEncoderThreads = (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"];
+		limit = (maxEncoderThreads < [_encodingTasks count] ? maxEncoderThreads : [_encodingTasks count]);
+		
+		// Start encoding the next track(s)
+		for(i = 0; i < limit; ++i) {
+			if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"encoder.started"] boolValue]) {
+				[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
+			}
+		}	
+	}
 }
 
 - (void) encodeDidStart:(EncoderTask* ) task
