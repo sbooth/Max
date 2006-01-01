@@ -50,8 +50,6 @@
 
 	[result setValue:[NSNumber numberWithBool:NO] forKey:@"multipleArtists"];
 	[result setValue:[NSNumber numberWithUnsignedInt:0] forKey:@"trackNumber"];
-	[result setValue:[NSNumber numberWithUnsignedInt:0] forKey:@"discNumber"];
-	[result setValue:[NSNumber numberWithUnsignedInt:0] forKey:@"discsInSet"];
 
 	// Try TagLib first
 	if(false == f.isNull()) {
