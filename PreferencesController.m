@@ -112,19 +112,21 @@ static NSString		*OggFLACPreferencesToolbarItemIdentifier		= @"OggFLACPreference
 {
     NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"Max Preferences Toolbar"] autorelease];
     
-    [toolbar setAllowsUserCustomization: NO];
-    [toolbar setAutosavesConfiguration: NO];
-    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    [toolbar setAllowsUserCustomization:YES];
+    [toolbar setAutosavesConfiguration:YES];
     
     [toolbar setDelegate:self];
-	[toolbar setSelectedItemIdentifier:GeneralPreferencesToolbarItemIdentifier];
 	
     [[self window] setToolbar:toolbar];
-	[self selectPrefsPane:[[toolbar items] objectAtIndex:0]];
 }
 
 - (void) windowDidLoad
 {
+	NSToolbar *toolbar = [[self window] toolbar];
+
+	[toolbar setSelectedItemIdentifier:[[[toolbar visibleItems] objectAtIndex:0] itemIdentifier]];
+	[self selectPrefsPane:self];
+
 	[self setShouldCascadeWindows:NO];
 	[[self window] center];
 }
@@ -245,6 +247,7 @@ static NSString		*OggFLACPreferencesToolbarItemIdentifier		= @"OggFLACPreference
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		OggVorbisPreferencesToolbarItemIdentifier, FLACPreferencesToolbarItemIdentifier, OggFLACPreferencesToolbarItemIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
 }
 
@@ -254,6 +257,7 @@ static NSString		*OggFLACPreferencesToolbarItemIdentifier		= @"OggFLACPreference
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		OggVorbisPreferencesToolbarItemIdentifier, FLACPreferencesToolbarItemIdentifier, OggFLACPreferencesToolbarItemIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
 }
 
