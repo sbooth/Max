@@ -24,7 +24,7 @@
 
 #include "fileref.h"					// TagLib::File
 #include "tag.h"						// TagLib::Tag
-#include "mp4.h"
+#include "mp4.h"						// MP4FileHandle
 
 @implementation AudioMetadata
 
@@ -50,7 +50,7 @@
 
 	// Try TagLib first
 	if(false == f.isNull()) {
-		TagLib::String			s;
+		TagLib::String		s;
 		
 		// Album title
 		s = f.tag()->album();
