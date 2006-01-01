@@ -22,6 +22,7 @@
 
 @interface LAMEPreferencesController : NSWindowController 
 {
+	IBOutlet NSTextField	*_presetDescription;
 }
 
 - (IBAction) userSelectedPreset:(id)sender;

@@ -10,6 +10,7 @@
             ACTIONS = {userSelectedPreset = id; }; 
             CLASS = LAMEPreferencesController; 
             LANGUAGE = ObjC; 
+            OUTLETS = {"_presetDescription" = NSTextField; }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 

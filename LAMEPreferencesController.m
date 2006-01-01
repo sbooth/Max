@@ -21,6 +21,10 @@
 #import "LAMEPreferencesController.h"
 #import "MPEGEncoder.h"
 
+@interface LAMEPreferencesController (Private)
+- (void) setPresetDescription;
+@end
+
 @implementation LAMEPreferencesController
 
 - (id) init
@@ -29,6 +33,29 @@
 		return self;		
 	}
 	return nil;
+}
+
+- (void) awakeFromNib
+{
+	[self setPresetDescription];
+}
+
+- (void) setPresetDescription
+{
+	switch([[NSUserDefaults standardUserDefaults] integerForKey:@"lameUserPreset"]) {
+		case LAME_USER_PRESET_BEST:
+			[_presetDescription setStringValue:@"320 kbps constant bitrate (CBR)"];
+			break;
+		case LAME_USER_PRESET_TRANSPARENT:
+			[_presetDescription setStringValue:@"~190 kbps variable bitrate (VBR)"];
+			break;
+		case LAME_USER_PRESET_PORTABLE:
+			[_presetDescription setStringValue:@"~130 kbps variable bitrate (VBR)"];
+			break;
+		case LAME_USER_PRESET_CUSTOM:
+			[_presetDescription setStringValue:@"Custom encoder settings"];
+			break;
+	}	
 }
 
 - (IBAction) userSelectedPreset:(id)sender
@@ -70,8 +97,9 @@
 			[[NSUserDefaults standardUserDefaults] setFloat:50.0									forKey:@"lameVBRQuality"];
 			[[NSUserDefaults standardUserDefaults] setBool:NO										forKey:@"lameMonoEncoding"];
 			break;
-			
-	}
+		}
+	
+	[self setPresetDescription];
 }
 
 @end
