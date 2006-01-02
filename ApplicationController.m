@@ -208,7 +208,7 @@
 					}
 
 					@catch(FileFormatNotSupportedException *exception) {
-						displayExceptionSheet(exception, self, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+						displayExceptionAlert(exception);
 					}
 					
 					@catch(NSException *exception) {
