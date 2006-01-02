@@ -35,6 +35,7 @@
 #import "MacPADSocket.h"
 #import "IOException.h"
 #import "MissingResourceException.h"
+#import "FileFormatNotSupportedException.h"
 #import "FreeDBProtocolValueTransformer.h"
 #import "BooleanArrayValueTransformer.h"
 #import "NegateBooleanArrayValueTransformer.h"
@@ -156,7 +157,7 @@
 	NSMutableArray		*types;
 	
 	[panel setAllowsMultipleSelection:YES];
-	[panel setCanChooseDirectories:NO];
+	[panel setCanChooseDirectories:YES];
 	
 	// Allowable file types
 	types = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
@@ -164,17 +165,58 @@
 	[types addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", nil]];
 	
 	if(NSOKButton == [panel runModalForTypes:types]) {
-		NSArray			*filenames		= [panel filenames];
-		unsigned		i;
+		NSFileManager		*manager		= [NSFileManager defaultManager];
+		NSArray				*filenames		= [panel filenames];
+		NSString			*filename;
+		NSArray				*subpaths;
+		BOOL				isDir;
+		AudioMetadata		*metadata;
+		NSString			*basename;
+		NSEnumerator		*enumerator;
+		NSString			*subpath;
+		unsigned			i;
 		
 		for(i = 0; i < [filenames count]; ++i) {
-			NSString		*filename	= [filenames objectAtIndex:i];
-			AudioMetadata	*metadata	= [AudioMetadata metadataFromFilename:filename];
-			NSString		*basename	= [metadata outputBasename];
+			filename = [filenames objectAtIndex:i];
 			
-			createDirectoryStructure(basename);
+			if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
+				if(isDir) {
+					subpaths	= [manager subpathsAtPath:filename];
+					enumerator	= [subpaths objectEnumerator];
+					
+					while((subpath = [enumerator nextObject])) {
+						metadata	= [AudioMetadata metadataFromFilename:subpath];
+						basename	= [metadata outputBasename];
+						
+						createDirectoryStructure(basename);
+						@try {
+							[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] outputBasename:basename metadata:metadata];
+						}
+						@catch(FileFormatNotSupportedException *exception) {
+							// Just let it go since we are traversing a folder
+						}
+					}
+				}
+				else {
+					metadata	= [AudioMetadata metadataFromFilename:filename];
+					basename	= [metadata outputBasename];
+					
+					createDirectoryStructure(basename);
+					
+					@try {
+						[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];
+					}
 
-			[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];
+					@catch(FileFormatNotSupportedException *exception) {
+						displayExceptionSheet(exception, self, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+					}
+					
+					@catch(NSException *exception) {
+						@throw;
+					}
+					
+				}
+			}				
 		}
 	}
 }
