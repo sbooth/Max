@@ -1,5 +1,5 @@
 /*
- *  $Id: ConverterWindow.m 281 2005-12-27 07:26:06Z me $
+ *  $Id$
  *
  *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
  *
@@ -47,17 +47,47 @@
 
 	@try {
 		if([[pasteboard types] containsObject:NSFilenamesPboardType]) {
-			NSArray			*filenames		= [pasteboard propertyListForType:NSFilenamesPboardType];
-			unsigned		i;
+			NSFileManager		*manager		= [NSFileManager defaultManager];
+			NSArray				*filenames		= [pasteboard propertyListForType:NSFilenamesPboardType];
+			NSString			*filename;
+			NSArray				*subpaths;
+			BOOL				isDir;
+			AudioMetadata		*metadata;
+			NSString			*basename;
+			NSEnumerator		*enumerator;
+			NSString			*subpath;
+			unsigned			i;
 			
 			for(i = 0; i < [filenames count]; ++i) {
-				NSString		*filename	= [filenames objectAtIndex:i];
-				AudioMetadata	*metadata	= [AudioMetadata metadataFromFilename:filename];
-				NSString		*basename	= [metadata outputBasename];
+				filename = [filenames objectAtIndex:i];
 				
-				createDirectoryStructure(basename);
-				
-				[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];
+				if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
+					if(isDir) {
+						subpaths	= [manager subpathsAtPath:filename];
+						enumerator	= [subpaths objectEnumerator];
+						
+						while((subpath = [enumerator nextObject])) {
+							metadata	= [AudioMetadata metadataFromFilename:subpath];
+							basename	= [metadata outputBasename];
+							
+							createDirectoryStructure(basename);
+							@try {
+								[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] outputBasename:basename metadata:metadata];
+							}
+							@catch(FileFormatNotSupportedException *exception) {
+								// Just let it go since we are traversing a folder
+							}
+						}
+					}
+					else {
+						metadata	= [AudioMetadata metadataFromFilename:filename];
+						basename	= [metadata outputBasename];
+						
+						createDirectoryStructure(basename);
+						
+						[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];
+					}
+				}				
 			}
 		}
 	}
