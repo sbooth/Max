@@ -18,37 +18,22 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "ConverterWindow.h"
+#import "ServicesProvider.h"
 
 #import "TaskMaster.h"
 #import "FileFormatNotSupportedException.h"
-#import "UtilityFunctions.h"
+#import "IOException.h"
 
-@interface ConverterWindow (Private)
-- (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-@end
+@implementation ServicesProvider
 
-@implementation ConverterWindow
-
-- (NSDragOperation) draggingEntered:(id <NSDraggingInfo>)sender 
+- (void) encodeFile:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error
 {
-    NSPasteboard		*pasteboard		= [sender draggingPasteboard];
+	NSArray *types = [pboard types];
 	
-    if([[pasteboard types] containsObject:NSFilenamesPboardType]) {
-		return NSDragOperationCopy;
-    }
-	
-    return NSDragOperationNone;
-}
-
-- (BOOL) performDragOperation:(id <NSDraggingInfo>)sender 
-{
-    NSPasteboard		*pasteboard		= [sender draggingPasteboard];
-
 	@try {
-		if([[pasteboard types] containsObject:NSFilenamesPboardType]) {
+		if([types containsObject:NSFilenamesPboardType]) {
 			NSFileManager		*manager		= [NSFileManager defaultManager];
-			NSArray				*filenames		= [pasteboard propertyListForType:NSFilenamesPboardType];
+			NSArray				*filenames		= [pboard propertyListForType:NSFilenamesPboardType];
 			NSString			*filename;
 			NSArray				*subpaths;
 			BOOL				isDir;
@@ -90,22 +75,56 @@
 				}				
 			}
 		}
+		else if([types containsObject:NSStringPboardType]) {
+			NSFileManager		*manager		= [NSFileManager defaultManager];
+			NSString			*filename		= [pboard stringForType:NSStringPboardType];
+			NSArray				*subpaths;
+			BOOL				isDir;
+			AudioMetadata		*metadata;
+			NSString			*basename;
+			NSEnumerator		*enumerator;
+			NSString			*subpath;
+			
+			if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
+				if(isDir) {
+					subpaths	= [manager subpathsAtPath:filename];
+					enumerator	= [subpaths objectEnumerator];
+					
+					while((subpath = [enumerator nextObject])) {
+						metadata	= [AudioMetadata metadataFromFilename:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
+						basename	= [metadata outputBasename];
+						
+						createDirectoryStructure(basename);
+						@try {
+							[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] outputBasename:basename metadata:metadata];
+						}
+						@catch(FileFormatNotSupportedException *exception) {
+							// Just let it go since we are traversing a folder
+						}
+					}
+				}
+				else {
+					metadata	= [AudioMetadata metadataFromFilename:filename];
+					basename	= [metadata outputBasename];
+					
+					createDirectoryStructure(basename);
+					
+					[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];
+				}
+			}
+			else {
+				@throw [IOException exceptionWithReason:@"File not found" userInfo:nil];
+			}
+		}
 	}
 	
 	@catch(FileFormatNotSupportedException *exception) {
-		displayExceptionSheet(exception, self, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
-	}
-
-	@catch(NSException *exception) {
-		@throw;
+		displayExceptionAlert(exception);
 	}
 	
-	return YES;
-}
-
-- (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	// Nothing for now
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
 }
 
 @end

@@ -1,7 +1,7 @@
 /*
- *  $Id: Track.m 202 2005-12-04 21:50:52Z me $
+ *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -169,21 +169,21 @@
 	return _disc;
 }
 
-- (void)					encodeStarted
+- (void) encodeStarted
 {
 	[self willChangeValueForKey:@"encodeInProgress"];
 	++_activeEncoders;
 	[self didChangeValueForKey:@"encodeInProgress"];
 }
 
-- (void)					encodeCompleted
+- (void) encodeCompleted
 {
 	[self willChangeValueForKey:@"encodeInProgress"];
 	--_activeEncoders;
 	[self didChangeValueForKey:@"encodeInProgress"];
 }
 
-- (NSNumber *)				encodeInProgress
+- (NSNumber *) encodeInProgress
 {
 	return [NSNumber numberWithBool:(0 != _activeEncoders)];
 }

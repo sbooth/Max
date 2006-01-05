@@ -1,7 +1,7 @@
 /*
- *  $Id: Ripper.h 182 2005-11-28 12:32:41Z me $
+ *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,10 +51,12 @@
 	NSString				*_timeRemaining;
 }
 
-- (id)		initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive;
+- (id)				initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive;
 
-- (void)	requestStop;
+- (void)			requestStop;
 
-- (void)	ripToFile:(int)file;
+- (void)			ripToFile:(int)file;
+
+- (NSString *)		deviceName;
 
 @end

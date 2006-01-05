@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -218,5 +218,17 @@
 	
 	return 0; //bytesWritten;
 }	
+
+- (NSString *) description
+{
+	return [NSString stringWithFormat:@"FLAC settings: exhaustiveModelSearch:%i midSideStereo:%i looseMidSideStereo:%i QPLCoeffPrecision:%i, minResidualPartitionOrder:%i, maxResidualPartitionOrder:%i, maxLPCOrder:%i", 
+		FLAC__file_encoder_get_do_exhaustive_model_search(_flac),
+		FLAC__file_encoder_get_do_mid_side_stereo(_flac),
+		FLAC__file_encoder_get_loose_mid_side_stereo(_flac),
+		FLAC__file_encoder_get_qlp_coeff_precision(_flac),
+		FLAC__file_encoder_get_min_residual_partition_order(_flac),
+		FLAC__file_encoder_get_max_residual_partition_order(_flac),
+		FLAC__file_encoder_get_max_lpc_order(_flac)];
+}
 
 @end

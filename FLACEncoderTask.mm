@@ -1,7 +1,7 @@
 /*
- *  $Id: EncoderTask.m 181 2005-11-28 08:38:43Z me $
+ *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -88,6 +88,9 @@
 	
 	// Comment
 	comment = [_metadata valueForKey:@"albumComment"];
+	if(_writeSettingsToComment) {
+		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+	}
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}

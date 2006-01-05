@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -253,6 +253,11 @@ callback(long inpos, int function, void *userdata)
 		// Advance cursor
 		++cursor;
 	}
+}
+
+- (NSString *) deviceName
+{
+	return [NSString stringWithUTF8String:_drive->device_name];
 }
 
 @end

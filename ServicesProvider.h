@@ -20,16 +20,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <DiskArbitration/DASession.h>
-
-#import "CompactDiscDocument.h"
-
-@interface MediaController : NSObject
+@interface ServicesProvider : NSObject
 {
-	DASessionRef		_session;
 }
 
-+ (MediaController *)		sharedController;
-- (void)					ejectDiscForCompactDiscDocument:(CompactDiscDocument *)document;
+- (void) encodeFile:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
 @end

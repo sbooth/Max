@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -293,28 +293,28 @@ static TaskMaster *sharedController = nil;
 - (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
 	if([keyPath isEqualToString:@"ripper.started"]) {
-		[self performSelectorOnMainThread:@selector(ripDidStart:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(ripDidStart:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"ripper.stopped"]) {
-		[self performSelectorOnMainThread:@selector(ripDidStop:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(ripDidStop:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"ripper.completed"]) {
-		[self performSelectorOnMainThread:@selector(ripDidComplete:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(ripDidComplete:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"converter.started"]) {
-		[self performSelectorOnMainThread:@selector(convertDidStart:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(convertDidStart:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"converter.stopped"]) {
-		[self performSelectorOnMainThread:@selector(convertDidStop:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(convertDidStop:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"converter.completed"]) {
-		[self performSelectorOnMainThread:@selector(convertDidComplete:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(convertDidComplete:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"encoder.started"]) {
-		[self performSelectorOnMainThread:@selector(encodeDidStart:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(encodeDidStart:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"encoder.stopped"]) {
-		[self performSelectorOnMainThread:@selector(encodeDidStop:) withObject:context waitUntilDone:TRUE];
+		[self performSelectorOnMainThread:@selector(encodeDidStop:) withObject:context waitUntilDone:YES];
 	}
 	else if([keyPath isEqualToString:@"encoder.completed"]) {
 		[self performSelectorOnMainThread:@selector(encodeDidComplete:) withObject:context waitUntilDone:YES];
@@ -342,13 +342,27 @@ static TaskMaster *sharedController = nil;
 
 - (void) spawnRipperThreads
 {
-	NSMutableArray *activeDrives = [NSMutableArray arrayWithCapacity:4];
+	NSMutableArray	*activeDrives = [NSMutableArray arrayWithCapacity:4];
+	NSEnumerator	*enumerator;
+	RipperTask		*task;
+	NSString		*deviceName;
 	
-	@synchronized(_rippingTasks) {
-		
-		
-		if(0 != [_rippingTasks count] && NO == [[[_rippingTasks objectAtIndex:0] valueForKeyPath:@"ripper.started"] boolValue]) {
-			[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_rippingTasks objectAtIndex:0] withObject:self];
+	// Iterate through all ripping tasks once and determine which devices are active
+	enumerator = [_rippingTasks objectEnumerator];
+	while((task = [enumerator nextObject])) {
+		deviceName = [[task valueForKey:@"ripper"] deviceName];
+		if([[task valueForKeyPath:@"ripper.started"] boolValue] && NO == [activeDrives containsObject:deviceName]) {
+			[activeDrives addObject:deviceName];
+		}
+	}
+	
+	// Iterate through a second time and spawn threads for non-active devices
+	enumerator = [_rippingTasks objectEnumerator];
+	while((task = [enumerator nextObject])) {
+		deviceName = [[task valueForKey:@"ripper"] deviceName];
+		if(NO == [[task valueForKeyPath:@"ripper.started"] boolValue] && NO == [activeDrives containsObject:deviceName]) {
+			[activeDrives addObject:deviceName];
+			[NSThread detachNewThreadSelector:@selector(run:) toTarget:task withObject:self];
 		}
 	}
 }

@@ -1,7 +1,7 @@
 /*
- *  $Id: RipperTask.m 205 2005-12-05 06:04:34Z me $
+ *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
 	cdrom_drive			*drive;
 
 	if(0 == [tracks count]) {
-		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"empty array passed to RipperTask::initWithTracks" userInfo:nil];
+		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"Empty array passed to RipperTask::initWithTracks" userInfo:nil];
 	}
 
 	if((self = [super initWithMetadata:metadata])) {
@@ -68,6 +68,14 @@
 
 - (void) dealloc
 {
+	NSEnumerator		*enumerator;
+	Track				*track;
+
+	enumerator = [_tracks objectEnumerator];		
+	while((track = [enumerator nextObject])) {
+		[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+	}
+
 	[_tracks release];	
 	[_ripper release];
 	
@@ -77,8 +85,6 @@
 - (void) run:(id)object
 {
 	NSAutoreleasePool	*pool			= [[NSAutoreleasePool alloc] init];
-	NSEnumerator		*enumerator;
-	Track				*track;
 
 	@try {
 		[_ripper ripToFile:_out];
@@ -88,15 +94,10 @@
 	}
 	
 	@catch(NSException *exception) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:YES];
 	}
 	
 	@finally {
-		enumerator = [_tracks objectEnumerator];		
-		while((track = [enumerator nextObject])) {
-			[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
-		}
-
 		// Close output file
 		if(-1 == close(_out)) {
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];

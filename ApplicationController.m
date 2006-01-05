@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 #import "ApplicationController.h"
 
+#import "ServicesProvider.h"
 #import "PreferencesController.h"
 #import "AcknowledgmentsController.h"
 #import "ComponentVersionsController.h"
@@ -104,7 +105,7 @@
 		
 	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
 	[MediaController sharedController];
-	
+		
 	// Check for new version
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"startupVersionCheck"]) {
 		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
@@ -114,6 +115,9 @@
 		[macPAD performCheck:[NSURL URLWithString:@"http://sbooth.org/Max/Max.plist"] withVersion:bundleVersion];
 		[[macPAD retain] autorelease];
 	}
+	
+	// Register services
+	[[NSApplication sharedApplication] setServicesProvider:[[ServicesProvider alloc] init]];
 }
 
 - (void) macPADCheckFinished:(NSNotification *) aNotification
@@ -185,7 +189,7 @@
 					enumerator	= [subpaths objectEnumerator];
 					
 					while((subpath = [enumerator nextObject])) {
-						metadata	= [AudioMetadata metadataFromFilename:subpath];
+						metadata	= [AudioMetadata metadataFromFilename:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
 						basename	= [metadata outputBasename];
 						
 						createDirectoryStructure(basename);

@@ -58,6 +58,7 @@
 		8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0DA1092E641200418C45 /* MacPAD.url */; };
 		8C8B0DAD092E64D900418C45 /* UpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0DAB092E64D900418C45 /* UpdateChecker.m */; };
 		8C8B0EC9092E710200418C45 /* UpdateChecker.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0EC8092E710200418C45 /* UpdateChecker.nib */; };
+		8C8CAF6E096C4A9700A1A4E0 /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */; };
 		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9A24B40925ADB200FB244D /* Growl.framework in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
@@ -146,9 +147,6 @@
 		8CF1EC5C096664EE0058BE92 /* FLACPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */; };
 		8CF1EC810966665C0058BE92 /* FLACPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1EC800966665C0058BE92 /* FLACPreferences.nib */; };
 		8CF1EC9E09666E690058BE92 /* FLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */; };
-		8CF1ED2C096676D10058BE92 /* OggFLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1ED2B096676D10058BE92 /* OggFLACDefaults.plist */; };
-		8CF1ED35096676FD0058BE92 /* OggFLACPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1ED34096676FD0058BE92 /* OggFLACPreferences.nib */; };
-		8CF1ED400966780B0058BE92 /* OggFLACPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1ED3E0966780B0058BE92 /* OggFLACPreferencesController.m */; };
 		8CF4D3F70945138900385BE4 /* LibsndfileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */; };
 		8CF4D47509454CD700385BE4 /* LibsndfileEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D47309454CD700385BE4 /* LibsndfileEncoderTask.m */; };
 		8CF4D4E10945531F00385BE4 /* FormatsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF4D4E00945531F00385BE4 /* FormatsToolbarImage.png */; };
@@ -295,6 +293,8 @@
 		8C8B0DAA092E64D900418C45 /* UpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateChecker.h; sourceTree = "<group>"; };
 		8C8B0DAB092E64D900418C45 /* UpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateChecker.m; sourceTree = "<group>"; };
 		8C8B0EC8092E710200418C45 /* UpdateChecker.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = UpdateChecker.nib; sourceTree = "<group>"; };
+		8C8CAF6B096C4A9700A1A4E0 /* ServicesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServicesProvider.h; sourceTree = "<group>"; };
+		8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServicesProvider.m; sourceTree = "<group>"; };
 		8C9A24A30925ACD100FB244D /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		8CA382EC0924598D00BDFD02 /* libcddb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcddb.a; sourceTree = "<group>"; };
 		8CA382ED0924598D00BDFD02 /* libtag.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtag.a; sourceTree = "<group>"; };
@@ -422,10 +422,6 @@
 		8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACPreferencesController.m; sourceTree = "<group>"; };
 		8CF1EC800966665C0058BE92 /* FLACPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FLACPreferences.nib; sourceTree = "<group>"; };
 		8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = FLACDefaults.plist; sourceTree = "<group>"; };
-		8CF1ED2B096676D10058BE92 /* OggFLACDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = OggFLACDefaults.plist; sourceTree = "<group>"; };
-		8CF1ED34096676FD0058BE92 /* OggFLACPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = OggFLACPreferences.nib; sourceTree = "<group>"; };
-		8CF1ED3D0966780B0058BE92 /* OggFLACPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACPreferencesController.h; sourceTree = "<group>"; };
-		8CF1ED3E0966780B0058BE92 /* OggFLACPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACPreferencesController.m; sourceTree = "<group>"; };
 		8CF1EF7A09668A8B0058BE92 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		8CF4D3F00945137100385BE4 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsndfile.a; sourceTree = "<group>"; };
 		8CF4D3F40945138900385BE4 /* LibsndfileEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibsndfileEncoder.h; sourceTree = "<group>"; };
@@ -562,7 +558,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8CF1ED2B096676D10058BE92 /* OggFLACDefaults.plist */,
 				8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */,
 				8CEDCB9A0961333A009CFC49 /* ApplicationControllerDefaults.plist */,
 				8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */,
@@ -613,7 +608,6 @@
 				8CEDC16A094BF05B0023DD01 /* Encoder.nib */,
 				8CE0990D095108300020C8B1 /* Converter.nib */,
 				8CF1EC800966665C0058BE92 /* FLACPreferences.nib */,
-				8CF1ED34096676FD0058BE92 /* OggFLACPreferences.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -665,8 +659,6 @@
 				8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */,
 				8CF1EC59096664EE0058BE92 /* FLACPreferencesController.h */,
 				8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */,
-				8CF1ED3D0966780B0058BE92 /* OggFLACPreferencesController.h */,
-				8CF1ED3E0966780B0058BE92 /* OggFLACPreferencesController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -768,6 +760,8 @@
 				8CE9743D09461DB6000127B6 /* ComponentVersionsController.m */,
 				8CEDC029094BE6E10023DD01 /* RipperController.m */,
 				8CEDC02A094BE6E10023DD01 /* RipperController.h */,
+				8C8CAF6B096C4A9700A1A4E0 /* ServicesProvider.h */,
+				8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -977,8 +971,6 @@
 				8CEDCB9B0961333A009CFC49 /* ApplicationControllerDefaults.plist in Resources */,
 				8CF1EC810966665C0058BE92 /* FLACPreferences.nib in Resources */,
 				8CF1EC9E09666E690058BE92 /* FLACDefaults.plist in Resources */,
-				8CF1ED2C096676D10058BE92 /* OggFLACDefaults.plist in Resources */,
-				8CF1ED35096676FD0058BE92 /* OggFLACPreferences.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,7 +1060,7 @@
 				8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */,
 				8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */,
 				8CF1EC5C096664EE0058BE92 /* FLACPreferencesController.m in Sources */,
-				8CF1ED400966780B0058BE92 /* OggFLACPreferencesController.m in Sources */,
+				8C8CAF6E096C4A9700A1A4E0 /* ServicesProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

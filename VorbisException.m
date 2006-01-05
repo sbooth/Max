@@ -1,7 +1,7 @@
 /*
- *  $Id: LAMEException.m 54 2005-10-02 16:10:42Z me $
+ *  $Id$
  *
- *  Copyright (C) 2005 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
