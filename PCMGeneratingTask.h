@@ -20,20 +20,24 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Task.h"
 #import "AudioMetadata.h"
 
-@interface PCMGeneratingTask : NSObject 
+@interface PCMGeneratingTask : Task
 {
-	NSString			*_basename;
-	NSString			*_outputFilename;
-	int					_out;
-	AudioMetadata		*_metadata;
+	NSString						*_basename;
+	NSString						*_outputFilename;
+	int								_out;
+	AudioMetadata					*_metadata;
+	BOOL							_fileClosed;
 }
 
 - (id)						initWithMetadata:(AudioMetadata *)metadata;
 
 - (void)					run:(id)object;
 - (void)					stop;
+
+- (void)					closeFile;
 
 - (AudioMetadata *)			metadata;
 - (NSString *)				outputFilename;

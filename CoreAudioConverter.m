@@ -38,8 +38,10 @@
 
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
-	OSStatus			err;
-	FSRef				ref;
+	OSStatus						err;
+	FSRef							ref;
+	UInt32							size;
+	AudioStreamBasicDescription		asbd;
 
 	if((self = [super initWithInputFilename:inputFilename])) {
 		
@@ -72,6 +74,19 @@
 			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileSetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
+
+		size	= sizeof(asbd);
+		err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileDataFormat, &size, &asbd);;
+		if(err != noErr) {
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileGetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		}
+		
+		size	= sizeof(_fileType);
+		err		= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &size, &_fileType);
+		if(noErr != err) {
+			_fileType = @"Unknown (Core Audio)";
+		}
 		
 		return self;
 	}
@@ -82,6 +97,8 @@
 {
 	OSStatus			err;
 
+	[_fileType release];
+	
 	// Close the input file
 	err = ExtAudioFileDispose(_in);
 	if(noErr != err) {
@@ -93,6 +110,7 @@
 
 - (void) convertToFile:(int)file
 {
+	NSDate			*startTime			= [NSDate date];
 	OSStatus		err;
 	UInt32			frameCount;
 	UInt32			size;
@@ -101,19 +119,18 @@
 	
 	
 	// Tell our owner we are starting
-	_startTime = [[NSDate date] retain];
-	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setValue:startTime forKey:@"startTime"];	
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
 	// Get input file information
 	size	= sizeof(totalFrames);
 	err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);;
 	if(err != noErr) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileGetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
-
+	
 	framesToRead = totalFrames;
 	
 	// Allocate the input buffer
@@ -123,15 +140,15 @@
 	_buf.mBuffers[0].mDataByteSize		= _buflen * sizeof(int16_t);
 	_buf.mBuffers[0].mData				= calloc(_buflen, sizeof(int16_t));;
 	if(NULL == _buf.mBuffers[0].mData) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Iteratively get the data and convert it to PCM
 	for(;;) {
 		// Check if we should stop, and if so throw an exception
-		if([_shouldStop boolValue]) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		if([_delegate shouldStop]) {
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
@@ -139,7 +156,7 @@
 		frameCount	= _buf.mBuffers[0].mDataByteSize / _outputASBD.mBytesPerPacket;
 		err			= ExtAudioFileRead(_in, &frameCount, &_buf);
 		if(err != noErr) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileRead failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
@@ -150,25 +167,23 @@
 		
 		// Write the PCM data to file
 		if(-1 == write(file, _buf.mBuffers[0].mData, frameCount * _outputASBD.mBytesPerPacket)) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 			
 		// Update status
 		framesToRead -= frameCount;
 		if(0 == framesToRead % 10) {
-			[self setValue:[NSNumber numberWithDouble:((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0] forKey:@"percentComplete"];
-			NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
+			[_delegate setValue:[NSNumber numberWithDouble:((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0] forKey:@"percentComplete"];
+			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 			unsigned int timeRemaining = interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval;
-			[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+			[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 		}
 	}
 	
-
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	
-	_endTime = [[NSDate date] retain];
+	[_delegate setValue:[NSDate date] forKey:@"endTime"];
+	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
 }
 
 @end

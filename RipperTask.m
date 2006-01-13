@@ -84,32 +84,41 @@
 
 - (void) run:(id)object
 {
-	NSAutoreleasePool	*pool			= [[NSAutoreleasePool alloc] init];
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	@try {
+		[[TaskMaster sharedController] ripDidStart:self];
+		[_ripper setDelegate:self];
 		[_ripper ripToFile:_out];
+		[[TaskMaster sharedController] ripDidComplete:self];
 	}
 	
 	@catch(StopException *exception) {
+		[[TaskMaster sharedController] ripDidStop:self];
 	}
 	
 	@catch(NSException *exception) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:YES];
+		[[TaskMaster sharedController] ripDidStop:self];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:NO];
 	}
 	
 	@finally {
-		// Close output file
-		if(-1 == close(_out)) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-		}
-		
+		[self closeFile];
+		[[TaskMaster sharedController] ripFinished:self];
 		[pool release];
 	}
 }
 
 - (void) stop
 {
-	[_ripper requestStop];
+	if([_started boolValue]) {
+		_shouldStop = [NSNumber numberWithBool:YES];			
+	}
+	else {
+		[[TaskMaster sharedController] ripDidStop:self];
+		[self closeFile];
+		[[TaskMaster sharedController] ripFinished:self];
+	}
 }
 
 @end

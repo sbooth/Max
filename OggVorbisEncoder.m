@@ -52,7 +52,7 @@ enum {
 	@try {
 		vorbisDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"OggVorbisDefaults" ofType:@"plist"];
 		if(nil == vorbisDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load OggVorbisDefaults.plist." userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"OggVorbisDefaults.plist"] userInfo:nil];
 		}
 		vorbisDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:vorbisDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:vorbisDefaultsValuesDictionary];
@@ -86,6 +86,7 @@ enum {
 
 - (ssize_t) encodeToFile:(NSString *) filename
 {
+	NSDate						*startTime									= [NSDate date];	
 	ogg_packet					header;
 	ogg_packet					header_comm;
 	ogg_packet					header_code;
@@ -114,23 +115,23 @@ enum {
 	ssize_t						bytesWritten								= 0;
 	ssize_t						bytesToRead									= 0;
 	ssize_t						totalBytes									= 0;
-	NSDate						*startTime									= [NSDate date];	
 	
 	// Tell our owner we are starting
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setValue:startTime forKey:@"startTime"];	
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
 	// Open the input file
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -138,7 +139,7 @@ enum {
 	_buflen			= 1024 * 10;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -148,13 +149,13 @@ enum {
 	// Create the output file
 	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if(-1 == _out) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Check if we should stop, and if so throw an exception
-	if([_shouldStop boolValue]) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+	if([_delegate shouldStop]) {
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 	}
 		
@@ -165,18 +166,18 @@ enum {
 	
 	if(VORBIS_MODE_QUALITY == _mode) {
 		if(vorbis_encode_init_vbr(&vi, 2, 44100, _quality)) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
 		}
 	}
 	else if(VORBIS_MODE_BITRATE == _mode) {
 		if(vorbis_encode_init(&vi, 2, 44100, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
 		}
 	}
 	else {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
 	}
 	
@@ -205,14 +206,14 @@ enum {
 
 		currentBytesWritten = write(_out, og.header, og.header_len);
 		if(-1 == currentBytesWritten) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 		
 		currentBytesWritten = write(_out, og.body, og.body_len);
 		if(-1 == currentBytesWritten) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
@@ -222,15 +223,15 @@ enum {
 	while(NO == eos) {
 
 		// Check if we should stop, and if so throw an exception
-		if([_shouldStop boolValue]) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		if([_delegate shouldStop]) {
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 
 		// Read a chunk of PCM input
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -251,10 +252,10 @@ enum {
 		
 		// Update status
 		bytesToRead -= bytesRead;
-		[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+		[_delegate setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
 		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 
 		while(1 == vorbis_analysis_blockout(&vd, &vb)){
 			
@@ -274,14 +275,14 @@ enum {
 
 					currentBytesWritten = write(_out, og.header, og.header_len);
 					if(-1 == currentBytesWritten) {
-						[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+						[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 						@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 					}
 					bytesWritten += currentBytesWritten;
 					
 					currentBytesWritten = write(_out, og.body, og.body_len);
 					if(-1 == currentBytesWritten) {
-						[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+						[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 						@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 					}
 					bytesWritten += currentBytesWritten;
@@ -296,13 +297,13 @@ enum {
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		//[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 
 	// Close the output file
 	if(-1 == close(_out)) {
-		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		//[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -313,8 +314,9 @@ enum {
 	vorbis_comment_clear(&vc);
 	vorbis_info_clear(&vi);
 	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSDate date] forKey:@"endTime"];
+	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
 	
 	return bytesWritten;
 }

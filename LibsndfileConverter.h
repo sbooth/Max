@@ -22,8 +22,12 @@
 
 #import "Converter.h"
 
+#include "sndfile.h"
+
 @interface LibsndfileConverter : Converter
 {
+	SNDFILE				*_in;
+	NSString			*_fileType;
 }
 
 - (id)		initWithInputFilename:(NSString *)inputFilename;

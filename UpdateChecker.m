@@ -83,8 +83,8 @@ static UpdateChecker *sharedController = nil;
 	if([updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: @"OK"];
-		[alert setMessageText: [[aNotification userInfo] objectForKey:MacPADErrorMessage]];
-		[alert setInformativeText: @"MacPAD Error"];
+		[alert setMessageText: @"MacPAD Error"];
+		[alert setInformativeText: [[aNotification userInfo] objectForKey:MacPADErrorMessage]];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		
 		[alert beginSheetModalForWindow:updateWindow modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];

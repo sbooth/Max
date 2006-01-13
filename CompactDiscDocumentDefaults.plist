@@ -10,6 +10,8 @@
 	<false/>
 	<key>outputOggVorbis</key>
 	<false/>
+	<key>outputSpeex</key>
+	<false/>
 	<key>libsndfileOutputFormats</key>
 	<array/>
 	<key>coreAudioOutputFormats</key>

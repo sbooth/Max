@@ -38,4 +38,9 @@
 	[super dealloc];
 }
 
+- (NSString *) getType
+{
+	return [_converter valueForKey:@"fileType"];
+}
+
 @end

@@ -40,6 +40,7 @@
 #import "FreeDBProtocolValueTransformer.h"
 #import "BooleanArrayValueTransformer.h"
 #import "NegateBooleanArrayValueTransformer.h"
+#import "MultiplicationValueTransformer.h"
 
 @implementation ApplicationController
 
@@ -59,11 +60,14 @@
 
 	transformer = [[[NegateBooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"NegateBooleanArrayValueTransformer"];
+
+	transformer = [[[MultiplicationValueTransformer alloc] initWithMultiplier:10] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"MultiplyByTenValueTransformer"];
 	
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load ApplicationControllerDefaults.plist." userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"ApplicationControllerDefaults.plist"] userInfo:nil];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
@@ -166,7 +170,7 @@
 	// Allowable file types
 	types = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
 	[types addObjectsFromArray:getLibsndfileExtensions()];
-	[types addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", nil]];
+	[types addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", nil]];
 	
 	if(NSOKButton == [panel runModalForTypes:types]) {
 		NSFileManager		*manager		= [NSFileManager defaultManager];
@@ -287,15 +291,12 @@
 - (NSDictionary *) registrationDictionaryForGrowl
 {
 	NSArray *defaultNotifications = [NSArray arrayWithObjects:
-		@"Rip started",
-		@"Rip completed",
 		@"Rip stopped",
-		@"Convert started",
-		@"Convert completed",
+		@"Ripping completed",
 		@"Convert stopped",
-		@"Encode started",
-		@"Encode completed",
+		@"Conversion completed",
 		@"Encode stopped",
+		@"Encoding completed",
 		nil
 		];
 
@@ -303,12 +304,15 @@
 		@"Rip started",
 		@"Rip completed",
 		@"Rip stopped",
+		@"Ripping completed",
 		@"Convert started",
 		@"Convert completed",
 		@"Convert stopped",
+		@"Conversion completed",
 		@"Encode started",
 		@"Encode completed",
 		@"Encode stopped",
+		@"Encoding completed",
 		nil
 		];
 	

@@ -48,25 +48,17 @@
 {
 	[_inputFilename release];
 	
-	[_startTime release];
-	[_endTime release];
-	
 	[super dealloc];
 }
 
-- (void) convertToFile:(int)file					{}
-
-- (void) requestStop
+- (void) setDelegate:(Task *)delegate
 {
-	@synchronized(self) {
-		if([_started boolValue]) {
-			_shouldStop = [NSNumber numberWithBool:YES];			
-		}
-		else {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		}
-	}
+	_delegate = delegate;
 }
+
+- (Task *) delegate									{ return _delegate; }
+
+- (void) convertToFile:(int)file					{}
 
 - (NSString *) description							{ return [_inputFilename lastPathComponent]; }
 

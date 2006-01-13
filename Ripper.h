@@ -20,13 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Task.h"
 #import "Track.h"
 
 #include "cdparanoia/interface/cdda_interface.h"
 #include "cdparanoia/paranoia/cdda_paranoia.h"
 
-@interface Ripper : NSObject 
+@interface Ripper : Task 
 {
+	Task					*_delegate;
+
 	cdrom_paranoia			*_paranoia;
 	cdrom_drive				*_drive;
 	
@@ -39,24 +42,16 @@
 	NSNumber				*_grandTotalSectors;
 	NSNumber				*_sectorsRead;
 	NSNumber				*_sectorsWritten;
-
 	NSDate					*_startTime;
-	NSDate					*_endTime;
-	
-	NSNumber				*_started;
-	NSNumber				*_completed;
-	NSNumber				*_stopped;
-	NSNumber				*_percentComplete;
-	NSNumber				*_shouldStop;
-	NSString				*_timeRemaining;
 }
 
 - (id)				initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive;
 
-- (void)			requestStop;
-
 - (void)			ripToFile:(int)file;
 
 - (NSString *)		deviceName;
+
+- (Task *)			delegate;
+- (void)			setDelegate:(Task *)delegate;
 
 @end

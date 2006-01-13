@@ -111,23 +111,23 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 
 - (void) convertToFile:(int)file
 {
+	NSDate				*startTime			= [NSDate date];
 	FLAC__uint64		bytesRead			= 0;
 	FLAC__uint64		bytesToRead			= 0;
 	FLAC__uint64		totalBytes			= 0;
 		
 	
 	// Tell our owner we are starting
-	_startTime = [[NSDate date] retain];
-	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setValue:startTime forKey:@"startTime"];	
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
 	_fd = file;
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == stat([_inputFilename UTF8String], &sourceStat)) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -136,20 +136,20 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	
 	// Initialize decoder
 	if(FLAC__FILE_DECODER_OK != FLAC__file_decoder_init(_flac)) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 	}
 	
 	for(;;) {
 		// Check if we should stop, and if so throw an exception
-		if([_shouldStop boolValue]) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		if([_delegate shouldStop]) {
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
 		// Decode the data
 		if(NO == FLAC__file_decoder_process_single(_flac)) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
 
@@ -160,32 +160,30 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		
 		// Determine bytes processed
 		if(NO == FLAC__file_decoder_get_decode_position(_flac, &bytesRead)) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 		}
 		
-		
 		// Update status
 		bytesToRead = totalBytes - bytesRead;
-		[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
-		NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
+		[_delegate setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 	}
 	
 	// Flush buffers
 	if(NO == FLAC__file_decoder_finish(_flac)) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
 	}
 
 	// Finish up
 	_fd  = -1;
 
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	
-	_endTime = [[NSDate date] retain];
+	[_delegate setValue:[NSDate date] forKey:@"endTime"];
+	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
 }
 
 - (void) writeFrame:(const FLAC__Frame *)frame buffer:(const FLAC__int32 * const [])buffer
@@ -198,7 +196,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	pcmBufferLen	= frame->header.channels * frame->header.blocksize;
 	pcmBuffer		= calloc(pcmBufferLen, sizeof(int16_t));
 	if(NULL == pcmBuffer) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [MallocException exceptionWithReason:@"Unable to create buffer" userInfo:nil];
 	}
 
@@ -214,7 +212,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	
 	// Write
 	if(-1 == write(_fd, pcmBuffer, pcmBufferLen * sizeof(int16_t))) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	

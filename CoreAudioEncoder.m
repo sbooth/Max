@@ -83,6 +83,7 @@
 
 - (ssize_t) encodeToFile:(NSString *) filename
 {
+	NSDate				*startTime							= [NSDate date];
 	OSStatus			err;
 	AudioBufferList		bufferList;
 	UInt32				frameCount, size, bitrate, quality, mode;
@@ -95,24 +96,24 @@
 	ExtAudioFileRef		extAudioFileRef;
 	AudioConverterRef	converter;
 	CFArrayRef			converterPropertySettings;
-	NSDate				*startTime							= [NSDate date];
 	
 	
 	// Tell our owner we are starting
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
-
+	[_delegate setValue:startTime forKey:@"startTime"];	
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	
 	// Open the input file
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -120,7 +121,7 @@
 	_buflen			= 1024;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -133,19 +134,19 @@
 	
 	err = FSPathMakeRef((const UInt8 *)[path UTF8String], &ref, NULL);
 	if(noErr != err) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	
 	err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, [[_formatInfo valueForKey:@"fileType"] intValue], &_outputASBD, NULL, &extAudioFileRef);
 	if(noErr != err) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	
 	err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(_inputASBD), &_inputASBD);
 	if(noErr != err) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set output file properties (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	
@@ -153,7 +154,7 @@
 	size = sizeof(converter);
 	err = ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_AudioConverter, &size, &converter);
 	if(noErr != err) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to get AudioConverter (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 
@@ -162,7 +163,7 @@
 		bitrate		= [[_formatInfo objectForKey:@"bitrate"] intValue] * 1000;
 		err			= AudioConverterSetProperty(converter, kAudioConverterEncodeBitRate, sizeof(bitrate), &bitrate);
 		if(noErr != err) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioConverter bitrate (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}		
 	}
@@ -172,7 +173,7 @@
 		quality		= [[_formatInfo objectForKey:@"quality"] intValue];
 		err			= AudioConverterSetProperty(converter, kAudioConverterCodecQuality, sizeof(quality), &quality);
 		if(noErr != err) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioConverter quality (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}		
 	}
@@ -182,7 +183,7 @@
 		mode		= [[_formatInfo objectForKey:@"useVBR"] boolValue] ? kAudioCodecBitRateFormat_VBR : kAudioCodecBitRateFormat_CBR;
 		err			= AudioConverterSetProperty(converter, kAudioCodecBitRateFormat, sizeof(mode), &mode);
 		if(noErr != err) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioConverter to VBR (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}		
 	}
@@ -191,28 +192,28 @@
 	size = sizeof(converterPropertySettings);
 	err = AudioConverterGetProperty(converter, kAudioConverterPropertySettings, &size, &converterPropertySettings);
 	if(noErr != err) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to get AudioConverter property settings (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}		
 
 	err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ConverterConfig, size, &converterPropertySettings);
 	if(noErr != err) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set AudioFile converter configuration (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}		
 	
 	// Iteratively get the PCM data and encode it
 	while(0 < bytesToRead) {
 		// Check if we should stop, and if so throw an exception
-		if([_shouldStop boolValue]) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		if([_delegate shouldStop]) {
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 				
 		// Read a chunk of PCM input
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -227,33 +228,34 @@
 		// Write the data, encoding/converting in the process
 		err = ExtAudioFileWrite(extAudioFileRef, frameCount, &bufferList);
 		if(noErr != err) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [NSException exceptionWithName:@"CAException" reason:[NSString stringWithFormat:@"ExtAudioFileWrite failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 
 		// Update status
 		bytesToRead -= bytesRead;
-		[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+		[_delegate setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
 		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 	}
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		//[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Close the output file
 	err = ExtAudioFileDispose(extAudioFileRef);
 	if(noErr != err) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 		
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSDate date] forKey:@"endTime"];
+	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
 	
 	return bytesWritten;
 }

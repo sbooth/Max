@@ -113,7 +113,7 @@
 			// Comment
 			comment = [_metadata valueForKey:@"albumComment"];
 			if(_writeSettingsToComment) {
-				comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+				comment = (nil == comment ? [_encoder description] : [NSString stringWithFormat:@"%@\n%@", comment, [_encoder description]]);
 			}
 			if(nil != comment) {
 				MP4SetMetadataComment(mp4FileHandle, [comment UTF8String]);
@@ -247,7 +247,8 @@
 			size = sizeof(info);
 			err = AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, &info);
 			if(noErr != err) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set info dictionary (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				// TODO: Uncomment the following line when (if?) Apple implements this functionality
+				//@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set info dictionary (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 			}
 		}
 		

@@ -34,6 +34,7 @@ static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences
 static NSString		*LAMEPreferencesToolbarItemIdentifier			= @"LAMEPreferences";
 static NSString		*FLACPreferencesToolbarItemIdentifier			= @"FLACPreferences";
 static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPreferences";
+static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 
 @interface PreferencesController (Private)
 - (void) setupToolbar;
@@ -53,7 +54,7 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 
 	@try {
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
-		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"OggVorbisDefaults", @"FLACDefaults", nil];
+		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults", @"FreeDBDefaults", @"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"TaskMasterDefaults", @"OggVorbisDefaults", @"FLACDefaults", @"SpeexDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -222,6 +223,17 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	} 
+    else if([itemIdentifier isEqualToString:SpeexPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"Speex"];
+		[toolbarItem setPaletteLabel: @"Speex"];
+		[toolbarItem setToolTip: @"Speex encoder preferences"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SpeexToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
+	} 
 	else {
 		toolbarItem = nil;
     }
@@ -235,6 +247,7 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
+		SpeexPreferencesToolbarItemIdentifier,
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
 }
@@ -245,6 +258,7 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
+		SpeexPreferencesToolbarItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
@@ -256,6 +270,7 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
+		SpeexPreferencesToolbarItemIdentifier,
 		nil];
 }
 

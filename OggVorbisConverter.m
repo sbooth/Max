@@ -64,6 +64,7 @@
 
 - (void) convertToFile:(int)file
 {
+	NSDate			*startTime			= [NSDate date];
 	ogg_int64_t		samplesRead			= 0;
 	ogg_int64_t		samplesToRead		= 0;
 	ogg_int64_t		totalSamples		= 0;
@@ -72,10 +73,9 @@
 	char			buf	[4096];
 	
 	// Tell our owner we are starting
-	_startTime = [[NSDate date] retain];
-	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setValue:startTime forKey:@"startTime"];	
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
 	// Get input file information
 	totalSamples		= ov_pcm_total(&_vf, -1);
@@ -84,8 +84,8 @@
 	for(;;) {
 		
 		// Check if we should stop, and if so throw an exception
-		if([_shouldStop boolValue]) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		if([_delegate shouldStop]) {
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
@@ -94,7 +94,7 @@
 
 		// Check for errors
 		if(0 > bytesRead) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:@"Ogg Vorbis decode error" userInfo:nil];
 		}
 		
@@ -105,23 +105,22 @@
 			
 		// Write the PCM data to file
 		if(-1 == write(file, buf, bytesRead)) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		// Update status
 		samplesRead		= ov_pcm_tell(&_vf);
 		samplesToRead	= totalSamples - samplesRead;
-		[self setValue:[NSNumber numberWithDouble:((double)(totalSamples - samplesToRead)/(double) totalSamples) * 100.0] forKey:@"percentComplete"];
-		NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
+		[_delegate setValue:[NSNumber numberWithDouble:((double)(totalSamples - samplesToRead)/(double) totalSamples) * 100.0] forKey:@"percentComplete"];
+		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 		unsigned int timeRemaining = interval / ((double)(totalSamples - samplesToRead)/(double) totalSamples) - interval;
-		[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 	}
-		
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	
-	_endTime = [[NSDate date] retain];
+
+	[_delegate setValue:[NSDate date] forKey:@"endTime"];
+	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
 }
 
 @end

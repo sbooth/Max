@@ -50,9 +50,10 @@
 		
 		_out = mkstemps(path, 4);
 		if(-1 == _out) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
+		_fileClosed			= NO;
 		_outputFilename		= [[NSString stringWithUTF8String:path] retain];
 		
 		return self;
@@ -65,6 +66,8 @@
 {
 	[_metadata release];
 	
+	[self closeFile];
+
 	// Delete output file
 	if(-1 == unlink([_outputFilename UTF8String])) {
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _outputFilename, errno, strerror(errno)] userInfo:nil];
@@ -73,6 +76,20 @@
 	[_outputFilename release];	
 	
 	[super dealloc];
+}
+
+- (void) closeFile
+{
+	if(YES == _fileClosed) {
+		return;
+	}
+	
+	// Close output file
+	if(-1 == close(_out)) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close temporary file '%@' (%i:%s)", _outputFilename, errno, strerror(errno)] userInfo:nil];
+	}
+	
+	_fileClosed = YES;
 }
 
 - (AudioMetadata *)		metadata							{ return _metadata; }

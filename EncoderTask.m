@@ -94,28 +94,44 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	@try {
+		[[TaskMaster sharedController] encodeDidStart:self];
+		[_encoder setDelegate:self];
 		[_encoder encodeToFile:_outputFilename];
 		if(nil != _metadata) {
 			[self writeTags];
 		}
+		[[TaskMaster sharedController] encodeDidComplete:self];
 	}
 	
 	@catch(StopException *exception) {
+		[[TaskMaster sharedController] encodeDidStop:self];
 		[self removeOutputFile];
 	}
 	
 	@catch(NSException *exception) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
+		[[TaskMaster sharedController] encodeDidStop:self];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:NO];
 	}
 	
 	@finally {
+		[[TaskMaster sharedController] encodeFinished:self];
 		[pool release];
 	}
 }
 
-- (void)		stop							{ [_encoder requestStop]; }
+- (void) stop
+{
+	if([_started boolValue]) {
+		_shouldStop = [NSNumber numberWithBool:YES];			
+	}
+	else {
+		[[TaskMaster sharedController] encodeDidStop:self];
+		[[TaskMaster sharedController] encodeFinished:self];
+	}
+}
+
 - (void)		writeTags						{}
-- (NSString *)	description						{ return (nil == _metadata ? @"Unknown fnord" : [_metadata description]); }
+- (NSString *)	description						{ return (nil == _metadata ? @"fnord" : [_metadata description]); }
 - (NSString *)	getType							{ return nil; }
 
 @end

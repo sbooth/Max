@@ -34,20 +34,16 @@
 - (void) dealloc
 {
 	[_pcmFilename release];
+
 	[super dealloc];
 }
 
-- (void) requestStop
+- (void) setDelegate:(Task *)delegate
 {
-	@synchronized(self) {
-		if([_started boolValue]) {
-			_shouldStop = [NSNumber numberWithBool:YES];			
-		}
-		else {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		}
-	}
+	_delegate = delegate;
 }
+
+- (Task *)		delegate									{ return _delegate; }
 
 - (ssize_t)		encodeToFile:(NSString *) filename			{ return 0; }
 - (NSString *)	description									{ return @"fnord"; }

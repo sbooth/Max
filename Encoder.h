@@ -20,23 +20,20 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Task.h"
+
 @interface Encoder : NSObject 
 {
+	Task					*_delegate;
 	NSString				*_pcmFilename;	
 	int						_pcm;
-		
-	NSNumber				*_started;
-	NSNumber				*_completed;
-	NSNumber				*_stopped;
-	NSNumber				*_percentComplete;
-	NSNumber				*_shouldStop;
-	NSNumber				*_timeRemaining;
 }
 
 - (id)				initWithPCMFilename:(NSString *)pcmFilename;
 
 - (ssize_t)			encodeToFile:(NSString *)filename;
 
-- (void)			requestStop;
+- (Task *)			delegate;
+- (void)			setDelegate:(Task *)delegate;
 
 @end

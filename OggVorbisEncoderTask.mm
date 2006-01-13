@@ -89,7 +89,7 @@
 	// Comment
 	comment = [_metadata valueForKey:@"albumComment"];
 	if(_writeSettingsToComment) {
-		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+		comment = (nil == comment ? [_encoder description] : [NSString stringWithFormat:@"%@\n%@", comment, [_encoder description]]);
 	}
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));

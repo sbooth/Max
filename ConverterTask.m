@@ -55,32 +55,43 @@
 
 - (void) run:(id)object
 {
-	NSAutoreleasePool	*pool			= [[NSAutoreleasePool alloc] init];
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	@try {
+		[[TaskMaster sharedController] convertDidStart:self];
+		[_converter setDelegate:self];
 		[_converter convertToFile:_out];
+		[[TaskMaster sharedController] convertDidComplete:self];
 	}
 	
 	@catch(StopException *exception) {
+		[[TaskMaster sharedController] convertDidStop:self];
 	}
 	
 	@catch(NSException *exception) {
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:TRUE];
+		[[TaskMaster sharedController] convertDidStop:self];
+		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:NO];
 	}
 	
-	@finally {		
-		// Close output file
-		if(-1 == close(_out)) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-		}
-		
+	@finally {
+		[self closeFile];
+		[[TaskMaster sharedController] convertFinished:self];
 		[pool release];
 	}
 }
 
 - (void) stop
 {
-	[_converter requestStop];
+	if([_started boolValue]) {
+		_shouldStop = [NSNumber numberWithBool:YES];			
+	}
+	else {
+		[[TaskMaster sharedController] convertDidStop:self];
+		[self closeFile];
+		[[TaskMaster sharedController] convertFinished:self];
+	}
 }
+
+- (NSString *)	getType							{ return nil; }
 
 @end

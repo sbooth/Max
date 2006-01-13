@@ -51,6 +51,7 @@
 
 - (ssize_t) encodeToFile:(NSString *) filename
 {
+	NSDate						*startTime			= [NSDate date];
 	SNDFILE						*in					= NULL;
 	SNDFILE						*out				= NULL;
 	SF_INFO						info;
@@ -67,23 +68,23 @@
 	ssize_t						bytesRead			= 0;
 	ssize_t						bytesToRead			= 0;
 	ssize_t						totalBytes			= 0;
-	NSDate						*startTime			= [NSDate date];
 	
 	// Tell our owner we are starting
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setValue:startTime forKey:@"startTime"];	
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
 	// Open the input file
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 
@@ -93,7 +94,7 @@
 	info.channels		= 2;
 	in					= sf_open_fd(_pcm, SFM_READ, &info, NO);
 	if(NULL == in) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 	}
 
@@ -101,7 +102,7 @@
 	info.format			= _format;
 	out					= sf_open([filename UTF8String], SFM_WRITE, &info);
 	if(NULL == out) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 	}
 	
@@ -120,7 +121,7 @@
 		
 		doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
 		if(NULL == doubleBuffer) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -132,8 +133,8 @@
 		if(maxSignal < 1.0) {	
 			while(readCount > 0) {
 				// Check if we should stop, and if so throw an exception
-				if([_shouldStop boolValue]) {
-					[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				if([_delegate shouldStop]) {
+					[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -147,8 +148,8 @@
 			
 			while(0 < readCount) {
 				// Check if we should stop, and if so throw an exception
-				if([_shouldStop boolValue]) {
-					[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				if([_delegate shouldStop]) {
+					[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -166,7 +167,7 @@
 	else {
 		intBuffer = (int *)malloc(bufferLen * sizeof(int));
 		if(NULL == intBuffer) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -175,8 +176,8 @@
 		
 		while(0 < readCount) {	
 			// Check if we should stop, and if so throw an exception
-			if([_shouldStop boolValue]) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			if([_delegate shouldStop]) {
+				[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 			}
 
@@ -189,10 +190,10 @@
 		
 	// Update status
 	bytesToRead -= bytesRead;
-	[self setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
 	NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 	unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-	[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+	[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 
 	// Clean up sndfile
 	sf_close(in);
@@ -203,8 +204,9 @@
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSDate date] forKey:@"endTime"];
+	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
 	
 	return 0;//bytesWritten;
 }

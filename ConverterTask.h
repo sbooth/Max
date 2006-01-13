@@ -29,6 +29,8 @@
 	Converter				*_converter;
 }
 
-- (id)			initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
+- (id)				initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
+
+- (NSString *)		getType;
 
 @end

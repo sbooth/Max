@@ -34,6 +34,8 @@
 	ssize_t							_buflen;
 	
 	AudioStreamBasicDescription		_outputASBD;
+	
+	NSString						*_fileType;
 }
 
 - (id)		initWithInputFilename:(NSString *)inputFilename;

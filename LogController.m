@@ -100,7 +100,8 @@ static LogController *sharedLog = nil;
 
 - (void) logMessage:(NSString *)message
 {
-	@synchronized(_logTextView) {
+	@synchronized(self) {
+//	@synchronized(_logTextView) {
 		NSTextStorage					*storage		= [_logTextView textStorage];
 		NSRange							range			= NSMakeRange([storage length], 0);
 		NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];

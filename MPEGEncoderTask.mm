@@ -102,7 +102,7 @@
 	// Comment
 	comment = [_metadata valueForKey:@"albumComment"];
 	if(_writeSettingsToComment) {
-		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+		comment = (nil == comment ? [_encoder description] : [NSString stringWithFormat:@"%@\n%@", comment, [_encoder description]]);
 	}
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
@@ -119,7 +119,7 @@
 	totalTracks = [[_metadata valueForKey:@"albumTrackCount"] intValue];
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
 	if(nil == frame) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 	frame->setText(TagLib::String([[NSString stringWithFormat:@"%@/%u", trackNumber, totalTracks] UTF8String], TagLib::String::UTF8));
 	f.ID3v2Tag()->addFrame(frame);
@@ -131,7 +131,7 @@
 	if(nil != discNumber && nil != discsInSet) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		if(nil == frame) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
 		frame->setText(TagLib::String([[NSString stringWithFormat:@"%@/%@", discNumber, discsInSet] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
@@ -139,7 +139,7 @@
 	else if(nil != discNumber) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		if(nil == frame) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
 		frame->setText(TagLib::String([[discNumber stringValue] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
@@ -147,7 +147,7 @@
 	else if(nil != discsInSet) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		if(nil == frame) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
 		frame->setText(TagLib::String([[NSString stringWithFormat:@"/@u", discsInSet] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
@@ -156,7 +156,7 @@
 	// Encoded by
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TENC", TagLib::String::Latin1);
 	if(nil == frame) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 	versionString = [NSString stringWithFormat:@"LAME %s (Max %@)", get_lame_short_version(), bundleVersion];
@@ -167,7 +167,7 @@
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TDEN", TagLib::String::Latin1);
 	timestamp = getID3v2Timestamp();
 	if(nil == frame) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 	frame->setText(TagLib::String([timestamp UTF8String], TagLib::String::UTF8));
 	f.ID3v2Tag()->addFrame(frame);
@@ -176,7 +176,7 @@
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TDTG", TagLib::String::Latin1);
 	timestamp = getID3v2Timestamp();
 	if(nil == frame) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 	frame->setText(TagLib::String([timestamp UTF8String], TagLib::String::UTF8));
 	f.ID3v2Tag()->addFrame(frame);

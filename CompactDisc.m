@@ -51,13 +51,13 @@
 		// Setup libcddb data structures
 		_freeDBDisc	= cddb_disc_new();
 		if(NULL == _freeDBDisc) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		for(i = 1; i <= [self trackCount]; ++i) {
 			cddb_track_t	*cddb_track	= cddb_track_new();
 			if(NULL == cddb_track) {
-				@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 			}
 			cddb_track_set_frame_offset(cddb_track, [self firstSectorForTrack:i] + 150);
 			cddb_disc_add_track(_freeDBDisc, cddb_track);

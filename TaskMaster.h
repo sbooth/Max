@@ -39,6 +39,11 @@
 	NSMutableArray			*_rippingTasks;
 	NSMutableArray			*_convertingTasks;
 	NSMutableArray			*_encodingTasks;
+
+	unsigned				_maxConverterThreads;
+	unsigned				_maxEncoderThreads;
+	
+	BOOL					_useDynamicWindows;
 }
 
 + (TaskMaster *)	sharedController;
@@ -66,13 +71,16 @@
 - (void)			ripDidStart:(RipperTask *) task;
 - (void)			ripDidStop:(RipperTask *) task;
 - (void)			ripDidComplete:(RipperTask *) task;
+- (void)			ripFinished:(RipperTask *)task;
 
 - (void)			convertDidStart:(ConverterTask *) task;
 - (void)			convertDidStop:(ConverterTask *) task;
 - (void)			convertDidComplete:(ConverterTask *) task;
+- (void)			convertFinished:(ConverterTask *)task;
 
 - (void)			encodeDidStart:(EncoderTask *) task;
 - (void)			encodeDidStop:(EncoderTask *) task;
 - (void)			encodeDidComplete:(EncoderTask *) task;
+- (void)			encodeFinished:(EncoderTask *)task;
 
 @end

@@ -42,7 +42,7 @@
 			// Hardcode default value to avoid a crash
 			NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"freedb.freedb.org", @"8880", @"1", nil] forKeys:[NSArray arrayWithObjects:@"freeDBServer", @"freeDBPort", @"freeDBProtocol", nil]];
 			[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load FreeDBDefaults.plist" userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"FreeDBDefaults.plist"] userInfo:nil];
 		}
 		cddbDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:cddbDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:cddbDefaultsValuesDictionary];
@@ -61,7 +61,7 @@
 	if((self = [super init])) {
 		_freeDB = cddb_new();
 		if(NULL == _freeDB) {
-			@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
 		cddb_set_server_name(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBServer"] UTF8String]);
 		cddb_set_server_port(_freeDB, [[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBPort"]);
@@ -191,7 +191,7 @@
 	// Create disc structure
 	disc = cddb_disc_new();
 	if(NULL == disc) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 
 	cddb_disc_set_category(disc, [[info valueForKey:@"category"] intValue]);
@@ -258,7 +258,7 @@
 	
 	disc = cddb_disc_clone([[_disc getDisc] getFreeDBDisc]);
 	if(NULL == disc) {
-		@throw [MallocException exceptionWithReason:@"Unable to allocate memory" userInfo:nil];
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 
 	temp = [_disc valueForKey:@"genre"];

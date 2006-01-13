@@ -234,6 +234,7 @@ displayExceptionSheet(NSException	*exception,
 		[alert setMessageText: @"Core Audio Error"];
 	}
 	else {
+		Debugger();
 		[alert setMessageText: @"Unknown Error"];
 	}
 	[alert setInformativeText: [exception reason]];

@@ -22,10 +22,11 @@
 
 #import "Encoder.h"
 #import "Track.h"
+#import "Task.h"
 #import "AudioMetadata.h"
 #import "PCMGeneratingTask.h"
 
-@interface EncoderTask : NSObject
+@interface EncoderTask : Task
 {
 	NSString				*_outputFilename;
 	Encoder					*_encoder;

@@ -84,7 +84,7 @@ callback(long inpos, int function, void *userdata)
 	@try {
 		paranoiaDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ParanoiaDefaults" ofType:@"plist"];
 		if(nil == paranoiaDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:@"Unable to load ParanoiaDefaults.plist." userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"ParanoiaDefaults.plist"] userInfo:nil];
 		}
 		paranoiaDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:paranoiaDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:paranoiaDefaultsValuesDictionary];
@@ -162,22 +162,17 @@ callback(long inpos, int function, void *userdata)
 	[super dealloc];
 }
 
-- (void) requestStop
-{
-	@synchronized(self) {
-		if([_started boolValue]) {
-			_shouldStop = [NSNumber numberWithBool:YES];			
-		}
-		else {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-		}
-	}
-}
-
 - (BOOL) logActivity
 {
 	return _logActivity;
 }
+
+- (void) setDelegate:(Task *)delegate
+{
+	_delegate = delegate;
+}
+
+- (Task *) delegate									{ return _delegate; }
 
 - (void) ripToFile:(int)file
 {
@@ -185,10 +180,10 @@ callback(long inpos, int function, void *userdata)
 	SectorRange			*range;
 	
 	// Tell our owner we are starting
-	_startTime = [[NSDate date] retain];
-	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[self setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	_startTime = [NSDate date];
+	[_delegate setValue:_startTime forKey:@"startTime"];	
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
+	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
 	
 	enumerator = [_sectors objectEnumerator];
 	
@@ -197,10 +192,9 @@ callback(long inpos, int function, void *userdata)
 		_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range totalSectors]];
 	}
 	
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];
-	[self setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	
-	_endTime = [[NSDate date] retain];
+	[_delegate setValue:[NSDate date] forKey:@"endTime"];
+	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
+	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
 }
 
 - (void) ripSectorRange:(SectorRange *)range toFile:(int)file
@@ -215,7 +209,7 @@ callback(long inpos, int function, void *userdata)
 	// Go to the range's first sector in preparation for reading
 	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
 	if(-1 == where) {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 		@throw [ParanoiaException exceptionWithReason:@"Unable to access CD" userInfo:nil];
 	}
 
@@ -223,30 +217,30 @@ callback(long inpos, int function, void *userdata)
 	while(cursor <= lastSector) {
 		
 		// Check if we should stop, and if so throw an exception
-		if([_shouldStop boolValue]) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		if([_delegate shouldStop]) {
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
 		// Read a chunk
 		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [ParanoiaException exceptionWithReason:@"Skip tolerance exceeded/Unable to access CD" userInfo:nil];
 		}
 		
 		// Update status
 		sectorsToRead--;
 		if(0 == sectorsToRead % 10) {
-			[self setValue:[NSNumber numberWithDouble:((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0] forKey:@"percentComplete"];
+			[_delegate setValue:[NSNumber numberWithDouble:((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0] forKey:@"percentComplete"];
 			NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
 			unsigned int timeRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
-			[self setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+			[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 		}
 		
 		// Write data to file
 		if(-1 == write(file, buf, CD_FRAMESIZE_RAW)) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		

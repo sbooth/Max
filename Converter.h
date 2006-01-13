@@ -20,25 +20,19 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "Task.h"
+
 @interface Converter : NSObject
 {
-	NSString						*_inputFilename;
-	
-	NSDate							*_startTime;
-	NSDate							*_endTime;
-	
-	NSNumber						*_started;
-	NSNumber						*_completed;
-	NSNumber						*_stopped;
-	NSNumber						*_percentComplete;
-	NSNumber						*_shouldStop;
-	NSString						*_timeRemaining;
+	NSString			*_inputFilename;
+	Task				*_delegate;
 }
 
 - (id)		initWithInputFilename:(NSString *)inputFilename;
 
-- (void)	requestStop;
-
 - (void)	convertToFile:(int)file;
+
+- (Task *)	delegate;
+- (void)	setDelegate:(Task *)delegate;
 
 @end
