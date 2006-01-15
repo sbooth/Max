@@ -301,6 +301,8 @@
 	return NO;
 }
 
+- (NSArray *)	tracks					{ return _tracks; }
+
 - (NSArray *) selectedTracks
 {
 	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[_disc trackCount]];

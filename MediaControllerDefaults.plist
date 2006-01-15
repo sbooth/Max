@@ -8,5 +8,7 @@
 	<false/>
 	<key>ejectAfterRipping</key>
 	<false/>
+	<key>closeWindowAfterEncoding</key>
+	<false/>
 </dict>
 </plist>

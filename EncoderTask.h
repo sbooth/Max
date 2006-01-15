@@ -40,6 +40,7 @@
 
 - (id)				initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata;
 
+- (NSArray *)		getTracks;
 - (void)			setTracks:(NSArray *)tracks;
 
 - (void)			run;

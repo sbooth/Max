@@ -59,6 +59,7 @@
 - (IBAction)		stopAllTasks:(id)sender;
 
 - (BOOL)			compactDiscDocumentHasRippingTasks:(CompactDiscDocument *)document;
+- (BOOL)			compactDiscDocumentHasEncodingTasks:(CompactDiscDocument *)document;
 - (void)			stopRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
 
 - (void)			encodeTrack:(Track *)track outputBasename:(NSString *)outputBasename;

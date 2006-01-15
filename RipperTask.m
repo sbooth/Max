@@ -53,8 +53,6 @@
 		enumerator		= [_tracks objectEnumerator];
 		
 		while((track = [enumerator nextObject])) {
-			[track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
-
 			firstSector		= [[track valueForKey:@"firstSector"] unsignedLongValue];
 			lastSector		= [[track valueForKey:@"lastSector"] unsignedLongValue];
 			range			= [SectorRange rangeWithFirstSector:firstSector lastSector:lastSector];
@@ -71,14 +69,6 @@
 
 - (void) dealloc
 {
-	NSEnumerator		*enumerator;
-	Track				*track;
-
-	enumerator = [_tracks objectEnumerator];		
-	while((track = [enumerator nextObject])) {
-		[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
-	}
-
 	if(nil != _connection) {
 		[_connection release];
 	}
@@ -95,9 +85,11 @@
 
 - (void) run
 {
-	NSPort		*port1			= [NSPort port];
-	NSPort		*port2			= [NSPort port];
-	NSArray		*portArray		= nil;
+	NSEnumerator	*enumerator;
+	Track			*track;
+	NSPort			*port1			= [NSPort port];
+	NSPort			*port2			= [NSPort port];
+	NSArray			*portArray		= nil;
 	
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
 	[_connection setRootObject:self];
@@ -105,6 +97,12 @@
 	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
 	[super setStarted];
+	
+	enumerator = [_tracks objectEnumerator];		
+	while((track = [enumerator nextObject])) {
+		[track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+	}
+	
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:[Ripper class] withObject:portArray];
 }
 
@@ -130,10 +128,19 @@
 
 - (void) setCompleted 
 {
+	NSEnumerator		*enumerator;
+	Track				*track;
+
 	[super setCompleted]; 
-	[self closeOutputFile]; 
+	[self closeOutputFile];
 	[_connection invalidate];
-	[[TaskMaster sharedController] ripDidComplete:self]; 
+	
+	[[TaskMaster sharedController] ripDidComplete:self];
+	
+	enumerator = [_tracks objectEnumerator];		
+	while((track = [enumerator nextObject])) {
+		[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+	}
 }
 
 - (void) stop

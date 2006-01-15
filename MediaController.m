@@ -220,7 +220,9 @@ static MediaController *sharedController = nil;
 // This elaborate scheme is necessary since multiple threads are going at the same time
 - (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
 {
-	CompactDiscDocument *doc = (CompactDiscDocument *)context;
+	CompactDiscDocument		*doc		= (CompactDiscDocument *)context;
+	NSArray					*tracks		= nil;
+	NSIndexSet				*indexSet	= nil;
 	
 	if([keyPath isEqualToString:@"freeDBQueryInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"]) {
@@ -230,20 +232,36 @@ static MediaController *sharedController = nil;
 			[doc encode:self];
 			
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
-				NSArray			*tracks		= [doc valueForKey:@"tracks"];
-				NSIndexSet		*indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
+				tracks		= [doc valueForKey:@"tracks"];
+				indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
 				
 				[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
+				
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"]) {					
+					[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"encodeInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
+				}
 			}
 		}
 	}
 	else if([keyPath isEqualToString:@"ripInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
 		if(NO == [[TaskMaster sharedController] compactDiscDocumentHasRippingTasks:doc]) {
-			NSArray			*tracks		= [doc valueForKey:@"tracks"];
-			NSIndexSet		*indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
+			tracks		= [doc valueForKey:@"tracks"];
+			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
 			
 			[tracks removeObserver:self fromObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress"];
+			
 			[doc ejectDisc:self];
+		}
+	}
+	else if([keyPath isEqualToString:@"encodeInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
+		if(NO == [[TaskMaster sharedController] compactDiscDocumentHasEncodingTasks:doc]) {
+			tracks		= [doc valueForKey:@"tracks"];
+			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
+			
+			[tracks removeObserver:self fromObjectsAtIndexes:indexSet forKeyPath:@"encodeInProgress"];
+			
+			[doc saveDocument:self];
+			[[doc windowForSheet] performClose:self];
 		}
 	}
 }

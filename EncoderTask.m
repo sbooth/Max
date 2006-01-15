@@ -82,6 +82,7 @@
 
 - (NSString *)		getOutputFilename				{ return _outputFilename; }
 - (NSString *)		getPCMFilename					{ return [_task getOutputFilename]; }
+- (NSArray *)		getTracks						{ return _tracks; }
 
 - (void) setTracks:(NSArray *)tracks
 {

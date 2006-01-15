@@ -53,6 +53,7 @@
 - (NSArray *)		genres;
 - (void)			displayException:(NSException *)exception;
 
+- (NSArray *)		tracks;
 - (NSArray *)		selectedTracks;
 
 // Toolbar/menu item enabling utility methods
