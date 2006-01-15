@@ -32,6 +32,7 @@
 	NSNumber						*_discInDrive;
 	NSNumber						*_discID;
 	NSNumber						*_freeDBQueryInProgress;
+	NSNumber						*_freeDBQuerySuccessful;
 		
 	// Disc information
 	NSString						*_title;

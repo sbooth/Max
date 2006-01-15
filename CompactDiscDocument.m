@@ -499,6 +499,8 @@
 
 	@try {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"freeDBQueryInProgress"];
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"_freeDBQuerySuccessful"];
+
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
 		matches = [freeDB fetchMatches];
@@ -559,6 +561,8 @@
 		[self clearFreeDBData];
 		
 		[freeDB updateDisc:info];
+		
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"_freeDBQuerySuccessful"];
 	}
 	
 	@catch(NSException *exception) {

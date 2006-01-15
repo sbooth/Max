@@ -247,8 +247,10 @@ static MediaController *sharedController = nil;
 	NSIndexSet				*indexSet	= nil;
 	
 	if([keyPath isEqualToString:@"freeDBQueryInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"]) {
-			[doc removeObserver:self forKeyPath:@"freeDBQueryInProgress"];
+
+		[doc removeObserver:self forKeyPath:@"freeDBQueryInProgress"];
+		
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && [[doc valueForKey:@"_freeDBQuerySuccessful"] boolValue]) {
 			[doc selectAll:self];
 			//[[[doc valueForKey:@"tracks"] objectAtIndex:0] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
 			[doc encode:self];
