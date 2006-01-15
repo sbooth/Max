@@ -137,7 +137,7 @@ enum {
 	}
 	
 	// Allocate the buffer (Vorbis crashes if it is too large)
-	_buflen			= 1024 * 10;
+	_buflen			= 1024;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[_delegate setStopped];

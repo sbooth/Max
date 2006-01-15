@@ -110,7 +110,6 @@
 	OSStatus			err;
 	AudioBufferList		bufferList;
 	UInt32				frameCount, size, bitrate, quality, mode;
-	ssize_t				bytesWritten						= 0;
 	ssize_t				bytesRead							= 0;
 	ssize_t				bytesToRead							= 0;
 	ssize_t				totalBytes							= 0;

@@ -184,7 +184,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	}
 	
 	// Allocate the buffer
-	_buflen			= 1024 * 10;
+	_buflen			= 1024;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[_delegate setStopped];

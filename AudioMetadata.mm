@@ -31,7 +31,17 @@
 - (NSString *) description
 {
 	if(nil != _multipleArtists && [_multipleArtists boolValue]) {
-		return [NSString stringWithFormat:@"%@ - %@", _trackArtist, _trackTitle];
+		NSString	*artist		= _trackArtist;
+		NSString	*title		= _trackTitle;
+		
+		if(nil == artist) {
+			artist = @"Unknown Artist";
+		}
+		if(nil == title) {
+			title = @"Unknown Title";
+		}
+		
+		return [NSString stringWithFormat:@"%@ - %@", artist, title];			
 	}
 	else if(nil != _trackTitle) {
 		return [NSString stringWithFormat:@"%@", _trackTitle];
@@ -159,7 +169,7 @@
 		
 		// Compilation
 		MP4GetMetadataCompilation(mp4FileHandle, &multipleArtists);
-		if(0xFF != multipleArtists) {
+		if(multipleArtists) {
 			[result setValue:[NSNumber numberWithBool:YES] forKey:@"multipleArtists"];
 		}
 		
