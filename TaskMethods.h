@@ -18,7 +18,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#define MAX_DO_POLL_FREQUENCY 250
+// The number of iterations a task will run between calls to its delegate
+#define MAX_DO_POLL_FREQUENCY 300
 
 #import <Cocoa/Cocoa.h>
 
