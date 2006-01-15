@@ -27,6 +27,8 @@
 	NSDictionary	*_formatInfo;
 }
 
-- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata formatInfo:(NSDictionary *)formatInfo;
+- (id)		initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata formatInfo:(NSDictionary *)formatInfo;
+
+- (int)		getFormat;
 
 @end

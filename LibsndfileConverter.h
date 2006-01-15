@@ -30,6 +30,4 @@
 	NSString			*_fileType;
 }
 
-- (id)		initWithInputFilename:(NSString *)inputFilename;
-
 @end

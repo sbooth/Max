@@ -26,19 +26,13 @@
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithInputFilename:inputFilename metadata:metadata])) {
-		_converter	= [[SpeexConverter alloc] initWithInputFilename:inputFilename];
+		_converterClass = [SpeexConverter class];
 		return self;
 	}
 	return nil;
 }
 
-- (void) dealloc
-{
-	[_converter release];
-	[super dealloc];
-}
-
-- (NSString *) getType
+- (NSString *) getInputType
 {
 	return @"Speex";
 }

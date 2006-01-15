@@ -20,19 +20,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Task.h"
+#import "ConverterMethods.h"
+#import "TaskMethods.h"
 
-@interface Converter : NSObject
+@interface Converter : NSObject <ConverterMethods>
 {
-	NSString			*_inputFilename;
-	Task				*_delegate;
+	NSString				*_inputFilename;
+	id <TaskMethods>		_delegate;
 }
 
-- (id)		initWithInputFilename:(NSString *)inputFilename;
-
-- (void)	convertToFile:(int)file;
-
-- (Task *)	delegate;
-- (void)	setDelegate:(Task *)delegate;
+- (id)						initWithInputFilename:(NSString *)inputFilename;
 
 @end

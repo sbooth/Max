@@ -18,22 +18,41 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#define MAX_DO_POLL_FREQUENCY 250
+
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
+@protocol TaskMethods
 
-@interface SpeexEncoder : Encoder
-{
-	int16_t					*_buf;
-	ssize_t					_buflen;
-	
-	int						_out;
-	
-	// Settings flags
-	int						_mode;
-	float					_quality;
-	long					_bitrate;
-	BOOL					_cbr;
-}
+- (NSDate *)		getStartTime;
+- (NSDate *)		getEndTime;
+
+- (void)			setStartTime:(NSDate *)startTime;
+- (void)			setEndTime:(NSDate *)endTime;
+
+- (BOOL)			started;
+- (BOOL)			completed;
+- (BOOL)			stopped;
+
+- (void)			setStarted;
+- (void)			setCompleted;
+- (void)			setStopped;
+
+- (double)			percentComplete;
+- (void)			setPercentComplete:(double)percentComplete;
+
+- (BOOL)			shouldStop;
+- (void)			setShouldStop;
+
+- (NSString *)		getTimeRemaining;
+- (void)			setTimeRemaining:(NSString *)timeRemaining;
+
+- (void)			updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining;
+
+- (NSString *)		getInputType;
+- (void)			setInputType:(NSString *)inputType;
+
+- (NSString *)		getOutputType;
+- (void)			setOutputType:(NSString *)outputType;
 
 @end

@@ -300,6 +300,8 @@
 		8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
 		8C7C897808EC435700F6FCB1 /* MediaController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MediaController.m; sourceTree = "<group>"; };
 		8C7C897908EC435700F6FCB1 /* MediaController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MediaController.h; sourceTree = "<group>"; };
+		8C81CEFC09795DD300B24C55 /* TaskMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskMethods.h; sourceTree = "<group>"; };
+		8C81CFD8097969EE00B24C55 /* ConverterMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverterMethods.h; sourceTree = "<group>"; };
 		8C8B0CC2092E5DAA00418C45 /* English */ = {isa = PBXFileReference; lastKnownFileType = folder; name = English; path = "English.lproj/Max Help"; sourceTree = "<group>"; };
 		8C8B0D1F092E617B00418C45 /* MacPADSocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MacPADSocket.h; sourceTree = "<group>"; };
 		8C8B0D20092E617B00418C45 /* MacPADSocket.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MacPADSocket.m; sourceTree = "<group>"; };
@@ -367,6 +369,8 @@
 		8CBB8BBC08EFAF4E007197C3 /* CompactDiscDocumentDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CompactDiscDocumentDefaults.plist; sourceTree = "<group>"; };
 		8CBB8BCB08EFB0BF007197C3 /* MissingResourceException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingResourceException.h; sourceTree = "<group>"; };
 		8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissingResourceException.m; sourceTree = "<group>"; };
+		8CBCD0600979CC2E001931E4 /* RipperMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperMethods.h; sourceTree = "<group>"; };
+		8CBCD19A0979D81E001931E4 /* EncoderMethods.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EncoderMethods.h; sourceTree = "<group>"; };
 		8CBEC4EE08ED6F770064F794 /* FreeDBException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDBException.h; sourceTree = "<group>"; };
 		8CBEC4EF08ED6F770064F794 /* FreeDBException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDBException.m; sourceTree = "<group>"; };
 		8CBEC55408ED74E90064F794 /* MallocException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MallocException.h; sourceTree = "<group>"; };
@@ -504,6 +508,7 @@
 		080E96DDFE201D6D7F000001 /* Encoder */ = {
 			isa = PBXGroup;
 			children = (
+				8CBCD19A0979D81E001931E4 /* EncoderMethods.h */,
 				8C4961F009472D95006E1765 /* OggFLACEncoder.h */,
 				8C4961F109472D95006E1765 /* OggFLACEncoder.m */,
 				8CB0AE61093AE12000968F66 /* FLACEncoder.h */,
@@ -674,6 +679,7 @@
 				8CD7B0CC094E7F2600BA2427 /* SectorRange.m */,
 				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
 				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
+				8CBCD0600979CC2E001931E4 /* RipperMethods.h */,
 			);
 			name = Ripper;
 			sourceTree = "<group>";
@@ -826,6 +832,7 @@
 		8C9AEF98096FADDB001140A5 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				8C81CEFC09795DD300B24C55 /* TaskMethods.h */,
 				8C206F120929486C00793FD0 /* TaskMaster.h */,
 				8C206F130929486C00793FD0 /* TaskMaster.m */,
 				8CA5C441095277F7006FB5B7 /* PCMGeneratingTask.h */,
@@ -908,6 +915,7 @@
 		8CE09A0009510EED0020C8B1 /* Converter */ = {
 			isa = PBXGroup;
 			children = (
+				8C81CFD8097969EE00B24C55 /* ConverterMethods.h */,
 				8CE09951095109BF0020C8B1 /* Converter.h */,
 				8CE09952095109BF0020C8B1 /* Converter.m */,
 				8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */,

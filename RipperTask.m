@@ -26,27 +26,30 @@
 
 #include "cdparanoia/interface/cdda_interface.h"
 
+@interface RipperTask (Private)
+- (void) ripperReady:(id)anObject;
+@end
 
 @implementation RipperTask
 
 - (id) initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
 {
-	NSMutableArray		*sectors;
 	SectorRange			*range;
 	NSEnumerator		*enumerator;
 	Track				*track;
 	unsigned long		firstSector, lastSector;
-	cdrom_drive			*drive;
 
 	if(0 == [tracks count]) {
 		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"Empty array passed to RipperTask::initWithTracks" userInfo:nil];
 	}
 
 	if((self = [super initWithMetadata:metadata])) {
+
+		_connection		= nil;
 		
 		_tracks			= [tracks retain];
-		drive			= [[[[_tracks objectAtIndex:0] getCompactDiscDocument] getDisc] getDrive];
-		sectors			= [NSMutableArray arrayWithCapacity:[tracks count]];
+		_drive			= [[[[_tracks objectAtIndex:0] getCompactDiscDocument] getDisc] getDrive];
+		_sectors		= [NSMutableArray arrayWithCapacity:[tracks count]];
 		enumerator		= [_tracks objectEnumerator];
 		
 		while((track = [enumerator nextObject])) {
@@ -56,11 +59,9 @@
 			lastSector		= [[track valueForKey:@"lastSector"] unsignedLongValue];
 			range			= [SectorRange rangeWithFirstSector:firstSector lastSector:lastSector];
 
-			[sectors addObject:range];
+			[_sectors addObject:range];
 		}
 
-		_ripper = [[Ripper alloc] initWithSectors:sectors drive:drive];
-		
 		return self;
 	}
 	return nil;
@@ -76,48 +77,70 @@
 		[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
 	}
 
+	if(nil != _connection) {
+		[_connection release];
+	}
+	
 	[_tracks release];	
-	[_ripper release];
 	
 	[super dealloc];
 }
 
+- (NSArray *)			getSectors				{ return _sectors; }
+- (cdrom_drive *)		getDrive				{ return _drive; }
+
 - (void) run:(id)object
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSPort		*port1			= [NSPort port];
+	NSPort		*port2			= [NSPort port];
+	NSArray		*portArray		= nil;
+	
+	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
+	[_connection setRootObject:self];
+	
+	portArray = [NSArray arrayWithObjects:port2, port1, nil];
+	
+	[super setStarted];
+	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:[Ripper class] withObject:portArray];
+}
 
-	@try {
-		[[TaskMaster sharedController] ripDidStart:self];
-		[_ripper setDelegate:self];
-		[_ripper ripToFile:_out];
-		[[TaskMaster sharedController] ripDidComplete:self];
-	}
-	
-	@catch(StopException *exception) {
-		[[TaskMaster sharedController] ripDidStop:self];
-	}
-	
-	@catch(NSException *exception) {
-		[[TaskMaster sharedController] ripDidStop:self];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:NO];
-	}
-	
-	@finally {
-		[self closeFile];
-		[[TaskMaster sharedController] ripFinished:self];
-		[pool release];
-	}
+- (void) ripperReady:(id)anObject
+{
+    [anObject setProtocolForProxy:@protocol(RipperMethods)];
+	[anObject ripToFile:_out];
+}
+
+- (void) setStarted
+{
+	[super setStarted];
+	[[TaskMaster sharedController] ripDidStart:self]; 
+}
+
+- (void) setStopped 
+{
+	[super setStopped];
+	[self closeOutputFile];
+	[_connection invalidate];
+	[[TaskMaster sharedController] ripDidStop:self]; 
+}
+
+- (void) setCompleted 
+{
+	[super setCompleted]; 
+	[self closeOutputFile]; 
+	[_connection invalidate];
+	[[TaskMaster sharedController] ripDidComplete:self]; 
 }
 
 - (void) stop
 {
-	if([_started boolValue]) {
-		_shouldStop = [NSNumber numberWithBool:YES];			
+	if([self started]) {
+		[self setShouldStop];
 	}
 	else {
+		[self closeOutputFile];
+		[_connection invalidate];
 		[[TaskMaster sharedController] ripDidStop:self];
-		[self closeFile];
-		[[TaskMaster sharedController] ripFinished:self];
 	}
 }
 

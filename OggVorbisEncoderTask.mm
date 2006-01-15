@@ -29,16 +29,10 @@
 - (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
-		_encoder = [[OggVorbisEncoder alloc] initWithPCMFilename:[_task outputFilename]];
+		_encoderClass = [OggVorbisEncoder class];
 		return self;
 	}
 	return nil;
-}
-
-- (void) dealloc
-{
-	[_encoder release];
-	[super dealloc];
 }
 
 - (void) writeTags
@@ -89,7 +83,7 @@
 	// Comment
 	comment = [_metadata valueForKey:@"albumComment"];
 	if(_writeSettingsToComment) {
-		comment = (nil == comment ? [_encoder description] : [NSString stringWithFormat:@"%@\n%@", comment, [_encoder description]]);
+		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 	}
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
@@ -110,7 +104,7 @@
 	f.save();
 }
 
-- (NSString *) getType
+- (NSString *) getOutputType
 {
 	return @"Ogg Vorbis";
 }

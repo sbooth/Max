@@ -31,8 +31,8 @@
 - (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata formatInfo:(NSDictionary *)formatInfo
 {
 	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
-		_formatInfo	= [formatInfo retain];
-		_encoder	= [[CoreAudioEncoder alloc] initWithPCMFilename:[_task outputFilename] formatInfo:formatInfo];
+		_formatInfo		= [formatInfo retain];
+		_encoderClass	= [CoreAudioEncoder class];
 		return self;
 	}
 	return nil;
@@ -41,9 +41,10 @@
 - (void) dealloc
 {
 	[_formatInfo release];
-	[_encoder release];
 	[super dealloc];
 }
+
+- (NSDictionary *)		getFormatInfo				{ return _formatInfo; }
 
 - (void) writeTags
 {
@@ -113,7 +114,7 @@
 			// Comment
 			comment = [_metadata valueForKey:@"albumComment"];
 			if(_writeSettingsToComment) {
-				comment = (nil == comment ? [_encoder description] : [NSString stringWithFormat:@"%@\n%@", comment, [_encoder description]]);
+				comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 			}
 			if(nil != comment) {
 				MP4SetMetadataComment(mp4FileHandle, [comment UTF8String]);
@@ -226,7 +227,7 @@
 			// Comment
 			comment = [_metadata valueForKey:@"albumComment"];
 			if(_writeSettingsToComment) {
-				comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+				comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 			}
 			if(nil != comment) {
 				[info setValue:comment forKey:@kAFInfoDictionary_Comments];
@@ -260,7 +261,7 @@
 	}	
 }
 
-- (NSString *) getType
+- (NSString *) getOutputType
 {
 	return [_formatInfo valueForKey:@"fileTypeName"];
 }

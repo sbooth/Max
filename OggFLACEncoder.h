@@ -31,6 +31,4 @@
 	OggFLAC__FileEncoder	*_flac;
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename;
-
 @end

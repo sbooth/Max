@@ -43,19 +43,17 @@
 	[super dealloc];
 }
 
-- (void) convertToFile:(int)file
+- (oneway void) convertToFile:(int)file
 {
 	NSDate						*startTime			= [NSDate date];
 	
 	// Tell our owner we are starting
-	[_delegate setValue:startTime forKey:@"startTime"];	
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setStartTime:startTime];	
+	[_delegate setStarted];
 	
 	
-	[_delegate setValue:[NSDate date] forKey:@"endTime"];
-	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
+	[_delegate setEndTime:[NSDate date]];
+	[_delegate setCompleted];	
 }
 
 @end

@@ -26,11 +26,12 @@
 @interface ConverterTask : PCMGeneratingTask
 {
 	NSString				*_inputFilename;
-	Converter				*_converter;
+	Class					_converterClass;
+	NSConnection			*_connection;
 }
 
 - (id)				initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
 
-- (NSString *)		getType;
+- (NSString *)		getInputFilename;
 
 @end

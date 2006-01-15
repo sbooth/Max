@@ -22,6 +22,156 @@
 
 @implementation Task
 
-- (BOOL) shouldStop			{ return [_shouldStop boolValue]; }
+- (id) init
+{
+	if((self = [super init])) {
+		
+		_started			= NO;
+		_completed			= NO;
+		_stopped			= NO;
+		
+		_shouldStop			= NO;
+		
+		_percentComplete	= 0.0;
+		
+		return self;
+	}
+	return nil;
+}
+
+- (void) dealloc
+{
+	if(nil != _startTime) {
+		[_startTime release];
+	}
+	
+	if(nil != _endTime) {
+		[_endTime release];
+	}
+	
+	if(nil != _timeRemaining) {
+		[_timeRemaining release];
+	}
+	
+	if(nil != _inputType) {
+		[_inputType release];
+	}
+
+	if(nil != _outputType) {
+		[_outputType release];
+	}
+	
+	[super dealloc];
+}
+
+- (NSDate *)		getStartTime									{ return _endTime; }
+- (NSDate *)		getEndTime										{ return _endTime; }
+
+- (BOOL)			started											{ return _started; }
+- (BOOL)			completed										{ return _completed; }
+- (BOOL)			stopped											{ return _stopped; }
+
+- (double)			percentComplete									{ return _percentComplete; }
+
+- (BOOL)			shouldStop										{ return _shouldStop; }
+
+- (NSString *)		getTimeRemaining								{ return _timeRemaining; }
+
+- (NSString *)		getInputType									{ return _inputType; }
+- (NSString *)		getOutputType									{ return _outputType; }
+
+- (void) setStartTime:(NSDate *)startTime
+{ 
+	[self willChangeValueForKey:@"startTime"];
+	if(nil != _startTime) {
+		[_startTime release];
+	}
+	_startTime = [startTime retain];
+	[self didChangeValueForKey:@"startTime"];
+}
+
+- (void) setEndTime:(NSDate *)endTime
+{ 
+	[self willChangeValueForKey:@"endTime"];
+	if(nil != _endTime) {
+		[_endTime release];
+	}
+	_endTime = [endTime retain];
+	[self didChangeValueForKey:@"endTime"];
+}
+
+- (void) setStarted
+{
+	[self setPercentComplete:0.0];
+	
+	[self willChangeValueForKey:@"started"];
+	_started = YES;
+	[self didChangeValueForKey:@"started"];
+}
+- (void) setCompleted
+{ 
+	[self setPercentComplete:100.0];
+	
+	[self willChangeValueForKey:@"completed"];
+	_completed = YES;
+	[self didChangeValueForKey:@"completed"];
+}
+
+- (void) setStopped
+{
+	[self willChangeValueForKey:@"stopped"];
+	_stopped  = YES;
+	[self didChangeValueForKey:@"stopped"];
+}
+
+- (void) setPercentComplete:(double)percentComplete
+{
+	[self willChangeValueForKey:@"percentComplete"];
+	_percentComplete = percentComplete;
+	[self didChangeValueForKey:@"percentComplete"];
+}
+
+- (void) setShouldStop
+{
+	[self willChangeValueForKey:@"shouldStop"];
+	_shouldStop = YES;
+	[self didChangeValueForKey:@"shouldStop"];
+}
+
+- (void) setTimeRemaining:(NSString *)timeRemaining
+{
+	[self willChangeValueForKey:@"timeRemaining"];
+	if(nil != _timeRemaining) {
+		[_timeRemaining release];
+	}
+	_timeRemaining = [timeRemaining retain];
+	[self didChangeValueForKey:@"timeRemaining"];
+}
+
+- (void) setInputType:(NSString *)inputType
+{
+	[self willChangeValueForKey:@"inputType"];
+	if(nil != _inputType) {
+		[_inputType release];
+	}
+	_inputType = [inputType retain];
+	[self didChangeValueForKey:@"inputType"];
+}
+
+- (void) setOutputType:(NSString *)outputType
+{
+	[self willChangeValueForKey:@"outputType"];
+	if(nil != _outputType) {
+		[_outputType release];
+	}
+	_outputType = [outputType retain];
+	[self didChangeValueForKey:@"outputType"];
+}
+
+- (void) updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining
+{
+	[self setPercentComplete:percentComplete];
+	[self setTimeRemaining:timeRemaining];
+}
 
 @end

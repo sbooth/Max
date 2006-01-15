@@ -18,26 +18,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "OggFLACEncoderTask.h"
-#import "OggFLACEncoder.h"
+#import <Cocoa/Cocoa.h>
 
-@implementation OggFLACEncoderTask
+#import "TaskMethods.h"
 
-- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
-{
-	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
-		_encoderClass = [OggFLACEncoder class];
-		return self;
-	}
-	return nil;
-}
+@protocol EncoderMethods
 
-- (void) writeTags
-{}
+- (oneway void)				encodeToFile:(NSString *)filename;
 
-- (NSString *) getOutputType
-{
-	return @"Ogg FLAC";
-}
+- (NSString *)				settings;
+
+- (id <TaskMethods>)		delegate;
+- (void)					setDelegate:(id <TaskMethods>)delegate;
 
 @end

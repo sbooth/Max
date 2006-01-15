@@ -20,20 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Task.h"
+#import "EncoderMethods.h"
+#import "TaskMethods.h"
 
-@interface Encoder : NSObject 
+@interface Encoder : NSObject <EncoderMethods>
 {
-	Task					*_delegate;
+	id <TaskMethods>		_delegate;
 	NSString				*_pcmFilename;	
 	int						_pcm;
 }
 
-- (id)				initWithPCMFilename:(NSString *)pcmFilename;
-
-- (ssize_t)			encodeToFile:(NSString *)filename;
-
-- (Task *)			delegate;
-- (void)			setDelegate:(Task *)delegate;
+- (id)						initWithPCMFilename:(NSString *)pcmFilename;
 
 @end

@@ -20,6 +20,7 @@
 
 #import "Converter.h"
 
+#import "ConverterTask.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
@@ -34,6 +35,28 @@
 #include <AudioToolbox/ExtendedAudioFile.h>
 
 @implementation Converter
+
++ (void) connectWithPorts:(NSArray *)portArray
+{
+	NSAutoreleasePool	*pool;
+	NSConnection		*connection;
+	Converter			*converter;
+	ConverterTask		*owner;
+	
+	pool			= [[NSAutoreleasePool alloc] init];
+	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+	owner			= (ConverterTask *)[connection rootProxy];
+	converter		= [[self alloc] initWithInputFilename:[owner getInputFilename]];
+	
+	[converter setDelegate:owner];
+	[owner converterReady:converter];
+	
+	[converter release];
+	
+	[[NSRunLoop currentRunLoop] run];
+	
+	[pool release];
+}
 
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
@@ -51,15 +74,11 @@
 	[super dealloc];
 }
 
-- (void) setDelegate:(Task *)delegate
-{
-	_delegate = delegate;
-}
+- (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
+- (id <TaskMethods>)	delegate									{ return _delegate; }
 
-- (Task *) delegate									{ return _delegate; }
+- (oneway void)			convertToFile:(int)file						{}
 
-- (void) convertToFile:(int)file					{}
-
-- (NSString *) description							{ return [_inputFilename lastPathComponent]; }
+- (NSString *)			description									{ return [_inputFilename lastPathComponent]; }
 
 @end

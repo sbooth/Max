@@ -67,7 +67,7 @@
 	[super dealloc];
 }
 
-- (void) convertToFile:(int)file
+- (oneway void) convertToFile:(int)file
 {
 	NSDate						*startTime			= [NSDate date];
 	SNDFILE						*out				= NULL;
@@ -81,20 +81,21 @@
 	double						maxSignal;
 	int							frameCount;
 	int							readCount;
+	unsigned long				iterations			= 0;
 	
 //	ssize_t						bytesRead			= 0;
 //	ssize_t						bytesToRead			= 0;
 //	ssize_t						totalBytes			= 0;
 
 	// Tell our owner we are starting
-	[_delegate setValue:startTime forKey:@"startTime"];	
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setStartTime:startTime];	
+	[_delegate setStarted];
+	[_delegate setInputType:_fileType];
 		
 	// Get input file information
 //	struct stat sourceStat;
 //	if(-1 == fstat(_pcm, &sourceStat)) {
-//		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+//		[_delegate setStopped];
 //		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 //	}
 	
@@ -104,7 +105,7 @@
 	info.channels		= 2;
 	out					= sf_open_fd(file, SFM_WRITE, &info, 0);
 	if(NULL == out) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 	}
 	
@@ -123,7 +124,7 @@
 		
 		doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
 		if(NULL == doubleBuffer) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -135,13 +136,15 @@
 		if(maxSignal < 1.0) {	
 			while(readCount > 0) {
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
-					[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+					[_delegate setStopped];
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
 				readCount = sf_readf_double(_in, doubleBuffer, frameCount) ;
 				sf_writef_double(out, doubleBuffer, readCount) ;
+				
+				++iterations;
 			}
 		}
 		// Renormalize output
@@ -150,8 +153,8 @@
 			
 			while(0 < readCount) {
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
-					[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+					[_delegate setStopped];
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -161,6 +164,8 @@
 				}
 				
 				sf_writef_double(out, doubleBuffer, readCount);
+				
+				++iterations;
 			}
 		}
 		
@@ -169,7 +174,7 @@
 	else {
 		intBuffer = (int *)malloc(bufferLen * sizeof(int));
 		if(NULL == intBuffer) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -178,13 +183,15 @@
 		
 		while(0 < readCount) {	
 			// Check if we should stop, and if so throw an exception
-			if([_delegate shouldStop]) {
-				[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+				[_delegate setStopped];
 				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 			}
 			
 			readCount = sf_readf_int(_in, intBuffer, frameCount);
 			sf_writef_int(out, intBuffer, readCount);
+			
+			++iterations;
 		}
 		
 		free(intBuffer);
@@ -192,17 +199,16 @@
 	
 	// Update status
 //	bytesToRead -= bytesRead;
-//	[_delegate setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+//	[_delegate setPercentComplete:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0];
 //	NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 //	unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-//	[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+//	[_delegate setTimeRemaining:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60]];
 	
 	// Clean up sndfile
 	sf_close(out);
 	
-	[_delegate setValue:[NSDate date] forKey:@"endTime"];
-	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
+	[_delegate setEndTime:[NSDate date]];
+	[_delegate setCompleted];	
 }
 
 @end

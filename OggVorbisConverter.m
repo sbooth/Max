@@ -62,7 +62,7 @@
 	[super dealloc];
 }
 
-- (void) convertToFile:(int)file
+- (oneway void) convertToFile:(int)file
 {
 	NSDate			*startTime			= [NSDate date];
 	ogg_int64_t		samplesRead			= 0;
@@ -71,11 +71,11 @@
 	long			bytesRead;
 	int				currentSection;
 	char			buf	[4096];
+	unsigned long	iterations			= 0;
 	
 	// Tell our owner we are starting
-	[_delegate setValue:startTime forKey:@"startTime"];	
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setStartTime:startTime];	
+	[_delegate setStarted];
 	
 	// Get input file information
 	totalSamples		= ov_pcm_total(&_vf, -1);
@@ -83,18 +83,12 @@
 	
 	for(;;) {
 		
-		// Check if we should stop, and if so throw an exception
-		if([_delegate shouldStop]) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-		}
-		
 		// Decode the data
 		bytesRead = ov_read(&_vf, buf, 4096, 1, 2, 1, &currentSection);
 
 		// Check for errors
 		if(0 > bytesRead) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:@"Ogg Vorbis decode error" userInfo:nil];
 		}
 		
@@ -105,22 +99,37 @@
 			
 		// Write the PCM data to file
 		if(-1 == write(file, buf, bytesRead)) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		// Update status
 		samplesRead		= ov_pcm_tell(&_vf);
 		samplesToRead	= totalSamples - samplesRead;
-		[_delegate setValue:[NSNumber numberWithDouble:((double)(totalSamples - samplesToRead)/(double) totalSamples) * 100.0] forKey:@"percentComplete"];
-		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-		unsigned int timeRemaining = interval / ((double)(totalSamples - samplesToRead)/(double) totalSamples) - interval;
-		[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		
+		// Distributed Object calls are expensive, so only perform them every few iterations
+		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+
+			// Check if we should stop, and if so throw an exception
+			if([_delegate shouldStop]) {
+				[_delegate setStopped];
+				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+			}
+			
+			// Update UI
+			double percentComplete = ((double)(totalSamples - samplesToRead)/(double) totalSamples) * 100.0;
+			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+			unsigned int secondsRemaining = interval / ((double)(totalSamples - samplesToRead)/(double) totalSamples) - interval;
+			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			
+			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+		}
+		
+		++iterations;
 	}
 
-	[_delegate setValue:[NSDate date] forKey:@"endTime"];
-	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
+	[_delegate setEndTime:[NSDate date]];
+	[_delegate setCompleted];	
 }
 
 @end

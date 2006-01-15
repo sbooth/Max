@@ -263,7 +263,7 @@ static TaskMaster *sharedController = nil;
 	[ripperTask setValue:basename forKey:@"basename"];
 	
 	// Show the ripper window if it is hidden
-	if(NO == [[NSApplication sharedApplication] isHidden] && _useDynamicWindows) {
+	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 		[[_ripperController window] orderFront:self];
 	}
 	
@@ -310,7 +310,7 @@ static TaskMaster *sharedController = nil;
 	[converterTask setValue:basename forKey:@"basename"];
 	
 	// Show the converter window if it is hidden
-	if(NO == [[NSApplication sharedApplication] isHidden] && _useDynamicWindows) {
+	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 		[[_converterController window] orderFront:self];
 	}
 	
@@ -323,9 +323,9 @@ static TaskMaster *sharedController = nil;
 
 - (void) addRippingTask:(RipperTask *)task
 {
-//	@synchronized(_rippingTasks) {
+	@synchronized(_rippingTasks) {
 		[[self mutableArrayValueForKey:@"rippingTasks"] addObject:task];
-//	}
+	}
 }
 
 - (void) removeRippingTask:(RipperTask *)task
@@ -337,7 +337,7 @@ static TaskMaster *sharedController = nil;
 			[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
 			
 			// Hide the ripper window if no more tasks
-			if(NO == [self hasRippingTasks] && _useDynamicWindows) {
+			if(NO == [self hasRippingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 				[[_ripperController window] performClose:self];
 			}
 		}
@@ -367,7 +367,7 @@ static TaskMaster *sharedController = nil;
 			deviceName = [[task valueForKey:@"ripper"] deviceName];
 			if(NO == [[task valueForKeyPath:@"started"] boolValue] && NO == [activeDrives containsObject:deviceName]) {
 				[activeDrives addObject:deviceName];
-				[NSThread detachNewThreadSelector:@selector(run:) toTarget:task withObject:self];
+				[task run];
 			}
 		}
 	}
@@ -378,8 +378,8 @@ static TaskMaster *sharedController = nil;
 	NSString *trackName = [task description];
 	
 	[LogController logMessage:[NSString stringWithFormat:@"Rip started for %@", trackName]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Rip started" description:trackName
-//						   notificationName:@"Rip started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Rip started" description:trackName
+						   notificationName:@"Rip started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) ripDidStop:(RipperTask* ) task
@@ -387,44 +387,43 @@ static TaskMaster *sharedController = nil;
 	NSString *trackName = [task description];
 
 	[LogController logMessage:[NSString stringWithFormat:@"Rip stopped for %@", trackName]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Rip stopped" description:trackName
-//						   notificationName:@"Rip stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Rip stopped" description:trackName
+						   notificationName:@"Rip stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
+	[self removeRippingTask:task];
+	[self spawnRipperThreads];
 }
 
 - (void) ripDidComplete:(RipperTask* ) task
 {
-	NSDate			*startTime		= [task valueForKey:@"startTime"];
-	NSDate			*endTime		= [task valueForKey:@"endTime"];
+	NSDate			*startTime		= [task getStartTime];
+	NSDate			*endTime		= [task getEndTime];
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
 		
 	[LogController logMessage:[NSString stringWithFormat:@"Rip completed for %@", trackName]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:[NSString stringWithFormat:@"%@\nDuration: %@", trackName, duration]
-//						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:[NSString stringWithFormat:@"%@\nDuration: %@", trackName, duration]
+						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	if(NO == [self hasRippingTasks]) {
-//		[GrowlApplicationBridge notifyWithTitle:@"Ripping completed" description:@"All ripping tasks completed"
-//							   notificationName:@"Ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-	}
-	
 	[self runEncodersForTask:task];
-}
 
-- (void) ripFinished:(RipperTask *)task
-{
 	[self removeRippingTask:task];
 	[self spawnRipperThreads];
+
+	if(NO == [self hasRippingTasks]) {
+		[GrowlApplicationBridge notifyWithTitle:@"Ripping completed" description:@"All ripping tasks completed"
+							   notificationName:@"Ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	}
 }
 
 #pragma mark Converting Functionality
 
 - (void) addConvertingTask:(ConverterTask *)task
 {
-//	@synchronized(_convertingTasks) {
+	@synchronized(_convertingTasks) {
 		[[self mutableArrayValueForKey:@"convertingTasks"] addObject:task];
-//	}
+	}
 }
 
 - (void) removeConvertingTask:(ConverterTask *) task
@@ -436,7 +435,7 @@ static TaskMaster *sharedController = nil;
 			[[self mutableArrayValueForKey:@"convertingTasks"] removeObject:task];
 			
 			// Hide the converter window if no more tasks
-			if(NO == [self hasConvertingTasks] && _useDynamicWindows) {
+			if(NO == [self hasConvertingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 				[[_converterController window] performClose:self];
 			}
 		}
@@ -453,8 +452,8 @@ static TaskMaster *sharedController = nil;
 		
 		// Start converting the next file(s)
 		for(i = 0; i < limit; ++i) {
-			if(NO == [[[_convertingTasks objectAtIndex:i] valueForKey:@"started"] boolValue]) {
-				[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_convertingTasks objectAtIndex:i] withObject:self];
+			if(NO == [[_convertingTasks objectAtIndex:i] started]) {
+				[[_convertingTasks objectAtIndex:i] run];
 			}
 		}	
 	}
@@ -465,8 +464,8 @@ static TaskMaster *sharedController = nil;
 	NSString	*filename		= [task description];
 	
 	[LogController logMessage:[NSString stringWithFormat:@"Convert started for %@", filename]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Convert started" description:filename
-//						   notificationName:@"Convert started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert started" description:filename
+						   notificationName:@"Convert started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) convertDidStop:(ConverterTask* ) task
@@ -474,33 +473,33 @@ static TaskMaster *sharedController = nil;
 	NSString	*filename		= [task description];
 	
 	[LogController logMessage:[NSString stringWithFormat:@"Convert stopped for %@", filename]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Convert stopped" description:filename
-//						   notificationName:@"Convert stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert stopped" description:filename
+						   notificationName:@"Convert stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+
+	[self removeConvertingTask:task];
+	[self spawnConverterThreads];
 }
 
 - (void) convertDidComplete:(ConverterTask* ) task
 {
-	NSDate			*startTime		= [task valueForKey:@"startTime"];
-	NSDate			*endTime		= [task valueForKey:@"endTime"];
+	NSDate			*startTime		= [task getStartTime];
+	NSDate			*endTime		= [task getEndTime];
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*filename		= [task description];
 	
 	[LogController logMessage:[NSString stringWithFormat:@"Convert completed for %@", filename]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Convert completed" description:[NSString stringWithFormat:@"%@\nDuration: %@", filename, duration]
-//						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Convert completed" description:[NSString stringWithFormat:@"%@\nDuration: %@", filename, duration]
+						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	[self runEncodersForTask:task];	
-}
+	[self runEncodersForTask:task];
 
-- (void) convertFinished:(ConverterTask *)task
-{
 	[self removeConvertingTask:task];
 	[self spawnConverterThreads];
-	
+
 	if(NO == [self hasConvertingTasks]) {
-//		[GrowlApplicationBridge notifyWithTitle:@"Conversion completed" description:@"All converting tasks completed"
-//							   notificationName:@"Conversion completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		[GrowlApplicationBridge notifyWithTitle:@"Conversion completed" description:@"All converting tasks completed"
+							   notificationName:@"Conversion completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
 }
 
@@ -556,7 +555,7 @@ static TaskMaster *sharedController = nil;
 				encoderTask		= [[CoreAudioEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
 				
 				// Show the encoder window if it is hidden
-				if(NO == [[NSApplication sharedApplication] isHidden] && _useDynamicWindows) {
+				if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 					[[_encoderController window] orderFront:self];
 				}
 				
@@ -577,7 +576,7 @@ static TaskMaster *sharedController = nil;
 				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
 
 				// Show the encoder window if it is hidden
-				if(NO == [[NSApplication sharedApplication] isHidden] && _useDynamicWindows) {
+				if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 					[[_encoderController window] orderFront:self];
 				}
 				
@@ -606,7 +605,7 @@ static TaskMaster *sharedController = nil;
 	}
 
 	// Show the encoder window if it is hidden
-	if(NO == [[NSApplication sharedApplication] isHidden] && _useDynamicWindows) {
+	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 		[[_encoderController window] orderFront:self];
 	}
 	
@@ -617,9 +616,9 @@ static TaskMaster *sharedController = nil;
 
 - (void) addEncodingTask:(EncoderTask *)task
 {
-//	@synchronized(_encodingTasks) {
+	@synchronized(_encodingTasks) {
 		[[self mutableArrayValueForKey:@"encodingTasks"] addObject:task];
-//	}
+	}
 }
 
 - (void) removeEncodingTask:(EncoderTask *)task
@@ -631,7 +630,7 @@ static TaskMaster *sharedController = nil;
 			[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:task];
 
 			// Hide the encoder window if no more tasks
-			if(NO == [self hasEncodingTasks] && _useDynamicWindows) {
+			if(NO == [self hasEncodingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 				[[_encoderController window] performClose:self];
 			}
 		}	
@@ -649,7 +648,7 @@ static TaskMaster *sharedController = nil;
 		// Start encoding the next track(s)
 		for(i = 0; i < limit; ++i) {
 			if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"started"] boolValue]) {
-				[NSThread detachNewThreadSelector:@selector(run:) toTarget:[_encodingTasks objectAtIndex:i] withObject:self];
+				[[_encodingTasks objectAtIndex:i] run];
 			}
 		}	
 	}
@@ -658,50 +657,50 @@ static TaskMaster *sharedController = nil;
 - (void) encodeDidStart:(EncoderTask* ) task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task getType];
-	NSString	*settings		= [task valueForKeyPath:@"encoder.description"];
+	NSString	*type			= [task getOutputType];
+	NSString	*settings		= [task settings];
 
 	[LogController logMessage:[NSString stringWithFormat:@"Encode started for %@ [%@]", trackName, type]];
 	if(nil != settings) {
 		[LogController logMessage:settings];
 	}
-//	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
-//						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode started" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
+						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) encodeDidStop:(EncoderTask* ) task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task getType];
+	NSString	*type			= [task getOutputType];
 
 	[LogController logMessage:[NSString stringWithFormat:@"Encode stopped for %@ [%@]", trackName, type]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
-//						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode stopped" description:[NSString stringWithFormat:@"%@\nFile format: %@", trackName, type]
+						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+
+	[self removeEncodingTask:task];
+	[self spawnEncoderThreads];
 }
 
 - (void) encodeDidComplete:(EncoderTask* ) task
 {
-	NSDate			*startTime		= [task valueForKey:@"startTime"];
-	NSDate			*endTime		= [task valueForKey:@"endTime"];
+	NSDate			*startTime		= [task getStartTime];
+	NSDate			*endTime		= [task getEndTime];
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
-	NSString		*type			= [task getType];
+	NSString		*type			= [task getOutputType];
 	
 	[LogController logMessage:[NSString stringWithFormat:@"Encode completed for %@ [%@]", trackName, type]];
-//	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@\nFile format: %@\nDuration: %@", trackName, type, duration]
-//						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	[GrowlApplicationBridge notifyWithTitle:@"Encode completed" description:[NSString stringWithFormat:@"%@\nFile format: %@\nDuration: %@", trackName, type, duration]
+						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	if(NO == [self hasEncodingTasks]) {
-//		[GrowlApplicationBridge notifyWithTitle:@"Encoding completed" description:@"All encoding tasks completed"
-//							   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-	}
-}
-
-- (void) encodeFinished:(EncoderTask *)task
-{
 	[self removeEncodingTask:task];
 	[self spawnEncoderThreads];
+
+	if(NO == [self hasEncodingTasks]) {
+		[GrowlApplicationBridge notifyWithTitle:@"Encoding completed" description:@"All encoding tasks completed"
+							   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	}
 }
 
 - (BOOL) outputFormatsSelected

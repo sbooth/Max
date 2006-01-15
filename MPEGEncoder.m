@@ -166,21 +166,20 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	
 
 	// Tell our owner we are starting
-	[_delegate setValue:startTime forKey:@"startTime"];	
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setStartTime:startTime];	
+	[_delegate setStarted];
 	
 	// Open the input file
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -188,7 +187,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	_buflen			= 1024 * 10;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -198,7 +197,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	// Create the output file
 	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if(-1 == _out) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -206,14 +205,14 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	while(0 < bytesToRead) {
 		// Check if we should stop, and if so throw an exception
 		if([_delegate shouldStop]) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
 		// Read a chunk of PCM input
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -222,10 +221,10 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		
 		// Update status
 		bytesToRead -= bytesRead;
-		[_delegate setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+		[_delegate setPercentComplete:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0];
 		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-		[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		[_delegate setTimeRemaining:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60]];
 	}
 	
 	// Flush the last MP3 frames (maybe)
@@ -233,31 +232,30 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		//[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Close the output file
 	if(-1 == close(_out)) {
-		//[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		//[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Write the Xing VBR tag
 	file = fopen([filename UTF8String], "r+");
 	if(NULL == file) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	lame_mp3_tags_fid(_gfp, file);
 	if(EOF == fclose(file)) {
-		//[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		//[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
-	[_delegate setValue:[NSDate date] forKey:@"endTime"];
-	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
+	[_delegate setEndTime:[NSDate date]];
+	[_delegate setCompleted];	
 	
 	return bytesWritten;
 }
@@ -278,19 +276,19 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		bufSize = 1.25 * numSamples + 7200;
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		lameResult = lame_encode_buffer_interleaved(_gfp, chunk, numSamples / 2, buf, bufSize);
 		if(0 > lameResult) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [LAMEException exceptionWithReason:@"LAME encoding error" userInfo:nil];
 		}
 		
 		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 	}
@@ -322,21 +320,21 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		bufSize = 7200;
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
 		// Flush the mp3 buffer
 		lameResult = lame_encode_flush(_gfp, buf, bufSize);
 		if(-1 == lameResult) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [LAMEException exceptionWithReason:@"LAME unable to flush buffers" userInfo:nil];
 		}
 		
 		// And write any frames it returns
 		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 	}
@@ -352,7 +350,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	return bytesWritten;
 }
 
-- (NSString *) description
+- (NSString *) settings
 {
 	NSString *bitrateString;
 	NSString *qualityString;

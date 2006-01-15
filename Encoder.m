@@ -19,8 +19,31 @@
  */
 
 #import "Encoder.h"
+#import "EncoderTask.h"
 
 @implementation Encoder
+
++ (void) connectWithPorts:(NSArray *)portArray
+{
+	NSAutoreleasePool	*pool;
+	NSConnection		*connection;
+	Encoder				*encoder;
+	EncoderTask			*owner;
+	
+	pool			= [[NSAutoreleasePool alloc] init];
+	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+	owner			= (EncoderTask *)[connection rootProxy];
+	encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename]];
+	
+	[encoder setDelegate:owner];
+	[owner encoderReady:encoder];
+	
+	[encoder release];
+	
+	[[NSRunLoop currentRunLoop] run];
+	
+	[pool release];
+}
 
 - (id) initWithPCMFilename:(NSString *)pcmFilename
 {
@@ -38,14 +61,11 @@
 	[super dealloc];
 }
 
-- (void) setDelegate:(Task *)delegate
-{
-	_delegate = delegate;
-}
+- (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
+- (id <TaskMethods>)	delegate									{ return _delegate; }
 
-- (Task *)		delegate									{ return _delegate; }
+- (oneway void)			encodeToFile:(NSString *)filename			{}
 
-- (ssize_t)		encodeToFile:(NSString *) filename			{ return 0; }
-- (NSString *)	description									{ return @"fnord"; }
+- (NSString *)			settings									{ return @"Encoder settings unknown"; }
 
 @end

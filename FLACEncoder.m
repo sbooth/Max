@@ -89,21 +89,20 @@
 	ssize_t						totalBytes			= 0;
 	
 	// Tell our owner we are starting
-	[_delegate setValue:startTime forKey:@"startTime"];	
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setStartTime:startTime];	
+	[_delegate setStarted];
 	
 	// Open the input file
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 		
@@ -111,7 +110,7 @@
 	_buflen			= 1024 * 10;
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -120,15 +119,15 @@
 	
 	// Initialize the FLAC encoder
 	if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(NO == FLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	if(FLAC__FILE_ENCODER_OK != FLAC__file_encoder_init(_flac)) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 	}
 	
@@ -136,14 +135,14 @@
 	while(0 < bytesToRead) {
 		// Check if we should stop, and if so throw an exception
 		if([_delegate shouldStop]) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
 		// Read a chunk of PCM input
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -152,10 +151,10 @@
 		
 		// Update status
 		bytesToRead -= bytesRead;
-		[_delegate setValue:[NSNumber numberWithDouble:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0] forKey:@"percentComplete"];
+		[_delegate setPercentComplete:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0];
 		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-		[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+		[_delegate setTimeRemaining:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60]];
 	}
 	
 	// Finish up the encoding process
@@ -163,13 +162,12 @@
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		//[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 		
-	[_delegate setValue:[NSDate date] forKey:@"endTime"];
-	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
+	[_delegate setEndTime:[NSDate date]];
+	[_delegate setCompleted];	
 	
 	return 0;//bytesWritten;
 }
@@ -186,7 +184,7 @@
 		rawPCM[0] = calloc(numSamples / 2, sizeof(int32_t));
 		rawPCM[1] = calloc(numSamples / 2, sizeof(int32_t));
 		if(NULL == rawPCM[0] || NULL == rawPCM[1]) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
@@ -204,7 +202,7 @@
 		flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);
 		
 		if(NO == flacResult) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 	}
@@ -221,7 +219,7 @@
 	return 0; //bytesWritten;
 }	
 
-- (NSString *) description
+- (NSString *) settings
 {
 	return [NSString stringWithFormat:@"FLAC settings: exhaustiveModelSearch:%i midSideStereo:%i looseMidSideStereo:%i QPLCoeffPrecision:%i, minResidualPartitionOrder:%i, maxResidualPartitionOrder:%i, maxLPCOrder:%i", 
 		FLAC__file_encoder_get_do_exhaustive_model_search(_flac),

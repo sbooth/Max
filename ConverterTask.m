@@ -18,18 +18,25 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#import "ConverterMethods.h"
 #import "ConverterTask.h"
 #import "TaskMaster.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
 
+@interface ConverterTask (Private)
+- (void) converterReady:(id)anObject;
+@end
+
 @implementation ConverterTask
 
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithMetadata:metadata])) {
-		_inputFilename		= [inputFilename retain];
+		_inputFilename	= [inputFilename retain];
+		_connection		= nil;
+		
 		return self;
 	}
 	return nil;
@@ -37,12 +44,16 @@
 
 - (void) dealloc
 {
+	if(nil != _connection) {
+		[_connection release];
+	}
+	
 	[_inputFilename release];	
 	[super dealloc];
 }
 
 - (NSString *) description 
-{ 
+{
 	NSString *description = [_metadata description];
 	
 	if([description isEqualToString:@"Unknown Track"]) {
@@ -53,45 +64,61 @@
 	}
 }
 
-- (void) run:(id)object
+- (void) run
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	@try {
-		[[TaskMaster sharedController] convertDidStart:self];
-		[_converter setDelegate:self];
-		[_converter convertToFile:_out];
-		[[TaskMaster sharedController] convertDidComplete:self];
-	}
-	
-	@catch(StopException *exception) {
-		[[TaskMaster sharedController] convertDidStop:self];
-	}
-	
-	@catch(NSException *exception) {
-		[[TaskMaster sharedController] convertDidStop:self];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:NO];
-	}
-	
-	@finally {
-		[self closeFile];
-		[[TaskMaster sharedController] convertFinished:self];
-		[pool release];
-	}
+	NSPort		*port1			= [NSPort port];
+	NSPort		*port2			= [NSPort port];
+	NSArray		*portArray		= nil;
+
+	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
+	[_connection setRootObject:self];
+
+	portArray = [NSArray arrayWithObjects:port2, port1, nil];
+
+	[super setStarted];
+	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_converterClass withObject:portArray];
+}
+
+- (void) converterReady:(id)anObject
+{
+    [anObject setProtocolForProxy:@protocol(ConverterMethods)];
+	[anObject convertToFile:_out];
+}
+
+- (void) setStarted
+{
+	[super setStarted];
+	[[TaskMaster sharedController] convertDidStart:self]; 
+}
+
+- (void) setStopped 
+{
+	[super setStopped]; 
+	[self closeOutputFile];
+	[_connection invalidate];
+	[[TaskMaster sharedController] convertDidStop:self]; 
+}
+
+- (void) setCompleted 
+{
+	[super setCompleted]; 
+	[self closeOutputFile]; 
+	[_connection invalidate];
+	[[TaskMaster sharedController] convertDidComplete:self]; 
 }
 
 - (void) stop
 {
-	if([_started boolValue]) {
-		_shouldStop = [NSNumber numberWithBool:YES];			
+	if([self started]) {
+		[self setShouldStop];
 	}
 	else {
+		[self closeOutputFile];
+		[_connection invalidate];
 		[[TaskMaster sharedController] convertDidStop:self];
-		[self closeFile];
-		[[TaskMaster sharedController] convertFinished:self];
 	}
 }
 
-- (NSString *)	getType							{ return nil; }
+- (NSString *)	getInputFilename				{ return _inputFilename; }
 
 @end

@@ -19,21 +19,28 @@
  */
 
 #import "EncoderTask.h"
+#import "EncoderMethods.h"
 #import "TaskMaster.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
+
+@interface EncoderTask (Private)
+- (void) encoderReady:(id)anObject;
+- (void) encodeFinished;
+@end
 
 @implementation EncoderTask
 
 - (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super init])) {
+		_connection					= nil;
+		_encoder					= nil;
 		_task						= [task retain];
 		_outputFilename				= [outputFilename retain];
 		_metadata					= [metadata retain];
 		_tracks						= nil;
-		_encoder					= nil;
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
 		return self;
@@ -59,11 +66,22 @@
 		[_tracks release];
 	}
 	
+	if(nil != _connection) {
+		[_connection release];
+	}
+
+	if(nil != _encoder) {
+		[(NSObject *)_encoder release];
+	}
+	
 	[_task release];
 	[_outputFilename release];
 	
 	[super dealloc];
 }
+
+- (NSString *)		getOutputFilename				{ return _outputFilename; }
+- (NSString *)		getPCMFilename					{ return [_task getOutputFilename]; }
 
 - (void) setTracks:(NSArray *)tracks
 {
@@ -89,49 +107,65 @@
 	}	
 }
 
-- (void) run:(id) object
+- (void) run
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSPort		*port1			= [NSPort port];
+	NSPort		*port2			= [NSPort port];
+	NSArray		*portArray		= nil;
 	
-	@try {
-		[[TaskMaster sharedController] encodeDidStart:self];
-		[_encoder setDelegate:self];
-		[_encoder encodeToFile:_outputFilename];
-		if(nil != _metadata) {
-			[self writeTags];
-		}
-		[[TaskMaster sharedController] encodeDidComplete:self];
-	}
+	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
+	[_connection setRootObject:self];
 	
-	@catch(StopException *exception) {
-		[[TaskMaster sharedController] encodeDidStop:self];
-		[self removeOutputFile];
-	}
+	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
-	@catch(NSException *exception) {
-		[[TaskMaster sharedController] encodeDidStop:self];
-		[[TaskMaster sharedController] performSelectorOnMainThread:@selector(displayExceptionSheet:) withObject:exception waitUntilDone:NO];
+	[super setStarted];
+	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_encoderClass withObject:portArray];
+}
+
+- (void) encoderReady:(id)anObject
+{
+	_encoder = [(NSObject*) anObject retain];
+    [anObject setProtocolForProxy:@protocol(EncoderMethods)];
+	[anObject encodeToFile:_outputFilename];
+}
+
+- (void) setStarted
+{
+	[super setStarted];
+	[[TaskMaster sharedController] encodeDidStart:self]; 
+}
+
+- (void) setStopped 
+{
+	[super setStopped]; 
+	[_connection invalidate];
+	[[TaskMaster sharedController] encodeDidStop:self]; 
+}
+
+- (void) setCompleted 
+{
+	if(nil != _metadata) {
+		[self writeTags];
 	}
-	
-	@finally {
-		[[TaskMaster sharedController] encodeFinished:self];
-		[pool release];
-	}
+
+	[super setCompleted]; 
+	[_connection invalidate];
+	[[TaskMaster sharedController] encodeDidComplete:self]; 
 }
 
 - (void) stop
 {
-	if([_started boolValue]) {
-		_shouldStop = [NSNumber numberWithBool:YES];			
+	if([self started]) {
+		[self setShouldStop];
 	}
 	else {
+		[_connection invalidate];
 		[[TaskMaster sharedController] encodeDidStop:self];
-		[[TaskMaster sharedController] encodeFinished:self];
 	}
 }
 
 - (void)		writeTags						{}
 - (NSString *)	description						{ return (nil == _metadata ? @"fnord" : [_metadata description]); }
-- (NSString *)	getType							{ return nil; }
+- (NSString *)	settings						{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
 
 @end

@@ -50,6 +50,4 @@ enum {
 	lame_global_flags		*_gfp;
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename;
-
 @end

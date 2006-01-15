@@ -66,19 +66,23 @@
 {
 	[_metadata release];
 	
-	[self closeFile];
-
-	// Delete output file
-	if(-1 == unlink([_outputFilename UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _outputFilename, errno, strerror(errno)] userInfo:nil];
-	}	
+	[self closeOutputFile];
+	[self removeOutputFile];
 	
 	[_outputFilename release];	
 	
 	[super dealloc];
 }
 
-- (void) closeFile
+- (void) removeOutputFile
+{
+	// Delete output file
+	if(-1 == unlink([_outputFilename UTF8String])) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _outputFilename, errno, strerror(errno)] userInfo:nil];
+	}	
+}
+
+- (void) closeOutputFile
 {
 	if(YES == _fileClosed) {
 		return;
@@ -93,9 +97,10 @@
 }
 
 - (AudioMetadata *)		metadata							{ return _metadata; }
-- (NSString *)			outputFilename						{ return _outputFilename; }
+- (int)					getOutputFile						{ return _out; }
+- (NSString *)			getOutputFilename					{ return _outputFilename; }
 - (NSString *)			description							{ return [_metadata description]; }
-- (void)				run:(id)object						{}
+- (void)				run									{}
 - (void)				stop								{}
 
 @end

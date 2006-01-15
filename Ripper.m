@@ -19,6 +19,7 @@
  */
 
 #import "Ripper.h"
+#import "RipperTask.h"
 #import "Track.h"
 #import "SectorRange.h"
 #import "LogController.h"
@@ -89,11 +90,35 @@ callback(long inpos, int function, void *userdata)
 		paranoiaDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:paranoiaDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:paranoiaDefaultsValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
 	}
+
 	@finally {
 	}
+}
+
++ (void) connectWithPorts:(NSArray *)portArray
+{
+	NSAutoreleasePool	*pool;
+	NSConnection		*connection;
+	Ripper				*ripper;
+	RipperTask			*owner;
+	
+	pool			= [[NSAutoreleasePool alloc] init];
+	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+	owner			= (RipperTask *)[connection rootProxy];
+	ripper			= [[self alloc] initWithSectors:[owner getSectors] drive:[owner getDrive]];
+	
+	[ripper setDelegate:owner];
+	[owner ripperReady:ripper];
+	
+	[ripper release];
+	
+	[[NSRunLoop currentRunLoop] run];
+	
+	[pool release];
 }
 
 - (id) initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive
@@ -101,11 +126,7 @@ callback(long inpos, int function, void *userdata)
 	if((self = [super init])) {
 		int paranoiaLevel	= 0;
 		int paranoiaMode	= PARANOIA_MODE_DISABLE;
-				
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"started"];
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"completed"];
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"stopped"];
-		
+
 		// Setup logging
 		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
 				
@@ -157,22 +178,14 @@ callback(long inpos, int function, void *userdata)
 	[_sectors release];
 
 	[_startTime release];
-	[_endTime release];
 	
 	[super dealloc];
 }
 
-- (BOOL) logActivity
-{
-	return _logActivity;
-}
+- (BOOL)				logActivity									{ return _logActivity; }
 
-- (void) setDelegate:(Task *)delegate
-{
-	_delegate = delegate;
-}
-
-- (Task *) delegate									{ return _delegate; }
+- (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
+- (id <TaskMethods>)	delegate									{ return _delegate; }
 
 - (void) ripToFile:(int)file
 {
@@ -181,9 +194,8 @@ callback(long inpos, int function, void *userdata)
 	
 	// Tell our owner we are starting
 	_startTime = [NSDate date];
-	[_delegate setValue:_startTime forKey:@"startTime"];	
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setStartTime:_startTime];
+	[_delegate setStarted];
 	
 	enumerator = [_sectors objectEnumerator];
 	
@@ -192,9 +204,8 @@ callback(long inpos, int function, void *userdata)
 		_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range totalSectors]];
 	}
 	
-	[_delegate setValue:[NSDate date] forKey:@"endTime"];
-	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
+	[_delegate setEndTime:[NSDate date]];
+	[_delegate setCompleted];	
 }
 
 - (void) ripSectorRange:(SectorRange *)range toFile:(int)file
@@ -205,45 +216,54 @@ callback(long inpos, int function, void *userdata)
 	unsigned long		grandTotalSectors	= [_grandTotalSectors unsignedLongValue];
 	unsigned long		sectorsToRead		= grandTotalSectors - [_sectorsRead unsignedLongValue];
 	long				where;
+	unsigned long		iterations			= 0;
 	
 	// Go to the range's first sector in preparation for reading
 	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
 	if(-1 == where) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [ParanoiaException exceptionWithReason:@"Unable to access CD" userInfo:nil];
 	}
 
 	// Rip the track
 	while(cursor <= lastSector) {
 		
-		// Check if we should stop, and if so throw an exception
-		if([_delegate shouldStop]) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-		}
-		
 		// Read a chunk
 		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [ParanoiaException exceptionWithReason:@"Skip tolerance exceeded/Unable to access CD" userInfo:nil];
-		}
-		
-		// Update status
-		sectorsToRead--;
-		if(0 == sectorsToRead % 10) {
-			[_delegate setValue:[NSNumber numberWithDouble:((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0] forKey:@"percentComplete"];
-			NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
-			unsigned int timeRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
-			[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
 		}
 		
 		// Write data to file
 		if(-1 == write(file, buf, CD_FRAMESIZE_RAW)) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 		
+		// Update status
+		sectorsToRead--;
+		
+		// Distributed Object calls are expensive, so only perform them every few iterations
+		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+			
+			// Check if we should stop, and if so throw an exception
+			if([_delegate shouldStop]) {
+				[_delegate setStopped];
+				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+			}
+			
+			// Update UI
+			double percentComplete = ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0;
+			NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
+			unsigned int secondsRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
+			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			
+			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+		}
+		
+		++iterations;
+
 		// Advance cursor
 		++cursor;
 	}

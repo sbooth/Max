@@ -26,19 +26,13 @@
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithInputFilename:inputFilename metadata:metadata])) {
-		_converter	= [[OggVorbisConverter alloc] initWithInputFilename:inputFilename];
+		_converterClass = [OggVorbisConverter class];
 		return self;
 	}
 	return nil;
 }
 
-- (void) dealloc
-{
-	[_converter release];
-	[super dealloc];
-}
-
-- (NSString *) getType
+- (NSString *) getInputType
 {
 	return @"Ogg Vorbis";
 }

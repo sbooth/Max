@@ -28,8 +28,10 @@
 
 @interface EncoderTask : Task
 {
+	NSConnection			*_connection;
 	NSString				*_outputFilename;
-	Encoder					*_encoder;
+	Class					_encoderClass;
+	id <EncoderMethods>		_encoder;
 	NSArray					*_tracks;
 	AudioMetadata			*_metadata;
 	PCMGeneratingTask		*_task;
@@ -40,12 +42,16 @@
 
 - (void)			setTracks:(NSArray *)tracks;
 
-- (void)			run:(id) object;
+- (void)			run;
 - (void)			stop;
+
+- (NSString *)		getPCMFilename;
+- (NSString *)		getOutputFilename;
+
 - (void)			removeOutputFile;
 
 - (void)			writeTags;
 
-- (NSString *)		getType;
+- (NSString *)		settings;
 
 @end

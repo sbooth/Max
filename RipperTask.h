@@ -26,10 +26,15 @@
 
 @interface RipperTask : PCMGeneratingTask
 {
-	Ripper			*_ripper;
-	NSArray			*_tracks;
+	NSConnection			*_connection;
+	NSArray					*_tracks;
+	NSMutableArray			*_sectors;
+	cdrom_drive				*_drive;
 }
 
-- (id)			initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
+- (id)				initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
+
+- (NSArray *)		getSectors;
+- (cdrom_drive *)	getDrive;
 
 @end

@@ -29,7 +29,7 @@
 - (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
-		_encoder = [[FLACEncoder alloc] initWithPCMFilename:[_task outputFilename]];
+		_encoderClass = [FLACEncoder class];
 		return self;
 	}
 	return nil;
@@ -37,7 +37,6 @@
 
 - (void) dealloc
 {
-	[_encoder release];
 	[super dealloc];
 }
 
@@ -89,7 +88,7 @@
 	// Comment
 	comment = [_metadata valueForKey:@"albumComment"];
 	if(_writeSettingsToComment) {
-		comment = (nil == comment ? [_encoder description] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [_encoder description]]]);
+		comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 	}
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
@@ -110,7 +109,7 @@
 	f.save();
 }
 
-- (NSString *) getType
+- (NSString *) getOutputType
 {
 	return @"FLAC";
 }

@@ -26,19 +26,13 @@
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithInputFilename:inputFilename metadata:metadata])) {
-		_converter	= [[OggFLACConverter alloc] initWithInputFilename:inputFilename];
+		_converterClass = [OggFLACConverter class];
 		return self;
 	}
 	return nil;
 }
 
-- (void) dealloc
-{
-	[_converter release];
-	[super dealloc];
-}
-
-- (NSString *) getType
+- (NSString *) getInputType
 {
 	return @"Ogg FLAC";
 }

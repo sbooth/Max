@@ -193,6 +193,8 @@ displayExceptionSheet(NSException	*exception,
 					  SEL			selector,
 					  void			*contextInfo)
 {
+	NSLog(@"Exception: %@ (userInfo = %@)", exception, [exception userInfo]);
+	
 	NSBeep();
 	
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];

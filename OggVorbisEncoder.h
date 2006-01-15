@@ -36,6 +36,4 @@
 	BOOL					_cbr;
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename;
-
 @end

@@ -78,7 +78,7 @@
 		size	= sizeof(asbd);
 		err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileDataFormat, &size, &asbd);;
 		if(err != noErr) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileGetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
@@ -108,7 +108,7 @@
 	[super dealloc];
 }
 
-- (void) convertToFile:(int)file
+- (oneway void) convertToFile:(int)file
 {
 	NSDate			*startTime			= [NSDate date];
 	OSStatus		err;
@@ -116,18 +116,19 @@
 	UInt32			size;
 	SInt64			totalFrames;
 	SInt64			framesToRead;
+	unsigned long	iterations			= 0;
 	
 	
 	// Tell our owner we are starting
-	[_delegate setValue:startTime forKey:@"startTime"];	
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"started"];
-	[_delegate setValue:[NSNumber numberWithDouble:0.0] forKey:@"percentComplete"];
+	[_delegate setStartTime:startTime];	
+	[_delegate setStarted];
+	[_delegate setInputType:_fileType];
 	
 	// Get input file information
 	size	= sizeof(totalFrames);
 	err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);;
 	if(err != noErr) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileGetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	
@@ -140,23 +141,18 @@
 	_buf.mBuffers[0].mDataByteSize		= _buflen * sizeof(int16_t);
 	_buf.mBuffers[0].mData				= calloc(_buflen, sizeof(int16_t));;
 	if(NULL == _buf.mBuffers[0].mData) {
-		[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+		[_delegate setStopped];
 		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Iteratively get the data and convert it to PCM
 	for(;;) {
-		// Check if we should stop, and if so throw an exception
-		if([_delegate shouldStop]) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-		}
 		
 		// Read a chunk of PCM input (converted from whatever format)
 		frameCount	= _buf.mBuffers[0].mDataByteSize / _outputASBD.mBytesPerPacket;
 		err			= ExtAudioFileRead(_in, &frameCount, &_buf);
 		if(err != noErr) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileRead failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
@@ -167,23 +163,36 @@
 		
 		// Write the PCM data to file
 		if(-1 == write(file, _buf.mBuffers[0].mData, frameCount * _outputASBD.mBytesPerPacket)) {
-			[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
 			
 		// Update status
 		framesToRead -= frameCount;
-		if(0 == framesToRead % 10) {
-			[_delegate setValue:[NSNumber numberWithDouble:((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0] forKey:@"percentComplete"];
+		
+		// Distributed Object calls are expensive, so only perform them every few iterations
+		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+			
+			// Check if we should stop, and if so throw an exception
+			if([_delegate shouldStop]) {
+				[_delegate setStopped];
+				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+			}
+
+			// Update UI
+			double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-			unsigned int timeRemaining = interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval;
-			[_delegate setValue:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60] forKey:@"timeRemaining"];
+			unsigned int secondsRemaining = interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval;
+			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			
+			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
 		}
+		
+		++iterations;
 	}
 	
-	[_delegate setValue:[NSDate date] forKey:@"endTime"];
-	[_delegate setValue:[NSNumber numberWithDouble:100.0] forKey:@"percentComplete"];
-	[_delegate setValue:[NSNumber numberWithBool:YES] forKey:@"completed"];	
+	[_delegate setEndTime:[NSDate date]];
+	[_delegate setCompleted];	
 }
 
 @end

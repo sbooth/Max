@@ -26,21 +26,10 @@
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithInputFilename:inputFilename metadata:metadata])) {
-		_converter	= [[CoreAudioConverter alloc] initWithInputFilename:inputFilename];
+		_converterClass = [CoreAudioConverter class];
 		return self;
 	}
 	return nil;
-}
-
-- (void) dealloc
-{
-	[_converter release];
-	[super dealloc];
-}
-
-- (NSString *) getType
-{
-	return [_converter valueForKey:@"fileType"];
 }
 
 @end

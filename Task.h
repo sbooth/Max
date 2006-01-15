@@ -20,19 +20,25 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface Task : NSObject 
-{
-	NSDate							*_startTime;
-	NSDate							*_endTime;
-	
-	NSNumber						*_started;
-	NSNumber						*_completed;
-	NSNumber						*_stopped;
-	NSNumber						*_percentComplete;
-	NSNumber						*_shouldStop;
-	NSString						*_timeRemaining;
-}
+#import "TaskMethods.h"
 
-- (BOOL)	shouldStop;
+@interface Task : NSObject <TaskMethods>
+{
+	NSDate				*_startTime;
+	NSDate				*_endTime;
+	
+	BOOL				_started;
+	BOOL				_completed;
+	BOOL				_stopped;
+	
+	double				_percentComplete;
+	
+	BOOL				_shouldStop;
+	
+	NSString			*_timeRemaining;
+	
+	NSString			*_inputType;
+	NSString			*_outputType;
+}
 
 @end

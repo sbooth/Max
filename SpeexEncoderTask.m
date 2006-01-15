@@ -26,19 +26,13 @@
 - (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
-		_encoder = [[SpeexEncoder alloc] initWithPCMFilename:[_task outputFilename]];
+		_encoderClass = [SpeexEncoder class];
 		return self;
 	}
 	return nil;
 }
 
-- (void) dealloc
-{
-	[_encoder release];
-	[super dealloc];
-}
-
-- (NSString *) getType
+- (NSString *) getOutputType
 {
 	return @"Speex";
 }
