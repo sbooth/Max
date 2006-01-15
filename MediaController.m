@@ -158,6 +158,9 @@ static MediaController *sharedController = nil;
 	CompactDiscDocument		*doc		= nil;
 	NSError					*err		= nil;
 	BOOL					newDisc		= NO;
+	NSArray					*tracks		= nil;
+	NSIndexSet				*indexSet	= nil;
+	
 	
 	// Ugly hack to avoid letting the user specify the save filename
 	if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
@@ -175,10 +178,29 @@ static MediaController *sharedController = nil;
 			[doc showWindows];
 		}
 		
+		// Automatically query FreeDB for new discs if desired
 		if(newDisc) {
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
 				[doc addObserver:self forKeyPath:@"freeDBQueryInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
 				[doc queryFreeDB:self];
+			}
+		}
+		
+		// Automatic rip/encode functionality
+		else if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && (NO == [[NSUserDefaults standardUserDefaults] boolForKey:@"onFirstInsertOnly"] || newDisc)) {
+			[doc selectAll:self];
+			//[[[doc valueForKey:@"tracks"] objectAtIndex:0] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
+			[doc encode:self];
+			
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
+				tracks		= [doc valueForKey:@"tracks"];
+				indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
+				
+				[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
+				
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"]) {					
+					[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"encodeInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
+				}
 			}
 		}
 	}

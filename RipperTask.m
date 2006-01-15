@@ -120,10 +120,18 @@
 
 - (void) setStopped 
 {
+	NSEnumerator		*enumerator;
+	Track				*track;
+
 	[super setStopped];
 	[self closeOutputFile];
 	[_connection invalidate];
 	[[TaskMaster sharedController] ripDidStop:self]; 
+
+	enumerator = [_tracks objectEnumerator];		
+	while((track = [enumerator nextObject])) {
+		[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+	}
 }
 
 - (void) setCompleted 

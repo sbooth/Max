@@ -33,6 +33,9 @@
 #define kTrackGenreButton		9
 #define kTrackYearButton		10
 
+#define kOutputDirOpenPanel		1
+#define kTmpDirOpenPanel		2
+
 @implementation OutputPreferencesController
 
 - (id) init
@@ -88,11 +91,24 @@
 	[panel setCanChooseDirectories:YES];
 	[panel setCanChooseFiles:NO];
 	
-	[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:[NSNumber numberWithInt:kOutputDirOpenPanel]];
+}
+
+- (IBAction)selectTemporaryDirectory:(id)sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	
+	[panel setAllowsMultipleSelection:NO];
+	[panel setCanChooseDirectories:YES];
+	[panel setCanChooseFiles:NO];
+	
+	[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:[NSNumber numberWithInt:kTmpDirOpenPanel]];
 }
 
 - (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
+	int whichPanel = [(NSNumber *)contextInfo intValue];
+	
     if(NSOKButton == returnCode) {
 		NSArray		*filesToOpen	= [sheet filenames];
 		int			count			= [filesToOpen count];
@@ -100,7 +116,15 @@
 		
 		for(i = 0; i < count; ++i) {
 			NSString *aFile = [filesToOpen objectAtIndex:i];
-			[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:aFile forKey:@"outputDirectory"];
+			switch(whichPanel) {
+				case kOutputDirOpenPanel:
+					[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:aFile forKey:@"outputDirectory"];
+					break;
+
+				case kTmpDirOpenPanel:
+					[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:aFile forKey:@"tmpDirectory"];
+					break;
+			}
 		}
 	}	
 }

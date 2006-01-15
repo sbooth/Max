@@ -19,6 +19,7 @@
  */
 
 #import "PCMGeneratingTask.h"
+#import "MissingResourceException.h"
 #import "MallocException.h"
 #import "IOException.h"
 
@@ -29,24 +30,55 @@
 
 @implementation PCMGeneratingTask
 
++ (void)initialize
+{
+	NSString					*defaultsValuesPath;
+    NSDictionary				*defaultsValuesDictionary;
+    
+	@try {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"PCMGeneratingTaskDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"PCMGeneratingTaskDefaults.plist"] userInfo:nil];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+	}
+	
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+	
+	@finally {
+	}	
+}
+
 - (id) initWithMetadata:(AudioMetadata *)metadata
 {
 	char				*path			= NULL;
-	ssize_t				slashTmpLen		= strlen(_PATH_TMP);
+	const char			*tmpDir;
+	ssize_t				tmpDirLen;
 	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
 
 	if((self = [super init])) {
 		
-		_metadata			= [metadata retain];
+		_metadata = [metadata retain];
 		
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
+			tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+		}
+		else {
+			tmpDir = _PATH_TMP;
+		}
+
 		// Create and open the output file
-		path = malloc((slashTmpLen + patternLen + 1) *  sizeof(char));
+		tmpDirLen	= strlen(tmpDir);
+		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
 		if(NULL == path) {
 			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 		}
-		memcpy(path, _PATH_TMP, slashTmpLen);
-		memcpy(path + slashTmpLen, TEMPFILE_PATTERN, patternLen);
-		path[slashTmpLen + patternLen] = '\0';
+		memcpy(path, tmpDir, tmpDirLen);
+		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+		path[tmpDirLen + patternLen] = '\0';
 		
 		_out = mkstemps(path, 4);
 		if(-1 == _out) {

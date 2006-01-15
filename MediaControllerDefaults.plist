@@ -10,5 +10,7 @@
 	<false/>
 	<key>closeWindowAfterEncoding</key>
 	<false/>
+	<key>onFirstInsertOnly</key>
+	<false/>
 </dict>
 </plist>

@@ -28,5 +28,6 @@
 
 - (IBAction)	customNamingButtonAction:(id)sender;
 - (IBAction)	selectOutputDirectory:(id)sender;
+- (IBAction)	selectTemporaryDirectory:(id)sender;
 
 @end

@@ -8,7 +8,11 @@
         }, 
         {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
-            ACTIONS = {customNamingButtonAction = id; selectOutputDirectory = id; }; 
+            ACTIONS = {
+                customNamingButtonAction = id; 
+                selectOutputDirectory = id; 
+                selectTemporaryDirectory = id; 
+            }; 
             CLASS = OutputPreferencesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {"_customNameTextField" = NSTextField; }; 
