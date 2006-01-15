@@ -104,7 +104,7 @@
 	[super dealloc];
 }
 
-- (ssize_t) encodeToFile:(NSString *) filename
+- (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate				*startTime							= [NSDate date];
 	OSStatus			err;
@@ -119,7 +119,7 @@
 	ExtAudioFileRef		extAudioFileRef;
 	AudioConverterRef	converter;
 	CFArrayRef			converterPropertySettings;
-	
+	unsigned long		iterations							= 0;
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
@@ -226,11 +226,6 @@
 	
 	// Iteratively get the PCM data and encode it
 	while(0 < bytesToRead) {
-		// Check if we should stop, and if so throw an exception
-		if([_delegate shouldStop]) {
-			[_delegate setStopped];
-			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-		}
 				
 		// Read a chunk of PCM input
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
@@ -256,10 +251,26 @@
 
 		// Update status
 		bytesToRead -= bytesRead;
-		[_delegate setPercentComplete:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0];
-		NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-		unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-		[_delegate setTimeRemaining:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60]];
+
+		// Distributed Object calls are expensive, so only perform them every few iterations
+		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+			
+			// Check if we should stop, and if so throw an exception
+			if([_delegate shouldStop]) {
+				[_delegate setStopped];
+				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+			}
+			
+			// Update UI
+			double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+			unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			
+			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+		}
+		
+		++iterations;
 	}
 	
 	// Close the input file
@@ -278,7 +289,7 @@
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
 	
-	return bytesWritten;
+//	return bytesWritten;
 }
 
 - (NSString *) settings

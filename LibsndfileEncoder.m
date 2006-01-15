@@ -72,7 +72,7 @@
 	[super dealloc];
 }
 
-- (ssize_t) encodeToFile:(NSString *) filename
+- (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime			= [NSDate date];
 	SNDFILE						*in					= NULL;
@@ -87,11 +87,8 @@
 	double						maxSignal;
 	int							frameCount;
 	int							readCount;
-	
-	ssize_t						bytesRead			= 0;
-	ssize_t						bytesToRead			= 0;
-	ssize_t						totalBytes			= 0;
-	
+	unsigned long				iterations			= 0;
+		
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
@@ -103,13 +100,6 @@
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
-	// Get input file information
-	struct stat sourceStat;
-	if(-1 == fstat(_pcm, &sourceStat)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-	}
-
 	// Setup libsndfile input file
 	info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 	info.samplerate		= 44100;
@@ -128,8 +118,6 @@
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 	}
 	
-	totalBytes		= sourceStat.st_size;
-
 	// Copy metadata
 	for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
 		string = sf_get_string(in, i);
@@ -155,13 +143,15 @@
 		if(maxSignal < 1.0) {	
 			while(readCount > 0) {
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
 					[_delegate setStopped];
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
 				readCount = sf_readf_double(in, doubleBuffer, frameCount) ;
 				sf_writef_double(out, doubleBuffer, readCount) ;
+
+				++iterations;
 			}
 		}
 		// Renormalize output
@@ -170,7 +160,7 @@
 			
 			while(0 < readCount) {
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
 					[_delegate setStopped];
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
@@ -181,6 +171,8 @@
 				}
 				
 				sf_writef_double(out, doubleBuffer, readCount);
+				
+				++iterations;
 			}
 		}
 		
@@ -198,25 +190,20 @@
 		
 		while(0 < readCount) {	
 			// Check if we should stop, and if so throw an exception
-			if([_delegate shouldStop]) {
+			if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
 				[_delegate setStopped];
 				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 			}
 
 			readCount = sf_readf_int(in, intBuffer, frameCount);
 			sf_writef_int(out, intBuffer, readCount);
+			
+			++iterations;
 		}
 		
 		free(intBuffer);
 	}
 		
-	// Update status
-	bytesToRead -= bytesRead;
-	[_delegate setPercentComplete:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0];
-	NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-	unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-	[_delegate setTimeRemaining:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60]];
-
 	// Clean up sndfile
 	sf_close(in);
 	sf_close(out);
@@ -228,8 +215,6 @@
 	
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
-	
-	return 0;//bytesWritten;
 }
 
 @end

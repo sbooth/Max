@@ -83,22 +83,11 @@
 	int							readCount;
 	unsigned long				iterations			= 0;
 	
-//	ssize_t						bytesRead			= 0;
-//	ssize_t						bytesToRead			= 0;
-//	ssize_t						totalBytes			= 0;
-
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	[_delegate setInputType:_fileType];
-		
-	// Get input file information
-//	struct stat sourceStat;
-//	if(-1 == fstat(_pcm, &sourceStat)) {
-//		[_delegate setStopped];
-//		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-//	}
-	
+			
 	// Setup libsndfile output file
 	info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 	info.samplerate		= 44100;
@@ -196,14 +185,7 @@
 		
 		free(intBuffer);
 	}
-	
-	// Update status
-//	bytesToRead -= bytesRead;
-//	[_delegate setPercentComplete:((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0];
-//	NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-//	unsigned int timeRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-//	[_delegate setTimeRemaining:[NSString stringWithFormat:@"%i:%02i", timeRemaining / 60, timeRemaining % 60]];
-	
+		
 	// Clean up sndfile
 	sf_close(out);
 	

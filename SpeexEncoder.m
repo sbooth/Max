@@ -73,7 +73,7 @@
 	[super dealloc];
 }
 
-- (ssize_t) encodeToFile:(NSString *) filename
+- (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime			= [NSDate date];
 	

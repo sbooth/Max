@@ -39,7 +39,7 @@
 	[super dealloc];
 }
 
-- (int)		getFormat				{ return [[_formatInfo valueForKey:@"format"] intValue]; }
+- (int)		getFormat				{ return [[_formatInfo valueForKey:@"sndfileFormat"] intValue]; }
 
 - (void) writeTags
 {
