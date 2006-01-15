@@ -64,7 +64,7 @@
 	[super dealloc];
 }
 
-- (NSDate *)		getStartTime									{ return _endTime; }
+- (NSDate *)		getStartTime									{ return _startTime; }
 - (NSDate *)		getEndTime										{ return _endTime; }
 
 - (BOOL)			started											{ return _started; }
