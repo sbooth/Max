@@ -70,7 +70,7 @@
 	ogg_int64_t		totalSamples		= 0;
 	long			bytesRead;
 	int				currentSection;
-	char			buf	[4096];
+	char			buf	[1024];
 	unsigned long	iterations			= 0;
 	
 	// Tell our owner we are starting
@@ -84,7 +84,7 @@
 	for(;;) {
 		
 		// Decode the data
-		bytesRead = ov_read(&_vf, buf, 4096, 1, 2, 1, &currentSection);
+		bytesRead = ov_read(&_vf, buf, 1024, 1, 2, 1, &currentSection);
 
 		// Check for errors
 		if(0 > bytesRead) {

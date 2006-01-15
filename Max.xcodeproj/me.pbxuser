@@ -270,8 +270,8 @@
 	8C0230A6095684BF005D8698 /* OggFLACConverter.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1094, 3262}}";
-			sepNavSelRange = "{4637, 0}";
-			sepNavVisRect = "{{0, 1947}, {828, 755}}";
+			sepNavSelRange = "{4566, 0}";
+			sepNavVisRect = "{{0, 1693}, {828, 755}}";
 			sepNavWindowFrame = "{{57, 4}, {873, 828}}";
 		};
 	};
@@ -301,9 +301,9 @@
 	};
 	8C02310B09570F9D005D8698 /* OggVorbisConverter.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 1904}}";
-			sepNavSelRange = "{2596, 0}";
-			sepNavVisRect = "{{0, 877}, {1233, 500}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1148, 1904}}";
+			sepNavSelRange = "{2743, 0}";
+			sepNavVisRect = "{{0, 876}, {828, 755}}";
 			sepNavWindowFrame = "{{8, 4}, {873, 828}}";
 		};
 	};
@@ -561,8 +561,8 @@
 	8C4961F109472D95006E1765 /* OggFLACEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1154, 3318}}";
-			sepNavSelRange = "{8250, 0}";
-			sepNavVisRect = "{{0, 2230}, {699, 637}}";
+			sepNavSelRange = "{5197, 0}";
+			sepNavVisRect = "{{0, 1334}, {699, 637}}";
 			sepNavWindowFrame = "{{454, 98}, {744, 710}}";
 		};
 	};
@@ -593,8 +593,8 @@
 	8C4D3E2F093DE4C300A88927 /* OggVorbisEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1244, 4872}}";
-			sepNavSelRange = "{10969, 0}";
-			sepNavVisRect = "{{0, 4057}, {705, 755}}";
+			sepNavSelRange = "{4329, 0}";
+			sepNavVisRect = "{{0, 1551}, {705, 755}}";
 			sepNavWindowFrame = "{{363, 4}, {750, 828}}";
 		};
 	};
@@ -821,8 +821,8 @@
 	8C75CA3D0953985B00A923AD /* LibsndfileConverter.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1142, 2758}}";
-			sepNavSelRange = "{4134, 0}";
-			sepNavVisRect = "{{0, 1525}, {708, 755}}";
+			sepNavSelRange = "{2174, 0}";
+			sepNavVisRect = "{{0, 902}, {708, 755}}";
 			sepNavWindowFrame = "{{15, 4}, {753, 828}}";
 		};
 	};
@@ -838,7 +838,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1094, 3276}}";
 			sepNavSelRange = "{6029, 0}";
-			sepNavVisRect = "{{0, 2038}, {828, 755}}";
+			sepNavVisRect = "{{0, 331}, {828, 755}}";
 			sepNavWindowFrame = "{{7, 4}, {873, 828}}";
 		};
 	};
@@ -1119,8 +1119,8 @@
 	8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1214, 5488}}";
-			sepNavSelRange = "{9460, 22}";
-			sepNavVisRect = "{{0, 3640}, {776, 295}}";
+			sepNavSelRange = "{6061, 0}";
+			sepNavVisRect = "{{0, 2303}, {830, 700}}";
 			sepNavWindowFrame = "{{17, 46}, {875, 773}}";
 		};
 	};
@@ -1741,7 +1741,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1280, 2786}}";
 			sepNavSelRange = "{4353, 0}";
-			sepNavVisRect = "{{0, 1976}, {815, 755}}";
+			sepNavVisRect = "{{0, 2031}, {815, 755}}";
 			sepNavWindowFrame = "{{98, 4}, {860, 828}}";
 		};
 	};
@@ -2107,8 +2107,8 @@
 	8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1142, 3094}}";
-			sepNavSelRange = "{6759, 0}";
-			sepNavVisRect = "{{0, 2799}, {776, 295}}";
+			sepNavSelRange = "{2573, 0}";
+			sepNavVisRect = "{{0, 1021}, {740, 755}}";
 			sepNavWindowFrame = "{{107, 4}, {785, 828}}";
 		};
 	};
