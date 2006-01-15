@@ -10,5 +10,7 @@
 	<integer>1</integer>
 	<key>freeDBServer</key>
 	<string>freedb.freedb.org</string>
+	<key>freeDBUseProxy</key>
+	<false/>
 </dict>
 </plist>

@@ -59,12 +59,15 @@
 	NSString *bundleVersion;
 	
 	if((self = [super init])) {
+		
 		_freeDB = cddb_new();
 		if(NULL == _freeDB) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
+		
 		cddb_set_server_name(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBServer"] UTF8String]);
 		cddb_set_server_port(_freeDB, [[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBPort"]);
+		
 		if(PROTO_HTTP == [[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBProtocol"]) {
 			cddb_http_enable(_freeDB);
 		}
@@ -72,12 +75,26 @@
 			cddb_http_disable(_freeDB);
 		}
 		
-		cddb_cache_disable(_freeDB);
-
-		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-
-		cddb_set_client(_freeDB, "Max", [bundleVersion UTF8String]);
 		cddb_set_email_address(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"emailAddress"] UTF8String]);
+
+		// Proxy support
+		if([[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBUseProxy"]) {
+			cddb_http_proxy_enable(_freeDB);
+			
+			cddb_set_http_proxy_server_name(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBProxyServer"] UTF8String]);
+			cddb_set_http_proxy_server_port(_freeDB, [[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBProxyPort"]);
+			
+			if([[NSUserDefaults standardUserDefaults] integerForKey:@"freeDBUseAuthentication"]) {
+				cddb_set_http_proxy_username(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBProxyUsername"] UTF8String]);
+				cddb_set_http_proxy_password(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBProxyPassword"] UTF8String]);				
+			}			
+		}
+		
+		// Client information
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		cddb_set_client(_freeDB, "Max", [bundleVersion UTF8String]);		
+		
+		cddb_cache_disable(_freeDB);
 		
 		return self;
 	}
