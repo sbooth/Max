@@ -37,4 +37,6 @@
 - (NSArray *)		getSectors;
 - (NSString *)		getDeviceName;
 
+- (NSArray *)		getTracks;
+
 @end

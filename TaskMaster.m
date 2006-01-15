@@ -107,7 +107,6 @@ static TaskMaster *sharedController = nil;
 		[_converterController setValue:self forKey:@"taskMaster"];
 		[_encoderController setValue:self forKey:@"taskMaster"];
 		
-
 		return self;
 	}
 	return nil;
@@ -165,40 +164,25 @@ static TaskMaster *sharedController = nil;
 #pragma mark Task Management
 
 - (BOOL)		hasTasks									{ return ([self hasRippingTasks] || [self hasConvertingTasks] || [self hasEncodingTasks]); }
-- (BOOL)		hasRippingTasks								{ @synchronized(_rippingTasks) { return (0 != [_rippingTasks count]); } }
-- (BOOL)		hasConvertingTasks							{ @synchronized(_convertingTasks) { return (0 != [_convertingTasks count]); } }
-- (BOOL)		hasEncodingTasks							{ @synchronized(_encodingTasks) { return (0 != [_encodingTasks count]);	 } }
+- (BOOL)		hasRippingTasks								{ return (0 != [_rippingTasks count]); }
+- (BOOL)		hasConvertingTasks							{ return (0 != [_convertingTasks count]); }
+- (BOOL)		hasEncodingTasks							{ return (0 != [_encodingTasks count]);	 }
 
 - (IBAction) stopAllRippingTasks:(id)sender
 {
-	NSArray	*tasks;
-	
-	@synchronized(_rippingTasks) {
-		tasks = [NSArray arrayWithArray:_rippingTasks];
-	}
-	
+	NSArray	*tasks = [NSArray arrayWithArray:_rippingTasks];
 	[tasks makeObjectsPerformSelector:@selector(stop)];
 }
 
 - (IBAction) stopAllConvertingTasks:(id)sender
 {
-	NSArray	*tasks;
-	
-	@synchronized(_convertingTasks) {
-		tasks = [NSArray arrayWithArray:_convertingTasks];
-	}
-	
+	NSArray	*tasks = [NSArray arrayWithArray:_convertingTasks];
 	[tasks makeObjectsPerformSelector:@selector(stop)];
 }
 
 - (IBAction) stopAllEncodingTasks:(id)sender
 {
-	NSArray	*tasks;
-	
-	@synchronized(_encodingTasks) {
-		tasks = [NSArray arrayWithArray:_encodingTasks];
-	}
-	
+	NSArray	*tasks = [NSArray arrayWithArray:_encodingTasks];
 	[tasks makeObjectsPerformSelector:@selector(stop)];
 }
 
@@ -214,12 +198,10 @@ static TaskMaster *sharedController = nil;
 	NSEnumerator	*enumerator;
 	RipperTask		*ripperTask;
 	
-	@synchronized(_rippingTasks) {
-		enumerator = [_rippingTasks objectEnumerator];
-		while((ripperTask = [enumerator nextObject])) {
-			if([document isEqual:[[[ripperTask valueForKey:@"tracks"] objectAtIndex:0] getCompactDiscDocument]]) {
-				return YES;
-			}
+	enumerator = [_rippingTasks objectEnumerator];
+	while((ripperTask = [enumerator nextObject])) {
+		if([document isEqual:[[[ripperTask valueForKey:@"tracks"] objectAtIndex:0] getCompactDiscDocument]]) {
+			return YES;
 		}
 	}
 	
@@ -232,12 +214,10 @@ static TaskMaster *sharedController = nil;
 	int					i;
 	NSMutableArray		*tasks				= [NSMutableArray arrayWithCapacity:[_rippingTasks count]];
 	
-	@synchronized(_rippingTasks) {
-		for(i = [_rippingTasks count] - 1; 0 <= i; --i) {
-			ripperTask = [_rippingTasks objectAtIndex:i];
-			if([document isEqual:[[[ripperTask valueForKey:@"tracks"] objectAtIndex:0] getCompactDiscDocument]]) {
-				[tasks addObject:ripperTask];
-			}
+	for(i = [_rippingTasks count] - 1; 0 <= i; --i) {
+		ripperTask = [_rippingTasks objectAtIndex:i];
+		if([document isEqual:[[[ripperTask valueForKey:@"tracks"] objectAtIndex:0] getCompactDiscDocument]]) {
+			[tasks addObject:ripperTask];
 		}
 	}
 
@@ -323,23 +303,19 @@ static TaskMaster *sharedController = nil;
 
 - (void) addRippingTask:(RipperTask *)task
 {
-	@synchronized(_rippingTasks) {
-		[[self mutableArrayValueForKey:@"rippingTasks"] addObject:task];
-	}
+	[[self mutableArrayValueForKey:@"rippingTasks"] addObject:task];
 }
 
 - (void) removeRippingTask:(RipperTask *)task
 {
 	// Remove from the list of ripping tasks
-	@synchronized(_rippingTasks) {
-		if([_rippingTasks containsObject:task]) {
-			
-			[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
-			
-			// Hide the ripper window if no more tasks
-			if(NO == [self hasRippingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
-				[[_ripperController window] performClose:self];
-			}
+	if([_rippingTasks containsObject:task]) {
+		
+		[[self mutableArrayValueForKey:@"rippingTasks"] removeObject:task];
+		
+		// Hide the ripper window if no more tasks
+		if(NO == [self hasRippingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+			[[_ripperController window] performClose:self];
 		}
 	}
 }
@@ -351,24 +327,22 @@ static TaskMaster *sharedController = nil;
 	RipperTask		*task;
 	NSString		*deviceName;
 	
-	@synchronized(_rippingTasks) {
-		// Iterate through all ripping tasks once and determine which devices are active
-		enumerator = [_rippingTasks objectEnumerator];
-		while((task = [enumerator nextObject])) {
-			deviceName = [task getDeviceName];
-			if([task started] && NO == [activeDrives containsObject:deviceName]) {
-				[activeDrives addObject:deviceName];
-			}
+	// Iterate through all ripping tasks once and determine which devices are active
+	enumerator = [_rippingTasks objectEnumerator];
+	while((task = [enumerator nextObject])) {
+		deviceName = [task getDeviceName];
+		if([task started] && NO == [activeDrives containsObject:deviceName]) {
+			[activeDrives addObject:deviceName];
 		}
-		
-		// Iterate through a second time and spawn threads for non-active devices
-		enumerator = [_rippingTasks objectEnumerator];
-		while((task = [enumerator nextObject])) {
-			deviceName = [task getDeviceName];
-			if(NO == [task started] && NO == [activeDrives containsObject:deviceName]) {
-				[activeDrives addObject:deviceName];
-				[task run];
-			}
+	}
+	
+	// Iterate through a second time and spawn threads for non-active devices
+	enumerator = [_rippingTasks objectEnumerator];
+	while((task = [enumerator nextObject])) {
+		deviceName = [task getDeviceName];
+		if(NO == [task started] && NO == [activeDrives containsObject:deviceName]) {
+			[activeDrives addObject:deviceName];
+			[task run];
 		}
 	}
 }
@@ -421,23 +395,19 @@ static TaskMaster *sharedController = nil;
 
 - (void) addConvertingTask:(ConverterTask *)task
 {
-	@synchronized(_convertingTasks) {
-		[[self mutableArrayValueForKey:@"convertingTasks"] addObject:task];
-	}
+	[[self mutableArrayValueForKey:@"convertingTasks"] addObject:task];
 }
 
 - (void) removeConvertingTask:(ConverterTask *) task
 {
 	// Remove from the list of converting tasks
-	@synchronized(_convertingTasks) {
-		if([_convertingTasks containsObject:task]) {
+	if([_convertingTasks containsObject:task]) {
 
-			[[self mutableArrayValueForKey:@"convertingTasks"] removeObject:task];
-			
-			// Hide the converter window if no more tasks
-			if(NO == [self hasConvertingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
-				[[_converterController window] performClose:self];
-			}
+		[[self mutableArrayValueForKey:@"convertingTasks"] removeObject:task];
+		
+		// Hide the converter window if no more tasks
+		if(NO == [self hasConvertingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+			[[_converterController window] performClose:self];
 		}
 	}
 }
@@ -447,15 +417,13 @@ static TaskMaster *sharedController = nil;
 	unsigned	i;
 	unsigned	limit;
 	
-	@synchronized(_convertingTasks) {
-		limit = (_maxConverterThreads < [_convertingTasks count] ? _maxConverterThreads : [_convertingTasks count]);
-		
-		// Start converting the next file(s)
-		for(i = 0; i < limit; ++i) {
-			if(NO == [[_convertingTasks objectAtIndex:i] started]) {
-				[[_convertingTasks objectAtIndex:i] run];
-			}
-		}	
+	limit = (_maxConverterThreads < [_convertingTasks count] ? _maxConverterThreads : [_convertingTasks count]);
+	
+	// Start converting the next file(s)
+	for(i = 0; i < limit; ++i) {
+		if(NO == [[_convertingTasks objectAtIndex:i] started]) {
+			[[_convertingTasks objectAtIndex:i] run];
+		}
 	}
 }
 
@@ -554,6 +522,10 @@ static TaskMaster *sharedController = nil;
 				outputFilename	= generateUniqueFilename([task valueForKey:@"basename"], extension);
 				encoderTask		= [[CoreAudioEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
 				
+				if([task isKindOfClass:[RipperTask class]]) {
+					[encoderTask setTracks:[(RipperTask *)task getTracks]];
+				}
+
 				// Show the encoder window if it is hidden
 				if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 					[[_encoderController window] orderFront:self];
@@ -574,6 +546,10 @@ static TaskMaster *sharedController = nil;
 				outputFilename			= generateUniqueFilename([task valueForKey:@"basename"], [formatInfo valueForKey:@"extension"]);
 				
 				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
+
+				if([task isKindOfClass:[RipperTask class]]) {
+					[encoderTask setTracks:[(RipperTask *)task getTracks]];
+				}
 
 				// Show the encoder window if it is hidden
 				if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
@@ -599,9 +575,9 @@ static TaskMaster *sharedController = nil;
 {
 	// Create the encoder (relies on each subclass having the same method signature)
 	EncoderTask *encoderTask = [[encoderClass alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata]];
-		
+
 	if([task isKindOfClass:[RipperTask class]]) {
-		[encoderTask setTracks:[task valueForKey:@"tracks"]];
+		[encoderTask setTracks:[(RipperTask *)task getTracks]];
 	}
 
 	// Show the encoder window if it is hidden
@@ -616,24 +592,20 @@ static TaskMaster *sharedController = nil;
 
 - (void) addEncodingTask:(EncoderTask *)task
 {
-	@synchronized(_encodingTasks) {
-		[[self mutableArrayValueForKey:@"encodingTasks"] addObject:task];
-	}
+	[[self mutableArrayValueForKey:@"encodingTasks"] addObject:task];
 }
 
 - (void) removeEncodingTask:(EncoderTask *)task
 {
 	// Remove from the list of encoding tasks
-	@synchronized(_encodingTasks) {
-		if([_encodingTasks containsObject:task]) {
+	if([_encodingTasks containsObject:task]) {
 
-			[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:task];
+		[[self mutableArrayValueForKey:@"encodingTasks"] removeObject:task];
 
-			// Hide the encoder window if no more tasks
-			if(NO == [self hasEncodingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
-				[[_encoderController window] performClose:self];
-			}
-		}	
+		// Hide the encoder window if no more tasks
+		if(NO == [self hasEncodingTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+			[[_encoderController window] performClose:self];
+		}
 	}
 }
 
@@ -642,14 +614,12 @@ static TaskMaster *sharedController = nil;
 	unsigned	i;
 	unsigned	limit;
 	
-	@synchronized(_encodingTasks) {
-		limit = (_maxEncoderThreads < [_encodingTasks count] ? _maxEncoderThreads : [_encodingTasks count]);
-		
-		// Start encoding the next track(s)
-		for(i = 0; i < limit; ++i) {
-			if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"started"] boolValue]) {
-				[[_encodingTasks objectAtIndex:i] run];
-			}
+	limit = (_maxEncoderThreads < [_encodingTasks count] ? _maxEncoderThreads : [_encodingTasks count]);
+	
+	// Start encoding the next track(s)
+	for(i = 0; i < limit; ++i) {
+		if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"started"] boolValue]) {
+			[[_encodingTasks objectAtIndex:i] run];
 		}	
 	}
 }

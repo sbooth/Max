@@ -54,7 +54,7 @@
 	Track			*track;
 
 	if(nil != _tracks) {
-		enumerator		= [_tracks objectEnumerator];
+		enumerator = [_tracks objectEnumerator];
 	
 		while((track = [enumerator nextObject])) {
 			[track encodeCompleted];
