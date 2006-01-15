@@ -35,6 +35,6 @@
 - (id)				initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
 
 - (NSArray *)		getSectors;
-- (cdrom_drive *)	getDrive;
+- (NSString *)		getDeviceName;
 
 @end

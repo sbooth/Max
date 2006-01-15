@@ -62,6 +62,8 @@
 			[_sectors addObject:range];
 		}
 
+		[_sectors retain];
+			
 		return self;
 	}
 	return nil;
@@ -81,15 +83,16 @@
 		[_connection release];
 	}
 	
+	[_sectors release];	
 	[_tracks release];	
 	
 	[super dealloc];
 }
 
 - (NSArray *)			getSectors				{ return _sectors; }
-- (cdrom_drive *)		getDrive				{ return _drive; }
+- (NSString *)			getDeviceName			{ return [NSString stringWithUTF8String:_drive->device_name]; }
 
-- (void) run:(id)object
+- (void) run
 {
 	NSPort		*port1			= [NSPort port];
 	NSPort		*port2			= [NSPort port];

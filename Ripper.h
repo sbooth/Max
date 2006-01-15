@@ -30,8 +30,8 @@
 {
 	id <TaskMethods>		_delegate;
 
-	cdrom_paranoia			*_paranoia;
 	cdrom_drive				*_drive;
+	cdrom_paranoia			*_paranoia;
 	
 	BOOL					_logActivity;
 	
@@ -45,8 +45,8 @@
 	NSDate					*_startTime;
 }
 
-- (id)						initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive;
+- (id)						initWithSectors:(NSArray *)sectors deviceName:(NSString *)deviceName;
 
-- (NSString *)				deviceName;
+- (NSString *)				getDeviceName;
 
 @end

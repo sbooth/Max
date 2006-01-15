@@ -109,7 +109,7 @@ callback(long inpos, int function, void *userdata)
 	pool			= [[NSAutoreleasePool alloc] init];
 	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 	owner			= (RipperTask *)[connection rootProxy];
-	ripper			= [[self alloc] initWithSectors:[owner getSectors] drive:[owner getDrive]];
+	ripper			= [[self alloc] initWithSectors:[owner getSectors] deviceName:[owner getDeviceName]];
 	
 	[ripper setDelegate:owner];
 	[owner ripperReady:ripper];
@@ -121,7 +121,7 @@ callback(long inpos, int function, void *userdata)
 	[pool release];
 }
 
-- (id) initWithSectors:(NSArray *)sectors drive:(cdrom_drive *)drive
+- (id) initWithSectors:(NSArray *)sectors deviceName:(NSString *)deviceName
 {
 	if((self = [super init])) {
 		int paranoiaLevel	= 0;
@@ -131,7 +131,15 @@ callback(long inpos, int function, void *userdata)
 		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
 				
 		// Setup cdparanoia
-		_drive		= drive;
+		_drive		= cdda_identify([deviceName UTF8String], 0, NULL);
+		if(NULL == _drive) {
+			@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
+		}
+		
+		if(0 != cdda_open(_drive)) {
+			@throw [ParanoiaException exceptionWithReason:@"cdda_open failed" userInfo:nil];
+		}
+
 		_paranoia	= paranoia_init(_drive);
 
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
@@ -173,12 +181,11 @@ callback(long inpos, int function, void *userdata)
 
 - (void) dealloc
 {
+	cdda_close(_drive);
 	paranoia_free(_paranoia);
 
 	[_sectors release];
 
-	[_startTime release];
-	
 	[super dealloc];
 }
 
@@ -187,7 +194,7 @@ callback(long inpos, int function, void *userdata)
 - (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
 - (id <TaskMethods>)	delegate									{ return _delegate; }
 
-- (void) ripToFile:(int)file
+- (oneway void) ripToFile:(int)file
 {
 	NSEnumerator		*enumerator;
 	SectorRange			*range;

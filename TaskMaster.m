@@ -355,8 +355,8 @@ static TaskMaster *sharedController = nil;
 		// Iterate through all ripping tasks once and determine which devices are active
 		enumerator = [_rippingTasks objectEnumerator];
 		while((task = [enumerator nextObject])) {
-			deviceName = [[task valueForKey:@"ripper"] deviceName];
-			if([[task valueForKeyPath:@"started"] boolValue] && NO == [activeDrives containsObject:deviceName]) {
+			deviceName = [task getDeviceName];
+			if([task started] && NO == [activeDrives containsObject:deviceName]) {
 				[activeDrives addObject:deviceName];
 			}
 		}
@@ -364,8 +364,8 @@ static TaskMaster *sharedController = nil;
 		// Iterate through a second time and spawn threads for non-active devices
 		enumerator = [_rippingTasks objectEnumerator];
 		while((task = [enumerator nextObject])) {
-			deviceName = [[task valueForKey:@"ripper"] deviceName];
-			if(NO == [[task valueForKeyPath:@"started"] boolValue] && NO == [activeDrives containsObject:deviceName]) {
+			deviceName = [task getDeviceName];
+			if(NO == [task started] && NO == [activeDrives containsObject:deviceName]) {
 				[activeDrives addObject:deviceName];
 				[task run];
 			}
@@ -406,8 +406,6 @@ static TaskMaster *sharedController = nil;
 	[GrowlApplicationBridge notifyWithTitle:@"Rip completed" description:[NSString stringWithFormat:@"%@\nDuration: %@", trackName, duration]
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	[self runEncodersForTask:task];
-
 	[self removeRippingTask:task];
 	[self spawnRipperThreads];
 
@@ -415,6 +413,8 @@ static TaskMaster *sharedController = nil;
 		[GrowlApplicationBridge notifyWithTitle:@"Ripping completed" description:@"All ripping tasks completed"
 							   notificationName:@"Ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
+
+	[self runEncodersForTask:task];
 }
 
 #pragma mark Converting Functionality
@@ -492,8 +492,6 @@ static TaskMaster *sharedController = nil;
 	[GrowlApplicationBridge notifyWithTitle:@"Convert completed" description:[NSString stringWithFormat:@"%@\nDuration: %@", filename, duration]
 						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
-	[self runEncodersForTask:task];
-
 	[self removeConvertingTask:task];
 	[self spawnConverterThreads];
 
@@ -501,6 +499,8 @@ static TaskMaster *sharedController = nil;
 		[GrowlApplicationBridge notifyWithTitle:@"Conversion completed" description:@"All converting tasks completed"
 							   notificationName:@"Conversion completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
+
+	[self runEncodersForTask:task];
 }
 
 #pragma mark Encoding functionality
