@@ -53,6 +53,8 @@
 		enumerator		= [_tracks objectEnumerator];
 		
 		while((track = [enumerator nextObject])) {
+			[track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
+
 			firstSector		= [[track valueForKey:@"firstSector"] unsignedLongValue];
 			lastSector		= [[track valueForKey:@"lastSector"] unsignedLongValue];
 			range			= [SectorRange rangeWithFirstSector:firstSector lastSector:lastSector];
@@ -85,8 +87,6 @@
 
 - (void) run
 {
-	NSEnumerator	*enumerator;
-	Track			*track;
 	NSPort			*port1			= [NSPort port];
 	NSPort			*port2			= [NSPort port];
 	NSArray			*portArray		= nil;
@@ -97,11 +97,6 @@
 	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
 	[super setStarted];
-	
-	enumerator = [_tracks objectEnumerator];		
-	while((track = [enumerator nextObject])) {
-		[track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
-	}
 	
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:[Ripper class] withObject:portArray];
 }
@@ -157,9 +152,7 @@
 		[self setShouldStop];
 	}
 	else {
-		[self closeOutputFile];
-		[_connection invalidate];
-		[[TaskMaster sharedController] ripDidStop:self];
+		[self setStopped];
 	}
 }
 
