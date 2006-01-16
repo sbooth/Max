@@ -249,7 +249,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		SpeexPreferencesToolbarItemIdentifier,
+//		SpeexPreferencesToolbarItemIdentifier,
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
 }
@@ -260,7 +260,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		SpeexPreferencesToolbarItemIdentifier,
+//		SpeexPreferencesToolbarItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
@@ -272,7 +272,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		SpeexPreferencesToolbarItemIdentifier,
+//		SpeexPreferencesToolbarItemIdentifier,
 		nil];
 }
 

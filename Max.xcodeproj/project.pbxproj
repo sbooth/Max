@@ -49,7 +49,6 @@
 		8C4D471D093E842C00A88927 /* OutputPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D4717093E842B00A88927 /* OutputPreferences.nib */; };
 		8C4D4721093E843F00A88927 /* OutputPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D471F093E843F00A88927 /* OutputPreferencesController.m */; };
 		8C4D48A8093E93AC00A88927 /* AcknowledgmentsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */; };
-		8C4DDD4C097A53940000245A /* OutputDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C4DDD4B097A53940000245A /* OutputDefaults.plist */; };
 		8C4DDD71097A55C60000245A /* PCMGeneratingTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */; };
 		8C4E51550961B4A400F06F00 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4E51540961B4A400F06F00 /* libvorbisfile.a */; };
 		8C5266BB0970E6FB008F1B55 /* Acknowledgments.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */; };
@@ -243,7 +242,6 @@
 		8C206F120929486C00793FD0 /* TaskMaster.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TaskMaster.h; sourceTree = "<group>"; };
 		8C206F130929486C00793FD0 /* TaskMaster.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TaskMaster.m; sourceTree = "<group>"; };
 		8C3101270931297C000A50FC /* Max.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Max.icns; sourceTree = "<group>"; };
-		8C328128096D0CFF00608C9D /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8C32817D096D12C400608C9D /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		8C4015720948E433003413BE /* CoreAudioEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoderTask.h; sourceTree = "<group>"; };
 		8C4015730948E433003413BE /* CoreAudioEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoderTask.m; sourceTree = "<group>"; };
@@ -274,7 +272,6 @@
 		8C4D489F093E932600A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
 		8C4D48A5093E93AC00A88927 /* AcknowledgmentsController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AcknowledgmentsController.h; sourceTree = "<group>"; };
 		8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AcknowledgmentsController.m; sourceTree = "<group>"; };
-		8C4DDD4B097A53940000245A /* OutputDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = OutputDefaults.plist; sourceTree = "<group>"; };
 		8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = PCMGeneratingTaskDefaults.plist; sourceTree = "<group>"; };
 		8C4E51540961B4A400F06F00 /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbisfile.a; sourceTree = "<group>"; };
 		8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
@@ -660,7 +657,6 @@
 				8C328116096D0CCA00608C9D /* Converter.nib */,
 				8C32810E096D0CBA00608C9D /* FLACPreferences.nib */,
 				8CDD97110973641400A5F2C1 /* SpeexDefaults.plist */,
-				8C4DDD4B097A53940000245A /* OutputDefaults.plist */,
 				8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */,
 			);
 			name = Resources;
@@ -1078,7 +1074,6 @@
 				8CDD96CC097361DE00A5F2C1 /* SpeexToolbarImage.png in Resources */,
 				8CDD96E3097362C900A5F2C1 /* SpeexPreferences.nib in Resources */,
 				8CDD97120973641400A5F2C1 /* SpeexDefaults.plist in Resources */,
-				8C4DDD4C097A53940000245A /* OutputDefaults.plist in Resources */,
 				8C4DDD71097A55C60000245A /* PCMGeneratingTaskDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1196,7 +1191,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				29B97319FDCFA39411CA2CEA /* English */,
-				8C328128096D0CFF00608C9D /* French */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
