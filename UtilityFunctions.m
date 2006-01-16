@@ -32,6 +32,7 @@
 #import "VorbisException.h"
 #import "FileFormatNotSupportedException.h"
 #import "CoreAudioException.h"
+#import "SpeexException.h"
 
 #include "sndfile.h"
 
@@ -234,6 +235,9 @@ displayExceptionSheet(NSException	*exception,
 	}
 	else if([exception isKindOfClass:[CoreAudioException class]]) {
 		[alert setMessageText: @"Core Audio Error"];
+	}
+	else if([exception isKindOfClass:[SpeexException class]]) {
+		[alert setMessageText: @"Speex Error"];
 	}
 	else {
 		Debugger();

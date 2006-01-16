@@ -63,6 +63,7 @@
 		8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */; };
 		8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */; };
 		8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */; };
+		8C881036097AE43800ED2843 /* SpeexException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C88102A097AE41A00ED2843 /* SpeexException.m */; };
 		8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0CC1092E5DAA00418C45 /* Max Help */; };
 		8C8B0D22092E617B00418C45 /* MacPADSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0D20092E617B00418C45 /* MacPADSocket.m */; };
 		8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0DA1092E641200418C45 /* MacPAD.url */; };
@@ -306,6 +307,8 @@
 		8C7C897908EC435700F6FCB1 /* MediaController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MediaController.h; sourceTree = "<group>"; };
 		8C81CEFC09795DD300B24C55 /* TaskMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskMethods.h; sourceTree = "<group>"; };
 		8C81CFD8097969EE00B24C55 /* ConverterMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConverterMethods.h; sourceTree = "<group>"; };
+		8C881029097AE41A00ED2843 /* SpeexException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeexException.h; sourceTree = "<group>"; };
+		8C88102A097AE41A00ED2843 /* SpeexException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexException.m; sourceTree = "<group>"; };
 		8C8B0CC2092E5DAA00418C45 /* English */ = {isa = PBXFileReference; lastKnownFileType = folder; name = English; path = "English.lproj/Max Help"; sourceTree = "<group>"; };
 		8C8B0D1F092E617B00418C45 /* MacPADSocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MacPADSocket.h; sourceTree = "<group>"; };
 		8C8B0D20092E617B00418C45 /* MacPADSocket.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MacPADSocket.m; sourceTree = "<group>"; };
@@ -899,6 +902,8 @@
 				8CBB8BCC08EFB0BF007197C3 /* MissingResourceException.m */,
 				8CB0AED7093AE96C00968F66 /* FLACException.h */,
 				8CB0AED8093AE96C00968F66 /* FLACException.m */,
+				8C881029097AE41A00ED2843 /* SpeexException.h */,
+				8C88102A097AE41A00ED2843 /* SpeexException.m */,
 			);
 			name = Exceptions;
 			sourceTree = "<group>";
@@ -1172,6 +1177,7 @@
 				8CDD96D50973624800A5F2C1 /* SpeexPreferencesController.m in Sources */,
 				8CDD9730097365F600A5F2C1 /* SpeexConverterTask.m in Sources */,
 				8CDD97410973663300A5F2C1 /* SpeexConverter.m in Sources */,
+				8C881036097AE43800ED2843 /* SpeexException.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
