@@ -25,6 +25,8 @@
 @interface RipperController : NSWindowController
 {
 	TaskMaster		*_taskMaster;
+	NSTimer			*_timer;
+	NSString		*_freeSpace;
 }
 
 + (RipperController *)	sharedController;

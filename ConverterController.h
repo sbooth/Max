@@ -25,6 +25,8 @@
 @interface ConverterController : NSWindowController
 {
 	TaskMaster		*_taskMaster;
+	NSTimer			*_timer;
+	NSString		*_freeSpace;
 }
 
 + (ConverterController *)	sharedController;

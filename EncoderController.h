@@ -25,6 +25,8 @@
 @interface EncoderController : NSWindowController
 {
 	TaskMaster		*_taskMaster;
+	NSTimer			*_timer;
+	NSString		*_freeSpace;
 }
 
 + (EncoderController *)	sharedController;
