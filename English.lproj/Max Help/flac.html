@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html><head>	<title>Max Help</title>	<meta name="generator" content="SubEthaEdit">	<meta name="AppleIcon" content="Max%20Help/images/max-icon.png">	<meta name="copyright" content="GPL">	<meta http-equiv="content-type" content="text/html; utf-8">
+	
+	<link href="index.css" rel="stylesheet" type="text/css" />
+	
+</head>
+
+<div id="wrap">
+
+<div id="title">
+          <div class="icon"></div>
+          
+          <h1><a href="index.html">Max Help</a>: FLAC</h1>
+          <ul style="padding: 0px;"><li></li><li><a href="ripping.html">Ripping</a> | </li><li><a href="tagging.html">Tagging</a> | </li><li><a href="encoding.html">Encoding</a> | </li><li><a href="file-naming.html">File naming</a></li></ul>
+          
+</div>
+
+<div id="content">
+
+     <p>FLAC is the <strong>F</strong>ree <strong>L</strong>ossless <strong>A</strong>udio <strong>C</strong>odec. It can be played on most operating systems, and is the only free (as in speech) lossless codec with hardware support.</p>
+     
+     <p>The default compression level is <strong>5</strong>. This is a preferable balance of encoding time and <!--<a href="glossary.html#ratio">-->compression ratio</a>. Lesser levels encode faster and larger; higher, slower and smaller.  A compression level of <strong>8</strong> is significantly slower and only marginally smaller than a level of <strong>5</strong>.</p>
+     
+     <h2>Custom settings</h2>
+     <p>These settings aren't very useful to the average user. They significantly increases encoding time while achieving only a few extra percentage points of compression.</p> 
+     <ul>
+          <li><strong>Exhaustive model search:</strong> This might compress by another 0.5% but will significantly increase the encoding time</li>
+          <li><strong>Enable mid-side coding for stereo input:</strong>  Basically, this option adds the stereo channels together and subtracts them from each other. If the resulting sum and difference are smaller than simply encoding the two channels separately, then FLAC encodes the sum of the left and right channels as the first channel and the difference as the second channel. Otherwise, the two channels will be encoded separately, as per usual. When decoding, FLAC will subtract the difference from the sum and output the result, which will be the equivalent of the originally encoded file. If there's not much difference between the first and second channel, then the encoded channel will be very small, resulting in a file that's few percentage points smaller than the default encoding.This is particularly useful for, say, recordings that were mixed monaurally but have been remastered stereophonically.</li>
+           <li><strong>Enable mid-side adaptive switching for stereo input:</strong> This is similar to <strong>Enable mid-side coding for stereo input</strong>, but uses a faster and less meticulous algorithm to separate the channels' sum and difference.</li>
+           <li><strong>QLP coefficient precision</strong>: <em>To be written...</em></li>
+           <li><strong>Minimum residual partition order</strong>: <em>To be written...</em></li>
+           <li><strong>Maximum residual partition order</strong>: <em>To be written...</em></li>
+           <li><strong>Maximum LPC order</strong>: <em>To be written...</em></li>
+     </ul>
+     
+     
+     <h2><a name="ogg-flac">Ogg FLAC</a></h2>
+     
+     <p>Ogg FLAC is a FLAC file in the Ogg <!--<a href="glossary.html#container">-->container format</a>.</p> There is no difference in file size or quality, but if you want to edit the compressed audio or multiplex it with a video layer, then Ogg FLAC is the better choice.</p>
+     
+     <h3>Custom settings</h3>
+     <p>The custom settings for Ogg FLAC are the same as those for FLAC.</p>
+
+</div>
+
+</div>

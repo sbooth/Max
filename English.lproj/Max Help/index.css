@@ -1,0 +1,35 @@
+body {
+     font-family: "lucida grande";
+     font-size: 14px;
+     line-height: 1.5em;
+}
+
+div#wrap { width: 75%; margin: auto; }
+
+div.icon { background-image: url(images/max-icon.png); width: 48px; height:48px; float: left; margin-right: 20px; }
+	
+h1 { 
+     margin: 0px; 
+     line-height: 1em;
+}
+
+h2 { line-height: 1em; font-size: 20px; margin: 0px; border-bottom: 1px solid black }
+
+a:link, a:active, a:visited { 
+     color: #000; 
+     text-decoration: underline;
+}
+a:hover { 
+     color: #555; 
+     text-decoration: none; 
+}
+
+ul {
+     padding: 0px;
+
+}
+
+div#title ul {margin: 0px; padding: 0px; font-weight: bold;}
+div#title li { display: inline; }
+
+code { font-family: courier; }

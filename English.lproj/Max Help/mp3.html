@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html><head>	<title>Max Help</title>	<meta name="generator" content="SubEthaEdit">	<meta name="AppleIcon" content="Max%20Help/images/max-icon.png">	<meta name="copyright" content="GPL">	<meta http-equiv="content-type" content="text/html; utf-8">
+	
+	<link href="index.css" rel="stylesheet" type="text/css" />
+	
+	<style type="text/css">
+	
+	ul {margin: 0px; padding: 0px; font-weight: bold;}
+	li { display: inline }
+	
+	</style>
+</head>
+
+<div id="wrap">
+
+<div id="title">
+          <div class="icon"></div>
+          
+          <h1><a href="index.html">Max Help</a>: Encoding</h1>
+          <ul style="padding: 0px;"><li></li><li><a href="ripping.html">Ripping</a> | </li><li><a href="tagging.html">Tagging</a> | </li><li><a href="encoding.html">Encoding</a> | </li><li><a href="file-naming.html">File naming</a></li></ul>
+          
+</div>
+
+<div id="content">
+
+     <p>MP3 is a <!--<a href="glossary.html#lossy">-->lossy</a> format. Max uses <!--<a href="glossary.html#lame">-->LAME<!--</a>-->, an open-source encoder, to encode MP3s. To enable Max to generate MP3s from your rips, select the <strong>MP3</strong> checkbox under <strong>Formats</strong> in Max's preferences.</p>
+     
+     <h2>Configuring MP3 Output</h2>
+     <p>MP3 configuration is located in the <strong>MP3</strong> section of the preferences.</p>
+     
+     <h3>Variable Bitrate</h3>
+     
+     <p><em>Variable bitrate is the recommended setting for MP3 encoding using LAME.</em></p>
+     
+     <p>To generate a <!--<a href="glossary.html#vbr">-->variable bitrate<!--</a>--> file, set the Target to Quality and choose the desired quality using the slider, with 0 being the lowest quality and 100 being the highest. Quality settings of 70-100 should produce CD-quality encodings.</p>
+     
+     <h3>Constant Bitrate</h3>
+     <p>To generate an MP3 with a <!--<a href="glossary.html#cbr">-->constant bitrate<!--</a>-->, set the <strong>Target</strong> to <strong>Bitrate</strong> then use the slider to choose the desired bitrate. Bitrates set to 128 and higher will generally produce CD-quality MP3s.</p>
+     
+     <h3>Average Bitrate</h3>
+     <p>If you'd like to set an <!--<a href="glossary.html#abr">-->average bitrate<!--</a>-->, set the <strong>Target</strong> to <strong>Bitrate</strong>, choose your desired average bitrate, then uncheck the "Restrict encoder to constant bitrate" checkbox.</p>
+     
+     <h3>Encoding Engine Quality</h3>
+     <p>After choosing a bitrate or quality, LAME can use different algorithms for encoding.</p>
+     
+     <p><strong>Fast</strong> will result in lower quality and a shorter encoding time, and should only be used when you need to encode quickly. It is equivalent to LAME's <code>-f</code> option.</p>
+     
+     <p><strong>Standard</strong> will result in decent quality in a fair amount of time, and is the default. It is equivalent to LAME's <code>-q 5</code> option.</p>
+     
+     <p><strong>High</strong> uses the slowest and best possible versions of all algorithms. It is equivalent to LAME's <code>-h</code> option.</p>
+     
+     <h3>Mono</h3>
+     <p>Mono encodings result in significant compression and loss of quality by consolidating the two (stereo) channels in one (mono) channel.</p>
+
+</div>
+
+</div>
