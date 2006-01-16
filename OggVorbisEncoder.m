@@ -192,7 +192,10 @@ enum {
 	
 	// Use the current time as the stream id
 	srand(time(NULL));
-	ogg_stream_init(&os, rand());
+	if(-1 == ogg_stream_init(&os, rand())) {
+		[_delegate setStopped];
+		@throw [VorbisException exceptionWithReason:@"Unable to initialize ogg stream." userInfo:nil];
+	}
 	
 	// Write stream headers	
 	vorbis_analysis_headerout(&vd, &vc, &header, &header_comm, &header_code);
