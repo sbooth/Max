@@ -278,7 +278,7 @@ static MediaController *sharedController = nil;
 		}
 	}
 	else if([keyPath isEqualToString:@"encodeInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		if(NO == [[TaskMaster sharedController] compactDiscDocumentHasEncodingTasks:doc]) {
+		if(NO == [[TaskMaster sharedController] compactDiscDocumentHasRippingTasks:doc] && NO == [[TaskMaster sharedController] compactDiscDocumentHasEncodingTasks:doc]) {
 			tracks		= [doc valueForKey:@"tracks"];
 			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
 			
