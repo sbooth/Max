@@ -24,6 +24,7 @@
 {
 	NSString		*_flacVersion;
 	NSString		*_lameVersion;
+	NSString		*_speexVersion;
 	NSString		*_libsndfileVersion;
 }
 

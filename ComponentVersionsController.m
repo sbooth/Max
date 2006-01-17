@@ -22,6 +22,7 @@
 
 #include "lame/lame.h"
 #include "flac/format.h"
+#include "speex/speex.h"
 #include "sndfile.h"
 
 static ComponentVersionsController *sharedController = nil;
@@ -51,11 +52,16 @@ static ComponentVersionsController *sharedController = nil;
 - (id)init
 {
 	if((self = [super initWithWindowNibName:@"ComponentVersions"])) {
-		char  buffer [128] ;
+
+		const char		*speexVersion;
+		char			buffer [128] ;
+		
+		speex_lib_ctl(SPEEX_LIB_GET_VERSION_STRING, &speexVersion);
 		sf_command(NULL, SFC_GET_LIB_VERSION, buffer, sizeof(buffer));
 		
 		_flacVersion		= [NSString stringWithFormat:@"FLAC %s", FLAC__VERSION_STRING];
 		_lameVersion		= [NSString stringWithFormat:@"LAME %s", get_lame_version()];
+		_speexVersion		= [NSString stringWithFormat:@"Speex %s", speexVersion];
 		_libsndfileVersion	= [NSString stringWithUTF8String:buffer];
 		
 		return self;
