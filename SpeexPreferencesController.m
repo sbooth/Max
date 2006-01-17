@@ -30,4 +30,11 @@
 	return nil;
 }
 
+- (IBAction) enableVBRButtonAction:(id)sender
+{
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"speexEnableVBR"]) {
+		[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:@"speexEnableVAD"];
+	}
+}
+
 @end

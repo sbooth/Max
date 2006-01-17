@@ -24,4 +24,6 @@
 {
 }
 
+- (IBAction)	enableVBRButtonAction:(id)sender;
+
 @end

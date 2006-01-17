@@ -31,9 +31,19 @@
 	
 	// Settings flags
 	int						_mode;
-	float					_quality;
-	long					_bitrate;
-	BOOL					_cbr;
+	int						_target;
+	int						_quality;
+	int						_bitrate;	
+	int						_complexity;
+	int						_framesPerPacket;
+
+	BOOL					_downsampleInput;
+	BOOL					_denoiseEnabled;
+	BOOL					_agcEnabled;
+	BOOL					_vbrEnabled;
+	BOOL					_abrEnabled;
+	BOOL					_dtxEnabled;
+	BOOL					_vadEnabled;	
 }
 
 @end

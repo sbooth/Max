@@ -4,11 +4,29 @@
 <dict>
 	<key>speexMode</key>
 	<integer>2</integer>
-	<key>speexFramesPerPacket</key>
-	<integer>1</integer>
+	<key>speexDownsampleInput</key>
+	<false/>
+	<key>speexDenoiseInput</key>
+	<false/>
+	<key>speexApplyAGC</key>
+	<false/>
+	<key>speexTarget</key>
+	<integer>0</integer>
+	<key>speexEnableVBR</key>
+	<false/>
+	<key>speexApplyABR</key>
+	<false/>
 	<key>speexQuality</key>
+	<real>8</real>
+	<key>speexBitrate</key>
 	<real>8</real>
 	<key>speexComplexity</key>
 	<real>3</real>
+	<key>speexEnableVAD</key>
+	<false/>
+	<key>speexEnableDTX</key>
+	<false/>
+	<key>speexFramesPerPacket</key>
+	<integer>1</integer>
 </dict>
 </plist>

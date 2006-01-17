@@ -8,33 +8,6 @@
 	<string>443.0</string>
 	<key>IBGroupedObjects</key>
 	<dict>
-		<key>0</key>
-		<array>
-			<string>116</string>
-			<string>120</string>
-			<string>118</string>
-			<string>119</string>
-			<string>121</string>
-			<string>114</string>
-			<string>117</string>
-			<string>115</string>
-			<string>112</string>
-			<string>122</string>
-		</array>
-		<key>1</key>
-		<array>
-			<string>128</string>
-			<string>133</string>
-			<string>126</string>
-			<string>127</string>
-		</array>
-		<key>2</key>
-		<array>
-			<string>128</string>
-			<string>133</string>
-			<string>126</string>
-			<string>127</string>
-		</array>
 		<key>3</key>
 		<array>
 			<string>180</string>
@@ -45,56 +18,10 @@
 			<string>180</string>
 			<string>265</string>
 		</array>
-		<key>5</key>
-		<array>
-			<string>128</string>
-			<string>133</string>
-			<string>126</string>
-			<string>127</string>
-		</array>
-		<key>6</key>
-		<array>
-			<string>116</string>
-			<string>120</string>
-			<string>118</string>
-			<string>119</string>
-			<string>121</string>
-			<string>114</string>
-			<string>117</string>
-			<string>115</string>
-			<string>112</string>
-			<string>122</string>
-		</array>
-		<key>7</key>
-		<array>
-			<string>116</string>
-			<string>120</string>
-			<string>118</string>
-			<string>119</string>
-			<string>121</string>
-			<string>114</string>
-			<string>117</string>
-			<string>115</string>
-			<string>112</string>
-			<string>122</string>
-		</array>
-		<key>8</key>
-		<array>
-			<string>116</string>
-			<string>120</string>
-			<string>118</string>
-			<string>119</string>
-			<string>121</string>
-			<string>114</string>
-			<string>117</string>
-			<string>115</string>
-			<string>112</string>
-			<string>122</string>
-		</array>
 	</dict>
 	<key>IBLastGroupID</key>
 	<string>9</string>
 	<key>IBSystem Version</key>
-	<string>8F46</string>
+	<string>8G32</string>
 </dict>
 </plist>

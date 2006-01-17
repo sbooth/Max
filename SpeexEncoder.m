@@ -30,12 +30,25 @@
 #include "speex/speex.h"
 #include "speex/speex_header.h"
 #include "speex/speex_stereo.h"
+#include "speex/speex_preprocess.h"
 #include "ogg/ogg.h"
 
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
 
+// My (semi-arbitrary) list of supported speex bitrates
+static int sSpeexBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
+
+// Tag values for NSPopupButton
+enum {
+	SPEEX_MODE_NARROWBAND					= 0,
+	SPEEX_MODE_WIDEBAND						= 1,
+	SPEEX_MODE_ULTRAWIDEBAND				= 2,
+	
+	SPEEX_TARGET_QUALITY					= 0,
+	SPEEX_TARGET_BITRATE					= 1
+};
 
 /*                 
 Comments will be stored in the Vorbis style.            
@@ -135,6 +148,28 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 {
 	if((self = [super initWithPCMFilename:pcmFilename])) {
 		
+		_mode				= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexMode"];
+
+		_downsampleInput	= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexDownsampleInput"];
+		
+		_denoiseEnabled		= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexDenoiseInput"];
+		_agcEnabled			= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexApplyAGC"];
+		
+		_target				= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexTarget"];
+
+		_vbrEnabled			= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexEnableVBR"];
+		_abrEnabled			= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexEnableABR"];
+
+		_quality			= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexQuality"];
+		_bitrate			= sSpeexBitrates[[[NSUserDefaults standardUserDefaults] integerForKey:@"speexBitrate"]] * 1000;
+		
+		_complexity			= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexComplexity"];
+
+		_vadEnabled			= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexEnableVAD"];
+		_dtxEnabled			= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexEnableDTX"];
+
+		_framesPerPacket	= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexFramesPerPacket"];
+		
 		return self;
 	}
 	return nil;
@@ -151,30 +186,21 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 {
 	NSDate						*startTime									= [NSDate date];
 
-	SpeexMode					*mode										= NULL;
-	int							modeID										= -1;
-	int							frameID										= -1;
 	void						*speexState;
+	const SpeexMode				*mode;
+	SpeexPreprocessState		*preprocess;
 	SpeexBits					bits;
+
 	int							rate										= 44100;
-	int							oggFramesPerPacket							= 1;
-	int							vbr_enabled									= 0;
-	int							abr_enabled									= 0;
-	int							vad_enabled									= 0;
-	int							dtx_enabled									= 0;
 	int							chan										= 2;
+	int							frameID										= -1;
 	int							frameSize;
-	int							complexity									= 3;
-	int							quality										= -1;
-	float						vbr_quality									= -1;
-	int							bitrate										= 0;
 	char						*comments;
 	int							comments_length;
 	int							totalFrames;
 	int							framesEncoded;
 	int							nbBytes;
 	int							lookahead									= 0;
-	int							tmp;
 	char						cbits [2000];
 	   
 	SpeexHeader					header;
@@ -241,63 +267,52 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	
 	// TODO: setup from user defaults
 	
-	mode = speex_lib_get_mode(SPEEX_MODEID_UWB/*modeID*/);
+	mode = speex_lib_get_mode(_mode);
 	
 	speex_init_header(&header, rate, 1, mode);
 	
-	header.frames_per_packet	= oggFramesPerPacket;
-	header.vbr					= vbr_enabled;
+	header.frames_per_packet	= _framesPerPacket;
+	header.vbr					= _vbrEnabled;
 	header.nb_channels			= chan;
 		
 	// Setup the encoder
 	speexState = speex_encoder_init(mode);
 		
 	speex_encoder_ctl(speexState, SPEEX_GET_FRAME_SIZE, &frameSize);
-	speex_encoder_ctl(speexState, SPEEX_SET_COMPLEXITY, &complexity);
+	speex_encoder_ctl(speexState, SPEEX_SET_COMPLEXITY, &_complexity);
 	speex_encoder_ctl(speexState, SPEEX_SET_SAMPLING_RATE, &rate);
-		
-	if(0 <= quality) {
-		if(vbr_enabled) {
-			speex_encoder_ctl(speexState, SPEEX_SET_VBR_QUALITY, &vbr_quality);
+
+	if(SPEEX_TARGET_QUALITY == _target) {
+		if(_vbrEnabled) {
+			speex_encoder_ctl(speexState, SPEEX_SET_VBR_QUALITY, &_quality);
 		}
 		else {
-			speex_encoder_ctl(speexState, SPEEX_SET_QUALITY, &quality);
+			speex_encoder_ctl(speexState, SPEEX_SET_QUALITY, &_quality);
 		}
 	}
-	
-	if(bitrate) {
-		if(quality >= 0 && vbr_enabled) {
-			fprintf(stderr, "Warning: --bitrate option is overriding --quality\n");
-		}
-		
-		speex_encoder_ctl(speexState, SPEEX_SET_BITRATE, &bitrate);
+	else if(SPEEX_TARGET_BITRATE == _target) {
+		speex_encoder_ctl(speexState, SPEEX_SET_BITRATE, &_bitrate);
+	}
+	else {
+		[_delegate setStopped];
+		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex target" userInfo:nil];
 	}
 	
-	if(vbr_enabled) {
-		tmp = 1;
-		speex_encoder_ctl(speexState, SPEEX_SET_VBR, &tmp);
-	} 
-	else if(vad_enabled) {
-		tmp = 1;
-		speex_encoder_ctl(speexState, SPEEX_SET_VAD, &tmp);
-	}
-	
-	if(dtx_enabled) {
-		speex_encoder_ctl(speexState, SPEEX_SET_DTX, &tmp);
-	}
-
-	if(dtx_enabled && !(vbr_enabled || abr_enabled || vad_enabled)) {
-		fprintf(stderr, "Warning: --dtx is useless without --vad, --vbr or --abr\n");
-	} 
-	else if ((vbr_enabled || abr_enabled) && (vad_enabled)) {
-		fprintf(stderr, "Warning: --vad is already implied by --vbr or --abr\n");
-	}
-	
-	if(abr_enabled) {
-		speex_encoder_ctl(speexState, SPEEX_SET_ABR, &abr_enabled);
+	speex_encoder_ctl(speexState, SPEEX_SET_VBR, &_vbrEnabled);
+	speex_encoder_ctl(speexState, SPEEX_SET_ABR, &_abrEnabled);
+	speex_encoder_ctl(speexState, SPEEX_SET_VAD, &_vadEnabled);
+	if(_vadEnabled) {
+		speex_encoder_ctl(speexState, SPEEX_SET_DTX, &_dtxEnabled);
 	}
 	
 	speex_encoder_ctl(speexState, SPEEX_GET_LOOKAHEAD, &lookahead);
+
+	if(_denoiseEnabled || _agcEnabled) {
+		lookahead	+= frameSize;
+		preprocess	= speex_preprocess_state_init(frameSize, rate);
+		speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_DENOISE, &_denoiseEnabled);
+		speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_AGC, &_agcEnabled);
+	}
 	
 	// Write header
 	op.packet		= (unsigned char *)speex_header_to_packet(&header, (int*)&(op.bytes));
@@ -378,11 +393,15 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			speex_encode_stereo_int(_buf, frameSize, &bits);
 		}
 		
+		if(NULL != preprocess) {
+			speex_preprocess(preprocess, _buf, NULL);
+		}
+
 		speex_encode_int(speexState, _buf, &bits);
 		
 		framesEncoded	+= frameSize;
 
-		if(0 == (frameID + 1) % oggFramesPerPacket) {
+		if(0 == (frameID + 1) % _framesPerPacket) {
 			
 			speex_bits_insert_terminator(&bits);
 			nbBytes = speex_bits_write(&bits, cbits, 2000);
@@ -397,7 +416,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				op.granulepos = totalFrames;
 			}
 
-			op.packetno		= 2 + frameID / oggFramesPerPacket;
+			op.packetno		= 2 + frameID / _framesPerPacket;
 			ogg_stream_packetin(&os, &op);
 			
 			// Write out pages
@@ -448,8 +467,8 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	}
 	
 	// Finish up
-	if(0 != (frameID + 1) % oggFramesPerPacket) {
-		while(0 != (frameID + 1) % oggFramesPerPacket) {
+	if(0 != (frameID + 1) % _framesPerPacket) {
+		while(0 != (frameID + 1) % _framesPerPacket) {
 			++frameID;
 			speex_bits_pack(&bits, 15, 5);
 		}
@@ -464,7 +483,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			op.granulepos = totalFrames;
 		}
 		
-		op.packetno = 2 + frameID / oggFramesPerPacket;
+		op.packetno = 2 + frameID / _framesPerPacket;
 		ogg_stream_packetin(&os, &op);
 	}
 	
