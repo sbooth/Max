@@ -65,13 +65,13 @@
 		
 		err = ExtAudioFileOpen(&ref, &_in);
 		if(noErr != err) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileOpen failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		err = ExtAudioFileSetProperty(_in, kExtAudioFileProperty_ClientDataFormat, sizeof(_outputASBD), &_outputASBD);
 		if(noErr != err) {
-			[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+			[_delegate setStopped];
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileSetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 
@@ -190,6 +190,8 @@
 		
 		++iterations;
 	}
+	
+	free(_buf.mBuffers[0].mData);
 	
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	

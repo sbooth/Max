@@ -77,13 +77,6 @@ enum {
 	return nil;
 }
 
-- (void) dealloc
-{
-	free(_buf);
-	
-	[super dealloc];
-}
-
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime									= [NSDate date];	
@@ -311,13 +304,13 @@ enum {
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 
 	// Close the output file
 	if(-1 == close(_out)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -327,7 +320,9 @@ enum {
 	vorbis_dsp_clear(&vd);
 	vorbis_comment_clear(&vc);
 	vorbis_info_clear(&vi);
-	
+
+	free(_buf);
+
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
 	
@@ -336,14 +331,18 @@ enum {
 
 - (NSString *) settings
 {
-	if(VORBIS_MODE_QUALITY == _mode) {
-		return [NSString stringWithFormat:@"libVorbis settings: VBR(q=%f)", _quality * 10.f];
-	}
-	else if(VORBIS_MODE_BITRATE == _mode) {
-		return [NSString stringWithFormat:@"libVorbis settings: %@(%l kbps)", (_cbr ? @"CBR" : @"VBR"), _bitrate / 1000];
-	}
-	else {
-		return nil;
+	switch(_mode) {
+		case VORBIS_MODE_QUALITY:
+			return [NSString stringWithFormat:@"libVorbis settings: VBR(q=%f)", _quality * 10.f];
+			break;
+			
+		case VORBIS_MODE_BITRATE:
+			return [NSString stringWithFormat:@"libVorbis settings: %@(%l kbps)", (_cbr ? @"CBR" : @"VBR"), _bitrate / 1000];
+			break;
+			
+		default:
+			return nil;
+			break;
 	}
 }
 

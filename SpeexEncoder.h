@@ -29,6 +29,10 @@
 	
 	int						_out;
 	
+	// Downsampling
+	NSString				*_downsampledFilename;
+	int						_downsampledOut;
+	
 	// Settings flags
 	int						_mode;
 	int						_target;
@@ -43,7 +47,9 @@
 	BOOL					_vbrEnabled;
 	BOOL					_abrEnabled;
 	BOOL					_dtxEnabled;
-	BOOL					_vadEnabled;	
+	BOOL					_vadEnabled;
+	
+	BOOL					_writeSettingsToComment;
 }
 
 @end

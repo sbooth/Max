@@ -250,7 +250,6 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
 		SpeexPreferencesToolbarItemIdentifier,
-		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
 }
 

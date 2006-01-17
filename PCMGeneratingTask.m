@@ -88,6 +88,8 @@
 		_fileClosed			= NO;
 		_outputFilename		= [[NSString stringWithUTF8String:path] retain];
 		
+		free(path);
+		
 		return self;
 	}
 	

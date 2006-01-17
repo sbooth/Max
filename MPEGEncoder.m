@@ -78,7 +78,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 			// LAME setup
 			_gfp = lame_init();
 			if(NULL == _gfp) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				[_delegate setStopped];
 				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 			}
 			
@@ -121,13 +121,13 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
 			}
 			else {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				[_delegate setStopped];
 				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME mode" userInfo:nil];
 			}
 			
 			lameResult = lame_init_params(_gfp);
 			if(-1 == lameResult) {
-				[self setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
+				[_delegate setStopped];
 				@throw [LAMEException exceptionWithReason:@"Failure initializing LAME library" userInfo:nil];
 			}
 		}
@@ -150,7 +150,6 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 - (void) dealloc
 {
 	lame_close(_gfp);	
-	free(_buf);
 	
 	[super dealloc];
 }
@@ -243,13 +242,13 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Close the output file
 	if(-1 == close(_out)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
@@ -261,10 +260,12 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	}
 	lame_mp3_tags_fid(_gfp, file);
 	if(EOF == fclose(file)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
-	
+
+	free(_buf);
+
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
 	

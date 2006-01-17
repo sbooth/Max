@@ -5,7 +5,7 @@
 	<key>speexMode</key>
 	<integer>2</integer>
 	<key>speexDownsampleInput</key>
-	<false/>
+	<true/>
 	<key>speexDenoiseInput</key>
 	<false/>
 	<key>speexApplyAGC</key>
@@ -19,7 +19,7 @@
 	<key>speexQuality</key>
 	<real>8</real>
 	<key>speexBitrate</key>
-	<real>8</real>
+	<real>2</real>
 	<key>speexComplexity</key>
 	<real>3</real>
 	<key>speexEnableVAD</key>

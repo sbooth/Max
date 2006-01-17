@@ -24,6 +24,7 @@
 #import "StopException.h"
 #import "MissingResourceException.h"
 #import "SpeexException.h"
+#import "CoreAudioException.h"
 
 #import "UtilityFunctions.h"
 
@@ -33,12 +34,18 @@
 #include "speex/speex_preprocess.h"
 #include "ogg/ogg.h"
 
+#include "sndfile.h"
+
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose
 #include <sys/stat.h>	// stat
+#include <paths.h>			//_PATH_TMP
+#include <unistd.h>			// mkstemp, unlink
+
+#define TEMPFILE_PATTERN	"MaxXXXXXX.raw"
 
 // My (semi-arbitrary) list of supported speex bitrates
-static int sSpeexBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
+static int sSpeexBitrates [13] = { 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28};
 
 // Tag values for NSPopupButton
 enum {
@@ -170,6 +177,41 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 		_framesPerPacket	= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexFramesPerPacket"];
 		
+		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
+			
+		// Setup downsampled file, if needed (do it here to avoid multithreaded issues)
+		if(_downsampleInput) {
+			char				*path			= NULL;
+			const char			*tmpDir;
+			ssize_t				tmpDirLen;
+			ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
+			
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
+				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+			}
+			else {
+				tmpDir = _PATH_TMP;
+			}
+			
+			tmpDirLen	= strlen(tmpDir);
+			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+			if(NULL == path) {
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			}
+			memcpy(path, tmpDir, tmpDirLen);
+			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+			path[tmpDirLen + patternLen] = '\0';
+			
+			_downsampledOut = mkstemps(path, 4);
+			if(-1 == _downsampledOut) {
+				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			}
+			
+			_downsampledFilename = [[NSString stringWithUTF8String:path] retain];
+			
+			free(path);
+		}
+			
 		return self;
 	}
 	return nil;
@@ -177,8 +219,15 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 - (void) dealloc
 {
-	free(_buf);
-	
+	// Delete downsampled temporary file
+	if(_downsampleInput) {
+		if(-1 == unlink([_downsampledFilename UTF8String])) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _downsampledFilename, errno, strerror(errno)] userInfo:nil];
+		}			
+
+		[_downsampledFilename release];
+	}
+
 	[super dealloc];
 }
 
@@ -191,7 +240,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	SpeexPreprocessState		*preprocess;
 	SpeexBits					bits;
 
-	int							rate										= 44100;
+	int							rate;
 	int							chan										= 2;
 	int							frameID										= -1;
 	int							frameSize;
@@ -227,12 +276,161 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 
-	// Open the input file
-	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
-	if(-1 == _pcm) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+	// Downsample input if requested using libsndfile
+	if(_downsampleInput) {
+		SNDFILE						*inSF;
+		SF_INFO						info;
+		SNDFILE						*outSF				= NULL;
+		const char					*string				= NULL;
+		int							i;
+		int							err					= 0 ;
+		int							bufferLen			= 1024;
+		int							*intBuffer			= NULL;
+		double						*doubleBuffer		= NULL;
+		double						maxSignal;
+		int							frameCount;
+		int							readCount;
+		
+		// Open the input file
+		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+		info.samplerate		= 44100;
+		info.channels		= 2;
+		
+		inSF = sf_open([_pcmFilename UTF8String], SFM_READ, &info);
+		if(NULL == inSF) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		}
+			
+		// Determine the desired sample rate
+		switch(_mode) {
+			case SPEEX_MODE_NARROWBAND:		rate = 8000;		break;
+			case SPEEX_MODE_WIDEBAND:		rate = 16000;		break;
+			case SPEEX_MODE_ULTRAWIDEBAND:	rate = 32000;		break;
+				
+			default:						
+				[_delegate setStopped];
+				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex mode" userInfo:nil];
+				break;
+		}
+				
+		// Setup downsampled output file
+		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+		info.samplerate		= rate;
+		info.channels		= 2;
+		outSF				= sf_open_fd(_downsampledOut, SFM_WRITE, &info, 1);
+		if(NULL == outSF) {
+			[_delegate setStopped];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		}
+		
+		// Copy metadata
+		for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
+			string = sf_get_string(inSF, i);
+			if(NULL != string) {
+				err = sf_set_string(outSF, i, string);
+			}
+		}
+		
+		// Copy audio data
+		if(((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_DOUBLE) || ((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_FLOAT)) {
+			
+			doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
+			if(NULL == doubleBuffer) {
+				[_delegate setStopped];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			}
+			
+			frameCount		= bufferLen / info.channels ;
+			readCount		= frameCount ;
+			
+			sf_command(inSF, SFC_CALC_SIGNAL_MAX, &maxSignal, sizeof(maxSignal)) ;
+			
+			if(maxSignal < 1.0) {	
+				while(readCount > 0) {
+					// Check if we should stop, and if so throw an exception
+					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+						[_delegate setStopped];
+						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+					}
+					
+					readCount = sf_readf_double(inSF, doubleBuffer, frameCount) ;
+					sf_writef_double(outSF, doubleBuffer, readCount) ;
+					
+					++iterations;
+				}
+			}
+			// Renormalize output
+			else {	
+				sf_command(inSF, SFC_SET_NORM_DOUBLE, NULL, SF_FALSE);
+				
+				while(0 < readCount) {
+					// Check if we should stop, and if so throw an exception
+					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+						[_delegate setStopped];
+						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+					}
+					
+					readCount = sf_readf_double(inSF, doubleBuffer, frameCount);
+					for(i = 0 ; i < readCount * info.channels; ++i) {
+						doubleBuffer[i] /= maxSignal;
+					}
+					
+					sf_writef_double(outSF, doubleBuffer, readCount);
+					
+					++iterations;
+				}
+			}
+			
+			free(doubleBuffer);
+		}
+		else {
+			intBuffer = (int *)malloc(bufferLen * sizeof(int));
+			if(NULL == intBuffer) {
+				[_delegate setStopped];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			}
+			
+			frameCount		= bufferLen / info.channels;
+			readCount		= frameCount;
+			
+			while(0 < readCount) {	
+				// Check if we should stop, and if so throw an exception
+				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+					[_delegate setStopped];
+					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+				}
+				
+				readCount = sf_readf_int(inSF, intBuffer, frameCount);
+				sf_writef_int(outSF, intBuffer, readCount);
+				
+				++iterations;
+			}
+			
+			free(intBuffer);
+		}
+		
+		// Clean up sndfile
+		sf_close(inSF);
+		sf_close(outSF);	// Also closes _downsampledOut
+				
+		// Open the new, downsampled input file
+		_pcm = open([_downsampledFilename UTF8String], O_RDONLY);
+		if(-1 == _pcm) {
+			[_delegate setStopped];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		}
 	}
+	else {
+		rate = 44100;
+
+		// Open the input file
+		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		if(-1 == _pcm) {
+			[_delegate setStopped];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		}
+	}
+	
 
 	// Get input file information
 	struct stat sourceStat;
@@ -264,10 +462,18 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		@throw [SpeexException exceptionWithReason:@"Unable to initialize ogg stream." userInfo:nil];
 	}
 
-	
-	// TODO: setup from user defaults
-	
-	mode = speex_lib_get_mode(_mode);
+
+	// Setup encoder from user defaults
+	switch(_mode) {
+		case SPEEX_MODE_NARROWBAND:		mode = speex_lib_get_mode(SPEEX_MODEID_NB);		break;
+		case SPEEX_MODE_WIDEBAND:		mode = speex_lib_get_mode(SPEEX_MODEID_WB);		break;
+		case SPEEX_MODE_ULTRAWIDEBAND:	mode = speex_lib_get_mode(SPEEX_MODEID_UWB);	break;
+
+		default:						
+			[_delegate setStopped];
+			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex mode" userInfo:nil];
+			break;
+	}
 	
 	speex_init_header(&header, rate, 1, mode);
 	
@@ -328,6 +534,10 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	
 	comment_init(&comments, &comments_length, [[NSString stringWithFormat:@"Encoded with Max %@", bundleVersion] UTF8String]);
 
+	if(_writeSettingsToComment) {
+		comment_add(&comments, &comments_length, NULL, [[self settings] UTF8String]);
+	}
+	
 	op.packet		= (unsigned char *)comments;
 	op.bytes		= comments_length;
 	op.b_o_s		= 0;
@@ -510,20 +720,22 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
 	// Close the output file
 	if(-1 == close(_out)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
-	
+
 	// Clean up
 	speex_encoder_destroy(speexState);
 	speex_bits_destroy(&bits);
 	ogg_stream_clear(&os);
+
+	free(_buf);
 
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
@@ -531,7 +743,19 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 - (NSString *) settings
 {
-	return @"libSpeex settings:";
+	switch(_target) {
+		case SPEEX_TARGET_QUALITY:
+			return [NSString stringWithFormat:@"libSpeex settings: quality=%i complexity=%i%@%@%@%@", _quality, _complexity, (_vbrEnabled ? @" VBR" : @" "), (_abrEnabled ? @" ABR" : @" "), (_vadEnabled ? @" VAD" : @" "), (_dtxEnabled ? @" DTX" : @" ")];
+			break;
+
+		case SPEEX_TARGET_BITRATE:
+			return [NSString stringWithFormat:@"libSpeex settings: bitrate=%i kpbs complexity=%i%@%@%@%@", _bitrate / 1000, _complexity, (_vbrEnabled ? @" VBR" : @" "), (_abrEnabled ? @" ABR" : @" "), (_vadEnabled ? @" VAD" : @" "), (_dtxEnabled ? @" DTX" : @" ")];
+			break;
+			
+		default:
+			return nil;
+			break;
+	}
 }
 
 @end

@@ -79,7 +79,6 @@
 - (void) dealloc
 {
 	OggFLAC__file_encoder_delete(_flac);
-	free(_buf);
 	
 	[super dealloc];
 }
@@ -178,10 +177,12 @@
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		//[_delegate setStopped];
+		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 	
+	free(_buf);
+
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
 }
