@@ -4,6 +4,8 @@
 <dict>
 	<key>automaticallyQueryFreeDB</key>
 	<true/>
+	<key>automaticallySaveFreeDBInfo</key>
+	<true/>
 	<key>automaticallyEncodeTracks</key>
 	<false/>
 	<key>ejectAfterRipping</key>

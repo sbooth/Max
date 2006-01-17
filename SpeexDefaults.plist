@@ -2,5 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>speexMode</key>
+	<integer>2</integer>
+	<key>speexFramesPerPacket</key>
+	<integer>1</integer>
+	<key>speexQuality</key>
+	<real>8</real>
+	<key>speexComplexity</key>
+	<real>3</real>
 </dict>
 </plist>

@@ -22,7 +22,7 @@
 
 #import <Growl/GrowlApplicationBridge.h>
 
-@interface ApplicationController : NSObject < GrowlApplicationBridgeDelegate >
+@interface ApplicationController : NSObject <GrowlApplicationBridgeDelegate>
 {
 }
 

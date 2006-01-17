@@ -295,9 +295,9 @@ static TaskMaster *sharedController = nil;
 	else if([extension isEqualToString:@"oggflac"]) {
 		converterTask = [[OggFLACConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
 	}
-	/*else if([extension isEqualToString:@"spx"]) {
+	else if([extension isEqualToString:@"spx"]) {
 		converterTask = [[SpeexConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
-	}*/
+	}
 	else {
 		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"File format not supported", @"Exceptions", @"") userInfo:nil];
 	}
@@ -512,10 +512,10 @@ static TaskMaster *sharedController = nil;
 			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"ogg");
 			[self runEncoder:[OggVorbisEncoderTask class] outputFilename:outputFilename task:task];
 		}
-		/*if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"]) {
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"]) {
 			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"spx");
 			[self runEncoder:[SpeexEncoderTask class] outputFilename:outputFilename task:task];
-		}*/
+		}
 		
 		// Core Audio encoders
 		if(nil != coreAudioFormats && 0 < [coreAudioFormats count]) {
@@ -696,9 +696,9 @@ static TaskMaster *sharedController = nil;
 	BOOL		outputFLAC			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"];
 	BOOL		outputOggFLAC		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"];
 	BOOL		outputOggVorbis		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"];
-	//BOOL		outputSpeex			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"];
+	BOOL		outputSpeex			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"];
 
-	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis /*|| outputSpeex*/);
+	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis || outputSpeex);
 }
 
 - (BOOL) verifyOutputFormats

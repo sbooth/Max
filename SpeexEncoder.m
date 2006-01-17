@@ -37,6 +37,78 @@
 #include <sys/stat.h>	// stat
 
 
+/*                 
+Comments will be stored in the Vorbis style.            
+It is describled in the "Structure" section of
+http://www.xiph.org/ogg/vorbis/doc/v-comment.html
+
+The comment header is decoded as follows:
+1) [vendor_length] = read an unsigned integer of 32 bits
+2) [vendor_string] = read a UTF-8 vector as [vendor_length] octets
+3) [user_comment_list_length] = read an unsigned integer of 32 bits
+4) iterate [user_comment_list_length] times {
+	5) [length] = read an unsigned integer of 32 bits
+6) this iteration's user comment = read a UTF-8 vector as [length] octets
+     }
+7) [framing_bit] = read a single bit as boolean
+8) if ( [framing_bit]  unset or end of packet ) then ERROR
+9) done.
+
+If you have troubles, please write to ymnk@jcraft.com.
+*/
+
+#define readint(buf, base) (((buf[base+3]<<24)&0xff000000)| \
+							((buf[base+2]<<16)&0xff0000)| \
+							((buf[base+1]<<8)&0xff00)| \
+							(buf[base]&0xff))
+#define writeint(buf, base, val) do{ buf[base+3]=((val)>>24)&0xff; \
+	buf[base+2]=((val)>>16)&0xff; \
+		buf[base+1]=((val)>>8)&0xff; \
+			buf[base]=(val)&0xff; \
+}while(0)
+
+static void comment_init(char **comments, int *length, char *vendor_string)
+{
+	int vendor_length = strlen(vendor_string);
+	int user_comment_list_length = 0;
+	int len = 4+vendor_length+4;
+	char *p = (char*)malloc(len);
+	if(NULL == p){
+	}
+	
+	writeint(p, 0, vendor_length);
+	memcpy(p+4, vendor_string, vendor_length);
+	writeint(p, 4+vendor_length, user_comment_list_length);
+
+	*length = len;
+	*comments = p;
+}
+
+static void comment_add(char **comments, int *length, char *tag, char *val)
+{
+	char* p=*comments;
+	int vendor_length=readint(p, 0);
+	int user_comment_list_length=readint(p, 4+vendor_length);
+	int tag_len=(tag?strlen(tag):0);
+	int val_len=strlen(val);
+	int len=(*length)+4+tag_len+val_len;
+	
+	p=(char*)realloc(p, len);
+	if(p==NULL){
+	}
+	
+	writeint(p, *length, tag_len+val_len);      /* length of comment */
+	if(tag) memcpy(p+*length+4, tag, tag_len);  /* comment */
+	memcpy(p+*length+4+tag_len, val, val_len);  /* comment */
+	writeint(p, 4+vendor_length, user_comment_list_length+1);
+	
+	*comments=p;
+	*length=len;
+}
+
+#undef readint
+#undef writeint
+
 @implementation SpeexEncoder
 
 + (void) initialize
@@ -70,6 +142,7 @@
 
 - (void) dealloc
 {
+	free(_buf);
 	
 	[super dealloc];
 }
@@ -80,26 +153,25 @@
 
 	SpeexMode					*mode										= NULL;
 	int							modeID										= -1;
-	int							id											= -1;
-	void						*st;
+	int							frameID										= -1;
+	void						*speexState;
 	SpeexBits					bits;
 	int							rate										= 44100;
-	int							nframes										= 1;
+	int							oggFramesPerPacket							= 1;
 	int							vbr_enabled									= 0;
 	int							abr_enabled									= 0;
 	int							vad_enabled									= 0;
 	int							dtx_enabled									= 0;
-	int							chan										= 1;
-	int							frame_size;
+	int							chan										= 2;
+	int							frameSize;
 	int							complexity									= 3;
 	int							quality										= -1;
 	float						vbr_quality									= -1;
 	int							bitrate										= 0;
 	char						*comments;
 	int							comments_length;
-	int							nb_samples;
-	int							total_samples								= 0;
-	int							nb_encoded;
+	int							totalFrames;
+	int							framesEncoded;
 	int							nbBytes;
 	int							lookahead									= 0;
 	int							tmp;
@@ -107,12 +179,15 @@
 	   
 	SpeexHeader					header;
 
+	NSString					*bundleVersion;
+	
 	ogg_stream_state			os;
 	ogg_page					og;
 	ogg_packet					op;
-
+	
 	BOOL						eos											= NO;
 
+	ssize_t						framesRead;
 	ssize_t						bytesRead									= 0;
 	ssize_t						currentBytesWritten							= 0;
 	ssize_t						bytesWritten								= 0;
@@ -138,14 +213,6 @@
 	if(-1 == fstat(_pcm, &sourceStat)) {
 		[_delegate setStopped];
 		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-	}
-
-	// Allocate the buffer
-	_buflen			= 1024;
-	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-	if(NULL == _buf) {
-		[_delegate setStopped];
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 	}
 
 	totalBytes		= sourceStat.st_size;
@@ -174,30 +241,27 @@
 	
 	// TODO: setup from user defaults
 	
-	mode = speex_lib_get_mode(modeID);
+	mode = speex_lib_get_mode(SPEEX_MODEID_UWB/*modeID*/);
 	
 	speex_init_header(&header, rate, 1, mode);
 	
-	header.frames_per_packet	= nframes;
+	header.frames_per_packet	= oggFramesPerPacket;
 	header.vbr					= vbr_enabled;
 	header.nb_channels			= chan;
-	
-	/*fprintf (stderr, "Encoding %d Hz audio at %d bps using %s mode\n", 
-		header.rate, mode->bitrate, mode->modeName);*/
-	
-	// Setup the encoder
-	st = speex_encoder_init(mode);
 		
-	speex_encoder_ctl(st, SPEEX_GET_FRAME_SIZE, &frame_size);
-	speex_encoder_ctl(st, SPEEX_SET_COMPLEXITY, &complexity);
-	speex_encoder_ctl(st, SPEEX_SET_SAMPLING_RATE, &rate);
-	
+	// Setup the encoder
+	speexState = speex_encoder_init(mode);
+		
+	speex_encoder_ctl(speexState, SPEEX_GET_FRAME_SIZE, &frameSize);
+	speex_encoder_ctl(speexState, SPEEX_SET_COMPLEXITY, &complexity);
+	speex_encoder_ctl(speexState, SPEEX_SET_SAMPLING_RATE, &rate);
+		
 	if(0 <= quality) {
 		if(vbr_enabled) {
-			speex_encoder_ctl(st, SPEEX_SET_VBR_QUALITY, &vbr_quality);
+			speex_encoder_ctl(speexState, SPEEX_SET_VBR_QUALITY, &vbr_quality);
 		}
 		else {
-			speex_encoder_ctl(st, SPEEX_SET_QUALITY, &quality);
+			speex_encoder_ctl(speexState, SPEEX_SET_QUALITY, &quality);
 		}
 	}
 	
@@ -206,20 +270,20 @@
 			fprintf(stderr, "Warning: --bitrate option is overriding --quality\n");
 		}
 		
-		speex_encoder_ctl(st, SPEEX_SET_BITRATE, &bitrate);
+		speex_encoder_ctl(speexState, SPEEX_SET_BITRATE, &bitrate);
 	}
 	
 	if(vbr_enabled) {
 		tmp = 1;
-		speex_encoder_ctl(st, SPEEX_SET_VBR, &tmp);
+		speex_encoder_ctl(speexState, SPEEX_SET_VBR, &tmp);
 	} 
 	else if(vad_enabled) {
 		tmp = 1;
-		speex_encoder_ctl(st, SPEEX_SET_VAD, &tmp);
+		speex_encoder_ctl(speexState, SPEEX_SET_VAD, &tmp);
 	}
 	
 	if(dtx_enabled) {
-		speex_encoder_ctl(st, SPEEX_SET_DTX, &tmp);
+		speex_encoder_ctl(speexState, SPEEX_SET_DTX, &tmp);
 	}
 
 	if(dtx_enabled && !(vbr_enabled || abr_enabled || vad_enabled)) {
@@ -230,10 +294,10 @@
 	}
 	
 	if(abr_enabled) {
-		speex_encoder_ctl(st, SPEEX_SET_ABR, &abr_enabled);
+		speex_encoder_ctl(speexState, SPEEX_SET_ABR, &abr_enabled);
 	}
 	
-	speex_encoder_ctl(st, SPEEX_GET_LOOKAHEAD, &lookahead);
+	speex_encoder_ctl(speexState, SPEEX_GET_LOOKAHEAD, &lookahead);
 	
 	// Write header
 	op.packet		= (unsigned char *)speex_header_to_packet(&header, (int*)&(op.bytes));
@@ -244,6 +308,10 @@
 	
 	ogg_stream_packetin(&os, &op);
 	free(op.packet);
+
+	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+	
+	comment_init(&comments, &comments_length, [[NSString stringWithFormat:@"Encoded with Max %@", bundleVersion] UTF8String]);
 
 	op.packet		= (unsigned char *)comments;
 	op.bytes		= comments_length;
@@ -274,16 +342,24 @@
 		}
 		bytesWritten += currentBytesWritten;
 	}
+	
+	// Allocate the buffer (hardcoded for 16-bit stereo input)
+	_buflen			= 2 * frameSize;
+	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
+	if(NULL == _buf) {
+		[_delegate setStopped];
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+	}
 
 	speex_bits_init(&bits);
+
+	framesEncoded	= -lookahead;
+	totalFrames		= 0;
 	
-	
-	
-	
-	// Iteratively get the PCM data and encode it
-	while(NO == eos) {
+	// Iteratively get the PCM data and encode it, one frame at a time
+	while(NO == eos || totalFrames > framesEncoded) {
 		
-		// Read a chunk of PCM input
+		// Read a single frame of PCM input
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
 			[_delegate setStopped];
@@ -293,56 +369,60 @@
 			eos = YES;
 		}
 		
-		total_samples	+= bytesRead / 4;
-		nb_encoded		= -lookahead;
-
-		id++;
+		framesRead		= bytesRead / 4;
+		totalFrames		+= framesRead;
 		
-		/*Encode current frame*/
+		++frameID;
+		
 		if(2 == chan) {
-			speex_encode_stereo_int(_buf, frame_size, &bits);
+			speex_encode_stereo_int(_buf, frameSize, &bits);
 		}
 		
-		speex_encode_int(st, _buf, &bits);
+		speex_encode_int(speexState, _buf, &bits);
 		
-		nb_encoded += frame_size;
+		framesEncoded	+= frameSize;
 
-		if(eos && total_samples <= nb_encoded) {
-			op.e_o_s = 1;
+		if(0 == (frameID + 1) % oggFramesPerPacket) {
+			
+			speex_bits_insert_terminator(&bits);
+			nbBytes = speex_bits_write(&bits, cbits, 2000);
+			speex_bits_reset(&bits);
+			
+			op.packet		= (unsigned char *)cbits;
+			op.bytes		= nbBytes;
+			op.b_o_s		= 0;
+			op.e_o_s		= (eos && totalFrames <= framesEncoded) ? 1 : 0;
+			op.granulepos	= (frameID + 1) * frameSize - lookahead;
+			if(op.granulepos > totalFrames) {
+				op.granulepos = totalFrames;
+			}
+
+			op.packetno		= 2 + frameID / oggFramesPerPacket;
+			ogg_stream_packetin(&os, &op);
+			
+			// Write out pages
+			for(;;) {
+				
+				if(0 == ogg_stream_pageout(&os, &og)) {
+					break;
+				}
+				
+				currentBytesWritten = write(_out, og.header, og.header_len);
+				if(-1 == currentBytesWritten) {
+					[_delegate setStopped];
+					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				}
+				bytesWritten += currentBytesWritten;
+				
+				currentBytesWritten = write(_out, og.body, og.body_len);
+				if(-1 == currentBytesWritten) {
+					[_delegate setStopped];
+					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				}
+				bytesWritten += currentBytesWritten;				
+			}			
 		}
-		else {
-			op.e_o_s = 0;
-		}
-		
-		total_samples += nb_samples;
-		
-		if((id + 1) % nframes != 0) {
-			continue;
-		}
-		speex_bits_insert_terminator(&bits);
-		nbBytes = speex_bits_write(&bits, cbits, 2000);
-		speex_bits_reset(&bits);
-		
-		op.packet		= (unsigned char *)cbits;
-		op.bytes		= nbBytes;
-		op.b_o_s		= 0;
-		
-		/*Is this redundent?*/
-		if(eos && total_samples <= nb_encoded) {
-			op.e_o_s	= 1;
-		}
-		else {
-			op.e_o_s	= 0;
-		}
-		
-		op.granulepos	= (id + 1) * frame_size - lookahead;
-		if(op.granulepos > total_samples) {
-			op.granulepos = total_samples;
-		}
-		/*printf ("granulepos: %d %d %d %d %d %d\n", (int)op.granulepos, id, nframes, lookahead, 5, 6);*/
-		op.packetno		= 2 + id / nframes;
-		ogg_stream_packetin(&os, &op);
-		
+
 		// Update status
 		bytesToRead -= bytesRead;
 		
@@ -365,51 +445,26 @@
 		}
 		
 		++iterations;
-		
-		// Write out pages (most likely 0 or 1)
-		while(NO == eos) {
-			
-			if(0 == ogg_stream_pageout(&os, &og)) {
-				break;
-			}
-			
-			currentBytesWritten = write(_out, og.header, og.header_len);
-			if(-1 == currentBytesWritten) {
-				[_delegate setStopped];
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-			}
-			bytesWritten += currentBytesWritten;
-			
-			currentBytesWritten = write(_out, og.body, og.body_len);
-			if(-1 == currentBytesWritten) {
-				[_delegate setStopped];
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
-			}
-			bytesWritten += currentBytesWritten;
-			
-			if(ogg_page_eos(&og)) {
-				eos = YES;
-			}
-		}
 	}
 	
 	// Finish up
-	if(0 != (id + 1) % nframes) {
-		while(0 != (id + 1) % nframes) {
-			id++;
+	if(0 != (frameID + 1) % oggFramesPerPacket) {
+		while(0 != (frameID + 1) % oggFramesPerPacket) {
+			++frameID;
 			speex_bits_pack(&bits, 15, 5);
 		}
+		
 		nbBytes			= speex_bits_write(&bits, cbits, 2000);
 		op.packet		= (unsigned char *)cbits;
 		op.bytes		= nbBytes;
 		op.b_o_s		= 0;
 		op.e_o_s		= 1;
-		op.granulepos	= (id + 1) * frame_size - lookahead;
-		if(op.granulepos > total_samples) {
-			op.granulepos = total_samples;
+		op.granulepos	= (frameID + 1) * frameSize - lookahead;
+		if(op.granulepos > totalFrames) {
+			op.granulepos = totalFrames;
 		}
 		
-		op.packetno = 2 + id / nframes;
+		op.packetno = 2 + frameID / oggFramesPerPacket;
 		ogg_stream_packetin(&os, &op);
 	}
 	
@@ -447,7 +502,7 @@
 	}
 	
 	// Clean up
-	speex_encoder_destroy(st);
+	speex_encoder_destroy(speexState);
 	speex_bits_destroy(&bits);
 	ogg_stream_clear(&os);
 

@@ -170,7 +170,7 @@
 	// Allowable file types
 	types = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
 	[types addObjectsFromArray:getLibsndfileExtensions()];
-	[types addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", /*@"spx",*/ nil]];
+	[types addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", nil]];
 	
 	if(NSOKButton == [panel runModalForTypes:types]) {
 		NSFileManager		*manager		= [NSFileManager defaultManager];
