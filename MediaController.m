@@ -249,6 +249,10 @@ static MediaController *sharedController = nil;
 	if([keyPath isEqualToString:@"freeDBQueryInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
 
 		[doc removeObserver:self forKeyPath:@"freeDBQueryInProgress"];
+
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallySaveFreeDBInfo"]) {
+			[doc saveDocument:self];
+		}
 		
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && [[doc valueForKey:@"_freeDBQuerySuccessful"] boolValue]) {
 			[doc selectAll:self];
