@@ -112,29 +112,11 @@
 		
 	// Check for new version
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"startupVersionCheck"]) {
-		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-		macPAD			= [[MacPADSocket alloc] init];
-		
-		[macPAD setDelegate:self];
-		[macPAD performCheck:[NSURL URLWithString:@"http://sbooth.org/Max/Max.plist"] withVersion:bundleVersion];
-		[[macPAD retain] autorelease];
+		[[UpdateChecker sharedController] checkForUpdate:NO];
 	}
 	
 	// Register services
 	[[NSApplication sharedApplication] setServicesProvider:[[ServicesProvider alloc] init]];
-}
-
-- (void) macPADCheckFinished:(NSNotification *) aNotification
-{
-	if(kMacPADResultNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue]) {
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: @"OK"];
-		[alert setMessageText: @"Newer version available"];
-		[alert setInformativeText: [NSString stringWithFormat:@"Max %@ is available.", [[aNotification object] newVersion]]];
-		[alert setAlertStyle: NSInformationalAlertStyle];
-		
-		[alert runModal];
-	}
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
@@ -280,7 +262,7 @@
 
 - (IBAction) checkForUpdate:(id)sender
 {
-	[[UpdateChecker sharedController] checkForUpdate];
+	[[UpdateChecker sharedController] checkForUpdate:YES];
 }
 
 - (IBAction) openHomeURL:(id)sender

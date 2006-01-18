@@ -29,6 +29,6 @@
 
 + (UpdateChecker *) sharedController;
 
-- (void) checkForUpdate;
+- (void) checkForUpdate:(BOOL)showWindow;
 
 @end

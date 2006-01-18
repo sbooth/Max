@@ -30,9 +30,6 @@ static UpdateChecker *sharedController = nil;
 		_socket		= [[MacPADSocket alloc] init];
 
 		[_socket setDelegate:self];
-
-		[self setShouldCascadeWindows:NO];
-		[self setWindowFrameAutosaveName:@"UpdateChecker"];	
 	}
 	return self;
 }
@@ -69,10 +66,21 @@ static UpdateChecker *sharedController = nil;
 	[super dealloc];
 }
 
-- (void) checkForUpdate
+- (void) windowDidLoad
+{
+	[self setShouldCascadeWindows:NO];
+	[self setWindowFrameAutosaveName:@"UpdateChecker"];	
+	[[self window] setExcludedFromWindowsMenu:YES];
+}
+
+- (void) checkForUpdate:(BOOL)showWindow
 {
 	NSString *bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-	[self showWindow:self];
+	
+	if(showWindow) {
+		[self showWindow:self];	
+	}
+	
 	[_socket performCheck:[NSURL URLWithString:@"http://sbooth.org/Max/Max.plist"] withVersion:bundleVersion];
 }
 
@@ -95,26 +103,62 @@ static UpdateChecker *sharedController = nil;
 {
 	NSWindow *updateWindow = [self window];
 	
-	if([updateWindow isVisible]) {
+	// Suppress up-to-date alert if our window isn't visible (called by ApplicationController at startup)
+	if(kMacPADResultNoNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue] && [updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: @"OK"];
-		if(kMacPADResultNoNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue]) {
-			[alert setMessageText: @"Software up-to-date"];
-			[alert setInformativeText: @"You are running the most current version of Max."];
-		}
-		else {
-			[alert setMessageText: @"Newer version available"];
-			[alert setInformativeText: [NSString stringWithFormat:@"Max %@ is available.", [_socket newVersion]]];
-		}
+		[alert setMessageText: @"Software up-to-date"];
+		[alert setInformativeText: @"You are running the most current version of Max."];
+
 		[alert setAlertStyle: NSWarningAlertStyle];
 		
 		[alert beginSheetModalForWindow:updateWindow modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	}
+	else {
+		int			result;
+		NSAlert		*alert	= [[[NSAlert alloc] init] autorelease];
+		
+		[alert addButtonWithTitle: @"OK"];
+		[alert addButtonWithTitle: @"More Info"];
+		[alert addButtonWithTitle: @"Download"];
+		
+		[alert setMessageText: @"Newer version available"];
+		[alert setInformativeText: [NSString stringWithFormat:@"Max %@ is available.", [_socket newVersion]]];
+
+		[alert setAlertStyle: NSWarningAlertStyle];
+
+		if([updateWindow isVisible]) {
+			[alert beginSheetModalForWindow:updateWindow modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+		}
+		else {
+			result = [alert runModal];
+			
+			if(NSAlertFirstButtonReturn == result) {
+				// do nothing
+			}
+			else if(NSAlertSecondButtonReturn == result) {
+				[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productPageURL]]];
+			}
+			else if(NSAlertThirdButtonReturn == result) {
+				[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productDownloadURL]]];
+			}
+		}
 	}
 }
 
 - (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
 	NSWindow *updateWindow = [self window];
+	
+	if(NSAlertFirstButtonReturn == returnCode) {
+		// do nothing
+	}
+	else if(NSAlertSecondButtonReturn == returnCode) {
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productPageURL]]];
+	}
+	else if(NSAlertThirdButtonReturn == returnCode) {
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productDownloadURL]]];
+	}
 
 	if([updateWindow isVisible]) {
 		[updateWindow orderOut:self];

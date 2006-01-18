@@ -40,6 +40,6 @@
 
 - (IBAction)			encodeFile:(id)sender;
 
--(NSDictionary *)		registrationDictionaryForGrowl;
+- (NSDictionary *)		registrationDictionaryForGrowl;
 
 @end
