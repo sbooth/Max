@@ -47,6 +47,11 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
     return sharedLog;
 }
 
++ (void) logMessage:(NSString *)message
+{
+	[[LogController sharedController] logMessage:message];
+}
+
 - (id)init
 {
 	if((self = [super initWithWindowNibName:@"Log"])) {
@@ -64,12 +69,8 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 - (void) windowDidLoad
 {
 	[self setShouldCascadeWindows:NO];
-	[self setWindowFrameAutosaveName:@"Log"];	
-}
-
-+ (void) logMessage:(NSString *)message
-{
-	[[LogController sharedController] logMessage:message];
+	[self setWindowFrameAutosaveName:@"Log"];
+	[[self window] setExcludedFromWindowsMenu:YES];
 }
 
 - (void) awakeFromNib
