@@ -258,7 +258,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>10</integer>
+									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -525,8 +525,8 @@
 		<string>8C95A697097DAE1D00336D5C</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>8C191A4608C515A500CB7453</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Users/me/Development/Max/Max.xcodeproj</string>
+		<string>1C0AD2B3069F1EA900FABCE6</string>
 	</array>
 	<key>WindowString</key>
 	<string>708 213 534 606 0 0 1280 832 </string>
@@ -755,7 +755,7 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>EncoderTask.m</string>
+										<string>CompactDiscDocument.m</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>

@@ -27,6 +27,7 @@
 @interface CompactDiscDocument : NSDocument 
 {
     IBOutlet NSDrawer				*_trackDrawer;
+    IBOutlet NSTableView			*_trackTable;
 
 	CompactDisc						*_disc;
 	NSNumber						*_discInDrive;

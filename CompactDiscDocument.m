@@ -93,6 +93,12 @@
 	[super dealloc];
 }
 
+- (void) awakeFromNib
+{
+	[_trackTable setAutosaveName:[NSString stringWithFormat: @"Tracks for 0x%.8x", [self discID]]];
+	[_trackTable setAutosaveTableColumns:YES];
+}
+
 #pragma mark NSDocument overrides
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item

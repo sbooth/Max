@@ -367,6 +367,11 @@
 			8C95A77E097DBB2600336D5C /* PBXBookmark */ = 8C95A77E097DBB2600336D5C /* PBXBookmark */;
 			8C95A784097DBB6400336D5C /* PBXTextBookmark */ = 8C95A784097DBB6400336D5C /* PBXTextBookmark */;
 			8C95A788097DBB7B00336D5C /* PBXTextBookmark */ = 8C95A788097DBB7B00336D5C /* PBXTextBookmark */;
+			8C95A7CB097DC3DD00336D5C /* PBXTextBookmark */ = 8C95A7CB097DC3DD00336D5C /* PBXTextBookmark */;
+			8C95A7CC097DC3DD00336D5C /* PBXTextBookmark */ = 8C95A7CC097DC3DD00336D5C /* PBXTextBookmark */;
+			8C95A7CD097DC3DD00336D5C /* PBXTextBookmark */ = 8C95A7CD097DC3DD00336D5C /* PBXTextBookmark */;
+			8C95A7CE097DC3DD00336D5C /* PBXTextBookmark */ = 8C95A7CE097DC3DD00336D5C /* PBXTextBookmark */;
+			8C95A7CF097DC3DD00336D5C /* PBXTextBookmark */ = 8C95A7CF097DC3DD00336D5C /* PBXTextBookmark */;
 			8C9D204D08C5379E00D95535 = 8C9D204D08C5379E00D95535 /* PBXTextBookmark */;
 			8CBEC73508ED8D980064F794 = 8CBEC73508ED8D980064F794 /* PBXTextBookmark */;
 			8CBEC73708ED8D980064F794 = 8CBEC73708ED8D980064F794 /* PBXTextBookmark */;
@@ -957,17 +962,17 @@
 	};
 	8C76E43208C6DE1A00F4F9A1 /* CompactDiscDocument.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {747, 1330}}";
-			sepNavSelRange = "{1185, 0}";
-			sepNavVisRect = "{{0, 343}, {747, 745}}";
+			sepNavIntBoundsRect = "{{0, 0}, {747, 1344}}";
+			sepNavSelRange = "{1055, 0}";
+			sepNavVisRect = "{{0, 0}, {747, 745}}";
 			sepNavWindowFrame = "{{476, 14}, {792, 818}}";
 		};
 	};
 	8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1304, 9156}}";
-			sepNavSelRange = "{14767, 0}";
-			sepNavVisRect = "{{0, 7582}, {784, 755}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1304, 9240}}";
+			sepNavSelRange = "{3990, 0}";
+			sepNavVisRect = "{{0, 1644}, {742, 338}}";
 			sepNavWindowFrame = "{{141, 4}, {829, 828}}";
 		};
 	};
@@ -2796,6 +2801,53 @@
 		vrLen = 998;
 		vrLoc = 3334;
 	};
+	8C95A7CB097DC3DD00336D5C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
+		name = "SpeexEncoder.m: 762";
+		rLen = 0;
+		rLoc = 25163;
+		rType = 0;
+		vrLen = 607;
+		vrLoc = 17479;
+	};
+	8C95A7CC097DC3DD00336D5C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */;
+		name = "_writeSettingsToComment\t\t= [[NSUserDefaults standardUserDefaults] boolForKey:@\"saveEncoderSettingsInComment\"];";
+		rLen = 113;
+		rLoc = 1477;
+		rType = 0;
+		vrLen = 605;
+		vrLoc = 1109;
+	};
+	8C95A7CD097DC3DD00336D5C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		rLen = 2;
+		rLoc = 4024;
+		rType = 0;
+	};
+	8C95A7CE097DC3DD00336D5C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */;
+		name = "_writeSettingsToComment\t\t= [[NSUserDefaults standardUserDefaults] boolForKey:@\"saveEncoderSettingsInComment\"];";
+		rLen = 113;
+		rLoc = 1477;
+		rType = 0;
+		vrLen = 605;
+		vrLoc = 1109;
+	};
+	8C95A7CF097DC3DD00336D5C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */;
+		name = "CompactDiscDocument.m: 131";
+		rLen = 0;
+		rLoc = 4051;
+		rType = 0;
+		vrLen = 938;
+		vrLoc = 3414;
+	};
 	8C9D204D08C5379E00D95535 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 8C752A8208C507CE001F588B /* Genres.h */;
@@ -3494,7 +3546,7 @@
 	8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {776, 868}}";
-			sepNavSelRange = "{1145, 0}";
+			sepNavSelRange = "{881, 0}";
 			sepNavVisRect = "{{0, 159}, {776, 709}}";
 			sepNavWindowFrame = "{{185, 50}, {821, 782}}";
 		};
@@ -3656,8 +3708,8 @@
 	8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1112, 2422}}";
-			sepNavSelRange = "{3754, 0}";
-			sepNavVisRect = "{{0, 1722}, {830, 700}}";
+			sepNavSelRange = "{1477, 113}";
+			sepNavVisRect = "{{0, 440}, {742, 338}}";
 			sepNavWindowFrame = "{{6, 51}, {875, 773}}";
 		};
 	};
