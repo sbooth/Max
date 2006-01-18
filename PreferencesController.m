@@ -141,7 +141,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"General"];
 		[toolbarItem setPaletteLabel: @"General"];		
-		[toolbarItem setToolTip: @"General preferences"];
+		[toolbarItem setToolTip: @"Control the general behavior of Max"];
 		[toolbarItem setImage: [NSImage imageNamed:@"GeneralToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -152,7 +152,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"Formats"];
 		[toolbarItem setPaletteLabel: @"Formats"];
-		[toolbarItem setToolTip: @"Output file format preferences"];
+		[toolbarItem setToolTip: @"Select the encoders that Max will use to produce audio"];
 		[toolbarItem setImage: [NSImage imageNamed:@"FormatsToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -163,7 +163,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"Output"];
 		[toolbarItem setPaletteLabel: @"Output"];
-		[toolbarItem setToolTip: @"Output file naming and location preferences"];
+		[toolbarItem setToolTip: @"Select where output files will be saved and how they will be named"];
 		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -174,7 +174,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"FreeDB"];
 		[toolbarItem setPaletteLabel: @"FreeDB"];
-		[toolbarItem setToolTip: @"FreeDB preferences"];
+		[toolbarItem setToolTip: @"Control the protocol and server used by FreeDB to retrieve CD information"];
 		[toolbarItem setImage: [NSImage imageNamed:@"FreeDBToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -185,7 +185,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"Ripper"];
 		[toolbarItem setPaletteLabel: @"Ripper"];
-		[toolbarItem setToolTip: @"CD ripper preferences"];
+		[toolbarItem setToolTip: @"Adjust the parameters used for CD audio extraction"];
 		[toolbarItem setImage: [NSImage imageNamed:@"RipperToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -196,7 +196,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"MP3"];
 		[toolbarItem setPaletteLabel: @"MP3"];
-		[toolbarItem setToolTip: @"LAME mp3 encoder preferences"];
+		[toolbarItem setToolTip: @"Adjust the parameters used by the MP3 encoder"];
 		[toolbarItem setImage: [NSImage imageNamed:@"LAMEToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -207,7 +207,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"FLAC"];
 		[toolbarItem setPaletteLabel: @"FLAC"];
-		[toolbarItem setToolTip: @"FLAC and Ogg FLAC encoder preferences"];
+		[toolbarItem setToolTip: @"Adjust the parameters used by the FLAC and Ogg FLAC encoders"];
 		[toolbarItem setImage: [NSImage imageNamed:@"FLAC"]];
 		
 		[toolbarItem setTarget:self];
@@ -218,7 +218,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"Ogg Vorbis"];
 		[toolbarItem setPaletteLabel: @"Ogg Vorbis"];
-		[toolbarItem setToolTip: @"Ogg Vorbis encoder preferences"];
+		[toolbarItem setToolTip: @"Adjust the parameters used by the Ogg Vorbis encoder"];
 		[toolbarItem setImage: [NSImage imageNamed:@"OggVorbisToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -229,7 +229,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		
 		[toolbarItem setLabel: @"Speex"];
 		[toolbarItem setPaletteLabel: @"Speex"];
-		[toolbarItem setToolTip: @"Speex encoder preferences"];
+		[toolbarItem setToolTip: @"Adjust the parameters used by the Speex encoder"];
 		[toolbarItem setImage: [NSImage imageNamed:@"SpeexToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -283,31 +283,32 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 	NSView					*prefView;
 	float					toolbarHeight, newWindowHeight, newWindowWidth;
 	NSRect					windowFrame, newFrameRect, newWindowFrame;
+	NSWindow				*myWindow;
 
-	
-	toolbar					= [[self window] toolbar];
+	myWindow				= [self window];
+	toolbar					= [myWindow toolbar];
 	itemIdentifier			= [toolbar selectedItemIdentifier];
 	prefPaneClass			= NSClassFromString([itemIdentifier stringByAppendingString:@"Controller"]);
 	prefPaneObject			= [[prefPaneClass alloc] init];
 	prefView				= [[prefPaneObject window] contentView];
 		
-	float windowHeight		= NSHeight([[[self window] contentView] frame]);
+	float windowHeight		= NSHeight([[myWindow contentView] frame]);
 	
 	// Calculate toolbar height
 	if([toolbar isVisible]) {
-		windowFrame = [NSWindow contentRectForFrameRect:[[self window] frame] styleMask:[[self window] styleMask]];
+		windowFrame = [NSWindow contentRectForFrameRect:[myWindow frame] styleMask:[myWindow styleMask]];
 		toolbarHeight = NSHeight(windowFrame) - windowHeight;
 	}
 	
 	newWindowHeight		= NSHeight([prefView frame]) + toolbarHeight;
-	newWindowWidth		= NSWidth([prefView frame]);
+	newWindowWidth		= NSWidth([[myWindow contentView] frame]); // Don't adjust width, only height
 	newFrameRect		= NSMakeRect(NSMinX(windowFrame), NSMaxY(windowFrame) - newWindowHeight, newWindowWidth, newWindowHeight);
-	newWindowFrame		= [NSWindow frameRectForContentRect:newFrameRect styleMask:[[self window] styleMask]];
+	newWindowFrame		= [NSWindow frameRectForContentRect:newFrameRect styleMask:[myWindow styleMask]];
 	
-	[[self window] setContentView:[[[NSView alloc] init] autorelease]];
-	[[self window] setTitle:[[self toolbar:toolbar itemForItemIdentifier:itemIdentifier willBeInsertedIntoToolbar:NO] label]];
-	[[self window] setFrame:newWindowFrame display:YES animate:[[self window] isVisible]];
-	[[self window] setContentView:prefView];
+	[myWindow setContentView:[[[NSView alloc] init] autorelease]];
+	[myWindow setTitle:[[self toolbar:toolbar itemForItemIdentifier:itemIdentifier willBeInsertedIntoToolbar:NO] label]];
+	[myWindow setFrame:newWindowFrame display:YES animate:[myWindow isVisible]];
+	[myWindow setContentView:prefView];
 }
 
 @end
