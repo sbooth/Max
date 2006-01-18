@@ -157,7 +157,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		
 		_mode				= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexMode"];
 
-		_downsampleInput	= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexDownsampleInput"];
+		_resampleInput		= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexResampleInput"];
 		
 		_denoiseEnabled		= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexDenoiseInput"];
 		_agcEnabled			= [[NSUserDefaults standardUserDefaults] boolForKey:@"speexApplyAGC"];
@@ -180,7 +180,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
 		// Setup downsampled file, if needed (do it here to avoid multithreaded issues)
-		if(_downsampleInput) {
+		if(_resampleInput) {
 			char				*path			= NULL;
 			const char			*tmpDir;
 			ssize_t				tmpDirLen;
@@ -202,12 +202,12 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 			path[tmpDirLen + patternLen] = '\0';
 			
-			_downsampledOut = mkstemps(path, 4);
-			if(-1 == _downsampledOut) {
+			_resampledOut = mkstemps(path, 4);
+			if(-1 == _resampledOut) {
 				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
 			}
 			
-			_downsampledFilename = [[NSString stringWithUTF8String:path] retain];
+			_resampledFilename = [[NSString stringWithUTF8String:path] retain];
 			
 			free(path);
 		}
@@ -219,13 +219,13 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 - (void) dealloc
 {
-	// Delete downsampled temporary file
-	if(_downsampleInput) {
-		if(-1 == unlink([_downsampledFilename UTF8String])) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _downsampledFilename, errno, strerror(errno)] userInfo:nil];
+	// Delete resampled temporary file
+	if(_resampleInput) {
+		if(-1 == unlink([_resampledFilename UTF8String])) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _resampledFilename, errno, strerror(errno)] userInfo:nil];
 		}			
 
-		[_downsampledFilename release];
+		[_resampledFilename release];
 	}
 
 	[super dealloc];
@@ -277,7 +277,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	[_delegate setStarted];
 
 	// Downsample input if requested using libsndfile
-	if(_downsampleInput) {
+	if(_resampleInput) {
 		SNDFILE						*inSF;
 		SF_INFO						info;
 		SNDFILE						*outSF				= NULL;
@@ -298,6 +298,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		
 		inSF = sf_open([_pcmFilename UTF8String], SFM_READ, &info);
 		if(NULL == inSF) {
+			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 		}
 			
@@ -317,7 +318,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 		info.samplerate		= rate;
 		info.channels		= 2;
-		outSF				= sf_open_fd(_downsampledOut, SFM_WRITE, &info, 1);
+		outSF				= sf_open_fd(_resampledOut, SFM_WRITE, &info, 1);
 		if(NULL == outSF) {
 			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
@@ -411,10 +412,10 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		
 		// Clean up sndfile
 		sf_close(inSF);
-		sf_close(outSF);	// Also closes _downsampledOut
+		sf_close(outSF);	// Also closes _resampledOut
 				
 		// Open the new, downsampled input file
-		_pcm = open([_downsampledFilename UTF8String], O_RDONLY);
+		_pcm = open([_resampledFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			[_delegate setStopped];
 			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
@@ -431,7 +432,6 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		}
 	}
 	
-
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
