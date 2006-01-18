@@ -1116,7 +1116,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 263";
 		rLen = 0;
-		rLoc = 16218;
+		rLoc = 16216;
 		rType = 0;
 		vrLen = 1363;
 		vrLoc = 7312;
@@ -1162,7 +1162,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 266";
 		rLen = 0;
-		rLoc = 16218;
+		rLoc = 16216;
 		rType = 0;
 		vrLen = 1370;
 		vrLoc = 7312;
@@ -1182,7 +1182,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 263";
 		rLen = 0;
-		rLoc = 16218;
+		rLoc = 16216;
 		rType = 0;
 		vrLen = 1450;
 		vrLoc = 7087;
@@ -1202,7 +1202,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 244";
 		rLen = 0;
-		rLoc = 15795;
+		rLoc = 15793;
 		rType = 0;
 		vrLen = 1449;
 		vrLoc = 7087;
@@ -1222,7 +1222,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 244";
 		rLen = 0;
-		rLoc = 15795;
+		rLoc = 15793;
 		rType = 0;
 		vrLen = 1449;
 		vrLoc = 7087;
@@ -1242,7 +1242,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 244";
 		rLen = 0;
-		rLoc = 15795;
+		rLoc = 15793;
 		rType = 0;
 		vrLen = 1450;
 		vrLoc = 7087;
@@ -1252,7 +1252,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 258";
 		rLen = 0;
-		rLoc = 16218;
+		rLoc = 16216;
 		rType = 0;
 		vrLen = 1430;
 		vrLoc = 7087;
@@ -1312,7 +1312,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 249";
 		rLen = 0;
-		rLoc = 15918;
+		rLoc = 15916;
 		rType = 0;
 		vrLen = 1661;
 		vrLoc = 7275;
@@ -1368,7 +1368,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: SPEEX_MODE_QUALITY";
 		rLen = 0;
-		rLoc = 1687;
+		rLoc = 1685;
 		rType = 0;
 		vrLen = 1714;
 		vrLoc = 1533;
@@ -1378,7 +1378,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 144";
 		rLen = 0;
-		rLoc = 4942;
+		rLoc = 4940;
 		rType = 0;
 		vrLen = 1403;
 		vrLoc = 3530;
@@ -1428,7 +1428,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 148";
 		rLen = 0;
-		rLoc = 4942;
+		rLoc = 4940;
 		rType = 0;
 		vrLen = 1375;
 		vrLoc = 3539;
@@ -1468,7 +1468,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 149";
 		rLen = 0;
-		rLoc = 5040;
+		rLoc = 5038;
 		rType = 0;
 		vrLen = 1475;
 		vrLoc = 3539;
@@ -1508,7 +1508,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 151";
 		rLen = 0;
-		rLoc = 5224;
+		rLoc = 5222;
 		rType = 0;
 		vrLen = 1605;
 		vrLoc = 3539;
@@ -1548,7 +1548,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 156";
 		rLen = 0;
-		rLoc = 5489;
+		rLoc = 5487;
 		rType = 0;
 		vrLen = 1728;
 		vrLoc = 3539;
@@ -1588,7 +1588,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 161";
 		rLen = 0;
-		rLoc = 5691;
+		rLoc = 5689;
 		rType = 0;
 		vrLen = 1861;
 		vrLoc = 3539;
@@ -1628,7 +1628,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 167";
 		rLen = 0;
-		rLoc = 6058;
+		rLoc = 6056;
 		rType = 0;
 		vrLen = 1707;
 		vrLoc = 4424;
@@ -1676,7 +1676,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "mode = speex_lib_get_mode(_mode);";
 		rLen = 0;
-		rLoc = 15795;
+		rLoc = 15793;
 		rType = 0;
 		vrLen = 616;
 		vrLoc = 8115;
@@ -1686,7 +1686,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 298";
 		rLen = 0;
-		rLoc = 16732;
+		rLoc = 16730;
 		rType = 0;
 		vrLen = 1969;
 		vrLoc = 8705;
@@ -1730,7 +1730,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: sSpeexBitrates";
 		rLen = 0;
-		rLoc = 1582;
+		rLoc = 1580;
 		rType = 0;
 		vrLen = 1799;
 		vrLoc = 523;
@@ -1740,7 +1740,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: sSpeexBitrates";
 		rLen = 0;
-		rLoc = 1578;
+		rLoc = 1576;
 		rType = 0;
 		vrLen = 1799;
 		vrLoc = 523;
@@ -1750,7 +1750,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: sSpeexBitrates";
 		rLen = 0;
-		rLoc = 1613;
+		rLoc = 1611;
 		rType = 0;
 		vrLen = 1822;
 		vrLoc = 523;
@@ -1760,7 +1760,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: sSpeexBitrates";
 		rLen = 0;
-		rLoc = 1560;
+		rLoc = 1558;
 		rType = 0;
 		vrLen = 1822;
 		vrLoc = 523;
@@ -1824,7 +1824,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: free";
 		rLen = 0;
-		rLoc = 24405;
+		rLoc = 24403;
 		rType = 0;
 		vrLen = 730;
 		vrLoc = 21143;
@@ -1891,7 +1891,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: free";
 		rLen = 0;
-		rLoc = 24405;
+		rLoc = 24403;
 		rType = 0;
 		vrLen = 730;
 		vrLoc = 21143;
@@ -1919,7 +1919,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "if(-1 == write(file, buf.mBuffers[0].mData, frameCount * outputASBD.mBytesPerPacket)) {";
 		rLen = 0;
-		rLoc = 10135;
+		rLoc = 10133;
 		rType = 0;
 		vrLen = 997;
 		vrLoc = 10196;
@@ -1939,7 +1939,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "if(-1 == write(file, buf.mBuffers[0].mData, frameCount * outputASBD.mBytesPerPacket)) {";
 		rLen = 0;
-		rLoc = 10135;
+		rLoc = 10133;
 		rType = 0;
 		vrLen = 1097;
 		vrLoc = 10114;
@@ -1986,7 +1986,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "if(-1 == write(file, buf.mBuffers[0].mData, frameCount * outputASBD.mBytesPerPacket)) {";
 		rLen = 0;
-		rLoc = 10135;
+		rLoc = 10133;
 		rType = 0;
 		vrLen = 1097;
 		vrLoc = 10114;
@@ -2004,7 +2004,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "if(-1 == write(file, buf.mBuffers[0].mData, frameCount * outputASBD.mBytesPerPacket)) {";
 		rLen = 0;
-		rLoc = 10135;
+		rLoc = 10133;
 		rType = 0;
 		vrLen = 1097;
 		vrLoc = 10114;
@@ -2062,7 +2062,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 688";
 		rLen = 0;
-		rLoc = 24301;
+		rLoc = 24299;
 		rType = 0;
 		vrLen = 2574;
 		vrLoc = 9840;
@@ -2144,7 +2144,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 684";
 		rLen = 0;
-		rLoc = 23957;
+		rLoc = 23955;
 		rType = 0;
 		vrLen = 1589;
 		vrLoc = 8471;
@@ -2174,7 +2174,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 684";
 		rLen = 0;
-		rLoc = 23957;
+		rLoc = 23955;
 		rType = 0;
 		vrLen = 1589;
 		vrLoc = 8471;
@@ -2184,7 +2184,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 684";
 		rLen = 0;
-		rLoc = 23957;
+		rLoc = 23955;
 		rType = 0;
 		vrLen = 1589;
 		vrLoc = 8471;
@@ -2194,7 +2194,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 684";
 		rLen = 0;
-		rLoc = 23957;
+		rLoc = 23955;
 		rType = 0;
 		vrLen = 1589;
 		vrLoc = 8471;
@@ -2204,7 +2204,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 684";
 		rLen = 0;
-		rLoc = 23957;
+		rLoc = 23955;
 		rType = 0;
 		vrLen = 1589;
 		vrLoc = 8471;
@@ -2234,7 +2234,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 309";
 		rLen = 0;
-		rLoc = 10135;
+		rLoc = 10133;
 		rType = 0;
 		vrLen = 2356;
 		vrLoc = 9110;
@@ -2339,7 +2339,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "info.sampleRate\t\t= 44100;";
 		rLen = 28;
-		rLoc = 9417;
+		rLoc = 9415;
 		rType = 0;
 		vrLen = 747;
 		vrLoc = 9026;
@@ -2359,7 +2359,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 323";
 		rLen = 0;
-		rLoc = 10135;
+		rLoc = 10133;
 		rType = 0;
 		vrLen = 2274;
 		vrLoc = 9110;
@@ -2369,7 +2369,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 319";
 		rLen = 0;
-		rLoc = 10285;
+		rLoc = 10283;
 		rType = 0;
 		vrLen = 2007;
 		vrLoc = 9154;
@@ -2379,7 +2379,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: setStopped";
 		rLen = 0;
-		rLoc = 11575;
+		rLoc = 11573;
 		rType = 0;
 		vrLen = 1845;
 		vrLoc = 22641;
@@ -2389,7 +2389,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 295";
 		rLen = 0;
-		rLoc = 9431;
+		rLoc = 9429;
 		rType = 0;
 		vrLen = 747;
 		vrLoc = 9026;
@@ -2422,7 +2422,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: setStopped";
 		rLen = 0;
-		rLoc = 11575;
+		rLoc = 11573;
 		rType = 0;
 		vrLen = 1845;
 		vrLoc = 22641;
@@ -2458,7 +2458,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: setStopped";
 		rLen = 0;
-		rLoc = 11575;
+		rLoc = 11573;
 		rType = 0;
 		vrLen = 1728;
 		vrLoc = 22596;
@@ -2468,7 +2468,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 295";
 		rLen = 0;
-		rLoc = 9431;
+		rLoc = 9429;
 		rType = 0;
 		vrLen = 747;
 		vrLoc = 9026;
@@ -2488,7 +2488,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: setStopped";
 		rLen = 0;
-		rLoc = 11575;
+		rLoc = 11573;
 		rType = 0;
 		vrLen = 1728;
 		vrLoc = 22596;
@@ -2498,7 +2498,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 295";
 		rLen = 0;
-		rLoc = 9431;
+		rLoc = 9429;
 		rType = 0;
 		vrLen = 747;
 		vrLoc = 9026;
@@ -2585,7 +2585,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 714";
 		rLen = 0;
-		rLoc = 23787;
+		rLoc = 23785;
 		rType = 0;
 		vrLen = 1960;
 		vrLoc = 21555;
@@ -2595,7 +2595,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 295";
 		rLen = 0;
-		rLoc = 9431;
+		rLoc = 9429;
 		rType = 0;
 		vrLen = 747;
 		vrLoc = 9026;
@@ -2642,7 +2642,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 745";
 		rLen = 0;
-		rLoc = 25157;
+		rLoc = 25155;
 		rType = 0;
 		vrLen = 1720;
 		vrLoc = 22862;
@@ -2652,7 +2652,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 296";
 		rLen = 0;
-		rLoc = 9431;
+		rLoc = 9429;
 		rType = 0;
 		vrLen = 710;
 		vrLoc = 9112;
@@ -2707,7 +2707,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "comment_add(&comments, &comments_length, [[self settings] UTF8String]);";
 		rLen = 80;
-		rLoc = 17810;
+		rLoc = 17808;
 		rType = 0;
 		vrLen = 601;
 		vrLoc = 17484;
@@ -2734,7 +2734,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: 747";
 		rLen = 0;
-		rLoc = 25157;
+		rLoc = 25155;
 		rType = 0;
 		vrLen = 1787;
 		vrLoc = 23098;
@@ -2744,7 +2744,7 @@
 		fRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */;
 		name = "SpeexEncoder.m: settings";
 		rLen = 0;
-		rLoc = 17859;
+		rLoc = 17857;
 		rType = 0;
 		vrLen = 613;
 		vrLoc = 17484;
