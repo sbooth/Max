@@ -68,6 +68,8 @@
 		8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0DA1092E641200418C45 /* MacPAD.url */; };
 		8C8B0DAD092E64D900418C45 /* UpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0DAB092E64D900418C45 /* UpdateChecker.m */; };
 		8C8CAF6E096C4A9700A1A4E0 /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */; };
+		8C925856097E1B3C008BE59E /* ClearLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */; };
+		8C925861097E1C1C008BE59E /* SaveLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */; };
 		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9A24B40925ADB200FB244D /* Growl.framework in Copy Growl */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
@@ -315,6 +317,8 @@
 		8C8B0EC8092E710200418C45 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/UpdateChecker.nib; sourceTree = "<group>"; };
 		8C8CAF6B096C4A9700A1A4E0 /* ServicesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServicesProvider.h; sourceTree = "<group>"; };
 		8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServicesProvider.m; sourceTree = "<group>"; };
+		8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClearLogToolbarImage.png; sourceTree = "<group>"; };
+		8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SaveLogToolbarImage.png; sourceTree = "<group>"; };
 		8C9A24A30925ACD100FB244D /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		8C9EB763096DAA760037CE20 /* SpeexEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeexEncoderTask.h; sourceTree = "<group>"; };
 		8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoderTask.m; sourceTree = "<group>"; };
@@ -604,6 +608,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */,
+				8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */,
 				8CDD96E2097362C900A5F2C1 /* SpeexPreferences.nib */,
 				8CDD96CB097361DE00A5F2C1 /* SpeexToolbarImage.png */,
 				8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */,
@@ -1075,6 +1081,8 @@
 				8CDD96E3097362C900A5F2C1 /* SpeexPreferences.nib in Resources */,
 				8CDD97120973641400A5F2C1 /* SpeexDefaults.plist in Resources */,
 				8C4DDD71097A55C60000245A /* PCMGeneratingTaskDefaults.plist in Resources */,
+				8C925856097E1B3C008BE59E /* ClearLogToolbarImage.png in Resources */,
+				8C925861097E1C1C008BE59E /* SaveLogToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -37,7 +37,6 @@ static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPrefer
 static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 
 @interface PreferencesController (Private)
-- (void) setupToolbar;
 - (void) selectPrefsPane:(id)sender;
 @end
 

@@ -20,7 +20,10 @@
 
 #import "LogController.h"
 
-static LogController *sharedLog = nil;
+static LogController	*sharedLog = nil;
+
+static NSString			*SaveLogToolbarItemIdentifier		= @"SaveLog";
+static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 
 @implementation LogController
 
@@ -69,9 +72,23 @@ static LogController *sharedLog = nil;
 	[[LogController sharedController] logMessage:message];
 }
 
+- (void) awakeFromNib
+{
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"Max Log Toolbar"] autorelease];
+    
+    [toolbar setAllowsUserCustomization:YES];
+    [toolbar setAutosavesConfiguration:YES];
+    
+    [toolbar setDelegate:self];
+	
+    [[self window] setToolbar:toolbar];
+}
+
 - (IBAction) clear:(id)sender
 {
-	[[_logTextView textStorage] deleteCharactersInRange:NSMakeRange(0, [[_logTextView textStorage] length])];
+	@synchronized(self) {
+		[[_logTextView textStorage] deleteCharactersInRange:NSMakeRange(0, [[_logTextView textStorage] length])];
+	}
 }
 
 - (IBAction) save:(id)sender
@@ -86,7 +103,7 @@ static LogController *sharedLog = nil;
 - (void) savePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
     if(NSOKButton == returnCode) {
-		@synchronized(_logTextView) {
+		@synchronized(self) {
 			NSString		*filename		= [sheet filename];
 			NSTextStorage	*storage		= [_logTextView textStorage];
 			NSData			*rtf			= [storage RTFFromRange:NSMakeRange(0, [storage length]) documentAttributes:nil];
@@ -101,7 +118,6 @@ static LogController *sharedLog = nil;
 - (void) logMessage:(NSString *)message
 {
 	@synchronized(self) {
-//	@synchronized(_logTextView) {
 		NSTextStorage					*storage		= [_logTextView textStorage];
 		NSRange							range			= NSMakeRange([storage length], 0);
 		NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
@@ -122,6 +138,53 @@ static LogController *sharedLog = nil;
 		
 		[logMessage release];
 	}
+}
+
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag 
+{
+    NSToolbarItem *toolbarItem = nil;
+    
+    if([itemIdentifier isEqualToString:SaveLogToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"Save"];
+		[toolbarItem setPaletteLabel: @"Save"];
+		[toolbarItem setToolTip: @"Save log contents to disk"];
+		[toolbarItem setImage: [NSImage imageNamed:@"SaveLogToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(save:)];
+	}
+	else if([itemIdentifier isEqualToString:ClearLogToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: @"Clear"];
+		[toolbarItem setPaletteLabel: @"Clear"];		
+		[toolbarItem setToolTip: @"Clear log contents"];
+		[toolbarItem setImage: [NSImage imageNamed:@"ClearLogToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(clear:)];
+	}
+	else {
+		toolbarItem = nil;
+    }
+	
+    return toolbarItem;
+}
+
+- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
+{
+    return [NSArray arrayWithObjects: SaveLogToolbarItemIdentifier, ClearLogToolbarItemIdentifier, 
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,nil];
+}
+
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
+{
+    return [NSArray arrayWithObjects: SaveLogToolbarItemIdentifier, ClearLogToolbarItemIdentifier, 
+		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
+		NSToolbarCustomizeToolbarItemIdentifier,
+		nil];
 }
 
 @end
