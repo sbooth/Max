@@ -46,6 +46,17 @@ static EncoderController *sharedController = nil;
 	return nil;
 }
 
+- (void) dealloc
+{
+	[_timer invalidate];
+	[super dealloc];
+}
+
+- (void) awakeFromNib
+{
+	[_taskTable setAutosaveTableColumns:YES];
+}
+
 + (EncoderController *) sharedController
 {
 	@synchronized(self) {

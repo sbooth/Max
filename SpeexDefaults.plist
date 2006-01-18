@@ -4,7 +4,7 @@
 <dict>
 	<key>speexMode</key>
 	<integer>2</integer>
-	<key>speexDownsampleInput</key>
+	<key>speexResampleInput</key>
 	<true/>
 	<key>speexDenoiseInput</key>
 	<false/>

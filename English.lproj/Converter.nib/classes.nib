@@ -3,6 +3,7 @@
         {
             CLASS = ConverterController; 
             LANGUAGE = ObjC; 
+            OUTLETS = {"_taskTable" = NSTableView; }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = ConverterWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 

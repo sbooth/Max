@@ -53,6 +53,11 @@ static ConverterController *sharedController = nil;
 	[super dealloc];
 }
 
+- (void) awakeFromNib
+{
+	[_taskTable setAutosaveTableColumns:YES];
+}
+
 + (ConverterController *) sharedController
 {
 	@synchronized(self) {

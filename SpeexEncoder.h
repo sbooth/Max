@@ -30,8 +30,8 @@
 	int						_out;
 	
 	// Downsampling
-	NSString				*_downsampledFilename;
-	int						_downsampledOut;
+	NSString				*_resampledFilename;
+	int						_resampledOut;
 	
 	// Settings flags
 	int						_mode;
@@ -41,7 +41,7 @@
 	int						_complexity;
 	int						_framesPerPacket;
 
-	BOOL					_downsampleInput;
+	BOOL					_resampleInput;
 	BOOL					_denoiseEnabled;
 	BOOL					_agcEnabled;
 	BOOL					_vbrEnabled;

@@ -4,6 +4,7 @@
             ACTIONS = {s = id; }; 
             CLASS = EncoderController; 
             LANGUAGE = ObjC; 
+            OUTLETS = {"_taskTable" = NSTableView; }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }

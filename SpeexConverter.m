@@ -32,8 +32,13 @@
 #include "ogg/ogg.h"
 
 #include "sndfile.h"
+
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
+#include <paths.h>		//_PATH_TMP
+#include <unistd.h>		// mkstemp, unlink
+
+#define TEMPFILE_PATTERN	"MaxXXXXXX.raw"
 
 @implementation SpeexConverter
 
@@ -41,6 +46,39 @@
 {
 	if((self = [super initWithInputFilename:inputFilename])) {
 
+		_resampleInput = NO;
+		
+		// Create a temp file in case we need to resample
+		char				*path			= NULL;
+		const char			*tmpDir;
+		ssize_t				tmpDirLen;
+		ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
+		
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
+			tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+		}
+		else {
+			tmpDir = _PATH_TMP;
+		}
+		
+		tmpDirLen	= strlen(tmpDir);
+		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+		if(NULL == path) {
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		}
+		memcpy(path, tmpDir, tmpDirLen);
+		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+		path[tmpDirLen + patternLen] = '\0';
+		
+		_origOut = mkstemps(path, 4);
+		if(-1 == _origOut) {
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		}
+		
+		_origFilename = [[NSString stringWithUTF8String:path] retain];
+		
+		free(path);
+		
 		return self;
 	}
 	return nil;
@@ -48,6 +86,19 @@
 
 - (void) dealloc
 {
+	// Close the resampled input file
+	if(-1 == close(_origOut)) {
+		[_delegate setStopped];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+	}
+
+	// Delete resampled temporary file
+	if(-1 == unlink([_origFilename UTF8String])) {
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _origFilename, errno, strerror(errno)] userInfo:nil];
+	}			
+	
+	[_origFilename release];
+
 	[super dealloc];
 }
 
@@ -69,8 +120,7 @@
 	SpeexBits						bits;
 	SpeexStereoState				stereo					= SPEEX_STEREO_STATE_INIT;
 	
-	int16_t							out[2000];
-	int16_t							output[2000];
+	int16_t							output [2000];
 	int								frameSize				= 0;
 	int								packetCount				= 0;
 
@@ -87,11 +137,12 @@
 	int								extraHeaders;
 	
 	char							*data;
-	int								i, j;
 	int								packetNumber;
-	
+	int								j;
+		
 	unsigned						iterations				= 0;
 	
+	int								newOut;
 	
 	
 	// Tell our owner we are starting
@@ -202,6 +253,14 @@
 					
 					speex_decoder_ctl(st, SPEEX_SET_SAMPLING_RATE, &rate);
 					
+					if(44100 != rate) {
+						_resampleInput	= YES;
+						newOut			= _origOut;
+					}
+					else {
+						newOut			= file;
+					}
+					
 					framesPerPacket		= header->frames_per_packet;
 					channels			= header->nb_channels;
 					extraHeaders		= header->extra_headers;
@@ -253,7 +312,7 @@
 							out[i] = le_int16_t(output[i]);
 						}*/
 
-						currentBytesWritten = write(file, output, sizeof(int16_t) * frameSize * channels);
+						currentBytesWritten = write(newOut, output, sizeof(int16_t) * frameSize * channels);
 						if(-1 == currentBytesWritten) {
 							[_delegate setStopped];
 							@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
@@ -301,6 +360,133 @@
 	speex_bits_destroy(&bits);
 	ogg_stream_clear(&os);
 	ogg_sync_clear(&oy);
+	
+	// Resample to 44.1 for intermediate format if required
+	if(_resampleInput) {
+		SNDFILE						*inSF;
+		SF_INFO						info;
+		SNDFILE						*outSF				= NULL;
+		const char					*string				= NULL;
+		int							i;
+		int							err					= 0 ;
+		int							bufferLen			= 1024;
+		int							*intBuffer			= NULL;
+		double						*doubleBuffer		= NULL;
+		double						maxSignal;
+		int							frameCount;
+		int							readCount;
+		
+		// Open the input file
+		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+		info.samplerate		= rate;
+		info.channels		= 2;
+		
+		inSF = sf_open([_origFilename UTF8String], SFM_READ, &info);
+		if(NULL == inSF) {
+			[_delegate setStopped];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		}
+				
+		// Setup downsampled output file
+		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+		info.samplerate		= 44100;
+		info.channels		= 2;
+		outSF				= sf_open_fd(file, SFM_WRITE, &info, 0);
+		if(NULL == outSF) {
+			[_delegate setStopped];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		}
+		
+		// Copy metadata
+		for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
+			string = sf_get_string(inSF, i);
+			if(NULL != string) {
+				err = sf_set_string(outSF, i, string);
+			}
+		}
+		
+		// Copy audio data
+		if(((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_DOUBLE) || ((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_FLOAT)) {
+			
+			doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
+			if(NULL == doubleBuffer) {
+				[_delegate setStopped];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			}
+			
+			frameCount		= bufferLen / info.channels ;
+			readCount		= frameCount ;
+			
+			sf_command(inSF, SFC_CALC_SIGNAL_MAX, &maxSignal, sizeof(maxSignal)) ;
+			
+			if(maxSignal < 1.0) {	
+				while(readCount > 0) {
+					// Check if we should stop, and if so throw an exception
+					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+						[_delegate setStopped];
+						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+					}
+					
+					readCount = sf_readf_double(inSF, doubleBuffer, frameCount) ;
+					sf_writef_double(outSF, doubleBuffer, readCount) ;
+					
+					++iterations;
+				}
+			}
+			// Renormalize output
+			else {	
+				sf_command(inSF, SFC_SET_NORM_DOUBLE, NULL, SF_FALSE);
+				
+				while(0 < readCount) {
+					// Check if we should stop, and if so throw an exception
+					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+						[_delegate setStopped];
+						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+					}
+					
+					readCount = sf_readf_double(inSF, doubleBuffer, frameCount);
+					for(i = 0 ; i < readCount * info.channels; ++i) {
+						doubleBuffer[i] /= maxSignal;
+					}
+					
+					sf_writef_double(outSF, doubleBuffer, readCount);
+					
+					++iterations;
+				}
+			}
+			
+			free(doubleBuffer);
+		}
+		else {
+			intBuffer = (int *)malloc(bufferLen * sizeof(int));
+			if(NULL == intBuffer) {
+				[_delegate setStopped];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			}
+			
+			frameCount		= bufferLen / info.channels;
+			readCount		= frameCount;
+			
+			while(0 < readCount) {	
+				// Check if we should stop, and if so throw an exception
+				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+					[_delegate setStopped];
+					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+				}
+				
+				readCount = sf_readf_int(inSF, intBuffer, frameCount);
+				sf_writef_int(outSF, intBuffer, readCount);
+				
+				++iterations;
+			}
+			
+			free(intBuffer);
+		}
+		
+		// Clean up sndfile
+		sf_close(inSF);
+		sf_close(outSF);	
+	}
 
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	

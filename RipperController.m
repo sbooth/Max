@@ -47,6 +47,17 @@ static RipperController *sharedController = nil;
 	return nil;
 }
 
+- (void) dealloc
+{
+	[_timer invalidate];
+	[super dealloc];
+}
+
+- (void) awakeFromNib
+{
+	[_taskTable setAutosaveTableColumns:YES];
+}
+
 + (RipperController *) sharedController
 {
 	@synchronized(self) {
