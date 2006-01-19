@@ -1689,9 +1689,9 @@
 	};
 	8CBB3C5708D8CC7A005266A8 /* Ripper.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1754, 3990}}";
-			sepNavSelRange = "{8500, 5}";
-			sepNavVisRect = "{{0, 145}, {776, 295}}";
+			sepNavIntBoundsRect = "{{0, 0}, {2000, 3990}}";
+			sepNavSelRange = "{7812, 0}";
+			sepNavVisRect = "{{0, 3266}, {907, 724}}";
 			sepNavWindowFrame = "{{13, 31}, {952, 797}}";
 		};
 	};
@@ -1933,10 +1933,10 @@
 	};
 	8CD7B0CC094E7F2600BA2427 /* SectorRange.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {776, 798}}";
-			sepNavSelRange = "{1425, 0}";
-			sepNavVisRect = "{{0, 503}, {776, 295}}";
-			sepNavWindowFrame = "{{130, 358}, {836, 710}}";
+			sepNavIntBoundsRect = "{{0, 0}, {791, 798}}";
+			sepNavSelRange = "{1202, 0}";
+			sepNavVisRect = "{{0, 161}, {791, 637}}";
+			sepNavWindowFrame = "{{130, 122}, {836, 710}}";
 		};
 	};
 	8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */ = {
@@ -1950,8 +1950,8 @@
 	8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1280, 2814}}";
-			sepNavSelRange = "{5781, 0}";
-			sepNavVisRect = "{{0, 1635}, {815, 755}}";
+			sepNavSelRange = "{2227, 0}";
+			sepNavVisRect = "{{0, 833}, {815, 755}}";
 			sepNavWindowFrame = "{{98, 4}, {860, 828}}";
 		};
 	};
@@ -2019,7 +2019,7 @@
 	8CDD973E0973663300A5F2C1 /* SpeexConverter.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {762, 755}}";
-			sepNavSelRange = "{990, 0}";
+			sepNavSelRange = "{3, 0}";
 			sepNavVisRect = "{{0, 0}, {762, 755}}";
 			sepNavWindowFrame = "{{15, -1}, {807, 828}}";
 		};
@@ -2074,9 +2074,9 @@
 	};
 	8CE09952095109BF0020C8B1 /* Converter.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {788, 1204}}";
-			sepNavSelRange = "{1719, 0}";
-			sepNavVisRect = "{{0, 240}, {746, 755}}";
+			sepNavIntBoundsRect = "{{0, 0}, {788, 1190}}";
+			sepNavSelRange = "{853, 0}";
+			sepNavVisRect = "{{0, 435}, {746, 755}}";
 			sepNavWindowFrame = "{{287, 4}, {791, 828}}";
 		};
 	};
