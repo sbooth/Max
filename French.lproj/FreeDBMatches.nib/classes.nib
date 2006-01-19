@@ -1,0 +1,14 @@
+{
+    IBClasses = (
+        {CLASS = CDDBMatch; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {cancel = id; useSelected = id; }; 
+            CLASS = CDDBMatchSheet; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_sheet" = NSWindow; "_table" = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
