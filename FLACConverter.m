@@ -99,8 +99,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		}
 		
 		@catch(NSException *exception) {
-			[_delegate setException:exception];
-			[_delegate setStopped];
+			return nil;
 		}
 			   
 		return self;

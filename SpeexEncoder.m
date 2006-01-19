@@ -216,8 +216,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		}
 
 		@catch(NSException *exception) {
-			[_delegate setException:exception];
-			[_delegate setStopped];
+			return nil;
 		}
 		
 		@finally {

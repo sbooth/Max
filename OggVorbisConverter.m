@@ -51,8 +51,7 @@
 		}
 				
 		@catch(NSException *exception) {
-			[_delegate setException:exception];
-			[_delegate setStopped];
+			return nil;
 		}			   
 			   
 		return self;

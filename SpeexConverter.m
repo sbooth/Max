@@ -44,51 +44,50 @@
 
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
+	char				*path			= NULL;
+	const char			*tmpDir;
+	ssize_t				tmpDirLen;
+	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
+
 	if((self = [super initWithInputFilename:inputFilename])) {
 
 		@try {
+			_resampleInput = NO;
 			
+			// Create a temp file in case we need to resample
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
+				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+			}
+			else {
+				tmpDir = _PATH_TMP;
+			}
+			
+			tmpDirLen	= strlen(tmpDir);
+			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+			if(NULL == path) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			memcpy(path, tmpDir, tmpDirLen);
+			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+			path[tmpDirLen + patternLen] = '\0';
+			
+			_origOut = mkstemps(path, 4);
+			if(-1 == _origOut) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			
+			_origFilename = [[NSString stringWithUTF8String:path] retain];
 		}
 		
 		@catch(NSException *exception) {
-			[_delegate setException:exception];
-			[_delegate setStopped];
+			return nil;
 		}
-		
-		_resampleInput = NO;
-		
-		// Create a temp file in case we need to resample
-		char				*path			= NULL;
-		const char			*tmpDir;
-		ssize_t				tmpDirLen;
-		ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
-		
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-			tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+
+		@finally {			
+			free(path);
 		}
-		else {
-			tmpDir = _PATH_TMP;
-		}
-		
-		tmpDirLen	= strlen(tmpDir);
-		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-		if(NULL == path) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
-		}
-		memcpy(path, tmpDir, tmpDirLen);
-		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
-		path[tmpDirLen + patternLen] = '\0';
-		
-		_origOut = mkstemps(path, 4);
-		if(-1 == _origOut) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
-		}
-		
-		_origFilename = [[NSString stringWithUTF8String:path] retain];
-		
-		free(path);
 		
 		return self;
 	}

@@ -131,7 +131,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		}
 
 		@catch(NSException *exception) {
-			[_delegate setStopped];
+			return nil;
 		}
 		
 		@finally {
