@@ -126,7 +126,7 @@
 - (void) windowControllerDidLoadNib:(NSWindowController *)controller
 {
 	[controller setShouldCascadeWindows:NO];
-	[controller setWindowFrameAutosaveName:[NSString stringWithFormat: @"Compact Disc 0x%.8x", [self discID]]];
+	[controller setWindowFrameAutosaveName:[NSString stringWithFormat: NSLocalizedStringFromTable(@"Compact Disc 0x%.8x", @"CompactDisc", @""), [self discID]]];
 	
 	NSToolbar *toolbar = [[[CompactDiscDocumentToolbar alloc] initWithCompactDiscDocument:self] autorelease];
     
@@ -398,10 +398,10 @@
 			return;
 		}
 		else if([self emptySelection]) {
-			@throw [EmptySelectionException exceptionWithReason:@"Please select one or more tracks to encode." userInfo:nil];
+			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"Please select one or more tracks to encode.", @"Exceptions", @"") userInfo:nil];
 		}
 		else if([self ripInProgress] || [self encodeInProgress]) {
-			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:@"A rip or encode operation is already in progress." userInfo:nil];
+			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A rip or encode operation is already in progress.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Iterate through the selected tracks and rip/encode them
@@ -454,10 +454,10 @@
 	
 	if([self ripInProgress]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:@"OK"];
-		[alert addButtonWithTitle:@"Cancel"];
-		[alert setMessageText:@"Really eject the disc?"];
-		[alert setInformativeText:@"There are active ripping tasks."];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"Really eject the disc?", @"CompactDisc", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping tasks.", @"CompactDisc", @"")];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
 		if(NSAlertSecondButtonReturn == [alert runModal]) {
@@ -511,7 +511,7 @@
 		matches = [freeDB fetchMatches];
 		
 		if(0 == [matches count]) {
-			@throw [FreeDBException exceptionWithReason:@"No matches found for this disc." userInfo:nil];
+			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matches found for this disc.", @"Exceptions", @"") userInfo:nil];
 		}
 		else if(1 == [matches count]) {
 			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
@@ -628,7 +628,7 @@
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
 	
 	if([self discInDrive] && [tracks count] != [_tracks count]) {
-		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
+		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:NSLocalizedStringFromTable(@"Track count mismatch", @"Exceptions", @"") userInfo:nil];
 	}
 	else if(0 == [_tracks count]) {
 		[self willChangeValueForKey:@"tracks"];

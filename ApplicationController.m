@@ -123,10 +123,10 @@
 {
 	if([[TaskMaster sharedController] hasTasks]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:@"OK"];
-		[alert addButtonWithTitle:@"Cancel"];
-		[alert setMessageText:@"Really Quit?"];
-		[alert setInformativeText:@"There are active ripping/encoding tasks."];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"Really Quit?", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping/encoding tasks.", @"General", @"")];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
 		if(NSAlertSecondButtonReturn == [alert runModal]) {

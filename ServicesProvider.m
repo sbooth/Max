@@ -113,7 +113,7 @@
 				}
 			}
 			else {
-				@throw [IOException exceptionWithReason:@"File not found" userInfo:nil];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"File not found", @"Exceptions", @"") userInfo:nil];
 			}
 		}
 	}

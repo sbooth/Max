@@ -41,11 +41,11 @@
 		// cdparanoia setup
 		_drive		= cdda_identify([bsdPath UTF8String], 0, NULL);
 		if(NULL == _drive) {
-			@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		if(0 != cdda_open(_drive)) {
-			@throw [ParanoiaException exceptionWithReason:@"cdda_open failed" userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Setup libcddb data structures
@@ -67,7 +67,7 @@
 		cddb_disc_set_length(_freeDBDisc, _length);
 		
 		if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
-			@throw [FreeDBException exceptionWithReason:@"Unable to calculate disc id" userInfo:nil];
+			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to calculate disc id", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		return self;

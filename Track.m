@@ -121,12 +121,12 @@
 
 - (NSString *) getPreEmphasis
 {
-	return [_preEmphasis boolValue] ? @"Yes" : @"No";
+	return [_preEmphasis boolValue] ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");
 }
 
 - (NSString *) getCopyPermitted
 {
-	return [_copyPermitted boolValue] ? @"Yes" : @"No";
+	return [_copyPermitted boolValue] ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");
 }
 
 - (NSNumber *) getSize

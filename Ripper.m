@@ -71,7 +71,7 @@ callback(long inpos, int function, void *userdata)
 	Ripper *ripper = (Ripper *)userdata;
 	
 	if([ripper logActivity]) {
-		[[LogController sharedController] performSelectorOnMainThread:@selector(logMessage:) withObject:[NSString stringWithFormat:@"Rip status: %s sector %ld (%ld)", (function >= -2 && function <= 13 ? callback_strings[function + 2] : ""), inpos / CD_FRAMEWORDS, inpos] waitUntilDone:NO];
+		[[LogController sharedController] performSelectorOnMainThread:@selector(logMessage:) withObject:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Rip status: %s sector %ld (%ld)", @"Log", @""), (function >= -2 && function <= 13 ? callback_strings[function + 2] : ""), inpos / CD_FRAMEWORDS, inpos] waitUntilDone:NO];
 	}	
 }
 
@@ -133,11 +133,11 @@ callback(long inpos, int function, void *userdata)
 		// Setup cdparanoia
 		_drive		= cdda_identify([deviceName UTF8String], 0, NULL);
 		if(NULL == _drive) {
-			@throw [ParanoiaException exceptionWithReason:@"cdda_identify failed" userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		if(0 != cdda_open(_drive)) {
-			@throw [ParanoiaException exceptionWithReason:@"cdda_open failed" userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
 		}
 
 		_paranoia	= paranoia_init(_drive);
@@ -239,13 +239,13 @@ callback(long inpos, int function, void *userdata)
 		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
 			[_delegate setStopped];
-			@throw [ParanoiaException exceptionWithReason:@"Skip tolerance exceeded/Unable to access CD" userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"Skip tolerance exceeded/Unable to access CD", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Write data to file
 		if(-1 == write(file, buf, CD_FRAMESIZE_RAW)) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		
 		// Update status

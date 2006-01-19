@@ -36,7 +36,7 @@
 		
 		_file = fopen([inputFilename UTF8String], "r");
 		if(NULL == _file) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
 		if(0 != ov_test(_file, &_vf, NULL, 0)) {
@@ -100,7 +100,7 @@
 		// Write the PCM data to file
 		if(-1 == write(file, buf, bytesRead)) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		
 		// Update status

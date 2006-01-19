@@ -56,7 +56,7 @@
 {
 	NSString *description = [_metadata description];
 	
-	if([description isEqualToString:@"Unknown Track"]) {
+	if([description isEqualToString:NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"")]) {
 		return [_inputFilename lastPathComponent]; 
 	}
 	else {

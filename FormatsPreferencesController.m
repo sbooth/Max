@@ -100,7 +100,6 @@
 	NSArray *types = [_libsndfileTypesController selectedObjects];
 	if(0 < [types count]) {
 		NSDictionary *type = [types objectAtIndex:0];
-//		[result addEntriesFromDictionary:type];
 		[result setValue:[type valueForKey:@"sndfileFormat"] forKey:@"sndfileFormat"];
 		[result setValue:[type valueForKey:@"type"] forKey:@"type"];
 		[result setValue:[type valueForKey:@"extension"] forKey:@"extension"];
@@ -109,8 +108,6 @@
 		if(0 < [subtypes count]) {
 			NSDictionary *subtype = [subtypes objectAtIndex:0];
 			[result addEntriesFromDictionary:subtype];
-//			[result setValue:[subtype valueForKey:@"sndfileFormat"] forKey:@"sndfileFormat"];
-//			[result setValue:[subtype valueForKey:@"kind"] forKey:@"kind"];
 		}
 	}
 	
@@ -133,7 +130,6 @@
 	NSArray *types = [_coreAudioTypesController selectedObjects];
 	if(0 < [types count]) {
 		NSDictionary *type = [types objectAtIndex:0];
-//		[result addEntriesFromDictionary:type];
 		[result setValue:[type valueForKey:@"fileType"] forKey:@"fileType"];
 		[result setValue:[type valueForKey:@"fileTypeName"] forKey:@"fileTypeName"];
 		[result setValue:[type valueForKey:@"extensionsForType"] forKey:@"extensionsForType"];
@@ -142,8 +138,6 @@
 		if(0 < [subtypes count]) {
 			NSDictionary *subtype = [subtypes objectAtIndex:0];
 			[result addEntriesFromDictionary:subtype];
-//			[result setValue:[subtype valueForKey:@"sndfileFormat"] forKey:@"sndfileFormat"];
-//			[result setValue:[subtype valueForKey:@"kind"] forKey:@"kind"];
 		}
 	}
 

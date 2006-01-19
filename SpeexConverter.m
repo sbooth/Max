@@ -64,7 +64,7 @@
 		tmpDirLen	= strlen(tmpDir);
 		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
 		if(NULL == path) {
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		memcpy(path, tmpDir, tmpDirLen);
 		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
@@ -72,7 +72,7 @@
 		
 		_origOut = mkstemps(path, 4);
 		if(-1 == _origOut) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		
 		_origFilename = [[NSString stringWithUTF8String:path] retain];
@@ -89,12 +89,12 @@
 	// Close the resampled input file
 	if(-1 == close(_origOut)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Delete resampled temporary file
 	if(-1 == unlink([_origFilename UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _origFilename, errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to delete temporary file '%@' (%i:%s)", @"Exceptions", @""), _origFilename, errno, strerror(errno)] userInfo:nil];
 	}			
 	
 	[_origFilename release];
@@ -153,14 +153,14 @@
 	fd = open([_inputFilename UTF8String], O_RDONLY);
 	if(-1 == fd) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(fd, &sourceStat)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
 	totalBytes		= sourceStat.st_size;
@@ -181,7 +181,7 @@
 		bytesRead = read(fd, data, 200);
 		if(-1 == bytesRead) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		else if(0 == bytesRead) {
 			eos = YES;
@@ -315,7 +315,7 @@
 						currentBytesWritten = write(newOut, output, sizeof(int16_t) * frameSize * channels);
 						if(-1 == currentBytesWritten) {
 							[_delegate setStopped];
-							@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+							@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 						}
 						bytesWritten += currentBytesWritten;
 					}
@@ -352,7 +352,7 @@
 	// Close the input file
 	if(-1 == close(fd)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Clean up
@@ -411,7 +411,7 @@
 			doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
 			if(NULL == doubleBuffer) {
 				[_delegate setStopped];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 			}
 			
 			frameCount		= bufferLen / info.channels ;
@@ -461,7 +461,7 @@
 			intBuffer = (int *)malloc(bufferLen * sizeof(int));
 			if(NULL == intBuffer) {
 				[_delegate setStopped];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 			}
 			
 			frameCount		= bufferLen / info.channels;

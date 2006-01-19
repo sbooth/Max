@@ -53,10 +53,10 @@ static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * con
 		DAReturn status = DADissenterGetStatus(dissenter);
 		if(unix_err(status)) {
 			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to unmount disc (%i:%s)", code, strerror(code)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to unmount disc (%i:%s)", @"Exceptions", @""), code, strerror(code)] userInfo:nil];
 		}
 		else {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to unmount disc (0x%.8x)", status] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to unmount disc (0x%.8x)", @"Exceptions", @""), status] userInfo:nil];
 		}
 	}
 }
@@ -67,10 +67,10 @@ static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * conte
 		DAReturn status = DADissenterGetStatus(dissenter);
 		if(unix_err(status)) {
 			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to eject disc (%i:%s)", code, strerror(code)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to eject disc (%i:%s)", @"Exceptions", @""), code, strerror(code)] userInfo:nil];
 		}
 		else {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to eject disc (0x%.8x)", status] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to eject disc (0x%.8x)", @"Exceptions", @""), status] userInfo:nil];
 		}
 	}
 }

@@ -196,7 +196,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			tmpDirLen	= strlen(tmpDir);
 			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
 			if(NULL == path) {
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 			}
 			memcpy(path, tmpDir, tmpDirLen);
 			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
@@ -204,7 +204,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			
 			_resampledOut = mkstemps(path, 4);
 			if(-1 == _resampledOut) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 			}
 			
 			_resampledFilename = [[NSString stringWithUTF8String:path] retain];
@@ -222,7 +222,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	// Delete resampled temporary file
 	if(_resampleInput) {
 		if(-1 == unlink([_resampledFilename UTF8String])) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to delete temporary file '%@' (%i:%s)", _resampledFilename, errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to delete temporary file '%@' (%i:%s)", @"Exceptions", @""), _resampledFilename, errno, strerror(errno)] userInfo:nil];
 		}			
 
 		[_resampledFilename release];
@@ -338,7 +338,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
 			if(NULL == doubleBuffer) {
 				[_delegate setStopped];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 			}
 			
 			frameCount		= bufferLen / info.channels ;
@@ -388,7 +388,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			intBuffer = (int *)malloc(bufferLen * sizeof(int));
 			if(NULL == intBuffer) {
 				[_delegate setStopped];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 			}
 			
 			frameCount		= bufferLen / info.channels;
@@ -418,7 +418,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		_pcm = open([_resampledFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 	}
 	else {
@@ -428,7 +428,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 	}
 	
@@ -436,7 +436,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 
 	totalBytes		= sourceStat.st_size;
@@ -446,7 +446,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if(-1 == _out) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Check if we should stop, and if so throw an exception
@@ -556,14 +556,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		currentBytesWritten = write(_out, og.header, og.header_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 		
 		currentBytesWritten = write(_out, og.body, og.body_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 	}
@@ -573,7 +573,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 	if(NULL == _buf) {
 		[_delegate setStopped];
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 
 	speex_bits_init(&bits);
@@ -588,7 +588,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		else if(0 == bytesRead) {
 			eos = YES;
@@ -639,14 +639,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				currentBytesWritten = write(_out, og.header, og.header_len);
 				if(-1 == currentBytesWritten) {
 					[_delegate setStopped];
-					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 				}
 				bytesWritten += currentBytesWritten;
 				
 				currentBytesWritten = write(_out, og.body, og.body_len);
 				if(-1 == currentBytesWritten) {
 					[_delegate setStopped];
-					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 				}
 				bytesWritten += currentBytesWritten;				
 			}			
@@ -706,14 +706,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		currentBytesWritten = write(_out, og.header, og.header_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 		
 		currentBytesWritten = write(_out, og.body, og.body_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 	}
@@ -721,13 +721,13 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	// Close the input file
 	if(-1 == close(_pcm)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Close the output file
 	if(-1 == close(_out)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Clean up

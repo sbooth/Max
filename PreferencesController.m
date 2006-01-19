@@ -60,7 +60,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
 			if(nil == defaultsPath) {
-				@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:@"Unable to load %@.plist  Some preferences may not display correctly.", [defaultFiles objectAtIndex:i]] userInfo:nil];
+				@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@.plist  Some preferences may not display correctly.", @"Preferences", @""), [defaultFiles objectAtIndex:i]] userInfo:nil];
 			}
 			[defaultsDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:defaultsPath]];
 		}
@@ -139,9 +139,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     if([itemIdentifier isEqualToString:GeneralPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"General"];
-		[toolbarItem setPaletteLabel: @"General"];		
-		[toolbarItem setToolTip: @"Control the general behavior of Max"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"General", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"General", @"Preferences", @"")];		
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Control the general behavior of Max", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"GeneralToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -150,9 +150,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:FormatsPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Formats"];
-		[toolbarItem setPaletteLabel: @"Formats"];
-		[toolbarItem setToolTip: @"Select the encoders that Max will use to produce audio"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Formats", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Formats", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select the encoders that Max will use to produce audio", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"FormatsToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -161,9 +161,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:OutputPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Output"];
-		[toolbarItem setPaletteLabel: @"Output"];
-		[toolbarItem setToolTip: @"Select where output files will be saved and how they will be named"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select where output files will be saved and how they will be named", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -172,9 +172,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:FreeDBPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"FreeDB"];
-		[toolbarItem setPaletteLabel: @"FreeDB"];
-		[toolbarItem setToolTip: @"Control the protocol and server used by FreeDB to retrieve CD information"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"FreeDB", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"FreeDB", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Control the protocol and server used by FreeDB to retrieve CD information", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"FreeDBToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -183,9 +183,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:RipperPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Ripper"];
-		[toolbarItem setPaletteLabel: @"Ripper"];
-		[toolbarItem setToolTip: @"Adjust the parameters used for CD audio extraction"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Ripper", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Ripper", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used for CD audio extraction", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"RipperToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -194,9 +194,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:LAMEPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"MP3"];
-		[toolbarItem setPaletteLabel: @"MP3"];
-		[toolbarItem setToolTip: @"Adjust the parameters used by the MP3 encoder"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"MP3", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"MP3", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the MP3 encoder", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"LAMEToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -205,9 +205,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:FLACPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"FLAC"];
-		[toolbarItem setPaletteLabel: @"FLAC"];
-		[toolbarItem setToolTip: @"Adjust the parameters used by the FLAC and Ogg FLAC encoders"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"FLAC", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"FLAC", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the FLAC and Ogg FLAC encoders", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"FLAC"]];
 		
 		[toolbarItem setTarget:self];
@@ -216,9 +216,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:OggVorbisPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Ogg Vorbis"];
-		[toolbarItem setPaletteLabel: @"Ogg Vorbis"];
-		[toolbarItem setToolTip: @"Adjust the parameters used by the Ogg Vorbis encoder"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Ogg Vorbis", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Ogg Vorbis", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the Ogg Vorbis encoder", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"OggVorbisToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -227,9 +227,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
     else if([itemIdentifier isEqualToString:SpeexPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Speex"];
-		[toolbarItem setPaletteLabel: @"Speex"];
-		[toolbarItem setToolTip: @"Adjust the parameters used by the Speex encoder"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Speex", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Speex", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the Speex encoder", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"SpeexToolbarImage"]];
 		
 		[toolbarItem setTarget:self];

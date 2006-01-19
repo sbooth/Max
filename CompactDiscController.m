@@ -28,7 +28,7 @@
 	NSString *title = [[self document] valueForKey:@"title"];
 	
 	if(nil == title) {
-		return [NSString stringWithFormat: @"Compact Disc 0x%.8x", [[self document] discID]];
+		return [NSString stringWithFormat: NSLocalizedStringFromTable(@"Compact Disc 0x%.8x", @"CompactDisc", @""), [[self document] discID]];
 	}
 	else {
 		return title;

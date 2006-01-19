@@ -76,9 +76,9 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setTag:kEncodeToolbarItemTag];
-		[toolbarItem setLabel: @"Encode"];
-		[toolbarItem setPaletteLabel: @"Encode"];		
-		[toolbarItem setToolTip: @"Encode the selected tracks"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Encode", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Encode", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Encode the selected tracks", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"EncodeToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
@@ -88,9 +88,9 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setTag:kTrackInfoToolbarItemTag];
-		[toolbarItem setLabel: @"Tracks"];
-		[toolbarItem setPaletteLabel: @"Tracks"];
-		[toolbarItem setToolTip: @"Show or hide detailed track information"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Tracks", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Tracks", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide detailed track information", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"TrackInfoToolbarImage"]];
 		
 		[toolbarItem setTarget:[_document valueForKey:@"trackDrawer"]];
@@ -100,9 +100,9 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setTag:kQueryFreeDBToolbarItemTag];
-		[toolbarItem setLabel: @"Query FreeDB"];
-		[toolbarItem setPaletteLabel: @"Query FreeDB"];
-		[toolbarItem setToolTip: @"Query FreeDB for album information"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Query FreeDB", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Query FreeDB", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Query FreeDB for album information", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"FreeDBToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
@@ -112,9 +112,9 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setTag:kSubmitToFreeDBToolbarItemTag];
-		[toolbarItem setLabel: @"Submit"];
-		[toolbarItem setPaletteLabel: @"Submit"];
-		[toolbarItem setToolTip: @"Submit album information to FreeDB"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Submit", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Submit", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Submit album information to FreeDB", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"SubmitToFreeDBToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
@@ -124,9 +124,9 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setTag:kEjectDiscToolbarItemTag];
-		[toolbarItem setLabel: @"Eject"];
-		[toolbarItem setPaletteLabel: @"Eject"];
-		[toolbarItem setToolTip: @"Eject the CD"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Eject", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Eject", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Eject the CD", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"EjectDiscToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];

@@ -107,7 +107,7 @@ static RipperController *sharedController = nil;
 	}
 	
 	if(-1 == statfs(tmpDir, &buf)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to get file system statistics (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get file system statistics (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	bytesFree	= (unsigned long long) buf.f_bsize * (unsigned long long) buf.f_bfree;
@@ -120,12 +120,12 @@ static RipperController *sharedController = nil;
 	}
 	
 	switch(divisions) {
-		case 0:	[self setValue:[NSString stringWithFormat:@"%.2f B", freeSpace] forKey:@"freeSpace"];	break;
-		case 1:	[self setValue:[NSString stringWithFormat:@"%.2f KB", freeSpace] forKey:@"freeSpace"];	break;
-		case 2:	[self setValue:[NSString stringWithFormat:@"%.2f MB", freeSpace] forKey:@"freeSpace"];	break;
-		case 3:	[self setValue:[NSString stringWithFormat:@"%.2f GB", freeSpace] forKey:@"freeSpace"];	break;
-		case 4:	[self setValue:[NSString stringWithFormat:@"%.2f TB", freeSpace] forKey:@"freeSpace"];	break;
-		case 5:	[self setValue:[NSString stringWithFormat:@"%.2f PB", freeSpace] forKey:@"freeSpace"];	break;
+		case 0:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f B", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
+		case 1:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f KB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
+		case 2:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f MB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
+		case 3:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f GB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
+		case 4:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f TB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
+		case 5:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f PB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
 	}
 }
 

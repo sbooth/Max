@@ -148,9 +148,9 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
     if([itemIdentifier isEqualToString:SaveLogToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Save"];
-		[toolbarItem setPaletteLabel: @"Save"];
-		[toolbarItem setToolTip: @"Save log contents to disk"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Save", @"Log", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Save", @"Log", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Save log contents to disk", @"Log", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"SaveLogToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -159,9 +159,9 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 	else if([itemIdentifier isEqualToString:ClearLogToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setLabel: @"Clear"];
-		[toolbarItem setPaletteLabel: @"Clear"];		
-		[toolbarItem setToolTip: @"Clear log contents"];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Clear", @"Log", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Clear", @"Log", @"")];		
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Clear log contents", @"Log", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"ClearLogToolbarImage"]];
 		
 		[toolbarItem setTarget:self];

@@ -114,7 +114,7 @@
 		doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
 		if(NULL == doubleBuffer) {
 			[_delegate setStopped];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		
 		frameCount		= bufferLen / info.channels ;
@@ -164,7 +164,7 @@
 		intBuffer = (int *)malloc(bufferLen * sizeof(int));
 		if(NULL == intBuffer) {
 			[_delegate setStopped];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:@"Unable to allocate memory (%i:%s) [%s:%i]", errno, strerror(errno), __FILE__, __LINE__] userInfo:nil];
+			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		
 		frameCount		= bufferLen / info.channels;

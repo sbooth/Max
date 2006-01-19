@@ -172,12 +172,12 @@
 	else {
 		err = FSPathMakeRef((const UInt8 *)[_outputFilename UTF8String], &ref, NULL);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to locate output file (%s: %s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		err = AudioFileOpen(&ref, fsRdWrPerm, [[_formatInfo valueForKey:@"fileType"] intValue], &fileID);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open output file (%s: %s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		// Get the dictionary and set properties
@@ -256,7 +256,7 @@
 		// Clean up	
 		err = AudioFileClose(fileID);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close output file (%s: %s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 	}	
 }

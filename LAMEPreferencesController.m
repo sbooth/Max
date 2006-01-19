@@ -44,16 +44,16 @@
 {
 	switch([[NSUserDefaults standardUserDefaults] integerForKey:@"lameUserPreset"]) {
 		case LAME_USER_PRESET_BEST:
-			[_presetDescription setStringValue:@"320 kbps constant bitrate (CBR)"];
+			[_presetDescription setStringValue:NSLocalizedStringFromTable(@"320 kbps constant bitrate (CBR)", @"Preferences", @"")];
 			break;
 		case LAME_USER_PRESET_TRANSPARENT:
-			[_presetDescription setStringValue:@"~190 kbps variable bitrate (VBR)"];
+			[_presetDescription setStringValue:NSLocalizedStringFromTable(@"~190 kbps variable bitrate (VBR)", @"Preferences", @"")];
 			break;
 		case LAME_USER_PRESET_PORTABLE:
-			[_presetDescription setStringValue:@"~130 kbps variable bitrate (VBR)"];
+			[_presetDescription setStringValue:NSLocalizedStringFromTable(@"~130 kbps variable bitrate (VBR)", @"Preferences", @"")];
 			break;
 		case LAME_USER_PRESET_CUSTOM:
-			[_presetDescription setStringValue:@"Custom encoder settings"];
+			[_presetDescription setStringValue:NSLocalizedStringFromTable(@"Custom encoder settings", @"Preferences", @"")];
 			break;
 	}	
 }
