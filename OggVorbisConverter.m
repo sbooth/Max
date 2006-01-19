@@ -34,26 +34,20 @@
 {
 	if((self = [super initWithInputFilename:inputFilename])) {	
 		
-		@try {
-			_file = fopen([_inputFilename UTF8String], "r");
-			if(NULL == _file) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
-			}
-			
-			if(0 != ov_test(_file, &_vf, NULL, 0)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Input file does not appear to be an Ogg Vorbis file", @"Exceptions", @"") userInfo:nil];
-			}
-			
-			if(0 != ov_test_open(&_vf)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") userInfo:nil];
-			}
+		_file = fopen([_inputFilename UTF8String], "r");
+		if(NULL == _file) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-				
-		@catch(NSException *exception) {
-			return nil;
-		}			   
-			   
+		
+		if(0 != ov_test(_file, &_vf, NULL, 0)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Input file does not appear to be an Ogg Vorbis file", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		if(0 != ov_test_open(&_vf)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") userInfo:nil];
+		}
+
 		return self;
 	}
 	return nil;
@@ -108,7 +102,7 @@
 			// Write the PCM data to file
 			if(-1 == write(file, buf, bytesRead)) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// Update status

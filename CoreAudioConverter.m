@@ -45,54 +45,48 @@
 
 	if((self = [super initWithInputFilename:inputFilename])) {
 		
-		@try {
-			bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
-			
-			// Desired output is interleaved 16-bit PCM audio
-			_outputASBD.mSampleRate			= 44100.f;
-			_outputASBD.mFormatID			= kAudioFormatLinearPCM;
-			_outputASBD.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
-			_outputASBD.mBytesPerPacket		= 4;
-			_outputASBD.mFramesPerPacket	= 1;
-			_outputASBD.mBytesPerFrame		= 4;
-			_outputASBD.mChannelsPerFrame	= 2;
-			_outputASBD.mBitsPerChannel		= 16;
-			
-			// Open the output file
-			err = FSPathMakeRef((const UInt8 *)[_inputFilename UTF8String], &ref, NULL);
-			if(noErr != err) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-			}
-			
-			err = ExtAudioFileOpen(&ref, &_in);
-			if(noErr != err) {
-				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed", @"Exceptions", @"")
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
-			err = ExtAudioFileSetProperty(_in, kExtAudioFileProperty_ClientDataFormat, sizeof(_outputASBD), &_outputASBD);
-			if(noErr != err) {
-				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileSetProperty failed", @"Exceptions", @"")
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
-			size	= sizeof(asbd);
-			err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileDataFormat, &size, &asbd);;
-			if(err != noErr) {
-				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
-			size	= sizeof(_fileType);
-			err		= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &size, &_fileType);
-			if(noErr != err) {
-				_fileType = NSLocalizedStringFromTable(@"Unknown (Core Audio)", @"General", @"");
-			}
+		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
+		
+		// Desired output is interleaved 16-bit PCM audio
+		_outputASBD.mSampleRate			= 44100.f;
+		_outputASBD.mFormatID			= kAudioFormatLinearPCM;
+		_outputASBD.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+		_outputASBD.mBytesPerPacket		= 4;
+		_outputASBD.mFramesPerPacket	= 1;
+		_outputASBD.mBytesPerFrame		= 4;
+		_outputASBD.mChannelsPerFrame	= 2;
+		_outputASBD.mBitsPerChannel		= 16;
+		
+		// Open the output file
+		err = FSPathMakeRef((const UInt8 *)[_inputFilename UTF8String], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
 		
-		@catch(NSException *exception) {
-			return nil;
+		err = ExtAudioFileOpen(&ref, &_in);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileSetProperty(_in, kExtAudioFileProperty_ClientDataFormat, sizeof(_outputASBD), &_outputASBD);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileSetProperty failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		size	= sizeof(asbd);
+		err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileDataFormat, &size, &asbd);;
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		size	= sizeof(_fileType);
+		err		= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &size, &_fileType);
+		if(noErr != err) {
+			_fileType = NSLocalizedStringFromTable(@"Unknown (Core Audio)", @"General", @"");
 		}
 		
 		return self;
@@ -152,7 +146,7 @@
 		_buf.mBuffers[0].mData				= calloc(_buflen, sizeof(int16_t));;
 		if(NULL == _buf.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Iteratively get the data and convert it to PCM
@@ -174,7 +168,7 @@
 			// Write the PCM data to file
 			if(-1 == write(file, _buf.mBuffers[0].mData, frameCount * _outputASBD.mBytesPerPacket)) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// Update status

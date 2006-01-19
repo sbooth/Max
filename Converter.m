@@ -38,24 +38,37 @@
 
 + (void) connectWithPorts:(NSArray *)portArray
 {
-	NSAutoreleasePool	*pool;
-	NSConnection		*connection;
-	Converter			*converter;
-	ConverterTask		*owner;
+	NSAutoreleasePool	*pool				= nil;
+	NSConnection		*connection			= nil;
+	Converter			*converter			= nil;
+	ConverterTask		*owner				= nil;
 	
-	pool			= [[NSAutoreleasePool alloc] init];
-	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
-	owner			= (ConverterTask *)[connection rootProxy];
-	converter		= [[self alloc] initWithInputFilename:[owner getInputFilename]];
+	@try {
+		pool			= [[NSAutoreleasePool alloc] init];
+		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+		owner			= (ConverterTask *)[connection rootProxy];
+		converter		= [[self alloc] initWithInputFilename:[owner getInputFilename]];
+		
+		[converter setDelegate:owner];
+		[owner converterReady:converter];
+		
+		[converter release];
+		
+		[[NSRunLoop currentRunLoop] run];
+	}	
 	
-	[converter setDelegate:owner];
-	[owner converterReady:converter];
+	@catch(NSException *exception) {
+		if(nil != owner) {
+			[owner setException:exception];
+			[owner setStopped];
+		}
+	}
 	
-	[converter release];
-	
-	[[NSRunLoop currentRunLoop] run];
-	
-	[pool release];
+	@finally {
+		if(nil != pool) {
+			[pool release];
+		}		
+	}
 }
 
 - (id) initWithInputFilename:(NSString *)inputFilename

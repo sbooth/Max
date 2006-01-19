@@ -40,42 +40,36 @@
 {
 	if((self = [super initWithPCMFilename:pcmFilename])) {
 		
-		@try {
-			_flac = OggFLAC__file_encoder_new();
-			if(NULL == _flac) {
-				@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create Ogg FLAC encoder", @"Exceptions", @"") userInfo:nil];
-			}
-			
-			// Setup the OggFLAC encoder
-			srand(time(NULL));
-			if(NO == OggFLAC__file_encoder_set_serial_number(_flac, rand())) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
-			if(NO == OggFLAC__file_encoder_set_do_exhaustive_model_search(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"oggFLACExhaustiveModelSearch"])) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
-			if(NO == OggFLAC__file_encoder_set_do_mid_side_stereo(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"oggFLACEnableMidSide"])) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
-			if(NO == OggFLAC__file_encoder_set_loose_mid_side_stereo(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"oggFLACEnableLooseMidSide"])) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
-			if(NO == OggFLAC__file_encoder_set_qlp_coeff_precision(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACQLPCoeffPrecision"])) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
-			if(NO == OggFLAC__file_encoder_set_min_residual_partition_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMinPartitionOrder"])) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
-			if(NO == OggFLAC__file_encoder_set_max_residual_partition_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMaxPartitionOrder"])) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
-			if(NO == OggFLAC__file_encoder_set_max_lpc_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMaxLPCOrder"])) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-			}
+		_flac = OggFLAC__file_encoder_new();
+		if(NULL == _flac) {
+			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create Ogg FLAC encoder", @"Exceptions", @"") userInfo:nil];
 		}
-
-		@catch(NSException *exception) {
-			return nil;
+		
+		// Setup the OggFLAC encoder
+		srand(time(NULL));
+		if(NO == OggFLAC__file_encoder_set_serial_number(_flac, rand())) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == OggFLAC__file_encoder_set_do_exhaustive_model_search(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"oggFLACExhaustiveModelSearch"])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == OggFLAC__file_encoder_set_do_mid_side_stereo(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"oggFLACEnableMidSide"])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == OggFLAC__file_encoder_set_loose_mid_side_stereo(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"oggFLACEnableLooseMidSide"])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == OggFLAC__file_encoder_set_qlp_coeff_precision(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACQLPCoeffPrecision"])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == OggFLAC__file_encoder_set_min_residual_partition_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMinPartitionOrder"])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == OggFLAC__file_encoder_set_max_residual_partition_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMaxPartitionOrder"])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == OggFLAC__file_encoder_set_max_lpc_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMaxLPCOrder"])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 		
 		return self;
@@ -108,14 +102,14 @@
 		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
 		struct stat sourceStat;
 		if(-1 == fstat(_pcm, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Allocate the buffer
@@ -123,7 +117,7 @@
 		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 		if(NULL == _buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		totalBytes		= sourceStat.st_size;
@@ -147,7 +141,7 @@
 			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 			if(-1 == bytesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// Encode the PCM data
@@ -193,7 +187,7 @@
 		// Close the input file
 		if(-1 == close(_pcm)) {
 			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
@@ -218,7 +212,7 @@
 		rawPCM[1] = calloc(numSamples / 2, sizeof(int32_t));
 		if(NULL == rawPCM[0] || NULL == rawPCM[1]) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Split PCM into channels and convert to 32-bits

@@ -38,24 +38,37 @@
 
 + (void) connectWithPorts:(NSArray *)portArray
 {
-	NSAutoreleasePool			*pool;
-	NSConnection				*connection;
-	LibsndfileEncoder			*encoder;
-	LibsndfileEncoderTask		*owner;
+	NSAutoreleasePool			*pool				= nil;
+	NSConnection				*connection			= nil;
+	LibsndfileEncoder			*encoder			= nil;
+	LibsndfileEncoderTask		*owner				= nil;
 	
-	pool			= [[NSAutoreleasePool alloc] init];
-	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
-	owner			= (LibsndfileEncoderTask *)[connection rootProxy];
-	encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename] format:[owner getFormat]];
+	@try {
+		pool			= [[NSAutoreleasePool alloc] init];
+		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+		owner			= (LibsndfileEncoderTask *)[connection rootProxy];
+		encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename] format:[owner getFormat]];
+		
+		[encoder setDelegate:owner];
+		[owner encoderReady:encoder];
+		
+		[encoder release];
+		
+		[[NSRunLoop currentRunLoop] run];
+	}	
 	
-	[encoder setDelegate:owner];
-	[owner encoderReady:encoder];
+	@catch(NSException *exception) {
+		if(nil != owner) {
+			[owner setException:exception];
+			[owner setStopped];
+		}
+	}
 	
-	[encoder release];
-	
-	[[NSRunLoop currentRunLoop] run];
-	
-	[pool release];
+	@finally {
+		if(nil != pool) {
+			[pool release];
+		}		
+	}
 }
 
 - (id) initWithPCMFilename:(NSString *)pcmFilename format:(int)format
@@ -98,7 +111,7 @@
 		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Setup libsndfile input file
@@ -108,7 +121,7 @@
 		in					= sf_open_fd(_pcm, SFM_READ, &info, NO);
 		if(NULL == in) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Setup libsndfile output file
@@ -116,7 +129,7 @@
 		out					= sf_open([filename UTF8String], SFM_WRITE, &info);
 		if(NULL == out) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Copy metadata
@@ -133,7 +146,7 @@
 			doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
 			if(NULL == doubleBuffer) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			frameCount		= bufferLen / info.channels ;
@@ -179,7 +192,7 @@
 			intBuffer = (int *)malloc(bufferLen * sizeof(int));
 			if(NULL == intBuffer) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			frameCount		= bufferLen / info.channels;
@@ -221,7 +234,7 @@
 		// Close the input file
 		if(-1 == close(_pcm)) {
 			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
-															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 	}	

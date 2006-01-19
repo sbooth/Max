@@ -64,7 +64,7 @@
 		_freeDB = cddb_new();
 		if(NULL == _freeDB) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		cddb_set_server_name(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBServer"] UTF8String]);
@@ -134,7 +134,7 @@
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	if(FALSE == cddb_sites(_freeDB)) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to obtain the list of FreeDB mirrors", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
 	site = cddb_first_site(_freeDB);
@@ -176,7 +176,7 @@
 	matches = cddb_query(_freeDB, freeDBDisc);
 	if(-1 == matches) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB query failed", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	while(matches > 0) {
@@ -195,7 +195,7 @@
 		if(0 < matches) {
 			if(0 == cddb_query_next(_freeDB, freeDBDisc)) {
 				@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB query index out of bounds", @"Exceptions", @"")
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
 	}
@@ -214,7 +214,7 @@
 	disc = cddb_disc_new();
 	if(NULL == disc) {
 		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	cddb_disc_set_category(disc, [[info valueForKey:@"category"] intValue]);
@@ -222,7 +222,7 @@
 	
 	if(0 == cddb_read(_freeDB, disc)) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB read failed", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	tempString = cddb_disc_get_title(disc);
@@ -283,7 +283,7 @@
 	disc = cddb_disc_clone([[_disc getDisc] getFreeDBDisc]);
 	if(NULL == disc) {
 		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	temp = [_disc valueForKey:@"genre"];
@@ -344,7 +344,7 @@
 
 	if(0 == cddb_write(_freeDB, disc)) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB write failed", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
 	// Clean up

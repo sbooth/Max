@@ -25,24 +25,37 @@
 
 + (void) connectWithPorts:(NSArray *)portArray
 {
-	NSAutoreleasePool	*pool;
-	NSConnection		*connection;
-	Encoder				*encoder;
-	EncoderTask			*owner;
+	NSAutoreleasePool	*pool				= nil;
+	NSConnection		*connection			= nil;
+	Encoder				*encoder			= nil;
+	EncoderTask			*owner				= nil;
 	
-	pool			= [[NSAutoreleasePool alloc] init];
-	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
-	owner			= (EncoderTask *)[connection rootProxy];
-	encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename]];
+	@try {
+		pool			= [[NSAutoreleasePool alloc] init];
+		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+		owner			= (EncoderTask *)[connection rootProxy];
+		encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename]];
+		
+		[encoder setDelegate:owner];
+		[owner encoderReady:encoder];
+		
+		[encoder release];
+		
+		[[NSRunLoop currentRunLoop] run];
+	}	
 	
-	[encoder setDelegate:owner];
-	[owner encoderReady:encoder];
+	@catch(NSException *exception) {
+		if(nil != owner) {
+			[owner setException:exception];
+			[owner setStopped];
+		}
+	}
 	
-	[encoder release];
-	
-	[[NSRunLoop currentRunLoop] run];
-	
-	[pool release];
+	@finally {
+		if(nil != pool) {
+			[pool release];
+		}		
+	}
 }
 
 - (id) initWithPCMFilename:(NSString *)pcmFilename

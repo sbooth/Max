@@ -102,24 +102,37 @@ callback(long inpos, int function, void *userdata)
 
 + (void) connectWithPorts:(NSArray *)portArray
 {
-	NSAutoreleasePool	*pool;
-	NSConnection		*connection;
-	Ripper				*ripper;
-	RipperTask			*owner;
+	NSAutoreleasePool	*pool				= nil;
+	NSConnection		*connection			= nil;
+	Ripper				*ripper				= nil;
+	RipperTask			*owner				= nil;
 	
-	pool			= [[NSAutoreleasePool alloc] init];
-	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
-	owner			= (RipperTask *)[connection rootProxy];
-	ripper			= [[self alloc] initWithSectors:[owner getSectors] deviceName:[owner getDeviceName]];
+	@try {
+		pool			= [[NSAutoreleasePool alloc] init];
+		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+		owner			= (RipperTask *)[connection rootProxy];
+		ripper			= [[self alloc] initWithSectors:[owner getSectors] deviceName:[owner getDeviceName]];
+
+		[ripper setDelegate:owner];
+		[owner ripperReady:ripper];
+		
+		[ripper release];
+
+		[[NSRunLoop currentRunLoop] run];
+	}	
 	
-	[ripper setDelegate:owner];
-	[owner ripperReady:ripper];
-	
-	[ripper release];
-	
-	[[NSRunLoop currentRunLoop] run];
-	
-	[pool release];
+	@catch(NSException *exception) {
+		if(nil != owner) {
+			[owner setException:exception];
+			[owner setStopped];
+		}
+	}
+
+	@finally {
+		if(nil != pool) {
+			[pool release];
+		}		
+	}
 }
 
 - (id) initWithSectors:(NSArray *)sectors deviceName:(NSString *)deviceName
@@ -128,57 +141,51 @@ callback(long inpos, int function, void *userdata)
 		int paranoiaLevel	= 0;
 		int paranoiaMode	= PARANOIA_MODE_DISABLE;
 
-		@try {
-			// Setup logging
-			_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
+		// Setup logging
+		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
+		
+		// Setup cdparanoia
+		_drive		= cdda_identify([deviceName UTF8String], 0, NULL);
+		if(NULL == _drive) {
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		if(0 != cdda_open(_drive)) {
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		_paranoia	= paranoia_init(_drive);
+		
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
+			paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
 			
-			// Setup cdparanoia
-			_drive		= cdda_identify([deviceName UTF8String], 0, NULL);
-			if(NULL == _drive) {
-				@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
+			paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
+			
+			if(PARANOIA_LEVEL_FULL == paranoiaLevel) {
+			}
+			else if(PARANOIA_LEVEL_OVERLAP_CHECKING == paranoiaLevel) {
+				paranoiaMode |= PARANOIA_MODE_OVERLAP;
+				paranoiaMode &= ~PARANOIA_MODE_VERIFY;
 			}
 			
-			if(0 != cdda_open(_drive)) {
-				@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
-			}
-			
-			_paranoia	= paranoia_init(_drive);
-			
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
-				paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
-				
-				paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
-				
-				if(PARANOIA_LEVEL_FULL == paranoiaLevel) {
-				}
-				else if(PARANOIA_LEVEL_OVERLAP_CHECKING == paranoiaLevel) {
-					paranoiaMode |= PARANOIA_MODE_OVERLAP;
-					paranoiaMode &= ~PARANOIA_MODE_VERIFY;
-				}
-				
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaNeverSkip"]) {
-					paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
-					_maximumRetries = -1;
-				}
-				else {
-					_maximumRetries = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaMaximumRetries"];
-				}
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaNeverSkip"]) {
+				paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
+				_maximumRetries = -1;
 			}
 			else {
-				paranoiaMode = PARANOIA_MODE_DISABLE;
+				_maximumRetries = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaMaximumRetries"];
 			}
-			
-			paranoia_modeset(_paranoia, paranoiaMode);
-			
-			_sectors		= [sectors retain];
-			
-			// Determine the size of the track(s) we are ripping
-			[self setValue:[_sectors valueForKeyPath:@"@sum.totalSectors"] forKey:@"grandTotalSectors"];			
 		}
-
-		@catch(NSException *exception) {
-			return nil;
+		else {
+			paranoiaMode = PARANOIA_MODE_DISABLE;
 		}
+		
+		paranoia_modeset(_paranoia, paranoiaMode);
+		
+		_sectors		= [sectors retain];
+		
+		// Determine the size of the track(s) we are ripping
+		[self setValue:[_sectors valueForKeyPath:@"@sum.totalSectors"] forKey:@"grandTotalSectors"];			
 		
 		return self;
 	}
@@ -262,7 +269,7 @@ callback(long inpos, int function, void *userdata)
 		// Write data to file
 		if(-1 == write(file, buf, CD_FRAMESIZE_RAW)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Update status

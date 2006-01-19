@@ -99,7 +99,7 @@ static EncoderController *sharedController = nil;
 	
 	if(-1 == statfs([[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] UTF8String], &buf)) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
 	bytesFree	= (unsigned long long) buf.f_bsize * (unsigned long long) buf.f_bfree;

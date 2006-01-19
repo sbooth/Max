@@ -40,24 +40,37 @@
 
 + (void) connectWithPorts:(NSArray *)portArray
 {
-	NSAutoreleasePool			*pool;
-	NSConnection				*connection;
-	CoreAudioEncoder			*encoder;
-	CoreAudioEncoderTask		*owner;
+	NSAutoreleasePool			*pool				= nil;
+	NSConnection				*connection			= nil;
+	CoreAudioEncoder			*encoder			= nil;
+	CoreAudioEncoderTask		*owner				= nil;
 	
-	pool			= [[NSAutoreleasePool alloc] init];
-	connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
-	owner			= (CoreAudioEncoderTask *)[connection rootProxy];
-	encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename] formatInfo:[owner getFormatInfo]];
+	@try {
+		pool			= [[NSAutoreleasePool alloc] init];
+		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
+		owner			= (CoreAudioEncoderTask *)[connection rootProxy];
+		encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename] formatInfo:[owner getFormatInfo]];
+		
+		[encoder setDelegate:owner];
+		[owner encoderReady:encoder];
+		
+		[encoder release];
+		
+		[[NSRunLoop currentRunLoop] run];
+	}	
 	
-	[encoder setDelegate:owner];
-	[owner encoderReady:encoder];
+	@catch(NSException *exception) {
+		if(nil != owner) {
+			[owner setException:exception];
+			[owner setStopped];
+		}
+	}
 	
-	[encoder release];
-	
-	[[NSRunLoop currentRunLoop] run];
-	
-	[pool release];
+	@finally {
+		if(nil != pool) {
+			[pool release];
+		}		
+	}
 }
 
 - (id) initWithPCMFilename:(NSString *)pcmFilename formatInfo:(NSDictionary *)formatInfo
@@ -129,14 +142,14 @@
 		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
 		struct stat sourceStat;
 		if(-1 == fstat(_pcm, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Allocate the input buffer
@@ -144,7 +157,7 @@
 		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
 		if(NULL == _buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		totalBytes		= sourceStat.st_size;
@@ -231,7 +244,7 @@
 			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 			if(-1 == bytesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// Put the data in an AudioFileBufferList
@@ -288,7 +301,7 @@
 		// Close the input file
 		if(-1 == close(_pcm)) {
 			exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 						
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
