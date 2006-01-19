@@ -114,7 +114,7 @@ static UpdateChecker *sharedController = nil;
 		
 		[alert beginSheetModalForWindow:updateWindow modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
 	}
-	else {
+	else if(kMacPADResultNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue]) {
 		int			result;
 		NSAlert		*alert	= [[[NSAlert alloc] init] autorelease];
 		
