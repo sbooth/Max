@@ -25,10 +25,6 @@
 #import "IOException.h"
 #import "StopException.h"
 
-@interface ConverterTask (Private)
-- (void) converterReady:(id)anObject;
-@end
-
 @implementation ConverterTask
 
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata

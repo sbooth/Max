@@ -172,12 +172,12 @@
 	else {
 		err = FSPathMakeRef((const UInt8 *)[_outputFilename UTF8String], &ref, NULL);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to locate output file (%s: %s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to locate the output file '%@' (%s:%s)", @"Exceptions", @""), _outputFilename, GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		err = AudioFileOpen(&ref, fsRdWrPerm, [[_formatInfo valueForKey:@"fileType"] intValue], &fileID);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open output file (%s: %s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the output file (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		// Get the dictionary and set properties
@@ -249,14 +249,14 @@
 			err = AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, &info);
 			if(noErr != err) {
 				// TODO: Uncomment the following line when (if?) Apple implements this functionality
-				//@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set info dictionary (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				//@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set info dictionary (%s:%s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 			}
 		}
 		
 		// Clean up	
 		err = AudioFileClose(fileID);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close output file (%s: %s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 	}	
 }

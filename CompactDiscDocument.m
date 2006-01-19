@@ -56,7 +56,7 @@
 		// Set up defaults
 		compactDiscDocumentDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CompactDiscDocumentDefaults" ofType:@"plist"];
 		if(nil == compactDiscDocumentDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"CompactDiscDocumentDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"CompactDiscDocumentDefaults.plist"] userInfo:nil];
 		}
 		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];

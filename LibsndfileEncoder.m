@@ -97,7 +97,7 @@
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Setup libsndfile input file
@@ -107,7 +107,7 @@
 	in					= sf_open_fd(_pcm, SFM_READ, &info, NO);
 	if(NULL == in) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open input sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 	}
 
 	// Setup libsndfile output file
@@ -115,7 +115,7 @@
 	out					= sf_open([filename UTF8String], SFM_WRITE, &info);
 	if(NULL == out) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create output sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 	}
 	
 	// Copy metadata
@@ -210,7 +210,7 @@
 	
 	// Close the input file
 	if(-1 == close(_pcm)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	[_delegate setEndTime:[NSDate date]];

@@ -54,15 +54,11 @@ getApplicationDataDirectory()
 
 			if(NO == [manager fileExistsAtPath:sDataDirectory isDirectory:&isDir]) {
 				if(NO == [manager createDirectoryAtPath:sDataDirectory attributes:nil]) {
-//					NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
-//					[[NSDocumentController sharedDocumentController] presentError:error];
-					@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create application data directory", @"Exceptions", @"") userInfo:nil];
 				}
 			}
 			else if(NO == isDir) {
-//				NSError *error = [NSError errorWithDomain:@"Initialization" code:0 userInfo:nil];
-//				[[NSDocumentController sharedDocumentController] presentError:error];
-				@throw [IOException exceptionWithReason:@"Unable to create application data directory" userInfo:nil];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create application data directory", @"Exceptions", @"") userInfo:nil];
 			}
 		}
 	}
@@ -147,11 +143,11 @@ validateAndCreateDirectory(NSString *path)
 
 	if(NO == [manager fileExistsAtPath:path isDirectory:&isDir]) {
 		if(NO == [manager createDirectoryAtPath:path attributes:nil]) {
-			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"Unable to create directory" userInfo:nil];
+			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create directory '%@'", @"Exceptions", @""), path] userInfo:nil];
 		}
 	}
 	else if(FALSE == isDir) {
-		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"Unable to create directory" userInfo:nil];
+		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create directory '%@'", @"Exceptions", @""), path] userInfo:nil];
 	}	
 }
 
@@ -199,49 +195,49 @@ displayExceptionSheet(NSException	*exception,
 	NSBeep();
 	
 	NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-	[alert addButtonWithTitle: @"OK"];
+	[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
 	if([exception isKindOfClass:[FreeDBException class]]) {
-		[alert setMessageText: @"FreeDB Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"FreeDB Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[IOException class]]) {
-		[alert setMessageText: @"Input/Output Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Input/Output Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[MallocException class]]) {
-		[alert setMessageText: @"Memory Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Memory Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[LAMEException class]]) {
-		[alert setMessageText: @"LAME Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"LAME Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[EmptySelectionException class]]) {
-		[alert setMessageText: @"Empty Selection"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Empty Selection", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[CustomNamingException class]]) {
-		[alert setMessageText: @"Custom Naming Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Custom Naming Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[MissingResourceException class]]) {
-		[alert setMessageText: @"Missing Resource"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Missing Resource", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[ParanoiaException class]]) {
-		[alert setMessageText: @"cdparanoia Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"cdparanoia Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[FLACException class]]) {
-		[alert setMessageText: @"FLAC Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"FLAC Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[VorbisException class]]) {
-		[alert setMessageText: @"Ogg Vorbis Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Ogg Vorbis Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[FileFormatNotSupportedException class]]) {
-		[alert setMessageText: @"File Format Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"File Format Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[CoreAudioException class]]) {
-		[alert setMessageText: @"Core Audio Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Core Audio Error", @"Exceptions", @"")];
 	}
 	else if([exception isKindOfClass:[SpeexException class]]) {
-		[alert setMessageText: @"Speex Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Speex Error", @"Exceptions", @"")];
 	}
 	else {
 		Debugger();
-		[alert setMessageText: @"Unknown Error"];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Unknown Error", @"Exceptions", @"")];
 	}
 	[alert setInformativeText: [exception reason]];
 	[alert setAlertStyle: NSWarningAlertStyle];

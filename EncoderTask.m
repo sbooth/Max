@@ -25,11 +25,6 @@
 #import "IOException.h"
 #import "StopException.h"
 
-@interface EncoderTask (Private)
-- (void) encoderReady:(id)anObject;
-- (void) encodeFinished;
-@end
-
 @implementation EncoderTask
 
 - (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
@@ -104,7 +99,7 @@
 - (void) removeOutputFile
 {
 	if(-1 == unlink([_outputFilename UTF8String])) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to delete output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to delete the output file '%@' (%i:%s)", @"Exceptions", @""), _outputFilename, errno, strerror(errno)] userInfo:nil];
 	}	
 }
 

@@ -35,7 +35,7 @@
 	@try {
 		trackDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TrackDefaults" ofType:@"plist"];
 		if(nil == trackDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"TrackDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"TrackDefaults.plist"] userInfo:nil];
 		}
 		trackDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:trackDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:trackDefaultsValuesDictionary];

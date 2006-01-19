@@ -50,7 +50,7 @@ metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *m
 	if(FLAC__METADATA_TYPE_STREAMINFO == metadata->type) {
 		if(16 != metadata->data.stream_info.bits_per_sample && 2 != metadata->data.stream_info.channels) {
 			[converter setValue:[NSNumber numberWithBool:YES] forKey:@"stopped"];
-			@throw [FLACException exceptionWithReason:@"FLAC stream is not 16-bit stereo" userInfo:nil];
+			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"FLAC stream is not 16-bit stereo", @"Exceptions", @"") userInfo:nil];
 		}
 	}
 }
@@ -77,7 +77,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		// Create and setup FLAC decoder
 		_flac = FLAC__file_decoder_new();
 		if(NULL == _flac) {
-			@throw [MallocException exceptionWithReason:@"Unable to create FLAC decoder" userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create FLAC decoder", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		if(NO == FLAC__file_decoder_set_filename(_flac, [_inputFilename UTF8String])) {
@@ -128,7 +128,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	struct stat sourceStat;
 	if(-1 == stat([_inputFilename UTF8String], &sourceStat)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	totalBytes		= (FLAC__uint64)sourceStat.st_size;
@@ -207,7 +207,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	pcmBuffer		= calloc(pcmBufferLen, sizeof(int16_t));
 	if(NULL == pcmBuffer) {
 		[_delegate setStopped];
-		@throw [MallocException exceptionWithReason:@"Unable to create buffer" userInfo:nil];
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 
 	// Interleave (16-bit sample size hard-coded)
@@ -223,7 +223,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	// Write
 	if(-1 == write(_fd, pcmBuffer, pcmBufferLen * sizeof(int16_t))) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Clean up

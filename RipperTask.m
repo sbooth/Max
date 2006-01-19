@@ -26,10 +26,6 @@
 
 #include "cdparanoia/interface/cdda_interface.h"
 
-@interface RipperTask (Private)
-- (void) ripperReady:(id)anObject;
-@end
-
 @implementation RipperTask
 
 - (id) initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata

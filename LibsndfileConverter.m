@@ -41,7 +41,7 @@
 		
 		_in = sf_open([_inputFilename UTF8String], SFM_READ, &info);
 		if(NULL == _in) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open input sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 		}
 		
 		// Get format info
@@ -51,7 +51,7 @@
 			_fileType = [[NSString stringWithUTF8String:formatInfo.name] retain];
 		}
 		else {
-			_fileType = @"Unknown (libsndfile)";
+			_fileType = NSLocalizedStringFromTable(@"Unknown (libsndfile)", @"General", @"");
 		}
 		
 		return self;
@@ -95,7 +95,7 @@
 	out					= sf_open_fd(file, SFM_WRITE, &info, 0);
 	if(NULL == out) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create output sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 	}
 	
 //	totalBytes		= sourceStat.st_size;

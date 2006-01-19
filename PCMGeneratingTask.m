@@ -38,7 +38,7 @@
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"PCMGeneratingTaskDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"PCMGeneratingTaskDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"PCMGeneratingTaskDefaults.plist"] userInfo:nil];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
@@ -82,7 +82,7 @@
 		
 		_out = mkstemps(path, 4);
 		if(-1 == _out) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%s' (%i:%s)", @"Exceptions", @""), path, errno, strerror(errno)] userInfo:nil];
 		}
 		
 		_fileClosed			= NO;
@@ -124,7 +124,7 @@
 	
 	// Close output file
 	if(-1 == close(_out)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close temporary file '%@' (%i:%s)", @"Exceptions", @""), _outputFilename, errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close temporary file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	_fileClosed = YES;

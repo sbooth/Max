@@ -34,17 +34,17 @@
 {
 	if((self = [super initWithInputFilename:inputFilename])) {	
 		
-		_file = fopen([inputFilename UTF8String], "r");
+		_file = fopen([_inputFilename UTF8String], "r");
 		if(NULL == _file) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _inputFilename, errno, strerror(errno)] userInfo:nil];
 		}
 		
 		if(0 != ov_test(_file, &_vf, NULL, 0)) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Input file does not appear to be an Ogg Vorbis file [%s:%i]", __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Input file does not appear to be an Ogg Vorbis file", @"Exceptions", @"") userInfo:nil];
 		}
 
 		if(0 != ov_test_open(&_vf)) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file [%s:%i]", __FILE__, __LINE__] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") userInfo:nil];
 		}
 				
 		return self;
@@ -56,7 +56,7 @@
 {
 	// Will close _file for us
 	if(0 != ov_clear(&_vf)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file [%s:%i]", __FILE__, __LINE__] userInfo:nil];
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") userInfo:nil];
 	}
 	
 	[super dealloc];
@@ -89,7 +89,7 @@
 		// Check for errors
 		if(0 > bytesRead) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:@"Ogg Vorbis decode error" userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Ogg Vorbis decode error", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// EOF?
@@ -100,7 +100,7 @@
 		// Write the PCM data to file
 		if(-1 == write(file, buf, bytesRead)) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		
 		// Update status

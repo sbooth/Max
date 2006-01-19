@@ -34,4 +34,6 @@
 
 - (NSString *)		getInputFilename;
 
+- (void)			converterReady:(id)anObject;
+
 @end

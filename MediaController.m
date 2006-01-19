@@ -87,7 +87,7 @@ static MediaController *sharedController = nil;
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"MediaControllerDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"MediaControllerDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"MediaControllerDefaults.plist"] userInfo:nil];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];

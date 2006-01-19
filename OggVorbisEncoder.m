@@ -52,7 +52,7 @@ enum {
 	@try {
 		vorbisDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"OggVorbisDefaults" ofType:@"plist"];
 		if(nil == vorbisDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"OggVorbisDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"OggVorbisDefaults.plist"] userInfo:nil];
 		}
 		vorbisDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:vorbisDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:vorbisDefaultsValuesDictionary];
@@ -119,14 +119,14 @@ enum {
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Allocate the buffer (Vorbis crashes if it is too large)
@@ -144,7 +144,7 @@ enum {
 	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if(-1 == _out) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%@' (%i:%s)", @"Exceptions", @""), filename, errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Check if we should stop, and if so throw an exception
@@ -161,13 +161,13 @@ enum {
 	if(VORBIS_MODE_QUALITY == _mode) {
 		if(vorbis_encode_init_vbr(&vi, 2, 44100, _quality)) {
 			[_delegate setStopped];
-			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
+			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize Ogg Vorbis encoder", @"Exceptions", @"") userInfo:nil];
 		}
 	}
 	else if(VORBIS_MODE_BITRATE == _mode) {
 		if(vorbis_encode_init(&vi, 2, 44100, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
 			[_delegate setStopped];
-			@throw [VorbisException exceptionWithReason:@"Unable to initialize encoder." userInfo:nil];
+			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize Ogg Vorbis encoder", @"Exceptions", @"") userInfo:nil];
 		}
 	}
 	else {
@@ -187,7 +187,7 @@ enum {
 	srand(time(NULL));
 	if(-1 == ogg_stream_init(&os, rand())) {
 		[_delegate setStopped];
-		@throw [VorbisException exceptionWithReason:@"Unable to initialize ogg stream." userInfo:nil];
+		@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream.", @"Exceptions", @"") userInfo:nil];
 	}
 	
 	// Write stream headers	
@@ -204,14 +204,14 @@ enum {
 		currentBytesWritten = write(_out, og.header, og.header_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 		
 		currentBytesWritten = write(_out, og.body, og.body_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 	}
@@ -223,7 +223,7 @@ enum {
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read from the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		
 		// Expose the buffer to submit data
@@ -283,14 +283,14 @@ enum {
 					currentBytesWritten = write(_out, og.header, og.header_len);
 					if(-1 == currentBytesWritten) {
 						[_delegate setStopped];
-						@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+						@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 					}
 					bytesWritten += currentBytesWritten;
 					
 					currentBytesWritten = write(_out, og.body, og.body_len);
 					if(-1 == currentBytesWritten) {
 						[_delegate setStopped];
-						@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+						@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 					}
 					bytesWritten += currentBytesWritten;
 
@@ -305,13 +305,13 @@ enum {
 	// Close the input file
 	if(-1 == close(_pcm)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Close the output file
 	if(-1 == close(_out)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Clean up

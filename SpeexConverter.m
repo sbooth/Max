@@ -72,7 +72,7 @@
 		
 		_origOut = mkstemps(path, 4);
 		if(-1 == _origOut) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%s' (%i:%s)", @"Exceptions", @""), path, errno, strerror(errno)] userInfo:nil];
 		}
 		
 		_origFilename = [[NSString stringWithUTF8String:path] retain];
@@ -89,7 +89,7 @@
 	// Close the resampled input file
 	if(-1 == close(_origOut)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Delete resampled temporary file
@@ -153,14 +153,14 @@
 	fd = open([_inputFilename UTF8String], O_RDONLY);
 	if(-1 == fd) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _inputFilename, errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(fd, &sourceStat)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	totalBytes		= sourceStat.st_size;
@@ -181,7 +181,7 @@
 		bytesRead = read(fd, data, 200);
 		if(-1 == bytesRead) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read from the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		else if(0 == bytesRead) {
 			eos = YES;
@@ -210,34 +210,34 @@
 					header = speex_packet_to_header((char*)op.packet, op.bytes);
 					if(NULL == header) {
 						[_delegate setStopped];
-						@throw [SpeexException exceptionWithReason:@"Cannot read Speex header" userInfo:nil];
+						@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Cannot read Speex header", @"Exceptions", @"") userInfo:nil];
 					}
 					if(SPEEX_NB_MODES <= header->mode) {
 						[_delegate setStopped];
-						@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:@"Mode number %i does not (yet/any longer) exist in this version", header->mode] userInfo:nil];
+						@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Speex mode number %i does not (yet/any longer) exist in this version", @"Exceptions", @""), header->mode] userInfo:nil];
 					}
 					
 					mode = speex_lib_get_mode(header->mode);
 					
 					if(1 < header->speex_version_id) {
 						[_delegate setStopped];
-						@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:@"This file was encoded with Speex bit-stream version %i, which I don't know how to decode", header->speex_version_id] userInfo:nil];
+						@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"This file was encoded with Speex bit-stream version %i, which I don't know how to decode", @"Exceptions", @""), header->speex_version_id] userInfo:nil];
 					}
 					
 					if(mode->bitstream_version < header->mode_bitstream_version) {
 						[_delegate setStopped];
-						@throw [SpeexException exceptionWithReason:@"The file was encoded with a newer version of Speex. You need to upgrade in order to play it." userInfo:nil];
+						@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"The file was encoded with a newer version of Speex", @"Exceptions", @"") userInfo:nil];
 					}
 					
 					if(mode->bitstream_version > header->mode_bitstream_version)  {
 						[_delegate setStopped];
-						@throw [SpeexException exceptionWithReason:@"The file was encoded with an older version of Speex. You would need to downgrade the version in order to play it." userInfo:nil];
+						@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"The file was encoded with an older version of Speex", @"Exceptions", @"") userInfo:nil];
 					}
 					
 					st = speex_decoder_init(mode);
 					if(NULL == st) {
 						[_delegate setStopped];
-						@throw [SpeexException exceptionWithReason:@"Unable to intialize Speex decoder." userInfo:nil];
+						@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to intialize Speex decoder", @"Exceptions", @"") userInfo:nil];
 					}
 					speex_decoder_ctl(st, SPEEX_SET_ENH, &enh_enabled);
 					speex_decoder_ctl(st, SPEEX_GET_FRAME_SIZE, &frameSize);
@@ -297,11 +297,11 @@
 						}
 						if(-2 == ret) {
 							[_delegate setStopped];
-							@throw [SpeexException exceptionWithReason:@"Decode error: corrupted stream?" userInfo:nil];
+							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Speex decode error: corrupted stream?", @"Exceptions", @"") userInfo:nil];
 						}
 						if(0 > speex_bits_remaining(&bits)) {
 							[_delegate setStopped];
-							@throw [SpeexException exceptionWithReason:@"Decoding overflow: corrupted stream?" userInfo:nil];
+							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Speex decoding overflow: corrupted stream?", @"Exceptions", @"") userInfo:nil];
 						}
 						if(2 == channels) {
 							speex_decode_stereo_int(output, frameSize, &stereo);
@@ -315,7 +315,7 @@
 						currentBytesWritten = write(newOut, output, sizeof(int16_t) * frameSize * channels);
 						if(-1 == currentBytesWritten) {
 							[_delegate setStopped];
-							@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+							@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 						}
 						bytesWritten += currentBytesWritten;
 					}
@@ -352,7 +352,7 @@
 	// Close the input file
 	if(-1 == close(fd)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Clean up
@@ -384,7 +384,7 @@
 		inSF = sf_open([_origFilename UTF8String], SFM_READ, &info);
 		if(NULL == inSF) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open input sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 		}
 				
 		// Setup downsampled output file
@@ -394,7 +394,7 @@
 		outSF				= sf_open_fd(file, SFM_WRITE, &info, 0);
 		if(NULL == outSF) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create output sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 		}
 		
 		// Copy metadata

@@ -41,7 +41,7 @@
 	if((self = [super initWithPCMFilename:pcmFilename])) {
 		_flac = OggFLAC__file_encoder_new();
 		if(NULL == _flac) {
-			@throw [MallocException exceptionWithReason:@"Unable to create OggFLAC encoder" userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create Ogg FLAC encoder", @"Exceptions", @"") userInfo:nil];
 		}
 
 		// Setup the OggFLAC encoder
@@ -100,14 +100,14 @@
 	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 	if(-1 == _pcm) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Get input file information
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Allocate the buffer
@@ -142,7 +142,7 @@
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read from the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		
 		// Encode the PCM data
@@ -178,7 +178,7 @@
 	// Close the input file
 	if(-1 == close(_pcm)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	free(_buf);

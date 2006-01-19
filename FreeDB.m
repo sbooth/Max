@@ -42,7 +42,7 @@
 			// Hardcode default value to avoid a crash
 			NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"freedb.freedb.org", @"8880", @"1", nil] forKeys:[NSArray arrayWithObjects:@"freeDBServer", @"freeDBPort", @"freeDBProtocol", nil]];
 			[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"FreeDBDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"FreeDBDefaults.plist"] userInfo:nil];
 		}
 		cddbDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:cddbDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:cddbDefaultsValuesDictionary];
@@ -131,7 +131,7 @@
 	cddb_sites(_freeDB);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	if(FALSE == cddb_sites(_freeDB)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"Unable to obtain list of FreeDB mirrors.\nlibcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to obtain list of FreeDB mirrors (%s)", @"Exceptions", @""), cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
 	}
 	
 	site = cddb_first_site(_freeDB);
@@ -172,7 +172,7 @@
 	// Run query to find matches
 	matches = cddb_query(_freeDB, freeDBDisc);
 	if(-1 == matches) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"FreeDB query failed (%s)", @"Exceptions", @""), cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
 	}
 
 	while(matches > 0) {
@@ -190,7 +190,7 @@
 		--matches;
 		if(0 < matches) {
 			if(0 == cddb_query_next(_freeDB, freeDBDisc)) {
-				@throw [FreeDBException exceptionWithReason:@"Query index out of bounds" userInfo:nil];
+				@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB query index out of bounds", @"Exceptions", @"") userInfo:nil];
 			}
 		}
 	}
@@ -215,7 +215,7 @@
 	cddb_disc_set_discid(disc, [[info valueForKey:@"discid"] unsignedIntValue]);
 	
 	if(0 == cddb_read(_freeDB, disc)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"FreeDB read failed (%s)", @"Exceptions", @""), cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
 	}
 
 	tempString = cddb_disc_get_title(disc);
@@ -335,7 +335,7 @@
 	}
 
 	if(0 == cddb_write(_freeDB, disc)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:@"libcddb reported: %s", cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"FreeDB write failed (%s)", @"Exceptions", @""), cddb_error_str(cddb_errno(_freeDB))] userInfo:nil];
 	}
 	
 	// Clean up

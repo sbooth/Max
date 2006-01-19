@@ -55,4 +55,6 @@
 
 - (NSString *)		settings;
 
+- (void)			encoderReady:(id)anObject;
+
 @end

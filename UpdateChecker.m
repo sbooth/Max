@@ -90,8 +90,8 @@ static UpdateChecker *sharedController = nil;
 
 	if([updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: @"OK"];
-		[alert setMessageText: @"MacPAD Error"];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText: NSLocalizedStringFromTable(@"MacPAD Error", @"Exceptions", @"")];
 		[alert setInformativeText: [[aNotification userInfo] objectForKey:MacPADErrorMessage]];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		
@@ -106,9 +106,9 @@ static UpdateChecker *sharedController = nil;
 	// Suppress up-to-date alert if our window isn't visible (called by ApplicationController at startup)
 	if(kMacPADResultNoNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue] && [updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: @"OK"];
-		[alert setMessageText: @"Software up-to-date"];
-		[alert setInformativeText: @"You are running the most current version of Max."];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Software up-to-date", @"General", @"")];
+		[alert setInformativeText: NSLocalizedStringFromTable(@"You are running the most current version of Max", @"General", @"")];
 
 		[alert setAlertStyle: NSWarningAlertStyle];
 		
@@ -118,12 +118,12 @@ static UpdateChecker *sharedController = nil;
 		int			result;
 		NSAlert		*alert	= [[[NSAlert alloc] init] autorelease];
 		
-		[alert addButtonWithTitle: @"OK"];
-		[alert addButtonWithTitle: @"More Info"];
-		[alert addButtonWithTitle: @"Download"];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"More Info", @"General", @"")];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Download", @"General", @"")];
 		
-		[alert setMessageText: @"Newer version available"];
-		[alert setInformativeText: [NSString stringWithFormat:@"Max %@ is available.", [_socket newVersion]]];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Newer version available", @"General", @"")];
+		[alert setInformativeText: [NSString stringWithFormat:NSLocalizedStringFromTable(@"Max %@ is available", @"General", @""), [_socket newVersion]]];
 
 		[alert setAlertStyle: NSWarningAlertStyle];
 

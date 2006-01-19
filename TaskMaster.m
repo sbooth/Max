@@ -73,7 +73,7 @@ static TaskMaster *sharedController = nil;
 	@try {
 		taskMasterDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TaskMasterDefaults" ofType:@"plist"];
 		if(nil == taskMasterDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"TaskMasterDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"TaskMasterDefaults.plist"] userInfo:nil];
 		}
 		taskMasterDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:taskMasterDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:taskMasterDefaultsValuesDictionary];
@@ -683,7 +683,7 @@ static TaskMaster *sharedController = nil;
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode completed", @"Log", @"") 
-								description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%@\nFile format: %@", @"Log", @""), trackName, type]
+								description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%@\nDuration: %@", @"Log", @""), trackName, duration]
 						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
 	[self removeEncodingTask:task];

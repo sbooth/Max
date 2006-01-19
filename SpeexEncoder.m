@@ -139,7 +139,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	@try {
 		speexDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"SpeexDefaults" ofType:@"plist"];
 		if(nil == speexDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"SpeexDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"SpeexDefaults.plist"] userInfo:nil];
 		}
 		speexDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:speexDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:speexDefaultsValuesDictionary];
@@ -204,7 +204,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			
 			_resampledOut = mkstemps(path, 4);
 			if(-1 == _resampledOut) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+				@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%s' (%i:%s)", @"Exceptions", @""), path, errno, strerror(errno)] userInfo:nil];
 			}
 			
 			_resampledFilename = [[NSString stringWithUTF8String:path] retain];
@@ -299,7 +299,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		inSF = sf_open([_pcmFilename UTF8String], SFM_READ, &info);
 		if(NULL == inSF) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open input sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 		}
 			
 		// Determine the desired sample rate
@@ -321,7 +321,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		outSF				= sf_open_fd(_resampledOut, SFM_WRITE, &info, 1);
 		if(NULL == outSF) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create output sndfile (%i:%s)", sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create output sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
 		}
 		
 		// Copy metadata
@@ -418,7 +418,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		_pcm = open([_resampledFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _resampledFilename, errno, strerror(errno)] userInfo:nil];
 		}
 	}
 	else {
@@ -428,7 +428,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to open input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
 		}
 	}
 	
@@ -436,7 +436,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	struct stat sourceStat;
 	if(-1 == fstat(_pcm, &sourceStat)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to stat input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 
 	totalBytes		= sourceStat.st_size;
@@ -446,7 +446,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if(-1 == _out) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to create the output file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%@' (%i:%s)", @"Exceptions", @""), filename, errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Check if we should stop, and if so throw an exception
@@ -459,7 +459,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	srand(time(NULL));
 	if(-1 == ogg_stream_init(&os, rand())) {
 		[_delegate setStopped];
-		@throw [SpeexException exceptionWithReason:@"Unable to initialize ogg stream." userInfo:nil];
+		@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream", @"Exceptions", @"") userInfo:nil];
 	}
 
 
@@ -556,14 +556,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		currentBytesWritten = write(_out, og.header, og.header_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 		
 		currentBytesWritten = write(_out, og.body, og.body_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 	}
@@ -588,7 +588,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 		if(-1 == bytesRead) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to read from input file. (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read from the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		else if(0 == bytesRead) {
 			eos = YES;
@@ -639,14 +639,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				currentBytesWritten = write(_out, og.header, og.header_len);
 				if(-1 == currentBytesWritten) {
 					[_delegate setStopped];
-					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+					@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 				}
 				bytesWritten += currentBytesWritten;
 				
 				currentBytesWritten = write(_out, og.body, og.body_len);
 				if(-1 == currentBytesWritten) {
 					[_delegate setStopped];
-					@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+					@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 				}
 				bytesWritten += currentBytesWritten;				
 			}			
@@ -706,14 +706,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		currentBytesWritten = write(_out, og.header, og.header_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 		
 		currentBytesWritten = write(_out, og.body, og.body_len);
 		if(-1 == currentBytesWritten) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 		bytesWritten += currentBytesWritten;
 	}
@@ -721,13 +721,13 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	// Close the input file
 	if(-1 == close(_pcm)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close input file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
 	// Close the output file
 	if(-1 == close(_out)) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to close output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 
 	// Clean up

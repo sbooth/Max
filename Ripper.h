@@ -47,6 +47,6 @@
 
 - (id)						initWithSectors:(NSArray *)sectors deviceName:(NSString *)deviceName;
 
-- (NSString *)				getDeviceName;
+- (NSString *)				deviceName;
 
 @end

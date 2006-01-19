@@ -60,32 +60,32 @@
 		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[_inputFilename UTF8String], &ref, NULL);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to locate input file (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to locate the input file '%@' (%s:%s)", @"Exceptions", @""), _inputFilename, GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		err = ExtAudioFileOpen(&ref, &_in);
 		if(noErr != err) {
 			[_delegate setStopped];
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileOpen failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		err = ExtAudioFileSetProperty(_in, kExtAudioFileProperty_ClientDataFormat, sizeof(_outputASBD), &_outputASBD);
 		if(noErr != err) {
 			[_delegate setStopped];
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileSetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"ExtAudioFileSetProperty failed (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 
 		size	= sizeof(asbd);
 		err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileDataFormat, &size, &asbd);;
 		if(err != noErr) {
 			[_delegate setStopped];
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileGetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		size	= sizeof(_fileType);
 		err		= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &size, &_fileType);
 		if(noErr != err) {
-			_fileType = @"Unknown (Core Audio)";
+			_fileType = NSLocalizedStringFromTable(@"Unknown (Core Audio)", @"General", @"");
 		}
 		
 		return self;
@@ -102,7 +102,7 @@
 	// Close the input file
 	err = ExtAudioFileDispose(_in);
 	if(noErr != err) {
-		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileDispose failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}	
 		
 	[super dealloc];
@@ -129,7 +129,7 @@
 	err		= ExtAudioFileGetProperty(_in, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);;
 	if(err != noErr) {
 		[_delegate setStopped];
-		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileGetProperty failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 	}
 	
 	framesToRead = totalFrames;
@@ -153,7 +153,7 @@
 		err			= ExtAudioFileRead(_in, &frameCount, &_buf);
 		if(err != noErr) {
 			[_delegate setStopped];
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:@"ExtAudioFileRead failed (%s: %s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"ExtAudioFileRead failed (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
 		}
 		
 		// We're finished if no frames were returned
@@ -164,7 +164,7 @@
 		// Write the PCM data to file
 		if(-1 == write(file, _buf.mBuffers[0].mData, frameCount * _outputASBD.mBytesPerPacket)) {
 			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to write to output file (%i:%s)", errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 		}
 			
 		// Update status

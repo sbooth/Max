@@ -67,7 +67,7 @@
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load %@", @"Exceptions", @""), @"ApplicationControllerDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"ApplicationControllerDefaults.plist"] userInfo:nil];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
@@ -104,9 +104,6 @@
 
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	NSString		*bundleVersion;
-	MacPADSocket	*macPAD;
-		
 	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
 	[MediaController sharedController];
 		

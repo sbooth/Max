@@ -39,4 +39,6 @@
 
 - (NSArray *)		getTracks;
 
+- (void)			ripperReady:(id)anObject;
+
 @end
