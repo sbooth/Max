@@ -53,10 +53,12 @@ static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * con
 		DAReturn status = DADissenterGetStatus(dissenter);
 		if(unix_err(status)) {
 			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to unmount disc (%i:%s)", @"Exceptions", @""), code, strerror(code)] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithUTF8String:strerror(code)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		else {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to unmount disc (0x%.8x)", @"Exceptions", @""), status] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
 		}
 	}
 }
@@ -67,10 +69,12 @@ static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * conte
 		DAReturn status = DADissenterGetStatus(dissenter);
 		if(unix_err(status)) {
 			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to eject disc (%i:%s)", @"Exceptions", @""), code, strerror(code)] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithUTF8String:strerror(code)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		else {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to eject disc (0x%.8x)", @"Exceptions", @""), status] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
 		}
 	}
 }
@@ -87,7 +91,8 @@ static MediaController *sharedController = nil;
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"MediaControllerDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"MediaControllerDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"MediaControllerDefaults.plist" forKey:@"filename"]];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];

@@ -61,24 +61,30 @@
 		[_outputType release];
 	}
 	
+	if(nil != _exception) {
+		[_exception release];
+	}
+	
 	[super dealloc];
 }
 
-- (NSDate *)		getStartTime									{ return _startTime; }
-- (NSDate *)		getEndTime										{ return _endTime; }
+- (NSDate *)		startTime									{ return _startTime; }
+- (NSDate *)		endTime										{ return _endTime; }
 
-- (BOOL)			started											{ return _started; }
-- (BOOL)			completed										{ return _completed; }
-- (BOOL)			stopped											{ return _stopped; }
+- (BOOL)			started										{ return _started; }
+- (BOOL)			completed									{ return _completed; }
+- (BOOL)			stopped										{ return _stopped; }
 
-- (double)			percentComplete									{ return _percentComplete; }
+- (double)			percentComplete								{ return _percentComplete; }
 
-- (BOOL)			shouldStop										{ return _shouldStop; }
+- (BOOL)			shouldStop									{ return _shouldStop; }
 
-- (NSString *)		getTimeRemaining								{ return _timeRemaining; }
+- (NSString *)		timeRemaining								{ return _timeRemaining; }
 
-- (NSString *)		getInputType									{ return _inputType; }
-- (NSString *)		getOutputType									{ return _outputType; }
+- (NSString *)		inputType									{ return _inputType; }
+- (NSString *)		outputType									{ return _outputType; }
+
+- (NSException *)	exception									{ return _exception; }
 
 - (void) setStartTime:(NSDate *)startTime
 { 
@@ -166,6 +172,18 @@
 	}
 	_outputType = [outputType retain];
 	[self didChangeValueForKey:@"outputType"];
+}
+
+- (void) setException:(NSException *)exception
+{
+	[self willChangeValueForKey:@"exception"];
+	if(nil != _exception) {
+		[_exception release];
+	}
+	_exception = [exception retain];
+	[self didChangeValueForKey:@"exception"];
+	
+	displayExceptionAlert(exception);
 }
 
 - (void) updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining

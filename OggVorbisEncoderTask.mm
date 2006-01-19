@@ -104,9 +104,9 @@
 	f.save();
 }
 
-- (NSString *) getOutputType
+- (NSString *) outputType
 {
-	return @"Ogg Vorbis";
+	return NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @"");
 }
 
 @end

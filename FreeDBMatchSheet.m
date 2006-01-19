@@ -28,7 +28,8 @@
 {
 	if((self = [super init])) {
 		if(NO == [NSBundle loadNibNamed:@"FreeDBMatches" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"FreeDBMatches.nib"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"FreeDBMatches.nib" forKey:@"filename"]];
 		}
 		
 		_doc = [doc retain];

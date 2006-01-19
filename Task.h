@@ -39,6 +39,8 @@
 	
 	NSString			*_inputType;
 	NSString			*_outputType;
+	
+	NSException			*_exception;
 }
 
 @end

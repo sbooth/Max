@@ -51,7 +51,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	@try {
 		lameDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"LAMEDefaults" ofType:@"plist"];
 		if(nil == lameDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"LAMEDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"LAMEDefaults.plist" forKey:@"filename"]];
 		}
 		lameDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:lameDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:lameDefaultsValuesDictionary];
@@ -70,16 +71,15 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	int			lameResult;
 	
 	
-	_gfp				= 0;
-	
-	@try {
-		if((self = [super initWithPCMFilename:pcmFilename])) {
-			
+	if((self = [super initWithPCMFilename:pcmFilename])) {
+		
+		@try {
 			// LAME setup
-			_gfp = lame_init();
+			_gfp	= NULL;
+			_gfp	= lame_init();
 			if(NULL == _gfp) {
-				[_delegate setStopped];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 			}
 			
 			// We know the input is coming from a CD
@@ -121,30 +121,29 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
 			}
 			else {
-				[_delegate setStopped];
 				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME mode" userInfo:nil];
 			}
 			
 			lameResult = lame_init_params(_gfp);
 			if(-1 == lameResult) {
-				[_delegate setStopped];
-				@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Failure initializing LAME library", @"Exceptions", @"") userInfo:nil];
+				@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize LAME encoder", @"Exceptions", @"") userInfo:nil];
 			}
 		}
-	}
-	@catch(NSException *exception) {
-		
-		if(0 != _gfp) {
-			lame_close(_gfp);
+
+		@catch(NSException *exception) {
+			[_delegate setStopped];
 		}
 		
-		@throw;
+		@finally {
+			if(0 != _gfp) {
+				lame_close(_gfp);
+			}
+		}
+		
+		return self;
 	}
 	
-	@finally {
-	}
-	
-	return self;
+	return nil;
 }
 
 - (void) dealloc
@@ -168,108 +167,120 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
-	// Open the input file
-	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
-	if(-1 == _pcm) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Get input file information
-	struct stat sourceStat;
-	if(-1 == fstat(_pcm, &sourceStat)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Allocate the buffer
-	_buflen			= 1024;
-	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-	if(NULL == _buf) {
-		[_delegate setStopped];
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-	
-	totalBytes		= sourceStat.st_size;
-	bytesToRead		= totalBytes;
-	
-	// Create the output file
-	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	if(-1 == _out) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%@' (%i:%s)", @"Exceptions", @""), filename, errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Iteratively get the PCM data and encode it
-	while(0 < bytesToRead) {
-		
-		// Read a chunk of PCM input
-		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
-		if(-1 == bytesRead) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read from the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+	@try {
+		// Open the input file
+		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		if(-1 == _pcm) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		
-		// Encode the PCM data
-		bytesWritten += [self encodeChunk:_buf numSamples:bytesRead / 2];
+		// Get input file information
+		struct stat sourceStat;
+		if(-1 == fstat(_pcm, &sourceStat)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
 		
-		// Update status
-		bytesToRead -= bytesRead;
-
-		// Distributed Object calls are expensive, so only perform them every few iterations
-		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+		// Allocate the buffer
+		_buflen			= 1024;
+		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
+		if(NULL == _buf) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		
+		totalBytes		= sourceStat.st_size;
+		bytesToRead		= totalBytes;
+		
+		// Create the output file
+		_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == _out) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		
+		// Iteratively get the PCM data and encode it
+		while(0 < bytesToRead) {
 			
-			// Check if we should stop, and if so throw an exception
-			if([_delegate shouldStop]) {
-				[_delegate setStopped];
-				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+			// Read a chunk of PCM input
+			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+			if(-1 == bytesRead) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 			}
 			
-			// Update UI
-			double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
-			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-			unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			// Encode the PCM data
+			bytesWritten += [self encodeChunk:_buf numSamples:bytesRead / 2];
 			
-			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			// Update status
+			bytesToRead -= bytesRead;
+			
+			// Distributed Object calls are expensive, so only perform them every few iterations
+			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+				
+				// Check if we should stop, and if so throw an exception
+				if([_delegate shouldStop]) {
+					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+				}
+				
+				// Update UI
+				double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+				unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+				
+				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			}
+			
+			++iterations;
 		}
 		
-		++iterations;
-	}
-	
-	// Flush the last MP3 frames (maybe)
-	bytesWritten += [self finishEncode];
-	
-	// Close the input file
-	if(-1 == close(_pcm)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Close the output file
-	if(-1 == close(_out)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Write the Xing VBR tag
-	file = fopen([filename UTF8String], "r+");
-	if(NULL == file) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-	lame_mp3_tags_fid(_gfp, file);
-	if(EOF == fclose(file)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+		// Flush the last MP3 frames (maybe)
+		bytesWritten += [self finishEncode];
+		
+		// Close the output file
+		if(-1 == close(_out)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		
+		// Write the Xing VBR tag
+		file = fopen([filename UTF8String], "r+");
+		if(NULL == file) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		lame_mp3_tags_fid(_gfp, file);
+		if(EOF == fclose(file)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
 	}
 
-	free(_buf);
+	@catch(StopException *exception) {
+		[_delegate setStopped];
+	}
+	
+	@catch(NSException *exception) {
+		[_delegate setException:exception];
+		[_delegate setStopped];
+	}
+	
+	@finally {
+		// Close the input file
+		if(-1 == close(_pcm)) {
+			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			NSLog(@"%@", exception);
+		}
+		
+
+		free(_buf);
+	}
 
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
-	
-//	return bytesWritten;
 }
 
 - (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
@@ -288,20 +299,19 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		bufSize = 1.25 * numSamples + 7200;
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
-			[_delegate setStopped];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		
 		lameResult = lame_encode_buffer_interleaved(_gfp, chunk, numSamples / 2, buf, bufSize);
 		if(0 > lameResult) {
-			[_delegate setStopped];
 			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME encoding error", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 	}
 	
@@ -332,22 +342,21 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		bufSize = 7200;
 		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
 		if(NULL == buf) {
-			[_delegate setStopped];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		
 		// Flush the mp3 buffer
 		lameResult = lame_encode_flush(_gfp, buf, bufSize);
 		if(-1 == lameResult) {
-			[_delegate setStopped];
 			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME unable to flush buffers", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// And write any frames it returns
 		bytesWritten = write(_out, buf, lameResult);
 		if(-1 == bytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 	}
 	

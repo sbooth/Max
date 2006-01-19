@@ -56,7 +56,8 @@
 		// Set up defaults
 		compactDiscDocumentDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CompactDiscDocumentDefaults" ofType:@"plist"];
 		if(nil == compactDiscDocumentDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"CompactDiscDocumentDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"CompactDiscDocumentDefaults.plist" forKey:@"filename"]];
 		}
 		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
@@ -628,7 +629,7 @@
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
 	
 	if([self discInDrive] && [tracks count] != [_tracks count]) {
-		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:NSLocalizedStringFromTable(@"Track count mismatch", @"Exceptions", @"") userInfo:nil];
+		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
 	}
 	else if(0 == [_tracks count]) {
 		[self willChangeValueForKey:@"tracks"];

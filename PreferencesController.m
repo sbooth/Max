@@ -60,7 +60,8 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
 			if(nil == defaultsPath) {
-				@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Preferences", @""), [NSString stringWithFormat:@"%@.plist", [defaultFiles objectAtIndex:i]]] userInfo:nil];
+				@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+															userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@.plist", [defaultFiles objectAtIndex:i]] forKey:@"filename"]];
 			}
 			[defaultsDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:defaultsPath]];
 		}

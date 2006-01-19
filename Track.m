@@ -35,7 +35,8 @@
 	@try {
 		trackDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TrackDefaults" ofType:@"plist"];
 		if(nil == trackDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"TrackDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"TrackDefaults.plist" forKey:@"filename"]];
 		}
 		trackDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:trackDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:trackDefaultsValuesDictionary];
@@ -77,11 +78,11 @@
 	if(nil == artist) {
 		artist = discArtist;
 		if(nil == artist) {
-			artist = @"Unknown Artist";
+			artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
 		}
 	}
 	if(nil == trackTitle) {
-		trackTitle = @"Unknown Track";
+		trackTitle = NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");
 	}
 	
 	

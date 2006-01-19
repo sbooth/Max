@@ -45,7 +45,7 @@
 {
 }
 
-- (NSString *) getOutputType
+- (NSString *) outputType
 {
 	return [_formatInfo valueForKey:@"type"];
 }

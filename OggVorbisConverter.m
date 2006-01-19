@@ -34,19 +34,27 @@
 {
 	if((self = [super initWithInputFilename:inputFilename])) {	
 		
-		_file = fopen([_inputFilename UTF8String], "r");
-		if(NULL == _file) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _inputFilename, errno, strerror(errno)] userInfo:nil];
-		}
-		
-		if(0 != ov_test(_file, &_vf, NULL, 0)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Input file does not appear to be an Ogg Vorbis file", @"Exceptions", @"") userInfo:nil];
-		}
-
-		if(0 != ov_test_open(&_vf)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") userInfo:nil];
+		@try {
+			_file = fopen([_inputFilename UTF8String], "r");
+			if(NULL == _file) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			
+			if(0 != ov_test(_file, &_vf, NULL, 0)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Input file does not appear to be an Ogg Vorbis file", @"Exceptions", @"") userInfo:nil];
+			}
+			
+			if(0 != ov_test_open(&_vf)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") userInfo:nil];
+			}
 		}
 				
+		@catch(NSException *exception) {
+			[_delegate setException:exception];
+			[_delegate setStopped];
+		}			   
+			   
 		return self;
 	}
 	return nil;
@@ -56,7 +64,8 @@
 {
 	// Will close _file for us
 	if(0 != ov_clear(&_vf)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") userInfo:nil];
+		NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") userInfo:nil];
+		NSLog(@"%@", exception);
 	}
 	
 	[super dealloc];
@@ -77,55 +86,64 @@
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
-	// Get input file information
-	totalSamples		= ov_pcm_total(&_vf, -1);
-	samplesToRead		= totalSamples;
-	
-	for(;;) {
+	@try {
+		// Get input file information
+		totalSamples		= ov_pcm_total(&_vf, -1);
+		samplesToRead		= totalSamples;
 		
-		// Decode the data
-		bytesRead = ov_read(&_vf, buf, 1024, 1, 2, 1, &currentSection);
-
-		// Check for errors
-		if(0 > bytesRead) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Ogg Vorbis decode error", @"Exceptions", @"") userInfo:nil];
-		}
-		
-		// EOF?
-		if(0 == bytesRead) {
-			break;
-		}
+		for(;;) {
 			
-		// Write the PCM data to file
-		if(-1 == write(file, buf, bytesRead)) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		
-		// Update status
-		samplesRead		= ov_pcm_tell(&_vf);
-		samplesToRead	= totalSamples - samplesRead;
-		
-		// Distributed Object calls are expensive, so only perform them every few iterations
-		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
-
-			// Check if we should stop, and if so throw an exception
-			if([_delegate shouldStop]) {
-				[_delegate setStopped];
-				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+			// Decode the data
+			bytesRead = ov_read(&_vf, buf, 1024, 1, 2, 1, &currentSection);
+			
+			// Check for errors
+			if(0 > bytesRead) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Ogg Vorbis decode error", @"Exceptions", @"") userInfo:nil];
 			}
 			
-			// Update UI
-			double percentComplete = ((double)(totalSamples - samplesToRead)/(double) totalSamples) * 100.0;
-			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-			unsigned int secondsRemaining = interval / ((double)(totalSamples - samplesToRead)/(double) totalSamples) - interval;
-			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			// EOF?
+			if(0 == bytesRead) {
+				break;
+			}
 			
-			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			// Write the PCM data to file
+			if(-1 == write(file, buf, bytesRead)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			
+			// Update status
+			samplesRead		= ov_pcm_tell(&_vf);
+			samplesToRead	= totalSamples - samplesRead;
+			
+			// Distributed Object calls are expensive, so only perform them every few iterations
+			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+				
+				// Check if we should stop, and if so throw an exception
+				if([_delegate shouldStop]) {
+					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+				}
+				
+				// Update UI
+				double percentComplete = ((double)(totalSamples - samplesToRead)/(double) totalSamples) * 100.0;
+				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+				unsigned int secondsRemaining = interval / ((double)(totalSamples - samplesToRead)/(double) totalSamples) - interval;
+				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+				
+				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			}
+			
+			++iterations;
 		}
-		
-		++iterations;
+	}
+
+	@catch(StopException *exception) {
+		[_delegate setStopped];
+	}
+	
+	@catch(NSException *exception) {
+		[_delegate setException:exception];
+		[_delegate setStopped];
 	}
 
 	[_delegate setEndTime:[NSDate date]];

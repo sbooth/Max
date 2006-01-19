@@ -32,9 +32,9 @@
 	return nil;
 }
 
-- (NSString *) getInputType
+- (NSString *) inputType
 {
-	return @"FLAC";
+	return NSLocalizedStringFromTable(@"FLAC", @"General", @"");
 }
 
 @end

@@ -139,7 +139,8 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	@try {
 		speexDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"SpeexDefaults" ofType:@"plist"];
 		if(nil == speexDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"SpeexDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"SpeexDefaults.plist" forKey:@"filename"]];
 		}
 		speexDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:speexDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:speexDefaultsValuesDictionary];
@@ -153,6 +154,11 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 - (id) initWithPCMFilename:(NSString *)pcmFilename
 {
+	char				*path			= NULL;
+	const char			*tmpDir;
+	ssize_t				tmpDirLen;
+	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
+
 	if((self = [super initWithPCMFilename:pcmFilename])) {
 		
 		_mode				= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexMode"];
@@ -179,39 +185,45 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
-		// Setup downsampled file, if needed (do it here to avoid multithreaded issues)
-		if(_resampleInput) {
-			char				*path			= NULL;
-			const char			*tmpDir;
-			ssize_t				tmpDirLen;
-			ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
-			
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+		@try {
+			// Setup downsampled file, if needed (do it here to avoid multithreaded issues)
+			if(_resampleInput) {				
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
+					tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+				}
+				else {
+					tmpDir = _PATH_TMP;
+				}
+				
+				tmpDirLen	= strlen(tmpDir);
+				path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+				if(NULL == path) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+				}
+				memcpy(path, tmpDir, tmpDirLen);
+				memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+				path[tmpDirLen + patternLen] = '\0';
+				
+				_resampledOut = mkstemps(path, 4);
+				if(-1 == _resampledOut) {
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+				}
+				
+				_resampledFilename = [[NSString stringWithUTF8String:path] retain];
 			}
-			else {
-				tmpDir = _PATH_TMP;
-			}
-			
-			tmpDirLen	= strlen(tmpDir);
-			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-			if(NULL == path) {
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-			}
-			memcpy(path, tmpDir, tmpDirLen);
-			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
-			path[tmpDirLen + patternLen] = '\0';
-			
-			_resampledOut = mkstemps(path, 4);
-			if(-1 == _resampledOut) {
-				@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%s' (%i:%s)", @"Exceptions", @""), path, errno, strerror(errno)] userInfo:nil];
-			}
-			
-			_resampledFilename = [[NSString stringWithUTF8String:path] retain];
-			
+		}
+
+		@catch(NSException *exception) {
+			[_delegate setException:exception];
+			[_delegate setStopped];
+		}
+		
+		@finally {
 			free(path);
 		}
-			
+		
 		return self;
 	}
 	return nil;
@@ -222,7 +234,9 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	// Delete resampled temporary file
 	if(_resampleInput) {
 		if(-1 == unlink([_resampledFilename UTF8String])) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to delete temporary file '%@' (%i:%s)", @"Exceptions", @""), _resampledFilename, errno, strerror(errno)] userInfo:nil];
+			NSException *exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
+															  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			NSLog(@"%@", exception);
 		}			
 
 		[_resampledFilename release];
@@ -244,7 +258,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	int							chan										= 2;
 	int							frameID										= -1;
 	int							frameSize;
-	char						*comments;
+	char						*comments									= NULL;
 	int							comments_length;
 	int							totalFrames;
 	int							framesEncoded;
@@ -271,471 +285,476 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 	unsigned long				iterations									= 0;
 	   
+	SNDFILE						*inSF;
+	SF_INFO						info;
+	SNDFILE						*outSF										= NULL;
+	const char					*string										= NULL;
+	int							i;
+	int							err											= 0 ;
+	int							bufferLen									= 1024;
+	int							*intBuffer									= NULL;
+	double						*doubleBuffer								= NULL;
+	double						maxSignal;
+	int							frameCount;
+	int							readCount;
+				
    
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 
-	// Downsample input if requested using libsndfile
-	if(_resampleInput) {
-		SNDFILE						*inSF;
-		SF_INFO						info;
-		SNDFILE						*outSF				= NULL;
-		const char					*string				= NULL;
-		int							i;
-		int							err					= 0 ;
-		int							bufferLen			= 1024;
-		int							*intBuffer			= NULL;
-		double						*doubleBuffer		= NULL;
-		double						maxSignal;
-		int							frameCount;
-		int							readCount;
-		
-		// Open the input file
-		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
-		info.samplerate		= 44100;
-		info.channels		= 2;
-		
-		inSF = sf_open([_pcmFilename UTF8String], SFM_READ, &info);
-		if(NULL == inSF) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open input sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
-		}
+	@try {
+		// Downsample input if requested using libsndfile
+		if(_resampleInput) {			
+			// Open the input file
+			info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+			info.samplerate		= 44100;
+			info.channels		= 2;
 			
-		// Determine the desired sample rate
+			inSF = sf_open([_pcmFilename UTF8String], SFM_READ, &info);
+			if(NULL == inSF) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			
+			// Determine the desired sample rate
+			switch(_mode) {
+				case SPEEX_MODE_NARROWBAND:		rate = 8000;		break;
+				case SPEEX_MODE_WIDEBAND:		rate = 16000;		break;
+				case SPEEX_MODE_ULTRAWIDEBAND:	rate = 32000;		break;
+					
+				default:						
+					@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex mode" userInfo:nil];
+					break;
+			}
+			
+			// Setup downsampled output file
+			info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+			info.samplerate		= rate;
+			info.channels		= 2;
+			outSF				= sf_open_fd(_resampledOut, SFM_WRITE, &info, 1);
+			if(NULL == outSF) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			
+			// Copy metadata
+			for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
+				string = sf_get_string(inSF, i);
+				if(NULL != string) {
+					err = sf_set_string(outSF, i, string);
+				}
+			}
+			
+			// Copy audio data
+			if(((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_DOUBLE) || ((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_FLOAT)) {
+				
+				doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
+				if(NULL == doubleBuffer) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+				}
+				
+				frameCount		= bufferLen / info.channels ;
+				readCount		= frameCount ;
+				
+				sf_command(inSF, SFC_CALC_SIGNAL_MAX, &maxSignal, sizeof(maxSignal)) ;
+				
+				if(maxSignal < 1.0) {	
+					while(readCount > 0) {
+						// Check if we should stop, and if so throw an exception
+						if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+							@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+						}
+						
+						readCount = sf_readf_double(inSF, doubleBuffer, frameCount) ;
+						sf_writef_double(outSF, doubleBuffer, readCount) ;
+						
+						++iterations;
+					}
+				}
+				// Renormalize output
+				else {	
+					sf_command(inSF, SFC_SET_NORM_DOUBLE, NULL, SF_FALSE);
+					
+					while(0 < readCount) {
+						// Check if we should stop, and if so throw an exception
+						if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+							@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+						}
+						
+						readCount = sf_readf_double(inSF, doubleBuffer, frameCount);
+						for(i = 0 ; i < readCount * info.channels; ++i) {
+							doubleBuffer[i] /= maxSignal;
+						}
+						
+						sf_writef_double(outSF, doubleBuffer, readCount);
+						
+						++iterations;
+					}
+				}
+			}
+			else {
+				intBuffer = (int *)malloc(bufferLen * sizeof(int));
+				if(NULL == intBuffer) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+				}
+				
+				frameCount		= bufferLen / info.channels;
+				readCount		= frameCount;
+				
+				while(0 < readCount) {	
+					// Check if we should stop, and if so throw an exception
+					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+					}
+					
+					readCount = sf_readf_int(inSF, intBuffer, frameCount);
+					sf_writef_int(outSF, intBuffer, readCount);
+					
+					++iterations;
+				}
+			}
+			
+			// Open the new, downsampled input file
+			_pcm = open([_resampledFilename UTF8String], O_RDONLY);
+			if(-1 == _pcm) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+		}
+		else {
+			rate = 44100;
+			
+			// Open the input file
+			_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+			if(-1 == _pcm) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+		}
+		
+		// Get input file information
+		struct stat sourceStat;
+		if(-1 == fstat(_pcm, &sourceStat)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		
+		totalBytes		= sourceStat.st_size;
+		bytesToRead		= totalBytes;
+		
+		// Create the output file
+		_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == _out) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		
+		// Check if we should stop, and if so throw an exception
+		if([_delegate shouldStop]) {
+			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+		}
+		
+		// Initialize ogg stream- use the current time as the stream id
+		srand(time(NULL));
+		if(-1 == ogg_stream_init(&os, rand())) {
+			@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		
+		// Setup encoder from user defaults
 		switch(_mode) {
-			case SPEEX_MODE_NARROWBAND:		rate = 8000;		break;
-			case SPEEX_MODE_WIDEBAND:		rate = 16000;		break;
-			case SPEEX_MODE_ULTRAWIDEBAND:	rate = 32000;		break;
+			case SPEEX_MODE_NARROWBAND:		mode = speex_lib_get_mode(SPEEX_MODEID_NB);		break;
+			case SPEEX_MODE_WIDEBAND:		mode = speex_lib_get_mode(SPEEX_MODEID_WB);		break;
+			case SPEEX_MODE_ULTRAWIDEBAND:	mode = speex_lib_get_mode(SPEEX_MODEID_UWB);	break;
 				
 			default:						
-				[_delegate setStopped];
 				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex mode" userInfo:nil];
 				break;
 		}
-				
-		// Setup downsampled output file
-		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
-		info.samplerate		= rate;
-		info.channels		= 2;
-		outSF				= sf_open_fd(_resampledOut, SFM_WRITE, &info, 1);
-		if(NULL == outSF) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create output sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
+		
+		speex_init_header(&header, rate, 1, mode);
+		
+		header.frames_per_packet	= _framesPerPacket;
+		header.vbr					= _vbrEnabled;
+		header.nb_channels			= chan;
+		
+		// Setup the encoder
+		speexState = speex_encoder_init(mode);
+		
+		speex_encoder_ctl(speexState, SPEEX_GET_FRAME_SIZE, &frameSize);
+		speex_encoder_ctl(speexState, SPEEX_SET_COMPLEXITY, &_complexity);
+		speex_encoder_ctl(speexState, SPEEX_SET_SAMPLING_RATE, &rate);
+		
+		switch(_target) {
+			case SPEEX_TARGET_QUALITY:
+					speex_encoder_ctl(speexState, (_vbrEnabled ? SPEEX_SET_VBR_QUALITY : SPEEX_SET_QUALITY), &_quality);
+				break;
+			case SPEEX_TARGET_BITRATE:
+				speex_encoder_ctl(speexState, SPEEX_SET_BITRATE, &_bitrate);
+				break;
+			default:
+				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex target" userInfo:nil];
+				break;
 		}
 		
-		// Copy metadata
-		for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
-			string = sf_get_string(inSF, i);
-			if(NULL != string) {
-				err = sf_set_string(outSF, i, string);
-			}
+		speex_encoder_ctl(speexState, SPEEX_SET_VBR, &_vbrEnabled);
+		speex_encoder_ctl(speexState, SPEEX_SET_ABR, &_abrEnabled);
+		speex_encoder_ctl(speexState, SPEEX_SET_VAD, &_vadEnabled);
+		if(_vadEnabled) {
+			speex_encoder_ctl(speexState, SPEEX_SET_DTX, &_dtxEnabled);
 		}
 		
-		// Copy audio data
-		if(((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_DOUBLE) || ((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_FLOAT)) {
-			
-			doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
-			if(NULL == doubleBuffer) {
-				[_delegate setStopped];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-			}
-			
-			frameCount		= bufferLen / info.channels ;
-			readCount		= frameCount ;
-			
-			sf_command(inSF, SFC_CALC_SIGNAL_MAX, &maxSignal, sizeof(maxSignal)) ;
-			
-			if(maxSignal < 1.0) {	
-				while(readCount > 0) {
-					// Check if we should stop, and if so throw an exception
-					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-						[_delegate setStopped];
-						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-					}
-					
-					readCount = sf_readf_double(inSF, doubleBuffer, frameCount) ;
-					sf_writef_double(outSF, doubleBuffer, readCount) ;
-					
-					++iterations;
-				}
-			}
-			// Renormalize output
-			else {	
-				sf_command(inSF, SFC_SET_NORM_DOUBLE, NULL, SF_FALSE);
-				
-				while(0 < readCount) {
-					// Check if we should stop, and if so throw an exception
-					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-						[_delegate setStopped];
-						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-					}
-					
-					readCount = sf_readf_double(inSF, doubleBuffer, frameCount);
-					for(i = 0 ; i < readCount * info.channels; ++i) {
-						doubleBuffer[i] /= maxSignal;
-					}
-					
-					sf_writef_double(outSF, doubleBuffer, readCount);
-					
-					++iterations;
-				}
-			}
-			
-			free(doubleBuffer);
+		speex_encoder_ctl(speexState, SPEEX_GET_LOOKAHEAD, &lookahead);
+		
+		if(_denoiseEnabled || _agcEnabled) {
+			lookahead	+= frameSize;
+			preprocess	= speex_preprocess_state_init(frameSize, rate);
+			speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_DENOISE, &_denoiseEnabled);
+			speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_AGC, &_agcEnabled);
 		}
-		else {
-			intBuffer = (int *)malloc(bufferLen * sizeof(int));
-			if(NULL == intBuffer) {
-				[_delegate setStopped];
-				@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+		
+		// Write header
+		op.packet		= (unsigned char *)speex_header_to_packet(&header, (int*)&(op.bytes));
+		op.b_o_s		= 1;
+		op.e_o_s		= 0;
+		op.granulepos	= 0;
+		op.packetno		= 0;
+		
+		ogg_stream_packetin(&os, &op);
+		free(op.packet);
+		
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		
+		comment_init(&comments, &comments_length, [[NSString stringWithFormat:@"Encoded with Max %@", bundleVersion] UTF8String]);
+		
+		if(_writeSettingsToComment) {
+			comment_add(&comments, &comments_length, NULL, [[self settings] UTF8String]);
+		}
+		
+		op.packet		= (unsigned char *)comments;
+		op.bytes		= comments_length;
+		op.b_o_s		= 0;
+		op.e_o_s		= 0;
+		op.granulepos	= 0;
+		op.packetno		= 1;
+		
+		ogg_stream_packetin(&os, &op);
+		
+		for(;;) {
+			if(0 == ogg_stream_flush(&os, &og)) {
+				break;	
 			}
 			
-			frameCount		= bufferLen / info.channels;
-			readCount		= frameCount;
+			currentBytesWritten = write(_out, og.header, og.header_len);
+			if(-1 == currentBytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			bytesWritten += currentBytesWritten;
 			
-			while(0 < readCount) {	
+			currentBytesWritten = write(_out, og.body, og.body_len);
+			if(-1 == currentBytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			bytesWritten += currentBytesWritten;
+		}
+		
+		// Allocate the buffer (hardcoded for 16-bit stereo input)
+		_buflen			= 2 * frameSize;
+		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
+		if(NULL == _buf) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		
+		speex_bits_init(&bits);
+		
+		framesEncoded	= -lookahead;
+		totalFrames		= 0;
+		
+		// Iteratively get the PCM data and encode it, one frame at a time
+		while(NO == eos || totalFrames > framesEncoded) {
+			
+			// Read a single frame of PCM input
+			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+			if(-1 == bytesRead) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			else if(0 == bytesRead) {
+				eos = YES;
+			}
+			
+			framesRead		= bytesRead / 4;
+			totalFrames		+= framesRead;
+			
+			++frameID;
+			
+			if(2 == chan) {
+				speex_encode_stereo_int(_buf, frameSize, &bits);
+			}
+			
+			if(NULL != preprocess) {
+				speex_preprocess(preprocess, _buf, NULL);
+			}
+			
+			speex_encode_int(speexState, _buf, &bits);
+			
+			framesEncoded	+= frameSize;
+			
+			if(0 == (frameID + 1) % _framesPerPacket) {
+				
+				speex_bits_insert_terminator(&bits);
+				nbBytes = speex_bits_write(&bits, cbits, 2000);
+				speex_bits_reset(&bits);
+				
+				op.packet		= (unsigned char *)cbits;
+				op.bytes		= nbBytes;
+				op.b_o_s		= 0;
+				op.e_o_s		= (eos && totalFrames <= framesEncoded) ? 1 : 0;
+				op.granulepos	= (frameID + 1) * frameSize - lookahead;
+				if(op.granulepos > totalFrames) {
+					op.granulepos = totalFrames;
+				}
+				
+				op.packetno		= 2 + frameID / _framesPerPacket;
+				ogg_stream_packetin(&os, &op);
+				
+				// Write out pages
+				for(;;) {
+					
+					if(0 == ogg_stream_pageout(&os, &og)) {
+						break;
+					}
+					
+					currentBytesWritten = write(_out, og.header, og.header_len);
+					if(-1 == currentBytesWritten) {
+						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+					}
+					bytesWritten += currentBytesWritten;
+					
+					currentBytesWritten = write(_out, og.body, og.body_len);
+					if(-1 == currentBytesWritten) {
+						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+					}
+					bytesWritten += currentBytesWritten;				
+				}			
+			}
+			
+			// Update status
+			bytesToRead -= bytesRead;
+			
+			// Distributed Object calls are expensive, so only perform them every few iterations
+			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+				
 				// Check if we should stop, and if so throw an exception
-				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-					[_delegate setStopped];
+				if([_delegate shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
-				readCount = sf_readf_int(inSF, intBuffer, frameCount);
-				sf_writef_int(outSF, intBuffer, readCount);
+				// Update UI
+				double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+				unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
-				++iterations;
+				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
 			}
 			
-			free(intBuffer);
+			++iterations;
 		}
 		
-		// Clean up sndfile
-		sf_close(inSF);
-		sf_close(outSF);	// Also closes _resampledOut
-				
-		// Open the new, downsampled input file
-		_pcm = open([_resampledFilename UTF8String], O_RDONLY);
-		if(-1 == _pcm) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _resampledFilename, errno, strerror(errno)] userInfo:nil];
-		}
-	}
-	else {
-		rate = 44100;
-
-		// Open the input file
-		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
-		if(-1 == _pcm) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
-		}
-	}
-	
-	// Get input file information
-	struct stat sourceStat;
-	if(-1 == fstat(_pcm, &sourceStat)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-
-	totalBytes		= sourceStat.st_size;
-	bytesToRead		= totalBytes;
-
-	// Create the output file
-	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	if(-1 == _out) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%@' (%i:%s)", @"Exceptions", @""), filename, errno, strerror(errno)] userInfo:nil];
-	}
-
-	// Check if we should stop, and if so throw an exception
-	if([_delegate shouldStop]) {
-		[_delegate setStopped];
-		@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-	}
-
-	// Initialize ogg stream- use the current time as the stream id
-	srand(time(NULL));
-	if(-1 == ogg_stream_init(&os, rand())) {
-		[_delegate setStopped];
-		@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream", @"Exceptions", @"") userInfo:nil];
-	}
-
-
-	// Setup encoder from user defaults
-	switch(_mode) {
-		case SPEEX_MODE_NARROWBAND:		mode = speex_lib_get_mode(SPEEX_MODEID_NB);		break;
-		case SPEEX_MODE_WIDEBAND:		mode = speex_lib_get_mode(SPEEX_MODEID_WB);		break;
-		case SPEEX_MODE_ULTRAWIDEBAND:	mode = speex_lib_get_mode(SPEEX_MODEID_UWB);	break;
-
-		default:						
-			[_delegate setStopped];
-			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex mode" userInfo:nil];
-			break;
-	}
-	
-	speex_init_header(&header, rate, 1, mode);
-	
-	header.frames_per_packet	= _framesPerPacket;
-	header.vbr					= _vbrEnabled;
-	header.nb_channels			= chan;
-		
-	// Setup the encoder
-	speexState = speex_encoder_init(mode);
-		
-	speex_encoder_ctl(speexState, SPEEX_GET_FRAME_SIZE, &frameSize);
-	speex_encoder_ctl(speexState, SPEEX_SET_COMPLEXITY, &_complexity);
-	speex_encoder_ctl(speexState, SPEEX_SET_SAMPLING_RATE, &rate);
-
-	if(SPEEX_TARGET_QUALITY == _target) {
-		if(_vbrEnabled) {
-			speex_encoder_ctl(speexState, SPEEX_SET_VBR_QUALITY, &_quality);
-		}
-		else {
-			speex_encoder_ctl(speexState, SPEEX_SET_QUALITY, &_quality);
-		}
-	}
-	else if(SPEEX_TARGET_BITRATE == _target) {
-		speex_encoder_ctl(speexState, SPEEX_SET_BITRATE, &_bitrate);
-	}
-	else {
-		[_delegate setStopped];
-		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex target" userInfo:nil];
-	}
-	
-	speex_encoder_ctl(speexState, SPEEX_SET_VBR, &_vbrEnabled);
-	speex_encoder_ctl(speexState, SPEEX_SET_ABR, &_abrEnabled);
-	speex_encoder_ctl(speexState, SPEEX_SET_VAD, &_vadEnabled);
-	if(_vadEnabled) {
-		speex_encoder_ctl(speexState, SPEEX_SET_DTX, &_dtxEnabled);
-	}
-	
-	speex_encoder_ctl(speexState, SPEEX_GET_LOOKAHEAD, &lookahead);
-
-	if(_denoiseEnabled || _agcEnabled) {
-		lookahead	+= frameSize;
-		preprocess	= speex_preprocess_state_init(frameSize, rate);
-		speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_DENOISE, &_denoiseEnabled);
-		speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_AGC, &_agcEnabled);
-	}
-	
-	// Write header
-	op.packet		= (unsigned char *)speex_header_to_packet(&header, (int*)&(op.bytes));
-	op.b_o_s		= 1;
-	op.e_o_s		= 0;
-	op.granulepos	= 0;
-	op.packetno		= 0;
-	
-	ogg_stream_packetin(&os, &op);
-	free(op.packet);
-
-	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-	
-	comment_init(&comments, &comments_length, [[NSString stringWithFormat:@"Encoded with Max %@", bundleVersion] UTF8String]);
-
-	if(_writeSettingsToComment) {
-		comment_add(&comments, &comments_length, NULL, [[self settings] UTF8String]);
-	}
-	
-	op.packet		= (unsigned char *)comments;
-	op.bytes		= comments_length;
-	op.b_o_s		= 0;
-	op.e_o_s		= 0;
-	op.granulepos	= 0;
-	op.packetno		= 1;
-	
-	ogg_stream_packetin(&os, &op);
-	free(comments);
-
-	for(;;) {
-		if(0 == ogg_stream_flush(&os, &og)) {
-			break;	
-		}
-		
-		currentBytesWritten = write(_out, og.header, og.header_len);
-		if(-1 == currentBytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		bytesWritten += currentBytesWritten;
-		
-		currentBytesWritten = write(_out, og.body, og.body_len);
-		if(-1 == currentBytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		bytesWritten += currentBytesWritten;
-	}
-	
-	// Allocate the buffer (hardcoded for 16-bit stereo input)
-	_buflen			= 2 * frameSize;
-	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-	if(NULL == _buf) {
-		[_delegate setStopped];
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-
-	speex_bits_init(&bits);
-
-	framesEncoded	= -lookahead;
-	totalFrames		= 0;
-	
-	// Iteratively get the PCM data and encode it, one frame at a time
-	while(NO == eos || totalFrames > framesEncoded) {
-		
-		// Read a single frame of PCM input
-		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
-		if(-1 == bytesRead) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read from the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		else if(0 == bytesRead) {
-			eos = YES;
-		}
-		
-		framesRead		= bytesRead / 4;
-		totalFrames		+= framesRead;
-		
-		++frameID;
-		
-		if(2 == chan) {
-			speex_encode_stereo_int(_buf, frameSize, &bits);
-		}
-		
-		if(NULL != preprocess) {
-			speex_preprocess(preprocess, _buf, NULL);
-		}
-
-		speex_encode_int(speexState, _buf, &bits);
-		
-		framesEncoded	+= frameSize;
-
-		if(0 == (frameID + 1) % _framesPerPacket) {
+		// Finish up
+		if(0 != (frameID + 1) % _framesPerPacket) {
+			while(0 != (frameID + 1) % _framesPerPacket) {
+				++frameID;
+				speex_bits_pack(&bits, 15, 5);
+			}
 			
-			speex_bits_insert_terminator(&bits);
-			nbBytes = speex_bits_write(&bits, cbits, 2000);
-			speex_bits_reset(&bits);
-			
+			nbBytes			= speex_bits_write(&bits, cbits, 2000);
 			op.packet		= (unsigned char *)cbits;
 			op.bytes		= nbBytes;
 			op.b_o_s		= 0;
-			op.e_o_s		= (eos && totalFrames <= framesEncoded) ? 1 : 0;
+			op.e_o_s		= 1;
 			op.granulepos	= (frameID + 1) * frameSize - lookahead;
 			if(op.granulepos > totalFrames) {
 				op.granulepos = totalFrames;
 			}
-
-			op.packetno		= 2 + frameID / _framesPerPacket;
+			
+			op.packetno = 2 + frameID / _framesPerPacket;
 			ogg_stream_packetin(&os, &op);
-			
-			// Write out pages
-			for(;;) {
-				
-				if(0 == ogg_stream_pageout(&os, &og)) {
-					break;
-				}
-				
-				currentBytesWritten = write(_out, og.header, og.header_len);
-				if(-1 == currentBytesWritten) {
-					[_delegate setStopped];
-					@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-				}
-				bytesWritten += currentBytesWritten;
-				
-				currentBytesWritten = write(_out, og.body, og.body_len);
-				if(-1 == currentBytesWritten) {
-					[_delegate setStopped];
-					@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-				}
-				bytesWritten += currentBytesWritten;				
-			}			
 		}
-
-		// Update status
-		bytesToRead -= bytesRead;
 		
-		// Distributed Object calls are expensive, so only perform them every few iterations
-		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
-			
-			// Check if we should stop, and if so throw an exception
-			if([_delegate shouldStop]) {
-				[_delegate setStopped];
-				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+		// Flush all pages left to be written
+		for(;;) {
+			if(0 == ogg_stream_flush(&os, &og)) {
+				break;	
 			}
 			
-			// Update UI
-			double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
-			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-			unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			currentBytesWritten = write(_out, og.header, og.header_len);
+			if(-1 == currentBytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			bytesWritten += currentBytesWritten;
 			
-			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			currentBytesWritten = write(_out, og.body, og.body_len);
+			if(-1 == currentBytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			bytesWritten += currentBytesWritten;
 		}
-		
-		++iterations;
-	}
-	
-	// Finish up
-	if(0 != (frameID + 1) % _framesPerPacket) {
-		while(0 != (frameID + 1) % _framesPerPacket) {
-			++frameID;
-			speex_bits_pack(&bits, 15, 5);
-		}
-		
-		nbBytes			= speex_bits_write(&bits, cbits, 2000);
-		op.packet		= (unsigned char *)cbits;
-		op.bytes		= nbBytes;
-		op.b_o_s		= 0;
-		op.e_o_s		= 1;
-		op.granulepos	= (frameID + 1) * frameSize - lookahead;
-		if(op.granulepos > totalFrames) {
-			op.granulepos = totalFrames;
-		}
-		
-		op.packetno = 2 + frameID / _framesPerPacket;
-		ogg_stream_packetin(&os, &op);
-	}
-	
-	// Flush all pages left to be written
-	for(;;) {
-		if(0 == ogg_stream_flush(&os, &og)) {
-			break;	
-		}
-		
-		currentBytesWritten = write(_out, og.header, og.header_len);
-		if(-1 == currentBytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		bytesWritten += currentBytesWritten;
-		
-		currentBytesWritten = write(_out, og.body, og.body_len);
-		if(-1 == currentBytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		bytesWritten += currentBytesWritten;
 	}
 
-	// Close the input file
-	if(-1 == close(_pcm)) {
+	@catch(StopException *exception) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
-	// Close the output file
-	if(-1 == close(_out)) {
+	@catch(NSException *exception) {
+		[_delegate setException:exception];
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
-
-	// Clean up
-	speex_encoder_destroy(speexState);
-	speex_bits_destroy(&bits);
-	ogg_stream_clear(&os);
-
-	free(_buf);
+	
+	@finally {
+		// Close the input file
+		if(-1 == close(_pcm)) {
+			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			NSLog(@"%@", exception);
+		}
+		
+		// Close the output file
+		if(-1 == close(_out)) {
+			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			NSLog(@"%@", exception);
+		}
+		
+		// Clean up sndfiles
+		if(NULL != inSF) {
+			sf_close(inSF);
+		}
+		if(NULL != outSF) {
+			sf_close(outSF);	
+		}
+		
+		// Clean up
+		free(comments);
+		free(_buf);
+		free(intBuffer);
+		free(doubleBuffer);
+		
+		speex_encoder_destroy(speexState);
+		speex_bits_destroy(&bits);
+		ogg_stream_clear(&os);
+	}
 
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	

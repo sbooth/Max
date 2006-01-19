@@ -19,6 +19,7 @@
  */
 
 #import "LogController.h"
+#import "IOException.h"
 
 static LogController	*sharedLog = nil;
 
@@ -110,7 +111,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 			NSData			*rtf			= [storage RTFFromRange:NSMakeRange(0, [storage length]) documentAttributes:nil];
 			
 			if(NO == [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil]) {
-				// what to do
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") userInfo:@""];
 			}
 		}	
 	}

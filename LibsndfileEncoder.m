@@ -93,125 +93,138 @@
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
-	// Open the input file
-	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
-	if(-1 == _pcm) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Setup libsndfile input file
-	info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
-	info.samplerate		= 44100;
-	info.channels		= 2;
-	in					= sf_open_fd(_pcm, SFM_READ, &info, NO);
-	if(NULL == in) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open input sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
-	}
-
-	// Setup libsndfile output file
-	info.format			= _format;
-	out					= sf_open([filename UTF8String], SFM_WRITE, &info);
-	if(NULL == out) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create output sndfile (%i:%s)", @"Exceptions", @""), sf_error(NULL), sf_strerror(NULL)] userInfo:nil];
-	}
-	
-	// Copy metadata
-	for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
-		string = sf_get_string(in, i);
-		if(NULL != string) {
-			err = sf_set_string(out, i, string);
-		}
-	}
-
-	// Copy audio data
-	if(((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_DOUBLE) || ((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_FLOAT)) {
-		
-		doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
-		if(NULL == doubleBuffer) {
-			[_delegate setStopped];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+	@try {
+		// Open the input file
+		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		if(-1 == _pcm) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		
-		frameCount		= bufferLen / info.channels ;
-		readCount		= frameCount ;
+		// Setup libsndfile input file
+		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+		info.samplerate		= 44100;
+		info.channels		= 2;
+		in					= sf_open_fd(_pcm, SFM_READ, &info, NO);
+		if(NULL == in) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
 		
-		sf_command(in, SFC_CALC_SIGNAL_MAX, &maxSignal, sizeof(maxSignal)) ;
+		// Setup libsndfile output file
+		info.format			= _format;
+		out					= sf_open([filename UTF8String], SFM_WRITE, &info);
+		if(NULL == out) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
 		
-		if(maxSignal < 1.0) {	
-			while(readCount > 0) {
+		// Copy metadata
+		for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
+			string = sf_get_string(in, i);
+			if(NULL != string) {
+				err = sf_set_string(out, i, string);
+			}
+		}
+		
+		// Copy audio data
+		if(((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_DOUBLE) || ((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_FLOAT)) {
+			
+			doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
+			if(NULL == doubleBuffer) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			
+			frameCount		= bufferLen / info.channels ;
+			readCount		= frameCount ;
+			
+			sf_command(in, SFC_CALC_SIGNAL_MAX, &maxSignal, sizeof(maxSignal)) ;
+			
+			if(maxSignal < 1.0) {	
+				while(readCount > 0) {
+					// Check if we should stop, and if so throw an exception
+					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+					}
+					
+					readCount = sf_readf_double(in, doubleBuffer, frameCount) ;
+					sf_writef_double(out, doubleBuffer, readCount) ;
+					
+					++iterations;
+				}
+			}
+			// Renormalize output
+			else {	
+				sf_command(in, SFC_SET_NORM_DOUBLE, NULL, SF_FALSE);
+				
+				while(0 < readCount) {
+					// Check if we should stop, and if so throw an exception
+					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
+						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+					}
+					
+					readCount = sf_readf_double(in, doubleBuffer, frameCount);
+					for(i = 0 ; i < readCount * info.channels; ++i) {
+						doubleBuffer[i] /= maxSignal;
+					}
+					
+					sf_writef_double(out, doubleBuffer, readCount);
+					
+					++iterations;
+				}
+			}
+		}
+		else {
+			intBuffer = (int *)malloc(bufferLen * sizeof(int));
+			if(NULL == intBuffer) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			
+			frameCount		= bufferLen / info.channels;
+			readCount		= frameCount;
+			
+			while(0 < readCount) {	
 				// Check if we should stop, and if so throw an exception
 				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-					[_delegate setStopped];
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
-				readCount = sf_readf_double(in, doubleBuffer, frameCount) ;
-				sf_writef_double(out, doubleBuffer, readCount) ;
-
-				++iterations;
-			}
-		}
-		// Renormalize output
-		else {	
-			sf_command(in, SFC_SET_NORM_DOUBLE, NULL, SF_FALSE);
-			
-			while(0 < readCount) {
-				// Check if we should stop, and if so throw an exception
-				if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-					[_delegate setStopped];
-					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-				}
-				
-				readCount = sf_readf_double(in, doubleBuffer, frameCount);
-				for(i = 0 ; i < readCount * info.channels; ++i) {
-					doubleBuffer[i] /= maxSignal;
-				}
-				
-				sf_writef_double(out, doubleBuffer, readCount);
+				readCount = sf_readf_int(in, intBuffer, frameCount);
+				sf_writef_int(out, intBuffer, readCount);
 				
 				++iterations;
 			}
 		}
-		
-		free(doubleBuffer);
 	}
-	else {
-		intBuffer = (int *)malloc(bufferLen * sizeof(int));
-		if(NULL == intBuffer) {
-			[_delegate setStopped];
-			@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		
-		frameCount		= bufferLen / info.channels;
-		readCount		= frameCount;
-		
-		while(0 < readCount) {	
-			// Check if we should stop, and if so throw an exception
-			if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-				[_delegate setStopped];
-				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-			}
 
-			readCount = sf_readf_int(in, intBuffer, frameCount);
-			sf_writef_int(out, intBuffer, readCount);
-			
-			++iterations;
-		}
-		
+	@catch(StopException *exception) {
+		[_delegate setStopped];
+	}
+	
+	@catch(NSException *exception) {
+		[_delegate setException:exception];
+		[_delegate setStopped];
+	}
+	
+	@finally {
 		free(intBuffer);
-	}
-		
-	// Clean up sndfile
-	sf_close(in);
-	sf_close(out);
-	
-	// Close the input file
-	if(-1 == close(_pcm)) {
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
+		free(doubleBuffer);
+		if(NULL != in) {
+			sf_close(in);
+		}
+		if(NULL != out) {
+			sf_close(out);
+		}
+
+		// Close the input file
+		if(-1 == close(_pcm)) {
+			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			NSLog(@"%@", exception);
+		}
+	}	
 	
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	

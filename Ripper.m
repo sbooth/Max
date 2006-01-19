@@ -85,7 +85,8 @@ callback(long inpos, int function, void *userdata)
 	@try {
 		paranoiaDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ParanoiaDefaults" ofType:@"plist"];
 		if(nil == paranoiaDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"ParanoiaDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"ParanoiaDefaults.plist" forKey:@"filename"]];
 		}
 		paranoiaDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:paranoiaDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:paranoiaDefaultsValuesDictionary];
@@ -127,52 +128,59 @@ callback(long inpos, int function, void *userdata)
 		int paranoiaLevel	= 0;
 		int paranoiaMode	= PARANOIA_MODE_DISABLE;
 
-		// Setup logging
-		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
+		@try {
+			// Setup logging
+			_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
+			
+			// Setup cdparanoia
+			_drive		= cdda_identify([deviceName UTF8String], 0, NULL);
+			if(NULL == _drive) {
+				@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
+			}
+			
+			if(0 != cdda_open(_drive)) {
+				@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
+			}
+			
+			_paranoia	= paranoia_init(_drive);
+			
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
+				paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
 				
-		// Setup cdparanoia
-		_drive		= cdda_identify([deviceName UTF8String], 0, NULL);
-		if(NULL == _drive) {
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
-		}
-		
-		if(0 != cdda_open(_drive)) {
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
-		}
-
-		_paranoia	= paranoia_init(_drive);
-
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
-			paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
-			
-			paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
-			
-			if(PARANOIA_LEVEL_FULL == paranoiaLevel) {
-			}
-			else if(PARANOIA_LEVEL_OVERLAP_CHECKING == paranoiaLevel) {
-				paranoiaMode |= PARANOIA_MODE_OVERLAP;
-				paranoiaMode &= ~PARANOIA_MODE_VERIFY;
-			}
-			
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaNeverSkip"]) {
-				paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
-				_maximumRetries = -1;
+				paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
+				
+				if(PARANOIA_LEVEL_FULL == paranoiaLevel) {
+				}
+				else if(PARANOIA_LEVEL_OVERLAP_CHECKING == paranoiaLevel) {
+					paranoiaMode |= PARANOIA_MODE_OVERLAP;
+					paranoiaMode &= ~PARANOIA_MODE_VERIFY;
+				}
+				
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaNeverSkip"]) {
+					paranoiaMode |= PARANOIA_MODE_NEVERSKIP;
+					_maximumRetries = -1;
+				}
+				else {
+					_maximumRetries = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaMaximumRetries"];
+				}
 			}
 			else {
-				_maximumRetries = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaMaximumRetries"];
+				paranoiaMode = PARANOIA_MODE_DISABLE;
 			}
-		}
-		else {
-			paranoiaMode = PARANOIA_MODE_DISABLE;
+			
+			paranoia_modeset(_paranoia, paranoiaMode);
+			
+			_sectors		= [sectors retain];
+			
+			// Determine the size of the track(s) we are ripping
+			[self setValue:[_sectors valueForKeyPath:@"@sum.totalSectors"] forKey:@"grandTotalSectors"];			
 		}
 
-		paranoia_modeset(_paranoia, paranoiaMode);
+		@catch(NSException *exception) {
+			[_delegate setException:exception];
+			[_delegate setStopped];
+		}
 		
-		_sectors		= [sectors retain];
-		
-		// Determine the size of the track(s) we are ripping
-		[self setValue:[_sectors valueForKeyPath:@"@sum.totalSectors"] forKey:@"grandTotalSectors"];
-				
 		return self;
 	}
 	
@@ -203,12 +211,23 @@ callback(long inpos, int function, void *userdata)
 	_startTime = [NSDate date];
 	[_delegate setStartTime:_startTime];
 	[_delegate setStarted];
+
+	@try {
+		enumerator = [_sectors objectEnumerator];
+		
+		while((range = [enumerator nextObject])) {
+			[self ripSectorRange:range toFile:file];
+			_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range totalSectors]];
+		}
+	}
+
+	@catch(StopException *exception) {
+		[_delegate setStopped];
+	}
 	
-	enumerator = [_sectors objectEnumerator];
-	
-	while((range = [enumerator nextObject])) {
-		[self ripSectorRange:range toFile:file];
-		_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range totalSectors]];
+	@catch(NSException *exception) {
+		[_delegate setException:exception];
+		[_delegate setStopped];
 	}
 	
 	[_delegate setEndTime:[NSDate date]];
@@ -229,7 +248,7 @@ callback(long inpos, int function, void *userdata)
 	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
 	if(-1 == where) {
 		[_delegate setStopped];
-		@throw [ParanoiaException exceptionWithReason:@"Unable to access CD" userInfo:nil];
+		@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to access CD", @"Exceptions", @"") userInfo:nil];
 	}
 
 	// Rip the track
@@ -238,14 +257,13 @@ callback(long inpos, int function, void *userdata)
 		// Read a chunk
 		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
-			[_delegate setStopped];
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"Skip tolerance exceeded/Unable to access CD", @"Exceptions", @"") userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"CD skip tolerance exceeded", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Write data to file
 		if(-1 == write(file, buf, CD_FRAMESIZE_RAW)) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		
 		// Update status
@@ -256,7 +274,6 @@ callback(long inpos, int function, void *userdata)
 			
 			// Check if we should stop, and if so throw an exception
 			if([_delegate shouldStop]) {
-				[_delegate setStopped];
 				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 			}
 			

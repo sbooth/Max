@@ -35,9 +35,9 @@
 - (void) writeTags
 {}
 
-- (NSString *) getOutputType
+- (NSString *) outputType
 {
-	return @"Ogg FLAC";
+	return NSLocalizedStringFromTable(@"Ogg FLAC", @"General", @"");
 }
 
 @end

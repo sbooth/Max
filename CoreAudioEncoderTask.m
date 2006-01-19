@@ -20,6 +20,7 @@
 
 #import "CoreAudioEncoderTask.h"
 #import "CoreAudioEncoder.h"
+#import "CoreAudioException.h"
 #import "IOException.h"
 
 #include "mp4.h"
@@ -172,12 +173,14 @@
 	else {
 		err = FSPathMakeRef((const UInt8 *)[_outputFilename UTF8String], &ref, NULL);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to locate the output file '%@' (%s:%s)", @"Exceptions", @""), _outputFilename, GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_outputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
 		
 		err = AudioFileOpen(&ref, fsRdWrPerm, [[_formatInfo valueForKey:@"fileType"] intValue], &fileID);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the output file (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileOpen failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get the dictionary and set properties
@@ -248,20 +251,22 @@
 			size = sizeof(info);
 			err = AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, &info);
 			if(noErr != err) {
-				// TODO: Uncomment the following line when (if?) Apple implements this functionality
-				//@throw [IOException exceptionWithReason:[NSString stringWithFormat:@"Unable to set info dictionary (%s:%s)", GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+				// TODO: Uncomment the following lines when (if?) Apple implements this functionality
+				//@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileSetProperty failed", @"Exceptions", @"")
+				//									  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
 		
 		// Clean up	
 		err = AudioFileClose(fileID);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%s:%s)", @"Exceptions", @""), GetMacOSStatusErrorString(err), GetMacOSStatusCommentString(err)] userInfo:nil];
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileClose failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 	}	
 }
 
-- (NSString *) getOutputType
+- (NSString *) outputType
 {
 	return [_formatInfo valueForKey:@"fileTypeName"];
 }

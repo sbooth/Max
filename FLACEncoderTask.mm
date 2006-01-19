@@ -109,9 +109,9 @@
 	f.save();
 }
 
-- (NSString *) getOutputType
+- (NSString *) outputType
 {
-	return @"FLAC";
+	return NSLocalizedStringFromTable(@"FLAC", @"General", @"");
 }
 
 @end

@@ -73,7 +73,8 @@ static TaskMaster *sharedController = nil;
 	@try {
 		taskMasterDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TaskMasterDefaults" ofType:@"plist"];
 		if(nil == taskMasterDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"TaskMasterDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"TaskMasterDefaults.plist" forKey:@"filename"]];
 		}
 		taskMasterDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:taskMasterDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:taskMasterDefaultsValuesDictionary];
@@ -385,15 +386,15 @@ static TaskMaster *sharedController = nil;
 
 - (void) ripDidComplete:(RipperTask* ) task
 {
-	NSDate			*startTime		= [task getStartTime];
-	NSDate			*endTime		= [task getEndTime];
+	NSDate			*startTime		= [task startTime];
+	NSDate			*endTime		= [task endTime];
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
 		
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Rip completed for %@", @"Log", @""), trackName]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Rip completed", @"Log", @"") 
-								description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%@\nDuration: %@", @"Log", @""), trackName, duration]
+								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
 	[self removeRippingTask:task];
@@ -447,18 +448,22 @@ static TaskMaster *sharedController = nil;
 - (void) convertDidStart:(ConverterTask* ) task
 {
 	NSString	*filename		= [task description];
+	NSString	*type			= [task inputType];
 	
-	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert started for %@", @"Log", @""), filename]];
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert started", @"Log", @"") description:filename
+	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert started for %@ [%@]", @"Log", @""), filename, type]];
+	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert started", @"Log", @"") 
+								description:[NSString stringWithFormat:@"%@\n%@", filename, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
 						   notificationName:@"Convert started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) convertDidStop:(ConverterTask* ) task
 {
 	NSString	*filename		= [task description];
+	NSString	*type			= [task inputType];
 	
-	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert stopped for %@", @"Log", @""), filename]];
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert stopped", @"Log", @"") description:filename
+	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert stopped for %@ [%@]", @"Log", @""), filename, type]];
+	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert stopped", @"Log", @"") 
+								description:[NSString stringWithFormat:@"%@\n%@", filename, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
 						   notificationName:@"Convert stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
 	[self removeConvertingTask:task];
@@ -467,17 +472,18 @@ static TaskMaster *sharedController = nil;
 
 - (void) convertDidComplete:(ConverterTask* ) task
 {
-	NSDate			*startTime		= [task getStartTime];
-	NSDate			*endTime		= [task getEndTime];
+	NSDate			*startTime		= [task startTime];
+	NSDate			*endTime		= [task endTime];
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*filename		= [task description];
+	NSString		*type			= [task inputType];
 	
-	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert completed for %@", @"Log", @""), filename]];
+	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert completed for %@ [%@]", @"Log", @""), filename, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert completed", @"Log", @"") 
-								description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%@\nDuration: %@", @"Log", @""), filename, duration]
+								description:[NSString stringWithFormat:@"%@\n%@\n%@", filename, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type], [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
 						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-
+	
 	[self removeConvertingTask:task];
 	[self spawnConverterThreads];
 
@@ -646,7 +652,7 @@ static TaskMaster *sharedController = nil;
 - (void) encodeDidStart:(EncoderTask* ) task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task getOutputType];
+	NSString	*type			= [task outputType];
 	NSString	*settings		= [task settings];
 
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode started for %@ [%@]", @"Log", @""), trackName, type]];
@@ -654,18 +660,18 @@ static TaskMaster *sharedController = nil;
 		[LogController logMessage:settings];
 	}
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode started", @"Log", @"") 
-								description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%@\nFile format: %@", @"Log", @""), trackName, type]
+								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
 - (void) encodeDidStop:(EncoderTask* ) task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task getOutputType];
+	NSString	*type			= [task outputType];
 
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode stopped for %@ [%@]", @"Log", @""), trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode stopped", @"Log", @"") 
-								description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%@\nFile format: %@", @"Log", @""), trackName, type]
+								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
 						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
 	[self removeEncodingTask:task];
@@ -674,16 +680,16 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeDidComplete:(EncoderTask* ) task
 {
-	NSDate			*startTime		= [task getStartTime];
-	NSDate			*endTime		= [task getEndTime];
+	NSDate			*startTime		= [task startTime];
+	NSDate			*endTime		= [task endTime];
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
-	NSString		*type			= [task getOutputType];
+	NSString		*type			= [task outputType];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode completed", @"Log", @"") 
-								description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%@\nDuration: %@", @"Log", @""), trackName, duration]
+								description:[NSString stringWithFormat:@"%@\n%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type], [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
 						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 
 	[self removeEncodingTask:task];

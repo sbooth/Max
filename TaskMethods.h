@@ -25,8 +25,8 @@
 
 @protocol TaskMethods
 
-- (NSDate *)		getStartTime;
-- (NSDate *)		getEndTime;
+- (NSDate *)		startTime;
+- (NSDate *)		endTime;
 
 - (void)			setStartTime:(NSDate *)startTime;
 - (void)			setEndTime:(NSDate *)endTime;
@@ -45,15 +45,18 @@
 - (BOOL)			shouldStop;
 - (void)			setShouldStop;
 
-- (NSString *)		getTimeRemaining;
+- (NSString *)		timeRemaining;
 - (void)			setTimeRemaining:(NSString *)timeRemaining;
 
 - (void)			updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining;
 
-- (NSString *)		getInputType;
+- (NSString *)		inputType;
 - (void)			setInputType:(NSString *)inputType;
 
-- (NSString *)		getOutputType;
+- (NSString *)		outputType;
 - (void)			setOutputType:(NSString *)outputType;
+
+- (NSException *)	exception;
+- (void)			setException:(NSException *)exception;
 
 @end

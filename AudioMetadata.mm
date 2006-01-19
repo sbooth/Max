@@ -38,7 +38,7 @@
 			artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
 		}
 		if(nil == title) {
-			title = NSLocalizedStringFromTable(@"Unknown Title", @"CompactDisc", @"");;
+			title = NSLocalizedStringFromTable(@"Unknown Title", @"CompactDisc", @"");
 		}
 		
 		return [NSString stringWithFormat:@"%@ - %@", artist, title];			
@@ -47,7 +47,7 @@
 		return [NSString stringWithFormat:@"%@", _trackTitle];
 	}
 	else {
-		return NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");;
+		return NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");
 	}
 }
 
@@ -355,7 +355,7 @@
 			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[self valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 		else {
-					basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[self valueForKey:@"discNumber"] intValue], [[self valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[self valueForKey:@"discNumber"] intValue], [[self valueForKey:@"trackNumber"] unsignedIntValue], makeStringSafeForFilename(trackTitle)];
 		}
 	}
 	

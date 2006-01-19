@@ -143,11 +143,13 @@ validateAndCreateDirectory(NSString *path)
 
 	if(NO == [manager fileExistsAtPath:path isDirectory:&isDir]) {
 		if(NO == [manager createDirectoryAtPath:path attributes:nil]) {
-			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create directory '%@'", @"Exceptions", @""), path] userInfo:nil];
+			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory", @"Exceptions", @"")
+										 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
 		}
 	}
 	else if(FALSE == isDir) {
-		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create directory '%@'", @"Exceptions", @""), path] userInfo:nil];
+		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory", @"Exceptions", @"")
+									 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
 	}	
 }
 
@@ -157,7 +159,7 @@ getLibsndfileExtensions()
 	NSMutableArray			*result;
 	SF_FORMAT_INFO			formatInfo;
 	SF_INFO					info;
-	int						i, majorCount;
+	int						i, majorCount = 0;
 
 	sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
 

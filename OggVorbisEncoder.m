@@ -52,7 +52,8 @@ enum {
 	@try {
 		vorbisDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"OggVorbisDefaults" ofType:@"plist"];
 		if(nil == vorbisDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to load '%@'", @"Exceptions", @""), @"OggVorbisDefaults.plist"] userInfo:nil];
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"OggVorbisDefaults.plist" forKey:@"filename"]];
 		}
 		vorbisDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:vorbisDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:vorbisDefaultsValuesDictionary];
@@ -115,214 +116,224 @@ enum {
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
-	// Open the input file
-	_pcm = open([_pcmFilename UTF8String], O_RDONLY);
-	if(-1 == _pcm) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to open the input file '%@' (%i:%s)", @"Exceptions", @""), _pcmFilename, errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Get input file information
-	struct stat sourceStat;
-	if(-1 == fstat(_pcm, &sourceStat)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to get information on the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Allocate the buffer (Vorbis crashes if it is too large)
-	_buflen			= 1024;
-	_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-	if(NULL == _buf) {
-		[_delegate setStopped];
-		@throw [MallocException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to allocate memory (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
-	
-	totalBytes		= sourceStat.st_size;
-	bytesToRead		= totalBytes;
-
-	// Create the output file
-	_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	if(-1 == _out) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to create the output file '%@' (%i:%s)", @"Exceptions", @""), filename, errno, strerror(errno)] userInfo:nil];
-	}
-	
-	// Check if we should stop, and if so throw an exception
-	if([_delegate shouldStop]) {
-		[_delegate setStopped];
-		@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-	}
-		
-	// Setup the encoder
-	vorbis_info_init(&vi);
-
-	// Use quality-based VBR
-	
-	if(VORBIS_MODE_QUALITY == _mode) {
-		if(vorbis_encode_init_vbr(&vi, 2, 44100, _quality)) {
-			[_delegate setStopped];
-			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize Ogg Vorbis encoder", @"Exceptions", @"") userInfo:nil];
-		}
-	}
-	else if(VORBIS_MODE_BITRATE == _mode) {
-		if(vorbis_encode_init(&vi, 2, 44100, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
-			[_delegate setStopped];
-			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize Ogg Vorbis encoder", @"Exceptions", @"") userInfo:nil];
-		}
-	}
-	else {
-		[_delegate setStopped];
-		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
-	}
-	
-	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-
-	vorbis_comment_init(&vc);
-	vorbis_comment_add_tag(&vc, "ENCODER", [[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String]);
-	
-	vorbis_analysis_init(&vd, &vi);
-	vorbis_block_init(&vd, &vb);
-	
-	// Use the current time as the stream id
-	srand(time(NULL));
-	if(-1 == ogg_stream_init(&os, rand())) {
-		[_delegate setStopped];
-		@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream.", @"Exceptions", @"") userInfo:nil];
-	}
-	
-	// Write stream headers	
-	vorbis_analysis_headerout(&vd, &vc, &header, &header_comm, &header_code);
-	ogg_stream_packetin(&os, &header);
-	ogg_stream_packetin(&os, &header_comm);
-	ogg_stream_packetin(&os, &header_code);
-	
-	for(;;) {
-		if(0 == ogg_stream_flush(&os, &og)) {
-			break;	
-		}
-
-		currentBytesWritten = write(_out, og.header, og.header_len);
-		if(-1 == currentBytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		bytesWritten += currentBytesWritten;
-		
-		currentBytesWritten = write(_out, og.body, og.body_len);
-		if(-1 == currentBytesWritten) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-		}
-		bytesWritten += currentBytesWritten;
-	}
-	
-	// Iteratively get the PCM data and encode it
-	while(NO == eos) {
-
-		// Read a chunk of PCM input
-		bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
-		if(-1 == bytesRead) {
-			[_delegate setStopped];
-			@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read from the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
+	@try {
+		// Open the input file
+		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		if(-1 == _pcm) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		
-		// Expose the buffer to submit data
-		buffer = vorbis_analysis_buffer(&vd, bytesRead / 4);
-		
-		left	= buffer[0];
-		right	= buffer[1];
-		buf		= _buf;
-		limit	= buf + bytesRead / 2;
-		while(buf < limit) {
-			*left++		= *buf++ / 32768.0f;
-			*right++	= *buf++ / 32768.0f;
+		// Get input file information
+		struct stat sourceStat;
+		if(-1 == fstat(_pcm, &sourceStat)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
 		}
 		
-		// Tell the library how much data we actually submitted
-		vorbis_analysis_wrote(&vd, bytesRead / 4);
+		// Allocate the buffer (Vorbis crashes if it is too large)
+		_buflen			= 1024;
+		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
+		if(NULL == _buf) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
 		
-		// Update status
-		bytesToRead -= bytesRead;
-
-		// Distributed Object calls are expensive, so only perform them every few iterations
-		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
-			
-			// Check if we should stop, and if so throw an exception
-			if([_delegate shouldStop]) {
-				[_delegate setStopped];
-				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+		totalBytes		= sourceStat.st_size;
+		bytesToRead		= totalBytes;
+		
+		// Create the output file
+		_out = open([filename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == _out) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+		}
+		
+		// Check if we should stop, and if so throw an exception
+		if([_delegate shouldStop]) {
+			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+		}
+		
+		// Setup the encoder
+		vorbis_info_init(&vi);
+		
+		// Use quality-based VBR
+		
+		if(VORBIS_MODE_QUALITY == _mode) {
+			if(vorbis_encode_init_vbr(&vi, 2, 44100, _quality)) {
+				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize Ogg Vorbis encoder", @"Exceptions", @"") userInfo:nil];
+			}
+		}
+		else if(VORBIS_MODE_BITRATE == _mode) {
+			if(vorbis_encode_init(&vi, 2, 44100, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
+				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize Ogg Vorbis encoder", @"Exceptions", @"") userInfo:nil];
+			}
+		}
+		else {
+			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
+		}
+		
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		
+		vorbis_comment_init(&vc);
+		vorbis_comment_add_tag(&vc, "ENCODER", [[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String]);
+		
+		vorbis_analysis_init(&vd, &vi);
+		vorbis_block_init(&vd, &vb);
+		
+		// Use the current time as the stream id
+		srand(time(NULL));
+		if(-1 == ogg_stream_init(&os, rand())) {
+			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream.", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		// Write stream headers	
+		vorbis_analysis_headerout(&vd, &vc, &header, &header_comm, &header_code);
+		ogg_stream_packetin(&os, &header);
+		ogg_stream_packetin(&os, &header_comm);
+		ogg_stream_packetin(&os, &header_code);
+		
+		for(;;) {
+			if(0 == ogg_stream_flush(&os, &og)) {
+				break;	
 			}
 			
-			// Update UI
-			double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
-			NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-			unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
-			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+			currentBytesWritten = write(_out, og.header, og.header_len);
+			if(-1 == currentBytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			bytesWritten += currentBytesWritten;
 			
-			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			currentBytesWritten = write(_out, og.body, og.body_len);
+			if(-1 == currentBytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
+			bytesWritten += currentBytesWritten;
 		}
 		
-		++iterations;
-
-		while(1 == vorbis_analysis_blockout(&vd, &vb)){
+		// Iteratively get the PCM data and encode it
+		while(NO == eos) {
 			
-			vorbis_analysis(&vb, NULL);
-			vorbis_bitrate_addblock(&vb);
+			// Read a chunk of PCM input
+			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+			if(-1 == bytesRead) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			}
 			
-			while(vorbis_bitrate_flushpacket(&vd, &op)) {
+			// Expose the buffer to submit data
+			buffer = vorbis_analysis_buffer(&vd, bytesRead / 4);
+			
+			left	= buffer[0];
+			right	= buffer[1];
+			buf		= _buf;
+			limit	= buf + bytesRead / 2;
+			while(buf < limit) {
+				*left++		= *buf++ / 32768.0f;
+				*right++	= *buf++ / 32768.0f;
+			}
+			
+			// Tell the library how much data we actually submitted
+			vorbis_analysis_wrote(&vd, bytesRead / 4);
+			
+			// Update status
+			bytesToRead -= bytesRead;
+			
+			// Distributed Object calls are expensive, so only perform them every few iterations
+			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
-				ogg_stream_packetin(&os, &op);
+				// Check if we should stop, and if so throw an exception
+				if([_delegate shouldStop]) {
+					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+				}
 				
-				// Write out pages (if any)
-				while(NO == eos) {
-
-					if(0 == ogg_stream_pageout(&os, &og)) {
-						break;
-					}
-
-					currentBytesWritten = write(_out, og.header, og.header_len);
-					if(-1 == currentBytesWritten) {
-						[_delegate setStopped];
-						@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-					}
-					bytesWritten += currentBytesWritten;
+				// Update UI
+				double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+				unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
+				
+				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			}
+			
+			++iterations;
+			
+			while(1 == vorbis_analysis_blockout(&vd, &vb)){
+				
+				vorbis_analysis(&vb, NULL);
+				vorbis_bitrate_addblock(&vb);
+				
+				while(vorbis_bitrate_flushpacket(&vd, &op)) {
 					
-					currentBytesWritten = write(_out, og.body, og.body_len);
-					if(-1 == currentBytesWritten) {
-						[_delegate setStopped];
-						@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to write to the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-					}
-					bytesWritten += currentBytesWritten;
-
-					if(ogg_page_eos(&og)) {
-						eos = YES;
+					ogg_stream_packetin(&os, &op);
+					
+					// Write out pages (if any)
+					while(NO == eos) {
+						
+						if(0 == ogg_stream_pageout(&os, &og)) {
+							break;
+						}
+						
+						currentBytesWritten = write(_out, og.header, og.header_len);
+						if(-1 == currentBytesWritten) {
+							@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+						}
+						bytesWritten += currentBytesWritten;
+						
+						currentBytesWritten = write(_out, og.body, og.body_len);
+						if(-1 == currentBytesWritten) {
+							@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+						}
+						bytesWritten += currentBytesWritten;
+						
+						if(ogg_page_eos(&og)) {
+							eos = YES;
+						}
 					}
 				}
 			}
 		}
 	}
-	
-	// Close the input file
-	if(-1 == close(_pcm)) {
-		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the input file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
-	}
 
-	// Close the output file
-	if(-1 == close(_out)) {
+	@catch(StopException *exception) {
 		[_delegate setStopped];
-		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to close the output file (%i:%s)", @"Exceptions", @""), errno, strerror(errno)] userInfo:nil];
 	}
 	
-	// Clean up
-	ogg_stream_clear(&os);
-	vorbis_block_clear(&vb);
-	vorbis_dsp_clear(&vd);
-	vorbis_comment_clear(&vc);
-	vorbis_info_clear(&vi);
+	@catch(NSException *exception) {
+		[_delegate setException:exception];
+		[_delegate setStopped];
+	}
+	
+	@finally {
+		NSException *exception;
+		// Close the input file
+		if(-1 == close(_pcm)) {
+			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 								
+												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			NSLog(@"%@", exception);
+		}
 
-	free(_buf);
+		// Close the output file
+		if(-1 == close(_out)) {
+			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString"]]];
+			NSLog(@"%@", exception);
+		}
+		
+		// Clean up
+		ogg_stream_clear(&os);
+		vorbis_block_clear(&vb);
+		vorbis_dsp_clear(&vd);
+		vorbis_comment_clear(&vc);
+		vorbis_info_clear(&vi);
 
+		free(_buf);
+	}
+	
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
 	
