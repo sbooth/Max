@@ -116,7 +116,6 @@
 	return result;
 }
 
-
 - (void) makeWindowControllers 
 {
 	CompactDiscController *controller = [[CompactDiscController alloc] initWithWindowNibName:@"CompactDiscDocument" owner:self];
