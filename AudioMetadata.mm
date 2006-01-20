@@ -285,7 +285,7 @@
 			id				key;
 			
 			while((key = [enumerator nextObject])) {
-				[customPath replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", key] withString:[substitutions valueForKey:key] options:nil range:NSMakeRange(0, [customPath length])];
+				[customPath replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", key] withString:makeStringSafeForFilename([substitutions valueForKey:key]) options:nil range:NSMakeRange(0, [customPath length])];
 			}
 		}
 		
