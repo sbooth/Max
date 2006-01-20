@@ -131,13 +131,14 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		}
 
 		@catch(NSException *exception) {
+			if(0 != _gfp) {
+				lame_close(_gfp);
+			}
+			
 			@throw;
 		}
 		
 		@finally {
-			if(0 != _gfp) {
-				lame_close(_gfp);
-			}
 		}
 		
 		return self;
