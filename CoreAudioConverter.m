@@ -57,7 +57,7 @@
 		_outputASBD.mChannelsPerFrame	= 2;
 		_outputASBD.mBitsPerChannel		= 16;
 		
-		// Open the output file
+		// Open the input file
 		err = FSPathMakeRef((const UInt8 *)[_inputFilename UTF8String], &ref, NULL);
 		if(noErr != err) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
@@ -125,7 +125,7 @@
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
-	[_delegate setInputType:_fileType];
+	[_delegate setInputFormat:_fileType];
 	
 	@try {
 		// Get input file information

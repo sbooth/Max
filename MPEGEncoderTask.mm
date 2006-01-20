@@ -187,6 +187,6 @@
 }
 
 - (NSString *)		extension						{ return @"mp3"; }
-- (NSString *)		outputType						{ return NSLocalizedStringFromTable(@"MP3", @"General", @""); }
+- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"MP3", @"General", @""); }
 
 @end

@@ -47,7 +47,7 @@
 		pool			= [[NSAutoreleasePool alloc] init];
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (LibsndfileEncoderTask *)[connection rootProxy];
-		encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename] format:[owner getFormat]];
+		encoder			= [[self alloc] initWithPCMFilename:[owner inputFilename] format:[owner getFormat]];
 		
 		[encoder setDelegate:owner];
 		[owner encoderReady:encoder];
@@ -71,9 +71,9 @@
 	}
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename format:(int)format
+- (id) initWithPCMFilename:(NSString *)inputFilename format:(int)format
 {
-	if((self = [super initWithPCMFilename:pcmFilename])) {
+	if((self = [super initWithPCMFilename:inputFilename])) {
 		_format = format;
 		return self;
 	}
@@ -108,7 +108,7 @@
 	
 	@try {
 		// Open the input file
-		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		_pcm = open([_inputFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

@@ -47,7 +47,7 @@
 
 - (NSDictionary *)		getFormatInfo				{ return _formatInfo; }
 
-- (NSString *) outputType
+- (NSString *) outputFormat
 {
 	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
 

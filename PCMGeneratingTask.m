@@ -137,7 +137,7 @@
 
 - (AudioMetadata *)		metadata							{ return _metadata; }
 - (int)					getOutputFile						{ return _out; }
-- (NSString *)			getOutputFilename					{ return _outputFilename; }
+- (NSString *)			outputFilename					{ return _outputFilename; }
 - (NSString *)			description							{ return [_metadata description]; }
 - (void)				run									{}
 - (void)				stop								{}

@@ -111,6 +111,6 @@
 }
 
 - (NSString *)		extension						{ return @"flac"; }
-- (NSString *)		outputType						{ return NSLocalizedStringFromTable(@"FLAC", @"General", @""); }
+- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"FLAC", @"General", @""); }
 
 @end

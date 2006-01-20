@@ -34,7 +34,7 @@
 		pool			= [[NSAutoreleasePool alloc] init];
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (EncoderTask *)[connection rootProxy];
-		encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename]];
+		encoder			= [[self alloc] initWithPCMFilename:[owner inputFilename]];
 		
 		[encoder setDelegate:owner];
 		[owner encoderReady:encoder];
@@ -58,10 +58,10 @@
 	}
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename
+- (id) initWithPCMFilename:(NSString *)inputFilename
 {
 	if((self = [super init])) {
-		_pcmFilename = [pcmFilename retain];
+		_inputFilename = [inputFilename retain];
 		return self;
 	}
 	return nil;
@@ -69,7 +69,7 @@
 
 - (void) dealloc
 {
-	[_pcmFilename release];
+	[_inputFilename release];
 
 	[super dealloc];
 }

@@ -152,14 +152,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	}
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename
+- (id) initWithPCMFilename:(NSString *)inputFilename
 {
 	char				*path			= NULL;
 	const char			*tmpDir;
 	ssize_t				tmpDirLen;
 	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
 
-	if((self = [super initWithPCMFilename:pcmFilename])) {
+	if((self = [super initWithPCMFilename:inputFilename])) {
 		
 		_mode				= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexMode"];
 
@@ -310,7 +310,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			info.samplerate		= 44100;
 			info.channels		= 2;
 			
-			inSF = sf_open([_pcmFilename UTF8String], SFM_READ, &info);
+			inSF = sf_open([_inputFilename UTF8String], SFM_READ, &info);
 			if(NULL == inSF) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -427,7 +427,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			rate = 44100;
 			
 			// Open the input file
-			_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+			_pcm = open([_inputFilename UTF8String], O_RDONLY);
 			if(-1 == _pcm) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

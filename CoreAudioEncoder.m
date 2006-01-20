@@ -49,7 +49,7 @@
 		pool			= [[NSAutoreleasePool alloc] init];
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (CoreAudioEncoderTask *)[connection rootProxy];
-		encoder			= [[self alloc] initWithPCMFilename:[owner getPCMFilename] formatInfo:[owner getFormatInfo]];
+		encoder			= [[self alloc] initWithPCMFilename:[owner inputFilename] formatInfo:[owner getFormatInfo]];
 		
 		[encoder setDelegate:owner];
 		[owner encoderReady:encoder];
@@ -73,9 +73,9 @@
 	}
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename formatInfo:(NSDictionary *)formatInfo
+- (id) initWithPCMFilename:(NSString *)inputFilename formatInfo:(NSDictionary *)formatInfo
 {	
-	if((self = [super initWithPCMFilename:pcmFilename])) {
+	if((self = [super initWithPCMFilename:inputFilename])) {
 	
 		_formatInfo						= [formatInfo retain];
 				
@@ -139,7 +139,7 @@
 	
 	@try {
 		// Open the input file
-		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		_pcm = open([_inputFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -189,8 +189,8 @@
 		}
 		
 		// Tweak converter settings
-		size = sizeof(converter);
-		err = ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_AudioConverter, &size, &converter);
+		size	= sizeof(converter);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_AudioConverter, &size, &converter);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -227,8 +227,8 @@
 		}
 		
 		// Update
-		size = sizeof(converterPropertySettings);
-		err = AudioConverterGetProperty(converter, kAudioConverterPropertySettings, &size, &converterPropertySettings);
+		size	= sizeof(converterPropertySettings);
+		err		= AudioConverterGetProperty(converter, kAudioConverterPropertySettings, &size, &converterPropertySettings);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioConverterGetProperty failed", @"Exceptions", @"")
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

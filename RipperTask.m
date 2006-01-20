@@ -77,9 +77,9 @@
 	[super dealloc];
 }
 
-- (NSArray *)			getSectors				{ return _sectors; }
-- (NSString *)			getDeviceName			{ return [NSString stringWithUTF8String:_drive->device_name]; }
-- (NSArray *)			getTracks				{ return _tracks; }
+- (NSArray *)			sectors				{ return _sectors; }
+- (NSString *)			deviceName			{ return [NSString stringWithUTF8String:_drive->device_name]; }
+- (NSArray *)			tracks				{ return _tracks; }
 
 - (void) run
 {

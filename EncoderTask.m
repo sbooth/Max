@@ -81,10 +81,10 @@
 	[super dealloc];
 }
 
-- (NSString *)		getOutputFilename				{ return _outputFilename; }
-- (NSString *)		getPCMFilename					{ return [_task getOutputFilename]; }
-- (NSString *)		outputType						{ return nil; }
-- (NSArray *)		getTracks						{ return _tracks; }
+- (NSString *)		outputFilename					{ return _outputFilename; }
+- (NSString *)		inputFilename					{ return [_task outputFilename]; }
+- (NSString *)		outputFormat					{ return nil; }
+- (NSArray *)		tracks							{ return _tracks; }
 - (NSString *)		extension						{ return nil; }
 - (void)			writeTags						{}
 - (NSString *)		description						{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
@@ -146,7 +146,7 @@
 	// Create the output file
 
 	// Set up the additional key/value pairs to be substituted
-	[substitutions setObject:[self outputType] forKey:@"fileFormat"];
+	[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];
 	basename = [[_task metadata] outputBasenameWithSubstitutions:substitutions];
 	createDirectoryStructure(basename);
 	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];

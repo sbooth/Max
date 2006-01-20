@@ -106,6 +106,6 @@
 }
 
 - (NSString *)		extension						{ return @"ogg"; }
-- (NSString *)		outputType						{ return NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""); }
+- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""); }
 
 @end

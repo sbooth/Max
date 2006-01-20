@@ -32,7 +32,7 @@
 
 - (id)				initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
 
-- (NSString *)		getInputFilename;
+- (NSString *)		inputFilename;
 
 - (void)			converterReady:(id)anObject;
 

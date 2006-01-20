@@ -64,14 +64,14 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	}
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename
+- (id) initWithPCMFilename:(NSString *)inputFilename
 {
 	int			quality;
 	int			bitrate;
 	int			lameResult;
 	
 	
-	if((self = [super initWithPCMFilename:pcmFilename])) {
+	if((self = [super initWithPCMFilename:inputFilename])) {
 		
 		@try {
 			// LAME setup
@@ -170,7 +170,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	
 	@try {
 		// Open the input file
-		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		_pcm = open([_inputFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

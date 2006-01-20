@@ -196,7 +196,7 @@ static TaskMaster *sharedController = nil;
 	
 	enumerator = [_rippingTasks objectEnumerator];
 	while((ripperTask = [enumerator nextObject])) {
-		if([document isEqual:[[[ripperTask getTracks] objectAtIndex:0] getCompactDiscDocument]]) {
+		if([document isEqual:[[[ripperTask tracks] objectAtIndex:0] getCompactDiscDocument]]) {
 			return YES;
 		}
 	}
@@ -211,7 +211,7 @@ static TaskMaster *sharedController = nil;
 	
 	enumerator = [_encodingTasks objectEnumerator];
 	while((encoderTask = [enumerator nextObject])) {
-		if(nil != [encoderTask getTracks] && [document isEqual:[[[encoderTask getTracks] objectAtIndex:0] getCompactDiscDocument]]) {
+		if(nil != [encoderTask tracks] && [document isEqual:[[[encoderTask tracks] objectAtIndex:0] getCompactDiscDocument]]) {
 			return YES;
 		}
 	}
@@ -338,7 +338,7 @@ static TaskMaster *sharedController = nil;
 	// Iterate through all ripping tasks once and determine which devices are active
 	enumerator = [_rippingTasks objectEnumerator];
 	while((task = [enumerator nextObject])) {
-		deviceName = [task getDeviceName];
+		deviceName = [task deviceName];
 		if([task started] && NO == [activeDrives containsObject:deviceName]) {
 			[activeDrives addObject:deviceName];
 		}
@@ -347,7 +347,7 @@ static TaskMaster *sharedController = nil;
 	// Iterate through a second time and spawn threads for non-active devices
 	enumerator = [_rippingTasks objectEnumerator];
 	while((task = [enumerator nextObject])) {
-		deviceName = [task getDeviceName];
+		deviceName = [task deviceName];
 		if(NO == [task started] && NO == [activeDrives containsObject:deviceName]) {
 			[activeDrives addObject:deviceName];
 			[task run];
@@ -441,7 +441,7 @@ static TaskMaster *sharedController = nil;
 - (void) convertDidStart:(ConverterTask* ) task
 {
 	NSString	*filename		= [task description];
-	NSString	*type			= [task inputType];
+	NSString	*type			= [task inputFormat];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert started for %@ [%@]", @"Log", @""), filename, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert started", @"Log", @"") 
@@ -452,7 +452,7 @@ static TaskMaster *sharedController = nil;
 - (void) convertDidStop:(ConverterTask* ) task
 {
 	NSString	*filename		= [task description];
-	NSString	*type			= [task inputType];
+	NSString	*type			= [task inputFormat];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert stopped for %@ [%@]", @"Log", @""), filename, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert stopped", @"Log", @"") 
@@ -470,7 +470,7 @@ static TaskMaster *sharedController = nil;
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*filename		= [task description];
-	NSString		*type			= [task inputType];
+	NSString		*type			= [task inputFormat];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert completed for %@ [%@]", @"Log", @""), filename, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert completed", @"Log", @"") 
@@ -525,7 +525,7 @@ static TaskMaster *sharedController = nil;
 				encoderTask = [[CoreAudioEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
 				
 				if([task isKindOfClass:[RipperTask class]]) {
-					[encoderTask setTracks:[(RipperTask *)task getTracks]];
+					[encoderTask setTracks:[(RipperTask *)task tracks]];
 				}
 
 				// Show the encoder window if it is hidden
@@ -549,7 +549,7 @@ static TaskMaster *sharedController = nil;
 				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
 
 				if([task isKindOfClass:[RipperTask class]]) {
-					[encoderTask setTracks:[(RipperTask *)task getTracks]];
+					[encoderTask setTracks:[(RipperTask *)task tracks]];
 				}
 
 				// Show the encoder window if it is hidden
@@ -578,7 +578,7 @@ static TaskMaster *sharedController = nil;
 	EncoderTask *encoderTask = [[encoderClass alloc] initWithTask:task];
 
 	if([task isKindOfClass:[RipperTask class]]) {
-		[encoderTask setTracks:[(RipperTask *)task getTracks]];
+		[encoderTask setTracks:[(RipperTask *)task tracks]];
 	}
 
 	// Show the encoder window if it is hidden
@@ -629,7 +629,7 @@ static TaskMaster *sharedController = nil;
 - (void) encodeDidStart:(EncoderTask* ) task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task outputType];
+	NSString	*type			= [task outputFormat];
 	NSString	*settings		= [task settings];
 
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode started for %@ [%@]", @"Log", @""), trackName, type]];
@@ -644,7 +644,7 @@ static TaskMaster *sharedController = nil;
 - (void) encodeDidStop:(EncoderTask* ) task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task outputType];
+	NSString	*type			= [task outputFormat];
 
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode stopped for %@ [%@]", @"Log", @""), trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode stopped", @"Log", @"") 
@@ -662,7 +662,7 @@ static TaskMaster *sharedController = nil;
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
-	NSString		*type			= [task outputType];
+	NSString		*type			= [task outputFormat];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode completed", @"Log", @"") 

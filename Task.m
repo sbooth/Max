@@ -53,12 +53,12 @@
 		[_timeRemaining release];
 	}
 	
-	if(nil != _inputType) {
-		[_inputType release];
+	if(nil != _inputFormat) {
+		[_inputFormat release];
 	}
 
-	if(nil != _outputType) {
-		[_outputType release];
+	if(nil != _outputFormat) {
+		[_outputFormat release];
 	}
 	
 	if(nil != _exception) {
@@ -81,8 +81,8 @@
 
 - (NSString *)		timeRemaining								{ return _timeRemaining; }
 
-- (NSString *)		inputType									{ return _inputType; }
-- (NSString *)		outputType									{ return _outputType; }
+- (NSString *)		inputFormat									{ return _inputFormat; }
+- (NSString *)		outputFormat									{ return _outputFormat; }
 
 - (NSException *)	exception									{ return _exception; }
 
@@ -154,24 +154,24 @@
 	[self didChangeValueForKey:@"timeRemaining"];
 }
 
-- (void) setInputType:(NSString *)inputType
+- (void) setInputFormat:(NSString *)inputFormat
 {
-	[self willChangeValueForKey:@"inputType"];
-	if(nil != _inputType) {
-		[_inputType release];
+	[self willChangeValueForKey:@"inputFormat"];
+	if(nil != _inputFormat) {
+		[_inputFormat release];
 	}
-	_inputType = [inputType retain];
-	[self didChangeValueForKey:@"inputType"];
+	_inputFormat = [inputFormat retain];
+	[self didChangeValueForKey:@"inputFormat"];
 }
 
-- (void) setOutputType:(NSString *)outputType
+- (void) setOutputFormat:(NSString *)outputFormat
 {
-	[self willChangeValueForKey:@"outputType"];
-	if(nil != _outputType) {
-		[_outputType release];
+	[self willChangeValueForKey:@"outputFormat"];
+	if(nil != _outputFormat) {
+		[_outputFormat release];
 	}
-	_outputType = [outputType retain];
-	[self didChangeValueForKey:@"outputType"];
+	_outputFormat = [outputFormat retain];
+	[self didChangeValueForKey:@"outputFormat"];
 }
 
 - (void) setException:(NSException *)exception

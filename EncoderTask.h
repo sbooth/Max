@@ -39,7 +39,7 @@
 
 - (id)				initWithTask:(PCMGeneratingTask *)task;
 
-- (NSArray *)		getTracks;
+- (NSArray *)		tracks;
 - (void)			setTracks:(NSArray *)tracks;
 
 - (void)			run;
@@ -47,10 +47,10 @@
 
 - (NSString *)		extension;
 
-- (NSString *)		getPCMFilename;
-- (NSString *)		getOutputFilename;
+- (NSString *)		inputFilename;
+- (NSString *)		outputFilename;
 
-- (NSString *)		outputType;
+- (NSString *)		outputFormat;
 
 - (void)			removeOutputFile;
 

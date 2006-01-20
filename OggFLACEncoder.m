@@ -36,9 +36,9 @@
 
 @implementation OggFLACEncoder
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename
+- (id) initWithPCMFilename:(NSString *)inputFilename
 {
-	if((self = [super initWithPCMFilename:pcmFilename])) {
+	if((self = [super initWithPCMFilename:inputFilename])) {
 		
 		_flac = OggFLAC__file_encoder_new();
 		if(NULL == _flac) {
@@ -99,7 +99,7 @@
 	
 	@try {
 		// Open the input file
-		_pcm = open([_pcmFilename UTF8String], O_RDONLY);
+		_pcm = open([_inputFilename UTF8String], O_RDONLY);
 		if(-1 == _pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

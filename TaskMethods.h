@@ -50,11 +50,11 @@
 
 - (void)			updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining;
 
-- (NSString *)		inputType;
-- (void)			setInputType:(NSString *)inputType;
+- (NSString *)		inputFormat;
+- (void)			setInputFormat:(NSString *)inputFormat;
 
-- (NSString *)		outputType;
-- (void)			setOutputType:(NSString *)outputType;
+- (NSString *)		outputFormat;
+- (void)			setOutputFormat:(NSString *)outputFormat;
 
 - (NSException *)	exception;
 - (void)			setException:(NSException *)exception;

@@ -47,7 +47,7 @@
 		pool			= [[NSAutoreleasePool alloc] init];
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (ConverterTask *)[connection rootProxy];
-		converter		= [[self alloc] initWithInputFilename:[owner getInputFilename]];
+		converter		= [[self alloc] initWithInputFilename:[owner inputFilename]];
 		
 		[converter setDelegate:owner];
 		[owner converterReady:converter];

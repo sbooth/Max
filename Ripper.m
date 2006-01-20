@@ -111,7 +111,7 @@ callback(long inpos, int function, void *userdata)
 		pool			= [[NSAutoreleasePool alloc] init];
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (RipperTask *)[connection rootProxy];
-		ripper			= [[self alloc] initWithSectors:[owner getSectors] deviceName:[owner getDeviceName]];
+		ripper			= [[self alloc] initWithSectors:[owner sectors] deviceName:[owner deviceName]];
 
 		[ripper setDelegate:owner];
 		[owner ripperReady:ripper];

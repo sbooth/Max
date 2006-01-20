@@ -26,10 +26,10 @@
 @interface Encoder : NSObject <EncoderMethods>
 {
 	id <TaskMethods>		_delegate;
-	NSString				*_pcmFilename;	
+	NSString				*_inputFilename;	
 	int						_pcm;
 }
 
-- (id)						initWithPCMFilename:(NSString *)pcmFilename;
+- (id)						initWithPCMFilename:(NSString *)inputFilename;
 
 @end

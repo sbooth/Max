@@ -36,6 +36,6 @@
 	NSDictionary					*_formatInfo;
 }
 
-- (id) initWithPCMFilename:(NSString *)pcmFilename formatInfo:(NSDictionary *)formatInfo;
+- (id) initWithPCMFilename:(NSString *)inputFilename formatInfo:(NSDictionary *)formatInfo;
 
 @end

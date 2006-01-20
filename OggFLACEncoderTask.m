@@ -36,6 +36,6 @@
 {}
 
 - (NSString *)		extension						{ return @"oggflac"; }
-- (NSString *)		outputType						{ return NSLocalizedStringFromTable(@"Ogg FLAC", @"General", @""); }
+- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"Ogg FLAC", @"General", @""); }
 
 @end

@@ -33,6 +33,6 @@
 }
 
 - (NSString *)		extension						{ return @"spx"; }
-- (NSString *)		outputType						{ return NSLocalizedStringFromTable(@"Speex", @"General", @""); }
+- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"Speex", @"General", @""); }
 
 @end

@@ -37,7 +37,7 @@
 - (void)					stop;
 
 - (int)						getOutputFile;
-- (NSString *)				getOutputFilename;
+- (NSString *)				outputFilename;
 
 - (void)					closeOutputFile;
 - (void)					removeOutputFile;

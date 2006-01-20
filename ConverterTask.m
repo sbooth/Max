@@ -115,6 +115,6 @@
 	}
 }
 
-- (NSString *)	getInputFilename				{ return _inputFilename; }
+- (NSString *)		inputFilename					{ return _inputFilename; }
 
 @end

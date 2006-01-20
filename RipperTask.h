@@ -34,10 +34,10 @@
 
 - (id)				initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
 
-- (NSArray *)		getSectors;
-- (NSString *)		getDeviceName;
+- (NSArray *)		sectors;
+- (NSString *)		deviceName;
 
-- (NSArray *)		getTracks;
+- (NSArray *)		tracks;
 
 - (void)			ripperReady:(id)anObject;
 

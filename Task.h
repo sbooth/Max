@@ -37,8 +37,8 @@
 	
 	NSString			*_timeRemaining;
 	
-	NSString			*_inputType;
-	NSString			*_outputType;
+	NSString			*_inputFormat;
+	NSString			*_outputFormat;
 	
 	NSException			*_exception;
 }

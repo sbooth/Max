@@ -87,7 +87,7 @@
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
-	[_delegate setInputType:_fileType];
+	[_delegate setInputFormat:_fileType];
 			
 	@try {
 		// Setup libsndfile output file
