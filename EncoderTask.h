@@ -50,6 +50,8 @@
 - (NSString *)		getPCMFilename;
 - (NSString *)		getOutputFilename;
 
+- (NSString *)		outputType;
+
 - (void)			removeOutputFile;
 
 - (void)			writeTags;

@@ -39,8 +39,6 @@
 	NSNumber		*_multipleArtists;
 	NSNumber		*_discNumber;
 	NSNumber		*_discsInSet;
-	
-	NSString		*_fileFormat;
 }
 
 // Attempt to parse metadata from filename
@@ -48,5 +46,8 @@
 
 // Create output file's basename
 - (NSString *)			outputBasename;
+
+// Create output file's basename
+- (NSString *)			outputBasenameWithSubstitutions:(NSDictionary *)substitutions;
 
 @end

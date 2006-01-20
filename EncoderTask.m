@@ -41,9 +41,6 @@
 		_outputFilename				= nil;
 		_tracks						= nil;
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
-		
-		[[task metadata] setValue:[self outputType] forKey:@"fileFormat"];
-
 		return self;
 	}
 	return nil;
@@ -86,8 +83,12 @@
 
 - (NSString *)		getOutputFilename				{ return _outputFilename; }
 - (NSString *)		getPCMFilename					{ return [_task getOutputFilename]; }
+- (NSString *)		outputType						{ return nil; }
 - (NSArray *)		getTracks						{ return _tracks; }
 - (NSString *)		extension						{ return nil; }
+- (void)			writeTags						{}
+- (NSString *)		description						{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
+- (NSString *)		settings						{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
 
 - (void) setTracks:(NSArray *)tracks
 {
@@ -136,13 +137,17 @@
 
 - (void) run
 {
-	NSString	*basename;
-	NSPort		*port1			= [NSPort port];
-	NSPort		*port2			= [NSPort port];
-	NSArray		*portArray		= nil;
+	NSString				*basename;
+	NSMutableDictionary		*substitutions		= [NSMutableDictionary dictionaryWithCapacity:1];
+	NSPort					*port1				= [NSPort port];
+	NSPort					*port2				= [NSPort port];
+	NSArray					*portArray			= nil;
 	
 	// Create the output file
-	basename = [[_task metadata] outputBasename];
+
+	// Set up the additional key/value pairs to be substituted
+	[substitutions setObject:[self outputType] forKey:@"fileFormat"];
+	basename = [[_task metadata] outputBasenameWithSubstitutions:substitutions];
 	createDirectoryStructure(basename);
 	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];
 	[self createOutputFile];
@@ -197,9 +202,5 @@
 		[[TaskMaster sharedController] encodeDidStop:self];
 	}
 }
-
-- (void)		writeTags						{}
-- (NSString *)	description						{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
-- (NSString *)	settings						{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
 
 @end

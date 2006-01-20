@@ -28,9 +28,6 @@
 	if((self = [super initWithTask:task])) {
 		_formatInfo		= [formatInfo retain];
 		_encoderClass	= [LibsndfileEncoder class];
-
-		[[task metadata] setValue:[self outputType] forKey:@"fileFormat"];
-
 		return self;
 	}
 	return nil;

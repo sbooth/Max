@@ -157,7 +157,9 @@
 }
 
 // Create output file's basename
-- (NSString *) outputBasename
+- (NSString *) outputBasename						{ return [self outputBasenameWithSubstitutions:nil]; }
+
+- (NSString *) outputBasenameWithSubstitutions:(NSDictionary *)substitutions;
 {
 	NSString		*basename;
 	NSString		*outputDirectory;
@@ -184,7 +186,6 @@
 		NSString			*trackTitle			= [self valueForKey:@"trackTitle"];
 		NSString			*trackGenre			= [self valueForKey:@"trackGenre"];
 		NSNumber			*trackYear			= [self valueForKey:@"trackYear"];
-		NSString			*fileFormat			= [self valueForKey:@"fileFormat"];
 		
 		// Fallback to disc if specified in preferences
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"customNamingUseFallback"]) {
@@ -277,11 +278,15 @@
 		else {
 			[customPath replaceOccurrencesOfString:@"{trackYear}" withString:[trackYear stringValue] options:nil range:NSMakeRange(0, [customPath length])];
 		}
-		if(nil == fileFormat) {
-			[customPath replaceOccurrencesOfString:@"{fileFormat}" withString:@"Unknown Format" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{fileFormat}" withString:makeStringSafeForFilename(fileFormat) options:nil range:NSMakeRange(0, [customPath length])];
+		
+		// Perform additional substitutions as necessary
+		if(nil != substitutions) {
+			NSEnumerator	*enumerator			= [substitutions keyEnumerator];
+			id				key;
+			
+			while((key = [enumerator nextObject])) {
+				[customPath replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", key] withString:[substitutions valueForKey:key] options:nil range:NSMakeRange(0, [customPath length])];
+			}
 		}
 		
 		basename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];

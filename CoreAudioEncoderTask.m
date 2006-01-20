@@ -34,9 +34,6 @@
 	if((self = [super initWithTask:task])) {
 		_formatInfo		= [formatInfo retain];
 		_encoderClass	= [CoreAudioEncoder class];
-		
-		[[task metadata] setValue:[self outputType] forKey:@"fileFormat"];
-		
 		return self;
 	}
 	return nil;
@@ -49,7 +46,22 @@
 }
 
 - (NSDictionary *)		getFormatInfo				{ return _formatInfo; }
-- (NSString *)			outputType					{ return [_formatInfo valueForKey:@"fileTypeName"]; }
+
+- (NSString *) outputType
+{
+	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
+
+	// Special case AAC and Apple Lossless, since they are very common and MPEG4 is vague
+	if(kAudioFormatMPEG4AAC == formatID) {
+		return NSLocalizedStringFromTable(@"AAC", @"General", @"");
+	}
+	else if(kAudioFormatAppleLossless == formatID) {
+		return NSLocalizedStringFromTable(@"Apple Lossless", @"General", @"");
+	}
+	else {
+		return [_formatInfo valueForKey:@"fileTypeName"];
+	}
+}
 
 - (NSString *) extension
 {
