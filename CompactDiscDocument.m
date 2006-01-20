@@ -391,7 +391,6 @@
 	Track			*track;
 	NSArray			*selectedTracks;
 	NSEnumerator	*enumerator;
-	NSString		*basename;
 	
 	@try {
 		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
@@ -414,26 +413,19 @@
 			AudioMetadata *metadata = [[selectedTracks objectAtIndex:0] metadata];
 			
 			[metadata setValue:[NSNumber numberWithInt:0] forKey:@"trackNumber"];
-			[metadata setValue:@"Multiple Tracks" forKey:@"trackTitle"];
+			[metadata setValue:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"") forKey:@"trackTitle"];
 			[metadata setValue:nil forKey:@"trackArtist"];
 			[metadata setValue:nil forKey:@"trackGenre"];
 			[metadata setValue:nil forKey:@"trackYear"];
-			
-			basename = [metadata outputBasename];
-			createDirectoryStructure(basename);
-			
-			[[TaskMaster sharedController] encodeTracks:selectedTracks outputBasename:basename metadata:metadata];
+						
+			[[TaskMaster sharedController] encodeTracks:selectedTracks metadata:metadata];
 		}
 		// Create one file per track
 		else {			
 			enumerator		= [selectedTracks objectEnumerator];
 			
 			while((track = [enumerator nextObject])) {
-				
-				basename = [[track metadata] outputBasename];
-				createDirectoryStructure(basename);
-				
-				[[TaskMaster sharedController] encodeTrack:track outputBasename:basename];
+				[[TaskMaster sharedController] encodeTrack:track];
 			}
 		}
 	}

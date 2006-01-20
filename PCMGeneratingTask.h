@@ -25,7 +25,6 @@
 
 @interface PCMGeneratingTask : Task
 {
-	NSString				*_basename;
 	NSString				*_outputFilename;
 	int						_out;
 	AudioMetadata			*_metadata;

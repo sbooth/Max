@@ -33,18 +33,19 @@
 	Class					_encoderClass;
 	id <EncoderMethods>		_encoder;
 	NSArray					*_tracks;
-	AudioMetadata			*_metadata;
 	PCMGeneratingTask		*_task;
 	BOOL					_writeSettingsToComment;
 }
 
-- (id)				initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata;
+- (id)				initWithTask:(PCMGeneratingTask *)task;
 
 - (NSArray *)		getTracks;
 - (void)			setTracks:(NSArray *)tracks;
 
 - (void)			run;
 - (void)			stop;
+
+- (NSString *)		extension;
 
 - (NSString *)		getPCMFilename;
 - (NSString *)		getOutputFilename;

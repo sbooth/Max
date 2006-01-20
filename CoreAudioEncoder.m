@@ -126,8 +126,8 @@
 	ssize_t				bytesRead							= 0;
 	ssize_t				bytesToRead							= 0;
 	ssize_t				totalBytes							= 0;
-	NSString			*file, *path;
 	FSRef				ref;
+	AudioFileID			audioFile;
 	ExtAudioFileRef		extAudioFileRef;
 	AudioConverterRef	converter;
 	CFArrayRef			converterPropertySettings;
@@ -163,19 +163,22 @@
 		totalBytes		= sourceStat.st_size;
 		bytesToRead		= totalBytes;
 		
-		// Create the output file
-		path = [filename stringByDeletingLastPathComponent];
-		file = [filename lastPathComponent];
-		
-		err = FSPathMakeRef((const UInt8 *)[path UTF8String], &ref, NULL);
+		// Open the output file		
+		// There is no convenient ExtAudioFile API for wiping clean an existing file, so use AudioFile
+		err = FSPathMakeRef((const UInt8 *)[filename UTF8String], &ref, NULL);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:path, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		err = AudioFileInitialize(&ref, [[_formatInfo valueForKey:@"fileType"] intValue], &_outputASBD, 0, &audioFile);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileInitialize failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		err = ExtAudioFileCreateNew(&ref, (CFStringRef)file, [[_formatInfo valueForKey:@"fileType"] intValue], &_outputASBD, NULL, &extAudioFileRef);
+		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
 		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileCreateNew failed", @"Exceptions", @"")
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrapAudioFileID failed", @"Exceptions", @"")
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
@@ -313,6 +316,14 @@
 			NSLog(@"%@", exception);
 		}
 
+		// Close the output file
+		err = AudioFileClose(audioFile);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileClose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}
+		
 		free(_buf);
 	}
 

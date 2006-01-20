@@ -28,29 +28,6 @@
 
 @implementation AudioMetadata
 
-- (NSString *) description
-{
-	if(nil != _multipleArtists && [_multipleArtists boolValue]) {
-		NSString	*artist		= _trackArtist;
-		NSString	*title		= _trackTitle;
-		
-		if(nil == artist) {
-			artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
-		}
-		if(nil == title) {
-			title = NSLocalizedStringFromTable(@"Unknown Title", @"CompactDisc", @"");
-		}
-		
-		return [NSString stringWithFormat:@"%@ - %@", artist, title];			
-	}
-	else if(nil != _trackTitle) {
-		return [NSString stringWithFormat:@"%@", _trackTitle];
-	}
-	else {
-		return NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");
-	}
-}
-
 // Attempt to parse metadata from filename
 + (AudioMetadata *) metadataFromFilename:(NSString *)filename
 {
@@ -207,6 +184,7 @@
 		NSString			*trackTitle			= [self valueForKey:@"trackTitle"];
 		NSString			*trackGenre			= [self valueForKey:@"trackGenre"];
 		NSNumber			*trackYear			= [self valueForKey:@"trackYear"];
+		NSString			*fileFormat			= [self valueForKey:@"fileFormat"];
 		
 		// Fallback to disc if specified in preferences
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"customNamingUseFallback"]) {
@@ -299,6 +277,12 @@
 		else {
 			[customPath replaceOccurrencesOfString:@"{trackYear}" withString:[trackYear stringValue] options:nil range:NSMakeRange(0, [customPath length])];
 		}
+		if(nil == fileFormat) {
+			[customPath replaceOccurrencesOfString:@"{fileFormat}" withString:@"Unknown Format" options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{fileFormat}" withString:makeStringSafeForFilename(fileFormat) options:nil range:NSMakeRange(0, [customPath length])];
+		}
 		
 		basename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
 	}
@@ -360,6 +344,29 @@
 	}
 	
 	return [[basename retain] autorelease];
+}
+
+- (NSString *) description
+{
+	if(nil != _multipleArtists && [_multipleArtists boolValue]) {
+		NSString	*artist		= _trackArtist;
+		NSString	*title		= _trackTitle;
+		
+		if(nil == artist) {
+			artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
+		}
+		if(nil == title) {
+			title = NSLocalizedStringFromTable(@"Unknown Title", @"CompactDisc", @"");
+		}
+		
+		return [NSString stringWithFormat:@"%@ - %@", artist, title];			
+	}
+	else if(nil != _trackTitle) {
+		return [NSString stringWithFormat:@"%@", _trackTitle];
+	}
+	else {
+		return NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");
+	}
 }
 
 @end

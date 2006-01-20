@@ -57,10 +57,10 @@
 - (BOOL)			compactDiscDocumentHasEncodingTasks:(CompactDiscDocument *)document;
 - (void)			stopRippingTasksForCompactDiscDocument:(CompactDiscDocument *)document;
 
-- (void)			encodeTrack:(Track *)track outputBasename:(NSString *)outputBasename;
-- (void)			encodeTracks:(NSArray *)tracks outputBasename:(NSString *)outputBasename metadata:(AudioMetadata *)metadata;
+- (void)			encodeTrack:(Track *)track;
+- (void)			encodeTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
 
-- (void)			encodeFile:(NSString *)filename outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata;
+- (void)			encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata;
 
 - (void)			displayExceptionSheet:(NSException *) exception;
 

@@ -23,9 +23,9 @@
 
 @implementation OggFLACEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithTask:(PCMGeneratingTask *)task
 {
-	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
+	if((self = [super initWithTask:task])) {
 		_encoderClass = [OggFLACEncoder class];
 		return self;
 	}
@@ -35,9 +35,7 @@
 - (void) writeTags
 {}
 
-- (NSString *) outputType
-{
-	return NSLocalizedStringFromTable(@"Ogg FLAC", @"General", @"");
-}
+- (NSString *)		extension						{ return @"oggflac"; }
+- (NSString *)		outputType						{ return NSLocalizedStringFromTable(@"Ogg FLAC", @"General", @""); }
 
 @end

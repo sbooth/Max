@@ -32,6 +32,7 @@
 #define kTrackTitleButton		8
 #define kTrackGenreButton		9
 #define kTrackYearButton		10
+#define kFileFormatButton		11
 
 #define kOutputDirOpenPanel		1
 #define kTmpDirOpenPanel		2
@@ -68,6 +69,7 @@
 		case kTrackTitleButton:			string = @"{trackTitle}";		break;
 		case kTrackGenreButton:			string = @"{trackGenre}";		break;
 		case kTrackYearButton:			string = @"{trackYear}";		break;
+		case kFileFormatButton:			string = @"{fileFormat}";		break;
 	}
 	
 	NSText *fieldEditor = [_customNameTextField currentEditor];
@@ -161,6 +163,7 @@
 	[sample replaceOccurrencesOfString:@"{trackTitle}"		withString:@"The Man Who Sold the World" options:nil range:NSMakeRange(0, [sample length])];
 	[sample replaceOccurrencesOfString:@"{trackGenre}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
 	[sample replaceOccurrencesOfString:@"{trackYear}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
+	[sample replaceOccurrencesOfString:@"{fileFormat}"		withString:@"FLAC" options:nil range:NSMakeRange(0, [sample length])];
 	
 	[self setValue:sample forKey:@"customNameExample"];
 }

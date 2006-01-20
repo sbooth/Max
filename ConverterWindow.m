@@ -53,7 +53,6 @@
 			NSArray				*subpaths;
 			BOOL				isDir;
 			AudioMetadata		*metadata;
-			NSString			*basename;
 			NSEnumerator		*enumerator;
 			NSString			*subpath;
 			unsigned			i;
@@ -67,25 +66,20 @@
 						enumerator	= [subpaths objectEnumerator];
 						
 						while((subpath = [enumerator nextObject])) {
-							metadata	= [AudioMetadata metadataFromFilename:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
-							basename	= [metadata outputBasename];
+
+							metadata = [AudioMetadata metadataFromFilename:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
 							
-							createDirectoryStructure(basename);
 							@try {
-								[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] outputBasename:basename metadata:metadata];
+								[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] metadata:metadata];
 							}
 							@catch(FileFormatNotSupportedException *exception) {
 								// Just let it go since we are traversing a folder
 							}
 						}
 					}
-					else {
-						metadata	= [AudioMetadata metadataFromFilename:filename];
-						basename	= [metadata outputBasename];
-						
-						createDirectoryStructure(basename);
-						
-						[[TaskMaster sharedController] encodeFile:filename outputBasename:basename metadata:metadata];
+					else {						
+						metadata = [AudioMetadata metadataFromFilename:filename];
+						[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
 					}
 				}				
 			}

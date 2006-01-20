@@ -24,20 +24,26 @@
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
+#import "UtilityFunctions.h"
+
+@interface EncoderTask (Private)
+- (void) createOutputFile;
+@end
 
 @implementation EncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithTask:(PCMGeneratingTask *)task
 {
 	if((self = [super init])) {
 		_connection					= nil;
 		_encoder					= nil;
 		_task						= [task retain];
-		_outputFilename				= [outputFilename retain];
-		_metadata					= [metadata retain];
+		_outputFilename				= nil;
 		_tracks						= nil;
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
-			
+		
+		[[task metadata] setValue:[self outputType] forKey:@"fileFormat"];
+
 		return self;
 	}
 	return nil;
@@ -69,8 +75,11 @@
 		[(NSObject *)_encoder release];
 	}
 	
+	if(nil != _outputFilename) {
+		[_outputFilename release];
+	}	
+
 	[_task release];
-	[_outputFilename release];
 	
 	[super dealloc];
 }
@@ -78,6 +87,7 @@
 - (NSString *)		getOutputFilename				{ return _outputFilename; }
 - (NSString *)		getPCMFilename					{ return [_task getOutputFilename]; }
 - (NSArray *)		getTracks						{ return _tracks; }
+- (NSString *)		extension						{ return nil; }
 
 - (void) setTracks:(NSArray *)tracks
 {
@@ -98,17 +108,44 @@
 
 - (void) removeOutputFile
 {
-	if(-1 == unlink([_outputFilename UTF8String])) {
+	if(nil != _outputFilename && -1 == unlink([_outputFilename UTF8String])) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the output file", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}	
 }
 
+- (void) createOutputFile
+{
+	int fd;
+	
+	if(nil != _outputFilename) {
+		// Create the file (don't overwrite)
+		fd = open([_outputFilename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == fd) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+
+		// And close it
+		if(-1 == close(fd)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+	}	
+}
+
 - (void) run
 {
+	NSString	*basename;
 	NSPort		*port1			= [NSPort port];
 	NSPort		*port2			= [NSPort port];
 	NSArray		*portArray		= nil;
+	
+	// Create the output file
+	basename = [[_task metadata] outputBasename];
+	createDirectoryStructure(basename);
+	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];
+	[self createOutputFile];
 	
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
 	[_connection setRootObject:self];
@@ -141,7 +178,7 @@
 
 - (void) setCompleted 
 {
-	if(nil != _metadata) {
+	if(nil != [_task metadata]) {
 		[self writeTags];
 	}
 
@@ -162,7 +199,7 @@
 }
 
 - (void)		writeTags						{}
-- (NSString *)	description						{ return (nil == _metadata ? @"fnord" : [_metadata description]); }
+- (NSString *)	description						{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
 - (NSString *)	settings						{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
 
 @end

@@ -23,18 +23,16 @@
 
 @implementation SpeexEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithTask:(PCMGeneratingTask *)task
 {
-	if((self = [super initWithTask:task outputFilename:outputFilename metadata:metadata])) {
+	if((self = [super initWithTask:task])) {
 		_encoderClass = [SpeexEncoder class];
 		return self;
 	}
 	return nil;
 }
 
-- (NSString *) outputType
-{
-	return NSLocalizedStringFromTable(@"Speex", @"General", @"");
-}
+- (NSString *)		extension						{ return @"spx"; }
+- (NSString *)		outputType						{ return NSLocalizedStringFromTable(@"Speex", @"General", @""); }
 
 @end

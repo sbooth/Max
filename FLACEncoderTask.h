@@ -26,6 +26,4 @@
 {
 }
 
-- (id) initWithTask:(PCMGeneratingTask *)task outputFilename:(NSString *)outputFilename metadata:(AudioMetadata *)metadata;
-
 @end

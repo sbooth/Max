@@ -57,7 +57,7 @@ static TaskMaster *sharedController = nil;
 - (void) removeConvertingTask:(ConverterTask *) task;
 - (void) removeEncodingTask:(EncoderTask *) task;
 - (void) runEncodersForTask:(PCMGeneratingTask *)task;
-- (void) runEncoder:(Class)encoderClass outputFilename:(NSString *)outputFilename task:(PCMGeneratingTask *)task;
+- (void) runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task;
 - (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
 - (BOOL) outputFormatsSelected;
 - (BOOL) verifyOutputFormats;
@@ -235,12 +235,12 @@ static TaskMaster *sharedController = nil;
 	[tasks makeObjectsPerformSelector:@selector(stop)];
 }
 
-- (void) encodeTrack:(Track *)track outputBasename:(NSString *)basename
+- (void) encodeTrack:(Track *)track
 {
-	[self encodeTracks:[NSArray arrayWithObjects:track, nil] outputBasename:basename metadata:[track metadata]];
+	[self encodeTracks:[NSArray arrayWithObjects:track, nil] metadata:[track metadata]];
 }
 
-- (void) encodeTracks:(NSArray *)tracks outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata
+- (void) encodeTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
 {
 	RipperTask	*ripperTask		= nil;
 
@@ -251,7 +251,6 @@ static TaskMaster *sharedController = nil;
 		
 	// Start rip
 	ripperTask = [[RipperTask alloc] initWithTracks:tracks metadata:metadata];
-	[ripperTask setValue:basename forKey:@"basename"];
 	
 	// Show the ripper window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
@@ -263,7 +262,7 @@ static TaskMaster *sharedController = nil;
 	[self spawnRipperThreads];
 }
 
-- (void) encodeFile:(NSString *)filename outputBasename:(NSString *)basename metadata:(AudioMetadata *)metadata
+- (void) encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata
 {
 	ConverterTask	*converterTask			= nil;
 	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
@@ -297,8 +296,6 @@ static TaskMaster *sharedController = nil;
 	else {
 		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"File format not supported", @"Exceptions", @"") userInfo:nil];
 	}
-
-	[converterTask setValue:basename forKey:@"basename"];
 	
 	// Show the converter window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
@@ -498,29 +495,23 @@ static TaskMaster *sharedController = nil;
 {
 	NSArray			*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
 	NSArray			*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
-	NSString		*outputFilename		= nil;
 
 	// Create encoder tasks for the rip that just completed
 	@try {
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"]) {
-			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"mp3");
-			[self runEncoder:[MPEGEncoderTask class] outputFilename:outputFilename task:task];
+			[self runEncoder:[MPEGEncoderTask class] forTask:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"]) {
-			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"flac");
-			[self runEncoder:[FLACEncoderTask class] outputFilename:outputFilename task:task];
+			[self runEncoder:[FLACEncoderTask class] forTask:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"]) {
-			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"oggflac");
-			[self runEncoder:[OggFLACEncoderTask class] outputFilename:outputFilename task:task];
+			[self runEncoder:[OggFLACEncoderTask class] forTask:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"]) {
-			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"ogg");
-			[self runEncoder:[OggVorbisEncoderTask class] outputFilename:outputFilename task:task];
+			[self runEncoder:[OggVorbisEncoderTask class] forTask:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"]) {
-			outputFilename = generateUniqueFilename([task valueForKey:@"basename"], @"spx");
-			[self runEncoder:[SpeexEncoderTask class] outputFilename:outputFilename task:task];
+			[self runEncoder:[SpeexEncoderTask class] forTask:task];
 		}
 		
 		// Core Audio encoders
@@ -528,20 +519,10 @@ static TaskMaster *sharedController = nil;
 			EncoderTask		*encoderTask;
 			NSEnumerator	*formats		= [coreAudioFormats objectEnumerator];
 			NSDictionary	*formatInfo;
-			id				extensions;
-			NSString		*extension;
 			
 			while((formatInfo = [formats nextObject])) {
-				extensions		= [formatInfo valueForKey:@"extensionsForType"];
-				if([extensions isKindOfClass:[NSArray class]]) {
-					extension = [extensions objectAtIndex:0];
-				}
-				else {
-					extension = extensions;
-				}
 				
-				outputFilename	= generateUniqueFilename([task valueForKey:@"basename"], extension);
-				encoderTask		= [[CoreAudioEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
+				encoderTask = [[CoreAudioEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
 				
 				if([task isKindOfClass:[RipperTask class]]) {
 					[encoderTask setTracks:[(RipperTask *)task getTracks]];
@@ -564,9 +545,8 @@ static TaskMaster *sharedController = nil;
 			NSDictionary	*formatInfo;
 			
 			while((formatInfo = [formats nextObject])) {
-				outputFilename			= generateUniqueFilename([task valueForKey:@"basename"], [formatInfo valueForKey:@"extension"]);
 				
-				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata] formatInfo:formatInfo];
+				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
 
 				if([task isKindOfClass:[RipperTask class]]) {
 					[encoderTask setTracks:[(RipperTask *)task getTracks]];
@@ -592,10 +572,10 @@ static TaskMaster *sharedController = nil;
 	}
 }
 
-- (void) runEncoder:(Class)encoderClass outputFilename:(NSString *)outputFilename task:(PCMGeneratingTask *)task
+- (void) runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task
 {
 	// Create the encoder (relies on each subclass having the same method signature)
-	EncoderTask *encoderTask = [[encoderClass alloc] initWithTask:task outputFilename:outputFilename metadata:[task metadata]];
+	EncoderTask *encoderTask = [[encoderClass alloc] initWithTask:task];
 
 	if([task isKindOfClass:[RipperTask class]]) {
 		[encoderTask setTracks:[(RipperTask *)task getTracks]];

@@ -39,6 +39,8 @@
 	NSNumber		*_multipleArtists;
 	NSNumber		*_discNumber;
 	NSNumber		*_discsInSet;
+	
+	NSString		*_fileFormat;
 }
 
 // Attempt to parse metadata from filename
