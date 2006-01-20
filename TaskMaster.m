@@ -97,11 +97,6 @@ static TaskMaster *sharedController = nil;
 		_ripperController		= [[RipperController sharedController] retain];
 		_converterController	= [[ConverterController sharedController] retain];
 		_encoderController		= [[EncoderController sharedController] retain];
-
-		_maxConverterThreads	= (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
-		_maxEncoderThreads		= (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"];
-
-		_useDynamicWindows		= [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"];
 		
 		// Avoid infinite loops in init
 		[_ripperController setValue:self forKey:@"taskMaster"];
@@ -432,10 +427,11 @@ static TaskMaster *sharedController = nil;
 
 - (void) spawnConverterThreads
 {
+	unsigned	maxThreads	= (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
 	unsigned	i;
 	unsigned	limit;
-	
-	limit = (_maxConverterThreads < [_convertingTasks count] ? _maxConverterThreads : [_convertingTasks count]);
+
+	limit = (maxThreads < [_convertingTasks count] ? maxThreads : [_convertingTasks count]);
 	
 	// Start converting the next file(s)
 	for(i = 0; i < limit; ++i) {
@@ -636,10 +632,11 @@ static TaskMaster *sharedController = nil;
 
 - (void) spawnEncoderThreads
 {
+	unsigned	maxThreads		= (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"];
 	unsigned	i;
 	unsigned	limit;
 	
-	limit = (_maxEncoderThreads < [_encodingTasks count] ? _maxEncoderThreads : [_encodingTasks count]);
+	limit = (maxThreads < [_encodingTasks count] ? maxThreads : [_encodingTasks count]);
 	
 	// Start encoding the next track(s)
 	for(i = 0; i < limit; ++i) {

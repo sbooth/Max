@@ -39,11 +39,6 @@
 	NSMutableArray			*_rippingTasks;
 	NSMutableArray			*_convertingTasks;
 	NSMutableArray			*_encodingTasks;
-
-	unsigned				_maxConverterThreads;
-	unsigned				_maxEncoderThreads;
-	
-	BOOL					_useDynamicWindows;
 }
 
 + (TaskMaster *)	sharedController;
