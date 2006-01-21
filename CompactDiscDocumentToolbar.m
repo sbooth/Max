@@ -178,7 +178,7 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
 {
     return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
-		SelectPreviousTrackToolbarItemIdentifier, TrackInfoToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
+		TrackInfoToolbarItemIdentifier, SelectPreviousTrackToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
 		QueryFreeDBToolbarItemIdentifier, SubmitToFreeDBToolbarItemIdentifier,
 		EjectDiscToolbarItemIdentifier, 
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
