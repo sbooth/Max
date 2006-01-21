@@ -286,22 +286,22 @@ static TaskMaster *sharedController = nil;
 
 	// Determine which type of converter to use and create it
 	if([coreAudioExtensions containsObject:extension]) {
-		converterTask = [[CoreAudioConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+		converterTask = [[CoreAudioConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else if([libsndfileExtensions containsObject:extension]) {
-		converterTask = [[LibsndfileConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+		converterTask = [[LibsndfileConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else if([extension isEqualToString:@"ogg"]) {
-		converterTask = [[OggVorbisConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+		converterTask = [[OggVorbisConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else if([extension isEqualToString:@"flac"]) {
-		converterTask = [[FLACConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+		converterTask = [[FLACConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else if([extension isEqualToString:@"oggflac"]) {
-		converterTask = [[OggFLACConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+		converterTask = [[OggFLACConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else if([extension isEqualToString:@"spx"]) {
-		converterTask = [[SpeexConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
+		converterTask = [[SpeexConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else {
 		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"File format not supported", @"Exceptions", @"") 

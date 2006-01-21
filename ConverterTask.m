@@ -49,7 +49,7 @@
 	}
 }
 
-- (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
 	if((self = [super initWithMetadata:metadata])) {
 		_inputFilename	= [inputFilename retain];

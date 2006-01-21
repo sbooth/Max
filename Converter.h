@@ -29,6 +29,6 @@
 	id <TaskMethods>		_delegate;
 }
 
-- (id)						initWithInputFilename:(NSString *)inputFilename;
+- (id)						initWithInputFile:(NSString *)inputFilename;
 
 @end

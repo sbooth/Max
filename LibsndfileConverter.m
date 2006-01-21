@@ -34,9 +34,9 @@
 
 @implementation LibsndfileConverter
 
-- (id) initWithInputFilename:(NSString *)inputFilename
+- (id) initWithInputFile:(NSString *)inputFilename
 {
-	if((self = [super initWithInputFilename:inputFilename])) {
+	if((self = [super initWithInputFile:inputFilename])) {
 
 		// Open the input file to get the file's information
 		[self openInputFile];

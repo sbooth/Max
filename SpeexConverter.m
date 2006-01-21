@@ -42,7 +42,7 @@
 
 @implementation SpeexConverter
 
-- (id) initWithInputFilename:(NSString *)inputFilename
+- (id) initWithInputFile:(NSString *)inputFilename
 {
 	int					fd				= -1;
 	char				*path			= NULL;
@@ -50,7 +50,7 @@
 	ssize_t				tmpDirLen;
 	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
 
-	if((self = [super initWithInputFilename:inputFilename])) {
+	if((self = [super initWithInputFile:inputFilename])) {
 
 		@try {
 			_resampleInput = NO;

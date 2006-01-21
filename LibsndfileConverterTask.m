@@ -26,37 +26,46 @@
 
 @implementation LibsndfileConverterTask
 
-- (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
 	SF_INFO					info;
 	SF_FORMAT_INFO			formatInfo;
-	SNDFILE					*sndfile;
+	SNDFILE					*sndfile			= NULL;
 	
-	if((self = [super initWithInputFilename:inputFilename metadata:metadata])) {
-		_converterClass = [LibsndfileConverter class];
-
-		// Get information on the input file
-		info.format = 0;
+	if((self = [super initWithInputFile:inputFilename metadata:metadata])) {
 		
-		sndfile = sf_open([_inputFilename UTF8String], SFM_READ, &info);
-		if(NULL == sndfile) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		@try {
+			_converterClass = [LibsndfileConverter class];
+			
+			// Get information on the input file
+			info.format = 0;
+			
+			sndfile = sf_open([_inputFilename UTF8String], SFM_READ, &info);
+			if(NULL == sndfile) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			
+			// Get format info
+			formatInfo.format = info.format;
+			
+			if(0 == sf_command(NULL, SFC_GET_FORMAT_INFO, &formatInfo, sizeof(formatInfo))) {
+				_fileFormat = [[NSString stringWithUTF8String:formatInfo.name] retain];
+			}
+			else {
+				_fileFormat = NSLocalizedStringFromTable(@"Unknown (libsndfile)", @"General", @"");
+			}
 		}
 		
-		// Get format info
-		formatInfo.format = info.format;
-		
-		if(0 == sf_command(NULL, SFC_GET_FORMAT_INFO, &formatInfo, sizeof(formatInfo))) {
-			_fileFormat = [[NSString stringWithUTF8String:formatInfo.name] retain];
-		}
-		else {
-			_fileFormat = NSLocalizedStringFromTable(@"Unknown (libsndfile)", @"General", @"");
+		@catch(NSException *exception) {
+			@throw;
 		}
 	
-		if(0 != sf_close(sndfile)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		@finally {
+			if(0 != sf_close(sndfile)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
 		}
 
 		return self;

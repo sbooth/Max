@@ -23,9 +23,9 @@
 
 @implementation OggVorbisConverterTask
 
-- (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
+- (id) initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
-	if((self = [super initWithInputFilename:inputFilename metadata:metadata])) {
+	if((self = [super initWithInputFile:inputFilename metadata:metadata])) {
 		_converterClass = [OggVorbisConverter class];
 		return self;
 	}

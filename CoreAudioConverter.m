@@ -41,9 +41,9 @@
 
 @implementation CoreAudioConverter
 
-- (id) initWithInputFilename:(NSString *)inputFilename
+- (id) initWithInputFile:(NSString *)inputFilename
 {
-	if((self = [super initWithInputFilename:inputFilename])) {
+	if((self = [super initWithInputFile:inputFilename])) {
 		
 		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
 		

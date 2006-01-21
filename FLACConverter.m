@@ -64,9 +64,9 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 
 @implementation FLACConverter
 
-- (id) initWithInputFilename:(NSString *)inputFilename
+- (id) initWithInputFile:(NSString *)inputFilename
 {
-	if((self = [super initWithInputFilename:inputFilename])) {	
+	if((self = [super initWithInputFile:inputFilename])) {	
 		_fd  = -1;
 		return self;
 	}

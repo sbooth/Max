@@ -32,125 +32,135 @@
 + (AudioMetadata *) metadataFromFilename:(NSString *)filename
 {
 	AudioMetadata				*result				= [[AudioMetadata alloc] init];
-	TagLib::FileRef				f					([filename UTF8String]);
-	MP4FileHandle				mp4FileHandle		= MP4Read([filename UTF8String], 0);
+	BOOL						parsed				= NO;
 
 	[result setValue:[NSNumber numberWithBool:NO] forKey:@"multipleArtists"];
 	[result setValue:[NSNumber numberWithUnsignedInt:0] forKey:@"trackNumber"];
 
 	// Try TagLib first
-	if(false == f.isNull()) {
-		TagLib::String		s;
+	{
+		TagLib::FileRef			f([filename UTF8String]);
 		
-		// Album title
-		s = f.tag()->album();
-		if(false == s.isNull()) {
-			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumTitle"];
-		}
-		
-		// Artist
-		s = f.tag()->artist();
-		if(false == s.isNull()) {
-			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumArtist"];
-		}
-		
-		// Genre
-		s = f.tag()->genre();
-		if(false == s.isNull()) {
-			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumGenre"];
-		}
-		
-		// Year
-		if(0 != f.tag()->year()) {
-			[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->year()] forKey:@"albumYear"];
-		}
-		
-		// Comment
-		s = f.tag()->comment();
-		if(false == s.isNull()) {
-			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumComment"];
-		}
-		
-		// Track title
-		s = f.tag()->title();
-		if(false == s.isNull()) {
-			[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
-		}
-		
-		// Track number
-		if(0 != f.tag()->track()) {
-			[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
+		if(false == f.isNull()) {
+			TagLib::String		s;
+			
+			// Album title
+			s = f.tag()->album();
+			if(false == s.isNull()) {
+				[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumTitle"];
+			}
+			
+			// Artist
+			s = f.tag()->artist();
+			if(false == s.isNull()) {
+				[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumArtist"];
+			}
+			
+			// Genre
+			s = f.tag()->genre();
+			if(false == s.isNull()) {
+				[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumGenre"];
+			}
+			
+			// Year
+			if(0 != f.tag()->year()) {
+				[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->year()] forKey:@"albumYear"];
+			}
+			
+			// Comment
+			s = f.tag()->comment();
+			if(false == s.isNull()) {
+				[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"albumComment"];
+			}
+			
+			// Track title
+			s = f.tag()->title();
+			if(false == s.isNull()) {
+				[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
+			}
+			
+			// Track number
+			if(0 != f.tag()->track()) {
+				[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
+			}
+			
+			parsed = YES;
 		}
 	}
+	
 	// Try mp4v2 second
-	else if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
-		char			*s;
-		u_int16_t		trackNumber, totalTracks;
-		u_int16_t		discNumber, discsInSet;
-		u_int8_t		multipleArtists;
+	if(NO == parsed) {
+		MP4FileHandle mp4FileHandle = MP4Read([filename UTF8String], 0);
 		
-		// Album title
-		MP4GetMetadataAlbum(mp4FileHandle, &s);
-		if(0 != s) {
-			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumTitle"];
+		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
+			char			*s;
+			u_int16_t		trackNumber, totalTracks;
+			u_int16_t		discNumber, discsInSet;
+			u_int8_t		multipleArtists;
+			
+			// Album title
+			MP4GetMetadataAlbum(mp4FileHandle, &s);
+			if(0 != s) {
+				[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumTitle"];
+			}
+			
+			// Artist
+			MP4GetMetadataArtist(mp4FileHandle, &s);
+			if(0 != s) {
+				[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumArtist"];
+			}
+			
+			// Genre
+			MP4GetMetadataGenre(mp4FileHandle, &s);
+			if(0 != s) {
+				[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumGenre"];
+			}
+			
+			// Year
+			MP4GetMetadataYear(mp4FileHandle, &s);
+			if(0 != s) {
+				// Avoid atoi()
+				[result setValue:[NSNumber numberWithInt:[[NSString stringWithUTF8String:s] intValue]] forKey:@"albumYear"];
+			}
+			
+			// Comment
+			MP4GetMetadataComment(mp4FileHandle, &s);
+			if(0 != s) {
+				[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumComment"];
+			}
+			
+			// Track title
+			MP4GetMetadataName(mp4FileHandle, &s);
+			if(0 != s) {
+				[result setValue:[NSString stringWithUTF8String:s] forKey:@"trackTitle"];
+			}
+			
+			// Track number
+			MP4GetMetadataTrack(mp4FileHandle, &trackNumber, &totalTracks);
+			if(0 != trackNumber) {
+				[result setValue:[NSNumber numberWithUnsignedShort:trackNumber] forKey:@"trackNumber"];
+			}
+			if(0 != totalTracks) {
+				[result setValue:[NSNumber numberWithUnsignedShort:totalTracks] forKey:@"albumTrackCount"];
+			}
+			
+			// Disc number
+			MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discsInSet);
+			if(0 != discNumber) {
+				[result setValue:[NSNumber numberWithUnsignedShort:discNumber] forKey:@"discNumber"];
+			}
+			if(0 != discsInSet) {
+				[result setValue:[NSNumber numberWithUnsignedShort:discsInSet] forKey:@"discsInSet"];
+			}
+			
+			// Compilation
+			MP4GetMetadataCompilation(mp4FileHandle, &multipleArtists);
+			if(multipleArtists) {
+				[result setValue:[NSNumber numberWithBool:YES] forKey:@"multipleArtists"];
+			}
+			
+			MP4Close(mp4FileHandle);
 		}
-		
-		// Artist
-		MP4GetMetadataArtist(mp4FileHandle, &s);
-		if(0 != s) {
-			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumArtist"];
-		}
-		
-		// Genre
-		MP4GetMetadataGenre(mp4FileHandle, &s);
-		if(0 != s) {
-			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumGenre"];
-		}
-		
-		// Year
-		MP4GetMetadataYear(mp4FileHandle, &s);
-		if(0 != s) {
-			// Avoid atoi()
-			[result setValue:[NSNumber numberWithInt:[[NSString stringWithUTF8String:s] intValue]] forKey:@"albumYear"];
-		}
-		
-		// Comment
-		MP4GetMetadataComment(mp4FileHandle, &s);
-		if(0 != s) {
-			[result setValue:[NSString stringWithUTF8String:s] forKey:@"albumComment"];
-		}
-		
-		// Track title
-		MP4GetMetadataName(mp4FileHandle, &s);
-		if(0 != s) {
-			[result setValue:[NSString stringWithUTF8String:s] forKey:@"trackTitle"];
-		}
-		
-		// Track number
-		MP4GetMetadataTrack(mp4FileHandle, &trackNumber, &totalTracks);
-		if(0 != trackNumber) {
-			[result setValue:[NSNumber numberWithUnsignedShort:trackNumber] forKey:@"trackNumber"];
-		}
-		if(0 != totalTracks) {
-			[result setValue:[NSNumber numberWithUnsignedShort:totalTracks] forKey:@"albumTrackCount"];
-		}
-		
-		// Disc number
-		MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discsInSet);
-		if(0 != discNumber) {
-			[result setValue:[NSNumber numberWithUnsignedShort:discNumber] forKey:@"discNumber"];
-		}
-		if(0 != discsInSet) {
-			[result setValue:[NSNumber numberWithUnsignedShort:discsInSet] forKey:@"discsInSet"];
-		}
-		
-		// Compilation
-		MP4GetMetadataCompilation(mp4FileHandle, &multipleArtists);
-		if(multipleArtists) {
-			[result setValue:[NSNumber numberWithBool:YES] forKey:@"multipleArtists"];
-		}
-		
-		MP4Close(mp4FileHandle);
 	}
 	
 	return [result autorelease];

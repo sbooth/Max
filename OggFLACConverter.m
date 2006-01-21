@@ -64,9 +64,9 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 
 @implementation OggFLACConverter
 
-- (id) initWithInputFilename:(NSString *)inputFilename
+- (id) initWithInputFile:(NSString *)inputFilename
 {
-	if((self = [super initWithInputFilename:inputFilename])) {	
+	if((self = [super initWithInputFile:inputFilename])) {	
 		_fd  = -1;
 		return self;
 	}

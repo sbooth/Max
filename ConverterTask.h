@@ -30,7 +30,7 @@
 	NSConnection			*_connection;
 }
 
-- (id)				initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
+- (id)				initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
 
 - (NSString *)		inputFilename;
 - (NSString *)		inputFormat;
