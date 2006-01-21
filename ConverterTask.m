@@ -24,8 +24,30 @@
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
+#import "MissingResourceException.h"
 
 @implementation ConverterTask
+
++ (void) initialize
+{
+	NSString				*defaultsValuesPath;
+    NSDictionary			*defaultsValuesDictionary;
+    
+	@try {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ConverterTaskDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"ConverterTaskDefaults.plist" forKey:@"filename"]];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+	}
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+	@finally {
+	}
+}
 
 - (id) initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
@@ -99,6 +121,14 @@
 	[super setCompleted]; 
 	[_connection invalidate];
 	[[TaskMaster sharedController] convertDidComplete:self]; 
+	
+	// Delete input file if requested
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
+		if(-1 == unlink([_inputFilename UTF8String])) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}	
+	}
 }
 
 - (void) stop
@@ -113,5 +143,6 @@
 }
 
 - (NSString *)		inputFilename					{ return _inputFilename; }
+- (NSString *)		inputFormat						{ return NSLocalizedStringFromTable(@"Unknown", @"General", @""); }
 
 @end
