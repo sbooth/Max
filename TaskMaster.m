@@ -304,7 +304,8 @@ static TaskMaster *sharedController = nil;
 		converterTask = [[SpeexConverterTask alloc] initWithInputFilename:filename metadata:metadata];		
 	}
 	else {
-		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"File format not supported", @"Exceptions", @"") userInfo:nil];
+		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"File format not supported", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
 	}
 	
 	// Show the converter window if it is hidden

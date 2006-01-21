@@ -163,43 +163,37 @@
 		NSString			*subpath;
 		unsigned			i;
 		
-		for(i = 0; i < [filenames count]; ++i) {
-			filename = [filenames objectAtIndex:i];
-			
-			if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
-				if(isDir) {
-					subpaths	= [manager subpathsAtPath:filename];
-					enumerator	= [subpaths objectEnumerator];
-					
-					while((subpath = [enumerator nextObject])) {
-
-						metadata = [AudioMetadata metadataFromFilename:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
+		@try {
+			for(i = 0; i < [filenames count]; ++i) {
+				filename = [filenames objectAtIndex:i];
+				
+				if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
+					if(isDir) {
+						subpaths	= [manager subpathsAtPath:filename];
+						enumerator	= [subpaths objectEnumerator];
 						
-						@try {
-							[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] metadata:metadata];
-						}
-						@catch(FileFormatNotSupportedException *exception) {
-							// Just let it go since we are traversing a folder
+						while((subpath = [enumerator nextObject])) {
+							metadata = [AudioMetadata metadataFromFilename:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
+							
+							@try {
+								[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] metadata:metadata];
+							}
+							
+							@catch(FileFormatNotSupportedException *exception) {
+								// Just let it go since we are traversing a folder
+							}
 						}
 					}
-				}
-				else {
-					metadata = [AudioMetadata metadataFromFilename:filename];
-					
-					@try {
+					else {
+						metadata = [AudioMetadata metadataFromFilename:filename];						
 						[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
 					}
-
-					@catch(FileFormatNotSupportedException *exception) {
-						displayExceptionAlert(exception);
-					}
-					
-					@catch(NSException *exception) {
-						@throw;
-					}
-					
 				}
 			}				
+		}
+
+		@catch(NSException *exception) {
+			displayExceptionAlert(exception);
 		}
 	}
 }

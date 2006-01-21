@@ -88,10 +88,12 @@
 	
 	@catch(FileFormatNotSupportedException *exception) {
 		displayExceptionSheet(exception, self, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+		return NO;
 	}
 
 	@catch(NSException *exception) {
-		@throw;
+		displayExceptionSheet(exception, self, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+		return NO;
 	}
 	
 	return YES;
