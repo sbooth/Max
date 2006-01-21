@@ -24,7 +24,7 @@
 
 @protocol ConverterMethods
 
-- (oneway void)				convertToFile:(int)file;
+- (oneway void)				convertToFile:(NSString *)filename;
 
 - (id <TaskMethods>)		delegate;
 - (void)					setDelegate:(id <TaskMethods>)delegate;

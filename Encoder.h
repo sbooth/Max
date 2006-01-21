@@ -27,7 +27,6 @@
 {
 	id <TaskMethods>		_delegate;
 	NSString				*_inputFilename;	
-	int						_pcm;
 }
 
 - (id)						initWithPCMFilename:(NSString *)inputFilename;

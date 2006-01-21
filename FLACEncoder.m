@@ -37,57 +37,36 @@
 @implementation FLACEncoder
 
 - (id) initWithPCMFilename:(NSString *)inputFilename
-{
+{	
 	if((self = [super initWithPCMFilename:inputFilename])) {
 		
-		_flac = FLAC__file_encoder_new();
-		if(NULL == _flac) {
-			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create FLAC encoder", @"Exceptions", @"") userInfo:nil];
-		}
+		_flac					= NULL;
 		
-		// Setup the FLAC encoder
-		if(NO == FLAC__file_encoder_set_do_exhaustive_model_search(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"flacExhaustiveModelSearch"])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_do_mid_side_stereo(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"flacEnableMidSide"])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_loose_mid_side_stereo(_flac, [[NSUserDefaults standardUserDefaults] boolForKey:@"flacEnableLooseMidSide"])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_qlp_coeff_precision(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"flacQLPCoeffPrecision"])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_min_residual_partition_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMinPartitionOrder"])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_max_residual_partition_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMaxPartitionOrder"])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_max_lpc_order(_flac, [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMaxLPCOrder"])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-				
-		return self;
+		_exhaustiveModelSearch	= [[NSUserDefaults standardUserDefaults] boolForKey:@"flacExhaustiveModelSearch"];
+		_enableMidSide			= [[NSUserDefaults standardUserDefaults] boolForKey:@"flacEnableMidSide"];
+		_enableLooseMidSide		= [[NSUserDefaults standardUserDefaults] boolForKey:@"flacLooseEnableMidSide"];
+		_QLPCoeffPrecision		= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacQLPCoeffPrecision"];
+		_minPartitionOrder		= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMinPartitionOrder"];
+		_maxPartitionOrder		= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMaxPartitionOrder"];
+		_maxLPCOrder			= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMaxLPCOrder"];
+		
+		return self;	
 	}
-	return nil;
-}
-
-- (void) dealloc
-{
-	FLAC__file_encoder_delete(_flac);
 	
-	[super dealloc];
+	return nil;
 }
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime			= [NSDate date];
+	int							pcm					= -1;
 	ssize_t						bytesRead			= 0;
 	ssize_t						bytesWritten		= 0;
 	ssize_t						bytesToRead			= 0;
 	ssize_t						totalBytes			= 0;
 	unsigned long				iterations			= 0;
+	int16_t						*buf				= NULL;
+	ssize_t						buflen				= 0;
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
@@ -95,23 +74,23 @@
 	
 	@try {
 		// Open the input file
-		_pcm = open([_inputFilename UTF8String], O_RDONLY);
-		if(-1 == _pcm) {
+		pcm = open([_inputFilename UTF8String], O_RDONLY);
+		if(-1 == pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
 		struct stat sourceStat;
-		if(-1 == fstat(_pcm, &sourceStat)) {
+		if(-1 == fstat(pcm, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Allocate the buffer
-		_buflen			= 1024;
-		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-		if(NULL == _buf) {
+		buflen		= 1024;
+		buf			= (int16_t *) calloc(buflen, sizeof(int16_t));
+		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -119,6 +98,36 @@
 		totalBytes		= sourceStat.st_size;
 		bytesToRead		= totalBytes;
 		
+		
+		// Create the FLAC encoder
+		_flac = FLAC__file_encoder_new();
+		if(NULL == _flac) {
+			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create FLAC encoder", @"Exceptions", @"") userInfo:nil];
+		}
+
+		// Setup FLAC encoder
+		if(NO == FLAC__file_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_encoder_set_do_mid_side_stereo(_flac, _enableMidSide)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_encoder_set_loose_mid_side_stereo(_flac, _enableLooseMidSide)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_encoder_set_qlp_coeff_precision(_flac, _QLPCoeffPrecision)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_encoder_set_min_residual_partition_order(_flac, _minPartitionOrder)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_encoder_set_max_residual_partition_order(_flac, _maxPartitionOrder)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_encoder_set_max_lpc_order(_flac, _maxLPCOrder)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+
 		// Initialize the FLAC encoder
 		if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
@@ -134,14 +143,14 @@
 		while(0 < bytesToRead) {
 			
 			// Read a chunk of PCM input
-			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+			bytesRead = read(pcm, buf, (bytesToRead > 2 * buflen ? 2 * buflen : bytesToRead));
 			if(-1 == bytesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// Encode the PCM data
-			bytesWritten += [self encodeChunk:_buf numSamples:bytesRead / 2];
+			bytesWritten += [self encodeChunk:buf numSamples:bytesRead / 2];
 			
 			// Update status
 			bytesToRead -= bytesRead;
@@ -181,14 +190,17 @@
 	}
 	
 	@finally {
+
+		FLAC__file_encoder_delete(_flac);
+
 		// Close the input file
-		if(-1 == close(_pcm)) {
+		if(-1 == close(pcm)) {
 			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
 															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 			
-		free(_buf);
+		free(buf);
 	}
 	
 	[_delegate setEndTime:[NSDate date]];
@@ -245,13 +257,7 @@
 - (NSString *) settings
 {
 	return [NSString stringWithFormat:@"FLAC settings: exhaustiveModelSearch:%i midSideStereo:%i looseMidSideStereo:%i QPLCoeffPrecision:%i, minResidualPartitionOrder:%i, maxResidualPartitionOrder:%i, maxLPCOrder:%i", 
-		FLAC__file_encoder_get_do_exhaustive_model_search(_flac),
-		FLAC__file_encoder_get_do_mid_side_stereo(_flac),
-		FLAC__file_encoder_get_loose_mid_side_stereo(_flac),
-		FLAC__file_encoder_get_qlp_coeff_precision(_flac),
-		FLAC__file_encoder_get_min_residual_partition_order(_flac),
-		FLAC__file_encoder_get_max_residual_partition_order(_flac),
-		FLAC__file_encoder_get_max_lpc_order(_flac)];
+		_exhaustiveModelSearch, _enableMidSide, _enableLooseMidSide, _QLPCoeffPrecision, _minPartitionOrder, _maxPartitionOrder, _maxLPCOrder];
 }
 
 @end

@@ -70,7 +70,6 @@
 - (void) dealloc
 {
 	[_inputFilename release];
-
 	[super dealloc];
 }
 

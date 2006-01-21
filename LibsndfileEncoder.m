@@ -88,6 +88,7 @@
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime			= [NSDate date];
+	int							pcm					= -1;
 	SNDFILE						*in					= NULL;
 	SNDFILE						*out				= NULL;
 	SF_INFO						info;
@@ -108,8 +109,8 @@
 	
 	@try {
 		// Open the input file
-		_pcm = open([_inputFilename UTF8String], O_RDONLY);
-		if(-1 == _pcm) {
+		pcm = open([_inputFilename UTF8String], O_RDONLY);
+		if(-1 == pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -118,7 +119,7 @@
 		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 		info.samplerate		= 44100;
 		info.channels		= 2;
-		in					= sf_open_fd(_pcm, SFM_READ, &info, NO);
+		in					= sf_open_fd(pcm, SFM_READ, &info, NO);
 		if(NULL == in) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -232,7 +233,7 @@
 		}
 
 		// Close the input file
-		if(-1 == close(_pcm)) {
+		if(-1 == close(pcm)) {
 			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
 															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);

@@ -44,7 +44,7 @@ writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const 
 static void
 metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
-	FLACConverter *converter = (FLACConverter *) client_data;
+	//FLACConverter *converter = (FLACConverter *) client_data;
 
 	// Only accept 16-bit 2-channel FLAC files
 	if(FLAC__METADATA_TYPE_STREAMINFO == metadata->type) {
@@ -57,9 +57,7 @@ metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *m
 static void
 errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
-	FLACConverter *converter = (FLACConverter *) client_data;
-
-	NSLog(@"errorCallback");
+	//FLACConverter *converter = (FLACConverter *) client_data;
 	
 	@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(decoder)]] userInfo:nil];
 }
@@ -69,62 +67,36 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
 	if((self = [super initWithInputFilename:inputFilename])) {	
-
 		_fd  = -1;
-		
-		// Create and setup FLAC decoder
-		_flac = FLAC__file_decoder_new();
-		if(NULL == _flac) {
-			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create FLAC decoder", @"Exceptions", @"") userInfo:nil];
-		}
-		
-		if(NO == FLAC__file_decoder_set_filename(_flac, [_inputFilename UTF8String])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
-		}
-		
-		// Setup callbacks
-		if(NO == FLAC__file_decoder_set_write_callback(_flac, writeCallback)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_decoder_set_metadata_callback(_flac, metadataCallback)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_decoder_set_error_callback(_flac, errorCallback)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
-		}
-		if(NO == FLAC__file_decoder_set_client_data(_flac, self)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
-		}
-			   
 		return self;
 	}
 	return nil;
 }
 
-- (void) dealloc
-{
-	FLAC__file_decoder_delete(_flac);
-	[super dealloc];
-}
-
-- (oneway void) convertToFile:(int)file
+- (oneway void) convertToFile:(NSString *)filename
 {
 	NSDate				*startTime			= [NSDate date];
+	FLAC__FileDecoder	*flac				= NULL;
 	FLAC__uint64		bytesRead			= 0;
 	FLAC__uint64		bytesToRead			= 0;
 	FLAC__uint64		totalBytes			= 0;
 	unsigned long		iterations			= 0;
-		
+	struct stat			sourceStat;
+
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
-		_fd = file;
+		// Open the output file
+		_fd = open([filename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == _fd) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
 		
 		// Get input file information
-		struct stat sourceStat;
 		if(-1 == stat([_inputFilename UTF8String], &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -133,26 +105,50 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		totalBytes		= (FLAC__uint64)sourceStat.st_size;
 		bytesToRead		= totalBytes;
 		
+		// Create FLAC decoder
+		flac = FLAC__file_decoder_new();
+		if(NULL == flac) {
+			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create FLAC decoder", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		if(NO == FLAC__file_decoder_set_filename(flac, [_inputFilename UTF8String])) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
+		}
+		
+		// Setup callbacks
+		if(NO == FLAC__file_decoder_set_write_callback(flac, writeCallback)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_decoder_set_metadata_callback(flac, metadataCallback)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_decoder_set_error_callback(flac, errorCallback)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
+		}
+		if(NO == FLAC__file_decoder_set_client_data(flac, self)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
+		}
+
 		// Initialize decoder
-		if(FLAC__FILE_DECODER_OK != FLAC__file_decoder_init(_flac)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		if(FLAC__FILE_DECODER_OK != FLAC__file_decoder_init(flac)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
 		}
 		
 		for(;;) {
 			
 			// Decode the data
-			if(NO == FLAC__file_decoder_process_single(_flac)) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+			if(NO == FLAC__file_decoder_process_single(flac)) {
+				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
 			}
 			
 			// EOF?
-			if(FLAC__FILE_DECODER_END_OF_FILE == FLAC__file_decoder_get_state(_flac)) {
+			if(FLAC__FILE_DECODER_END_OF_FILE == FLAC__file_decoder_get_state(flac)) {
 				break;
 			}
 			
 			// Determine bytes processed
-			if(NO == FLAC__file_decoder_get_decode_position(_flac, &bytesRead)) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+			if(NO == FLAC__file_decoder_get_decode_position(flac, &bytesRead)) {
+				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
 			}
 			
 			// Update status
@@ -179,8 +175,8 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		}
 		
 		// Flush buffers
-		if(NO == FLAC__file_decoder_finish(_flac)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]] userInfo:nil];
+		if(NO == FLAC__file_decoder_finish(flac)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)]] userInfo:nil];
 		}
 	}
 
@@ -194,7 +190,14 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	}
 	
 	@finally {
-		_fd  = -1;		
+		FLAC__file_decoder_delete(flac);
+
+		// Close the output file
+		if(-1 == close(_fd)) {
+			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}
 	}
 
 	[_delegate setEndTime:[NSDate date]];

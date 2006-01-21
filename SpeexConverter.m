@@ -44,6 +44,7 @@
 
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
+	int					fd				= -1;
 	char				*path			= NULL;
 	const char			*tmpDir;
 	ssize_t				tmpDirLen;
@@ -72,13 +73,18 @@
 			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 			path[tmpDirLen + patternLen] = '\0';
 			
-			_origOut = mkstemps(path, 4);
-			if(-1 == _origOut) {
+			fd = mkstemps(path, 4);
+			if(-1 == fd) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
-			_origFilename = [[NSString stringWithUTF8String:path] retain];
+			_tempFilename = [[NSString stringWithUTF8String:path] retain];
+			
+			if(-1 == close(fd)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
 		}
 		
 		@catch(NSException *exception) {
@@ -96,36 +102,30 @@
 
 - (void) dealloc
 {
-	NSException *exception;
-	
-	// Close the resampled input file
-	if(-1 == close(_origOut)) {
-		exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
-											userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		NSLog(@"%@", exception);
-	}
-
 	// Delete resampled temporary file
-	if(-1 == unlink([_origFilename UTF8String])) {
-		exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
-											userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	if(-1 == unlink([_tempFilename UTF8String])) {
+		NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 					
+														 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		NSLog(@"%@", exception);
 	}			
 	
-	[_origFilename release];
+	[_tempFilename release];
 
 	[super dealloc];
 }
 
-- (oneway void) convertToFile:(int)file
+- (oneway void) convertToFile:(NSString *)filename
 {
 	NSDate							*startTime				= [NSDate date];
+	int								in_fd					= -1;
+	int								out_fd					= -1;
+	int								temp_fd					= -1;
+	int								current_fd				= -1;
 	ssize_t							totalBytes;
 	ssize_t							bytesToRead;
 	ssize_t							bytesRead;
 	ssize_t							bytesWritten			= 0;
 	ssize_t							currentBytesWritten;
-	int								fd;
 	BOOL							streamInited			= NO;
 
 	void							*st;
@@ -157,8 +157,6 @@
 		
 	unsigned						iterations				= 0;
 	
-	int								newOut;
-
 	SNDFILE							*inSF;
 	SF_INFO							info;
 	SNDFILE							*outSF				= NULL;
@@ -179,16 +177,32 @@
 	[_delegate setStarted];
 	
 	@try {
+		// Open the output file (converter output may be resampled before it is written to this file)
+		out_fd = open([filename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == out_fd) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		// Open the temporary file if resampling is necessary
+		if(_resampleInput) {
+			temp_fd = open([_tempFilename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			if(-1 == temp_fd) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+		}
+		
 		// Open the input file
-		fd = open([_inputFilename UTF8String], O_RDONLY);
-		if(-1 == fd) {
+		in_fd = open([_inputFilename UTF8String], O_RDONLY);
+		if(-1 == in_fd) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
 		struct stat sourceStat;
-		if(-1 == fstat(fd, &sourceStat)) {
+		if(-1 == fstat(in_fd, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -208,7 +222,7 @@
 			data = ogg_sync_buffer(&oy, 200);
 			
 			// Read bitstream from input file
-			bytesRead = read(fd, data, 200);
+			bytesRead = read(in_fd, data, 200);
 			if(-1 == bytesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -279,10 +293,10 @@
 						
 						if(44100 != rate) {
 							_resampleInput	= YES;
-							newOut			= _origOut;
+							current_fd		= temp_fd;
 						}
 						else {
-							newOut			= file;
+							current_fd		= out_fd;
 						}
 						
 						framesPerPacket		= header->frames_per_packet;
@@ -332,7 +346,7 @@
 								out[i] = le_int16_t(output[i]);
 							}*/
 							
-							currentBytesWritten = write(newOut, output, sizeof(int16_t) * frameSize * channels);
+							currentBytesWritten = write(current_fd, output, sizeof(int16_t) * frameSize * channels);
 							if(-1 == currentBytesWritten) {
 								@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 															   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -376,9 +390,9 @@
 			info.samplerate		= rate;
 			info.channels		= 2;
 			
-			inSF = sf_open([_origFilename UTF8String], SFM_READ, &info);
+			inSF = sf_open_fd(temp_fd, SFM_READ, &info, 0);
 			if(NULL == inSF) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the temporary file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
@@ -386,7 +400,7 @@
 			info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 			info.samplerate		= 44100;
 			info.channels		= 2;
-			outSF				= sf_open_fd(file, SFM_WRITE, &info, 0);
+			outSF				= sf_open_fd(out_fd, SFM_WRITE, &info, 0);
 			if(NULL == outSF) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -484,24 +498,45 @@
 	
 	@finally {
 		// Close the input file
-		if(-1 == close(fd)) {
+		if(-1 == close(in_fd)) {
 			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
 															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
-		
-		// Clean up sndfiles
-		if(NULL != inSF) {
-			sf_close(inSF);
+
+		// Close the output file
+		if(-1 == close(out_fd)) {
+			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
 		}
-		if(NULL != outSF) {
-			sf_close(outSF);	
-		}
+
+		// Close the temporary file
+		if(_resampleInput) {
+			if(-1 == close(temp_fd)) {
+				NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
+																 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				NSLog(@"%@", exception);
+			}
+			
+			// Clean up sndfiles
+			if(0 != sf_close(inSF)) {
+				NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+																userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				NSLog(@"%@", exception);
+			}
+			if(0 != sf_close(outSF)) {
+				NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+																userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				NSLog(@"%@", exception);
+			}
+
+			free(intBuffer);
+			free(doubleBuffer);
+		} 
 		
 		// Clean up
 		free(header);
-		free(intBuffer);
-		free(doubleBuffer);
 
 		speex_decoder_destroy(st);
 		speex_bits_destroy(&bits);

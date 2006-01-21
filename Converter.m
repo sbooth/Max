@@ -90,7 +90,7 @@
 - (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
 - (id <TaskMethods>)	delegate									{ return _delegate; }
 
-- (oneway void)			convertToFile:(int)file						{}
+- (oneway void)			convertToFile:(NSString *)filename			{}
 
 - (NSString *)			description									{ return [_inputFilename lastPathComponent]; }
 

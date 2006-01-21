@@ -100,7 +100,7 @@
 - (void) ripperReady:(id)anObject
 {
     [anObject setProtocolForProxy:@protocol(RipperMethods)];
-	[anObject ripToFile:_out];
+	[anObject ripToFile:[self outputFilename]];
 }
 
 - (void) setStarted
@@ -115,7 +115,6 @@
 	Track				*track;
 
 	[super setStopped];
-	[self closeOutputFile];
 	[_connection invalidate];
 	[[TaskMaster sharedController] ripDidStop:self]; 
 
@@ -130,8 +129,7 @@
 	NSEnumerator		*enumerator;
 	Track				*track;
 
-	[super setCompleted]; 
-	[self closeOutputFile];
+	[super setCompleted];
 	[_connection invalidate];
 	
 	[[TaskMaster sharedController] ripDidComplete:self];

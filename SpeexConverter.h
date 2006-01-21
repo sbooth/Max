@@ -25,8 +25,7 @@
 @interface SpeexConverter : Converter 
 {
 	BOOL			_resampleInput;
-	int				_origOut;
-	NSString		*_origFilename;
+	NSString		*_tempFilename;
 }
 
 @end

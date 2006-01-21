@@ -24,14 +24,8 @@
 
 @interface SpeexEncoder : Encoder
 {
-	int16_t					*_buf;
-	ssize_t					_buflen;
-	
-	int						_out;
-	
-	// Downsampling
-	NSString				*_resampledFilename;
-	int						_resampledOut;
+	// Resampling
+	NSString				*_tempFilename;
 	
 	// Settings flags
 	int						_mode;

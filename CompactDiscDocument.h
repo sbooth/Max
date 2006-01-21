@@ -26,6 +26,7 @@
 
 @interface CompactDiscDocument : NSDocument 
 {
+    IBOutlet NSArrayController		*_trackController;
     IBOutlet NSDrawer				*_trackDrawer;
     IBOutlet NSTableView			*_trackTable;
 
@@ -76,6 +77,8 @@
 - (IBAction)		queryFreeDB:(id) sender;
 - (IBAction)		submitToFreeDB:(id) sender;
 - (IBAction)		toggleTrackInformation:(id) sender;
+- (IBAction)		selectNextTrack:(id) sender;
+- (IBAction)		selectPreviousTrack:(id) sender;
 
 - (void)			clearFreeDBData;
 - (void)			updateDiscFromFreeDB:(NSDictionary *) info;

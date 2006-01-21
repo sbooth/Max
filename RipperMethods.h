@@ -24,7 +24,7 @@
 
 @protocol RipperMethods
 
-- (oneway void)				ripToFile:(int)file;
+- (oneway void)				ripToFile:(NSString *)filename;
 
 - (id <TaskMethods>)		delegate;
 - (void)					setDelegate:(id <TaskMethods>)delegate;

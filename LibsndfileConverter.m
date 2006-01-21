@@ -27,33 +27,22 @@
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
 
+@interface LibsndfileConverter (Private)
+- (void) openInputFile;
+- (void) closeInputFile:(BOOL)throw;
+@end
+
 @implementation LibsndfileConverter
 
 - (id) initWithInputFilename:(NSString *)inputFilename
 {
-	SF_INFO					info;
-	SF_FORMAT_INFO			formatInfo;
-
 	if((self = [super initWithInputFilename:inputFilename])) {
 
-		// Open the input file
-		info.format = 0;
+		// Open the input file to get the file's information
+		[self openInputFile];
 		
-		_in = sf_open([_inputFilename UTF8String], SFM_READ, &info);
-		if(NULL == _in) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Get format info
-		formatInfo.format = info.format;
-		
-		if(0 == sf_command(NULL, SFC_GET_FORMAT_INFO, &formatInfo, sizeof(formatInfo))) {
-			_fileType = [[NSString stringWithUTF8String:formatInfo.name] retain];
-		}
-		else {
-			_fileType = NSLocalizedStringFromTable(@"Unknown (libsndfile)", @"General", @"");
-		}
+		// Close to avoid too many open file descriptors
+		[self closeInputFile:YES];
 		
 		return self;
 	}
@@ -63,12 +52,50 @@
 - (void) dealloc
 {
 	[_fileType release];
-	sf_close(_in);
-	
 	[super dealloc];
 }
 
-- (oneway void) convertToFile:(int)file
+- (void) openInputFile
+{
+	SF_INFO					info;
+	SF_FORMAT_INFO			formatInfo;
+	
+	// Open the input file
+	info.format = 0;
+	
+	_in = sf_open([_inputFilename UTF8String], SFM_READ, &info);
+	if(NULL == _in) {
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	}
+	
+	// Get format info
+	formatInfo.format = info.format;
+	
+	if(0 == sf_command(NULL, SFC_GET_FORMAT_INFO, &formatInfo, sizeof(formatInfo))) {
+		_fileType = [[NSString stringWithUTF8String:formatInfo.name] retain];
+	}
+	else {
+		_fileType = NSLocalizedStringFromTable(@"Unknown (libsndfile)", @"General", @"");
+	}
+}
+
+- (void) closeInputFile:(BOOL)throw
+{
+	if(0 != sf_close(_in)) {
+		if(throw) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		else {
+			NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+															userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}
+	}
+}
+
+- (oneway void) convertToFile:(NSString *)filename
 {
 	NSDate						*startTime			= [NSDate date];
 	SNDFILE						*out				= NULL;
@@ -90,13 +117,16 @@
 	[_delegate setInputFormat:_fileType];
 			
 	@try {
+		// Open input file
+		[self openInputFile];
+		
 		// Setup libsndfile output file
 		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 		info.samplerate		= 44100;
 		info.channels		= 2;
-		out					= sf_open_fd(file, SFM_WRITE, &info, 0);
+		out					= sf_open([filename UTF8String], SFM_WRITE, &info);
 		if(NULL == out) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 				
@@ -192,8 +222,11 @@
 	@finally {
 		free(intBuffer);
 		free(doubleBuffer);
-		if(NULL != out) {
-			sf_close(out);
+		[self closeInputFile:NO];
+		if(0 != sf_close(out)) {
+			NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+															userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
 		}
 	}
 	

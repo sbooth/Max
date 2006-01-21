@@ -25,8 +25,6 @@
 
 @interface OggVorbisConverter : Converter 
 {
-	OggVorbis_File		_vf;
-	FILE				*_file;
 }
 
 @end

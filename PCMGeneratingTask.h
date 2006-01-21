@@ -26,9 +26,7 @@
 @interface PCMGeneratingTask : Task
 {
 	NSString				*_outputFilename;
-	int						_out;
 	AudioMetadata			*_metadata;
-	BOOL					_fileClosed;
 }
 
 - (id)						initWithMetadata:(AudioMetadata *)metadata;
@@ -36,10 +34,8 @@
 - (void)					run;
 - (void)					stop;
 
-- (int)						getOutputFile;
 - (NSString *)				outputFilename;
 
-- (void)					closeOutputFile;
 - (void)					removeOutputFile;
 
 - (AudioMetadata *)			metadata;

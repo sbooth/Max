@@ -25,10 +25,15 @@
 
 @interface OggFLACEncoder : Encoder
 {
-	int16_t					*_buf;
-	ssize_t					_buflen;
-	
 	OggFLAC__FileEncoder	*_flac;
+	
+	BOOL					_exhaustiveModelSearch;
+	BOOL					_enableMidSide;
+	BOOL					_enableLooseMidSide;
+	int						_QLPCoeffPrecision;
+	int						_minPartitionOrder;
+	int						_maxPartitionOrder;
+	int						_maxLPCOrder;
 }
 
 @end

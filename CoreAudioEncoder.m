@@ -120,6 +120,7 @@
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate				*startTime							= [NSDate date];
+	int					pcm									= -1;
 	OSStatus			err;
 	AudioBufferList		bufferList;
 	UInt32				frameCount, size, bitrate, quality, mode;
@@ -132,22 +133,22 @@
 	AudioConverterRef	converter;
 	CFArrayRef			converterPropertySettings;
 	unsigned long		iterations							= 0;
-	
+	struct stat			sourceStat;
+
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
 		// Open the input file
-		_pcm = open([_inputFilename UTF8String], O_RDONLY);
-		if(-1 == _pcm) {
+		pcm = open([_inputFilename UTF8String], O_RDONLY);
+		if(-1 == pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
-		struct stat sourceStat;
-		if(-1 == fstat(_pcm, &sourceStat)) {
+		if(-1 == fstat(pcm, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -244,7 +245,7 @@
 		while(0 < bytesToRead) {
 			
 			// Read a chunk of PCM input
-			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+			bytesRead = read(pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
 			if(-1 == bytesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -302,7 +303,7 @@
 		NSException *exception;
 		
 		// Close the input file
-		if(-1 == close(_pcm)) {
+		if(-1 == close(pcm)) {
 			exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 						
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);

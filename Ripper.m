@@ -208,8 +208,9 @@ callback(long inpos, int function, void *userdata)
 - (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
 - (id <TaskMethods>)	delegate									{ return _delegate; }
 
-- (oneway void) ripToFile:(int)file
+- (oneway void) ripToFile:(NSString *)filename
 {
+	int					fd;
 	NSEnumerator		*enumerator;
 	SectorRange			*range;
 	
@@ -219,10 +220,17 @@ callback(long inpos, int function, void *userdata)
 	[_delegate setStarted];
 
 	@try {
+		// Open the output file
+		fd = open([filename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == fd) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+
 		enumerator = [_sectors objectEnumerator];
 		
 		while((range = [enumerator nextObject])) {
-			[self ripSectorRange:range toFile:file];
+			[self ripSectorRange:range toFile:fd];
 			_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range totalSectors]];
 		}
 	}
@@ -234,6 +242,15 @@ callback(long inpos, int function, void *userdata)
 	@catch(NSException *exception) {
 		[_delegate setException:exception];
 		[_delegate setStopped];
+	}
+	
+	@finally {
+		// Close the output file
+		if(-1 == close(fd)) {
+			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}
 	}
 	
 	[_delegate setEndTime:[NSDate date]];

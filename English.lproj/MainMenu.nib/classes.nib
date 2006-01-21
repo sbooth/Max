@@ -23,6 +23,8 @@
                 ejectDisc = id; 
                 encode = id; 
                 queryFreeDB = id; 
+                selectNextTrack = id; 
+                selectPreviousTrack = id; 
                 submitToFreeDB = id; 
                 toggleTrackInformation = id; 
             }; 

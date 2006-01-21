@@ -23,13 +23,9 @@
 #import "Encoder.h"
 
 @interface OggVorbisEncoder : Encoder
-{
-	int16_t					*_buf;
-	ssize_t					_buflen;
-	
+{	
 	int						_out;
 	
-	// Settings flags
 	int						_mode;
 	float					_quality;
 	long					_bitrate;

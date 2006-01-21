@@ -465,6 +465,16 @@
 	[[MediaController sharedController] ejectDiscForCompactDiscDocument:self];
 }
 
+- (IBAction) selectNextTrack:(id) sender
+{
+	[_trackController selectNext:sender];
+}
+
+- (IBAction) selectPreviousTrack:(id) sender
+{
+	[_trackController selectPrevious:sender];	
+}
+
 #pragma mark FreeDB Functionality
 
 - (void) clearFreeDBData

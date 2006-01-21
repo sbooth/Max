@@ -25,8 +25,7 @@
 
 @interface FLACConverter : Converter 
 {
-	FLAC__FileDecoder		*_flac;	
-	int						_fd;
+	int	_fd;
 }
 
 @end

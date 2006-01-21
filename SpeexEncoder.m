@@ -154,6 +154,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 - (id) initWithPCMFilename:(NSString *)inputFilename
 {
+	int					fd				= -1;
 	char				*path			= NULL;
 	const char			*tmpDir;
 	ssize_t				tmpDirLen;
@@ -205,13 +206,18 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 				path[tmpDirLen + patternLen] = '\0';
 				
-				_resampledOut = mkstemps(path, 4);
-				if(-1 == _resampledOut) {
+				fd = mkstemps(path, 4);
+				if(-1 == fd) {
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
 												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 				}
 				
-				_resampledFilename = [[NSString stringWithUTF8String:path] retain];
+				_tempFilename = [[NSString stringWithUTF8String:path] retain];
+				
+				if(-1 == close(fd)) {
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}				
 			}
 		}
 
@@ -232,13 +238,13 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 {
 	// Delete resampled temporary file
 	if(_resampleInput) {
-		if(-1 == unlink([_resampledFilename UTF8String])) {
+		if(-1 == unlink([_tempFilename UTF8String])) {
 			NSException *exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
 															  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}			
 
-		[_resampledFilename release];
+		[_tempFilename release];
 	}
 
 	[super dealloc];
@@ -275,6 +281,12 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	
 	BOOL						eos											= NO;
 
+	int16_t						*buf;
+	ssize_t						buflen;
+	
+	int							pcm											= -1;
+	int							fd											= -1;
+	
 	ssize_t						framesRead;
 	ssize_t						bytesRead									= 0;
 	ssize_t						currentBytesWritten							= 0;
@@ -296,7 +308,8 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	double						maxSignal;
 	int							frameCount;
 	int							readCount;
-				
+	struct stat					sourceStat;
+
    
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
@@ -327,13 +340,13 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 					break;
 			}
 			
-			// Setup downsampled output file
+			// Setup resampled output file
 			info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 			info.samplerate		= rate;
 			info.channels		= 2;
-			outSF				= sf_open_fd(_resampledOut, SFM_WRITE, &info, 1);
+			outSF				= sf_open([_tempFilename UTF8String], SFM_WRITE, &info);
 			if(NULL == outSF) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
@@ -416,9 +429,9 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				}
 			}
 			
-			// Open the new, downsampled input file
-			_pcm = open([_resampledFilename UTF8String], O_RDONLY);
-			if(-1 == _pcm) {
+			// Open the new, resampled input file
+			pcm = open([_tempFilename UTF8String], O_RDONLY);
+			if(-1 == pcm) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
@@ -427,16 +440,15 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			rate = 44100;
 			
 			// Open the input file
-			_pcm = open([_inputFilename UTF8String], O_RDONLY);
-			if(-1 == _pcm) {
+			pcm = open([_inputFilename UTF8String], O_RDONLY);
+			if(-1 == pcm) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
 		
 		// Get input file information
-		struct stat sourceStat;
-		if(-1 == fstat(_pcm, &sourceStat)) {
+		if(-1 == fstat(pcm, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -445,8 +457,8 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		bytesToRead		= totalBytes;
 		
 		// Open the output file
-		_out = open([filename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == _out) {
+		fd = open([filename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == fd) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -547,14 +559,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				break;	
 			}
 			
-			currentBytesWritten = write(_out, og.header, og.header_len);
+			currentBytesWritten = write(fd, og.header, og.header_len);
 			if(-1 == currentBytesWritten) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			bytesWritten += currentBytesWritten;
 			
-			currentBytesWritten = write(_out, og.body, og.body_len);
+			currentBytesWritten = write(fd, og.body, og.body_len);
 			if(-1 == currentBytesWritten) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -563,9 +575,9 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		}
 		
 		// Allocate the buffer (hardcoded for 16-bit stereo input)
-		_buflen			= 2 * frameSize;
-		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-		if(NULL == _buf) {
+		buflen			= 2 * frameSize;
+		buf			= (int16_t *) calloc(buflen, sizeof(int16_t));
+		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -579,7 +591,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		while(NO == eos || totalFrames > framesEncoded) {
 			
 			// Read a single frame of PCM input
-			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+			bytesRead = read(pcm, buf, (bytesToRead > 2 * buflen ? 2 * buflen : bytesToRead));
 			if(-1 == bytesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -594,14 +606,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			++frameID;
 			
 			if(2 == chan) {
-				speex_encode_stereo_int(_buf, frameSize, &bits);
+				speex_encode_stereo_int(buf, frameSize, &bits);
 			}
 			
 			if(NULL != preprocess) {
-				speex_preprocess(preprocess, _buf, NULL);
+				speex_preprocess(preprocess, buf, NULL);
 			}
 			
-			speex_encode_int(speexState, _buf, &bits);
+			speex_encode_int(speexState, buf, &bits);
 			
 			framesEncoded	+= frameSize;
 			
@@ -630,14 +642,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 						break;
 					}
 					
-					currentBytesWritten = write(_out, og.header, og.header_len);
+					currentBytesWritten = write(fd, og.header, og.header_len);
 					if(-1 == currentBytesWritten) {
 						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 					}
 					bytesWritten += currentBytesWritten;
 					
-					currentBytesWritten = write(_out, og.body, og.body_len);
+					currentBytesWritten = write(fd, og.body, og.body_len);
 					if(-1 == currentBytesWritten) {
 						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -696,14 +708,14 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				break;	
 			}
 			
-			currentBytesWritten = write(_out, og.header, og.header_len);
+			currentBytesWritten = write(fd, og.header, og.header_len);
 			if(-1 == currentBytesWritten) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			bytesWritten += currentBytesWritten;
 			
-			currentBytesWritten = write(_out, og.body, og.body_len);
+			currentBytesWritten = write(fd, og.body, og.body_len);
 			if(-1 == currentBytesWritten) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -723,32 +735,39 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 	
 	@finally {
 		// Close the input file
-		if(-1 == close(_pcm)) {
+		if(-1 == close(pcm)) {
 			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
 															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
 		// Close the output file
-		if(-1 == close(_out)) {
+		if(-1 == close(fd)) {
 			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
 															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
-		// Clean up sndfiles
-		if(NULL != inSF) {
-			sf_close(inSF);
-		}
-		if(NULL != outSF) {
-			sf_close(outSF);	
+		if(_resampleInput) {
+			// Clean up sndfiles
+			if(0 != sf_close(inSF)) {
+				NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+																userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				NSLog(@"%@", exception);
+			}
+			if(0 != sf_close(outSF)) {
+				NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+																userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				NSLog(@"%@", exception);
+			}
+			
+			free(intBuffer);
+			free(doubleBuffer);
 		}
 		
 		// Clean up
 		free(comments);
-		free(_buf);
-		free(intBuffer);
-		free(doubleBuffer);
+		free(buf);
 		
 		speex_encoder_destroy(speexState);
 		speex_bits_destroy(&bits);

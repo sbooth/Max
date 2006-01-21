@@ -42,10 +42,7 @@ enum {
 };
 
 @interface MPEGEncoder : Encoder
-{
-	int16_t					*_buf;
-	ssize_t					_buflen;
-	
+{	
 	int						_out;
 	lame_global_flags		*_gfp;
 }

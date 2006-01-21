@@ -98,12 +98,17 @@ enum {
 	float						**buffer;
 	
 	float						*left,				*right;
-	int16_t						*buf,				*limit;
+	int16_t						*alias,				*limit;
 		
 	NSString					*bundleVersion;
 
 	BOOL						eos											= NO;
+
+	int							pcm											= -1;
 	
+	int16_t						*buf;
+	ssize_t						buflen;
+
 	ssize_t						bytesRead									= 0;
 	ssize_t						currentBytesWritten							= 0;
 	ssize_t						bytesWritten								= 0;
@@ -118,23 +123,23 @@ enum {
 	
 	@try {
 		// Open the input file
-		_pcm = open([_inputFilename UTF8String], O_RDONLY);
-		if(-1 == _pcm) {
+		pcm = open([_inputFilename UTF8String], O_RDONLY);
+		if(-1 == pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
 		struct stat sourceStat;
-		if(-1 == fstat(_pcm, &sourceStat)) {
+		if(-1 == fstat(pcm, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Allocate the buffer (Vorbis crashes if it is too large)
-		_buflen			= 1024;
-		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-		if(NULL == _buf) {
+		buflen			= 1024;
+		buf			= (int16_t *) calloc(buflen, sizeof(int16_t));
+		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -217,7 +222,7 @@ enum {
 		while(NO == eos) {
 			
 			// Read a chunk of PCM input
-			bytesRead = read(_pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
+			bytesRead = read(pcm, buf, (bytesToRead > 2 * buflen ? 2 * buflen : bytesToRead));
 			if(-1 == bytesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -228,11 +233,11 @@ enum {
 			
 			left	= buffer[0];
 			right	= buffer[1];
-			buf		= _buf;
+			alias	= buf;
 			limit	= buf + bytesRead / 2;
-			while(buf < limit) {
-				*left++		= *buf++ / 32768.0f;
-				*right++	= *buf++ / 32768.0f;
+			while(alias < limit) {
+				*left++		= *alias++ / 32768.0f;
+				*right++	= *alias++ / 32768.0f;
 			}
 			
 			// Tell the library how much data we actually submitted
@@ -311,7 +316,7 @@ enum {
 	@finally {
 		NSException *exception;
 		// Close the input file
-		if(-1 == close(_pcm)) {
+		if(-1 == close(pcm)) {
 			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 								
 												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
@@ -331,7 +336,7 @@ enum {
 		vorbis_comment_clear(&vc);
 		vorbis_info_clear(&vi);
 
-		free(_buf);
+		free(buf);
 	}
 	
 	[_delegate setEndTime:[NSDate date]];

@@ -25,8 +25,7 @@
 
 @interface OggFLACConverter : Converter 
 {
-	OggFLAC__FileDecoder	*_flac;	
-	int						_fd;
+	int _fd;
 }
 
 @end

@@ -25,10 +25,15 @@
 
 @interface FLACEncoder : Encoder
 {
-	int16_t					*_buf;
-	ssize_t					_buflen;
-
 	FLAC__FileEncoder		*_flac;
+
+	BOOL					_exhaustiveModelSearch;
+	BOOL					_enableMidSide;
+	BOOL					_enableLooseMidSide;
+	int						_QLPCoeffPrecision;
+	int						_minPartitionOrder;
+	int						_maxPartitionOrder;
+	int						_maxLPCOrder;
 }
 
 @end

@@ -24,7 +24,7 @@
 
 @interface LibsndfileEncoder : Encoder
 {
-	int		_format;
+	int _format;
 }
 
 - (id) initWithPCMFilename:(NSString *)inputFilename format:(int)format;

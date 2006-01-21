@@ -55,6 +55,7 @@
 
 - (id) initWithMetadata:(AudioMetadata *)metadata
 {
+	int					fd;
 	char				*path			= NULL;
 	const char			*tmpDir;
 	ssize_t				tmpDirLen;
@@ -62,36 +63,50 @@
 
 	if((self = [super init])) {
 		
-		_metadata = [metadata retain];
-		
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-			tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
-		}
-		else {
-			tmpDir = _PATH_TMP;
-		}
+		@try {
+			_metadata		= [metadata retain];
 
-		// Create and open the output file
-		tmpDirLen	= strlen(tmpDir);
-		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-		if(NULL == path) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		memcpy(path, tmpDir, tmpDirLen);
-		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
-		path[tmpDirLen + patternLen] = '\0';
-		
-		_out = mkstemps(path, 4);
-		if(-1 == _out) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
+				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+			}
+			else {
+				tmpDir = _PATH_TMP;
+			}
+
+			// Create and open the (temporary) output file
+			tmpDirLen	= strlen(tmpDir);
+			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+			if(NULL == path) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			memcpy(path, tmpDir, tmpDirLen);
+			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+			path[tmpDirLen + patternLen] = '\0';
+		
+			// We're really only interested in the name of this file.  
+			// Use mkstemps (instead of mktemp) to guarantee creation of a unique temp file
+			fd = mkstemps(path, 4);
+			if(-1 == fd) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+
+			if(-1 == close(fd)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			
+			_outputFilename		= [[NSString stringWithUTF8String:path] retain];
 		}
 		
-		_fileClosed			= NO;
-		_outputFilename		= [[NSString stringWithUTF8String:path] retain];
+		@catch(NSException *exception) {
+			@throw;
+		}
 		
-		free(path);
+		@finally {
+			free(path);
+		}
 		
 		return self;
 	}
@@ -102,10 +117,7 @@
 - (void) dealloc
 {
 	[_metadata release];
-	
-	[self closeOutputFile];
 	[self removeOutputFile];
-	
 	[_outputFilename release];	
 	
 	[super dealloc];
@@ -120,24 +132,9 @@
 	}	
 }
 
-- (void) closeOutputFile
-{
-	if(YES == _fileClosed) {
-		return;
-	}
-	
-	// Close output file
-	if(-1 == close(_out)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-	
-	_fileClosed = YES;
-}
 
 - (AudioMetadata *)		metadata							{ return _metadata; }
-- (int)					getOutputFile						{ return _out; }
-- (NSString *)			outputFilename					{ return _outputFilename; }
+- (NSString *)			outputFilename						{ return _outputFilename; }
 - (NSString *)			description							{ return [_metadata description]; }
 - (void)				run									{}
 - (void)				stop								{}

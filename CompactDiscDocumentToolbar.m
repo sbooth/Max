@@ -20,17 +20,21 @@
 
 #import "CompactDiscDocumentToolbar.h"
 
-static NSString		*EncodeToolbarItemIdentifier			= @"Encode";
-static NSString		*TrackInfoToolbarItemIdentifier			= @"TrackInfo";
-static NSString		*QueryFreeDBToolbarItemIdentifier		= @"QueryFreeDB";
-static NSString		*SubmitToFreeDBToolbarItemIdentifier	= @"SubmitToFreeDB";
-static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
+static NSString		*EncodeToolbarItemIdentifier				= @"Encode";
+static NSString		*TrackInfoToolbarItemIdentifier				= @"TrackInfo";
+static NSString		*SelectNextTrackToolbarItemIdentifier		= @"SelectNextTrack";
+static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"SelectPreviousTrack";
+static NSString		*QueryFreeDBToolbarItemIdentifier			= @"QueryFreeDB";
+static NSString		*SubmitToFreeDBToolbarItemIdentifier		= @"SubmitToFreeDB";
+static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 
-#define kEncodeToolbarItemTag			1
-#define kTrackInfoToolbarItemTag		2
-#define kQueryFreeDBToolbarItemTag		3
-#define kSubmitToFreeDBToolbarItemTag	4
-#define kEjectDiscToolbarItemTag		5
+#define kEncodeToolbarItemTag					1
+#define kTrackInfoToolbarItemTag				2
+#define kQueryFreeDBToolbarItemTag				3
+#define kSubmitToFreeDBToolbarItemTag			4
+#define kEjectDiscToolbarItemTag				5
+#define kSelectNextTrackToolbarItemTag			6
+#define kSelectPreviousTrackToolbarItemTag		7
 
 @implementation CompactDiscDocumentToolbar
 
@@ -96,6 +100,30 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 		[toolbarItem setTarget:[_document valueForKey:@"trackDrawer"]];
 		[toolbarItem setAction:@selector(toggle:)];
 	}
+    else if([itemIdentifier isEqualToString:SelectNextTrackToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setTag:kSelectNextTrackToolbarItemTag];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Next", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Next", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select the next track for editing", @"CompactDisc", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"SelectNextTrackToolbarImage"]];
+		
+		[toolbarItem setTarget:[_document valueForKey:@"trackController"]];
+		[toolbarItem setAction:@selector(selectNext:)];
+	}
+    else if([itemIdentifier isEqualToString:SelectPreviousTrackToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setTag:kSelectPreviousTrackToolbarItemTag];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Previous", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Previous", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select the previous track for editing", @"CompactDisc", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"SelectPreviousTrackToolbarImage"]];
+		
+		[toolbarItem setTarget:[_document valueForKey:@"trackController"]];
+		[toolbarItem setAction:@selector(selectPrevious:)];
+	}
     else if([itemIdentifier isEqualToString:QueryFreeDBToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
@@ -149,7 +177,8 @@ static NSString		*EjectDiscToolbarItemIdentifier			= @"EjectDisc";
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
 {
-    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, TrackInfoToolbarItemIdentifier, 
+    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
+		SelectPreviousTrackToolbarItemIdentifier, TrackInfoToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
 		QueryFreeDBToolbarItemIdentifier, SubmitToFreeDBToolbarItemIdentifier,
 		EjectDiscToolbarItemIdentifier, 
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,

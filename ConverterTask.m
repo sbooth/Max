@@ -78,7 +78,7 @@
 - (void) converterReady:(id)anObject
 {
     [anObject setProtocolForProxy:@protocol(ConverterMethods)];
-	[anObject convertToFile:_out];
+	[anObject convertToFile:[self outputFilename]];
 }
 
 - (void) setStarted
@@ -90,7 +90,6 @@
 - (void) setStopped 
 {
 	[super setStopped]; 
-	[self closeOutputFile];
 	[_connection invalidate];
 	[[TaskMaster sharedController] convertDidStop:self]; 
 }
@@ -98,7 +97,6 @@
 - (void) setCompleted 
 {
 	[super setCompleted]; 
-	[self closeOutputFile]; 
 	[_connection invalidate];
 	[[TaskMaster sharedController] convertDidComplete:self]; 
 }
@@ -109,7 +107,6 @@
 		[self setShouldStop];
 	}
 	else {
-		[self closeOutputFile];
 		[_connection invalidate];
 		[[TaskMaster sharedController] convertDidStop:self];
 	}

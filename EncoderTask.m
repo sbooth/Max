@@ -27,7 +27,7 @@
 #import "UtilityFunctions.h"
 
 @interface EncoderTask (Private)
-- (void) createOutputFile;
+- (void) touchOutputFile;
 @end
 
 @implementation EncoderTask
@@ -115,7 +115,7 @@
 	}	
 }
 
-- (void) createOutputFile
+- (void) touchOutputFile
 {
 	int fd;
 	
@@ -143,14 +143,16 @@
 	NSPort					*port2				= [NSPort port];
 	NSArray					*portArray			= nil;
 	
-	// Create the output file
-
 	// Set up the additional key/value pairs to be substituted
 	[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];
 	basename = [[_task metadata] outputBasenameWithSubstitutions:substitutions];
+
+	// Create the directory hierarchy if required
 	createDirectoryStructure(basename);
+	
+	// Generate a unique filename and touch the file
 	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];
-	[self createOutputFile];
+	[self touchOutputFile];
 	
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
 	[_connection setRootObject:self];
@@ -165,7 +167,7 @@
 {
 	_encoder = [(NSObject*) anObject retain];
     [anObject setProtocolForProxy:@protocol(EncoderMethods)];
-	[anObject encodeToFile:_outputFilename];
+	[anObject encodeToFile:[self outputFilename]];
 }
 
 - (void) setStarted

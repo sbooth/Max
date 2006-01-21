@@ -13,6 +13,8 @@
 		8C040A31092AB41A0052D881 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */; };
 		8C04524A0947F0EC0041AAA8 /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */; };
 		8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* FreeDB.m */; };
+		8C137F160981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */; };
+		8C137F170981BCB800EBFC77 /* SelectNextTrackToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C137F150981BCB800EBFC77 /* SelectNextTrackToolbarImage.png */; };
 		8C1A6C52093ED45A006176C4 /* LAMEToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */; };
 		8C1A6C59093ED65F006176C4 /* OggVorbisToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */; };
 		8C206F150929486C00793FD0 /* TaskMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C206F130929486C00793FD0 /* TaskMaster.m */; };
@@ -244,6 +246,8 @@
 		8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoder.m; sourceTree = "<group>"; };
 		8C08573708DE90DD004B42F0 /* FreeDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDB.h; sourceTree = "<group>"; };
 		8C08573808DE90DD004B42F0 /* FreeDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDB.m; sourceTree = "<group>"; };
+		8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectPreviousTrackToolbarImage.png; sourceTree = "<group>"; };
+		8C137F150981BCB800EBFC77 /* SelectNextTrackToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectNextTrackToolbarImage.png; sourceTree = "<group>"; };
 		8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LAMEToolbarImage.png; sourceTree = "<group>"; };
 		8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OggVorbisToolbarImage.png; sourceTree = "<group>"; };
 		8C206F120929486C00793FD0 /* TaskMaster.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TaskMaster.h; sourceTree = "<group>"; };
@@ -640,6 +644,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */,
+				8C137F150981BCB800EBFC77 /* SelectNextTrackToolbarImage.png */,
 				8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */,
 				8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */,
 				8C794DD8097F0DC10081CD7F /* SpeexPreferences.nib */,
@@ -1125,6 +1131,8 @@
 				8C29D928097F424900E8B766 /* General.strings in Resources */,
 				8C29D94B097F442700E8B766 /* Genres.strings in Resources */,
 				8C29D981097F46A200E8B766 /* Log.strings in Resources */,
+				8C137F160981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png in Resources */,
+				8C137F170981BCB800EBFC77 /* SelectNextTrackToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
