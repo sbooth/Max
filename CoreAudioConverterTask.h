@@ -24,6 +24,7 @@
 
 @interface CoreAudioConverterTask : ConverterTask 
 {
+	NSString *_fileFormat;
 }
 
 - (id)			initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;

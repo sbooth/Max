@@ -24,6 +24,7 @@
 
 @interface LibsndfileConverterTask : ConverterTask 
 {
+	NSString *_fileFormat;
 }
 
 - (id)			initWithInputFilename:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
