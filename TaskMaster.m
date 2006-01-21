@@ -98,6 +98,10 @@ static TaskMaster *sharedController = nil;
 		_converterController	= [[ConverterController sharedController] retain];
 		_encoderController		= [[EncoderController sharedController] retain];
 		
+		_freezeRipping			= NO;
+		_freezeConverting		= NO;
+		_freezeEncoding			= NO;
+		
 		// Avoid infinite loops in init
 		[_ripperController setValue:self forKey:@"taskMaster"];
 		[_converterController setValue:self forKey:@"taskMaster"];
@@ -167,19 +171,25 @@ static TaskMaster *sharedController = nil;
 - (IBAction) stopAllRippingTasks:(id)sender
 {
 	NSArray	*tasks = [NSArray arrayWithArray:_rippingTasks];
+	_freezeRipping = YES;
 	[tasks makeObjectsPerformSelector:@selector(stop)];
+	_freezeRipping = NO;
 }
 
 - (IBAction) stopAllConvertingTasks:(id)sender
 {
 	NSArray	*tasks = [NSArray arrayWithArray:_convertingTasks];
+	_freezeConverting = YES;
 	[tasks makeObjectsPerformSelector:@selector(stop)];
+	_freezeConverting = NO;
 }
 
 - (IBAction) stopAllEncodingTasks:(id)sender
 {
 	NSArray	*tasks = [NSArray arrayWithArray:_encodingTasks];
+	_freezeEncoding = YES;
 	[tasks makeObjectsPerformSelector:@selector(stop)];
+	_freezeEncoding = NO;
 }
 
 - (IBAction) stopAllTasks:(id)sender
@@ -335,6 +345,10 @@ static TaskMaster *sharedController = nil;
 	RipperTask		*task;
 	NSString		*deviceName;
 	
+	if(0 == [_rippingTasks count] || _freezeRipping) {
+		return;
+	}
+	
 	// Iterate through all ripping tasks once and determine which devices are active
 	enumerator = [_rippingTasks objectEnumerator];
 	while((task = [enumerator nextObject])) {
@@ -424,13 +438,20 @@ static TaskMaster *sharedController = nil;
 
 - (void) spawnConverterThreads
 {
-	unsigned	maxThreads	= (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
-	unsigned	i;
-	unsigned	limit;
-
-	limit = (maxThreads < [_convertingTasks count] ? maxThreads : [_convertingTasks count]);
+	int		maxThreads			= [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
+	int		i, limit, delta;
 	
-	// Start converting the next file(s)
+	if(0 == [_convertingTasks count] || _freezeConverting) {
+		return;
+	}
+	
+	limit = (maxThreads < (int)[_convertingTasks count] ? maxThreads : (int)[_convertingTasks count]);
+
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"balanceConverters"]) {
+		delta = 2 * [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"] - [_encodingTasks count];
+		limit = (limit <= delta ? limit : delta);
+	}
+
 	for(i = 0; i < limit; ++i) {
 		if(NO == [[_convertingTasks objectAtIndex:i] started]) {
 			[[_convertingTasks objectAtIndex:i] run];
@@ -616,6 +637,10 @@ static TaskMaster *sharedController = nil;
 	unsigned	i;
 	unsigned	limit;
 	
+	if(0 == [_encodingTasks count] || _freezeEncoding) {
+		return;
+	}
+	
 	limit = (maxThreads < [_encodingTasks count] ? maxThreads : [_encodingTasks count]);
 	
 	// Start encoding the next track(s)
@@ -623,6 +648,10 @@ static TaskMaster *sharedController = nil;
 		if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"started"] boolValue]) {
 			[[_encodingTasks objectAtIndex:i] run];
 		}	
+	}
+	
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"balanceConverters"]) {
+		[self spawnConverterThreads];
 	}
 }
 

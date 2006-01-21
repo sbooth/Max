@@ -39,6 +39,10 @@
 	NSMutableArray			*_rippingTasks;
 	NSMutableArray			*_convertingTasks;
 	NSMutableArray			*_encodingTasks;
+	
+	BOOL					_freezeRipping;
+	BOOL					_freezeConverting;
+	BOOL					_freezeEncoding;
 }
 
 + (TaskMaster *)	sharedController;

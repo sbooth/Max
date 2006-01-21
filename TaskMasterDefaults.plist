@@ -8,5 +8,7 @@
 	<real>2</real>
 	<key>useDynamicWindows</key>
 	<true/>
+	<key>balanceConverters</key>
+	<true/>
 </dict>
 </plist>
