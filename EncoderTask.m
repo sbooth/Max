@@ -192,6 +192,14 @@
 	[super setCompleted]; 
 	[_connection invalidate];
 	[[TaskMaster sharedController] encodeDidComplete:self]; 
+
+	// Delete input file if requested
+	if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
+		if(-1 == unlink([[(ConverterTask *)_task inputFilename] UTF8String])) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}	
+	}
 }
 
 - (void) stop
