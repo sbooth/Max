@@ -646,7 +646,7 @@ static TaskMaster *sharedController = nil;
 	
 	// Start encoding the next track(s)
 	for(i = 0; i < limit; ++i) {
-		if(NO == [[[_encodingTasks objectAtIndex:i] valueForKeyPath:@"started"] boolValue]) {
+		if(NO == [[_encodingTasks objectAtIndex:i] started]) {
 			[[_encodingTasks objectAtIndex:i] run];
 		}	
 	}
