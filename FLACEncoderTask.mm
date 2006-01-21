@@ -20,8 +20,9 @@
 
 #import "FLACEncoderTask.h"
 #import "FLACEncoder.h"
+#import "IOException.h"
 
-#include "fileref.h"					// TagLib::File
+#include "flacfile.h"					// TagLib::FLAC::File
 #include "tag.h"						// TagLib::Tag
 
 @implementation FLACEncoderTask
@@ -35,11 +36,6 @@
 	return nil;
 }
 
-- (void) dealloc
-{
-	[super dealloc];
-}
-
 - (void) writeTags
 {
 	AudioMetadata								*metadata				= [_task metadata];
@@ -50,8 +46,12 @@
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
-	TagLib::FileRef								f						([_outputFilename UTF8String], false);
+	TagLib::FLAC::File							f						([_outputFilename UTF8String], false);
 
+
+	if(NO == f.isValid()) {
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
+	}
 	
 	// Album title
 	album = [metadata valueForKey:@"albumTitle"];
@@ -111,6 +111,6 @@
 }
 
 - (NSString *)		extension						{ return @"flac"; }
-- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"FLAC", @"General", @""); }
+- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"FLAC", @"General", @""); }
 
 @end

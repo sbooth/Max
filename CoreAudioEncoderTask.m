@@ -51,7 +51,7 @@
 {
 	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
 
-	// Special case AAC and Apple Lossless, since they are very common and MPEG4 is vague
+	// Special case AAC and Apple Lossless, since they are very common and "MPEG4 Audio" is vague
 	if(kAudioFormatMPEG4AAC == formatID) {
 		return NSLocalizedStringFromTable(@"AAC", @"General", @"");
 	}
@@ -194,97 +194,106 @@
 	}
 	// Use (unimplemented as of 10.4.3) CoreAudio metadata functions
 	else {
-		err = FSPathMakeRef((const UInt8 *)[_outputFilename UTF8String], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_outputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		
-		err = AudioFileOpen(&ref, fsRdWrPerm, [[_formatInfo valueForKey:@"fileType"] intValue], &fileID);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileOpen failed", @"Exceptions", @"")
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Get the dictionary and set properties
-		size = sizeof(info);
-		err = AudioFileGetProperty(fileID, kAudioFilePropertyInfoDictionary, &size, &info);
-		//		NSLog(@"error is %@", UTCreateStringForOSType(err));
-		if(noErr == err) {
-			
-			bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-			[info setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
-			
-			// Album title
-			album = [metadata valueForKey:@"albumTitle"];
-			if(nil != album) {
-				[info setValue:album forKey:@kAFInfoDictionary_Album];
-			}
-			
-			// Artist
-			artist = [metadata valueForKey:@"trackArtist"];
-			if(nil == artist) {
-				artist = [metadata valueForKey:@"albumArtist"];
-			}
-			if(nil != artist) {
-				[info setValue:artist forKey:@kAFInfoDictionary_Artist];
-			}
-			
-			// Genre
-			if(1 == [_tracks count]) {
-				genre = [metadata valueForKey:@"trackGenre"];
-			}
-			if(nil == genre) {
-				genre = [metadata valueForKey:@"albumGenre"];
-			}
-			if(nil != genre) {
-				[info setValue:genre forKey:@kAFInfoDictionary_Genre];
-			}
-			
-			// Year
-			year = [metadata valueForKey:@"trackYear"];
-			if(nil == year) {
-				year = [metadata valueForKey:@"albumYear"];
-			}
-			if(nil != year) {
-				[info setValue:year forKey:@kAFInfoDictionary_Year];
-			}
-			
-			// Comment
-			comment = [metadata valueForKey:@"albumComment"];
-			if(_writeSettingsToComment) {
-				comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
-			}
-			if(nil != comment) {
-				[info setValue:comment forKey:@kAFInfoDictionary_Comments];
-			}
-			
-			// Track title
-			title = [metadata valueForKey:@"trackTitle"];
-			if(nil != title) {
-				[info setValue:title forKey:@kAFInfoDictionary_Title];
-			}
-			
-			// Track number
-			trackNumber = [metadata valueForKey:@"trackNumber"];
-			if(nil != trackNumber) {
-				[info setValue:trackNumber forKey:@kAFInfoDictionary_TrackNumber];
-			}
-			
-			size = sizeof(info);
-			err = AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, &info);
+
+		@try {
+			err = FSPathMakeRef((const UInt8 *)[_outputFilename UTF8String], &ref, NULL);
 			if(noErr != err) {
-				// TODO: Uncomment the following lines when (if?) Apple implements this functionality
-				//@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileSetProperty failed", @"Exceptions", @"")
-				//									  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_outputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+			}
+			
+			err = AudioFileOpen(&ref, fsRdWrPerm, [[_formatInfo valueForKey:@"fileType"] intValue], &fileID);
+			if(noErr != err) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileOpen failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			
+			// Get the dictionary and set properties
+			size = sizeof(info);
+			err = AudioFileGetProperty(fileID, kAudioFilePropertyInfoDictionary, &size, &info);
+			//		NSLog(@"error is %@", UTCreateStringForOSType(err));
+			if(noErr == err) {
+				
+				bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+				[info setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
+				
+				// Album title
+				album = [metadata valueForKey:@"albumTitle"];
+				if(nil != album) {
+					[info setValue:album forKey:@kAFInfoDictionary_Album];
+				}
+				
+				// Artist
+				artist = [metadata valueForKey:@"trackArtist"];
+				if(nil == artist) {
+					artist = [metadata valueForKey:@"albumArtist"];
+				}
+				if(nil != artist) {
+					[info setValue:artist forKey:@kAFInfoDictionary_Artist];
+				}
+				
+				// Genre
+				if(1 == [_tracks count]) {
+					genre = [metadata valueForKey:@"trackGenre"];
+				}
+				if(nil == genre) {
+					genre = [metadata valueForKey:@"albumGenre"];
+				}
+				if(nil != genre) {
+					[info setValue:genre forKey:@kAFInfoDictionary_Genre];
+				}
+				
+				// Year
+				year = [metadata valueForKey:@"trackYear"];
+				if(nil == year) {
+					year = [metadata valueForKey:@"albumYear"];
+				}
+				if(nil != year) {
+					[info setValue:year forKey:@kAFInfoDictionary_Year];
+				}
+				
+				// Comment
+				comment = [metadata valueForKey:@"albumComment"];
+				if(_writeSettingsToComment) {
+					comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
+				}
+				if(nil != comment) {
+					[info setValue:comment forKey:@kAFInfoDictionary_Comments];
+				}
+				
+				// Track title
+				title = [metadata valueForKey:@"trackTitle"];
+				if(nil != title) {
+					[info setValue:title forKey:@kAFInfoDictionary_Title];
+				}
+				
+				// Track number
+				trackNumber = [metadata valueForKey:@"trackNumber"];
+				if(nil != trackNumber) {
+					[info setValue:trackNumber forKey:@kAFInfoDictionary_TrackNumber];
+				}
+				
+				size = sizeof(info);
+				err = AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, &info);
+				if(noErr != err) {
+					// TODO: Uncomment the following lines when (if?) Apple implements this functionality
+					//@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileSetProperty failed", @"Exceptions", @"")
+					//									  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
 			}
 		}
 		
-		// Clean up	
-		err = AudioFileClose(fileID);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileClose failed", @"Exceptions", @"")
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		@catch(NSException *exception) {
+			@throw;
+		}
+		
+		@finally {
+			// Clean up	
+			err = AudioFileClose(fileID);
+			if(noErr != err) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileClose failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
 		}
 	}	
 }

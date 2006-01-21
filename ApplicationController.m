@@ -173,7 +173,7 @@
 						enumerator	= [subpaths objectEnumerator];
 						
 						while((subpath = [enumerator nextObject])) {
-							metadata = [AudioMetadata metadataFromFilename:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
+							metadata = [AudioMetadata metadataFromFile:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
 							
 							@try {
 								[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] metadata:metadata];
@@ -185,7 +185,7 @@
 						}
 					}
 					else {
-						metadata = [AudioMetadata metadataFromFilename:filename];						
+						metadata = [AudioMetadata metadataFromFile:filename];						
 						[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
 					}
 				}

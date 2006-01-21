@@ -42,7 +42,7 @@
 }
 
 // Attempt to parse metadata from filename
-+ (AudioMetadata *)		metadataFromFilename:(NSString *)filename;
++ (AudioMetadata *)		metadataFromFile:(NSString *)filename;
 
 // Create output file's basename
 - (NSString *)			outputBasename;

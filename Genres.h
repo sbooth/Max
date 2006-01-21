@@ -23,7 +23,10 @@
 @interface Genres : NSObject
 {
 	NSArray		*_genres;
+	NSArray		*_unsortedGenres;
 }
 
 + (NSArray *) sharedGenres;
++ (NSArray *) unsortedGenres;
+
 @end

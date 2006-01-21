@@ -22,14 +22,16 @@
 
 #import "UtilityFunctions.h"
 
-#include "fileref.h"					// TagLib::File
-#include "tag.h"						// TagLib::Tag
+#include "fileref.h"					// TagLib::FileRef
+#include "mpegfile.h"					// TagLib::MPEG::File
+#include "id3v2tag.h"					// TagLib::ID3v2::Tag
+#include "id3v2frame.h"					// TagLib::ID3v2::Frame
 #include "mp4.h"						// MP4FileHandle
 
 @implementation AudioMetadata
 
 // Attempt to parse metadata from filename
-+ (AudioMetadata *) metadataFromFilename:(NSString *)filename
++ (AudioMetadata *) metadataFromFile:(NSString *)filename
 {
 	AudioMetadata				*result				= [[AudioMetadata alloc] init];
 	BOOL						parsed				= NO;
@@ -39,7 +41,8 @@
 
 	// Try TagLib first
 	{
-		TagLib::FileRef			f([filename UTF8String]);
+		TagLib::FileRef			f						([filename UTF8String]);
+		TagLib::MPEG::File		*mpegFile				= NULL;
 		
 		if(false == f.isNull()) {
 			TagLib::String		s;
@@ -84,6 +87,22 @@
 				[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
 			}
 			
+			// If this is an MPEG file look for the iTunes TCMP tag
+			mpegFile = dynamic_cast<TagLib::MPEG::File *>(f.file());
+			if(NULL != mpegFile && [[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+				TagLib::ID3v2::Tag		*id3v2tag		= mpegFile->ID3v2Tag();
+				
+				if(NULL != id3v2tag) {
+					TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TCMP"];
+					
+					if(NO == frameList.isEmpty()) {
+						// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
+						NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+						[result setValue:[NSNumber numberWithBool:(BOOL)[value intValue]] forKey:@"multipleArtists"];
+					}			
+				}
+			}
+
 			parsed = YES;
 		}
 	}
@@ -368,7 +387,10 @@
 		NSString	*title		= _trackTitle;
 		
 		if(nil == artist) {
-			artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
+			artist = _albumArtist;
+			if(nil == artist) {
+				artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
+			}
 		}
 		if(nil == title) {
 			title = NSLocalizedStringFromTable(@"Unknown Title", @"CompactDisc", @"");

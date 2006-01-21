@@ -20,8 +20,9 @@
 
 #import "OggVorbisEncoderTask.h"
 #import "OggVorbisEncoder.h"
+#import "IOException.h"
 
-#include "fileref.h"					// TagLib::File
+#include "vorbisfile.h"					// TagLib::Ogg::Vorbis::File
 #include "tag.h"						// TagLib::Tag
 
 @implementation OggVorbisEncoderTask
@@ -45,9 +46,13 @@
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
-	TagLib::FileRef								f						([_outputFilename UTF8String], false);
+	TagLib::Ogg::Vorbis::File					f						([_outputFilename UTF8String], false);
 
 	
+	if(NO == f.isValid()) {
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
+	}
+
 	// Album title
 	album = [metadata valueForKey:@"albumTitle"];
 	if(nil != album) {
@@ -106,6 +111,6 @@
 }
 
 - (NSString *)		extension						{ return @"ogg"; }
-- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""); }
+- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""); }
 
 @end

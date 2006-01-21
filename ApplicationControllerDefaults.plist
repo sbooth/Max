@@ -4,5 +4,7 @@
 <dict>
 	<key>startupVersionCheck</key>
 	<true/>
+	<key>useiTunesWorkarounds</key>
+	<true/>
 </dict>
 </plist>

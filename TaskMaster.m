@@ -67,17 +67,17 @@ static TaskMaster *sharedController = nil;
 
 + (void) initialize
 {
-	NSString				*taskMasterDefaultsValuesPath;
-    NSDictionary			*taskMasterDefaultsValuesDictionary;
+	NSString				*defaultsValuesPath;
+    NSDictionary			*defaultsValuesDictionary;
     
 	@try {
-		taskMasterDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TaskMasterDefaults" ofType:@"plist"];
-		if(nil == taskMasterDefaultsValuesPath) {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TaskMasterDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
 			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"TaskMasterDefaults.plist" forKey:@"filename"]];
 		}
-		taskMasterDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:taskMasterDefaultsValuesPath];
-		[[NSUserDefaults standardUserDefaults] registerDefaults:taskMasterDefaultsValuesDictionary];
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);

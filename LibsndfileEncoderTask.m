@@ -42,6 +42,6 @@
 - (void)			writeTags						{}
 - (int)				getFormat						{ return [[_formatInfo valueForKey:@"sndfileFormat"] intValue]; }
 - (NSString *)		extension						{ return [_formatInfo valueForKey:@"extension"]; }
-- (NSString *)		outputFormat						{ return [_formatInfo valueForKey:@"type"]; }
+- (NSString *)		outputFormat					{ return [_formatInfo valueForKey:@"type"]; }
 
 @end

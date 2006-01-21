@@ -20,7 +20,9 @@
 
 #import "MPEGEncoderTask.h"
 #import "MPEGEncoder.h"
+#import "Genres.h"
 #import "MallocException.h"
+#import "IOException.h"
 #import "UtilityFunctions.h"
 
 #include "lame/lame.h"					// get_lame_version
@@ -53,6 +55,7 @@
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
+	NSNumber									*multipleArtists		= nil;
 	NSNumber									*discNumber				= nil;
 	NSNumber									*discsInSet				= nil;
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= nil;
@@ -60,7 +63,13 @@
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	NSString									*timestamp				= nil;
+	unsigned									index					= NSNotFound;
 	
+
+	if(NO == f.isValid()) {
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
+	}
+
 	// Album title
 	album = [metadata valueForKey:@"albumTitle"];
 	if(nil != album) {
@@ -82,7 +91,29 @@
 		genre = [metadata valueForKey:@"albumGenre"];
 	}
 	if(nil != genre) {
-		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
+		// There is a bug in iTunes that will show numeric genres for ID3v2.4 genre tags
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+			index = [[Genres unsortedGenres] indexOfObject:genre];
+			
+			frame = new TagLib::ID3v2::TextIdentificationFrame("TCON", TagLib::String::Latin1);
+			if(nil == frame) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+
+			// Only use numbers for the original ID3v1 genre list
+			if(NSNotFound == index) {
+				frame->setText(TagLib::String([genre UTF8String], TagLib::String::UTF8));
+			}
+			else {
+				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%u)", index] UTF8String], TagLib::String::UTF8));
+			}
+			
+			f.ID3v2Tag()->addFrame(frame);
+		}
+		else {
+			f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
+		}
 	}
 	
 	// Year
@@ -125,6 +156,19 @@
 		f.tag()->setTrack([trackNumber intValue]);
 	}
 		
+	// Multi-artist (compilation)
+	// iTunes uses the TCMP frame for this, which isn't in the standard, but we'll use it for compatibility
+	multipleArtists = [metadata valueForKey:@"multipleArtists"];
+	if(nil != multipleArtists && [multipleArtists boolValue] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+		frame = new TagLib::ID3v2::TextIdentificationFrame("TCMP", TagLib::String::Latin1);
+		if(nil == frame) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		frame->setText(TagLib::String("1", TagLib::String::Latin1));
+		f.ID3v2Tag()->addFrame(frame);
+	}	
+	
 	// Disc number
 	discNumber = [metadata valueForKey:@"discNumber"];
 	discsInSet = [metadata valueForKey:@"discsInSet"];
@@ -192,6 +236,6 @@
 }
 
 - (NSString *)		extension						{ return @"mp3"; }
-- (NSString *)		outputFormat						{ return NSLocalizedStringFromTable(@"MP3", @"General", @""); }
+- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"MP3", @"General", @""); }
 
 @end
