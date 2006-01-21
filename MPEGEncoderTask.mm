@@ -112,13 +112,18 @@
 	// Track number
 	trackNumber = [metadata valueForKey:@"trackNumber"];
 	totalTracks = [[metadata valueForKey:@"albumTrackCount"] intValue];
-	frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
-	if(nil == frame) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	if(0 != totalTracks) {
+		frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
+		if(nil == frame) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"%@/%u", trackNumber, totalTracks] UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
 	}
-	frame->setText(TagLib::String([[NSString stringWithFormat:@"%@/%u", trackNumber, totalTracks] UTF8String], TagLib::String::UTF8));
-	f.ID3v2Tag()->addFrame(frame);
+	else {
+		f.tag()->setTrack([trackNumber intValue]);
+	}
 		
 	// Disc number
 	discNumber = [metadata valueForKey:@"discNumber"];
