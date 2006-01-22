@@ -23,7 +23,7 @@
 #import "TaskMaster.h"
 #import "IOException.h"
 
-#include <paths.h>			//_PATH_TMP
+#include <paths.h>			// _PATH_TMP
 #include <sys/param.h>		// statfs
 #include <sys/mount.h>
 

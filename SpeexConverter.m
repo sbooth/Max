@@ -35,7 +35,7 @@
 
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
-#include <paths.h>		//_PATH_TMP
+#include <paths.h>		// _PATH_TMP
 #include <unistd.h>		// mkstemp, unlink
 
 #define TEMPFILE_PATTERN	"Max.XXXXXXXX"

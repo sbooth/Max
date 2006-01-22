@@ -23,7 +23,8 @@
 #import "MallocException.h"
 #import "IOException.h"
 
-#include <paths.h>			//_PATH_TMP
+#include <sys/stat.h>		// stat
+#include <paths.h>			// _PATH_TMP
 #include <unistd.h>			// mkstemp, unlink
 
 #define TEMPFILE_PATTERN	"Max.XXXXXXXX"
@@ -130,8 +131,10 @@
 
 - (void) removeOutputFile
 {
-	// Delete output file
-	if(-1 == unlink([_outputFilename UTF8String])) {
+	struct stat sourceStat;
+	
+	// Delete output file if it exists
+	if(0 == stat([_outputFilename UTF8String], &sourceStat) && -1 == unlink([_outputFilename UTF8String])) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}	
