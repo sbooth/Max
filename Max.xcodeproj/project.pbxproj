@@ -6,23 +6,6 @@
 	objectVersion = 42;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		8C79F3CD09841AB20003BD66 /* SVNRevision */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 8C79F3D309841AFA0003BD66 /* Build configuration list for PBXAggregateTarget "SVNRevision" */;
-			buildPhases = (
-				8C79F3CC09841AB20003BD66 /* ShellScript */,
-			);
-			buildSettings = {
-				PRODUCT_NAME = SVNRevision;
-			};
-			dependencies = (
-			);
-			name = SVNRevision;
-			productName = SVNRevision;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		8C0230950956848A005D8698 /* OggFLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230930956848A005D8698 /* OggFLACConverterTask.m */; };
 		8C0230F909570F26005D8698 /* OggVorbisConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230F709570F26005D8698 /* OggVorbisConverterTask.m */; };
@@ -226,16 +209,6 @@
 			name = Deployment;
 		};
 /* End PBXBuildStyle section */
-
-/* Begin PBXContainerItemProxy section */
-		8C79F3D009841AEB0003BD66 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8C79F3CD09841AB20003BD66 /* SVNRevision */;
-			remoteInfo = SVNRevision;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		8C9A24AC0925ACF400FB244D /* Copy Growl */ = {
@@ -1047,6 +1020,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C1919DE08C50B7A00CB7453 /* Build configuration list for PBXNativeTarget "Max" */;
 			buildPhases = (
+				8C79F44B09841CE00003BD66 /* Generate timestamp */,
+				8C79F44D09841D3B0003BD66 /* Generate SVNRevision.h */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
@@ -1066,7 +1041,6 @@
 				WRAPPER_EXTENSION = app;
 			};
 			dependencies = (
-				8C79F3D109841AEB0003BD66 /* PBXTargetDependency */,
 			);
 			name = Max;
 			productInstallPath = "$(HOME)/Applications";
@@ -1091,7 +1065,6 @@
 			projectDirPath = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Max */,
-				8C79F3CD09841AB20003BD66 /* SVNRevision */,
 			);
 		};
 /* End PBXProject section */
@@ -1172,15 +1145,32 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		8C79F3CC09841AB20003BD66 /* ShellScript */ = {
+		8C79F44B09841CE00003BD66 /* Generate timestamp */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Generate timestamp";
 			outputPaths = (
-				"$(PROJECT_DIR)/SVNRevision.h",
+				"$(DERIVED_FILE_DIR)/timestamp",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"timestamp\" > $SCRIPT_OUTPUT_FILE_0\nexit 0";
+		};
+		8C79F44D09841D3B0003BD66 /* Generate SVNRevision.h */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(DERIVED_FILE_DIR)/timestamp",
+			);
+			name = "Generate SVNRevision.h";
+			outputPaths = (
+				"$(PROJECT_ROOT)/SVNRevision.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1285,14 +1275,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		8C79F3D109841AEB0003BD66 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8C79F3CD09841AB20003BD66 /* SVNRevision */;
-			targetProxy = 8C79F3D009841AEB0003BD66 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
@@ -1648,28 +1630,6 @@
 			};
 			name = Release;
 		};
-		8C79F3D409841AFA0003BD66 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				PRODUCT_NAME = SVNRevision;
-			};
-			name = Debug;
-		};
-		8C79F3D509841AFA0003BD66 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				PRODUCT_NAME = SVNRevision;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1687,15 +1647,6 @@
 			buildConfigurations = (
 				8C1919E308C50B7A00CB7453 /* Debug */,
 				8C1919E408C50B7A00CB7453 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8C79F3D309841AFA0003BD66 /* Build configuration list for PBXAggregateTarget "SVNRevision" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8C79F3D409841AFA0003BD66 /* Debug */,
-				8C79F3D509841AFA0003BD66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
