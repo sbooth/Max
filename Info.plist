@@ -49,7 +49,7 @@
 	<key>CFBundleSignature</key>
 	<string>Maxx</string>
 	<key>CFBundleVersion</key>
-	<string>0.5.2</string>
+	<string>SVN_REVISION</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
