@@ -234,17 +234,13 @@
 		}
 		
 		// Encode the chunk
-		flacResult = FLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);
+		flacResult = FLAC__file_encoder_process(_flac, (const FLAC__int32 * const *)rawPCM, numSamples / 2);
 		
 		if(NO == flacResult) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
+		
 	@finally {
 		free(rawPCM[0]);
 		free(rawPCM[1]);
