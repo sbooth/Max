@@ -19,7 +19,7 @@
  */
 
 #import "ServicesProvider.h"
-
+#import "ApplicationController.h"
 #import "TaskMaster.h"
 #import "FileFormatNotSupportedException.h"
 #import "IOException.h"
@@ -32,76 +32,10 @@
 	
 	@try {
 		if([types containsObject:NSFilenamesPboardType]) {
-			NSFileManager		*manager		= [NSFileManager defaultManager];
-			NSArray				*filenames		= [pboard propertyListForType:NSFilenamesPboardType];
-			NSString			*filename;
-			NSArray				*subpaths;
-			BOOL				isDir;
-			AudioMetadata		*metadata;
-			NSEnumerator		*enumerator;
-			NSString			*subpath;
-			unsigned			i;
-			
-			for(i = 0; i < [filenames count]; ++i) {
-				filename = [filenames objectAtIndex:i];
-				
-				if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
-					if(isDir) {
-						subpaths	= [manager subpathsAtPath:filename];
-						enumerator	= [subpaths objectEnumerator];
-						
-						while((subpath = [enumerator nextObject])) {
-
-							metadata = [AudioMetadata metadataFromFile:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
-							
-							@try {
-								[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] metadata:metadata];
-							}
-							@catch(FileFormatNotSupportedException *exception) {
-								// Just let it go since we are traversing a folder
-							}
-						}
-					}
-					else {
-						metadata = [AudioMetadata metadataFromFile:filename];
-						[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
-					}
-				}				
-			}
+			[[ApplicationController sharedController] encodeFiles:[pboard propertyListForType:NSFilenamesPboardType]];
 		}
 		else if([types containsObject:NSStringPboardType]) {
-			NSFileManager		*manager		= [NSFileManager defaultManager];
-			NSString			*filename		= [pboard stringForType:NSStringPboardType];
-			NSArray				*subpaths;
-			BOOL				isDir;
-			AudioMetadata		*metadata;
-			NSEnumerator		*enumerator;
-			NSString			*subpath;
-			
-			if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
-				if(isDir) {
-					subpaths	= [manager subpathsAtPath:filename];
-					enumerator	= [subpaths objectEnumerator];
-					
-					while((subpath = [enumerator nextObject])) {
-						metadata = [AudioMetadata metadataFromFile:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
-
-						@try {
-							[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] metadata:metadata];
-						}
-						@catch(FileFormatNotSupportedException *exception) {
-							// Just let it go since we are traversing a folder
-						}
-					}
-				}
-				else {
-					metadata = [AudioMetadata metadataFromFile:filename];
-					[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
-				}
-			}
-			else {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"File not found", @"Exceptions", @"") userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
-			}
+			[[ApplicationController sharedController] encodeFiles:[NSArray arrayWithObject:[pboard stringForType:NSStringPboardType]]];
 		}
 	}
 	

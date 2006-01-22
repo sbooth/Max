@@ -38,7 +38,7 @@
 
 	[result setValue:[NSNumber numberWithBool:NO] forKey:@"multipleArtists"];
 	[result setValue:[NSNumber numberWithUnsignedInt:0] forKey:@"trackNumber"];
-
+	
 	// Try TagLib first
 	{
 		TagLib::FileRef			f						([filename UTF8String]);
@@ -106,7 +106,7 @@
 			parsed = YES;
 		}
 	}
-	
+
 	// Try mp4v2 second
 	if(NO == parsed) {
 		MP4FileHandle mp4FileHandle = MP4Read([filename UTF8String], 0);
@@ -181,7 +181,7 @@
 			MP4Close(mp4FileHandle);
 		}
 	}
-	
+
 	return [result autorelease];
 }
 

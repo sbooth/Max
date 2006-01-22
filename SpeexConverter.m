@@ -38,24 +38,22 @@
 #include <paths.h>		//_PATH_TMP
 #include <unistd.h>		// mkstemp, unlink
 
-#define TEMPFILE_PATTERN	"MaxXXXXXX.raw"
+#define TEMPFILE_PATTERN	"Max.XXXXXXXX"
 
 @implementation SpeexConverter
 
 - (id) initWithInputFile:(NSString *)inputFilename
 {
-	int					fd				= -1;
 	char				*path			= NULL;
 	const char			*tmpDir;
 	ssize_t				tmpDirLen;
 	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
-
+	
 	if((self = [super initWithInputFile:inputFilename])) {
 
 		@try {
 			_resampleInput = NO;
 			
-			// Create a temp file in case we need to resample
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
 				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
 			}
@@ -73,12 +71,7 @@
 			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 			path[tmpDirLen + patternLen] = '\0';
 			
-			fd = mkstemps(path, 4);
-			if(-1 == fd) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
+			mktemp(path);
 			_tempFilename = [[NSString stringWithUTF8String:path] retain];
 		}
 		
@@ -88,11 +81,6 @@
 
 		@finally {			
 			free(path);
-
-			if(-1 != fd && -1 == close(fd)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
 		}
 		
 		return self;

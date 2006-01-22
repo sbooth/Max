@@ -42,7 +42,7 @@
 #include <paths.h>		//_PATH_TMP
 #include <unistd.h>		// mkstemp, unlink
 
-#define TEMPFILE_PATTERN	"MaxXXXXXX.raw"
+#define TEMPFILE_PATTERN	"Max.XXXXXXXX"
 
 // My (semi-arbitrary) list of supported speex bitrates
 static int sSpeexBitrates [13] = { 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28};
@@ -154,12 +154,11 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 
 - (id) initWithPCMFilename:(NSString *)inputFilename
 {
-	int					fd				= -1;
 	char				*path			= NULL;
 	const char			*tmpDir;
 	ssize_t				tmpDirLen;
 	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
-
+	
 	if((self = [super initWithPCMFilename:inputFilename])) {
 		
 		_mode				= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexMode"];
@@ -187,7 +186,6 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
 		@try {
-			// Setup downsampled file, if needed (do it here to avoid multithreaded issues)
 			if(_resampleInput) {				
 				if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
 					tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
@@ -206,13 +204,8 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 				path[tmpDirLen + patternLen] = '\0';
 				
-				fd = mkstemps(path, 4);
-				if(-1 == fd) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				}
-				
-				_tempFilename = [[NSString stringWithUTF8String:path] retain];				
+				mktemp(path);
+				_tempFilename = [[NSString stringWithUTF8String:path] retain];
 			}
 		}
 
@@ -222,11 +215,6 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		
 		@finally {
 			free(path);
-
-			if(-1 != fd && -1 == close(fd)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}				
 		}
 		
 		return self;
@@ -346,7 +334,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 			info.channels		= 2;
 			outSF				= sf_open([_tempFilename UTF8String], SFM_WRITE, &info);
 			if(NULL == outSF) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the temporary file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			

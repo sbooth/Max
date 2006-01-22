@@ -35,7 +35,7 @@
 - (void)					stop;
 
 - (NSString *)				outputFilename;
-
+- (void)					touchOutputFile;
 - (void)					removeOutputFile;
 
 - (AudioMetadata *)			metadata;

@@ -38,6 +38,7 @@
 
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;
+static NSArray				*sAudioExtensions	= nil;
 
 NSString *
 getApplicationDataDirectory()
@@ -156,27 +157,33 @@ validateAndCreateDirectory(NSString *path)
 NSArray *
 getLibsndfileExtensions()
 {
-	NSMutableArray			*result;
 	SF_FORMAT_INFO			formatInfo;
 	SF_INFO					info;
 	int						i, majorCount = 0;
 
-	sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
+	@synchronized(sAudioExtensions) {
+		if(nil == sAudioExtensions) {
 
-	result = [NSMutableArray arrayWithCapacity:majorCount];
-	
-	// Generic defaults
-	info.channels		= 1 ;
-	info.samplerate		= 0;
-	
-	// Loop through each major mode
-	for(i = 0; i < majorCount; ++i) {	
-		formatInfo.format = i;
-		sf_command(NULL, SFC_GET_FORMAT_MAJOR, &formatInfo, sizeof(formatInfo));
-		[result addObject:[NSString stringWithUTF8String:formatInfo.extension]];
+			sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
+
+			sAudioExtensions = [NSMutableArray arrayWithCapacity:majorCount];
+			
+			// Generic defaults
+			info.channels		= 1 ;
+			info.samplerate		= 0;
+			
+			// Loop through each major mode
+			for(i = 0; i < majorCount; ++i) {	
+				formatInfo.format = i;
+				sf_command(NULL, SFC_GET_FORMAT_MAJOR, &formatInfo, sizeof(formatInfo));
+				[sAudioExtensions addObject:[NSString stringWithUTF8String:formatInfo.extension]];
+			}
+			
+			[sAudioExtensions retain];
+		}
 	}
-
-	return [[result retain] autorelease];
+	
+	return sAudioExtensions;
 }
 
 void

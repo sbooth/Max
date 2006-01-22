@@ -94,12 +94,14 @@
 	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 
 	[super setStarted];
+
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_converterClass withObject:portArray];
 }
 
 - (void) converterReady:(id)anObject
 {
     [anObject setProtocolForProxy:@protocol(ConverterMethods)];
+	[self touchOutputFile];
 	[anObject convertToFile:[self outputFilename]];
 }
 

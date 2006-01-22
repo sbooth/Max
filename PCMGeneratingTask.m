@@ -26,7 +26,7 @@
 #include <paths.h>			//_PATH_TMP
 #include <unistd.h>			// mkstemp, unlink
 
-#define TEMPFILE_PATTERN	"MaxXXXXXX.raw"
+#define TEMPFILE_PATTERN	"Max.XXXXXXXX"
 
 @implementation PCMGeneratingTask
 
@@ -55,58 +55,10 @@
 
 - (id) initWithMetadata:(AudioMetadata *)metadata
 {
-	int					fd;
-	char				*path			= NULL;
-	const char			*tmpDir;
-	ssize_t				tmpDirLen;
-	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
-
 	if((self = [super init])) {
 		
-		@try {
-			_metadata		= [metadata retain];
-
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
-			}
-			else {
-				tmpDir = _PATH_TMP;
-			}
-
-			// Create and open the (temporary) output file
-			tmpDirLen	= strlen(tmpDir);
-			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-			if(NULL == path) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			memcpy(path, tmpDir, tmpDirLen);
-			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
-			path[tmpDirLen + patternLen] = '\0';
-		
-			// We're really only interested in the name of this file.  
-			// Use mkstemps (instead of mktemp) to guarantee creation of a unique temp file
-			fd = mkstemps(path, 4);
-			if(-1 == fd) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-
-			if(-1 == close(fd)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
-			_outputFilename		= [[NSString stringWithUTF8String:path] retain];
-		}
-		
-		@catch(NSException *exception) {
-			@throw;
-		}
-		
-		@finally {
-			free(path);
-		}
+		_metadata			= [metadata retain];
+		_outputFilename		= nil;
 		
 		return self;
 	}
@@ -121,6 +73,59 @@
 	[_outputFilename release];	
 	
 	[super dealloc];
+}
+
+- (void) touchOutputFile
+{
+	int					fd				= -1;
+	char				*path			= NULL;
+	const char			*tmpDir;
+	ssize_t				tmpDirLen;
+	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
+	
+	if(nil == _outputFilename) {
+		@try {
+
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
+				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+			}
+			else {
+				tmpDir = _PATH_TMP;
+			}
+			
+			tmpDirLen	= strlen(tmpDir);
+			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+			if(NULL == path) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			memcpy(path, tmpDir, tmpDirLen);
+			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+			path[tmpDirLen + patternLen] = '\0';
+			
+			fd = mkstemp(path);
+			if(-1 == fd) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			
+			_outputFilename = [[NSString stringWithUTF8String:path] retain];
+		}
+		
+		@catch(NSException *exception) {
+			@throw;
+		}
+		
+		@finally {
+			free(path);
+			
+			// And close it
+			if(-1 != fd && -1 == close(fd)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+		}
+	}	
 }
 
 - (void) removeOutputFile

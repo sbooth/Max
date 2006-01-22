@@ -42,6 +42,8 @@
 #import "NegateBooleanArrayValueTransformer.h"
 #import "MultiplicationValueTransformer.h"
 
+static ApplicationController *sharedController = nil;
+
 @implementation ApplicationController
 
 + (void)initialize
@@ -78,6 +80,54 @@
 	}
 	@finally {
 	}	
+}
+
++ (ApplicationController *) sharedController
+{
+	@synchronized(self) {
+		if(nil == sharedController) {
+			sharedController = [[self alloc] init];
+		}
+	}
+	return sharedController;
+}
+
++ (id) allocWithZone:(NSZone *)zone
+{
+    @synchronized(self) {
+        if(nil == sharedController) {
+            return [super allocWithZone:zone];
+        }
+    }
+    return sharedController;
+}
+
+- (id)			copyWithZone:(NSZone *)zone						{ return self; }
+- (id)			retain											{ return self; }
+- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (void)		release											{ /* do nothing */ }
+- (id)			autorelease										{ return self; }
+
+- (id) init
+{
+	if((self = [super init])) {		
+
+		// Allowable file types
+		_allowedTypes = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
+		[_allowedTypes addObjectsFromArray:getLibsndfileExtensions()];
+		[_allowedTypes addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", nil]];
+
+		[_allowedTypes retain];
+		
+		return self;
+	}
+	return nil;
+}
+
+- (void) dealloc
+{
+	[_allowedTypes release];
+	[super dealloc];
 }
 
 - (void) awakeFromNib
@@ -142,60 +192,77 @@
 - (IBAction) encodeFile:(id)sender
 {
 	NSOpenPanel			*panel			= [NSOpenPanel openPanel];
-	NSMutableArray		*types;
 	
 	[panel setAllowsMultipleSelection:YES];
 	[panel setCanChooseDirectories:YES];
-	
-	// Allowable file types
-	types = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
-	[types addObjectsFromArray:getLibsndfileExtensions()];
-	[types addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", nil]];
-	
-	if(NSOKButton == [panel runModalForTypes:types]) {
-		NSFileManager		*manager		= [NSFileManager defaultManager];
-		NSArray				*filenames		= [panel filenames];
-		NSString			*filename;
-		NSArray				*subpaths;
-		BOOL				isDir;
-		AudioMetadata		*metadata;
-		NSEnumerator		*enumerator;
-		NSString			*subpath;
-		unsigned			i;
 		
-		@try {
-			for(i = 0; i < [filenames count]; ++i) {
-				filename = [filenames objectAtIndex:i];
-				
-				if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
-					if(isDir) {
-						subpaths	= [manager subpathsAtPath:filename];
-						enumerator	= [subpaths objectEnumerator];
-						
-						while((subpath = [enumerator nextObject])) {
-							metadata = [AudioMetadata metadataFromFile:[NSString stringWithFormat:@"%@/%@", filename, subpath]];
-							
-							@try {
-								[[TaskMaster sharedController] encodeFile:[NSString stringWithFormat:@"%@/%@", filename, subpath] metadata:metadata];
-							}
-							
-							@catch(FileFormatNotSupportedException *exception) {
-								// Just let it go since we are traversing a folder
-							}
-						}
-					}
-					else {
-						metadata = [AudioMetadata metadataFromFile:filename];						
-						[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
-					}
-				}
-			}				
-		}
+	if(NSOKButton == [panel runModalForTypes:_allowedTypes]) {
 
+		@try {
+			[self encodeFiles:[panel filenames]];
+		}
+		
 		@catch(NSException *exception) {
 			displayExceptionAlert(exception);
-		}
+		}		
 	}
+}
+
+- (void) encodeFiles:(NSArray *)filenames
+{
+	NSFileManager		*manager		= [NSFileManager defaultManager];
+	NSString			*filename;
+	NSArray				*subpaths;
+	BOOL				isDir;
+	AudioMetadata		*metadata;
+	NSEnumerator		*enumerator;
+	NSString			*subpath;
+	NSString			*composedPath;
+	unsigned			i;
+	
+	for(i = 0; i < [filenames count]; ++i) {
+		filename = [filenames objectAtIndex:i];
+		
+		if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
+			if(isDir) {
+				subpaths	= [manager subpathsAtPath:filename];
+				enumerator	= [subpaths objectEnumerator];
+				
+				while((subpath = [enumerator nextObject])) {
+					composedPath = [NSString stringWithFormat:@"%@/%@", filename, subpath];
+					
+					// Ignore dotfiles
+					if([[subpath lastPathComponent] hasPrefix:@"."]) {
+						continue;
+					}
+					// Ignore files that don't have our extensions
+					else if(NO == [_allowedTypes containsObject:[subpath pathExtension]]) {
+						continue;
+					}
+					
+					// Ignore directories
+					if([manager fileExistsAtPath:composedPath isDirectory:&isDir] && NO == isDir) {
+						metadata = [AudioMetadata metadataFromFile:composedPath];
+						
+						@try {
+							[[TaskMaster sharedController] encodeFile:composedPath metadata:metadata];
+						}
+						
+						@catch(FileFormatNotSupportedException *exception) {
+							// Just let it go since we are traversing a folder
+						}
+					}
+				}
+			}
+			else {
+				metadata = [AudioMetadata metadataFromFile:filename];						
+				[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
+			}
+		}
+		else {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"File not found", @"Exceptions", @"") userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
+		}
+	}					
 }
 
 - (IBAction) showComponentVersions:(id)sender

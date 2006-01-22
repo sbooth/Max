@@ -100,6 +100,7 @@
 - (void) ripperReady:(id)anObject
 {
     [anObject setProtocolForProxy:@protocol(RipperMethods)];
+	[self touchOutputFile];
 	[anObject ripToFile:[self outputFilename]];
 }
 
