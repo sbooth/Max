@@ -235,7 +235,7 @@
 		}
 		
 		// Encode the chunk
-		flacResult = OggFLAC__file_encoder_process(_flac, rawPCM, numSamples / 2);
+		flacResult = OggFLAC__file_encoder_process(_flac, (const int32_t * const *)rawPCM, numSamples / 2);
 		
 		if(NO == flacResult) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
