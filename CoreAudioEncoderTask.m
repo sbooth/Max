@@ -282,11 +282,7 @@
 				}
 			}
 		}
-		
-		@catch(NSException *exception) {
-			@throw;
-		}
-		
+				
 		@finally {
 			// Clean up	
 			err = AudioFileClose(fileID);

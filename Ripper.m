@@ -95,9 +95,6 @@ callback(long inpos, int function, void *userdata)
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
 	}
-
-	@finally {
-	}
 }
 
 + (void) connectWithPorts:(NSArray *)portArray

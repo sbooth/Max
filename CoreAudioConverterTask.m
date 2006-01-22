@@ -70,10 +70,6 @@
 				_fileFormat = NSLocalizedStringFromTable(@"Unknown (Core Audio)", @"General", @"");
 			}		
 		}
-
-		@catch(NSException *exception) {
-			@throw;
-		}
 		
 		@finally {
 			err = ExtAudioFileDispose(extAudioFileRef);

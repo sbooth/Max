@@ -48,10 +48,9 @@
 		cddbDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:cddbDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:cddbDefaultsValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	@finally {
 	}
 }
 

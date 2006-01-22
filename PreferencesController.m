@@ -69,10 +69,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		initialValuesDictionary = [defaultsDictionary dictionaryWithValuesForKeys:[defaultsDictionary allKeys]];		
 		[[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:initialValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	@finally {
 	}
 }
 

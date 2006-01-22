@@ -75,10 +75,6 @@
 			_tempFilename = [[NSString stringWithUTF8String:path] retain];
 		}
 		
-		@catch(NSException *exception) {
-			@throw;
-		}
-
 		@finally {			
 			free(path);
 		}

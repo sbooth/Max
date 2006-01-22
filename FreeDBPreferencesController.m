@@ -43,9 +43,6 @@
 	@catch(NSException *exception) {
 		displayExceptionSheet(exception, [[PreferencesController sharedPreferences] window], self, @selector(alertDidEnd:returnCode:contextInfo:), NULL);
 	}
-	
-	@finally {
-	}
 }
 
 - (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo

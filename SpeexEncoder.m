@@ -145,10 +145,9 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		speexDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:speexDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:speexDefaultsValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	@finally {
 	}
 }
 
@@ -207,10 +206,6 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 				mktemp(path);
 				_tempFilename = [[NSString stringWithUTF8String:path] retain];
 			}
-		}
-
-		@catch(NSException *exception) {
-			@throw;
 		}
 		
 		@finally {

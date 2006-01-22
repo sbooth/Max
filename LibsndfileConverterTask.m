@@ -56,11 +56,7 @@
 				_fileFormat = NSLocalizedStringFromTable(@"Unknown (libsndfile)", @"General", @"");
 			}
 		}
-		
-		@catch(NSException *exception) {
-			@throw;
-		}
-	
+			
 		@finally {
 			if(0 != sf_close(sndfile)) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 

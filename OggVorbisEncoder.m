@@ -58,10 +58,9 @@ enum {
 		vorbisDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:vorbisDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:vorbisDefaultsValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	@finally {
 	}
 }
 

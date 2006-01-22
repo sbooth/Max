@@ -49,9 +49,6 @@
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
 	}
-	
-	@finally {
-	}	
 }
 
 - (id) initWithMetadata:(AudioMetadata *)metadata
@@ -112,11 +109,7 @@
 			
 			_outputFilename = [[NSString stringWithUTF8String:path] retain];
 		}
-		
-		@catch(NSException *exception) {
-			@throw;
-		}
-		
+				
 		@finally {
 			free(path);
 			

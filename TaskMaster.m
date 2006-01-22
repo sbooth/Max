@@ -79,10 +79,9 @@ static TaskMaster *sharedController = nil;
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	@finally {
 	}
 }
 
@@ -247,7 +246,7 @@ static TaskMaster *sharedController = nil;
 
 - (void) encodeTrack:(Track *)track
 {
-	[self encodeTracks:[NSArray arrayWithObjects:track, nil] metadata:[track metadata]];
+	[self encodeTracks:[NSArray arrayWithObject:track] metadata:[track metadata]];
 }
 
 - (void) encodeTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
@@ -588,9 +587,6 @@ static TaskMaster *sharedController = nil;
 	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	
-	@finally {
 	}
 }
 

@@ -63,11 +63,10 @@
 		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
 		
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
 	}
-	@finally {
-	}	
 }
 
 - (id) init
@@ -432,10 +431,6 @@
 	
 	@catch(NSException *exception) {
 		[self displayException:exception];
-	}
-	
-	@finally {
-		
 	}
 }
 

@@ -42,10 +42,9 @@
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	@finally {
 	}
 }
 

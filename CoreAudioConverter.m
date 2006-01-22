@@ -61,10 +61,6 @@
 			// Open the input file to get the file's information
 			[self openInputFile];
 		}
-
-		@catch(NSException *exception) {
-			@throw;
-		}
 		
 		@finally {
 			// Close the input file to avoid too many open file descriptors

@@ -57,10 +57,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		lameDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:lameDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:lameDefaultsValuesDictionary];
 	}
+	
 	@catch(NSException *exception) {
 		displayExceptionAlert(exception);
-	}
-	@finally {
 	}
 }
 
@@ -137,10 +136,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 			
 			@throw;
 		}
-		
-		@finally {
-		}
-		
+				
 		return self;
 	}
 	
@@ -328,11 +324,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
+		
 	@finally {
 		free(buf);
 	}
@@ -373,11 +365,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
+		
 	@finally {
 		free(buf);
 	}

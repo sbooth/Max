@@ -241,11 +241,7 @@
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 	}
-	
-	@catch(NSException *exception) {
-		@throw;
-	}
-	
+		
 	@finally {
 		free(rawPCM[0]);
 		free(rawPCM[1]);

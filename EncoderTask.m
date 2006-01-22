@@ -128,10 +128,6 @@
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
-
-		@catch(NSException *exception) {
-			@throw;
-		}
 		
 		@finally {
 			// And close it
