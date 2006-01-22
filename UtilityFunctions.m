@@ -176,7 +176,7 @@ getLibsndfileExtensions()
 			for(i = 0; i < majorCount; ++i) {	
 				formatInfo.format = i;
 				sf_command(NULL, SFC_GET_FORMAT_MAJOR, &formatInfo, sizeof(formatInfo));
-				[sAudioExtensions addObject:[NSString stringWithUTF8String:formatInfo.extension]];
+				[(NSMutableArray *)sAudioExtensions addObject:[NSString stringWithUTF8String:formatInfo.extension]];
 			}
 			
 			[sAudioExtensions retain];
