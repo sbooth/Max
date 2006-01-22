@@ -190,7 +190,6 @@
 	}
 	
 	@finally {
-
 		FLAC__file_encoder_delete(_flac);
 
 		// Close the input file

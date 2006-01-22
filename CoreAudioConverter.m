@@ -45,23 +45,31 @@
 {
 	if((self = [super initWithInputFile:inputFilename])) {
 		
-		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
+		@try {
+			bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
+			
+			// Desired output is interleaved 16-bit PCM audio
+			_outputASBD.mSampleRate			= 44100.f;
+			_outputASBD.mFormatID			= kAudioFormatLinearPCM;
+			_outputASBD.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+			_outputASBD.mBytesPerPacket		= 4;
+			_outputASBD.mFramesPerPacket	= 1;
+			_outputASBD.mBytesPerFrame		= 4;
+			_outputASBD.mChannelsPerFrame	= 2;
+			_outputASBD.mBitsPerChannel		= 16;
+			
+			// Open the input file to get the file's information
+			[self openInputFile];
+		}
+
+		@catch(NSException *exception) {
+			@throw;
+		}
 		
-		// Desired output is interleaved 16-bit PCM audio
-		_outputASBD.mSampleRate			= 44100.f;
-		_outputASBD.mFormatID			= kAudioFormatLinearPCM;
-		_outputASBD.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
-		_outputASBD.mBytesPerPacket		= 4;
-		_outputASBD.mFramesPerPacket	= 1;
-		_outputASBD.mBytesPerFrame		= 4;
-		_outputASBD.mChannelsPerFrame	= 2;
-		_outputASBD.mBitsPerChannel		= 16;
-		
-		// Open the input file to get the file's information
-		[self openInputFile];
-		
-		// Close the input file to avoid too many open file descriptors
-		[self closeInputFile:YES];
+		@finally {
+			// Close the input file to avoid too many open file descriptors
+			[self closeInputFile:YES];
+		}
 		
 		return self;
 	}

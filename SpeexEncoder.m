@@ -212,12 +212,7 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 				}
 				
-				_tempFilename = [[NSString stringWithUTF8String:path] retain];
-				
-				if(-1 == close(fd)) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				}				
+				_tempFilename = [[NSString stringWithUTF8String:path] retain];				
 			}
 		}
 
@@ -227,6 +222,11 @@ static void comment_add(char **comments, int *length, char *tag, char *val)
 		
 		@finally {
 			free(path);
+
+			if(-1 != fd && -1 == close(fd)) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}				
 		}
 		
 		return self;

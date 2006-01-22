@@ -80,11 +80,6 @@
 	return nil;
 }
 
-- (void) dealloc
-{
-	[super dealloc];
-}
-
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime			= [NSDate date];
@@ -225,11 +220,17 @@
 	@finally {
 		free(intBuffer);
 		free(doubleBuffer);
-		if(NULL != in) {
-			sf_close(in);
+		
+		if(0 != sf_close(in)) {
+			NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+															userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
 		}
-		if(NULL != out) {
-			sf_close(out);
+		
+		if(0 != sf_close(out)) {
+			NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+															userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
 		}
 
 		// Close the input file

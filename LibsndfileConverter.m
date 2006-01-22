@@ -38,11 +38,19 @@
 {
 	if((self = [super initWithInputFile:inputFilename])) {
 
-		// Open the input file to get the file's information
-		[self openInputFile];
+		@try {
+			// Open the input file to get the file's information
+			[self openInputFile];
+		}
+
+		@catch(NSException *exception) {
+			@throw;
+		}
 		
-		// Close to avoid too many open file descriptors
-		[self closeInputFile:YES];
+		@finally {
+			// Close to avoid too many open file descriptors
+			[self closeInputFile:YES];
+		}
 		
 		return self;
 	}

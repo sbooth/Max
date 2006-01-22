@@ -138,7 +138,7 @@ enum {
 		
 		// Allocate the buffer (Vorbis crashes if it is too large)
 		buflen			= 1024;
-		buf			= (int16_t *) calloc(buflen, sizeof(int16_t));
+		buf				= (int16_t *) calloc(buflen, sizeof(int16_t));
 		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
