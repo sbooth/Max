@@ -179,6 +179,7 @@ static Genres *sharedGenres = nil;
 			NSLocalizedStringFromTable(@"Synthpop", @"Genres", @""),
 			nil
 			];
+		[_unsortedGenres retain];
 		_genres = [[_unsortedGenres sortedArrayUsingSelector:@selector(compare:)] retain];
 	}
 	return self;
