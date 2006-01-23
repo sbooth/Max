@@ -252,6 +252,8 @@
 	_disc			= [disc retain];
 
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"discInDrive"];
+
+	[self setValue:[_disc MCN] forKey:@"MCN"];
 	
 	[self willChangeValueForKey:@"tracks"];
 	if(0 == [_tracks count]) {
@@ -273,6 +275,7 @@
 		[track setValue:[NSNumber numberWithUnsignedInt:[_disc channelsForTrack:i]] forKey:@"channels"];
 		[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackHasPreEmphasis:i]] forKey:@"preEmphasis"];
 		[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackAllowsDigitalCopy:i]] forKey:@"copyPermitted"];
+		[track setValue:[_disc ISRC:i] forKey:@"ISRC"];
 	}
 }
 
@@ -601,6 +604,8 @@
 	NSMutableDictionary		*result		= [[NSMutableDictionary alloc] init];
 	NSMutableArray			*tracks		= [NSMutableArray arrayWithCapacity:[_tracks count]];
 		
+	//[result setValue:[NSNumber numberWithInt:[_trackDrawer state]] forKey:@"trackDrawerState"];
+
 	[result setValue:_title forKey:@"title"];
 	[result setValue:_artist forKey:@"artist"];
 	[result setValue:_year forKey:@"year"];
@@ -609,6 +614,7 @@
 	[result setValue:_discNumber forKey:@"discNumber"];
 	[result setValue:_discsInSet forKey:@"discsInSet"];
 	[result setValue:_multiArtist forKey:@"multiArtist"];
+	[result setValue:_MCN forKey:@"MCN"];
 	[result setValue:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
 	
 	for(i = 0; i < [_tracks count]; ++i) {
@@ -624,6 +630,7 @@
 {
 	unsigned				i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
+	int						drawerState;
 	
 	if([self discInDrive] && [tracks count] != [_tracks count]) {
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
@@ -642,6 +649,15 @@
 		[[_tracks objectAtIndex:i] setPropertiesFromDictionary:[tracks objectAtIndex:i]];
 	}
 	
+/*	drawerState = [[properties valueForKey:@"trackDrawerState"] intValue];
+	if(NSDrawerOpenState == drawerState || NSDrawerOpeningState == drawerState) {
+		NSLog(@"open");
+		[_trackDrawer open];
+	}
+	else {
+		[_trackDrawer close];
+	}*/
+
 	[self setValue:[properties valueForKey:@"title"] forKey:@"title"];
 	[self setValue:[properties valueForKey:@"artist"] forKey:@"artist"];
 	[self setValue:[properties valueForKey:@"year"] forKey:@"year"];
@@ -650,6 +666,7 @@
 	[self setValue:[properties valueForKey:@"discNumber"] forKey:@"discNumber"];
 	[self setValue:[properties valueForKey:@"discsInSet"] forKey:@"discsInSet"];
 	[self setValue:[properties valueForKey:@"multiArtist"] forKey:@"multiArtist"];
+	[self setValue:[properties valueForKey:@"MCN"] forKey:@"MCN"];
 	[self setValue:[properties valueForKey:@"discID"] forKey:@"discID"];
 }
 

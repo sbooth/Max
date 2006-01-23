@@ -49,6 +49,8 @@
 	NSNumber						*_discsInSet;
 	NSNumber						*_multiArtist;
 	
+	NSString						*_MCN;
+	
 	// Array of audio tracks
 	NSMutableArray					*_tracks;
 }

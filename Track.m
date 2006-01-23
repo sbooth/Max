@@ -208,6 +208,7 @@
 	[result setValue:_channels forKey:@"channels"];
 	[result setValue:_preEmphasis forKey:@"preEmphasis"];
 	[result setValue:_copyPermitted forKey:@"copyPermitted"];
+	[result setValue:_ISRC forKey:@"ISRC"];
 	
 	return [[result retain] autorelease];
 }
@@ -228,6 +229,7 @@
 	[self setValue:[properties valueForKey:@"channels"] forKey:@"channels"];
 	[self setValue:[properties valueForKey:@"preEmphasis"] forKey:@"preEmphasis"];
 	[self setValue:[properties valueForKey:@"copyPermitted"] forKey:@"copyPermitted"];
+	[self setValue:[properties valueForKey:@"ISRC"] forKey:@"ISRC"];
 }
 
 - (id) copyWithZone:(NSZone *)zone
@@ -250,6 +252,7 @@
 	[copy setValue:_channels forKey:@"channels"];
 	[copy setValue:_preEmphasis forKey:@"preEmphasis"];
 	[copy setValue:_copyPermitted forKey:@"copyPermitted"];
+	[copy setValue:_ISRC forKey:@"ISRC"];
 
 	return copy;
 }
@@ -263,8 +266,9 @@
 	[result setValue:_artist forKey:@"trackArtist"];
 	[result setValue:_year forKey:@"trackYear"];
 	[result setValue:_genre forKey:@"trackGenre"];
-	//[result setValue:nil_comment forKey:@"trackComment"];
-		
+//	[result setValue:_comment forKey:@"trackComment"];
+	[result setValue:_ISRC forKey:@"ISRC"];
+	
 	[result setValue:[NSNumber numberWithInt:[[_disc valueForKey:@"tracks"] count]] forKey:@"albumTrackCount"];
 	[result setValue:[_disc valueForKey:@"title"] forKey:@"albumTitle"];
 	[result setValue:[_disc valueForKey:@"artist"] forKey:@"albumArtist"];
@@ -276,6 +280,7 @@
 	[result setValue:[_disc valueForKey:@"discsInSet"] forKey:@"discsInSet"];
 	[result setValue:[_disc valueForKey:@"multiArtist"] forKey:@"multipleArtists"];
 	
+	[result setValue:[_disc valueForKey:@"MCN"] forKey:@"MCN"];
 	
 	return [result autorelease];
 }

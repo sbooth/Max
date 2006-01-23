@@ -150,6 +150,34 @@
 	return cdda_track_copyp(_drive, track) ? YES : NO;
 }
 
+- (NSString *) MCN
+{
+	char *mcn = cdda_disc_mcn(_drive);
+	
+	if(NULL == mcn) {
+		return nil;
+	}
+	else {
+		NSString *result = [NSString stringWithCString:mcn encoding:NSASCIIStringEncoding];
+		free(mcn);
+		return [[result retain] autorelease];
+	}
+}
+
+- (NSString *) ISRC:(ssize_t) track
+{
+	char *isrc = cdda_track_isrc(_drive, track);
+
+	if(NULL == isrc) {
+		return nil;
+	}
+	else {
+		NSString *result = [NSString stringWithCString:isrc encoding:NSASCIIStringEncoding];
+		free(isrc);
+		return [[result retain] autorelease];
+	}
+}
+
 - (int) discID
 {
 	return cddb_disc_get_discid(_freeDBDisc);

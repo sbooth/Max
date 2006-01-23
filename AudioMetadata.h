@@ -39,6 +39,9 @@
 	NSNumber		*_multipleArtists;
 	NSNumber		*_discNumber;
 	NSNumber		*_discsInSet;
+	
+	NSString		*_MCN;
+	NSString		*_ISRC;
 }
 
 // Attempt to parse metadata from filename

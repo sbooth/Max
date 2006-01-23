@@ -51,6 +51,9 @@
 - (BOOL)				trackHasPreEmphasis:(ssize_t) track;
 - (BOOL)				trackAllowsDigitalCopy:(ssize_t) track;
 
+- (NSString *)			MCN;
+- (NSString *)			ISRC:(ssize_t) track;
+
 // Derived properties
 - (int)					discID;
 - (unsigned)			length;

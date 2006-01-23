@@ -26,6 +26,10 @@
 
 #include "cdparanoia/interface/cdda_interface.h"
 
+@interface RipperTask (Private)
+- (void) generateCueSheet;
+@end
+
 @implementation RipperTask
 
 - (id) initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
@@ -149,6 +153,11 @@
 	else {
 		[self setStopped];
 	}
+}
+
+- (void) generateCueSheet
+{
+	
 }
 
 @end

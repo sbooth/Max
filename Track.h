@@ -47,6 +47,7 @@
 	NSNumber				*_channels;
 	NSNumber				*_preEmphasis;
 	NSNumber				*_copyPermitted;
+	NSString				*_ISRC;
 }
 
 - (NSString *)				getPreEmphasis;
