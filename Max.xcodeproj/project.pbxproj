@@ -291,6 +291,11 @@
 		8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AcknowledgmentsController.m; sourceTree = "<group>"; };
 		8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = PCMGeneratingTaskDefaults.plist; sourceTree = "<group>"; };
 		8C4E51540961B4A400F06F00 /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbisfile.a; sourceTree = "<group>"; };
+		8C51308B0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/CompactDisc.strings; sourceTree = "<group>"; };
+		8C51308C0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/General.strings; sourceTree = "<group>"; };
+		8C51308D0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Genres.strings; sourceTree = "<group>"; };
+		8C51308E0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Log.strings; sourceTree = "<group>"; };
+		8C51308F0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		8C6819B30982CA5100A35119 /* OggFLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggFLACEncoderTask.mm; sourceTree = "<group>"; };
@@ -1263,6 +1268,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C29D8D6097F3D5500E8B766 /* English */,
+				8C51308F0984CD1C00F41352 /* French */,
 			);
 			name = Preferences.strings;
 			sourceTree = "<group>";
@@ -1271,6 +1277,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C29D8F8097F3EB700E8B766 /* English */,
+				8C51308B0984CD1C00F41352 /* French */,
 			);
 			name = CompactDisc.strings;
 			sourceTree = "<group>";
@@ -1279,6 +1286,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C29D923097F424400E8B766 /* English */,
+				8C51308C0984CD1C00F41352 /* French */,
 			);
 			name = General.strings;
 			sourceTree = "<group>";
@@ -1287,6 +1295,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C29D946097F442200E8B766 /* English */,
+				8C51308D0984CD1C00F41352 /* French */,
 			);
 			name = Genres.strings;
 			sourceTree = "<group>";
@@ -1295,6 +1304,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C29D97C097F469D00E8B766 /* English */,
+				8C51308E0984CD1C00F41352 /* French */,
 			);
 			name = Log.strings;
 			sourceTree = "<group>";
