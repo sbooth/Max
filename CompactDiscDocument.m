@@ -409,8 +409,8 @@
 		// Iterate through the selected tracks and rip/encode them
 		selectedTracks	= [self selectedTracks];
 		
-		// Create one single file
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"]) {
+		// Create one single file for more than one track
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && 1 < [selectedTracks count]) {
 			
 			AudioMetadata *metadata = [[selectedTracks objectAtIndex:0] metadata];
 			
