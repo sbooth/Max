@@ -167,8 +167,14 @@
 {
 	NSMutableArray			*result			= [NSMutableArray arrayWithCapacity:10];
 	cddb_disc_t				*freeDBDisc		= [[_disc getDisc] getFreeDBDisc];
-	int						matches;
 	NSMutableDictionary		*currentMatch;
+	const char				*artist;
+	const char				*title;
+	unsigned int			year;
+	const char				*genre;
+	cddb_cat_t				category;
+	unsigned				discid;
+	int						matches;
 	
 
 	// Run query to find matches
@@ -181,12 +187,36 @@
 	while(matches > 0) {
 		currentMatch = [NSMutableDictionary dictionaryWithCapacity:6];
 		
-		[currentMatch setValue:[NSString stringWithUTF8String:cddb_disc_get_artist(freeDBDisc)] forKey:@"artist"];
-		[currentMatch setValue:[NSString stringWithUTF8String:cddb_disc_get_title(freeDBDisc)] forKey:@"title"];
-		[currentMatch setValue:[NSNumber numberWithUnsignedInt:cddb_disc_get_year(freeDBDisc)] forKey:@"year"];
-		[currentMatch setValue:[NSString stringWithUTF8String:cddb_disc_get_genre(freeDBDisc)] forKey:@"genre"];
-		[currentMatch setValue:[NSNumber numberWithInt:cddb_disc_get_category(freeDBDisc)] forKey:@"category"];
-		[currentMatch setValue:[NSNumber numberWithUnsignedInt:cddb_disc_get_discid(freeDBDisc)] forKey:@"discid"];
+		artist		= cddb_disc_get_artist(freeDBDisc);
+		title		= cddb_disc_get_title(freeDBDisc);
+		year		= cddb_disc_get_year(freeDBDisc);
+		genre		= cddb_disc_get_genre(freeDBDisc);
+		category	= cddb_disc_get_category(freeDBDisc);
+		discid		= cddb_disc_get_discid(freeDBDisc);
+		
+		if(NULL != artist) {
+			[currentMatch setValue:[NSString stringWithUTF8String:artist] forKey:@"artist"];
+		}
+		
+		if(NULL != title) {
+			[currentMatch setValue:[NSString stringWithUTF8String:title] forKey:@"title"];
+		}
+		
+		if(0 != year) {
+			[currentMatch setValue:[NSNumber numberWithUnsignedInt:year] forKey:@"year"];
+		}
+		
+		if(NULL != genre) {
+			[currentMatch setValue:[NSString stringWithUTF8String:genre] forKey:@"genre"];
+		}
+		
+		if(CDDB_CAT_INVALID != category) {
+			[currentMatch setValue:[NSNumber numberWithInt:category] forKey:@"category"];
+		}
+		
+		if(0 != discid) {
+			[currentMatch setValue:[NSNumber numberWithUnsignedInt:discid] forKey:@"discid"];
+		}
 
 		[result addObject:currentMatch];
 		
@@ -206,8 +236,12 @@
 {
 	cddb_disc_t				*disc			= NULL;
 	cddb_track_t			*track			= NULL;
-	const char				*tempString;
-	int						tempInt;
+	const char				*artist;
+	const char				*title;
+	unsigned int			year;
+	const char				*genre;
+	const char				*ext_data;
+	int						trackNum;
 	
 	// Create disc structure
 	disc = cddb_disc_new();
@@ -224,43 +258,53 @@
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
-	tempString = cddb_disc_get_title(disc);
-	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"title"];
-	}
-	
-	tempString = cddb_disc_get_artist(disc);
-	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"artist"];		
-	}
-	
-	tempString = cddb_disc_get_genre(disc);
-	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"genre"];		
-	}
-	
-	tempInt = cddb_disc_get_year(disc);
-	if(0 != tempInt) {
-		[_disc setValue:[NSNumber numberWithUnsignedInt:tempInt] forKey:@"year"];
+	artist		= cddb_disc_get_artist(disc);
+	title		= cddb_disc_get_title(disc);
+	year		= cddb_disc_get_year(disc);
+	genre		= cddb_disc_get_genre(disc);
+	ext_data	= cddb_disc_get_ext_data(disc);
+
+	if(NULL != artist) {
+		[_disc setValue:[NSString stringWithUTF8String:artist] forKey:@"artist"];		
 	}
 
-	tempString = cddb_disc_get_ext_data(disc);
-	if(NULL != tempString) {
-		[_disc setValue:[NSString stringWithUTF8String:tempString] forKey:@"comment"];		
+	if(NULL != artist) {
+		[_disc setValue:[NSString stringWithUTF8String:title] forKey:@"title"];
 	}
+		
+	if(0 != year) {
+		[_disc setValue:[NSNumber numberWithUnsignedInt:year] forKey:@"year"];
+	}
+	
+	if(NULL != genre) {
+		[_disc setValue:[NSString stringWithUTF8String:genre] forKey:@"genre"];		
+	}
+	
+	if(NULL != ext_data) {
+		[_disc setValue:[NSString stringWithUTF8String:ext_data] forKey:@"comment"];		
+	}
+	
 	
 	track = cddb_disc_get_track_first(disc);
 	while(NULL != track) {
 		
-		tempString = cddb_track_get_title(track);
-		if(NULL != tempString) {
-			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithUTF8String:tempString] forKey:@"title"];
+		title		= cddb_track_get_title(track);
+		artist		= cddb_track_get_artist(track);
+		trackNum	= cddb_track_get_number(track);
+		
+		// Just skip this track if the number is bogus
+		if(-1 == trackNum) {
+			track = cddb_disc_get_track_next(disc);
+			continue;
+		}
+		
+		if(NULL != title) {
+			[[[_disc valueForKey:@"tracks"] objectAtIndex:trackNum - 1] setValue:[NSString stringWithUTF8String:title] forKey:@"title"];
 		}
 
-		tempString = cddb_track_get_artist(track);
-		if(NULL != tempString && NO == [[NSString stringWithUTF8String:tempString] isEqualToString:[_disc valueForKey:@"artist"]]) {
+		if(NULL != artist && NO == [[NSString stringWithUTF8String:artist] isEqualToString:[_disc valueForKey:@"artist"]]) {
 			[_disc setValue:[NSNumber numberWithBool:YES] forKey:@"multiArtist"];
-			[[[_disc valueForKey:@"tracks"] objectAtIndex:cddb_track_get_number(track) - 1] setValue:[NSString stringWithUTF8String:tempString] forKey:@"artist"];
+			[[[_disc valueForKey:@"tracks"] objectAtIndex:trackNum - 1] setValue:[NSString stringWithUTF8String:artist] forKey:@"artist"];
 		}
 		
 		track = cddb_disc_get_track_next(disc);
@@ -272,7 +316,11 @@
 - (void) submitDisc
 {
 	cddb_disc_t			*disc;
-	id					temp;
+	NSString			*title;
+	NSString			*artist;
+	NSString			*genre;
+	NSNumber			*year;
+	NSString			*comment;
 	NSArray				*tracks;
 	cddb_track_t		*track;
 	Track				*currentTrack;
@@ -285,38 +333,38 @@
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
-	temp = [_disc valueForKey:@"genre"];
-	if(nil != temp) {
-		cddb_disc_set_category_str(disc, [[temp lowercaseString] UTF8String]);
+	genre = [_disc valueForKey:@"genre"];
+	if(nil != genre) {
+		cddb_disc_set_category_str(disc, [[genre lowercaseString] UTF8String]);
 	}
 	else {
 		cddb_disc_set_category(disc, CDDB_CAT_MISC);
 	}
 	
 	// Fill in the cddb_disc_t with data from the CompactDiscDocument
-	temp = [_disc valueForKey:@"title"];
-	if(nil != temp) {
-		cddb_disc_set_title(disc, [temp UTF8String]);
+	title = [_disc valueForKey:@"title"];
+	if(nil != title) {
+		cddb_disc_set_title(disc, [title UTF8String]);
 	}
 
-	temp = [_disc valueForKey:@"artist"];
-	if(nil != temp) {
-		cddb_disc_set_artist(disc, [temp UTF8String]);
+	artist = [_disc valueForKey:@"artist"];
+	if(nil != artist) {
+		cddb_disc_set_artist(disc, [artist UTF8String]);
 	}
 
-	temp = [_disc valueForKey:@"genre"];
-	if(nil != temp) {
-		cddb_disc_set_genre(disc, [temp UTF8String]);
+	genre = [_disc valueForKey:@"genre"];
+	if(nil != genre) {
+		cddb_disc_set_genre(disc, [genre UTF8String]);
 	}
 
-	temp = [_disc valueForKey:@"year"];
-	if(nil != temp) {
-		cddb_disc_set_year(disc, [temp unsignedIntValue]);
+	year = [_disc valueForKey:@"year"];
+	if(nil != year) {
+		cddb_disc_set_year(disc, [year unsignedIntValue]);
 	}
 
-	temp = [_disc valueForKey:@"comment"];
-	if(nil != temp) {
-		cddb_disc_set_ext_data(disc, [temp UTF8String]);
+	comment = [_disc valueForKey:@"comment"];
+	if(nil != comment) {
+		cddb_disc_set_ext_data(disc, [comment UTF8String]);
 	}
 			
 	tracks = [_disc valueForKey:@"tracks"];
@@ -324,20 +372,14 @@
 		currentTrack	= [tracks objectAtIndex:i];
 		track			= cddb_disc_get_track(disc, i);
 
-		temp = [currentTrack valueForKey:@"title"];
-		if(nil != temp) {
-			cddb_track_set_title(track, [temp UTF8String]);
+		title = [currentTrack valueForKey:@"title"];
+		if(nil != title) {
+			cddb_track_set_title(track, [title UTF8String]);
 		}
 
-		if([[_disc valueForKey:@"multiArtist"] boolValue]) {
-			temp = [currentTrack valueForKey:@"artist"];
-		}
-		else {
-			temp = [_disc valueForKey:@"artist"];
-		}
-
-		if(nil != temp) {
-			cddb_track_set_artist(track, [temp UTF8String]);
+		artist = ([[_disc valueForKey:@"multiArtist"] boolValue] ? [currentTrack valueForKey:@"artist"] : [_disc valueForKey:@"artist"]);
+		if(nil != artist) {
+			cddb_track_set_artist(track, [artist UTF8String]);
 		}
 	}
 
