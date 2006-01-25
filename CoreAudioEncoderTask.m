@@ -46,13 +46,25 @@
 }
 
 - (NSDictionary *)		getFormatInfo				{ return _formatInfo; }
-- (NSString *)			cueSheetFormatName			{ return [self outputFormat]; }
+
+- (NSString *) cueSheetFormatName
+{
+ 	switch([[_formatInfo valueForKey:@"fileType"] unsignedLongValue]) {
+		case kAudioFileWAVEType:	return @"WAVE";				break;
+		case kAudioFileAIFFType:	return @"AIFF";				break;
+		case kAudioFileMP3Type:		return @"MP3";				break;
+		default:					return NO;					break;
+	}
+}
 
 - (BOOL) formatLegalForCueSheet
-{ 
-	UInt32	formatID	= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
-
-	return (kAudioFormatLinearPCM == formatID || kAudioFormatMPEGLayer3 == formatID);
+{
+ 	switch([[_formatInfo valueForKey:@"fileType"] unsignedLongValue]) {
+		case kAudioFileWAVEType:	return YES;					break;
+		case kAudioFileAIFFType:	return YES;					break;
+		case kAudioFileMP3Type:		return YES;					break;
+		default:					return NO;					break;
+	}
 }
 
 - (NSString *) outputFormat
