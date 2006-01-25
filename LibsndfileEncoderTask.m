@@ -21,6 +21,8 @@
 #import "LibsndfileEncoderTask.h"
 #import "LibsndfileEncoder.h"
 
+#include "sndfile.h"
+
 @implementation LibsndfileEncoderTask
 
 - (id) initWithTask:(PCMGeneratingTask *)task formatInfo:(NSDictionary *)formatInfo
@@ -43,5 +45,23 @@
 - (int)				getFormat						{ return [[_formatInfo valueForKey:@"sndfileFormat"] intValue]; }
 - (NSString *)		extension						{ return [_formatInfo valueForKey:@"extension"]; }
 - (NSString *)		outputFormat					{ return [_formatInfo valueForKey:@"type"]; }
+
+- (BOOL) formatLegalForCueSheet
+{ 
+	switch([self getFormat] & SF_FORMAT_TYPEMASK) {
+		case SF_FORMAT_WAV:			return YES;					break;
+		case SF_FORMAT_AIFF:		return YES;					break;
+		default:					return NO;					break;
+	}
+}
+
+- (NSString *) cueSheetFormatName
+{
+	switch([self getFormat] & SF_FORMAT_TYPEMASK) {
+		case SF_FORMAT_WAV:			return @"WAVE";				break;
+		case SF_FORMAT_AIFF:		return @"AIFF";				break;
+		default:					return nil;					break;
+	}
+}
 
 @end

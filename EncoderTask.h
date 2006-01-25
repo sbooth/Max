@@ -60,4 +60,8 @@
 
 - (void)			encoderReady:(id)anObject;
 
+- (BOOL)			formatLegalForCueSheet;
+- (NSString *)		cueSheetFormatName;
+- (void)			generateCueSheet;
+
 @end

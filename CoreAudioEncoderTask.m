@@ -46,10 +46,18 @@
 }
 
 - (NSDictionary *)		getFormatInfo				{ return _formatInfo; }
+- (NSString *)			cueSheetFormatName			{ return [self outputFormat]; }
+
+- (BOOL) formatLegalForCueSheet
+{ 
+	UInt32	formatID	= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
+
+	return (kAudioFormatLinearPCM == formatID || kAudioFormatMPEGLayer3 == formatID);
+}
 
 - (NSString *) outputFormat
 {
-	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
+	UInt32	formatID	= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
 
 	// Special case AAC and Apple Lossless, since they are very common and "MPEG4 Audio" is vague
 	if(kAudioFormatMPEG4AAC == formatID) {

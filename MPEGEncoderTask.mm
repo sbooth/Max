@@ -237,5 +237,7 @@
 
 - (NSString *)		extension						{ return @"mp3"; }
 - (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"MP3", @"General", @""); }
+- (BOOL)			formatLegalForCueSheet			{ return YES; }
+- (NSString *)		cueSheetFormatName				{ return @"MP3"; }
 
 @end

@@ -62,7 +62,7 @@ static ComponentVersionsController *sharedController = nil;
 		_flacVersion		= [NSString stringWithFormat:@"FLAC %s", FLAC__VERSION_STRING];
 		_lameVersion		= [NSString stringWithFormat:@"LAME %s", get_lame_version()];
 		_speexVersion		= [NSString stringWithFormat:@"Speex %s", speexVersion];
-		_libsndfileVersion	= [NSString stringWithUTF8String:buffer];
+		_libsndfileVersion	= [NSString stringWithUTF8String:(NULL == buffer ? NSLocalizedStringFromTable("Unknown", @"General", @"") : buffer)];
 		
 		return self;
 	}

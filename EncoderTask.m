@@ -24,6 +24,7 @@
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
+#import "FileFormatNotSupportedException.h"
 #import "UtilityFunctions.h"
 
 @interface EncoderTask (Private)
@@ -89,6 +90,8 @@
 - (void)			writeTags						{}
 - (NSString *)		description						{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
 - (NSString *)		settings						{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
+- (BOOL)			formatLegalForCueSheet			{ return NO; }
+- (NSString *)		cueSheetFormatName				{ return nil; }
 
 - (void) setTracks:(NSArray *)tracks
 {
@@ -189,20 +192,37 @@
 
 - (void) setCompleted 
 {
-	if(nil != [_task metadata]) {
-		[self writeTags];
+	@try {
+		if(nil != [_task metadata]) {
+			[self writeTags];
+		}
+		
+		[super setCompleted]; 
+		[_connection invalidate];
+		[[TaskMaster sharedController] encodeDidComplete:self]; 
+		
+		// Delete input file if requested
+		if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
+			if(-1 == unlink([[(ConverterTask *)_task inputFilename] UTF8String])) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}	
+		}
+
+		// Generate cue sheet
+		if(nil != _tracks && [[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"generateCueSheet"]) {
+			if([self formatLegalForCueSheet]) {
+				[self generateCueSheet];
+			}
+			else {
+				@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"Cue sheets not supported for this output format", @"Exceptions", @"")
+																   userInfo:[NSDictionary dictionaryWithObject:[self outputFormat] forKey:@"fileFormat"]];
+			}
+		}
 	}
-
-	[super setCompleted]; 
-	[_connection invalidate];
-	[[TaskMaster sharedController] encodeDidComplete:self]; 
-
-	// Delete input file if requested
-	if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
-		if(-1 == unlink([[(ConverterTask *)_task inputFilename] UTF8String])) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}	
+	
+	@catch(NSException *e) {
+		displayExceptionAlert(e);
 	}
 }
 
@@ -214,6 +234,147 @@
 	else {
 		[_connection invalidate];
 		[[TaskMaster sharedController] encodeDidStop:self];
+	}
+}
+
+- (void) generateCueSheet
+{
+	NSString		*cueSheetFilename		= nil;
+	NSString		*temp					= nil;
+	NSString		*bundleVersion			= nil;
+	Track			*currentTrack			= nil;
+	const char		*buf					= NULL;
+	int				fd						= -1;
+	ssize_t			bytesWritten			= -1;
+	unsigned		i;
+	unsigned		m						= 0;
+	unsigned		s						= 0;
+	unsigned		f						= 0;
+	
+	if(nil == _tracks) {
+		return;
+	}
+	
+	cueSheetFilename = [[_outputFilename stringByDeletingPathExtension] stringByAppendingPathExtension:@"cue"];
+	NSLog(@"%@", cueSheetFilename);
+	
+	@try {
+		// Create the file (don't overwrite)
+		fd = open([cueSheetFilename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == fd) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the cue sheet", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		// REM
+		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		temp			= [NSString stringWithFormat:@"REM File create by Max %@\n", bundleVersion];
+		buf				= [temp UTF8String];
+		bytesWritten = write(fd, buf, strlen(buf));
+		if(-1 == bytesWritten) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		// TITLE
+		temp	= [NSString stringWithFormat:@"TITLE \"%@\"\n", [[[_tracks objectAtIndex:0] getCompactDiscDocument] valueForKey:@"title"]];
+		buf		= [temp UTF8String];
+		bytesWritten = write(fd, buf, strlen(buf));
+		if(-1 == bytesWritten) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+
+		// PERFORMER
+		temp	= [NSString stringWithFormat:@"PERFORMER \"%@\"\n", [[[_tracks objectAtIndex:0] getCompactDiscDocument] valueForKey:@"artist"]];
+		buf		= [temp UTF8String];
+		bytesWritten = write(fd, buf, strlen(buf));
+		if(-1 == bytesWritten) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+
+		// FILE
+		temp	= [NSString stringWithFormat:@"FILE \"%@\" %@\n", [_outputFilename lastPathComponent], [self cueSheetFormatName]];
+		buf		= [temp UTF8String];
+		bytesWritten = write(fd, buf, strlen(buf));
+		if(-1 == bytesWritten) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		for(i = 0; i < [_tracks count]; ++i) {
+			currentTrack = [_tracks objectAtIndex:i];
+
+			// TRACK xx
+			temp	= [NSString stringWithFormat:@"  TRACK %.02u AUDIO\n", [[currentTrack valueForKey:@"number"] intValue]];
+			buf		= [temp UTF8String];
+			bytesWritten = write(fd, buf, strlen(buf));
+			if(-1 == bytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+
+			// ISRC
+			temp	= [NSString stringWithFormat:@"    ISRC %@\n", [currentTrack valueForKey:@"ISRC"]];
+			buf		= [temp UTF8String];
+			bytesWritten = write(fd, buf, strlen(buf));
+			if(-1 == bytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+
+			// TITLE
+			temp	= [NSString stringWithFormat:@"    TITLE \"%@\"\n", [currentTrack valueForKey:@"title"]];
+			buf		= [temp UTF8String];
+			bytesWritten = write(fd, buf, strlen(buf));
+			if(-1 == bytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+
+			// PERFORMER
+			temp	= [NSString stringWithFormat:@"    PERFORMER \"%@\"\n", [currentTrack valueForKey:@"artist"]];
+			buf		= [temp UTF8String];
+			bytesWritten = write(fd, buf, strlen(buf));
+			if(-1 == bytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+
+			// INDEX
+			temp	= [NSString stringWithFormat:@"    INDEX 01 %.2u:%.2u:%.2u\n", m, s, f];
+			buf		= [temp UTF8String];
+			bytesWritten = write(fd, buf, strlen(buf));
+			if(-1 == bytesWritten) {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			
+			// Update times
+			f += [currentTrack getFrame];
+			while(75 < f) {
+				f /= 75;
+				++s;
+			}
+			
+			s += [currentTrack getSecond];
+			while(60 < s) {
+				s /= 60;
+				++m;
+			}
+			
+			m += [currentTrack getMinute];
+		}
+	}
+
+
+	@finally {
+		// And close it
+		if(-1 != fd && -1 == close(fd)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the cue sheet", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
 	}
 }
 
