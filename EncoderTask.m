@@ -255,10 +255,9 @@
 		return;
 	}
 	
-	cueSheetFilename = [[_outputFilename stringByDeletingPathExtension] stringByAppendingPathExtension:@"cue"];
-	NSLog(@"%@", cueSheetFilename);
-	
 	@try {
+		cueSheetFilename = generateUniqueFilename([_outputFilename stringByDeletingPathExtension], @"cue");
+
 		// Create the file (don't overwrite)
 		fd = open([cueSheetFilename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		if(-1 == fd) {
