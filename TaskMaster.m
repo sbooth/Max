@@ -59,6 +59,7 @@ static TaskMaster *sharedController = nil;
 - (void) runEncodersForTask:(PCMGeneratingTask *)task;
 - (void) runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task;
 - (void) alertDidEnd:(NSAlert *) alert returnCode:(int) returnCode contextInfo:(void *) contextInfo;
+- (NSArray *) extensionsForSelectedOutputFormats;
 - (BOOL) outputFormatsSelected;
 - (BOOL) verifyOutputFormats;
 @end
@@ -703,6 +704,63 @@ static TaskMaster *sharedController = nil;
 									description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
 							   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
+}
+
+- (NSArray *) extensionsForSelectedOutputFormats
+{
+	NSMutableArray		*result = [NSMutableArray arrayWithCapacity:5];
+	BOOL				outputMP3			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"];
+	BOOL				outputFLAC			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"];
+	BOOL				outputOggFLAC		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"];
+	BOOL				outputOggVorbis		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"];
+	BOOL				outputSpeex			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"];
+	NSArray				*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
+	NSArray				*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
+	
+	
+	if(outputMP3) {
+		[result addObject:@"mp3"];
+	}
+
+	if(outputFLAC) {
+		[result addObject:@"flac"];
+	}
+
+	if(outputOggFLAC) {
+		[result addObject:@"oggflac"];
+	}
+
+	if(outputOggVorbis) {
+		[result addObject:@"ogg"];
+	}
+
+	if(outputSpeex) {
+		[result addObject:@"spx"];
+	}
+
+	
+	// Core Audio encoders
+	if(nil != coreAudioFormats && 0 < [coreAudioFormats count]) {
+		NSEnumerator	*formats		= [coreAudioFormats objectEnumerator];
+		NSDictionary	*formatInfo;
+
+		while((formatInfo = [formats nextObject])) {		
+			id extensions = [formatInfo valueForKey:@"extensionsForType"];
+			[result addObject:[extensions isKindOfClass:[NSArray class]] ? [extensions objectAtIndex:0] : extensions];
+		}
+	}
+		
+	// libsndfile encoders
+	if(nil != libsndfileFormats && 0 < [libsndfileFormats count]) {
+		NSEnumerator	*formats		= [libsndfileFormats objectEnumerator];
+		NSDictionary	*formatInfo;
+		
+		while((formatInfo = [formats nextObject])) {				
+			[result addObject:[formatInfo valueForKey:@"extension"]];
+		}
+	}
+	
+	return [[result retain] autorelease];
 }
 
 - (BOOL) outputFormatsSelected

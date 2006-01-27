@@ -274,3 +274,24 @@ getID3v2Timestamp()
 	}
 	return [sDateFormatter stringFromDate:[NSDate date]];
 }
+
+void
+addVorbisComment(FLAC__StreamMetadata		*block,
+				 NSString					*key,
+				 NSString					*value)
+{
+	NSString									*string;
+	FLAC__StreamMetadata_VorbisComment_Entry	entry;
+	
+	string			= [NSString stringWithFormat:@"%@=%@", key, value];
+	entry.length	= [string length];
+	entry.entry		= (unsigned char *)strdup([string UTF8String]);
+	if(NULL == entry.entry) {
+		free(entry.entry);
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+	}
+	
+	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+	}	
+}

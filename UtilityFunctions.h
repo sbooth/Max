@@ -22,6 +22,8 @@
 
 #import "AudioMetadata.h"
 
+#include "metadata.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -57,6 +59,11 @@ void displayExceptionSheet(NSException	*exception,
 						   id			delegate,
 						   SEL			selector,
 						   void			*userInfo);
+
+// Add a Vorbis comment to a FLAC file
+void addVorbisComment(FLAC__StreamMetadata		*block,
+					  NSString					*key,
+					  NSString					*value);
 
 #ifdef __cplusplus
 }

@@ -28,9 +28,6 @@
 #include "metadata.h"
 #include "format.h"
 
-#include "flacfile.h"					// TagLib::FLAC::File
-#include "tag.h"						// TagLib::Tag
-
 @implementation FLACEncoderTask
 
 - (id) initWithTask:(PCMGeneratingTask *)task

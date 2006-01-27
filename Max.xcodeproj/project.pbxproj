@@ -10,6 +10,7 @@
 		8C0230950956848A005D8698 /* OggFLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230930956848A005D8698 /* OggFLACConverterTask.m */; };
 		8C0230F909570F26005D8698 /* OggVorbisConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230F709570F26005D8698 /* OggVorbisConverterTask.m */; };
 		8C02310D09570F9D005D8698 /* OggVorbisConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C02310B09570F9D005D8698 /* OggVorbisConverter.m */; };
+		8C039AD4098AA762007EFA10 /* FLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C039AD3098AA761007EFA10 /* FLACEncoderTask.m */; };
 		8C040A31092AB41A0052D881 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */; };
 		8C04524A0947F0EC0041AAA8 /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */; };
 		8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* FreeDB.m */; };
@@ -97,7 +98,7 @@
 		8CB0AE79093AE1E500968F66 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0AE78093AE1E500968F66 /* libFLAC.a */; };
 		8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0AED8093AE96C00968F66 /* FLACException.m */; };
 		8CB0B088093AFBF300968F66 /* MPEGEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */; };
-		8CB0B38E093B301400968F66 /* FLACEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */; };
+		8CB1503D0989D775001AC333 /* EncoderTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
 		8CB86020093EE76D00A60FC1 /* GeneralToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB8601F093EE76D00A60FC1 /* GeneralToolbarImage.png */; };
@@ -241,6 +242,7 @@
 		8C0230F709570F26005D8698 /* OggVorbisConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggVorbisConverterTask.m; sourceTree = "<group>"; };
 		8C02310A09570F9D005D8698 /* OggVorbisConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggVorbisConverter.h; sourceTree = "<group>"; };
 		8C02310B09570F9D005D8698 /* OggVorbisConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggVorbisConverter.m; sourceTree = "<group>"; };
+		8C039AD3098AA761007EFA10 /* FLACEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACEncoderTask.m; sourceTree = "<group>"; };
 		8C040A2E092AB41A0052D881 /* RipperTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperTask.h; sourceTree = "<group>"; };
 		8C040A2F092AB41A0052D881 /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C0452470947F0EC0041AAA8 /* CoreAudioEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoder.h; sourceTree = "<group>"; };
@@ -392,7 +394,7 @@
 		8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEGEncoderTask.h; sourceTree = "<group>"; };
 		8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MPEGEncoderTask.mm; sourceTree = "<group>"; };
 		8CB0B38B093B301400968F66 /* FLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACEncoderTask.h; sourceTree = "<group>"; };
-		8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FLACEncoderTask.mm; sourceTree = "<group>"; };
+		8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = EncoderTaskDefaults.plist; sourceTree = "<group>"; };
 		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
 		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
@@ -651,6 +653,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */,
 				8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */,
 				8C137F150981BCB800EBFC77 /* SelectNextTrackToolbarImage.png */,
 				8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */,
@@ -816,13 +819,13 @@
 		8C75CA6B09539D1F00A923AD /* Encoder Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				8C039AD3098AA761007EFA10 /* FLACEncoderTask.m */,
 				8C6819B30982CA5100A35119 /* OggFLACEncoderTask.mm */,
 				8C4015720948E433003413BE /* CoreAudioEncoderTask.h */,
 				8C4015730948E433003413BE /* CoreAudioEncoderTask.m */,
 				8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */,
 				8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */,
 				8CB0B38B093B301400968F66 /* FLACEncoderTask.h */,
-				8CB0B38C093B301400968F66 /* FLACEncoderTask.mm */,
 				8CF4D47209454CD700385BE4 /* LibsndfileEncoderTask.h */,
 				8CF4D47309454CD700385BE4 /* LibsndfileEncoderTask.m */,
 				8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */,
@@ -1142,6 +1145,7 @@
 				8C137F160981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png in Resources */,
 				8C137F170981BCB800EBFC77 /* SelectNextTrackToolbarImage.png in Resources */,
 				8C137F730981CF4B00EBFC77 /* ConverterTaskDefaults.plist in Resources */,
+				8CB1503D0989D775001AC333 /* EncoderTaskDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1186,7 +1190,6 @@
 				8CB0AE64093AE12100968F66 /* FLACEncoder.m in Sources */,
 				8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */,
 				8CB0B088093AFBF300968F66 /* MPEGEncoderTask.mm in Sources */,
-				8CB0B38E093B301400968F66 /* FLACEncoderTask.mm in Sources */,
 				8C4D4538093E6D7D00A88927 /* GeneralPreferencesController.m in Sources */,
 				8C4D461D093E75E100A88927 /* LAMEPreferencesController.m in Sources */,
 				8C4D4658093E7A6100A88927 /* FreeDBPreferencesController.m in Sources */,
@@ -1240,6 +1243,7 @@
 				8CDD97410973663300A5F2C1 /* SpeexConverter.m in Sources */,
 				8C881036097AE43800ED2843 /* SpeexException.m in Sources */,
 				8C6819B40982CA5100A35119 /* OggFLACEncoderTask.mm in Sources */,
+				8C039AD4098AA762007EFA10 /* FLACEncoderTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
