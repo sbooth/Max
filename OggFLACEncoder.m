@@ -134,10 +134,10 @@
 		}
 
 		// Create the padding metadata block if desired
-		if(0 > _padding) {
+		if(0 < _padding) {
 			padding.type		= FLAC__METADATA_TYPE_PADDING;
 			padding.is_last		= NO;
-			padding.length		= (unsigned)_padding;
+			padding.length		= _padding;
 			metadata[0]			= &padding;
 			
 			if(NO == OggFLAC__file_encoder_set_metadata(_flac, metadata, 1)) {
