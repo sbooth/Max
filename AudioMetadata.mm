@@ -34,13 +34,101 @@
 + (AudioMetadata *) metadataFromFile:(NSString *)filename
 {
 	AudioMetadata				*result				= [[AudioMetadata alloc] init];
+	NSString					*extension			= [filename pathExtension];
 	BOOL						parsed				= NO;
 
 	[result setValue:[NSNumber numberWithBool:NO] forKey:@"multipleArtists"];
 	[result setValue:[NSNumber numberWithUnsignedInt:0] forKey:@"trackNumber"];
 	
-	// Try TagLib first
-	{
+	// For ".flac" files try to parse with libFLAC
+	if([extension isEqualToString:@"flac"]) {
+		FLAC__StreamMetadata						*tags, *currentTag;
+		FLAC__StreamMetadata_VorbisComment_Entry	*comments;
+		unsigned									i;
+		NSString									*commentString, *key, *value;
+		NSRange										range;
+		
+		if(FLAC__metadata_get_tags([filename UTF8String], &tags)) {
+			
+			currentTag = tags;
+			
+			for(;;) {
+
+				switch(currentTag->type) {
+					case FLAC__METADATA_TYPE_VORBIS_COMMENT:
+						comments = currentTag->data.vorbis_comment.comments;
+						
+						for(i = 0; i < currentTag->data.vorbis_comment.num_comments; ++i) {
+
+							// Split the comment at '='
+							commentString	= [NSString stringWithUTF8String:(const char *)currentTag->data.vorbis_comment.comments[i].entry];
+							range			= [commentString rangeOfString:@"=" options:NSLiteralSearch];
+							
+							// Sanity check (comments should be well-formed)
+							if(NSNotFound != range.location && 0 != range.length) {
+								key		= [commentString substringToIndex:range.location];
+								value	= [commentString substringFromIndex:range.location + 1];
+								
+								if([key isEqualToString:@"ALBUM"]) {
+									[result setValue:value forKey:@"albumTitle"];
+								}
+								else if([key isEqualToString:@"ARTIST"]) {
+									[result setValue:value forKey:@"albumArtist"];
+								}
+								else if([key isEqualToString:@"GENRE"]) {
+									[result setValue:value forKey:@"albumGenre"];
+								}
+								else if([key isEqualToString:@"DATE"]) {
+									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"albumYear"];
+								}
+								else if([key isEqualToString:@"DESCRIPTION"]) {
+									[result setValue:value forKey:@"albumComment"];
+								}
+								else if([key isEqualToString:@"TITLE"]) {
+									[result setValue:value forKey:@"trackTitle"];
+								}
+								else if([key isEqualToString:@"TRACKNUMBER"]) {
+									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"trackNumber"];
+								}
+								else if([key isEqualToString:@"TOTALTRACKS"]) {
+									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"albumTrackCount"];
+								}
+								else if([key isEqualToString:@"COMPILATION"]) {
+									[result setValue:[NSNumber numberWithBool:[value intValue]] forKey:@"multipleArtists"];
+								}
+								else if([key isEqualToString:@"DISCNUMBER"]) {
+									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"discNumber"];
+								}
+								else if([key isEqualToString:@"DISCSINSET"]) {
+									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"discsInSet"];
+								}
+								else if([key isEqualToString:@"ISRC"]) {
+									[result setValue:value forKey:@"ISRC"];
+								}
+							}							
+						}
+						break;
+				
+					default:
+						break;
+				}
+
+				if(currentTag->is_last) {
+					break;
+				}
+				else {
+					++currentTag;
+				}
+			}
+			
+			FLAC__metadata_object_delete(tags);
+			
+			parsed = YES;
+		}
+	}
+	
+	// Try TagLib
+	if(NO == parsed) {
 		TagLib::FileRef			f						([filename UTF8String]);
 		TagLib::MPEG::File		*mpegFile				= NULL;
 		
@@ -107,7 +195,7 @@
 		}
 	}
 
-	// Try mp4v2 second
+	// Try mp4v2
 	if(NO == parsed) {
 		MP4FileHandle mp4FileHandle = MP4Read([filename UTF8String], 0);
 		
