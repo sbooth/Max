@@ -25,6 +25,7 @@
 #import "IOException.h"
 #import "StopException.h"
 #import "FileFormatNotSupportedException.h"
+#import "MissingResourceException.h"
 #import "UtilityFunctions.h"
 
 @interface EncoderTask (Private)
@@ -32,6 +33,26 @@
 @end
 
 @implementation EncoderTask
+
++ (void) initialize
+{
+	NSString				*defaultsValuesPath;
+    NSDictionary			*defaultsValuesDictionary;
+    
+	@try {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"EncoderTaskDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"EncoderTaskDefaults.plist" forKey:@"filename"]];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+	}
+	
+	@catch(NSException *exception) {
+		displayExceptionAlert(exception);
+	}
+}
 
 - (id) initWithTask:(PCMGeneratingTask *)task
 {
@@ -150,13 +171,19 @@
 	NSPort					*port2				= [NSPort port];
 	NSArray					*portArray			= nil;
 	
-	// Set up the additional key/value pairs to be substituted
-	[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];
-	basename = [[_task metadata] outputBasenameWithSubstitutions:substitutions];
-
-	// Create the directory hierarchy if required
-	createDirectoryStructure(basename);
-	
+	// Determine whether to convert in place
+	if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"]) {
+		basename = [[(ConverterTask *)_task inputFilename] stringByDeletingPathExtension];
+	}
+	else {
+		// Set up the additional key/value pairs to be substituted
+		[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];
+		basename = [[_task metadata] outputBasenameWithSubstitutions:substitutions];
+		
+		// Create the directory hierarchy if required
+		createDirectoryStructure(basename);
+	}
+		
 	// Generate a unique filename and touch the file
 	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];
 	[self touchOutputFile];
