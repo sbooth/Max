@@ -119,6 +119,11 @@
 	return (unsigned) (offset % 75);
 }
 
+- (BOOL) hasPreEmphasis
+{
+	return [_preEmphasis boolValue];
+}
+
 - (NSString *) getPreEmphasis
 {
 	return [_preEmphasis boolValue] ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");

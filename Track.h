@@ -50,6 +50,7 @@
 	NSString				*_ISRC;
 }
 
+- (BOOL)					hasPreEmphasis;
 - (NSString *)				getPreEmphasis;
 - (NSString *)				getCopyPermitted;
 
