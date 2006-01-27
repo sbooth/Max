@@ -34,6 +34,7 @@
 	int						_minPartitionOrder;
 	int						_maxPartitionOrder;
 	int						_maxLPCOrder;
+	unsigned				_padding;
 }
 
 @end

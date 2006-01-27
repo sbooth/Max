@@ -49,6 +49,7 @@
 		_minPartitionOrder		= [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMinPartitionOrder"];
 		_maxPartitionOrder		= [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMaxPartitionOrder"];
 		_maxLPCOrder			= [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACMaxLPCOrder"];
+		_padding				= [[NSUserDefaults standardUserDefaults] integerForKey:@"oggFLACPadding"];
 		
 		return self;
 	}
@@ -67,6 +68,8 @@
 	int16_t						*buf				= NULL;
 	ssize_t						buflen				= 0;
 	struct stat					sourceStat;
+	FLAC__StreamMetadata		padding;
+	FLAC__StreamMetadata		*metadata [1];
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
@@ -128,6 +131,18 @@
 		}
 		if(NO == OggFLAC__file_encoder_set_max_lpc_order(_flac, _maxLPCOrder)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+		}
+
+		// Create the padding metadata block if desired
+		if(0 > _padding) {
+			padding.type		= FLAC__METADATA_TYPE_PADDING;
+			padding.is_last		= NO;
+			padding.length		= (unsigned)_padding;
+			metadata[0]			= &padding;
+			
+			if(NO == OggFLAC__file_encoder_set_metadata(_flac, metadata, 1)) {
+				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			}
 		}
 
 		// Initialize the Ogg FLAC encoder

@@ -49,6 +49,7 @@
 		_minPartitionOrder		= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMinPartitionOrder"];
 		_maxPartitionOrder		= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMaxPartitionOrder"];
 		_maxLPCOrder			= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacMaxLPCOrder"];
+		_padding				= [[NSUserDefaults standardUserDefaults] integerForKey:@"flacPadding"];
 		
 		return self;	
 	}
@@ -67,6 +68,9 @@
 	unsigned long				iterations			= 0;
 	int16_t						*buf				= NULL;
 	ssize_t						buflen				= 0;
+	struct stat					sourceStat;
+	FLAC__StreamMetadata		padding;
+	FLAC__StreamMetadata		*metadata [1];
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
@@ -81,7 +85,6 @@
 		}
 		
 		// Get input file information
-		struct stat sourceStat;
 		if(-1 == fstat(pcm, &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -128,6 +131,18 @@
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 
+		// Create the padding metadata block if desired
+		if(0 > _padding) {
+			padding.type		= FLAC__METADATA_TYPE_PADDING;
+			padding.is_last		= NO;
+			padding.length		= (unsigned)_padding;
+			metadata[0]			= &padding;
+			
+			if(NO == FLAC__file_encoder_set_metadata(_flac, metadata, 1)) {
+				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			}
+		}
+		
 		// Initialize the FLAC encoder
 		if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
@@ -137,8 +152,8 @@
 		}
 		if(FLAC__FILE_ENCODER_OK != FLAC__file_encoder_init(_flac)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
-		}
-		
+		}		
+
 		// Iteratively get the PCM data and encode it
 		while(0 < bytesToRead) {
 			

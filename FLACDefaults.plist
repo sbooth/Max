@@ -4,6 +4,8 @@
 <dict>
 	<key>flacCompressionLevel</key>
 	<integer>6</integer>
+	<key>flacPadding</key>
+	<real>4096</real>
 	<key>flacExhaustiveModelSearch</key>
 	<false/>
 	<key>flacEnableMidSide</key>
@@ -20,6 +22,8 @@
 	<real>8</real>
 	<key>oggFLACCompressionLevel</key>
 	<integer>6</integer>
+	<key>oggFLACPadding</key>
+	<real>4096</real>
 	<key>oggFLACExhaustiveModelSearch</key>
 	<false/>
 	<key>oggFLACEnableMidSide</key>
