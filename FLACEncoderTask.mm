@@ -21,6 +21,12 @@
 #import "FLACEncoderTask.h"
 #import "FLACEncoder.h"
 #import "IOException.h"
+#import "MallocException.h"
+#import "FLACException.h"
+#import "UtilityFunctions.h"
+
+#include "metadata.h"
+#include "format.h"
 
 #include "flacfile.h"					// TagLib::FLAC::File
 #include "tag.h"						// TagLib::Tag
@@ -39,75 +45,172 @@
 - (void) writeTags
 {
 	AudioMetadata								*metadata				= [_task metadata];
+	FLAC__Metadata_Chain						*chain					= NULL;
+	FLAC__Metadata_Iterator						*iterator				= NULL;
+	FLAC__StreamMetadata						*block					= NULL;
+	NSString									*bundleVersion			= nil;
+	NSString									*versionString			= nil;
 	NSNumber									*trackNumber			= nil;
+	NSNumber									*totalTracks			= nil;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*title					= nil;
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
-	TagLib::FLAC::File							f						([_outputFilename UTF8String], false);
+	NSNumber									*discNumber				= nil;
+	NSNumber									*discsInSet				= nil;
+	NSNumber									*multiArtist			= nil;
+	NSString									*isrc					= nil;
+	
+	
+	@try  {
+		chain = FLAC__metadata_chain_new();
+		if(NULL == chain) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename UTF8String])) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		FLAC__metadata_chain_sort_padding(chain);
+		
+		iterator = FLAC__metadata_iterator_new();
+		if(NULL == iterator) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		FLAC__metadata_iterator_init(iterator, chain);
 
+		// Seek to the vorbis comment block if it exists
+		while(FLAC__METADATA_TYPE_VORBIS_COMMENT != FLAC__metadata_iterator_get_block_type(iterator)) {
+			if(NO == FLAC__metadata_iterator_next(iterator)) {
+				break; // Already at end
+			}
+		}
+		
+		// If there isn't a vorbis comment block add one
+		if(FLAC__METADATA_TYPE_VORBIS_COMMENT != FLAC__metadata_iterator_get_block_type(iterator)) {
 
-	if(NO == f.isValid()) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
+			// The padding block will be the last block if it exists; add the comment block before it
+			if(FLAC__METADATA_TYPE_PADDING == FLAC__metadata_iterator_get_block_type(iterator)) {
+				FLAC__metadata_iterator_prev(iterator);
+			}
+			
+			block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT);
+			if(NULL == block) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+			}
+			
+			// Add our metadata
+			if(NO == FLAC__metadata_iterator_insert_block_after(iterator, block)) {
+				@throw [FLACException exceptionWithReason:[NSString stringWithFormat:@"%i", FLAC__metadata_chain_status(chain)] userInfo:nil];
+			}
+		}
+		else {
+			block = FLAC__metadata_iterator_get_block(iterator);
+		}
+
+		// Album title
+		album = [metadata valueForKey:@"albumTitle"];
+		if(nil != album) {
+			addVorbisComment(block, @"ALBUM", album);
+		}
+		
+		// Artist
+		artist = [metadata valueForKey:@"trackArtist"];
+		if(nil == artist) {
+			artist = [metadata valueForKey:@"albumArtist"];
+		}
+		if(nil != artist) {
+			addVorbisComment(block, @"ARTIST", artist);
+		}
+		
+		// Genre
+		genre = [metadata valueForKey:@"trackGenre"];
+		if(nil == genre) {
+			genre = [metadata valueForKey:@"albumGenre"];
+		}
+		if(nil != genre) {
+			addVorbisComment(block, @"GENRE", genre);
+		}
+		
+		// Year
+		year = [metadata valueForKey:@"trackYear"];
+		if(nil == year) {
+			year = [metadata valueForKey:@"albumYear"];
+		}
+		if(nil != year) {
+			addVorbisComment(block, @"DATE", [year stringValue]);
+		}
+		
+		// Comment
+		comment = [metadata valueForKey:@"albumComment"];
+		if(_writeSettingsToComment) {
+			comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
+		}
+		if(nil != comment) {
+			addVorbisComment(block, @"DESCRIPTION", comment);
+		}
+		
+		// Track title
+		title = [metadata valueForKey:@"trackTitle"];
+		if(nil != title) {
+			addVorbisComment(block, @"TITLE", title);
+		}
+		
+		// Track number
+		trackNumber = [metadata valueForKey:@"trackNumber"];
+		if(nil != trackNumber) {
+			addVorbisComment(block, @"TRACKNUMBER", [trackNumber stringValue]);
+		}
+
+		// Total tracks
+		totalTracks = [metadata valueForKey:@"albumTrackCount"];
+		if(nil != totalTracks) {
+			addVorbisComment(block, @"TOTALTRACKS", [totalTracks stringValue]);
+		}
+
+		// Compilation
+		multiArtist = [metadata valueForKey:@"multipleArtists"];
+		if(nil != multiArtist && [multiArtist boolValue]) {
+			addVorbisComment(block, @"COMPILATION", @"1");
+		}
+		
+		// Disc number
+		discNumber = [metadata valueForKey:@"discNumber"];
+		if(nil != discNumber) {
+			addVorbisComment(block, @"DISCNUMBER", [discNumber stringValue]);
+		}
+		
+		// Discs in set
+		discsInSet = [metadata valueForKey:@"discsInSet"];
+		if(nil != discsInSet) {
+			addVorbisComment(block, @"DISCSINSET", [discsInSet stringValue]);
+		}
+		
+		// ISRC
+		isrc = [metadata valueForKey:@"ISRC"];
+		if(nil != isrc) {
+			addVorbisComment(block, @"ISRC", isrc);
+		}
+		
+		// Encoded by
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
+		addVorbisComment(block, @"ENCODER", versionString);
+
+		// Write the new metadata to the file
+		if(NO == FLAC__metadata_chain_write(chain, YES, NO)) {
+			@throw [FLACException exceptionWithReason:[NSString stringWithFormat:@"%i", FLAC__metadata_chain_status(chain)] userInfo:nil];
+		}
 	}
-	
-	// Album title
-	album = [metadata valueForKey:@"albumTitle"];
-	if(nil != album) {
-		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
+
+	@finally {
+		FLAC__metadata_chain_delete(chain);
+		FLAC__metadata_iterator_delete(iterator);
 	}
-	
-	// Artist
-	artist = [metadata valueForKey:@"trackArtist"];
-	if(nil == artist) {
-		artist = [metadata valueForKey:@"albumArtist"];
-	}
-	if(nil != artist) {
-		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
-	}
-	
-	// Genre
-	genre = [metadata valueForKey:@"trackGenre"];
-	if(nil == genre) {
-		genre = [metadata valueForKey:@"albumGenre"];
-	}
-	if(nil != genre) {
-		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
-	}
-	
-	// Year
-	year = [metadata valueForKey:@"trackYear"];
-	if(nil == year) {
-		year = [metadata valueForKey:@"albumYear"];
-	}
-	if(nil != year) {
-		f.tag()->setYear([year intValue]);
-	}
-	
-	// Comment
-	comment = [metadata valueForKey:@"albumComment"];
-	if(_writeSettingsToComment) {
-		comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
-	}
-	if(nil != comment) {
-		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
-	}
-	
-	// Track title
-	title = [metadata valueForKey:@"trackTitle"];
-	if(nil != title) {
-		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
-	}
-	
-	// Track number
-	trackNumber = [metadata valueForKey:@"trackNumber"];
-	if(nil != trackNumber) {
-		f.tag()->setTrack([trackNumber unsignedIntValue]);
-	}
-	
-	f.save();
 }
 
 - (NSString *)		extension						{ return @"flac"; }
