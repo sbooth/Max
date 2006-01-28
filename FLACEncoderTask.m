@@ -198,6 +198,9 @@
 		versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
 		addVorbisComment(block, @"ENCODER", versionString);
 
+		// Encoder settings
+		addVorbisComment(block, @"ENCODING", [self settings]);
+		
 		// Write the new metadata to the file
 		if(NO == FLAC__metadata_chain_write(chain, YES, NO)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithFormat:@"%i", FLAC__metadata_chain_status(chain)] userInfo:nil];
