@@ -128,6 +128,7 @@
 		8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */; };
 		8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED19C0935AA5E00413C0A /* CompactDisc.m */; };
 		8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD7B0CC094E7F2600BA2427 /* SectorRange.m */; };
+		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
 		8CD9ED95094FEB6700F67AC8 /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */; };
 		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
 		8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */; };
@@ -142,7 +143,6 @@
 		8CE164620933D42700A99A68 /* libcdda_paranoia.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164600933D42700A99A68 /* libcdda_paranoia.a */; };
 		8CE164630933D42700A99A68 /* libcdda_interface.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE164610933D42700A99A68 /* libcdda_interface.a */; };
 		8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1687C0934681C00A99A68 /* ParanoiaException.m */; };
-		8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CE6F51D08CD60970028DA37 /* Credits.rtf */; };
 		8CE9743F09461DB6000127B6 /* ComponentVersionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE9743D09461DB6000127B6 /* ComponentVersionsController.m */; };
 		8CE9744909461DE2000127B6 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
 		8CE974770946262B000127B6 /* FLAC.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE974760946262B000127B6 /* FLAC.png */; };
@@ -442,6 +442,7 @@
 		8CCED19C0935AA5E00413C0A /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
 		8CD7B0CB094E7F2600BA2427 /* SectorRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectorRange.h; sourceTree = "<group>"; };
 		8CD7B0CC094E7F2600BA2427 /* SectorRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectorRange.m; sourceTree = "<group>"; };
+		8CD7F7D1098B0B19002C4D9F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverter.h; sourceTree = "<group>"; };
 		8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverter.m; sourceTree = "<group>"; };
 		8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterTask.h; sourceTree = "<group>"; };
@@ -470,7 +471,7 @@
 		8CE165B60933FAD400A99A68 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
 		8CE1687B0934681C00A99A68 /* ParanoiaException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParanoiaException.h; sourceTree = "<group>"; };
 		8CE1687C0934681C00A99A68 /* ParanoiaException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParanoiaException.m; sourceTree = "<group>"; };
-		8CE6F51D08CD60970028DA37 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		8CE6F51D08CD60970028DA37 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8CE9743C09461DB6000127B6 /* ComponentVersionsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentVersionsController.h; sourceTree = "<group>"; };
 		8CE9743D09461DB6000127B6 /* ComponentVersionsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComponentVersionsController.m; sourceTree = "<group>"; };
 		8CE9746209461F35000127B6 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ComponentVersions.nib; sourceTree = "<group>"; };
@@ -692,7 +693,7 @@
 				8C32811E096D0CD700608C9D /* CompactDiscDocument.nib */,
 				8C4D464F093E776500A88927 /* Preferences.nib */,
 				8CB6E20008DACB8100345B8F /* COPYING.txt */,
-				8CE6F51D08CD60970028DA37 /* Credits.rtf */,
+				8CD7F5E0098B0A30002C4D9F /* Credits.rtf */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				8CBB8BA708EFAE60007197C3 /* FreeDBDefaults.plist */,
@@ -1083,7 +1084,7 @@
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				8C32811F096D0CD700608C9D /* CompactDiscDocument.nib in Resources */,
-				8CE6F51E08CD60970028DA37 /* Credits.rtf in Resources */,
+				8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */,
 				8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */,
 				8C4D4650093E776500A88927 /* Preferences.nib in Resources */,
 				8CBB8BA408EFAE53007197C3 /* TrackDefaults.plist in Resources */,
@@ -1499,6 +1500,15 @@
 				8C8B0CC2092E5DAA00418C45 /* English */,
 			);
 			name = "Max Help";
+			sourceTree = "<group>";
+		};
+		8CD7F5E0098B0A30002C4D9F /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8CE6F51D08CD60970028DA37 /* English */,
+				8CD7F7D1098B0B19002C4D9F /* French */,
+			);
+			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
