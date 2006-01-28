@@ -39,11 +39,13 @@
 
 #import "UtilityFunctions.h"
 
-#define kEncodeMenuItemTag				1
-#define kTrackInfoMenuItemTag			2
-#define kQueryFreeDBMenuItemTag			3
-#define kEjectDiscMenuItemTag			4
-#define kSubmitToFreeDBMenuItemTag		5
+#define kEncodeMenuItemTag					1
+#define kTrackInfoMenuItemTag				2
+#define kQueryFreeDBMenuItemTag				3
+#define kEjectDiscMenuItemTag				4
+#define kSubmitToFreeDBMenuItemTag			5
+#define kSelectNextTrackMenuItemTag			6
+#define kSelectPreviousTrackMenuItemTag		7
 
 @implementation CompactDiscDocument
 
@@ -106,11 +108,13 @@
 	BOOL result;
 	
 	switch([item tag]) {
-		default:							result = [super validateMenuItem:item];			break;
-		case kEncodeMenuItemTag:			result = [self encodeAllowed];					break;
-		case kQueryFreeDBMenuItemTag:		result = [self queryFreeDBAllowed];				break;
-		case kSubmitToFreeDBMenuItemTag:	result = [self submitToFreeDBAllowed];			break;
-		case kEjectDiscMenuItemTag:			result = [self ejectDiscAllowed];				break;
+		default:								result = [super validateMenuItem:item];			break;
+		case kEncodeMenuItemTag:				result = [self encodeAllowed];					break;
+		case kQueryFreeDBMenuItemTag:			result = [self queryFreeDBAllowed];				break;
+		case kSubmitToFreeDBMenuItemTag:		result = [self submitToFreeDBAllowed];			break;
+		case kEjectDiscMenuItemTag:				result = [self ejectDiscAllowed];				break;
+		case kSelectNextTrackMenuItemTag:		result = [_trackController canSelectNext];		break;
+		case kSelectPreviousTrackMenuItemTag:	result = [_trackController canSelectPrevious];	break;
 	}
 	
 	return result;
