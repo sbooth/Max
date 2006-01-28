@@ -180,7 +180,7 @@ enum {
 		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 		
 		vorbis_comment_init(&vc);
-		vorbis_comment_add_tag(&vc, "ENCODER", [[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String]);
+		vorbis_comment_add_tag(&vc, "ENCODER", (char *)[[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String]);
 		
 		vorbis_analysis_init(&vd, &vi);
 		vorbis_block_init(&vd, &vb);

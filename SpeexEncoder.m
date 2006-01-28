@@ -87,7 +87,7 @@ If you have troubles, please write to ymnk@jcraft.com.
 			buf[base]=(val)&0xff; \
 }while(0)
 
-static void comment_init(char **comments, int *length, char *vendor_string)
+static void comment_init(char **comments, int *length, const char *vendor_string)
 {
 	int vendor_length = strlen(vendor_string);
 	int user_comment_list_length = 0;
@@ -104,7 +104,7 @@ static void comment_init(char **comments, int *length, char *vendor_string)
 	*comments = p;
 }
 
-static void comment_add(char **comments, int *length, char *tag, char *val)
+static void comment_add(char **comments, int *length, const char *tag, const char *val)
 {
 	char* p=*comments;
 	int vendor_length=readint(p, 0);

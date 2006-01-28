@@ -630,7 +630,7 @@
 {
 	unsigned				i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
-	int						drawerState;
+	//int						drawerState;
 	
 	if([self discInDrive] && [tracks count] != [_tracks count]) {
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
