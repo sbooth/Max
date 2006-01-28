@@ -147,7 +147,7 @@
 
 - (void) stop
 {
-	if([self started]) {
+	if([self started] && NO == [self stopped]) {
 		[self setShouldStop];
 	}
 	else {

@@ -55,8 +55,6 @@
 		[owner encoderReady:encoder];
 		
 		[encoder release];
-		
-		[[NSRunLoop currentRunLoop] run];
 	}	
 	
 	@catch(NSException *exception) {

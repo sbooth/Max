@@ -53,8 +53,6 @@
 		[owner converterReady:converter];
 		
 		[converter release];
-		
-		[[NSRunLoop currentRunLoop] run];
 	}	
 	
 	@catch(NSException *exception) {

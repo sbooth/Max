@@ -255,12 +255,11 @@
 
 - (void) stop
 {
-	if([self started]) {
+	if([self started] && NO == [self stopped]) {
 		[self setShouldStop];
 	}
 	else {
-		[_connection invalidate];
-		[[TaskMaster sharedController] encodeDidStop:self];
+		[self setStopped];
 	}
 }
 

@@ -114,8 +114,6 @@ callback(long inpos, int function, void *userdata)
 		[owner ripperReady:ripper];
 		
 		[ripper release];
-
-		[[NSRunLoop currentRunLoop] run];
 	}	
 	
 	@catch(NSException *exception) {
