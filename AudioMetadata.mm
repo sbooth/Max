@@ -131,10 +131,15 @@
 	if(NO == parsed) {
 		TagLib::FileRef			f						([filename UTF8String]);
 		TagLib::MPEG::File		*mpegFile				= NULL;
+		TagLib::String			s;
+		TagLib::ID3v2::Tag		*id3v2tag;
+		NSString				*trackString, *trackNum, *totalTracks;
+		NSRange					range;
+		
 		
 		if(false == f.isNull()) {
-			TagLib::String		s;
-			
+			mpegFile = dynamic_cast<TagLib::MPEG::File *>(f.file());
+
 			// Album title
 			s = f.tag()->album();
 			if(false == s.isNull()) {
@@ -169,16 +174,39 @@
 			if(false == s.isNull()) {
 				[result setValue:[NSString stringWithUTF8String:s.toCString(true)] forKey:@"trackTitle"];
 			}
-			
+
 			// Track number
-			if(0 != f.tag()->track()) {
+			if(NULL != mpegFile) {
+				id3v2tag = mpegFile->ID3v2Tag();
+				
+				if(NULL != id3v2tag) {
+					TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TRCK"];
+					
+					if(NO == frameList.isEmpty()) {
+						// Split the tracks at '/'
+						trackString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+						range			= [trackString rangeOfString:@"/" options:NSLiteralSearch];
+						
+						if(NSNotFound != range.location && 0 != range.length) {
+							trackNum		= [trackString substringToIndex:range.location];
+							totalTracks		= [trackString substringFromIndex:range.location + 1];
+							
+							[result setValue:[NSNumber numberWithUnsignedInt:[trackNum intValue]] forKey:@"trackNumber"];
+							[result setValue:[NSNumber numberWithUnsignedInt:[totalTracks intValue]] forKey:@"albumTrackCount"];
+						}
+						else {
+							[result setValue:[NSNumber numberWithUnsignedInt:[trackString intValue]] forKey:@"trackNumber"];
+						}
+					}			
+				}
+			}
+			else if(0 != f.tag()->track()) {
 				[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
 			}
 			
 			// If this is an MPEG file look for the iTunes TCMP tag
-			mpegFile = dynamic_cast<TagLib::MPEG::File *>(f.file());
 			if(NULL != mpegFile && [[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
-				TagLib::ID3v2::Tag		*id3v2tag		= mpegFile->ID3v2Tag();
+				id3v2tag = mpegFile->ID3v2Tag();
 				
 				if(NULL != id3v2tag) {
 					TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TCMP"];
@@ -190,7 +218,7 @@
 					}			
 				}
 			}
-
+						
 			parsed = YES;
 		}
 	}
