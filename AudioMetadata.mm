@@ -24,8 +24,10 @@
 
 #include "fileref.h"					// TagLib::FileRef
 #include "mpegfile.h"					// TagLib::MPEG::File
+#include "vorbisfile.h"					// TagLib::Ogg::Vorbis::File
 #include "id3v2tag.h"					// TagLib::ID3v2::Tag
 #include "id3v2frame.h"					// TagLib::ID3v2::Frame
+#include "xiphcomment.h"				// TagLib::Ogg::XiphComment
 #include "mp4.h"						// MP4FileHandle
 
 @implementation AudioMetadata
@@ -75,6 +77,9 @@
 								else if([key isEqualToString:@"ARTIST"]) {
 									[result setValue:value forKey:@"albumArtist"];
 								}
+								else if([key isEqualToString:@"COMPOSER"]) {
+									[result setValue:value forKey:@"albumComposer"];
+								}
 								else if([key isEqualToString:@"GENRE"]) {
 									[result setValue:value forKey:@"albumGenre"];
 								}
@@ -90,6 +95,10 @@
 								else if([key isEqualToString:@"TRACKNUMBER"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"trackNumber"];
 								}
+								else if([key isEqualToString:@"TRACKTOTAL"]) {
+									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"albumTrackCount"];
+								}
+								// Maintain backwards compatibility
 								else if([key isEqualToString:@"TOTALTRACKS"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"albumTrackCount"];
 								}
@@ -129,16 +138,19 @@
 	
 	// Try TagLib
 	if(NO == parsed) {
-		TagLib::FileRef			f						([filename UTF8String]);
-		TagLib::MPEG::File		*mpegFile				= NULL;
-		TagLib::String			s;
-		TagLib::ID3v2::Tag		*id3v2tag;
-		NSString				*trackString, *trackNum, *totalTracks;
-		NSRange					range;
+		TagLib::FileRef					f						([filename UTF8String]);
+		TagLib::MPEG::File				*mpegFile				= NULL;
+		TagLib::Ogg::Vorbis::File		*vorbisFile				= NULL;
+		TagLib::String					s;
+		TagLib::ID3v2::Tag				*id3v2tag;
+		TagLib::Ogg::XiphComment		*xiphComment;
+		NSString						*trackString, *trackNum, *totalTracks;
+		NSRange							range;
 		
 		
 		if(false == f.isNull()) {
-			mpegFile = dynamic_cast<TagLib::MPEG::File *>(f.file());
+			mpegFile	= dynamic_cast<TagLib::MPEG::File *>(f.file());
+			vorbisFile	= dynamic_cast<TagLib::Ogg::Vorbis::File *>(f.file());
 
 			// Album title
 			s = f.tag()->album();
@@ -176,10 +188,17 @@
 			}
 
 			// Track number
+			if(0 != f.tag()->track()) {
+				[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
+			}
+
+			// Special case for certain ID3 tags in MPEG files
 			if(NULL != mpegFile) {
 				id3v2tag = mpegFile->ID3v2Tag();
 				
 				if(NULL != id3v2tag) {
+					
+					// Extract total tracks if present
 					TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TRCK"];
 					
 					if(NO == frameList.isEmpty()) {
@@ -197,28 +216,56 @@
 						else {
 							[result setValue:[NSNumber numberWithUnsignedInt:[trackString intValue]] forKey:@"trackNumber"];
 						}
-					}			
+					}
+					
+					// Extract compilation if present (iTunes TCMP tag)
+					if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+						frameList = id3v2tag->frameListMap()["TCMP"];
+						
+						if(NO == frameList.isEmpty()) {
+							// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
+							NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+							[result setValue:[NSNumber numberWithBool:(BOOL)[value intValue]] forKey:@"multipleArtists"];
+						}			
+					}
 				}
-			}
-			else if(0 != f.tag()->track()) {
-				[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
 			}
 			
-			// If this is an MPEG file look for the iTunes TCMP tag
-			if(NULL != mpegFile && [[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
-				id3v2tag = mpegFile->ID3v2Tag();
+			// Special case for certain tags in Ogg Vorbis files
+			if(NULL != vorbisFile) {
+				xiphComment = vorbisFile->tag();
 				
-				if(NULL != id3v2tag) {
-					TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TCMP"];
+				if(NULL != xiphComment) {
+					TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
+					NSString						*value		= nil;
 					
-					if(NO == frameList.isEmpty()) {
-						// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
-						NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+					if(fieldList.contains("TRACKTOTAL")) {
+						value = [NSString stringWithUTF8String:fieldList["TRACKTOTAL"].toString().toCString(true)];
+						[result setValue:[NSNumber numberWithInt:[value intValue]] forKey:@"albumTrackCount"];
+					}
+
+					if(fieldList.contains("DISCNUMBER")) {
+						value = [NSString stringWithUTF8String:fieldList["DISCNUMBER"].toString().toCString(true)];
+						[result setValue:[NSNumber numberWithInt:[value intValue]] forKey:@"discNumber"];
+					}
+
+					if(fieldList.contains("DISCSINSET")) {
+						value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
+						[result setValue:[NSNumber numberWithInt:[value intValue]] forKey:@"discsInSet"];
+					}
+
+					if(fieldList.contains("COMPILATION")) {
+						value = [NSString stringWithUTF8String:fieldList["COMPILATION"].toString().toCString(true)];
 						[result setValue:[NSNumber numberWithBool:(BOOL)[value intValue]] forKey:@"multipleArtists"];
-					}			
+					}
+
+					if(fieldList.contains("ISRC")) {
+						value = [NSString stringWithUTF8String:fieldList["ISRC"].toString().toCString(true)];
+						[result setValue:value forKey:@"ISRC"];
+					}					
 				}
 			}
-						
+			
 			parsed = YES;
 		}
 	}

@@ -51,6 +51,7 @@
 	NSNumber									*totalTracks			= nil;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
+	NSString									*composer				= nil;
 	NSString									*title					= nil;
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
@@ -123,6 +124,15 @@
 		if(nil != artist) {
 			addVorbisComment(block, @"ARTIST", artist);
 		}
+
+		// Composer
+		composer = [metadata valueForKey:@"trackComposer"];
+		if(nil == composer) {
+			composer = [metadata valueForKey:@"albumComposer"];
+		}
+		if(nil != composer) {
+			addVorbisComment(block, @"COMPOSER", composer);
+		}
 		
 		// Genre
 		genre = [metadata valueForKey:@"trackGenre"];
@@ -166,7 +176,7 @@
 		// Total tracks
 		totalTracks = [metadata valueForKey:@"albumTrackCount"];
 		if(nil != totalTracks) {
-			addVorbisComment(block, @"TOTALTRACKS", [totalTracks stringValue]);
+			addVorbisComment(block, @"TRACKTOTAL", [totalTracks stringValue]);
 		}
 
 		// Compilation

@@ -40,12 +40,18 @@
 {
 	AudioMetadata								*metadata				= [_task metadata];
 	NSNumber									*trackNumber			= nil;
+	NSNumber									*trackTotal				= nil;
+	NSNumber									*discNumber				= nil;
+	NSNumber									*discsInSet				= nil;
+	NSNumber									*multiArtist			= nil;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
+	NSString									*composer				= nil;
 	NSString									*title					= nil;
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
+	NSString									*isrc					= nil;
 	TagLib::Ogg::Vorbis::File					f						([_outputFilename UTF8String], false);
 
 	
@@ -66,6 +72,15 @@
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
+	}
+
+	// Composer
+	composer = [metadata valueForKey:@"trackComposer"];
+	if(nil == composer) {
+		composer = [metadata valueForKey:@"albumComposer"];
+	}
+	if(nil != composer) {
+		f.tag()->addField("COMPOSER", TagLib::String([composer UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
@@ -107,6 +122,39 @@
 		f.tag()->setTrack([trackNumber unsignedIntValue]);
 	}
 
+	// Track total
+	trackTotal = [metadata valueForKey:@"albumTrackCount"];
+	if(nil != trackTotal) {
+		f.tag()->addField("TRACKTOTAL", TagLib::String([[trackTotal stringValue] UTF8String], TagLib::String::UTF8));
+	}
+
+	// Disc number
+	discNumber = [metadata valueForKey:@"discNumber"];
+	if(nil != discNumber) {
+		f.tag()->addField("DISCNUMBER", TagLib::String([[discNumber stringValue] UTF8String], TagLib::String::UTF8));
+	}
+	
+	// Discs in set
+	discsInSet = [metadata valueForKey:@"discsInSet"];
+	if(nil != discsInSet) {
+		f.tag()->addField("DISCSINSET", TagLib::String([[discsInSet stringValue] UTF8String], TagLib::String::UTF8));
+	}
+
+	// Multiple artists
+	multiArtist = [metadata valueForKey:@"multipleArtists"];
+	if(nil != multiArtist && [multiArtist boolValue]) {
+		f.tag()->addField("COMPILATION", TagLib::String([[multiArtist stringValue] UTF8String], TagLib::String::UTF8));
+	}
+	
+	// ISRC
+	isrc = [metadata valueForKey:@"ISRC"];
+	if(nil != isrc) {
+		f.tag()->addField("ISRC", TagLib::String([isrc UTF8String], TagLib::String::UTF8));
+	}
+
+	// Encoder settings
+	f.tag()->addField("ENCODING", TagLib::String([[self settings] UTF8String], TagLib::String::UTF8));
+	
 	f.save();
 }
 
