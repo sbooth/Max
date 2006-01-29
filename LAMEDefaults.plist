@@ -6,8 +6,8 @@
 	<real>8</real>
 	<key>lameEncodingEngineQuality</key>
 	<integer>2</integer>
-	<key>lameMonoEncoding</key>
-	<false/>
+	<key>lameStereoMode</key>
+	<real>0</real>
 	<key>lameQuality</key>
 	<real>4</real>
 	<key>lameTarget</key>

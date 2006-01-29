@@ -68,7 +68,7 @@
 			[[NSUserDefaults standardUserDefaults] setInteger:LAME_ENCODING_ENGINE_QUALITY_HIGH		forKey:@"lameEncodingEngineQuality"];
 			[[NSUserDefaults standardUserDefaults] setInteger:13									forKey:@"lameBitrate"];
 			[[NSUserDefaults standardUserDefaults] setBool:YES										forKey:@"lameUseConstantBitrate"];
-			[[NSUserDefaults standardUserDefaults] setBool:NO										forKey:@"lameMonoEncoding"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_STEREO_MODE_DEFAULT				forKey:@"lameStereoMode"];
 			break;
 
 		/*
@@ -82,7 +82,7 @@
 			[[NSUserDefaults standardUserDefaults] setInteger:LAME_ENCODING_ENGINE_QUALITY_HIGH		forKey:@"lameEncodingEngineQuality"];
 			[[NSUserDefaults standardUserDefaults] setInteger:LAME_VARIABLE_BITRATE_MODE_FAST		forKey:@"lameVariableBitrateMode"];
 			[[NSUserDefaults standardUserDefaults] setFloat:80.0									forKey:@"lameVBRQuality"];
-			[[NSUserDefaults standardUserDefaults] setBool:NO										forKey:@"lameMonoEncoding"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_STEREO_MODE_DEFAULT				forKey:@"lameStereoMode"];
 			break;
 
 		/*
@@ -95,7 +95,7 @@
 			[[NSUserDefaults standardUserDefaults] setInteger:LAME_ENCODING_ENGINE_QUALITY_HIGH		forKey:@"lameEncodingEngineQuality"];
 			[[NSUserDefaults standardUserDefaults] setInteger:LAME_VARIABLE_BITRATE_MODE_FAST		forKey:@"lameVariableBitrateMode"];
 			[[NSUserDefaults standardUserDefaults] setFloat:50.0									forKey:@"lameVBRQuality"];
-			[[NSUserDefaults standardUserDefaults] setBool:NO										forKey:@"lameMonoEncoding"];
+			[[NSUserDefaults standardUserDefaults] setInteger:LAME_STEREO_MODE_DEFAULT				forKey:@"lameStereoMode"];
 			break;
 		}
 	

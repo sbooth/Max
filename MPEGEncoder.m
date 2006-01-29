@@ -65,6 +65,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 - (id) initWithPCMFilename:(NSString *)inputFilename
 {
+	int			mode;
 	int			quality;
 	int			bitrate;
 	int			lameResult;
@@ -89,17 +90,21 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 			lame_set_bWriteVbrTag(_gfp, 1);
 			
 			// Set encoding properties from user defaults
-			lame_set_mode(_gfp, [[NSUserDefaults standardUserDefaults] boolForKey:@"lameMonoEncoding"] ? MONO : JOINT_STEREO);
+			mode = [[NSUserDefaults standardUserDefaults] integerForKey:@"lameStereoMode"];
+			switch(mode) {
+				case LAME_STEREO_MODE_DEFAULT:			lame_set_mode(_gfp, NOT_SET);			break;
+				case LAME_STEREO_MODE_MONO:				lame_set_mode(_gfp, MONO);				break;
+				case LAME_STEREO_MODE_STEREO:			lame_set_mode(_gfp, STEREO);			break;
+				case LAME_STEREO_MODE_JOINT_STEREO:		lame_set_mode(_gfp, JOINT_STEREO);		break;
+				default:								lame_set_mode(_gfp, NOT_SET);			break;
+			}
 			
 			quality = [[NSUserDefaults standardUserDefaults] integerForKey:@"lameEncodingEngineQuality"];
-			if(LAME_ENCODING_ENGINE_QUALITY_FAST == quality) {
-				lame_set_quality(_gfp, 7);
-			}
-			else if(LAME_ENCODING_ENGINE_QUALITY_STANDARD == quality) {
-				lame_set_quality(_gfp, 5);
-			}
-			else if(LAME_ENCODING_ENGINE_QUALITY_HIGH == quality) {
-				lame_set_quality(_gfp, 2);
+			switch(quality) {
+				case LAME_ENCODING_ENGINE_QUALITY_FAST:			lame_set_quality(_gfp, 7);		break;
+				case LAME_ENCODING_ENGINE_QUALITY_STANDARD:		lame_set_quality(_gfp, 5);		break;
+				case LAME_ENCODING_ENGINE_QUALITY_HIGH:			lame_set_quality(_gfp, 2);		break;
+				default:										lame_set_quality(_gfp, 5);		break;
 			}
 			
 			// Target is bitrate
@@ -120,7 +125,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				lame_set_VBR_q(_gfp, (100 - [[NSUserDefaults standardUserDefaults] integerForKey:@"lameVBRQuality"]) / 10);
 			}
 			else {
-				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME mode" userInfo:nil];
+				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME target" userInfo:nil];
 			}
 			
 			lameResult = lame_init_params(_gfp);
