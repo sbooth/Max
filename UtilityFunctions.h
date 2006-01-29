@@ -44,6 +44,9 @@ NSString * generateUniqueFilename(NSString *basename,
 // Create path if it does not exist; throw an exception if it exists and is a file
 void validateAndCreateDirectory(NSString *path);
 
+// Get an array of file types with built-in support
+NSArray * getBuiltinExtensions();
+
 // Get an array of file types supported by libsndfile
 NSArray * getLibsndfileExtensions();
 

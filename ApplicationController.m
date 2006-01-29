@@ -114,7 +114,7 @@ static ApplicationController *sharedController = nil;
 		// Allowable file types
 		_allowedTypes = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
 		[(NSMutableArray *)_allowedTypes addObjectsFromArray:getLibsndfileExtensions()];
-		[(NSMutableArray *)_allowedTypes addObjectsFromArray:[NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", nil]];
+		[(NSMutableArray *)_allowedTypes addObjectsFromArray:getBuiltinExtensions()];
 
 		[_allowedTypes retain];
 		

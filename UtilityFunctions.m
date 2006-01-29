@@ -39,6 +39,7 @@
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;
 static NSArray				*sAudioExtensions	= nil;
+static NSArray				*sBuiltinExtensions	= nil;
 
 NSString *
 getApplicationDataDirectory()
@@ -152,6 +153,19 @@ validateAndCreateDirectory(NSString *path)
 		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory", @"Exceptions", @"")
 									 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
 	}	
+}
+
+NSArray * 
+getBuiltinExtensions()
+{
+	@synchronized(sBuiltinExtensions) {
+		if(nil == sBuiltinExtensions) {
+			sBuiltinExtensions = [NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", nil];
+			[sBuiltinExtensions retain];
+		}
+	}
+	
+	return sBuiltinExtensions;
 }
 
 NSArray *
