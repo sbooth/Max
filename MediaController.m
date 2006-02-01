@@ -232,7 +232,7 @@ static MediaController *sharedController = nil;
 - (void) ejectDiscForCompactDiscDocument:(CompactDiscDocument *)document
 {
 	NSString	*bsdName	= [[document getDisc] bsdName];
-	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [bsdName UTF8String]);
+	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [bsdName fileSystemRepresentation]);
 	
 	// Close all open connections to the drive
 	[document discEjected];

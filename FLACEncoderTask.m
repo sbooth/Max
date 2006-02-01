@@ -68,7 +68,7 @@
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename UTF8String])) {
+		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename fileSystemRepresentation])) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
 		}
 		
@@ -252,7 +252,7 @@
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename UTF8String])) {
+		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename fileSystemRepresentation])) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
 		}
 		

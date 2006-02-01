@@ -102,7 +102,7 @@ static ConverterController *sharedController = nil;
 	unsigned				divisions;
 	
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-		tmpDir = [[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] UTF8String];
+		tmpDir = [[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] fileSystemRepresentation];
 	}
 	else {
 		tmpDir = _PATH_TMP;

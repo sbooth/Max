@@ -116,7 +116,7 @@
 	
 	// Use mp4v2 for Apple lossless/AAC files
 	if(kAudioFormatMPEG4AAC == formatID || kAudioFormatAppleLossless == formatID) {
-		mp4FileHandle = MP4Modify([_outputFilename UTF8String], 0, 0);
+		mp4FileHandle = MP4Modify([_outputFilename fileSystemRepresentation], 0, 0);
 		
 		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
 			
@@ -216,7 +216,7 @@
 	else {
 
 		@try {
-			err = FSPathMakeRef((const UInt8 *)[_outputFilename UTF8String], &ref, NULL);
+			err = FSPathMakeRef((const UInt8 *)[_outputFilename fileSystemRepresentation], &ref, NULL);
 			if(noErr != err) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_outputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];

@@ -187,7 +187,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		@try {
 			if(_resampleInput) {				
 				if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-					tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+					tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
 				}
 				else {
 					tmpDir = _PATH_TMP;
@@ -221,7 +221,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 {
 	// Delete resampled temporary file
 	if(_resampleInput) {
-		if(-1 == unlink([_tempFilename UTF8String])) {
+		if(-1 == unlink([_tempFilename fileSystemRepresentation])) {
 			NSException *exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
 															  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
@@ -306,7 +306,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			info.samplerate		= 44100;
 			info.channels		= 2;
 			
-			inSF = sf_open([_inputFilename UTF8String], SFM_READ, &info);
+			inSF = sf_open([_inputFilename fileSystemRepresentation], SFM_READ, &info);
 			if(NULL == inSF) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -327,7 +327,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 			info.samplerate		= rate;
 			info.channels		= 2;
-			outSF				= sf_open([_tempFilename UTF8String], SFM_WRITE, &info);
+			outSF				= sf_open([_tempFilename fileSystemRepresentation], SFM_WRITE, &info);
 			if(NULL == outSF) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the temporary file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -413,7 +413,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			}
 			
 			// Open the new, resampled input file
-			pcm = open([_tempFilename UTF8String], O_RDONLY);
+			pcm = open([_tempFilename fileSystemRepresentation], O_RDONLY);
 			if(-1 == pcm) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -423,7 +423,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			rate = 44100;
 			
 			// Open the input file
-			pcm = open([_inputFilename UTF8String], O_RDONLY);
+			pcm = open([_inputFilename fileSystemRepresentation], O_RDONLY);
 			if(-1 == pcm) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -440,7 +440,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		bytesToRead		= totalBytes;
 		
 		// Open the output file
-		fd = open([filename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		if(-1 == fd) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

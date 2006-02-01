@@ -139,7 +139,7 @@
 	
 	@try {
 		// Open the input file
-		pcm = open([_inputFilename UTF8String], O_RDONLY);
+		pcm = open([_inputFilename fileSystemRepresentation], O_RDONLY);
 		if(-1 == pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -164,7 +164,7 @@
 		
 		// Open the output file		
 		// There is no convenient ExtAudioFile API for wiping clean an existing file, so use AudioFile
-		err = FSPathMakeRef((const UInt8 *)[filename UTF8String], &ref, NULL);
+		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
 		if(noErr != err) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];

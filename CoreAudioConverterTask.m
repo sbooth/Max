@@ -45,7 +45,7 @@
 			_converterClass = [CoreAudioConverter class];
 			
 			// Get information on the input file
-			err = FSPathMakeRef((const UInt8 *)[_inputFilename UTF8String], &ref, NULL);
+			err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
 			if(noErr != err) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];

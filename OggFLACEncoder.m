@@ -77,7 +77,7 @@
 	
 	@try {
 		// Open the input file
-		pcm = open([_inputFilename UTF8String], O_RDONLY);
+		pcm = open([_inputFilename fileSystemRepresentation], O_RDONLY);
 		if(-1 == pcm) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -149,7 +149,7 @@
 		if(NO == OggFLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
-		if(NO == OggFLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
+		if(NO == OggFLAC__file_encoder_set_filename(_flac, [filename fileSystemRepresentation])) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 		if(OggFLAC__FILE_ENCODER_OK != OggFLAC__file_encoder_init(_flac)) {

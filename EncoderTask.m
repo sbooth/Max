@@ -133,7 +133,7 @@
 
 - (void) removeOutputFile
 {
-	if(nil != _outputFilename && -1 == unlink([_outputFilename UTF8String])) {
+	if(nil != _outputFilename && -1 == unlink([_outputFilename fileSystemRepresentation])) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the output file", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}	
@@ -146,7 +146,7 @@
 	if(nil != _outputFilename) {
 		@try {
 			// Create the file (don't overwrite)
-			fd = open([_outputFilename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			fd = open([_outputFilename fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if(-1 == fd) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -230,7 +230,7 @@
 		
 		// Delete input file if requested
 		if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
-			if(-1 == unlink([[(ConverterTask *)_task inputFilename] UTF8String])) {
+			if(-1 == unlink([[(ConverterTask *)_task inputFilename] fileSystemRepresentation])) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}	
@@ -285,7 +285,7 @@
 		cueSheetFilename = generateUniqueFilename([_outputFilename stringByDeletingPathExtension], @"cue");
 
 		// Create the file (don't overwrite)
-		fd = open([cueSheetFilename UTF8String], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		fd = open([cueSheetFilename fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		if(-1 == fd) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the cue sheet", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -321,7 +321,7 @@
 
 		// FILE
 		temp	= [NSString stringWithFormat:@"FILE \"%@\" %@\n", [_outputFilename lastPathComponent], [self cueSheetFormatName]];
-		buf		= [temp UTF8String];
+		buf		= [temp fileSystemRepresentation];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 

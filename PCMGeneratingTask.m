@@ -85,7 +85,7 @@
 		@try {
 
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
 			}
 			else {
 				tmpDir = _PATH_TMP;
@@ -127,7 +127,7 @@
 	struct stat sourceStat;
 	
 	// Delete output file if it exists
-	if(0 == stat([_outputFilename UTF8String], &sourceStat) && -1 == unlink([_outputFilename UTF8String])) {
+	if(0 == stat([_outputFilename fileSystemRepresentation], &sourceStat) && -1 == unlink([_outputFilename fileSystemRepresentation])) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}	

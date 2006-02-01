@@ -46,7 +46,7 @@
 	NSNumber									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
-	TagLib::Ogg::FLAC::File						f						([_outputFilename UTF8String], false);
+	TagLib::Ogg::FLAC::File						f						([_outputFilename fileSystemRepresentation], false);
 	
 	
 	if(NO == f.isValid()) {

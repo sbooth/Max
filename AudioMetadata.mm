@@ -50,7 +50,7 @@
 		NSString									*commentString, *key, *value;
 		NSRange										range;
 		
-		if(FLAC__metadata_get_tags([filename UTF8String], &tags)) {
+		if(FLAC__metadata_get_tags([filename fileSystemRepresentation], &tags)) {
 			
 			currentTag = tags;
 			
@@ -138,7 +138,7 @@
 	
 	// Try TagLib
 	if(NO == parsed) {
-		TagLib::FileRef					f						([filename UTF8String]);
+		TagLib::FileRef					f						([filename fileSystemRepresentation]);
 		TagLib::MPEG::File				*mpegFile				= NULL;
 		TagLib::Ogg::Vorbis::File		*vorbisFile				= NULL;
 		TagLib::String					s;
@@ -272,7 +272,7 @@
 
 	// Try mp4v2
 	if(NO == parsed) {
-		MP4FileHandle mp4FileHandle = MP4Read([filename UTF8String], 0);
+		MP4FileHandle mp4FileHandle = MP4Read([filename fileSystemRepresentation], 0);
 		
 		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
 			char			*s;

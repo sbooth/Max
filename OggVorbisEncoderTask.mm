@@ -52,7 +52,7 @@
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	NSString									*isrc					= nil;
-	TagLib::Ogg::Vorbis::File					f						([_outputFilename UTF8String], false);
+	TagLib::Ogg::Vorbis::File					f						([_outputFilename fileSystemRepresentation], false);
 
 	
 	if(NO == f.isValid()) {

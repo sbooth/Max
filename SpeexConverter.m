@@ -55,7 +55,7 @@
 			_resampleInput = NO;
 			
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] UTF8String];
+				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
 			}
 			else {
 				tmpDir = _PATH_TMP;
@@ -87,7 +87,7 @@
 - (void) dealloc
 {
 	// Delete resampled temporary file
-	if(-1 == unlink([_tempFilename UTF8String])) {
+	if(-1 == unlink([_tempFilename fileSystemRepresentation])) {
 		NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 					
 														 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		NSLog(@"%@", exception);
@@ -162,7 +162,7 @@
 	
 	@try {
 		// Open the output file (converter output may be resampled before it is written to this file)
-		out_fd = open([filename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		out_fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		if(-1 == out_fd) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -170,7 +170,7 @@
 		
 		// Open the temporary file if resampling is necessary
 		if(_resampleInput) {
-			temp_fd = open([_tempFilename UTF8String], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			temp_fd = open([_tempFilename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if(-1 == temp_fd) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the temporary file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -178,7 +178,7 @@
 		}
 		
 		// Open the input file
-		in_fd = open([_inputFilename UTF8String], O_RDONLY);
+		in_fd = open([_inputFilename fileSystemRepresentation], O_RDONLY);
 		if(-1 == in_fd) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

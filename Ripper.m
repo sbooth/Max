@@ -140,7 +140,7 @@ callback(long inpos, int function, void *userdata)
 		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
 		
 		// Setup cdparanoia
-		_drive		= cdda_identify([deviceName UTF8String], 0, NULL);
+		_drive		= cdda_identify([deviceName fileSystemRepresentation], 0, NULL);
 		if(NULL == _drive) {
 			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
 		}
@@ -216,7 +216,7 @@ callback(long inpos, int function, void *userdata)
 
 	@try {
 		// Open the output file
-		fd = open([filename UTF8String], O_WRONLY | O_TRUNC, 0);
+		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, 0);
 		if(-1 == fd) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

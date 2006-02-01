@@ -39,7 +39,7 @@
 		_bsdName	= [bsdName retain];
 		
 		// cdparanoia setup
-		_drive		= cdda_identify([bsdPath UTF8String], 0, NULL);
+		_drive		= cdda_identify([bsdPath fileSystemRepresentation], 0, NULL);
 		if(NULL == _drive) {
 			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
 		}
