@@ -28,13 +28,13 @@
 
 #import "UtilityFunctions.h"
 
-#include "speex/speex.h"
-#include "speex/speex_header.h"
-#include "speex/speex_stereo.h"
-#include "speex/speex_preprocess.h"
-#include "ogg/ogg.h"
+#include "Speex/speex.h"
+#include "Speex/speex_header.h"
+#include "Speex/speex_stereo.h"
+#include "Speex/speex_preprocess.h"
+#include "Ogg/ogg.h"
 
-#include "sndfile.h"
+#include "sndfile/sndfile.h"
 
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose
@@ -237,9 +237,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 {
 	NSDate						*startTime									= [NSDate date];
 
-	void						*speexState;
-	const SpeexMode				*mode;
-	SpeexPreprocessState		*preprocess;
+	void						*speexState									= NULL;
+	const SpeexMode				*mode										= NULL;
+	SpeexPreprocessState		*preprocess									= NULL;
 	SpeexBits					bits;
 
 	int							rate;
@@ -264,7 +264,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	
 	BOOL						eos											= NO;
 
-	int16_t						*buf;
+	int16_t						*buf										= NULL;
 	ssize_t						buflen;
 	
 	int							pcm											= -1;
@@ -279,7 +279,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 
 	unsigned long				iterations									= 0;
 	   
-	SNDFILE						*inSF;
+	SNDFILE						*inSF										= NULL;
 	SF_INFO						info;
 	SNDFILE						*outSF										= NULL;
 	const char					*string										= NULL;
@@ -558,7 +558,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		}
 		
 		// Allocate the buffer (hardcoded for 16-bit stereo input)
-		buflen			= 2 * frameSize;
+		buflen		= 2 * frameSize;
 		buf			= (int16_t *) calloc(buflen, sizeof(int16_t));
 		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 

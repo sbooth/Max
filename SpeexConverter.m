@@ -25,13 +25,13 @@
 #import "StopException.h"
 #import "SpeexException.h"
 
-#include "speex/speex.h"
-#include "speex/speex_header.h"
-#include "speex/speex_stereo.h"
-#include "speex/speex_callbacks.h"
-#include "ogg/ogg.h"
+#include "Speex/speex.h"
+#include "Speex/speex_header.h"
+#include "Speex/speex_stereo.h"
+#include "Speex/speex_callbacks.h"
+#include "Ogg/ogg.h"
 
-#include "sndfile.h"
+#include "sndfile/sndfile.h"
 
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
@@ -112,8 +112,8 @@
 	ssize_t							currentBytesWritten;
 	BOOL							streamInited			= NO;
 
-	void							*st;
-	const SpeexMode					*mode;
+	void							*st						= NULL;
+	const SpeexMode					*mode					= NULL;
 	SpeexHeader						*header					= NULL;
 	SpeexCallback					callback;
 	SpeexBits						bits;
@@ -135,21 +135,21 @@
 	int								rate					= 0;
 	int								extraHeaders;
 	
-	char							*data;
+	char							*data					= NULL;
 	int								packetNumber;
 	int								j;
 		
 	unsigned						iterations				= 0;
 	
-	SNDFILE							*inSF;
+	SNDFILE							*inSF					= NULL;
 	SF_INFO							info;
-	SNDFILE							*outSF				= NULL;
-	const char						*string				= NULL;
+	SNDFILE							*outSF					= NULL;
+	const char						*string					= NULL;
 	int								i;
-	int								err					= 0 ;
-	int								bufferLen			= 1024;
-	int								*intBuffer			= NULL;
-	double							*doubleBuffer		= NULL;
+	int								err						= 0 ;
+	int								bufferLen				= 1024;
+	int								*intBuffer				= NULL;
+	double							*doubleBuffer			= NULL;
 	double							maxSignal;
 	int								frameCount;
 	int								readCount;
