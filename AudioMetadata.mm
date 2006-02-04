@@ -71,47 +71,47 @@
 								key		= [commentString substringToIndex:range.location];
 								value	= [commentString substringFromIndex:range.location + 1];
 								
-								if([key isEqualToString:@"ALBUM"]) {
+								if(NSOrderedSame == [key caseInsensitiveCompare:@"ALBUM"]) {
 									[result setValue:value forKey:@"albumTitle"];
 								}
-								else if([key isEqualToString:@"ARTIST"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"ARTIST"]) {
 									[result setValue:value forKey:@"albumArtist"];
 								}
-								else if([key isEqualToString:@"COMPOSER"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMPOSER"]) {
 									[result setValue:value forKey:@"albumComposer"];
 								}
-								else if([key isEqualToString:@"GENRE"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"GENRE"]) {
 									[result setValue:value forKey:@"albumGenre"];
 								}
-								else if([key isEqualToString:@"DATE"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"DATE"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"albumYear"];
 								}
-								else if([key isEqualToString:@"DESCRIPTION"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"DESCRIPTION"]) {
 									[result setValue:value forKey:@"albumComment"];
 								}
-								else if([key isEqualToString:@"TITLE"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"TITLE"]) {
 									[result setValue:value forKey:@"trackTitle"];
 								}
-								else if([key isEqualToString:@"TRACKNUMBER"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"TRACKNUMBER"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"trackNumber"];
 								}
-								else if([key isEqualToString:@"TRACKTOTAL"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"TRACKTOTAL"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"albumTrackCount"];
 								}
 								// Maintain backwards compatibility
-								else if([key isEqualToString:@"TOTALTRACKS"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"albumTrackCount"];
 								}
-								else if([key isEqualToString:@"COMPILATION"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMPILATION"]) {
 									[result setValue:[NSNumber numberWithBool:[value intValue]] forKey:@"multipleArtists"];
 								}
-								else if([key isEqualToString:@"DISCNUMBER"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCNUMBER"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"discNumber"];
 								}
-								else if([key isEqualToString:@"DISCSINSET"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCSINSET"]) {
 									[result setValue:[NSNumber numberWithUnsignedInt:[value intValue]] forKey:@"discsInSet"];
 								}
-								else if([key isEqualToString:@"ISRC"]) {
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"ISRC"]) {
 									[result setValue:value forKey:@"ISRC"];
 								}
 							}							
