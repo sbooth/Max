@@ -28,7 +28,7 @@
 
 #import "UtilityFunctions.h"
 
-#include "sndfile.h"
+#include "sndfile/sndfile.h"
 
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose

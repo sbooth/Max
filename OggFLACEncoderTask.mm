@@ -22,8 +22,8 @@
 #import "OggFLACEncoder.h"
 #import "IOException.h"
 
-#include "oggflacfile.h"				// TagLib::File
-#include "tag.h"						// TagLib::Tag
+#include "TagLib/oggflacfile.h"			// TagLib::File
+#include "TagLib/tag.h"					// TagLib::Tag
 
 @implementation OggFLACEncoderTask
 

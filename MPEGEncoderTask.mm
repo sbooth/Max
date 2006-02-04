@@ -25,13 +25,13 @@
 #import "IOException.h"
 #import "UtilityFunctions.h"
 
-#include "lame/lame.h"					// get_lame_version
+#include "LAME/lame.h"						// get_lame_version
 
-#include "mpegfile.h"					// TagLib::MPEG::File
-#include "tag.h"						// TagLib::Tag
-#include "tstring.h"					// TagLib::String
-#include "textidentificationframe.h"	// TagLib::ID3V2::TextIdentificationFrame
-#include "id3v2tag.h"					// TagLib::ID3V2::Tag
+#include "TagLib/mpegfile.h"				// TagLib::MPEG::File
+#include "TagLib/tag.h"						// TagLib::Tag
+#include "TagLib/tstring.h"					// TagLib::String
+#include "TagLib/textidentificationframe.h"	// TagLib::ID3V2::TextIdentificationFrame
+#include "TagLib/id3v2tag.h"				// TagLib::ID3V2::Tag
 
 @implementation MPEGEncoderTask
 

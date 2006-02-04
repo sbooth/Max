@@ -22,13 +22,13 @@
 
 #import "UtilityFunctions.h"
 
-#include "fileref.h"					// TagLib::FileRef
-#include "mpegfile.h"					// TagLib::MPEG::File
-#include "vorbisfile.h"					// TagLib::Ogg::Vorbis::File
-#include "id3v2tag.h"					// TagLib::ID3v2::Tag
-#include "id3v2frame.h"					// TagLib::ID3v2::Frame
-#include "xiphcomment.h"				// TagLib::Ogg::XiphComment
-#include "mp4.h"						// MP4FileHandle
+#include "TagLib/fileref.h"				// TagLib::FileRef
+#include "TagLib/mpegfile.h"			// TagLib::MPEG::File
+#include "TagLib/vorbisfile.h"			// TagLib::Ogg::Vorbis::File
+#include "TagLib/id3v2tag.h"			// TagLib::ID3v2::Tag
+#include "TagLib/id3v2frame.h"			// TagLib::ID3v2::Frame
+#include "TagLib/xiphcomment.h"			// TagLib::Ogg::XiphComment
+#include "mp4v2/mp4.h"					// MP4FileHandle
 
 @implementation AudioMetadata
 

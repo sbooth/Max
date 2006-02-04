@@ -21,7 +21,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Converter.h"
-#include "vorbis/vorbisfile.h"
+#include "Vorbis/vorbisfile.h"
 
 @interface OggVorbisConverter : Converter 
 {

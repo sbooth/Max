@@ -27,7 +27,7 @@
 
 #import "UtilityFunctions.h"
 
-#include "vorbis/vorbisenc.h"
+#include "Vorbis/vorbisenc.h"
 
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose

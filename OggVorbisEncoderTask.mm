@@ -22,8 +22,8 @@
 #import "OggVorbisEncoder.h"
 #import "IOException.h"
 
-#include "vorbisfile.h"					// TagLib::Ogg::Vorbis::File
-#include "tag.h"						// TagLib::Tag
+#include "TagLib/vorbisfile.h"			// TagLib::Ogg::Vorbis::File
+#include "TagLib/tag.h"					// TagLib::Tag
 
 @implementation OggVorbisEncoderTask
 

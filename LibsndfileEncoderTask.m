@@ -21,7 +21,7 @@
 #import "LibsndfileEncoderTask.h"
 #import "LibsndfileEncoder.h"
 
-#include "sndfile.h"
+#include "sndfile/sndfile.h"
 
 @implementation LibsndfileEncoderTask
 

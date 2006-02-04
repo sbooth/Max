@@ -27,7 +27,7 @@
 
 #import "UtilityFunctions.h"
 
-#include "lame/lame.h"
+#include "LAME/lame.h"
 
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose

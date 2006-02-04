@@ -34,7 +34,7 @@
 #import "CoreAudioException.h"
 #import "SpeexException.h"
 
-#include "sndfile.h"
+#include "sndfile/sndfile.h"
 
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;

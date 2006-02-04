@@ -22,7 +22,7 @@
 #import "LibsndfileConverter.h"
 #import "IOException.h"
 
-#include "sndfile.h"
+#include "sndfile/sndfile.h"
 
 @implementation LibsndfileConverterTask
 

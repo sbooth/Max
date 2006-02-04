@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include "cdparanoia/interface/cdda_interface.h"
+#include "cdparanoia/cdda_interface.h"
 #include "cddb/cddb_disc.h"
 
 @interface CompactDisc : NSObject

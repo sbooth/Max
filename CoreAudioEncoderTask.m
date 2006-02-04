@@ -23,7 +23,7 @@
 #import "CoreAudioException.h"
 #import "IOException.h"
 
-#include "mp4.h"
+#include "mp4v2/mp4.h"
 
 #include <AudioToolbox/AudioFile.h>
 

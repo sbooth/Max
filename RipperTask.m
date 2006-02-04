@@ -24,7 +24,7 @@
 #import "IOException.h"
 #import "StopException.h"
 
-#include "cdparanoia/interface/cdda_interface.h"
+#include "cdparanoia/cdda_interface.h"
 
 @interface RipperTask (Private)
 - (void) generateCueSheet;
