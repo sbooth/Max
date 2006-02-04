@@ -655,7 +655,6 @@
 				8C32817C096D12A600608C9D /* Strings */,
 				8C8B0CC1092E5DAA00418C45 /* Max Help */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
-				8CA382DB0924589D00BDFD02 /* Libraries */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = "cocoa test";
@@ -946,13 +945,6 @@
 				8CF5E3370970432C0025360B /* Task.m */,
 			);
 			name = Tasks;
-			sourceTree = "<group>";
-		};
-		8CA382DB0924589D00BDFD02 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Libraries;
 			sourceTree = "<group>";
 		};
 		8CBEC4EB08ED6F640064F794 /* Exceptions */ = {
