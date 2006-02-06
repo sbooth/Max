@@ -97,10 +97,6 @@
 		8CB0B22D099289C500B0BFCD /* mp4v2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0B225099289C500B0BFCD /* mp4v2.framework */; };
 		8CB0B24409928A0E00B0BFCD /* mp4v2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0B225099289C500B0BFCD /* mp4v2.framework */; };
 		8CB11F800991F91A00C054B0 /* CustomGenre.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB11F7F0991F91A00C054B0 /* CustomGenre.nib */; };
-		8CB11F8B0991F95C00C054B0 /* Add_Pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 8CB11F870991F95C00C054B0 /* Add_Pressed.tiff */; };
-		8CB11F8C0991F95C00C054B0 /* Add.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 8CB11F880991F95C00C054B0 /* Add.tiff */; };
-		8CB11F8D0991F95C00C054B0 /* Remove_Pressed.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 8CB11F890991F95C00C054B0 /* Remove_Pressed.tiff */; };
-		8CB11F8E0991F95C00C054B0 /* Remove.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 8CB11F8A0991F95C00C054B0 /* Remove.tiff */; };
 		8CB1503D0989D775001AC333 /* EncoderTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */; };
 		8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB6DE8A08DA844000345B8F /* Encoder.m */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
@@ -415,10 +411,6 @@
 		8CB0B225099289C500B0BFCD /* mp4v2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = mp4v2.framework; sourceTree = "<group>"; };
 		8CB0B38B093B301400968F66 /* FLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACEncoderTask.h; sourceTree = "<group>"; };
 		8CB11F7F0991F91A00C054B0 /* CustomGenre.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = CustomGenre.nib; sourceTree = "<group>"; };
-		8CB11F870991F95C00C054B0 /* Add_Pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Add_Pressed.tiff; sourceTree = "<group>"; };
-		8CB11F880991F95C00C054B0 /* Add.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Add.tiff; sourceTree = "<group>"; };
-		8CB11F890991F95C00C054B0 /* Remove_Pressed.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Remove_Pressed.tiff; sourceTree = "<group>"; };
-		8CB11F8A0991F95C00C054B0 /* Remove.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Remove.tiff; sourceTree = "<group>"; };
 		8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = EncoderTaskDefaults.plist; sourceTree = "<group>"; };
 		8CB6DE8908DA844000345B8F /* Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encoder.h; sourceTree = "<group>"; };
 		8CB6DE8A08DA844000345B8F /* Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Encoder.m; sourceTree = "<group>"; };
@@ -676,10 +668,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8CB11F870991F95C00C054B0 /* Add_Pressed.tiff */,
-				8CB11F880991F95C00C054B0 /* Add.tiff */,
-				8CB11F890991F95C00C054B0 /* Remove_Pressed.tiff */,
-				8CB11F8A0991F95C00C054B0 /* Remove.tiff */,
 				8CB11F7F0991F91A00C054B0 /* CustomGenre.nib */,
 				8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */,
 				8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */,
@@ -1165,10 +1153,6 @@
 				8C137F730981CF4B00EBFC77 /* ConverterTaskDefaults.plist in Resources */,
 				8CB1503D0989D775001AC333 /* EncoderTaskDefaults.plist in Resources */,
 				8CB11F800991F91A00C054B0 /* CustomGenre.nib in Resources */,
-				8CB11F8B0991F95C00C054B0 /* Add_Pressed.tiff in Resources */,
-				8CB11F8C0991F95C00C054B0 /* Add.tiff in Resources */,
-				8CB11F8D0991F95C00C054B0 /* Remove_Pressed.tiff in Resources */,
-				8CB11F8E0991F95C00C054B0 /* Remove.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1546,6 +1530,7 @@
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX__;
 				HEADER_SEARCH_PATHS = (
@@ -1574,6 +1559,7 @@
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(SRCROOT)",
 				);
+				GCC_FAST_OBJC_DISPATCH = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX__;
 				HEADER_SEARCH_PATHS = (

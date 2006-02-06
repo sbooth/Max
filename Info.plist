@@ -45,11 +45,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.5.4</string>
+	<string>0.5.5</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Max 0.5.5</string>
 	<key>CFBundleSignature</key>
 	<string>Maxx</string>
 	<key>CFBundleVersion</key>
-	<string>0.5.4</string>
+	<string>0.5.5</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
