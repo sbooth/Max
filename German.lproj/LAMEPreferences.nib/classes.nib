@@ -1,0 +1,18 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {userSelectedPreset = id; }; 
+            CLASS = LAMEPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_presetDescription" = NSTextField; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
