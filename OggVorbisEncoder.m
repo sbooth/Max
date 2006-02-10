@@ -188,7 +188,7 @@ enum {
 		// Use the current time as the stream id
 		srand(time(NULL));
 		if(-1 == ogg_stream_init(&os, rand())) {
-			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream.", @"Exceptions", @"") userInfo:nil];
+			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize ogg stream", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Write stream headers	
