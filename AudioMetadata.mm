@@ -393,7 +393,7 @@
 		}
 		
 		if(nil == customNamingScheme) {
-			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"Invalid custom naming string." userInfo:nil];
+			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"Invalid custom naming string" userInfo:nil];
 		}
 		else {
 			[customPath setString:customNamingScheme];

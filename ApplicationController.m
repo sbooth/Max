@@ -173,7 +173,7 @@ static ApplicationController *sharedController = nil;
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
 		[alert setMessageText:NSLocalizedStringFromTable(@"Really Quit?", @"General", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping/encoding tasks.", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping/encoding tasks", @"General", @"")];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
 		if(NSAlertSecondButtonReturn == [alert runModal]) {
