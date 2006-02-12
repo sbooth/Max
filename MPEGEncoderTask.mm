@@ -58,6 +58,7 @@
 	NSNumber									*multipleArtists		= nil;
 	NSNumber									*discNumber				= nil;
 	NSNumber									*discsInSet				= nil;
+	NSNumber									*length					= nil;
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= nil;
 	TagLib::MPEG::File							f						([_outputFilename fileSystemRepresentation], false);
 	NSString									*bundleVersion			= nil;
@@ -202,6 +203,7 @@
 	}
 	
 	// Track length
+	length = [metadata valueForKey:@"length"];
 	if(nil != _tracks) {		
 		// Sum up length of all tracks
 		unsigned minutes	= [[_tracks valueForKeyPath:@"@sum.minute"] unsignedIntValue];
@@ -215,6 +217,15 @@
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", ms] UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+	else if(nil != length) {
+		frame = new TagLib::ID3v2::TextIdentificationFrame("TLEN", TagLib::String::Latin1);
+		if(nil == frame) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", 1000 * [length unsignedIntValue]] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
 	

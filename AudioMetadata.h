@@ -41,6 +41,8 @@
 	NSNumber		*_multipleArtists;
 	NSNumber		*_discNumber;
 	NSNumber		*_discsInSet;
+
+	NSNumber		*_length;
 	
 	NSString		*_MCN;
 	NSString		*_ISRC;

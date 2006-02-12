@@ -44,7 +44,7 @@
 	
 	// For ".flac" files try to parse with libFLAC
 	if([extension isEqualToString:@"flac"]) {
-		FLAC__StreamMetadata						*tags, *currentTag;
+		FLAC__StreamMetadata						*tags, *currentTag, streaminfo;
 		FLAC__StreamMetadata_VorbisComment_Entry	*comments;
 		unsigned									i;
 		NSString									*commentString, *key, *value;
@@ -134,6 +134,11 @@
 			
 			parsed = YES;
 		}
+
+		// Get length
+		if(FLAC__metadata_get_streaminfo([filename fileSystemRepresentation], &streaminfo) && FLAC__METADATA_TYPE_STREAMINFO == streaminfo.type) {
+			[result setValue:[NSNumber numberWithUnsignedLong:streaminfo.data.stream_info.total_samples * streaminfo.data.stream_info.sample_rate] forKey:@"length"];
+		}
 	}
 	
 	// Try TagLib
@@ -192,6 +197,11 @@
 				[result setValue:[NSNumber numberWithUnsignedInt:f.tag()->track()] forKey:@"trackNumber"];
 			}
 
+			// Length
+			if(0 != f.audioProperties()->length()) {
+				[result setValue:[NSNumber numberWithUnsignedInt:f.audioProperties()->length()] forKey:@"length"];
+			}
+			
 			// Special case for certain ID3 tags in MPEG files
 			if(NULL != mpegFile) {
 				id3v2tag = mpegFile->ID3v2Tag();
@@ -200,7 +210,6 @@
 					
 					// Extract total tracks if present
 					TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TRCK"];
-					
 					if(NO == frameList.isEmpty()) {
 						// Split the tracks at '/'
 						trackString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
@@ -218,10 +227,16 @@
 						}
 					}
 					
+					// Extract track length if present
+					frameList = id3v2tag->frameListMap()["TLEN"];
+					if(NO == frameList.isEmpty()) {
+						NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+						[result setValue:[NSNumber numberWithUnsignedLong:[value intValue] / 1000] forKey:@"length"];
+					}			
+					
 					// Extract compilation if present (iTunes TCMP tag)
 					if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
 						frameList = id3v2tag->frameListMap()["TCMP"];
-						
 						if(NO == frameList.isEmpty()) {
 							// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
 							NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
@@ -279,6 +294,7 @@
 			u_int16_t		trackNumber, totalTracks;
 			u_int16_t		discNumber, discsInSet;
 			u_int8_t		multipleArtists;
+			u_int64_t		duration;
 			
 			// Album title
 			MP4GetMetadataAlbum(mp4FileHandle, &s);
@@ -339,6 +355,12 @@
 			MP4GetMetadataCompilation(mp4FileHandle, &multipleArtists);
 			if(multipleArtists) {
 				[result setValue:[NSNumber numberWithBool:YES] forKey:@"multipleArtists"];
+			}
+			
+			// Length
+			duration = MP4GetDuration(mp4FileHandle);
+			if(0 != duration) {
+				[result setValue:[NSNumber numberWithUnsignedLong:duration] forKey:@"length"];
 			}
 			
 			MP4Close(mp4FileHandle);
