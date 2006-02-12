@@ -284,6 +284,8 @@
 	[result setValue:[_disc valueForKey:@"discNumber"] forKey:@"discNumber"];
 	[result setValue:[_disc valueForKey:@"discsInSet"] forKey:@"discsInSet"];
 	[result setValue:[_disc valueForKey:@"multiArtist"] forKey:@"multipleArtists"];
+
+	[result setValue:[_disc valueForKey:@"albumArt"] forKey:@"albumArt"];
 	
 	[result setValue:[_disc valueForKey:@"MCN"] forKey:@"MCN"];
 	

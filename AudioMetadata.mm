@@ -28,6 +28,7 @@
 #include "TagLib/id3v2tag.h"			// TagLib::ID3v2::Tag
 #include "TagLib/id3v2frame.h"			// TagLib::ID3v2::Frame
 #include "TagLib/xiphcomment.h"			// TagLib::Ogg::XiphComment
+#include "TagLib/tbytevector.h"			// TagLib::ByteVector
 #include "mp4v2/mp4.h"					// MP4FileHandle
 
 @implementation AudioMetadata
@@ -234,6 +235,16 @@
 						[result setValue:[NSNumber numberWithUnsignedLong:[value intValue] / 1000] forKey:@"length"];
 					}			
 					
+					// Extract album art if present
+					frameList = id3v2tag->frameListMap()["APIC"];
+					if(NO == frameList.isEmpty()) {
+						TagLib::ByteVector bv = frameList.front()->render();
+						NSImage *image = [[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]];
+						if(nil != image) {
+							[result setValue:[image autorelease] forKey:@"albumArt"];
+						}
+					}			
+					
 					// Extract compilation if present (iTunes TCMP tag)
 					if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
 						frameList = id3v2tag->frameListMap()["TCMP"];
@@ -290,11 +301,15 @@
 		MP4FileHandle mp4FileHandle = MP4Read([filename fileSystemRepresentation], 0);
 		
 		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
-			char			*s;
+			char			*s									= NULL;
 			u_int16_t		trackNumber, totalTracks;
 			u_int16_t		discNumber, discsInSet;
 			u_int8_t		multipleArtists;
 			u_int64_t		duration;
+			u_int32_t		artCount;
+			u_int8_t		*bytes								= NULL;
+			u_int32_t		length								= 0;
+			NSImage			*image								= nil;
 			
 			// Album title
 			MP4GetMetadataAlbum(mp4FileHandle, &s);
@@ -360,7 +375,17 @@
 			// Length
 			duration = MP4GetDuration(mp4FileHandle);
 			if(0 != duration) {
-				[result setValue:[NSNumber numberWithUnsignedLong:duration] forKey:@"length"];
+				[result setValue:[NSNumber numberWithUnsignedLong:duration / MP4GetTimeScale(mp4FileHandle)] forKey:@"length"];
+			}
+			
+			// Album art
+			artCount = MP4GetMetadataCoverArtCount(mp4FileHandle);
+			if(0 < artCount) {
+				MP4GetMetadataCoverArt(mp4FileHandle, &bytes, &length);
+				image = [[NSImage alloc] initWithData:[NSData dataWithBytes:bytes length:length]];
+				if(nil != image) {
+					[result setValue:[image autorelease] forKey:@"albumArt"];
+				}
 			}
 			
 			MP4Close(mp4FileHandle);

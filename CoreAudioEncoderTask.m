@@ -112,6 +112,11 @@
 	NSString				*genre					= nil;
 	NSString				*comment				= nil;
 	NSNumber				*multipleArtists		= nil;
+	NSImage					*albumArt				= nil;
+	NSArray					*representations		= nil;
+	NSEnumerator			*enumerator				= nil;
+	NSImageRep				*currentRepresentation	= nil;
+	NSData					*data					= nil;
 
 	
 	// Use mp4v2 for Apple lossless/AAC files
@@ -202,6 +207,20 @@
 				MP4SetMetadataCompilation(mp4FileHandle, [multipleArtists unsignedShortValue]);
 			}
 			
+			// Album art
+			albumArt = [metadata valueForKey:@"albumArt"];
+			if(nil != albumArt) {
+				representations = [albumArt representations];
+				enumerator		= [representations objectEnumerator];
+				while((currentRepresentation = [enumerator nextObject])) {
+					if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
+						data = [(NSBitmapImageRep *)currentRepresentation representationUsingType:NSPNGFileType properties:nil]; 
+						MP4SetMetadataCoverArt(mp4FileHandle, (u_int8_t *)[data bytes], [data length]);
+						break;
+					}
+				}
+			}
+
 			// Encoded by
 			bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 			versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];

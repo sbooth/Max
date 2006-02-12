@@ -44,6 +44,8 @@
 
 	NSNumber		*_length;
 	
+	NSImage			*_albumArt;
+	
 	NSString		*_MCN;
 	NSString		*_ISRC;
 }

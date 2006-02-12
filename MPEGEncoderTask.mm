@@ -30,7 +30,9 @@
 #include "TagLib/mpegfile.h"				// TagLib::MPEG::File
 #include "TagLib/tag.h"						// TagLib::Tag
 #include "TagLib/tstring.h"					// TagLib::String
+#include "TagLib/tbytevector.h"				// TagLib::ByteVector
 #include "TagLib/textidentificationframe.h"	// TagLib::ID3V2::TextIdentificationFrame
+#include "TagLib/attachedpictureframe.h"	// TagLib::ID3V2::AttachedPictureFrame
 #include "TagLib/id3v2tag.h"				// TagLib::ID3V2::Tag
 
 @implementation MPEGEncoderTask
@@ -59,7 +61,13 @@
 	NSNumber									*discNumber				= nil;
 	NSNumber									*discsInSet				= nil;
 	NSNumber									*length					= nil;
-	TagLib::ID3v2::TextIdentificationFrame		*frame					= nil;
+	TagLib::ID3v2::TextIdentificationFrame		*frame					= NULL;
+	TagLib::ID3v2::AttachedPictureFrame			*pictureFrame			= NULL;
+	NSImage										*albumArt				= nil;
+	NSArray										*representations		= nil;
+	NSEnumerator								*enumerator				= nil;
+	NSImageRep									*currentRepresentation	= nil;
+	NSData										*data					= nil;
 	TagLib::MPEG::File							f						([_outputFilename fileSystemRepresentation], false);
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
@@ -227,6 +235,27 @@
 		}
 		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", 1000 * [length unsignedIntValue]] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
+	}
+	
+	// Album art
+	albumArt = [metadata valueForKey:@"albumArt"];
+	if(nil != albumArt) {
+		representations = [albumArt representations];
+		enumerator		= [representations objectEnumerator];
+		while((currentRepresentation = [enumerator nextObject])) {
+			if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
+				data			= [(NSBitmapImageRep *)currentRepresentation representationUsingType:NSPNGFileType properties:nil]; 
+				pictureFrame	= new TagLib::ID3v2::AttachedPictureFrame();
+				if(nil == pictureFrame) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+				pictureFrame->setMimeType(TagLib::String("image/png", TagLib::String::Latin1));
+				pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], [data length]));
+				f.ID3v2Tag()->addFrame(pictureFrame);
+				break;
+			}
+		}
 	}
 	
 	// Encoded by
