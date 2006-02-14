@@ -22,6 +22,7 @@
 
 static NSString		*EncodeToolbarItemIdentifier				= @"Encode";
 static NSString		*TrackInfoToolbarItemIdentifier				= @"TrackInfo";
+static NSString		*AlbumArtToolbarItemIdentifier				= @"AlbumArt";
 static NSString		*SelectNextTrackToolbarItemIdentifier		= @"SelectNextTrack";
 static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"SelectPreviousTrack";
 static NSString		*QueryFreeDBToolbarItemIdentifier			= @"QueryFreeDB";
@@ -35,6 +36,7 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 #define kEjectDiscToolbarItemTag				5
 #define kSelectNextTrackToolbarItemTag			6
 #define kSelectPreviousTrackToolbarItemTag		7
+#define kAlbumArtToolbarItemTag					8
 
 @implementation CompactDiscDocumentToolbar
 
@@ -98,6 +100,18 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 		[toolbarItem setImage: [NSImage imageNamed:@"TrackInfoToolbarImage"]];
 		
 		[toolbarItem setTarget:[_document valueForKey:@"trackDrawer"]];
+		[toolbarItem setAction:@selector(toggle:)];
+	}
+    else if([itemIdentifier isEqualToString:AlbumArtToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setTag:kAlbumArtToolbarItemTag];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the artwork associated with this album", @"CompactDisc", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"AlbumArtToolbarImage"]];
+		
+		[toolbarItem setTarget:[_document valueForKey:@"artDrawer"]];
 		[toolbarItem setAction:@selector(toggle:)];
 	}
     else if([itemIdentifier isEqualToString:SelectNextTrackToolbarItemIdentifier]) {
@@ -169,7 +183,8 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
-    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, TrackInfoToolbarItemIdentifier, 
+    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
+		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		QueryFreeDBToolbarItemIdentifier,
 		NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
@@ -178,7 +193,8 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
 {
     return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
-		TrackInfoToolbarItemIdentifier, SelectPreviousTrackToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
+		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
+		SelectPreviousTrackToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
 		QueryFreeDBToolbarItemIdentifier, SubmitToFreeDBToolbarItemIdentifier,
 		EjectDiscToolbarItemIdentifier, 
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,

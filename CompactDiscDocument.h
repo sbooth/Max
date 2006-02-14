@@ -28,6 +28,7 @@
 {
     IBOutlet NSArrayController		*_trackController;
     IBOutlet NSDrawer				*_trackDrawer;
+    IBOutlet NSDrawer				*_artDrawer;
     IBOutlet NSTableView			*_trackTable;
 
 	CompactDisc						*_disc;
@@ -43,6 +44,7 @@
 	NSString						*_genre;
 	NSString						*_comment;
 	NSNumber						*_partOfSet;
+	NSImage							*_albumArt;
 
 	// Other disc info
 	NSNumber						*_discNumber;
@@ -79,8 +81,12 @@
 - (IBAction)		queryFreeDB:(id) sender;
 - (IBAction)		submitToFreeDB:(id) sender;
 - (IBAction)		toggleTrackInformation:(id) sender;
+- (IBAction)		toggleAlbumArt:(id) sender;
 - (IBAction)		selectNextTrack:(id) sender;
 - (IBAction)		selectPreviousTrack:(id) sender;
+- (IBAction)		fetchAlbumArt:(id) sender;
+- (IBAction)		selectAlbumArt:(id) sender;
+- (IBAction)		albumArtUpdated:(id) sender;
 
 - (void)			clearFreeDBData;
 - (void)			updateDiscFromFreeDB:(NSDictionary *) info;

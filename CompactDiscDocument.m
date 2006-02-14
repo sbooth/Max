@@ -155,7 +155,7 @@
 			return data;
 		}
 		else {
-			[error release];
+			*outError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:[NSDictionary dictionaryWithObject:[error autorelease] forKey:NSLocalizedFailureReasonErrorKey]];
 		}
 	}
 	return nil;
@@ -404,10 +404,10 @@
 			return;
 		}
 		else if([self emptySelection]) {
-			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"Please select one or more tracks to encode.", @"Exceptions", @"") userInfo:nil];
+			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"Please select one or more tracks to encode", @"Exceptions", @"") userInfo:nil];
 		}
 		else if([self ripInProgress] || [self encodeInProgress]) {
-			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A rip or encode operation is already in progress.", @"Exceptions", @"") userInfo:nil];
+			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A rip or encode operation is already in progress", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Iterate through the selected tracks and rip/encode them
@@ -452,7 +452,7 @@
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
 		[alert setMessageText:NSLocalizedStringFromTable(@"Really eject the disc?", @"CompactDisc", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping tasks.", @"CompactDisc", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping tasks", @"CompactDisc", @"")];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
 		if(NSAlertSecondButtonReturn == [alert runModal]) {
@@ -475,6 +475,67 @@
 - (IBAction) selectPreviousTrack:(id) sender
 {
 	[_trackController selectPrevious:sender];	
+}
+
+- (IBAction) selectAlbumArt:(id) sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	
+	[panel setAllowsMultipleSelection:NO];
+	[panel setCanChooseDirectories:NO];
+	[panel setCanChooseFiles:YES];
+	
+	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+}
+
+- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if(NSOKButton == returnCode) {
+		NSArray		*filesToOpen	= [sheet filenames];
+		int			count			= [filesToOpen count];
+		int			i;
+		
+		for(i = 0; i < count; ++i) {
+			[self setValue:[[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]] forKey:@"albumArt"];
+			[self updateChangeCount:NSChangeDone];
+		}
+	}	
+}
+
+- (IBAction) albumArtUpdated:(id) sender
+{
+	[self updateChangeCount:NSChangeDone];
+}
+
+- (IBAction) fetchAlbumArt:(id) sender
+{
+	// http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&Artist=Kid+Rock&Title=Cocky
+	NSString *urlString = [NSString stringWithFormat:@"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&Artist=%@&Title=%@", _artist, _title];
+	NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
+	NSURLResponse *response;
+	NSError *error;
+	NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
+	
+	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
+	[parser setDelegate:self];
+	[parser setShouldResolveExternalEntities:YES];
+	BOOL success = [parser parse]; // return value not used
+}
+
+- (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+{
+	NSLog(@"didStartElement:%@", elementName);
+}
+
+- (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+	NSLog(@"foundCharacters:%@", string);
+}
+
+- (void) parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+	NSLog(@"didEndElement:%@", elementName);
 }
 
 #pragma mark FreeDB Functionality
@@ -516,7 +577,7 @@
 		matches = [freeDB fetchMatches];
 		
 		if(0 == [matches count]) {
-			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matches found for this disc.", @"Exceptions", @"") userInfo:nil];
+			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matches found for this disc", @"Exceptions", @"") userInfo:nil];
 		}
 		else if(1 == [matches count]) {
 			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
@@ -593,6 +654,11 @@
 	[_trackDrawer toggle:sender];
 }
 
+- (IBAction) toggleAlbumArt:(id) sender
+{
+	[_artDrawer toggle:sender];
+}
+
 - (NSString *)		length			{ return [NSString stringWithFormat:@"%u:%.02u", [_disc length] / 60, [_disc length] % 60]; }
 
 - (NSArray *) genres
@@ -605,9 +671,13 @@
 - (NSDictionary *) getDictionary
 {
 	unsigned				i;
-	NSMutableDictionary		*result		= [[NSMutableDictionary alloc] init];
-	NSMutableArray			*tracks		= [NSMutableArray arrayWithCapacity:[_tracks count]];
-		
+	NSMutableDictionary		*result					= [[NSMutableDictionary alloc] init];
+	NSMutableArray			*tracks					= [NSMutableArray arrayWithCapacity:[_tracks count]];
+	NSArray					*representations		= nil;
+	NSEnumerator			*enumerator				= nil;
+	NSImageRep				*currentRepresentation	= nil;
+	NSData					*data					= nil;
+	
 	//[result setValue:[NSNumber numberWithInt:[_trackDrawer state]] forKey:@"trackDrawerState"];
 
 	[result setValue:_title forKey:@"title"];
@@ -617,9 +687,20 @@
 	[result setValue:_comment forKey:@"comment"];
 	[result setValue:_discNumber forKey:@"discNumber"];
 	[result setValue:_discsInSet forKey:@"discsInSet"];
-	[result setValue:_multiArtist forKey:@"multiArtist"];
+	[result setValue:_multiArtist forKey:@"multiArtist"];				
 	[result setValue:_MCN forKey:@"MCN"];
 	[result setValue:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
+	
+	// Convert the NSImage to PNG data
+	representations = [_albumArt representations];
+	enumerator		= [representations objectEnumerator];
+	while((currentRepresentation = [enumerator nextObject])) {
+		if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
+			data = [(NSBitmapImageRep *)currentRepresentation representationUsingType:NSPNGFileType properties:nil]; 
+			[result setValue:data forKey:@"albumArt"];
+			break;
+		}
+	}
 	
 	for(i = 0; i < [_tracks count]; ++i) {
 		[tracks addObject:[[_tracks objectAtIndex:i] getDictionary]];
@@ -634,6 +715,7 @@
 {
 	unsigned				i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
+	NSImage					*image			= nil;
 	//int						drawerState;
 	
 	if([self discInDrive] && [tracks count] != [_tracks count]) {
@@ -669,9 +751,15 @@
 	[self setValue:[properties valueForKey:@"comment"] forKey:@"comment"];
 	[self setValue:[properties valueForKey:@"discNumber"] forKey:@"discNumber"];
 	[self setValue:[properties valueForKey:@"discsInSet"] forKey:@"discsInSet"];
-	[self setValue:[properties valueForKey:@"multiArtist"] forKey:@"multiArtist"];
+	[self setValue:[properties valueForKey:@"multiArtist"] forKey:@"multiArtist"];	
 	[self setValue:[properties valueForKey:@"MCN"] forKey:@"MCN"];
 	[self setValue:[properties valueForKey:@"discID"] forKey:@"discID"];
+	
+	// Convert PNG data to an NSImage
+	image = [[NSImage alloc] initWithData:[properties valueForKey:@"albumArt"]];
+	if(nil != image) {
+		[self setValue:[image autorelease] forKey:@"albumArt"];
+	}	
 }
 
 @end
