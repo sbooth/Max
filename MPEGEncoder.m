@@ -167,7 +167,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate				*startTime						= [NSDate date];
-	FILE				*file;
+	FILE				*file							= NULL;
 	AudioBufferList		buf;
 	ssize_t				buflen							= 0;
 	OSStatus			err;
@@ -314,7 +314,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		}
 
 		// And close the other output file
-		if(EOF == fclose(file)) {
+		if(NULL != file && EOF == fclose(file)) {
 			exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"")
 												 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
@@ -329,6 +329,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 {
+	int16_t			*iter, *limit;
 	u_int8_t		*buf;
 	int				buflen;
 
@@ -345,6 +346,14 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		// Adjust for host endian-ness
+		iter	= chunk->mBuffers[0].mData;
+		limit	= iter + (chunk->mBuffers[0].mNumberChannels * frameCount);
+		while(iter < limit) {
+			*iter = OSSwapBigToHostInt16(*iter);
+			++iter;
 		}
 		
 		lameResult = lame_encode_buffer_interleaved(_gfp, chunk->mBuffers[0].mData, frameCount, buf, buflen);

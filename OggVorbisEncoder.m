@@ -175,7 +175,6 @@ enum {
 		vorbis_info_init(&vi);
 		
 		// Use quality-based VBR
-		
 		if(VORBIS_MODE_QUALITY == _mode) {
 			if(vorbis_encode_init_vbr(&vi, 2, 44100, _quality)) {
 				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize Ogg Vorbis encoder", @"Exceptions", @"") userInfo:nil];
@@ -247,8 +246,9 @@ enum {
 			alias	= buf.mBuffers[0].mData;
 			limit	= alias + (buf.mBuffers[0].mNumberChannels * frameCount);
 			while(alias < limit) {
-				*left++		= *alias++ / 32768.0f;
-				*right++	= *alias++ / 32768.0f;
+				// Preserve sign bit
+				*left++		= (int16_t)OSSwapBigToHostInt16(*alias++) / 32768.0f;
+				*right++	= (int16_t)OSSwapBigToHostInt16(*alias++) / 32768.0f;
 			}
 			
 			// Tell the library how much data we actually submitted

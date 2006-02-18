@@ -271,8 +271,8 @@
 		left	= rawPCM[0];
 		right	= rawPCM[1];
 		while(iter < limit) {
-			*left++		= *iter++;
-			*right++	= *iter++;
+			*left++		= OSSwapBigToHostInt16(*iter++);
+			*right++	= OSSwapBigToHostInt16(*iter++);
 		}
 		
 		// Encode the chunk
