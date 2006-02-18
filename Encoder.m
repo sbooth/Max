@@ -60,6 +60,19 @@
 {
 	if((self = [super init])) {
 		_inputFilename = [inputFilename retain];
+
+		bzero(&_inputASBD, sizeof(AudioStreamBasicDescription));
+		
+		// Input format is interleaved 16-bit PCM audio
+		_inputASBD.mSampleRate			= 44100.f;
+		_inputASBD.mFormatID			= kAudioFormatLinearPCM;
+		_inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+		_inputASBD.mBytesPerPacket		= 4;
+		_inputASBD.mFramesPerPacket		= 1;
+		_inputASBD.mBytesPerFrame		= 4;
+		_inputASBD.mChannelsPerFrame	= 2;
+		_inputASBD.mBitsPerChannel		= 16;
+
 		return self;
 	}
 	return nil;

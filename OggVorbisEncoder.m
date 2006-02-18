@@ -19,19 +19,22 @@
  */
 
 #import "OggVorbisEncoder.h"
+
+#include <Vorbis/vorbisenc.h>
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
 #import "MissingResourceException.h"
 #import "VorbisException.h"
+#import "CoreAudioException.h"
 
 #import "UtilityFunctions.h"
-
-#include "Vorbis/vorbisenc.h"
-
-#include <fcntl.h>		// open, write
-#include <stdio.h>		// fopen, fclose
-#include <sys/stat.h>	// stat
 
 // My (semi-arbitrary) list of supported vorbis bitrates
 static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
@@ -103,16 +106,15 @@ enum {
 
 	BOOL						eos											= NO;
 
-	int							pcm											= -1;
+	AudioBufferList				buf;
+	ssize_t						buflen										= 0;
+	OSStatus					err;
+	FSRef						ref;
+	ExtAudioFileRef				extAudioFileRef								= NULL;
+	SInt64						totalFrames, framesToRead;
+	UInt32						size, frameCount;
 	
-	int16_t						*buf;
-	ssize_t						buflen;
-
-	ssize_t						bytesRead									= 0;
-	ssize_t						currentBytesWritten							= 0;
-	ssize_t						bytesWritten								= 0;
-	ssize_t						bytesToRead									= 0;
-	ssize_t						totalBytes									= 0;
+	int							bytesWritten;
 	
 	unsigned long				iterations									= 0;
 	
@@ -121,30 +123,41 @@ enum {
 	[_delegate setStarted];
 	
 	@try {
+		buf.mBuffers[0].mData = NULL;
+		
 		// Open the input file
-		pcm = open([_inputFilename fileSystemRepresentation], O_RDONLY);
-		if(-1 == pcm) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
-		struct stat sourceStat;
-		if(-1 == fstat(pcm, &sourceStat)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		size	= sizeof(totalFrames);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);;
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		// Allocate the buffer (Vorbis crashes if it is too large)
-		buflen			= 1024;
-		buf				= (int16_t *) calloc(buflen, sizeof(int16_t));
-		if(NULL == buf) {
+		framesToRead = totalFrames;
+		
+		// Allocate the input buffer
+		buflen								= 1024;
+		buf.mNumberBuffers					= 1;
+		buf.mBuffers[0].mNumberChannels		= 2;
+		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
+		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));;
+		if(NULL == buf.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-		
-		totalBytes		= sourceStat.st_size;
-		bytesToRead		= totalBytes;
 		
 		// Open the output file
 		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -202,48 +215,47 @@ enum {
 				break;	
 			}
 			
-			currentBytesWritten = write(_out, og.header, og.header_len);
-			if(-1 == currentBytesWritten) {
+			bytesWritten = write(_out, og.header, og.header_len);
+			if(-1 == bytesWritten) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
-			bytesWritten += currentBytesWritten;
 			
-			currentBytesWritten = write(_out, og.body, og.body_len);
-			if(-1 == currentBytesWritten) {
+			bytesWritten = write(_out, og.body, og.body_len);
+			if(-1 == bytesWritten) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
-			bytesWritten += currentBytesWritten;
 		}
 		
 		// Iteratively get the PCM data and encode it
 		while(NO == eos) {
 			
 			// Read a chunk of PCM input
-			bytesRead = read(pcm, buf, (bytesToRead > 2 * buflen ? 2 * buflen : bytesToRead));
-			if(-1 == bytesRead) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerPacket;
+			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
+			if(err != noErr) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileRead failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
-			
+						
 			// Expose the buffer to submit data
-			buffer = vorbis_analysis_buffer(&vd, bytesRead / 4);
+			buffer = vorbis_analysis_buffer(&vd, frameCount);
 			
 			left	= buffer[0];
 			right	= buffer[1];
-			alias	= buf;
-			limit	= buf + bytesRead / 2;
+			alias	= buf.mBuffers[0].mData;
+			limit	= alias + (buf.mBuffers[0].mNumberChannels * frameCount);
 			while(alias < limit) {
 				*left++		= *alias++ / 32768.0f;
 				*right++	= *alias++ / 32768.0f;
 			}
 			
 			// Tell the library how much data we actually submitted
-			vorbis_analysis_wrote(&vd, bytesRead / 4);
+			vorbis_analysis_wrote(&vd, frameCount);
 			
 			// Update status
-			bytesToRead -= bytesRead;
+			framesToRead -= frameCount;
 			
 			// Distributed Object calls are expensive, so only perform them every few iterations
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
@@ -254,9 +266,9 @@ enum {
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+				unsigned int secondsRemaining = interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval;
 				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
 				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
@@ -280,19 +292,17 @@ enum {
 							break;
 						}
 						
-						currentBytesWritten = write(_out, og.header, og.header_len);
-						if(-1 == currentBytesWritten) {
+						bytesWritten = write(_out, og.header, og.header_len);
+						if(-1 == bytesWritten) {
 							@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 						}
-						bytesWritten += currentBytesWritten;
 						
-						currentBytesWritten = write(_out, og.body, og.body_len);
-						if(-1 == currentBytesWritten) {
+						bytesWritten = write(_out, og.body, og.body_len);
+						if(-1 == bytesWritten) {
 							@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 						}
-						bytesWritten += currentBytesWritten;
 						
 						if(ogg_page_eos(&og)) {
 							eos = YES;
@@ -314,13 +324,15 @@ enum {
 	
 	@finally {
 		NSException *exception;
+				
 		// Close the input file
-		if(-1 == close(pcm)) {
-			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 								
-												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = ExtAudioFileDispose(extAudioFileRef);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
-
+		
 		// Close the output file
 		if(-1 == close(_out)) {
 			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
@@ -335,13 +347,12 @@ enum {
 		vorbis_comment_clear(&vc);
 		vorbis_info_clear(&vi);
 
-		free(buf);
+		free(buf.mBuffers[0].mData);
+		
 	}
 	
 	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
-	
-//	return bytesWritten;
+	[_delegate setCompleted];
 }
 
 - (NSString *) settings

@@ -20,6 +20,12 @@
 
 #import "Converter.h"
 
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
 #import "ConverterTask.h"
 #import "MallocException.h"
 #import "IOException.h"
@@ -27,12 +33,6 @@
 
 #include <fcntl.h>		// open, write
 #include <sys/stat.h>	// stat
-
-#include <CoreAudio/CoreAudioTypes.h>
-#include <AudioToolbox/AudioFormat.h>
-#include <AudioToolbox/AudioConverter.h>
-#include <AudioToolbox/AudioFile.h>
-#include <AudioToolbox/ExtendedAudioFile.h>
 
 @implementation Converter
 
@@ -72,7 +72,20 @@
 - (id) initWithInputFile:(NSString *)inputFilename
 {
 	if((self = [super init])) {
-		_inputFilename = [inputFilename retain];		
+		_inputFilename = [inputFilename retain];
+		
+		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
+		
+		// Desired output is interleaved 16-bit PCM audio
+		_outputASBD.mSampleRate			= 44100.f;
+		_outputASBD.mFormatID			= kAudioFormatLinearPCM;
+		_outputASBD.mFormatFlags		= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+		_outputASBD.mBytesPerPacket		= 4;
+		_outputASBD.mFramesPerPacket	= 1;
+		_outputASBD.mBytesPerFrame		= 4;
+		_outputASBD.mChannelsPerFrame	= 2;
+		_outputASBD.mBitsPerChannel		= 16;
+		
 		return self;
 	}
 	return nil;

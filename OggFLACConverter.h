@@ -19,13 +19,13 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
 
 #import "Converter.h"
-#include "OggFLAC/file_decoder.h"
 
 @interface OggFLACConverter : Converter 
 {
-	int _fd;
+	ExtAudioFileRef		_extAudioFileRef;
 }
 
 @end

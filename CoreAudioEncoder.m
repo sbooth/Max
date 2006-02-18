@@ -20,21 +20,18 @@
 
 #import "CoreAudioEncoder.h"
 
-#import "CoreAudioEncoderTask.h"
-#import "CoreAudioException.h"
-#import "MallocException.h"
-#import "IOException.h"
-#import "StopException.h"
-
-#include <fcntl.h>		// open, write
-#include <sys/stat.h>	// stat
-
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>
 #include <AudioToolbox/AudioConverter.h>
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 #include <AudioUnit/AudioCodec.h>
+
+#import "CoreAudioEncoderTask.h"
+#import "CoreAudioException.h"
+#import "MallocException.h"
+#import "IOException.h"
+#import "StopException.h"
 
 @implementation CoreAudioEncoder
 
@@ -77,19 +74,8 @@
 	
 		_formatInfo						= [formatInfo retain];
 				
-		bzero(&_inputASBD, sizeof(AudioStreamBasicDescription));
 		bzero(&_outputASBD, sizeof(AudioStreamBasicDescription));
 		
-		// Interleaved 16-bit PCM audio
-		_inputASBD.mSampleRate			= 44100.f;
-		_inputASBD.mFormatID			= kAudioFormatLinearPCM;
-		_inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
-		_inputASBD.mBytesPerPacket		= 4;
-		_inputASBD.mFramesPerPacket		= 1;
-		_inputASBD.mBytesPerFrame		= 4;
-		_inputASBD.mChannelsPerFrame	= 2;
-		_inputASBD.mBitsPerChannel		= 16;
-
 		// Desired output
 		_outputASBD.mSampleRate			= [[_formatInfo valueForKey:@"sampleRate"] doubleValue];
 		_outputASBD.mFormatID			= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
@@ -117,50 +103,60 @@
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
-	NSDate				*startTime							= [NSDate date];
-	int					pcm									= -1;
-	OSStatus			err;
-	AudioBufferList		bufferList;
-	UInt32				frameCount, size, bitrate, quality, mode;
-	ssize_t				bytesRead							= 0;
-	ssize_t				bytesToRead							= 0;
-	ssize_t				totalBytes							= 0;
-	FSRef				ref;
-	AudioFileID			audioFile;
-	ExtAudioFileRef		extAudioFileRef;
-	AudioConverterRef	converter;
-	CFArrayRef			converterPropertySettings;
-	unsigned long		iterations							= 0;
-	struct stat			sourceStat;
+	NSDate					*startTime							= [NSDate date];
+	OSStatus				err;
+	AudioBufferList			buf;
+	ssize_t					buflen								= 0;
+	SInt64					totalFrames, framesToRead;
+	UInt32					size, frameCount;
+	UInt32					bitrate, quality, mode;
+	FSRef					ref;
+	AudioFileID				audioFile;
+	ExtAudioFileRef			outExtAudioFile, inExtAudioFile;
+	AudioConverterRef		converter;
+	CFArrayRef				converterPropertySettings;
+	unsigned long			iterations							= 0;
 
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
+		buf.mBuffers[0].mData = NULL;
+		
 		// Open the input file
-		pcm = open([_inputFilename fileSystemRepresentation], O_RDONLY);
-		if(-1 == pcm) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileOpen(&ref, &inExtAudioFile);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
-		if(-1 == fstat(pcm, &sourceStat)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		size	= sizeof(totalFrames);
+		err		= ExtAudioFileGetProperty(inExtAudioFile, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);;
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
+		framesToRead = totalFrames;
+		
 		// Allocate the input buffer
-		_buflen			= 1024;
-		_buf			= (int16_t *) calloc(_buflen, sizeof(int16_t));
-		if(NULL == _buf) {
+		buflen								= 1024;
+		buf.mNumberBuffers					= 1;
+		buf.mBuffers[0].mNumberChannels		= 2;
+		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
+		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));;
+		if(NULL == buf.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-		
-		totalBytes		= sourceStat.st_size;
-		bytesToRead		= totalBytes;
 		
 		// Open the output file		
 		// There is no convenient ExtAudioFile API for wiping clean an existing file, so use AudioFile
@@ -175,13 +171,13 @@
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
+		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &outExtAudioFile);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrapAudioFileID failed", @"Exceptions", @"")
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(_inputASBD), &_inputASBD);
+		err = ExtAudioFileSetProperty(outExtAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(_inputASBD), &_inputASBD);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileSetProperty failed", @"Exceptions", @"")
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -189,7 +185,7 @@
 		
 		// Tweak converter settings
 		size	= sizeof(converter);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_AudioConverter, &size, &converter);
+		err		= ExtAudioFileGetProperty(outExtAudioFile, kExtAudioFileProperty_AudioConverter, &size, &converter);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -233,39 +229,37 @@
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}		
 		
-		err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ConverterConfig, size, &converterPropertySettings);
+		err = ExtAudioFileSetProperty(outExtAudioFile, kExtAudioFileProperty_ConverterConfig, size, &converterPropertySettings);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioConverterSetProperty failed", @"Exceptions", @"")
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}		
 		
 		// Iteratively get the PCM data and encode it
-		while(0 < bytesToRead) {
+		for(;;) {
 			
 			// Read a chunk of PCM input
-			bytesRead = read(pcm, _buf, (bytesToRead > 2 * _buflen ? 2 * _buflen : bytesToRead));
-			if(-1 == bytesRead) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerPacket;
+			err			= ExtAudioFileRead(inExtAudioFile, &frameCount, &buf);
+			if(err != noErr) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileRead failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
-			// Put the data in an AudioFileBufferList
-			bufferList.mNumberBuffers					= 1;
-			bufferList.mBuffers[0].mData				= _buf;
-			bufferList.mBuffers[0].mDataByteSize		= bytesRead;
-			bufferList.mBuffers[0].mNumberChannels		= 2;
-			
-			frameCount									= bytesRead / _inputASBD.mBytesPerPacket;
-			
+			// We're finished if no frames were returned
+			if(0 == frameCount) {
+				break;
+			}
+						
 			// Write the data, encoding/converting in the process
-			err = ExtAudioFileWrite(extAudioFileRef, frameCount, &bufferList);
+			err = ExtAudioFileWrite(outExtAudioFile, frameCount, &buf);
 			if(noErr != err) {
 				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrite failed", @"Exceptions", @"")
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// Update status
-			bytesToRead -= bytesRead;
+			framesToRead -= frameCount;
 			
 			// Distributed Object calls are expensive, so only perform them every few iterations
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
@@ -276,9 +270,9 @@
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+				unsigned int secondsRemaining = interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval;
 				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
 				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
@@ -301,14 +295,15 @@
 		NSException *exception;
 		
 		// Close the input file
-		if(-1 == close(pcm)) {
-			exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 						
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = ExtAudioFileDispose(inExtAudioFile);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
 		// Close the output file
-		err = ExtAudioFileDispose(extAudioFileRef);
+		err = ExtAudioFileDispose(outExtAudioFile);
 		if(noErr != err) {
 			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -323,7 +318,7 @@
 			NSLog(@"%@", exception);
 		}
 		
-		free(_buf);
+		free(buf.mBuffers[0].mData);
 	}
 
 	[_delegate setEndTime:[NSDate date]];

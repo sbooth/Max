@@ -19,14 +19,16 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#include <CoreAudio/CoreAudioTypes.h>
 
 #import "EncoderMethods.h"
 #import "TaskMethods.h"
 
 @interface Encoder : NSObject <EncoderMethods>
 {
-	id <TaskMethods>		_delegate;
-	NSString				*_inputFilename;	
+	id <TaskMethods>				_delegate;
+	NSString						*_inputFilename;
+	AudioStreamBasicDescription		_inputASBD;
 }
 
 - (id)						initWithPCMFilename:(NSString *)inputFilename;

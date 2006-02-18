@@ -30,7 +30,6 @@
 	int16_t							*_buf;
 	ssize_t							_buflen;
 	
-	AudioStreamBasicDescription		_inputASBD;
 	AudioStreamBasicDescription		_outputASBD;
 	
 	NSDictionary					*_formatInfo;

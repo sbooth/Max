@@ -177,7 +177,11 @@ getCoreAudioFileDataFormats(OSType filetype)
 				// Interleaved 16-bit PCM audio
 				inputASBD.mSampleRate			= 44100.f;
 				inputASBD.mFormatID				= kAudioFormatLinearPCM;
+#if __BIG_ENDIAN__
 				inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+#else
+				inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger;
+#endif
 				inputASBD.mBytesPerPacket		= 4;
 				inputASBD.mFramesPerPacket		= 1;
 				inputASBD.mBytesPerFrame		= 4;

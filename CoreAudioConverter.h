@@ -20,21 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Converter.h"
-
-#include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 #include <AudioToolbox/AudioFile.h>
+
+#import "Converter.h"
 
 @interface CoreAudioConverter : Converter
 {
 	ExtAudioFileRef					_in;
-
 	AudioBufferList					_buf;
 	ssize_t							_buflen;
-	
-	AudioStreamBasicDescription		_outputASBD;
-	
 	NSString						*_fileType;
 }
 

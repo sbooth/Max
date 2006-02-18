@@ -19,19 +19,23 @@
  */
 
 #import "OggFLACEncoder.h"
+
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
 #import "MallocException.h"
 #import "IOException.h"
 #import "FLACException.h"
 #import "StopException.h"
+#import "CoreAudioException.h"
 
 #import "UtilityFunctions.h"
 
-#include <fcntl.h>		// open, write
-#include <stdio.h>		// fopen, fclose
-#include <sys/stat.h>	// stat
-
 @interface OggFLACEncoder (Private)
-- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples;
+- (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 @end
 
 @implementation OggFLACEncoder
@@ -58,48 +62,59 @@
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
-	NSDate						*startTime			= [NSDate date];
-	int							pcm					= -1;
-	ssize_t						bytesRead			= 0;
-	ssize_t						bytesWritten		= 0;
-	ssize_t						bytesToRead			= 0;
-	ssize_t						totalBytes			= 0;
-	unsigned long				iterations			= 0;
-	int16_t						*buf				= NULL;
-	ssize_t						buflen				= 0;
-	struct stat					sourceStat;
-	FLAC__StreamMetadata		padding;
-	FLAC__StreamMetadata		*metadata [1];
+	NSDate							*startTime					= [NSDate date];
+	unsigned long					iterations					= 0;
+	AudioBufferList					buf;
+	ssize_t							buflen						= 0;
+	FLAC__StreamMetadata			padding;
+	FLAC__StreamMetadata			*metadata [1];
+	OSStatus						err;
+	FSRef							ref;
+	ExtAudioFileRef					extAudioFileRef				= NULL;
+	SInt64							totalFrames, framesToRead;
+	UInt32							size, frameCount;
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
+		buf.mBuffers[0].mData = NULL;
+		
 		// Open the input file
-		pcm = open([_inputFilename fileSystemRepresentation], O_RDONLY);
-		if(-1 == pcm) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
-		if(-1 == fstat(pcm, &sourceStat)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		size	= sizeof(totalFrames);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);;
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		// Allocate the buffer
-		buflen		= 1024;
-		buf			= (int16_t *) calloc(buflen, sizeof(int16_t));
-		if(NULL == buf) {
+		framesToRead = totalFrames;
+		
+		// Allocate the input buffer
+		buflen								= 1024;
+		buf.mNumberBuffers					= 1;
+		buf.mBuffers[0].mNumberChannels		= 2;
+		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
+		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));;
+		if(NULL == buf.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-		
-		totalBytes		= sourceStat.st_size;
-		bytesToRead		= totalBytes;
-		
+				
 		// Create the Ogg FLAC encoder
 		_flac = OggFLAC__file_encoder_new();
 		if(NULL == _flac) {
@@ -146,7 +161,7 @@
 		}
 
 		// Initialize the Ogg FLAC encoder
-		if(NO == OggFLAC__file_encoder_set_total_samples_estimate(_flac, totalBytes / 2)) {
+		if(NO == OggFLAC__file_encoder_set_total_samples_estimate(_flac, totalFrames)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
 		}
 		if(NO == OggFLAC__file_encoder_set_filename(_flac, [filename fileSystemRepresentation])) {
@@ -157,20 +172,26 @@
 		}
 		
 		// Iteratively get the PCM data and encode it
-		while(0 < bytesToRead) {
+		for(;;) {
 			
 			// Read a chunk of PCM input
-			bytesRead = read(pcm, buf, (bytesToRead > 2 * buflen ? 2 * buflen : bytesToRead));
-			if(-1 == bytesRead) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerPacket;
+			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
+			if(err != noErr) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileRead failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			
+			// We're finished if no frames were returned
+			if(0 == frameCount) {
+				break;
 			}
 			
 			// Encode the PCM data
-			bytesWritten += [self encodeChunk:buf numSamples:bytesRead / 2];
+			[self encodeChunk:&buf frameCount:frameCount];
 			
 			// Update status
-			bytesToRead -= bytesRead;
+			framesToRead -= frameCount;
 			
 			// Distributed Object calls are expensive, so only perform them every few iterations
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
@@ -181,9 +202,9 @@
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+				unsigned int secondsRemaining = interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval;
 				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
 				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
@@ -206,23 +227,28 @@
 	}
 	
 	@finally {
-		OggFLAC__file_encoder_delete(_flac);
+		NSException *exception;
+
+		if(NULL != _flac) {
+			OggFLAC__file_encoder_delete(_flac);
+		}
 
 		// Close the input file
-		if(-1 == close(pcm)) {
-			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = ExtAudioFileDispose(extAudioFileRef);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
-		free(buf);
+		free(buf.mBuffers[0].mData);
 	}
 	
 	[_delegate setEndTime:[NSDate date]];
 	[_delegate setCompleted];	
 }
 
-- (ssize_t) encodeChunk:(int16_t *)chunk numSamples:(ssize_t)numSamples
+- (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 {
 	FLAC__bool		flacResult;
 	int32_t			*rawPCM [2];
@@ -232,16 +258,16 @@
 	@try {
 		rawPCM[0] = NULL;
 		rawPCM[1] = NULL;
-		rawPCM[0] = calloc(numSamples / 2, sizeof(int32_t));
-		rawPCM[1] = calloc(numSamples / 2, sizeof(int32_t));
+		rawPCM[0] = calloc(frameCount, sizeof(int32_t));
+		rawPCM[1] = calloc(frameCount, sizeof(int32_t));
 		if(NULL == rawPCM[0] || NULL == rawPCM[1]) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Split PCM into channels and convert to 32-bits
-		iter	= chunk;
-		limit	= chunk + numSamples;
+		iter	= chunk->mBuffers[0].mData;
+		limit	= iter + (chunk->mBuffers[0].mNumberChannels * frameCount);
 		left	= rawPCM[0];
 		right	= rawPCM[1];
 		while(iter < limit) {
@@ -250,7 +276,7 @@
 		}
 		
 		// Encode the chunk
-		flacResult = OggFLAC__file_encoder_process(_flac, (const int32_t * const *)rawPCM, numSamples / 2);
+		flacResult = OggFLAC__file_encoder_process(_flac, (const int32_t * const *)rawPCM, frameCount);
 		
 		if(NO == flacResult) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]] userInfo:nil];
@@ -261,8 +287,6 @@
 		free(rawPCM[0]);
 		free(rawPCM[1]);
 	}
-	
-	return 0; //bytesWritten;
 }	
 
 - (NSString *) settings

@@ -19,13 +19,13 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
 
 #import "Converter.h"
-#include "FLAC/file_decoder.h"
 
 @interface FLACConverter : Converter 
 {
-	int	_fd;
+	ExtAudioFileRef		_extAudioFileRef;
 }
 
 @end

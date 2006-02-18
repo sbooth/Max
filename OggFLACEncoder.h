@@ -19,9 +19,9 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#include <OggFLAC/file_encoder.h>
 
 #import "Encoder.h"
-#include "OggFLAC/file_encoder.h"
 
 @interface OggFLACEncoder : Encoder
 {

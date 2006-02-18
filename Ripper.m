@@ -30,6 +30,10 @@
 #import "IOException.h"
 #import "ParanoiaException.h"
 #import "MissingResourceException.h"
+#import "CoreAudioException.h"
+
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
 
 #include <stdlib.h>			// calloc, free
 #include <unistd.h>			// lseek, read
@@ -43,7 +47,7 @@ enum {
 
 @interface Ripper(Private)
 - (BOOL)	logActivity;
-- (void)	ripSectorRange:(SectorRange *)range toFile:(int)file;
+- (void)	ripSectorRange:(SectorRange *)range toFile:(ExtAudioFileRef)file;
 @end
 
 // cdparanoia callback
@@ -181,7 +185,7 @@ callback(long inpos, int function, void *userdata)
 		
 		// Determine the size of the track(s) we are ripping
 		[self setValue:[_sectors valueForKeyPath:@"@sum.totalSectors"] forKey:@"grandTotalSectors"];			
-		
+				
 		return self;
 	}
 	
@@ -205,9 +209,13 @@ callback(long inpos, int function, void *userdata)
 
 - (oneway void) ripToFile:(NSString *)filename
 {
-	int					fd;
-	NSEnumerator		*enumerator;
-	SectorRange			*range;
+	OSStatus						err;
+	FSRef							ref;
+	AudioFileID						audioFile;
+	ExtAudioFileRef					extAudioFileRef;
+	AudioStreamBasicDescription		outputASBD;
+	NSEnumerator					*enumerator;
+	SectorRange						*range;
 	
 	// Tell our owner we are starting
 	_startTime = [NSDate date];
@@ -215,17 +223,40 @@ callback(long inpos, int function, void *userdata)
 	[_delegate setStarted];
 
 	@try {
-		// Open the output file
-		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, 0);
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-
-		enumerator = [_sectors objectEnumerator];
+		// Setup output file type (same)
+		bzero(&outputASBD, sizeof(AudioStreamBasicDescription));
 		
+		// Interleaved 16-bit PCM audio
+		outputASBD.mSampleRate			= 44100.f;
+		outputASBD.mFormatID			= kAudioFormatLinearPCM;
+		outputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+		outputASBD.mBytesPerPacket		= 4;
+		outputASBD.mFramesPerPacket		= 1;
+		outputASBD.mBytesPerFrame		= 4;
+		outputASBD.mChannelsPerFrame	= 2;
+		outputASBD.mBitsPerChannel		= 16;
+		
+		// Open the output file
+		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &outputASBD, 0, &audioFile);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileInitialize failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrapAudioFileID failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		enumerator = [_sectors objectEnumerator];
 		while((range = [enumerator nextObject])) {
-			[self ripSectorRange:range toFile:fd];
+			[self ripSectorRange:range toFile:extAudioFileRef];
 			_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range totalSectors]];
 		}
 	}
@@ -240,10 +271,21 @@ callback(long inpos, int function, void *userdata)
 	}
 	
 	@finally {
+		NSException						*exception;
+		
 		// Close the output file
-		if(-1 == close(fd)) {
-			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
-															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = ExtAudioFileDispose(extAudioFileRef);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}
+		
+		// Close the output file
+		err = AudioFileClose(audioFile);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileClose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 	}
@@ -252,7 +294,7 @@ callback(long inpos, int function, void *userdata)
 	[_delegate setCompleted];	
 }
 
-- (void) ripSectorRange:(SectorRange *)range toFile:(int)file
+- (void) ripSectorRange:(SectorRange *)range toFile:(ExtAudioFileRef)file
 {
 	unsigned long		cursor				= [range firstSector];
 	unsigned long		lastSector			= [range lastSector];
@@ -261,6 +303,9 @@ callback(long inpos, int function, void *userdata)
 	unsigned long		sectorsToRead		= grandTotalSectors - [_sectorsRead unsignedLongValue];
 	long				where;
 	unsigned long		iterations			= 0;
+	OSStatus			err;
+	AudioBufferList		bufferList;
+	UInt32				frameCount;
 	
 	// Go to the range's first sector in preparation for reading
 	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
@@ -278,12 +323,21 @@ callback(long inpos, int function, void *userdata)
 			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"CD skip tolerance exceeded", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		// Write data to file
-		if(-1 == write(file, buf, CD_FRAMESIZE_RAW)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		// Put the data in an AudioBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mData				= buf;
+		bufferList.mBuffers[0].mDataByteSize		= CD_FRAMESIZE_RAW;
+		bufferList.mBuffers[0].mNumberChannels		= 2;
 		
+		frameCount									= CD_FRAMESIZE_RAW / 4;
+		
+		// Write the data
+		err = ExtAudioFileWrite(file, frameCount, &bufferList);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrite failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+				
 		// Update status
 		sectorsToRead--;
 		

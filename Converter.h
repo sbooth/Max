@@ -19,14 +19,16 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#include <CoreAudio/CoreAudioTypes.h>
 
 #import "ConverterMethods.h"
 #import "TaskMethods.h"
 
 @interface Converter : NSObject <ConverterMethods>
 {
-	NSString				*_inputFilename;
-	id <TaskMethods>		_delegate;
+	id <TaskMethods>				_delegate;
+	NSString						*_inputFilename;
+	AudioStreamBasicDescription		_outputASBD;
 }
 
 - (id)						initWithInputFile:(NSString *)inputFilename;

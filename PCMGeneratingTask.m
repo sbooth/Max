@@ -27,7 +27,8 @@
 #include <paths.h>			// _PATH_TMP
 #include <unistd.h>			// mkstemp, unlink
 
-#define TEMPFILE_PATTERN	"Max.XXXXXXXX"
+#define TEMPFILE_SUFFIX		".aiff"
+#define TEMPFILE_PATTERN	"MaxXXXXXXXX" TEMPFILE_SUFFIX
 
 @implementation PCMGeneratingTask
 
@@ -101,7 +102,7 @@
 			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 			path[tmpDirLen + patternLen] = '\0';
 			
-			fd = mkstemp(path);
+			fd = mkstemps(path, strlen(TEMPFILE_SUFFIX));
 			if(-1 == fd) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

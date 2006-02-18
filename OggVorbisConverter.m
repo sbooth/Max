@@ -19,10 +19,18 @@
  */
 
 #import "OggVorbisConverter.h"
+
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
 #import "FLACException.h"
+#import "CoreAudioException.h"
 
 #include <unistd.h>		// lseek
 #include <fcntl.h>		// open, write
@@ -33,12 +41,17 @@
 - (oneway void) convertToFile:(NSString *)filename
 {
 	NSDate				*startTime			= [NSDate date];
-	int					fd					= -1;
 	FILE				*file				= NULL;
 	OggVorbis_File		vf;
 	ogg_int64_t			samplesRead			= 0;
 	ogg_int64_t			samplesToRead		= 0;
 	ogg_int64_t			totalSamples		= 0;
+	OSStatus			err;
+	FSRef				ref;
+	AudioFileID			audioFile;
+	ExtAudioFileRef		extAudioFileRef;
+	AudioBufferList		bufferList;
+	UInt32				frameCount;
 	long				bytesRead;
 	int					currentSection;
 	char				buf	[1024];
@@ -50,10 +63,21 @@
 	
 	@try {
 		// Open the output file
-		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &_outputASBD, 0, &audioFile);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileInitialize failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrapAudioFileID failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Setup converter
@@ -78,7 +102,7 @@
 		for(;;) {
 			
 			// Decode the data
-			bytesRead = ov_read(&vf, buf, 1024, 1, 2, 1, &currentSection);
+			bytesRead = ov_read(&vf, buf, 1024, YES, sizeof(int16_t), YES, &currentSection);
 			
 			// Check for errors
 			if(0 > bytesRead) {
@@ -90,10 +114,19 @@
 				break;
 			}
 			
-			// Write the PCM data to file
-			if(-1 == write(fd, buf, bytesRead)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			// Put the data in an AudioBufferList
+			bufferList.mNumberBuffers					= 1;
+			bufferList.mBuffers[0].mData				= buf;
+			bufferList.mBuffers[0].mDataByteSize		= bytesRead;
+			bufferList.mBuffers[0].mNumberChannels		= 2;
+			
+			frameCount									= bytesRead / 4;
+			
+			// Write the data
+			err = ExtAudioFileWrite(extAudioFileRef, frameCount, &bufferList);
+			if(noErr != err) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrite failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// Update status
@@ -131,16 +164,27 @@
 	}
 	
 	@finally {
+		NSException						*exception;
+				
 		// Close the output file
-		if(-1 == close(fd)) {
-			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
-															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = ExtAudioFileDispose(extAudioFileRef);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
-
+		
+		// Close the output file
+		err = AudioFileClose(audioFile);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileClose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}		
+		
 		// Will close file for us
 		if(0 != ov_clear(&vf)) {
-			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") userInfo:nil];
+			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") userInfo:nil];
 			NSLog(@"%@", exception);
 		}
 	}
