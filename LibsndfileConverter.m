@@ -125,7 +125,7 @@
 		[self openInputFile];
 		
 		// Setup libsndfile output file
-		info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16 | SF_ENDIAN_BIG;
+		info.format			= SF_FORMAT_AIFF | SF_FORMAT_PCM_16;
 		info.samplerate		= 44100;
 		info.channels		= 2;
 		out					= sf_open([filename fileSystemRepresentation], SFM_WRITE, &info);
