@@ -22,14 +22,15 @@
 
 #import "UtilityFunctions.h"
 
-#include "TagLib/fileref.h"				// TagLib::FileRef
-#include "TagLib/mpegfile.h"			// TagLib::MPEG::File
-#include "TagLib/vorbisfile.h"			// TagLib::Ogg::Vorbis::File
-#include "TagLib/id3v2tag.h"			// TagLib::ID3v2::Tag
-#include "TagLib/id3v2frame.h"			// TagLib::ID3v2::Frame
-#include "TagLib/xiphcomment.h"			// TagLib::Ogg::XiphComment
-#include "TagLib/tbytevector.h"			// TagLib::ByteVector
-#include "mp4v2/mp4.h"					// MP4FileHandle
+#include "TagLib/fileref.h"					// TagLib::FileRef
+#include "TagLib/mpegfile.h"				// TagLib::MPEG::File
+#include "TagLib/vorbisfile.h"				// TagLib::Ogg::Vorbis::File
+#include "TagLib/id3v2tag.h"				// TagLib::ID3v2::Tag
+#include "TagLib/id3v2frame.h"				// TagLib::ID3v2::Frame
+#include "TagLib/attachedpictureframe.h"	// TagLib::ID3V2::AttachedPictureFrame
+#include "TagLib/xiphcomment.h"				// TagLib::Ogg::XiphComment
+#include "TagLib/tbytevector.h"				// TagLib::ByteVector
+#include "mp4v2/mp4.h"						// MP4FileHandle
 
 @implementation AudioMetadata
 
@@ -144,15 +145,15 @@
 	
 	// Try TagLib
 	if(NO == parsed) {
-		TagLib::FileRef					f						([filename fileSystemRepresentation]);
-		TagLib::MPEG::File				*mpegFile				= NULL;
-		TagLib::Ogg::Vorbis::File		*vorbisFile				= NULL;
-		TagLib::String					s;
-		TagLib::ID3v2::Tag				*id3v2tag;
-		TagLib::Ogg::XiphComment		*xiphComment;
-		NSString						*trackString, *trackNum, *totalTracks;
-		NSRange							range;
-		
+		TagLib::FileRef							f						([filename fileSystemRepresentation]);
+		TagLib::MPEG::File						*mpegFile				= NULL;
+		TagLib::Ogg::Vorbis::File				*vorbisFile				= NULL;
+		TagLib::ID3v2::AttachedPictureFrame		*picture				= NULL;
+		TagLib::String							s;
+		TagLib::ID3v2::Tag						*id3v2tag;
+		TagLib::Ogg::XiphComment				*xiphComment;
+		NSString								*trackString, *trackNum, *totalTracks;
+		NSRange									range;
 		
 		if(false == f.isNull()) {
 			mpegFile	= dynamic_cast<TagLib::MPEG::File *>(f.file());
@@ -237,8 +238,8 @@
 					
 					// Extract album art if present
 					frameList = id3v2tag->frameListMap()["APIC"];
-					if(NO == frameList.isEmpty()) {
-						TagLib::ByteVector bv = frameList.front()->render();
+					if(NO == frameList.isEmpty() && NULL != (picture = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front()))) {
+						TagLib::ByteVector bv = picture->picture();
 						NSImage *image = [[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]];
 						if(nil != image) {
 							[result setValue:[image autorelease] forKey:@"albumArt"];
@@ -265,11 +266,16 @@
 					TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
 					NSString						*value		= nil;
 					
+					if(fieldList.contains("COMPOSER")) {
+						value = [NSString stringWithUTF8String:fieldList["COMPOSER"].toString().toCString(true)];
+						[result setValue:value forKey:@"albumComposer"];
+					}
+
 					if(fieldList.contains("TRACKTOTAL")) {
 						value = [NSString stringWithUTF8String:fieldList["TRACKTOTAL"].toString().toCString(true)];
 						[result setValue:[NSNumber numberWithInt:[value intValue]] forKey:@"albumTrackCount"];
 					}
-
+					
 					if(fieldList.contains("DISCNUMBER")) {
 						value = [NSString stringWithUTF8String:fieldList["DISCNUMBER"].toString().toCString(true)];
 						[result setValue:[NSNumber numberWithInt:[value intValue]] forKey:@"discNumber"];

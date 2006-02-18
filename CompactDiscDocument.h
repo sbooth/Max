@@ -42,6 +42,7 @@
 	NSString						*_artist;
 	NSNumber						*_year;
 	NSString						*_genre;
+	NSString						*_composer;
 	NSString						*_comment;
 	NSNumber						*_partOfSet;
 	NSImage							*_albumArt;

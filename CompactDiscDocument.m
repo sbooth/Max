@@ -678,12 +678,11 @@
 	NSImageRep				*currentRepresentation	= nil;
 	NSData					*data					= nil;
 	
-	//[result setValue:[NSNumber numberWithInt:[_trackDrawer state]] forKey:@"trackDrawerState"];
-
 	[result setValue:_title forKey:@"title"];
 	[result setValue:_artist forKey:@"artist"];
 	[result setValue:_year forKey:@"year"];
 	[result setValue:_genre forKey:@"genre"];
+	[result setValue:_composer forKey:@"composer"];
 	[result setValue:_comment forKey:@"comment"];
 	[result setValue:_discNumber forKey:@"discNumber"];
 	[result setValue:_discsInSet forKey:@"discsInSet"];
@@ -716,7 +715,6 @@
 	unsigned				i;
 	NSArray					*tracks			= [properties valueForKey:@"tracks"];
 	NSImage					*image			= nil;
-	//int						drawerState;
 	
 	if([self discInDrive] && [tracks count] != [_tracks count]) {
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
@@ -735,19 +733,11 @@
 		[[_tracks objectAtIndex:i] setPropertiesFromDictionary:[tracks objectAtIndex:i]];
 	}
 	
-/*	drawerState = [[properties valueForKey:@"trackDrawerState"] intValue];
-	if(NSDrawerOpenState == drawerState || NSDrawerOpeningState == drawerState) {
-		NSLog(@"open");
-		[_trackDrawer open];
-	}
-	else {
-		[_trackDrawer close];
-	}*/
-
 	[self setValue:[properties valueForKey:@"title"] forKey:@"title"];
 	[self setValue:[properties valueForKey:@"artist"] forKey:@"artist"];
 	[self setValue:[properties valueForKey:@"year"] forKey:@"year"];
 	[self setValue:[properties valueForKey:@"genre"] forKey:@"genre"];
+	[self setValue:[properties valueForKey:@"composer"] forKey:@"composer"];
 	[self setValue:[properties valueForKey:@"comment"] forKey:@"comment"];
 	[self setValue:[properties valueForKey:@"discNumber"] forKey:@"discNumber"];
 	[self setValue:[properties valueForKey:@"discsInSet"] forKey:@"discsInSet"];
@@ -757,9 +747,7 @@
 	
 	// Convert PNG data to an NSImage
 	image = [[NSImage alloc] initWithData:[properties valueForKey:@"albumArt"]];
-	if(nil != image) {
-		[self setValue:[image autorelease] forKey:@"albumArt"];
-	}	
+	[self setValue:(nil != image ? [image autorelease] : nil) forKey:@"albumArt"];
 }
 
 @end
