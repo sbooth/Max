@@ -248,8 +248,9 @@
 	
 	[copy setValue:_title forKey:@"title"];
 	[copy setValue:_artist forKey:@"artist"];
-	[copy setValue:_year forKey:@"year"];;
+	[copy setValue:_year forKey:@"year"];
 	[copy setValue:_genre forKey:@"genre"];
+	[copy setValue:_composer forKey:@"composer"];
 	
 	[copy setValue:_number forKey:@"number"];
 	[copy setValue:_firstSector forKey:@"firstSector"];
@@ -271,6 +272,7 @@
 	[result setValue:_artist forKey:@"trackArtist"];
 	[result setValue:_year forKey:@"trackYear"];
 	[result setValue:_genre forKey:@"trackGenre"];
+	[result setValue:_composer forKey:@"trackComposer"];
 //	[result setValue:_comment forKey:@"trackComment"];
 	[result setValue:_ISRC forKey:@"ISRC"];
 	
@@ -279,6 +281,7 @@
 	[result setValue:[_disc valueForKey:@"artist"] forKey:@"albumArtist"];
 	[result setValue:[_disc valueForKey:@"year"] forKey:@"albumYear"];
 	[result setValue:[_disc valueForKey:@"genre"] forKey:@"albumGenre"];
+	[result setValue:[_disc valueForKey:@"composer"] forKey:@"albumComposer"];
 	[result setValue:[_disc valueForKey:@"comment"] forKey:@"albumComment"];
 		
 	[result setValue:[_disc valueForKey:@"discNumber"] forKey:@"discNumber"];

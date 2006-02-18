@@ -39,6 +39,7 @@
 	NSString				*_artist;
 	NSNumber				*_year;
 	NSString				*_genre;
+	NSString				*_composer;
 	
 	// Physical track properties
 	NSNumber				*_number;
