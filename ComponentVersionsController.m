@@ -20,10 +20,10 @@
 
 #import "ComponentVersionsController.h"
 
-#include "LAME/lame.h"
-#include "FLAC/format.h"
-#include "Speex/speex.h"
-#include "sndfile/sndfile.h"
+#include <LAME/lame.h>
+#include <FLAC/format.h>
+#include <Speex/speex.h>
+#include <sndfile/sndfile.h>
 
 static ComponentVersionsController *sharedController = nil;
 

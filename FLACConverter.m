@@ -26,7 +26,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-#include "FLAC/file_decoder.h"
+#include <FLAC/file_decoder.h>
 
 #import "MallocException.h"
 #import "IOException.h"
@@ -204,7 +204,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 	}
 	
 	@finally {
-		NSException						*exception;
+		NSException *exception;
 
 		FLAC__file_decoder_delete(flac);
 

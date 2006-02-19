@@ -26,7 +26,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-#include "OggFLAC/file_decoder.h"
+#include <OggFLAC/file_decoder.h>
 
 #import "MallocException.h"
 #import "IOException.h"
@@ -188,7 +188,7 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 	}
 	
 	@finally {
-		NSException						*exception;
+		NSException *exception;
 		
 		OggFLAC__file_decoder_delete(flac);
 		
