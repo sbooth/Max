@@ -64,7 +64,6 @@
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= NULL;
 	TagLib::ID3v2::AttachedPictureFrame			*pictureFrame			= NULL;
 	NSImage										*albumArt				= nil;
-	NSArray										*representations		= nil;
 	NSEnumerator								*enumerator				= nil;
 	NSImageRep									*currentRepresentation	= nil;
 	NSData										*data					= nil;
@@ -240,8 +239,7 @@
 	// Album art
 	albumArt = [metadata valueForKey:@"albumArt"];
 	if(nil != albumArt) {
-		representations = [albumArt representations];
-		enumerator		= [representations objectEnumerator];
+		enumerator = [[albumArt representations] objectEnumerator];
 		while((currentRepresentation = [enumerator nextObject])) {
 			if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
 				data			= [(NSBitmapImageRep *)currentRepresentation representationUsingType:NSPNGFileType properties:nil]; 
