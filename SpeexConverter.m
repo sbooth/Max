@@ -99,7 +99,9 @@
 	AudioFileID						audioFile;
 	ExtAudioFileRef					extAudioFileRef;
 	AudioBufferList					bufferList;	
-				
+
+	int16_t							*iter, *limit;
+
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
@@ -283,23 +285,26 @@
 								speex_decode_stereo_int(output, frameSize, &stereo);
 							}
 							
+							// Adjust for host endian-ness
+							iter	= output;
+							limit	= iter + (channels * frameSize);
+							while(iter < limit) {
+								*iter = OSSwapHostToBigInt16(*iter);
+								++iter;
+							}
+							
 							// Put the data in an AudioBufferList
 							bufferList.mNumberBuffers					= 1;
 							bufferList.mBuffers[0].mData				= output;
 							bufferList.mBuffers[0].mDataByteSize		= sizeof(int16_t) * frameSize * channels;
 							bufferList.mBuffers[0].mNumberChannels		= channels;
-														
+
 							// Write the data
 							err = ExtAudioFileWrite(extAudioFileRef, frameSize, &bufferList);
 							if(noErr != err) {
 								@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrite failed", @"Exceptions", @"")
 																	  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 							}
-
-							// Convert to int16_t and save to output file
-							/*for(i = 0; i < frameSize * channels; ++i) {
-								out[i] = le_int16_t(output[i]);
-							}*/
 						}
 					}
 				}

@@ -231,6 +231,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	ExtAudioFileRef				extAudioFileRef								= NULL;
 	SInt64						totalFileFrames, framesToRead;
 	UInt32						size, frameCount;
+
+	int16_t						*iter, *limit;
 	
    
 	// Tell our owner we are starting
@@ -443,8 +445,15 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				eos = YES;
 			}
 			
-			totalFrames		+= frameCount;
-			
+			// Adjust for host endian-ness
+			iter	= buf.mBuffers[0].mData;
+			limit	= iter + (buf.mBuffers[0].mNumberChannels * frameCount);
+			while(iter < limit) {
+				*iter = OSSwapBigToHostInt16(*iter);
+				++iter;
+			}
+
+			totalFrames += frameCount;			
 			++frameID;
 			
 			if(2 == chan) {
