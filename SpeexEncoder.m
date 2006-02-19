@@ -19,6 +19,21 @@
  */
 
 #import "SpeexEncoder.h"
+
+#include <CoreAudio/CoreAudioTypes.h>
+#include <AudioToolbox/AudioFormat.h>
+#include <AudioToolbox/AudioConverter.h>
+#include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
+#include <Speex/speex.h>
+#include <Speex/speex_header.h>
+#include <Speex/speex_stereo.h>
+#include <Speex/speex_callbacks.h>
+#include <Speex/speex_preprocess.h>
+
+#include <Ogg/ogg.h>
+
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
@@ -28,21 +43,8 @@
 
 #import "UtilityFunctions.h"
 
-#include "Speex/speex.h"
-#include "Speex/speex_header.h"
-#include "Speex/speex_stereo.h"
-#include "Speex/speex_preprocess.h"
-#include "Ogg/ogg.h"
-
-#include "sndfile/sndfile.h"
-
 #include <fcntl.h>		// open, write
 #include <stdio.h>		// fopen, fclose
-#include <sys/stat.h>	// stat
-#include <paths.h>		// _PATH_TMP
-#include <unistd.h>		// mkstemp, unlink
-
-#define TEMPFILE_PATTERN	"Max.XXXXXXXX"
 
 // My (semi-arbitrary) list of supported speex bitrates
 static int sSpeexBitrates [13] = { 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28};
@@ -153,11 +155,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 
 - (id) initWithPCMFilename:(NSString *)inputFilename
 {
-	char				*path			= NULL;
-	const char			*tmpDir;
-	ssize_t				tmpDirLen;
-	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
-	
 	if((self = [super initWithPCMFilename:inputFilename])) {
 		
 		_mode				= [[NSUserDefaults standardUserDefaults] integerForKey:@"speexMode"];
@@ -184,65 +181,23 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 			
-		@try {
-			if(_resampleInput) {				
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-					tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
-				}
-				else {
-					tmpDir = _PATH_TMP;
-				}
-				
-				tmpDirLen	= strlen(tmpDir);
-				path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-				if(NULL == path) {
-					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				}
-				memcpy(path, tmpDir, tmpDirLen);
-				memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
-				path[tmpDirLen + patternLen] = '\0';
-				
-				mktemp(path);
-				_tempFilename = [[NSString stringWithUTF8String:path] retain];
-			}
-		}
-		
-		@finally {
-			free(path);
-		}
-		
 		return self;
 	}
 	return nil;
-}
-
-- (void) dealloc
-{
-	// Delete resampled temporary file
-	if(_resampleInput) {
-		if(-1 == unlink([_tempFilename fileSystemRepresentation])) {
-			NSException *exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
-															  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}			
-
-		[_tempFilename release];
-	}
-
-	[super dealloc];
 }
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime									= [NSDate date];
 
+	int							fd											= -1;
+	
 	void						*speexState									= NULL;
 	const SpeexMode				*mode										= NULL;
 	SpeexPreprocessState		*preprocess									= NULL;
 	SpeexBits					bits;
 
-	int							rate;
+	int							rate										= 44100;
 	int							chan										= 2;
 	int							frameID										= -1;
 	int							frameSize;
@@ -264,53 +219,53 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	
 	BOOL						eos											= NO;
 
-	int16_t						*buf										= NULL;
-	ssize_t						buflen;
-	
-	int							pcm											= -1;
-	int							fd											= -1;
-	
-	ssize_t						framesRead;
-	ssize_t						bytesRead									= 0;
 	ssize_t						currentBytesWritten							= 0;
 	ssize_t						bytesWritten								= 0;
-	ssize_t						bytesToRead									= 0;
-	ssize_t						totalBytes									= 0;
 
 	unsigned long				iterations									= 0;
-	   
-	SNDFILE						*inSF										= NULL;
-	SF_INFO						info;
-	SNDFILE						*outSF										= NULL;
-	const char					*string										= NULL;
-	int							i;
-	int							err											= 0 ;
-	int							bufferLen									= 1024;
-	int							*intBuffer									= NULL;
-	double						*doubleBuffer								= NULL;
-	double						maxSignal;
-	int							frameCount;
-	int							readCount;
-	struct stat					sourceStat;
 
+	AudioBufferList				buf;
+	ssize_t						buflen										= 0;
+	OSStatus					err;
+	FSRef						ref;
+	ExtAudioFileRef				extAudioFileRef								= NULL;
+	SInt64						totalFileFrames, framesToRead;
+	UInt32						size, frameCount;
+	
    
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 
 	@try {
-		// Downsample input if requested using libsndfile
-		if(_resampleInput) {			
-			// Open the input file
-			info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
-			info.samplerate		= 44100;
-			info.channels		= 2;
-			
-			inSF = sf_open([_inputFilename fileSystemRepresentation], SFM_READ, &info);
-			if(NULL == inSF) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+		buf.mBuffers[0].mData = NULL;
+		
+		// Open the input file
+		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		// Get input file information
+		size	= sizeof(totalFileFrames);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFileFrames);;
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		framesToRead = totalFileFrames;
+		
+		// Resample input if requested
+		if(_resampleInput) {
+			AudioStreamBasicDescription asbd;
 			
 			// Determine the desired sample rate
 			switch(_mode) {
@@ -323,121 +278,21 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					break;
 			}
 			
-			// Setup resampled output file
-			info.format			= SF_FORMAT_RAW | SF_FORMAT_PCM_16;
-			info.samplerate		= rate;
-			info.channels		= 2;
-			outSF				= sf_open([_tempFilename fileSystemRepresentation], SFM_WRITE, &info);
-			if(NULL == outSF) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			asbd.mSampleRate			= (float)rate;
+			asbd.mFormatID				= kAudioFormatLinearPCM;
+			asbd.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian;
+			asbd.mBytesPerPacket		= 4;
+			asbd.mFramesPerPacket		= 1;
+			asbd.mBytesPerFrame			= 4;
+			asbd.mChannelsPerFrame		= 2;
+			asbd.mBitsPerChannel		= 16;
 			
-			// Copy metadata
-			for(i = SF_STR_FIRST; i <= SF_STR_LAST; ++i) {
-				string = sf_get_string(inSF, i);
-				if(NULL != string) {
-					err = sf_set_string(outSF, i, string);
-				}
-			}
-			
-			// Copy audio data
-			if(((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_DOUBLE) || ((info.format & SF_FORMAT_SUBMASK) == SF_FORMAT_FLOAT)) {
-				
-				doubleBuffer = (double *)malloc(bufferLen * sizeof(double));
-				if(NULL == doubleBuffer) {
-					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				}
-				
-				frameCount		= bufferLen / info.channels ;
-				readCount		= frameCount ;
-				
-				sf_command(inSF, SFC_CALC_SIGNAL_MAX, &maxSignal, sizeof(maxSignal)) ;
-				
-				if(maxSignal < 1.0) {	
-					while(readCount > 0) {
-						// Check if we should stop, and if so throw an exception
-						if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-							@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-						}
-						
-						readCount = sf_readf_double(inSF, doubleBuffer, frameCount) ;
-						sf_writef_double(outSF, doubleBuffer, readCount) ;
-						
-						++iterations;
-					}
-				}
-				// Renormalize output
-				else {	
-					sf_command(inSF, SFC_SET_NORM_DOUBLE, NULL, SF_FALSE);
-					
-					while(0 < readCount) {
-						// Check if we should stop, and if so throw an exception
-						if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-							@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-						}
-						
-						readCount = sf_readf_double(inSF, doubleBuffer, frameCount);
-						for(i = 0 ; i < readCount * info.channels; ++i) {
-							doubleBuffer[i] /= maxSignal;
-						}
-						
-						sf_writef_double(outSF, doubleBuffer, readCount);
-						
-						++iterations;
-					}
-				}
-			}
-			else {
-				intBuffer = (int *)malloc(bufferLen * sizeof(int));
-				if(NULL == intBuffer) {
-					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				}
-				
-				frameCount		= bufferLen / info.channels;
-				readCount		= frameCount;
-				
-				while(0 < readCount) {	
-					// Check if we should stop, and if so throw an exception
-					if(0 == iterations % MAX_DO_POLL_FREQUENCY && [_delegate shouldStop]) {
-						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-					}
-					
-					readCount = sf_readf_int(inSF, intBuffer, frameCount);
-					sf_writef_int(outSF, intBuffer, readCount);
-					
-					++iterations;
-				}
-			}
-			
-			// Open the new, resampled input file
-			pcm = open([_tempFilename fileSystemRepresentation], O_RDONLY);
-			if(-1 == pcm) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
+			if(noErr != err) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileSetProperty failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
-		else {
-			rate = 44100;
-			
-			// Open the input file
-			pcm = open([_inputFilename fileSystemRepresentation], O_RDONLY);
-			if(-1 == pcm) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-		}
-		
-		// Get input file information
-		if(-1 == fstat(pcm, &sourceStat)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		totalBytes		= sourceStat.st_size;
-		bytesToRead		= totalBytes;
 		
 		// Open the output file
 		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -478,9 +333,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		// Setup the encoder
 		speexState = speex_encoder_init(mode);
 		
-		speex_encoder_ctl(speexState, SPEEX_GET_FRAME_SIZE, &frameSize);
 		speex_encoder_ctl(speexState, SPEEX_SET_COMPLEXITY, &_complexity);
 		speex_encoder_ctl(speexState, SPEEX_SET_SAMPLING_RATE, &rate);
+		speex_encoder_ctl(speexState, SPEEX_GET_FRAME_SIZE, &frameSize);
 		
 		switch(_target) {
 			case SPEEX_TARGET_QUALITY:
@@ -557,10 +412,13 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			bytesWritten += currentBytesWritten;
 		}
 		
-		// Allocate the buffer (hardcoded for 16-bit stereo input)
-		buflen		= 2 * frameSize;
-		buf			= (int16_t *) calloc(buflen, sizeof(int16_t));
-		if(NULL == buf) {
+		// Allocate the input buffer
+		buflen								= 2 * frameSize;
+		buf.mNumberBuffers					= 1;
+		buf.mBuffers[0].mNumberChannels		= 2;
+		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
+		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));;
+		if(NULL == buf.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -574,29 +432,30 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		while(NO == eos || totalFrames > framesEncoded) {
 			
 			// Read a single frame of PCM input
-			bytesRead = read(pcm, buf, (bytesToRead > 2 * buflen ? 2 * buflen : bytesToRead));
-			if(-1 == bytesRead) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerPacket;
+			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
+			if(err != noErr) {
+				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileRead failed", @"Exceptions", @"")
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
-			else if(0 == bytesRead) {
+			
+			if(0 == frameCount) {
 				eos = YES;
 			}
 			
-			framesRead		= bytesRead / 4;
-			totalFrames		+= framesRead;
+			totalFrames		+= frameCount;
 			
 			++frameID;
 			
 			if(2 == chan) {
-				speex_encode_stereo_int(buf, frameSize, &bits);
+				speex_encode_stereo_int(buf.mBuffers[0].mData, frameSize, &bits);
 			}
 			
 			if(NULL != preprocess) {
-				speex_preprocess(preprocess, buf, NULL);
+				speex_preprocess(preprocess, buf.mBuffers[0].mData, NULL);
 			}
 			
-			speex_encode_int(speexState, buf, &bits);
+			speex_encode_int(speexState, buf.mBuffers[0].mData, &bits);
 			
 			framesEncoded	+= frameSize;
 			
@@ -642,7 +501,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			}
 			
 			// Update status
-			bytesToRead -= bytesRead;
+			framesToRead -= frameCount;
 			
 			// Distributed Object calls are expensive, so only perform them every few iterations
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
@@ -653,9 +512,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalBytes - bytesToRead)/(double) totalBytes) * 100.0;
+				double percentComplete = ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = interval / ((double)(totalBytes - bytesToRead)/(double) totalBytes) - interval;
+				unsigned int secondsRemaining = interval / ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) - interval;
 				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
 				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
@@ -717,40 +576,26 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	}
 	
 	@finally {
+		NSException *exception;
+		
 		// Close the input file
-		if(-1 == close(pcm)) {
-			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
-															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		err = ExtAudioFileDispose(extAudioFileRef);
+		if(noErr != err) {
+			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
 		// Close the output file
 		if(-1 == close(fd)) {
-			NSException *exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
-															 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
-		}
-		
-		if(_resampleInput) {
-			// Clean up sndfiles
-			if(0 != sf_close(inSF)) {
-				NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
-																userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				NSLog(@"%@", exception);
-			}
-			if(0 != sf_close(outSF)) {
-				NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
-																userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithUTF8String:sf_strerror(NULL)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				NSLog(@"%@", exception);
-			}
-			
-			free(intBuffer);
-			free(doubleBuffer);
 		}
 		
 		// Clean up
 		free(comments);
-		free(buf);
+		free(buf.mBuffers[0].mData);
 		
 		speex_encoder_destroy(speexState);
 		speex_bits_destroy(&bits);
