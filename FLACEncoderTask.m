@@ -25,8 +25,8 @@
 #import "FLACException.h"
 #import "UtilityFunctions.h"
 
-#include "metadata.h"
-#include "format.h"
+#include <FLAC/metadata.h>
+#include <FLAC/format.h>
 
 @implementation FLACEncoderTask
 

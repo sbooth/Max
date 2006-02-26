@@ -21,7 +21,7 @@
 #import "FormatsPreferencesController.h"
 #import "CoreAudioUtilities.h"
 
-#include "sndfile/sndfile.h"
+#include <sndfile/sndfile.h>
 
 
 @implementation FormatsPreferencesController

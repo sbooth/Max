@@ -23,7 +23,7 @@
 #import "CoreAudioException.h"
 #import "IOException.h"
 
-#include "mp4v2/mp4.h"
+#include <mp4v2/mp4.h>
 
 #include <AudioToolbox/AudioFile.h>
 
@@ -69,7 +69,7 @@
 
 - (NSString *) outputFormat
 {
-	UInt32	formatID	= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
+	UInt32	formatID	= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
 
 	// Special case AAC and Apple Lossless, since they are very common and "MPEG4 Audio" is vague
 	if(kAudioFormatMPEG4AAC == formatID) {
@@ -98,7 +98,7 @@
 	UInt32					size;
 	MP4FileHandle			mp4FileHandle;
 	AudioMetadata			*metadata				= [_task metadata];
-	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];;
+	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
 	NSString				*bundleVersion			= nil;
 	NSString				*versionString			= nil;
 	NSNumber				*trackNumber			= nil;
@@ -112,9 +112,7 @@
 	NSString				*genre					= nil;
 	NSString				*comment				= nil;
 	NSNumber				*multipleArtists		= nil;
-	NSImage					*albumArt				= nil;
-	NSEnumerator			*enumerator				= nil;
-	NSImageRep				*currentRepresentation	= nil;
+	NSBitmapImageRep		*albumArt				= nil;
 	NSData					*data					= nil;
 
 	
@@ -209,14 +207,8 @@
 			// Album art
 			albumArt = [metadata valueForKey:@"albumArt"];
 			if(nil != albumArt) {
-				enumerator = [[albumArt representations] objectEnumerator];
-				while((currentRepresentation = [enumerator nextObject])) {
-					if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
-						data = [(NSBitmapImageRep *)currentRepresentation representationUsingType:NSPNGFileType properties:nil]; 
-						MP4SetMetadataCoverArt(mp4FileHandle, (u_int8_t *)[data bytes], [data length]);
-						break;
-					}
-				}
+				data = [albumArt representationUsingType:NSPNGFileType properties:nil]; 
+				MP4SetMetadataCoverArt(mp4FileHandle, (u_int8_t *)[data bytes], [data length]);
 			}
 
 			// Encoded by

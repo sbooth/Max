@@ -22,7 +22,7 @@
 
 #import "Converter.h"
 
-#include "sndfile/sndfile.h"
+#include <sndfile/sndfile.h>
 
 @interface LibsndfileConverter : Converter
 {

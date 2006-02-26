@@ -37,6 +37,7 @@
 #import "EmptySelectionException.h"
 #import "MissingResourceException.h"
 
+#import "AmazonAlbumArt.h"
 #import "UtilityFunctions.h"
 
 #define kEncodeMenuItemTag					1
@@ -46,6 +47,10 @@
 #define kSubmitToFreeDBMenuItemTag			5
 #define kSelectNextTrackMenuItemTag			6
 #define kSelectPreviousTrackMenuItemTag		7
+
+@interface CompactDiscDocument (Private)
+- (void) updateAlbumArtImageRep;
+@end
 
 @implementation CompactDiscDocument
 
@@ -256,7 +261,7 @@
 	_disc			= [disc retain];
 
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"discInDrive"];
-
+	
 	[self setValue:[_disc MCN] forKey:@"MCN"];
 	
 	[self willChangeValueForKey:@"tracks"];
@@ -269,10 +274,10 @@
 	}
 	[self didChangeValueForKey:@"tracks"];
 	
-	for(i = 1; i <= [_disc trackCount]; ++i) {
-		Track			*track		= [_tracks objectAtIndex:i - 1];
+	for(i = 0; i < [_disc trackCount]; ++i) {
+		Track			*track		= [_tracks objectAtIndex:i];
 		
-		[track setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"number"];
+		[track setValue:[NSNumber numberWithUnsignedInt:i + 1] forKey:@"number"];
 		[track setValue:[NSNumber numberWithUnsignedLong:[_disc firstSectorForTrack:i]] forKey:@"firstSector"];
 		[track setValue:[NSNumber numberWithUnsignedLong:[_disc lastSectorForTrack:i]] forKey:@"lastSector"];
 		
@@ -494,10 +499,14 @@
 		NSArray		*filesToOpen	= [sheet filenames];
 		int			count			= [filesToOpen count];
 		int			i;
+		NSImage		*image			= nil;
 		
 		for(i = 0; i < count; ++i) {
-			[self setValue:[[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]] forKey:@"albumArt"];
-			[self updateChangeCount:NSChangeDone];
+			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
+			if(nil != image) {
+				[self setValue:[image autorelease] forKey:@"albumArt"];
+				[self albumArtUpdated:self];
+			}
 		}
 	}	
 }
@@ -505,37 +514,96 @@
 - (IBAction) albumArtUpdated:(id) sender
 {
 	[self updateChangeCount:NSChangeDone];
+	[self updateAlbumArtImageRep];
+}
+
+- (void) updateAlbumArtImageRep
+{
+	NSEnumerator		*enumerator;
+	NSImageRep			*currentRepresentation		= nil;
+	NSBitmapImageRep	*bitmapRep					= nil;
+	
+	if(nil == _albumArt) {
+		[self setValue:nil forKey:@"albumArtBitmap"];
+		return;
+	}
+	
+	enumerator = [[_albumArt representations] objectEnumerator];
+	while((currentRepresentation = [enumerator nextObject])) {
+		if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
+			bitmapRep = (NSBitmapImageRep *)currentRepresentation;
+			break;
+		}
+	}
+	
+	// Create a bitmap representation if one doesn't exist
+	if(nil == bitmapRep) {
+		NSSize size = [_albumArt size];
+		[_albumArt lockFocus];
+		bitmapRep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, size.width, size.height)] autorelease];
+		[_albumArt unlockFocus];
+	}
+	
+	[self setValue:bitmapRep forKey:@"albumArtBitmap"];
 }
 
 - (IBAction) fetchAlbumArt:(id) sender
 {
-	// http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&Artist=Kid+Rock&Title=Cocky
-	NSString *urlString = [NSString stringWithFormat:@"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&Artist=%@&Title=%@", _artist, _title];
-	NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-	NSURLResponse *response;
-	NSError *error;
-	NSData *data = [NSURLConnection sendSynchronousRequest:urlRequest returningResponse:&response error:&error];
+	// http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=Kid+Rock&Title=Cocky
+
+	NSError		*error;
+	NSString	*urlString;
+	NSURL		*url;
+
+	urlString	= [NSString stringWithFormat:@"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=%@&Title=%@", _artist, _title];
+	url			= [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	
-	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
-	[parser setDelegate:self];
-	[parser setShouldResolveExternalEntities:YES];
-	BOOL success = [parser parse]; // return value not used
-}
+	NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:(NSXMLNodePreserveWhitespace | NSXMLNodePreserveCDATA) error:&error];
+	if(nil == xmlDoc) {
+		xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:NSXMLDocumentTidyXML error:&error];
+	}
+	if(nil == xmlDoc) {
+		if(error) {
+//			[self handleError:error];
+		}
+		return;
+	}
 
-- (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
-{
-	NSLog(@"didStartElement:%@", elementName);
-}
-
-- (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-	NSLog(@"foundCharacters:%@", string);
-}
-
-- (void) parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
-	NSLog(@"didEndElement:%@", elementName);
+	if(error) {
+//		[self handleError:error];
+	}
+	
+//	NSLog(@"xmlDoc = %@", xmlDoc);
+	
+	NSXMLNode				*node, *childNode, *grandChildNode;
+	NSEnumerator			*childrenEnumerator, *grandChildrenEnumerator;
+	NSMutableDictionary		*dictionary;
+	NSMutableArray			*images;
+	
+	images	= [NSMutableArray arrayWithCapacity:10];
+	node	= [xmlDoc rootElement];
+	while((node = [node nextNode])) {
+		if([[node name] isEqualToString:@"ImageSet"]) {
+			// Iterate through children
+			childrenEnumerator = [[node children] objectEnumerator];
+			while((childNode = [childrenEnumerator nextObject])) {
+				dictionary					= [NSMutableDictionary dictionaryWithCapacity:3];
+				grandChildrenEnumerator		= [[childNode children] objectEnumerator];
+				
+				while((grandChildNode = [grandChildrenEnumerator nextObject])) {
+					[dictionary setValue:[grandChildNode stringValue] forKey:[grandChildNode name]];
+				}
+				
+				[images addObject:dictionary];
+//				NSLog(@"dictionary = %@", dictionary);
+			}
+		}
+	}
+	
+	AmazonAlbumArt *art = [[[AmazonAlbumArt alloc] initWithCompactDiscDocument:self] autorelease];
+	[art setValue:images forKey:@"images"];
+	[art showFreeDBMatches];
+	//NSLog(@"images = %@", images);
 }
 
 #pragma mark FreeDB Functionality
@@ -570,7 +638,7 @@
 
 	@try {
 		[self setValue:[NSNumber numberWithBool:YES] forKey:@"freeDBQueryInProgress"];
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"_freeDBQuerySuccessful"];
+		[self setValue:[NSNumber numberWithBool:NO] forKey:@"freeDBQuerySuccessful"];
 
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
@@ -633,7 +701,7 @@
 		
 		[freeDB updateDisc:info];
 		
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"_freeDBQuerySuccessful"];
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"freeDBQuerySuccessful"];
 	}
 	
 	@catch(NSException *exception) {
@@ -673,9 +741,6 @@
 	unsigned				i;
 	NSMutableDictionary		*result					= [[NSMutableDictionary alloc] init];
 	NSMutableArray			*tracks					= [NSMutableArray arrayWithCapacity:[_tracks count]];
-	NSArray					*representations		= nil;
-	NSEnumerator			*enumerator				= nil;
-	NSImageRep				*currentRepresentation	= nil;
 	NSData					*data					= nil;
 	
 	[result setValue:_title forKey:@"title"];
@@ -689,17 +754,9 @@
 	[result setValue:_multiArtist forKey:@"multiArtist"];				
 	[result setValue:_MCN forKey:@"MCN"];
 	[result setValue:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
-	
-	// Convert the NSImage to PNG data
-	representations = [_albumArt representations];
-	enumerator		= [representations objectEnumerator];
-	while((currentRepresentation = [enumerator nextObject])) {
-		if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
-			data = [(NSBitmapImageRep *)currentRepresentation representationUsingType:NSPNGFileType properties:nil]; 
-			[result setValue:data forKey:@"albumArt"];
-			break;
-		}
-	}
+
+	data = [_albumArtBitmap representationUsingType:NSPNGFileType properties:nil]; 
+	[result setValue:data forKey:@"albumArt"];
 	
 	for(i = 0; i < [_tracks count]; ++i) {
 		[tracks addObject:[[_tracks objectAtIndex:i] getDictionary]];
@@ -748,6 +805,7 @@
 	// Convert PNG data to an NSImage
 	image = [[NSImage alloc] initWithData:[properties valueForKey:@"albumArt"]];
 	[self setValue:(nil != image ? [image autorelease] : nil) forKey:@"albumArt"];
+	[self updateAlbumArtImageRep];
 }
 
 @end

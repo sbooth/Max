@@ -34,7 +34,7 @@
 #import "CoreAudioException.h"
 #import "SpeexException.h"
 
-#include "sndfile/sndfile.h"
+#include <sndfile/sndfile.h>
 
 static NSDateFormatter		*sDateFormatter		= nil;
 static NSString				*sDataDirectory		= nil;
@@ -299,13 +299,14 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 	
 	string			= [NSString stringWithFormat:@"%@=%@", key, value];
 	entry.length	= [string length];
+	entry.entry		= NULL;
 	entry.entry		= (unsigned char *)strdup([string UTF8String]);
 	if(NULL == entry.entry) {
-		free(entry.entry);
 		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}
 	
 	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
+		free(entry.entry);
 		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 	}	
 }

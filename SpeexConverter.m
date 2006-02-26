@@ -108,7 +108,7 @@
 	[_delegate setStarted];
 	
 	@try {
-		// Open the output file (converter output may be resampled before it is written to this file)
+		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
 		if(noErr != err) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")

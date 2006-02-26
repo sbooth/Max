@@ -22,32 +22,32 @@
 
 @interface AudioMetadata : NSObject
 {
-	NSNumber		*_trackNumber;
-	NSString		*_trackTitle;
-	NSString		*_trackArtist;
-	NSString		*_trackComposer;
-	NSNumber		*_trackYear;
-	NSString		*_trackGenre;
-	NSString		*_trackComment;
+	NSNumber				*_trackNumber;
+	NSString				*_trackTitle;
+	NSString				*_trackArtist;
+	NSString				*_trackComposer;
+	NSNumber				*_trackYear;
+	NSString				*_trackGenre;
+	NSString				*_trackComment;
 
-	NSNumber		*_albumTrackCount;
-	NSString		*_albumTitle;
-	NSString		*_albumArtist;
-	NSString		*_albumComposer;
-	NSNumber		*_albumYear;
-	NSString		*_albumGenre;
-	NSString		*_albumComment;
+	NSNumber				*_albumTrackCount;
+	NSString				*_albumTitle;
+	NSString				*_albumArtist;
+	NSString				*_albumComposer;
+	NSNumber				*_albumYear;
+	NSString				*_albumGenre;
+	NSString				*_albumComment;
 
-	NSNumber		*_multipleArtists;
-	NSNumber		*_discNumber;
-	NSNumber		*_discsInSet;
+	NSNumber				*_multipleArtists;
+	NSNumber				*_discNumber;
+	NSNumber				*_discsInSet;
 
-	NSNumber		*_length;
+	NSNumber				*_length;
 	
-	NSImage			*_albumArt;
+	NSBitmapImageRep		*_albumArt;
 	
-	NSString		*_MCN;
-	NSString		*_ISRC;
+	NSString				*_MCN;
+	NSString				*_ISRC;
 }
 
 // Attempt to parse metadata from filename

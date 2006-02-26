@@ -26,8 +26,8 @@
 
 #import "UtilityFunctions.h"
 
-#include "cddb/cddb_disc.h"
-#include "cddb/cddb.h"
+#include <cddb/cddb_disc.h>
+#include <cddb/cddb.h>
 
 @implementation FreeDB
 

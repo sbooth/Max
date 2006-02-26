@@ -35,19 +35,67 @@
 		unsigned			i;
 		unsigned long		discLength	= 150;
 		NSString			*bsdPath	= [NSString stringWithFormat:@"%@r%@", [NSString stringWithUTF8String:_PATH_DEV], bsdName];
+		char				*MCN		= NULL;
+		cdrom_drive			*drive		= NULL;
+		unsigned			trackCount	= 0;
 
-		_bsdName	= [bsdName retain];
-		
+
 		// cdparanoia setup
-		_drive		= cdda_identify([bsdPath fileSystemRepresentation], 0, NULL);
-		if(NULL == _drive) {
+		drive = cdda_identify([bsdPath fileSystemRepresentation], 0, NULL);
+		if(NULL == drive) {
 			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		if(0 != cdda_open(_drive)) {
+		if(0 != cdda_open(drive)) {
 			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
 		}
+
+		_bsdName		= [bsdName retain];
+		_deviceName		= [[NSString stringWithUTF8String:drive->device_name] retain];
 		
+		// Disc information
+		_firstSector	= [[NSNumber numberWithUnsignedLong:cdda_disc_firstsector(drive)] retain];
+		_lastSector		= [[NSNumber numberWithUnsignedLong:cdda_disc_lastsector(drive)] retain];
+
+		MCN = cdda_disc_mcn(drive);		
+		if(NULL != MCN) {
+			_MCN = [[NSString stringWithCString:MCN encoding:NSASCIIStringEncoding] retain];
+			free(MCN);
+		}
+		
+		// Iterate through the tracks and get their information
+		trackCount	= cdda_tracks(drive);
+		_tracks		= [[NSMutableArray arrayWithCapacity:trackCount] retain];
+		
+		// paranoia's tracks are 1-based
+		for(i = 1; i <= trackCount; ++i) {
+			NSMutableDictionary		*trackInfo;
+			char					*ISRC;
+
+			trackInfo = [NSMutableDictionary dictionaryWithCapacity:6];
+		
+			[trackInfo setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"number"];
+
+			[trackInfo setValue:[NSNumber numberWithUnsignedLong:cdda_track_firstsector(drive, i)] forKey:@"firstSector"];
+			[trackInfo setValue:[NSNumber numberWithUnsignedLong:cdda_track_lastsector(drive, i)] forKey:@"lastSector"];
+
+			[trackInfo setValue:[NSNumber numberWithUnsignedInt:cdda_track_channels(drive, i)] forKey:@"channels"];
+
+			[trackInfo setValue:[NSNumber numberWithBool:cdda_track_audiop(drive, i)] forKey:@"containsAudio"];
+			[trackInfo setValue:[NSNumber numberWithBool:cdda_track_preemp(drive, i)] forKey:@"preEmphasis"];
+			[trackInfo setValue:[NSNumber numberWithBool:cdda_track_copyp(drive, i)] forKey:@"allowsDigitalCopy"];
+
+			ISRC = cdda_track_isrc(drive, i);
+			if(NULL != ISRC) {
+				[trackInfo setValue:[NSString stringWithCString:ISRC encoding:NSASCIIStringEncoding] forKey:@"ISRC"];
+				free(ISRC);
+			}
+			
+			[_tracks addObject:trackInfo];
+		}
+		
+		cdda_close(drive);
+
 		// Setup libcddb data structures
 		_freeDBDisc	= cddb_disc_new();
 		if(NULL == _freeDBDisc) {
@@ -55,12 +103,15 @@
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		for(i = 1; i <= [self trackCount]; ++i) {
-			cddb_track_t	*cddb_track	= cddb_track_new();
+		for(i = 0; i < [self trackCount]; ++i) {
+			cddb_track_t *cddb_track;
+			
+			cddb_track = cddb_track_new();
 			if(NULL == cddb_track) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
+			
 			cddb_track_set_frame_offset(cddb_track, [self firstSectorForTrack:i] + 150);
 			cddb_disc_add_track(_freeDBDisc, cddb_track);
 			discLength += [self lastSectorForTrack:i] - [self firstSectorForTrack:i] + 1;
@@ -71,7 +122,7 @@
 		if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
 			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to calculate disc id", @"Exceptions", @"") userInfo:nil];
 		}
-		
+				
 		return self;
 	}
 	return nil;
@@ -79,14 +130,13 @@
 
 - (void) dealloc
 {
-	if(nil != _bsdName) {
-		[_bsdName release];
-	}
-	
-	if(NULL != _drive) {
-		cdda_close(_drive);
-	}
-	
+	[_bsdName release];
+	[_deviceName release];
+	[_tracks release];
+	[_MCN release];
+	[_firstSector release];
+	[_lastSector release];
+		
 	if(NULL != _freeDBDisc) {
 		cddb_disc_destroy(_freeDBDisc);
 	}
@@ -94,107 +144,34 @@
 	[super dealloc];
 }
 
-- (NSString *) bsdName
-{
-	return _bsdName;
-}
+- (NSString *)		bsdName									{ return _bsdName; }
+- (NSString *)		deviceName								{ return _deviceName; }
 
-- (unsigned) trackCount
-{
-	return cdda_tracks(_drive);
-}
+- (unsigned)		trackCount								{ return [_tracks count]; }
 
-- (unsigned long) firstSector
-{
-	return cdda_disc_firstsector(_drive);
-}
+- (NSString *)		MCN										{ return _MCN; }
 
-- (unsigned long) lastSector
-{
-	return cdda_disc_lastsector(_drive);
-}
+- (unsigned long)	firstSector								{ return [_firstSector unsignedLongValue]; }
+- (unsigned long)	lastSector								{ return [_lastSector unsignedLongValue]; }
 
-- (unsigned) trackContainingSector:(unsigned long) sector
-{
-	return cdda_sector_gettrack(_drive, sector);
-}
+- (unsigned long)	firstSectorForTrack:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"firstSector"] unsignedLongValue]; }
+- (unsigned long)	lastSectorForTrack:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"lastSector"] unsignedLongValue]; }
 
-- (unsigned long) firstSectorForTrack:(ssize_t) track
-{
-	return cdda_track_firstsector(_drive, track);
-}
+- (unsigned)		channelsForTrack:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"channels"] unsignedIntValue]; }
 
-- (unsigned long) lastSectorForTrack:(ssize_t) track
-{
-	return cdda_track_lastsector(_drive, track);
-}
+- (BOOL)			trackContainsAudio:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"containsAudio"] boolValue]; }
+- (BOOL)			trackHasPreEmphasis:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"hasPreEmphasis"] boolValue]; }
+- (BOOL)			trackAllowsDigitalCopy:(unsigned)track	{ return [[[_tracks objectAtIndex:track] valueForKey:@"allowsDigitalCopy"] boolValue]; }
 
-- (unsigned) channelsForTrack:(ssize_t) track;
-{
-	return cdda_track_channels(_drive, track);
-}
+- (NSString *)		ISRC:(unsigned) track					{ return [[_tracks objectAtIndex:track] valueForKey:@"ISRC"]; }
 
-- (BOOL) trackContainsAudio:(ssize_t) track
-{
-	return cdda_track_audiop(_drive, track) ? YES : NO;
-}
+- (int)				discID									{ return cddb_disc_get_discid(_freeDBDisc); }
+- (unsigned)		length									{ return _length; }
 
-- (BOOL) trackHasPreEmphasis:(ssize_t) track
-{
-	return cdda_track_preemp(_drive, track) ? YES : NO;
-}
+// KVC
+- (unsigned int)	countOfTracks								{ return [_tracks count]; }
+- (NSDictionary *)	objectInTracksAtIndex:(unsigned int)index	{ return [_tracks objectAtIndex:index]; }
 
-- (BOOL) trackAllowsDigitalCopy:(ssize_t) track
-{
-	return cdda_track_copyp(_drive, track) ? YES : NO;
-}
-
-- (NSString *) MCN
-{
-	char *mcn = cdda_disc_mcn(_drive);
-	
-	if(NULL == mcn) {
-		return nil;
-	}
-	else {
-		NSString *result = [NSString stringWithCString:mcn encoding:NSASCIIStringEncoding];
-		free(mcn);
-		return [[result retain] autorelease];
-	}
-}
-
-- (NSString *) ISRC:(ssize_t) track
-{
-	char *isrc = cdda_track_isrc(_drive, track);
-
-	if(NULL == isrc) {
-		return nil;
-	}
-	else {
-		NSString *result = [NSString stringWithCString:isrc encoding:NSASCIIStringEncoding];
-		free(isrc);
-		return [[result retain] autorelease];
-	}
-}
-
-- (int) discID
-{
-	return cddb_disc_get_discid(_freeDBDisc);
-}
-
-- (unsigned) length
-{
-	return _length;
-}
-
-- (cdrom_drive *) getDrive
-{
-	return _drive;
-}
-
-- (cddb_disc_t *) getFreeDBDisc
-{
-	return _freeDBDisc;
-}
+- (cddb_disc_t *)	getFreeDBDisc								{ return _freeDBDisc; }
 
 @end

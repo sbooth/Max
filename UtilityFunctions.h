@@ -22,7 +22,7 @@
 
 #import "AudioMetadata.h"
 
-#include "metadata.h"
+#include <FLAC/metadata.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -22,8 +22,8 @@
 #import "OggVorbisEncoder.h"
 #import "IOException.h"
 
-#include "TagLib/vorbisfile.h"			// TagLib::Ogg::Vorbis::File
-#include "TagLib/tag.h"					// TagLib::Tag
+#include <TagLib/vorbisfile.h>			// TagLib::Ogg::Vorbis::File
+#include <TagLib/tag.h>					// TagLib::Tag
 
 @implementation OggVorbisEncoderTask
 
@@ -52,6 +52,7 @@
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	NSString									*isrc					= nil;
+	NSString									*mcn					= nil;
 	TagLib::Ogg::Vorbis::File					f						([_outputFilename fileSystemRepresentation], false);
 
 	
@@ -152,6 +153,12 @@
 		f.tag()->addField("ISRC", TagLib::String([isrc UTF8String], TagLib::String::UTF8));
 	}
 
+	// MCN
+	mcn = [metadata valueForKey:@"MCN"];
+	if(nil != mcn) {
+		f.tag()->addField("MCN", TagLib::String([mcn UTF8String], TagLib::String::UTF8));
+	}
+	
 	// Encoder settings
 	f.tag()->addField("ENCODING", TagLib::String([[self settings] UTF8String], TagLib::String::UTF8));
 	

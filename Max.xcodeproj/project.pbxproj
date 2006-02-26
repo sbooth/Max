@@ -42,6 +42,7 @@
 		8C4015750948E433003413BE /* CoreAudioEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4015730948E433003413BE /* CoreAudioEncoderTask.m */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
 		8C4961F309472D95006E1765 /* OggFLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4961F109472D95006E1765 /* OggFLACEncoder.m */; };
+		8C4BF180099C54AA009C7C07 /* AlbumArtToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C4BF17F099C54AA009C7C07 /* AlbumArtToolbarImage.png */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4538093E6D7D00A88927 /* GeneralPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D4536093E6D7D00A88927 /* GeneralPreferencesController.m */; };
 		8C4D461D093E75E100A88927 /* LAMEPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D461B093E75E100A88927 /* LAMEPreferencesController.m */; };
@@ -74,11 +75,14 @@
 		8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0DA1092E641200418C45 /* MacPAD.url */; };
 		8C8B0DAD092E64D900418C45 /* UpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0DAB092E64D900418C45 /* UpdateChecker.m */; };
 		8C8CAF6E096C4A9700A1A4E0 /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */; };
+		8C924B8E09A988FC00359179 /* AmazonAlbumArt.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C924B8C09A988FC00359179 /* AmazonAlbumArt.m */; };
+		8C924B9F09AAB30400359179 /* AmazonAlbumArt.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C924B9E09AAB30400359179 /* AmazonAlbumArt.nib */; };
 		8C925856097E1B3C008BE59E /* ClearLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */; };
 		8C925861097E1C1C008BE59E /* SaveLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */; };
 		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9A24B40925ADB200FB244D /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
+		8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD973F0973663300A5F2C1 /* SpeexConverter.m */; };
 		8C9EB766096DAA760037CE20 /* SpeexEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */; };
 		8CA522790938E44100250BE8 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA522770938E44100250BE8 /* LogController.m */; };
 		8CA5C39C09526FA9006FB5B7 /* AudioMetadata.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CA5C39B09526FA9006FB5B7 /* AudioMetadata.mm */; };
@@ -139,7 +143,6 @@
 		8CDD96D50973624800A5F2C1 /* SpeexPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD96D30973624800A5F2C1 /* SpeexPreferencesController.m */; };
 		8CDD97120973641400A5F2C1 /* SpeexDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD97110973641400A5F2C1 /* SpeexDefaults.plist */; };
 		8CDD9730097365F600A5F2C1 /* SpeexConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD972E097365F600A5F2C1 /* SpeexConverterTask.m */; };
-		8CDD97410973663300A5F2C1 /* SpeexConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD973F0973663300A5F2C1 /* SpeexConverter.m */; };
 		8CE098FE095107DD0020C8B1 /* ConverterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE098FC095107DD0020C8B1 /* ConverterController.m */; };
 		8CE099180951089A0020C8B1 /* ConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE099160951089A0020C8B1 /* ConverterTask.m */; };
 		8CE09954095109BF0020C8B1 /* Converter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE09952095109BF0020C8B1 /* Converter.m */; };
@@ -289,6 +292,7 @@
 		8C4961F009472D95006E1765 /* OggFLACEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoder.h; sourceTree = "<group>"; };
 		8C4961F109472D95006E1765 /* OggFLACEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACEncoder.m; sourceTree = "<group>"; };
 		8C49624D09473168006E1765 /* OggFLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoderTask.h; sourceTree = "<group>"; };
+		8C4BF17F099C54AA009C7C07 /* AlbumArtToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AlbumArtToolbarImage.png; sourceTree = "<group>"; };
 		8C4D3E2E093DE4C300A88927 /* OggVorbisEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggVorbisEncoder.h; sourceTree = "<group>"; };
 		8C4D3E2F093DE4C300A88927 /* OggVorbisEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggVorbisEncoder.m; sourceTree = "<group>"; };
 		8C4D452F093E6CB200A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
@@ -390,6 +394,9 @@
 		8C91B7D0099AF7A00040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
 		8C91B7D8099AF9410040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
 		8C91B7E0099AF9A40040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/SpeexPreferences.nib; sourceTree = "<group>"; };
+		8C924B8B09A988FC00359179 /* AmazonAlbumArt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArt.h; sourceTree = "<group>"; };
+		8C924B8C09A988FC00359179 /* AmazonAlbumArt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArt.m; sourceTree = "<group>"; };
+		8C924B9E09AAB30400359179 /* AmazonAlbumArt.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = AmazonAlbumArt.nib; sourceTree = "<group>"; };
 		8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClearLogToolbarImage.png; sourceTree = "<group>"; };
 		8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SaveLogToolbarImage.png; sourceTree = "<group>"; };
 		8C9A24A30925ACD100FB244D /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
@@ -693,6 +700,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C924B9E09AAB30400359179 /* AmazonAlbumArt.nib */,
+				8C4BF17F099C54AA009C7C07 /* AlbumArtToolbarImage.png */,
 				8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */,
 				8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */,
 				8C137F150981BCB800EBFC77 /* SelectNextTrackToolbarImage.png */,
@@ -903,6 +912,8 @@
 				8CE165B60933FAD400A99A68 /* CompactDisc.h */,
 				8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */,
 				8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */,
+				8C924B8B09A988FC00359179 /* AmazonAlbumArt.h */,
+				8C924B8C09A988FC00359179 /* AmazonAlbumArt.m */,
 			);
 			name = "Compact Disc";
 			sourceTree = "<group>";
@@ -1176,6 +1187,8 @@
 				8C137F170981BCB800EBFC77 /* SelectNextTrackToolbarImage.png in Resources */,
 				8C137F730981CF4B00EBFC77 /* ConverterTaskDefaults.plist in Resources */,
 				8CB1503D0989D775001AC333 /* EncoderTaskDefaults.plist in Resources */,
+				8C4BF180099C54AA009C7C07 /* AlbumArtToolbarImage.png in Resources */,
+				8C924B9F09AAB30400359179 /* AmazonAlbumArt.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1270,10 +1283,11 @@
 				8CA64B4209732D8600505EB7 /* MultiplicationValueTransformer.m in Sources */,
 				8CDD96D50973624800A5F2C1 /* SpeexPreferencesController.m in Sources */,
 				8CDD9730097365F600A5F2C1 /* SpeexConverterTask.m in Sources */,
-				8CDD97410973663300A5F2C1 /* SpeexConverter.m in Sources */,
 				8C881036097AE43800ED2843 /* SpeexException.m in Sources */,
 				8C6819B40982CA5100A35119 /* OggFLACEncoderTask.mm in Sources */,
 				8C039AD4098AA762007EFA10 /* FLACEncoderTask.m in Sources */,
+				8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */,
+				8C924B8E09A988FC00359179 /* AmazonAlbumArt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

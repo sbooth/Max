@@ -24,7 +24,7 @@
 #import "IOException.h"
 #import "StopException.h"
 
-#include "cdparanoia/cdda_interface.h"
+#include <cdparanoia/cdda_interface.h>
 
 @interface RipperTask (Private)
 - (void) generateCueSheet;
@@ -48,7 +48,7 @@
 		_connection		= nil;
 		
 		_tracks			= [tracks retain];
-		_drive			= [[[[_tracks objectAtIndex:0] getCompactDiscDocument] getDisc] getDrive];
+		_deviceName		= [[[[_tracks objectAtIndex:0] getCompactDiscDocument] getDisc] deviceName];
 		_sectors		= [NSMutableArray arrayWithCapacity:[tracks count]];
 		enumerator		= [_tracks objectEnumerator];
 		
@@ -82,7 +82,7 @@
 }
 
 - (NSArray *)			sectors				{ return _sectors; }
-- (NSString *)			deviceName			{ return [NSString stringWithUTF8String:_drive->device_name]; }
+- (NSString *)			deviceName			{ return _deviceName; }
 - (NSArray *)			tracks				{ return _tracks; }
 
 - (void) run

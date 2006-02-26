@@ -45,7 +45,9 @@
 	NSString						*_composer;
 	NSString						*_comment;
 	NSNumber						*_partOfSet;
+
 	NSImage							*_albumArt;
+	NSBitmapImageRep				*_albumArtBitmap;
 
 	// Other disc info
 	NSNumber						*_discNumber;

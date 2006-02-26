@@ -357,7 +357,7 @@ enum {
 {
     // Ok, lets process this data
     NSData *plist = [NSData dataWithBytes:[data UTF8String] length:[data length]];
-    NSString *errorStr;;
+    NSString *errorStr;
     id obj = [NSPropertyListSerialization propertyListFromData:plist
                                               mutabilityOption:NSPropertyListImmutable format:NULL
                                               errorDescription:&errorStr];

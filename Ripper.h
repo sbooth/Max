@@ -23,8 +23,8 @@
 #import "RipperMethods.h"
 #import "Track.h"
 
-#include "cdparanoia/cdda_interface.h"
-#include "cdparanoia/cdda_paranoia.h"
+#include <cdparanoia/cdda_interface.h>
+#include <cdparanoia/cdda_paranoia.h>
 
 @interface Ripper : NSObject <RipperMethods>
 {

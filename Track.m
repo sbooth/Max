@@ -204,7 +204,7 @@
 
 	[result setValue:_title forKey:@"title"];
 	[result setValue:_artist forKey:@"artist"];
-	[result setValue:_year forKey:@"year"];;
+	[result setValue:_year forKey:@"year"];
 	[result setValue:_genre forKey:@"genre"];
 
 	[result setValue:_number forKey:@"number"];
@@ -288,7 +288,7 @@
 	[result setValue:[_disc valueForKey:@"discsInSet"] forKey:@"discsInSet"];
 	[result setValue:[_disc valueForKey:@"multiArtist"] forKey:@"multipleArtists"];
 
-	[result setValue:[_disc valueForKey:@"albumArt"] forKey:@"albumArt"];
+	[result setValue:[_disc valueForKey:@"albumArtBitmap"] forKey:@"albumArt"];
 	
 	[result setValue:[_disc valueForKey:@"MCN"] forKey:@"MCN"];
 	

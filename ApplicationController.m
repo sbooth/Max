@@ -188,6 +188,18 @@ static ApplicationController *sharedController = nil;
 	return NSTerminateNow;
 }
 
+/*- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
+{
+	NSError *error;
+	
+	if(nil == [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES error:&error]) {
+		NSLog(@"foo is nil");
+		[self encodeFiles:[NSArray arrayWithObject:filename]];
+	}		
+	
+	return YES;
+}*/
+
 - (IBAction) encodeFile:(id)sender
 {
 	NSOpenPanel			*panel			= [NSOpenPanel openPanel];

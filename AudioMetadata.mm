@@ -22,15 +22,15 @@
 
 #import "UtilityFunctions.h"
 
-#include "TagLib/fileref.h"					// TagLib::FileRef
-#include "TagLib/mpegfile.h"				// TagLib::MPEG::File
-#include "TagLib/vorbisfile.h"				// TagLib::Ogg::Vorbis::File
-#include "TagLib/id3v2tag.h"				// TagLib::ID3v2::Tag
-#include "TagLib/id3v2frame.h"				// TagLib::ID3v2::Frame
-#include "TagLib/attachedpictureframe.h"	// TagLib::ID3V2::AttachedPictureFrame
-#include "TagLib/xiphcomment.h"				// TagLib::Ogg::XiphComment
-#include "TagLib/tbytevector.h"				// TagLib::ByteVector
-#include "mp4v2/mp4.h"						// MP4FileHandle
+#include <TagLib/fileref.h>					// TagLib::FileRef
+#include <TagLib/mpegfile.h>				// TagLib::MPEG::File
+#include <TagLib/vorbisfile.h>				// TagLib::Ogg::Vorbis::File
+#include <TagLib/id3v2tag.h>				// TagLib::ID3v2::Tag
+#include <TagLib/id3v2frame.h>				// TagLib::ID3v2::Frame
+#include <TagLib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
+#include <TagLib/xiphcomment.h>				// TagLib::Ogg::XiphComment
+#include <TagLib/tbytevector.h>				// TagLib::ByteVector
+#include <mp4v2/mp4.h>						// MP4FileHandle
 
 @implementation AudioMetadata
 
@@ -294,6 +294,11 @@
 					if(fieldList.contains("ISRC")) {
 						value = [NSString stringWithUTF8String:fieldList["ISRC"].toString().toCString(true)];
 						[result setValue:value forKey:@"ISRC"];
+					}					
+
+					if(fieldList.contains("MCN")) {
+						value = [NSString stringWithUTF8String:fieldList["MCN"].toString().toCString(true)];
+						[result setValue:value forKey:@"MCN"];
 					}					
 				}
 			}

@@ -22,7 +22,7 @@
 
 #import "CompactDiscDocument.h"
 
-#include "cddb/cddb.h"
+#include <cddb/cddb.h>
 
 @interface FreeDB : NSObject 
 {
