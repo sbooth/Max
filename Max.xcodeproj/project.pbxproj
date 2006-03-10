@@ -75,8 +75,6 @@
 		8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0DA1092E641200418C45 /* MacPAD.url */; };
 		8C8B0DAD092E64D900418C45 /* UpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0DAB092E64D900418C45 /* UpdateChecker.m */; };
 		8C8CAF6E096C4A9700A1A4E0 /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */; };
-		8C924B8E09A988FC00359179 /* AmazonAlbumArt.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C924B8C09A988FC00359179 /* AmazonAlbumArt.m */; };
-		8C924B9F09AAB30400359179 /* AmazonAlbumArt.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C924B9E09AAB30400359179 /* AmazonAlbumArt.nib */; };
 		8C925856097E1B3C008BE59E /* ClearLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */; };
 		8C925861097E1C1C008BE59E /* SaveLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */; };
 		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
@@ -84,6 +82,9 @@
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
 		8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD973F0973663300A5F2C1 /* SpeexConverter.m */; };
 		8C9EB766096DAA760037CE20 /* SpeexEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */; };
+		8CA3FB9909BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3FB9709BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h */; };
+		8CA3FB9A09BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */; };
+		8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */; };
 		8CA522790938E44100250BE8 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA522770938E44100250BE8 /* LogController.m */; };
 		8CA5C39C09526FA9006FB5B7 /* AudioMetadata.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CA5C39B09526FA9006FB5B7 /* AudioMetadata.mm */; };
 		8CA5C444095277F7006FB5B7 /* PCMGeneratingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA5C442095277F7006FB5B7 /* PCMGeneratingTask.m */; };
@@ -241,6 +242,7 @@
 				8CD017C60992630400A31DE0 /* Ogg.framework in Copy Frameworks */,
 				8CD0174609925FB700A31DE0 /* LAME.framework in Copy Frameworks */,
 				8C9A24B40925ADB200FB244D /* Growl.framework in Copy Frameworks */,
+				8CA3FB9909BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,9 +396,6 @@
 		8C91B7D0099AF7A00040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
 		8C91B7D8099AF9410040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
 		8C91B7E0099AF9A40040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/SpeexPreferences.nib; sourceTree = "<group>"; };
-		8C924B8B09A988FC00359179 /* AmazonAlbumArt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArt.h; sourceTree = "<group>"; };
-		8C924B8C09A988FC00359179 /* AmazonAlbumArt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArt.m; sourceTree = "<group>"; };
-		8C924B9E09AAB30400359179 /* AmazonAlbumArt.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = AmazonAlbumArt.nib; sourceTree = "<group>"; };
 		8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClearLogToolbarImage.png; sourceTree = "<group>"; };
 		8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SaveLogToolbarImage.png; sourceTree = "<group>"; };
 		8C9A24A30925ACD100FB244D /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
@@ -404,6 +403,9 @@
 		8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoderTask.m; sourceTree = "<group>"; };
 		8C9EB779096DAAEA0037CE20 /* SpeexEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeexEncoder.h; sourceTree = "<group>"; };
 		8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoder.m; sourceTree = "<group>"; };
+		8CA3FB9709BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
+		8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
+		8CA3FB9B09BF5B1A00BB1BD4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
 		8CA522760938E44100250BE8 /* LogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogController.h; sourceTree = "<group>"; };
 		8CA522770938E44100250BE8 /* LogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogController.m; sourceTree = "<group>"; };
 		8CA5229E0938E5DD00250BE8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Log.nib; sourceTree = "<group>"; };
@@ -575,7 +577,7 @@
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -700,7 +702,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8C924B9E09AAB30400359179 /* AmazonAlbumArt.nib */,
+				8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */,
 				8C4BF17F099C54AA009C7C07 /* AlbumArtToolbarImage.png */,
 				8CB1503C0989D775001AC333 /* EncoderTaskDefaults.plist */,
 				8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */,
@@ -902,6 +904,8 @@
 		8C7C894308EC3FFE00F6FCB1 /* Compact Disc */ = {
 			isa = PBXGroup;
 			children = (
+				8CA3FB9709BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h */,
+				8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */,
 				8CCED19C0935AA5E00413C0A /* CompactDisc.m */,
 				8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */,
 				8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */,
@@ -912,8 +916,6 @@
 				8CE165B60933FAD400A99A68 /* CompactDisc.h */,
 				8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */,
 				8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */,
-				8C924B8B09A988FC00359179 /* AmazonAlbumArt.h */,
-				8C924B8C09A988FC00359179 /* AmazonAlbumArt.m */,
 			);
 			name = "Compact Disc";
 			sourceTree = "<group>";
@@ -1188,7 +1190,7 @@
 				8C137F730981CF4B00EBFC77 /* ConverterTaskDefaults.plist in Resources */,
 				8CB1503D0989D775001AC333 /* EncoderTaskDefaults.plist in Resources */,
 				8C4BF180099C54AA009C7C07 /* AlbumArtToolbarImage.png in Resources */,
-				8C924B9F09AAB30400359179 /* AmazonAlbumArt.nib in Resources */,
+				8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1287,7 +1289,7 @@
 				8C6819B40982CA5100A35119 /* OggFLACEncoderTask.mm in Sources */,
 				8C039AD4098AA762007EFA10 /* FLACEncoderTask.m in Sources */,
 				8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */,
-				8C924B8E09A988FC00359179 /* AmazonAlbumArt.m in Sources */,
+				8CA3FB9A09BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1569,6 +1571,14 @@
 				8C8B0CC2092E5DAA00418C45 /* English */,
 			);
 			name = "Max Help";
+			sourceTree = "<group>";
+		};
+		8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8CA3FB9B09BF5B1A00BB1BD4 /* English */,
+			);
+			name = AmazonAlbumArtSheet.nib;
 			sourceTree = "<group>";
 		};
 		8CD7F5E0098B0A30002C4D9F /* Credits.rtf */ = {
