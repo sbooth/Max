@@ -189,7 +189,7 @@ enum {
 			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
 		}
 		
-		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		
 		vorbis_comment_init(&vc);
 		vorbis_comment_add_tag(&vc, "ENCODER", (char *)[[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String]);

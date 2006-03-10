@@ -204,7 +204,7 @@
 		}
 		
 		// Encoded by
-		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
 		addVorbisComment(block, @"ENCODER", versionString);
 

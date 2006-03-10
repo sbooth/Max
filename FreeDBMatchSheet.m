@@ -50,12 +50,12 @@
     [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_doc windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }
 
-- (IBAction) cancel: (id)sender
+- (IBAction) cancel:(id)sender
 {
     [[NSApplication sharedApplication] endSheet:_sheet];
 }
 
-- (IBAction) useSelected: (id)sender
+- (IBAction) useSelected:(id)sender
 {	
 	[_doc updateDiscFromFreeDB:[_matches objectAtIndex:[_table selectedRow]]];	
     [[NSApplication sharedApplication] endSheet:_sheet];

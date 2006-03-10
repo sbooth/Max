@@ -92,7 +92,7 @@
 		}
 		
 		// Client information
-		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		cddb_set_client(_freeDB, "Max", [bundleVersion UTF8String]);		
 		
 		cddb_cache_disable(_freeDB);

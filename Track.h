@@ -19,64 +19,100 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
 #import "AudioMetadata.h"
 
 @class CompactDiscDocument;
 
 @interface Track : NSObject
 {
-	NSNumber				*_ripInProgress;
+	CompactDiscDocument		*_document;
+
+	BOOL					_ripInProgress;
 	unsigned				_activeEncoders;
-	CompactDiscDocument		*_disc;
 
 	// View properties
-	NSNumber				*_selected;
-	NSColor					*_color;
+	BOOL					_selected;
+//	NSColor					*_color;
 	
 	// Metadata information
 	NSString				*_title;
 	NSString				*_artist;
-	NSNumber				*_year;
+	unsigned				_year;
 	NSString				*_genre;
 	NSString				*_composer;
 	
 	// Physical track properties
-	NSNumber				*_number;
-	NSNumber				*_firstSector;
-	NSNumber				*_lastSector;
-	NSNumber				*_channels;
-	NSNumber				*_preEmphasis;
-	NSNumber				*_copyPermitted;
+	unsigned 				_number;
+	unsigned long			_firstSector;
+	unsigned long			_lastSector;
+	unsigned 				_channels;
+	BOOL					_preEmphasis;
+	BOOL					_copyPermitted;
 	NSString				*_ISRC;
 }
 
-- (BOOL)					hasPreEmphasis;
-- (NSString *)				getPreEmphasis;
-- (NSString *)				getCopyPermitted;
+//- (NSString *)				getPreEmphasis;
 
-- (NSNumber *)				getSize;
-- (NSColor *)				getColor;
+- (NSString *)				length;
 
-- (unsigned)				getMinute;
-- (unsigned)				getSecond;
-- (unsigned)				getFrame;
+- (CompactDiscDocument *)	document;
 
-- (NSString *)				getLength;
+- (BOOL)			ripInProgress;
+- (BOOL)			encodeInProgress;
 
-- (void)					clearFreeDBData;
+- (BOOL)			selected;
+- (NSColor *)		color;
 
-- (CompactDiscDocument *)	getCompactDiscDocument;
+- (NSString *)		title;
+- (NSString *)		artist;
+- (unsigned)		year;
+- (NSString *)		genre;
+- (NSString *)		composer;
 
-- (void)					encodeStarted;
-- (void)					encodeCompleted;
-- (NSNumber *)				encodeInProgress;
+- (unsigned long)	size;
 
+- (unsigned)		minute;
+- (unsigned)		second;
+- (unsigned)		frame;
 
+- (unsigned)		number;
+- (unsigned long)	firstSector;
+- (unsigned long)	lastSector;
+- (unsigned)		channels;
+- (BOOL)			preEmphasis;
+- (BOOL)			copyPermitted;
+- (NSString *)		ISRC;
+
+// Mutators
+- (void) setDocument:(CompactDiscDocument *)document;
+
+- (void) setRipInProgress:(BOOL)ripInProgress;
+- (void) encodeStarted;
+- (void) encodeCompleted;
+
+- (void) setSelected:(BOOL)selected;
+
+- (void) setTitle:(NSString *)title;
+- (void) setArtist:(NSString *)artist;
+- (void) setYear:(unsigned)year;
+- (void) setGenre:(NSString *)genre;
+- (void) setComposer:(NSString *)composer;
+
+- (void) setNumber:(unsigned)number;
+- (void) setFirstSector:(unsigned long)firstSector;
+- (void) setLastSector:(unsigned long)lastSector;
+- (void) setChannels:(unsigned)channels;
+- (void) setPreEmphasis:(BOOL)preEmphasis;
+- (void) setCopyPermitted:(BOOL)copyPermitted;
+- (void) setISRC:(NSString *)ISRC;
+
+// Metadata access
 - (AudioMetadata *)			metadata;
 
 // Save/Restore
 - (NSDictionary *)	getDictionary;
 - (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
+
+- (void)			clearFreeDBData;
 
 @end

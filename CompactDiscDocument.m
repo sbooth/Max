@@ -37,7 +37,7 @@
 #import "EmptySelectionException.h"
 #import "MissingResourceException.h"
 
-#import "AmazonAlbumArt.h"
+#import "AmazonAlbumArtSheet.h"
 #import "UtilityFunctions.h"
 
 #define kEncodeMenuItemTag					1
@@ -76,12 +76,36 @@
 	}
 }
 
++ (BOOL) accessInstanceVariablesDirectly	{ return NO; }
+
 - (id) init
 {
 	if((self = [super init])) {
-		_tracks			= [[NSMutableArray arrayWithCapacity:20] retain];
-		_discInDrive	= [NSNumber numberWithBool:NO];
-		_disc			= nil;
+
+		_disc				= nil;
+		_discInDrive		= NO;
+		_discID				= 0;
+		_freeDBQueryInProgress = NO;
+		_freeDBQuerySuccessful = NO;
+		
+		_title				= nil;
+		_artist				= nil;
+		_year				= 0;
+		_genre				= nil;
+		_composer			= nil;
+		_comment			= nil;
+		_partOfSet			= NO;
+		
+		_albumArt			= nil;
+		_albumArtBitmap		= nil;
+		
+		_discNumber			= 0;
+		_discsInSet			= 0;
+		_multiArtist		= NO;
+		
+		_MCN				= nil;
+		
+		_tracks				= [[NSMutableArray arrayWithCapacity:20] retain];
 		
 		return self;
 	}
@@ -90,12 +114,20 @@
 
 - (void) dealloc
 {	
-	[_tracks removeAllObjects];
-	[_tracks release];
+	[_disc release];
+
+	[_title release];
+	[_artist release];
+	[_genre release];
+	[_composer release];
+	[_comment release];
+
+	[_albumArt release];
+	[_albumArtBitmap release];
+
+	[_MCN release];
 	
-	if(nil != _disc) {
-		[_disc release];
-	}
+	[_tracks release];
 	
 	[super dealloc];
 }
@@ -146,10 +178,9 @@
     [toolbar setDelegate:toolbar];
 	
     [[controller window] setToolbar:toolbar];
-	
 }
 
-- (NSData *) dataOfType:(NSString *) typeName error:(NSError **) outError
+- (NSData *) dataOfType:(NSString *)typeName error:(NSError **)outError
 {
 	if([typeName isEqualToString:@"Max CD Information"]) {
 		NSData					*data;
@@ -166,7 +197,7 @@
 	return nil;
 }
 
-- (BOOL) readFromData:(NSData *) data ofType:(NSString *) typeName error:(NSError **) outError
+- (BOOL) readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {    
 	if([typeName isEqualToString:@"Max CD Information"]) {
 		NSDictionary			*dictionary;
@@ -196,7 +227,12 @@
 
 - (void) controlTextDidEndEditing:(NSNotification *)notification
 {
-	[self updateChangeCount:NSChangeDone];
+//	[self updateChangeCount:NSChangeDone];
+}
+
+- (NSUndoManager *) windowWillReturnUndoManager:(NSWindow *)sender
+{
+	return [self undoManager];
 }
 
 #pragma mark Exception Display
@@ -221,17 +257,12 @@
 
 - (int) discID
 {
-	if([self discInDrive]) {
-		return [_disc discID];
-	}
-	else {
-		return [_discID intValue];
-	}
+	return ([self discInDrive] ? [_disc discID] : [_discID intValue]);
 }
 
 - (BOOL) discInDrive
 {
-	return [_discInDrive boolValue];
+	return _discInDrive;
 }
 
 - (void) discEjected
@@ -239,7 +270,7 @@
 	[self setDisc:nil];
 }
 
-- (CompactDisc *) getDisc
+- (CompactDisc *) disc
 {
 	return _disc;
 }
@@ -248,10 +279,7 @@
 {
 	unsigned			i;
 	
-	if(nil != _disc) {
-		[_disc release];
-		_disc = nil;
-	}
+	[_disc release];
 
 	if(nil == disc) {
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"discInDrive"];
@@ -548,62 +576,9 @@
 }
 
 - (IBAction) fetchAlbumArt:(id) sender
-{
-	// http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=Kid+Rock&Title=Cocky
-
-	NSError		*error;
-	NSString	*urlString;
-	NSURL		*url;
-
-	urlString	= [NSString stringWithFormat:@"http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=%@&Title=%@", _artist, _title];
-	url			= [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-	
-	NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:(NSXMLNodePreserveWhitespace | NSXMLNodePreserveCDATA) error:&error];
-	if(nil == xmlDoc) {
-		xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:NSXMLDocumentTidyXML error:&error];
-	}
-	if(nil == xmlDoc) {
-		if(error) {
-//			[self handleError:error];
-		}
-		return;
-	}
-
-	if(error) {
-//		[self handleError:error];
-	}
-	
-//	NSLog(@"xmlDoc = %@", xmlDoc);
-	
-	NSXMLNode				*node, *childNode, *grandChildNode;
-	NSEnumerator			*childrenEnumerator, *grandChildrenEnumerator;
-	NSMutableDictionary		*dictionary;
-	NSMutableArray			*images;
-	
-	images	= [NSMutableArray arrayWithCapacity:10];
-	node	= [xmlDoc rootElement];
-	while((node = [node nextNode])) {
-		if([[node name] isEqualToString:@"ImageSet"]) {
-			// Iterate through children
-			childrenEnumerator = [[node children] objectEnumerator];
-			while((childNode = [childrenEnumerator nextObject])) {
-				dictionary					= [NSMutableDictionary dictionaryWithCapacity:3];
-				grandChildrenEnumerator		= [[childNode children] objectEnumerator];
-				
-				while((grandChildNode = [grandChildrenEnumerator nextObject])) {
-					[dictionary setValue:[grandChildNode stringValue] forKey:[grandChildNode name]];
-				}
-				
-				[images addObject:dictionary];
-//				NSLog(@"dictionary = %@", dictionary);
-			}
-		}
-	}
-	
-	AmazonAlbumArt *art = [[[AmazonAlbumArt alloc] initWithCompactDiscDocument:self] autorelease];
-	[art setValue:images forKey:@"images"];
-	[art showFreeDBMatches];
-	//NSLog(@"images = %@", images);
+{	
+	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithCompactDiscDocument:self] autorelease];
+	[art showAlbumArtMatches];
 }
 
 #pragma mark FreeDB Functionality
@@ -790,22 +765,155 @@
 		[[_tracks objectAtIndex:i] setPropertiesFromDictionary:[tracks objectAtIndex:i]];
 	}
 	
-	[self setValue:[properties valueForKey:@"title"] forKey:@"title"];
-	[self setValue:[properties valueForKey:@"artist"] forKey:@"artist"];
-	[self setValue:[properties valueForKey:@"year"] forKey:@"year"];
-	[self setValue:[properties valueForKey:@"genre"] forKey:@"genre"];
-	[self setValue:[properties valueForKey:@"composer"] forKey:@"composer"];
-	[self setValue:[properties valueForKey:@"comment"] forKey:@"comment"];
-	[self setValue:[properties valueForKey:@"discNumber"] forKey:@"discNumber"];
-	[self setValue:[properties valueForKey:@"discsInSet"] forKey:@"discsInSet"];
-	[self setValue:[properties valueForKey:@"multiArtist"] forKey:@"multiArtist"];	
-	[self setValue:[properties valueForKey:@"MCN"] forKey:@"MCN"];
-	[self setValue:[properties valueForKey:@"discID"] forKey:@"discID"];
+	[_title release];
+	[_artist release];
+	[_year release];
+	[_genre release];
+	[_composer release];
+	[_comment release];
+	[_discNumber release];
+	[_discsInSet release];
+	[_multiArtist release];
+	[_MCN release];
+
+	_title			= [[properties valueForKey:@"title"] retain];
+	_artist			= [[properties valueForKey:@"artist"] retain];
+	_year			= [[properties valueForKey:@"year"] retain];
+	_genre			= [[properties valueForKey:@"genre"] retain];
+	_composer		= [[properties valueForKey:@"composer"] retain];
+	_comment		= [[properties valueForKey:@"comment"] retain];
+	_discNumber		= [[properties valueForKey:@"discNumber"] retain];
+	_discsInSet		= [[properties valueForKey:@"discsInSet"] retain];
+	_multiArtist	= [[properties valueForKey:@"multiArtist"] retain];	
+	_MCN			= [[properties valueForKey:@"MCN"] retain];
+	
+	[self setValue:[properties valueForKey:@"discID"] forKey:@"discID"];	
 	
 	// Convert PNG data to an NSImage
 	image = [[NSImage alloc] initWithData:[properties valueForKey:@"albumArt"]];
 	[self setValue:(nil != image ? [image autorelease] : nil) forKey:@"albumArt"];
 	[self updateAlbumArtImageRep];
+}
+
+#pragma mark Accessors
+
+- (NSString *)	title								{ return _title; }
+- (NSString *)	artist								{ return _artist; }
+- (unsigned)	year								{ return _year; }
+- (NSString *)	genre								{ return _genre; }
+- (NSString *)	composer							{ return _composer; }
+- (NSString *)	comment								{ return _comment; }
+- (BOOL)		partOfSet							{ return _partOfSet; }
+- (unsigned)	discNumber							{ return _discNumber; }
+- (unsigned)	discsInSet							{ return _discsInSet; }
+- (BOOL)		multiArtist							{ return _multiArtist; }
+- (NSString *)	MCN									{ return _MCN; }
+
+#pragma mark Mutators
+
+- (void) setTitle:(NSString *)title
+{
+	if(NO == [_title isEqualToString:title]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setTitle:) object:_title];
+		[[self undoManager] setActionName:@"Album Title"];
+		[_title release];
+		_title = [title retain];
+	}
+}
+
+- (void) setArtist:(NSString *)artist
+{
+	if(NO == [_artist isEqualToString:artist]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setArtist:) object:_artist];
+		[[self undoManager] setActionName:@"Album Artist"];
+		[_artist release];
+		_artist = [artist retain];
+	}
+}
+
+- (void) setYear:(unsigned)year
+{
+	if(_year != year) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setYear:) object:_year];
+		[[self undoManager] setActionName:@"Album Year"];
+		_year = year;
+	}
+}
+
+- (void) setGenre:(NSString *)genre
+{
+	if(NO == [_genre isEqualToString:genre]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setGenre:) object:_genre];
+		[[self undoManager] setActionName:@"Album Genre"];
+		[_genre release];
+		_genre = [genre retain];
+	}
+}
+
+- (void) setComposer:(NSString *)composer
+{
+	if(NO == [_composer isEqualToString:composer]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComposer:) object:_composer];
+		[[self undoManager] setActionName:@"Album Composer"];
+		[_composer release];
+		_composer = [composer retain];
+	}
+}
+
+- (void) setComment:(NSString *)comment
+{
+	if(NO == [_comment isEqualToString:comment]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComment:) object:_comment];
+		[[self undoManager] setActionName:@"Album Comment"];
+		[_comment release];
+		_comment = [comment retain];
+	}
+}
+
+- (void) setPartOfSet:(BOOL)partOfSet
+{
+	if(_partOfSet != partOfSet) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setPartOfSet:) object:_partOfSet];
+		[[self undoManager] setActionName:@"Album partOfSet"];
+		_partOfSet = partOfSet retain;
+	}
+}
+
+- (void) setDiscNumber:(unsigned)discNumber
+{
+	if(_discNumber != discNumber) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscNumber:) object:_discNumber];
+		[[self undoManager] setActionName:@"Total Discs"];
+		_discNumber = discNumber;
+	}
+}
+
+- (void) setDiscsInSet:(unsigned)discsInSet
+{
+	if(_discsInSet != discsInSet) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscsInSet:) object:_discsInSet];
+		[[self undoManager] setActionName:@"Total Discs"];
+		_discsInSet = discsInSet;
+	}
+}
+
+- (void) setMultiArtist:(BOOL)multiArtist
+{
+	if(_multiArtist != multiArtist) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setMultiArtist:) object:_multiArtist];
+		[[self undoManager] setActionName:@"Compilation"];
+		_multiArtist = multiArtist;
+	}
+}
+
+- (void) setMCN:(NSString *)MCN
+{
+	if(NO == [_MCN isEqualToString:MCN]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setMCN:) object:_MCN];
+		[[self undoManager] setActionName:@"Album MCN"];
+		[_MCN release];
+		_MCN = [MCN retain];
+	}
 }
 
 @end

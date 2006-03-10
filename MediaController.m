@@ -31,8 +31,8 @@
 #include <DiskArbitration/DADisk.h>
 
 @interface MediaController (Private)
-- (void) volumeMounted: (NSString *)bsdName;
-- (void) volumeUnmounted: (NSString *)bsdName;
+- (void) volumeMounted:(NSString *)bsdName;
+- (void) volumeUnmounted:(NSString *)bsdName;
 @end
 
 #pragma mark DiskArbitration callback functions
@@ -154,7 +154,7 @@ static MediaController *sharedController = nil;
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 
-- (void) volumeMounted: (NSString *) bsdName
+- (void) volumeMounted:(NSString *) bsdName
 {
 	CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
 	NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
@@ -213,7 +213,7 @@ static MediaController *sharedController = nil;
 	}
 }
 
-- (void) volumeUnmounted: (NSString *) bsdName
+- (void) volumeUnmounted:(NSString *) bsdName
 {
 	NSArray					*documents				= [[NSDocumentController sharedDocumentController] documents];
 	NSEnumerator			*documentEnumerator		= [documents objectEnumerator];

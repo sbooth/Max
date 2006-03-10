@@ -190,7 +190,7 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
 }
 
-- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar 
+- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
 {
     return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,

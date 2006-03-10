@@ -212,7 +212,7 @@
 			}
 
 			// Encoded by
-			bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+			bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 			versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
 			MP4SetMetadataTool(mp4FileHandle, [versionString UTF8String]);
 			
@@ -243,7 +243,7 @@
 			//		NSLog(@"error is %@", UTCreateStringForOSType(err));
 			if(noErr == err) {
 				
-				bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+				bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 				[info setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
 				
 				// Album title

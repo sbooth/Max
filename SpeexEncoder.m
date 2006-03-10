@@ -377,7 +377,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		ogg_stream_packetin(&os, &op);
 		free(op.packet);
 		
-		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		
 		comment_init(&comments, &comments_length, [[NSString stringWithFormat:@"Encoded with Max %@", bundleVersion] UTF8String]);
 		

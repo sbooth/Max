@@ -75,13 +75,11 @@ static UpdateChecker *sharedController = nil;
 
 - (void) checkForUpdate:(BOOL)showWindow
 {
-	NSString *bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-	
 	if(showWindow) {
 		[self showWindow:self];	
 	}
 	
-	[_socket performCheck:[NSURL URLWithString:@"http://sbooth.org/Max/Max.plist"] withVersion:bundleVersion];
+	[_socket performCheck];
 }
 
 - (void) macPADErrorOccurred:(NSNotification *) aNotification

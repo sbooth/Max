@@ -292,7 +292,7 @@
 		}
 		
 		// REM
-		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		temp			= [NSString stringWithFormat:@"REM File create by Max %@\n", bundleVersion];
 		buf				= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));

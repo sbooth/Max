@@ -32,27 +32,27 @@
     IBOutlet NSTableView			*_trackTable;
 
 	CompactDisc						*_disc;
-	NSNumber						*_discInDrive;
-	NSNumber						*_discID;
-	NSNumber						*_freeDBQueryInProgress;
-	NSNumber						*_freeDBQuerySuccessful;
+	BOOL							_discInDrive;
+	int								_discID;
+	BOOL							_freeDBQueryInProgress;
+	BOOL							_freeDBQuerySuccessful;
 		
 	// Disc information
 	NSString						*_title;
 	NSString						*_artist;
-	NSNumber						*_year;
+	unsigned						_year;
 	NSString						*_genre;
 	NSString						*_composer;
 	NSString						*_comment;
-	NSNumber						*_partOfSet;
+	BOOL							_partOfSet;
 
 	NSImage							*_albumArt;
 	NSBitmapImageRep				*_albumArtBitmap;
 
 	// Other disc info
-	NSNumber						*_discNumber;
-	NSNumber						*_discsInSet;
-	NSNumber						*_multiArtist;
+	unsigned						_discNumber;
+	unsigned						_discsInSet;
+	BOOL							_multiArtist;
 	
 	NSString						*_MCN;
 	
@@ -62,9 +62,6 @@
 
 - (NSArray *)		genres;
 - (void)			displayException:(NSException *)exception;
-
-- (NSArray *)		tracks;
-- (NSArray *)		selectedTracks;
 
 // Toolbar/menu item enabling utility methods
 - (BOOL)			encodeAllowed;
@@ -94,13 +91,52 @@
 - (void)			clearFreeDBData;
 - (void)			updateDiscFromFreeDB:(NSDictionary *) info;
 
-- (int)				discID;
 
-- (BOOL)			discInDrive;
 - (void)			discEjected;
 
-- (CompactDisc *)	getDisc;
 - (void)			setDisc:(CompactDisc *)disc;
+
+// Accessors
+- (CompactDisc *)	disc;
+- (BOOL)			discInDrive;
+- (int)				discID;
+- (BOOL)			freeDBQueryInProgress;
+- (BOOL)			freeDBQuerySuccessful;
+
+- (NSString *)		title;
+- (NSString *)		artist;
+- (unsigned)		year;
+- (NSString *)		genre;
+- (NSString *)		composer;
+- (NSString *)		comment;
+- (BOOL)			partOfSet;
+
+- (NSImage *)		albumArt;
+- (NSImageBitmap *) albumArtBitmap;
+
+- (unsigned)		discNumber;
+- (unsigned)		discsInSet;
+- (BOOL)			multiArtist;
+
+- (NSString *)		MCN;
+
+- (NSArray *)		tracks;
+- (NSArray *)		selectedTracks;
+- (unsigned)		countOfTracks;
+- (Track *)			objectInTracksAtIndex:(unsigned)index;
+
+// Mutators
+- (void) setTitle:(NSString *)title;
+- (void) setArtist:(NSString *)artist;
+- (void) setYear:(unsigned)year;
+- (void) setGenre:(NSString *)genre;
+- (void) setComposer:(NSString *)composer;
+- (void) setComment:(NSString *)comment;
+- (void) setPartOfSet:(BOOL)partOfSet
+- (void) setDiscNumber:(unsigned)discNumber;
+- (void) setDiscsInSet:(unsigned)discsInSet
+- (void) setMultiArtist:(BOOL)multiArtist
+- (void) setMCN:(NSString *)MCN
 
 // Save/Restore
 - (NSDictionary *)	getDictionary;

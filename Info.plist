@@ -88,8 +88,6 @@
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>0.5.6</string>
 	<key>CFBundleSignature</key>
 	<string>Maxx</string>
 	<key>CFBundleVersion</key>
@@ -104,7 +102,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Max/Encode Selection</string>
+				<string>Max/Encode Selected File</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>encodeFile</string>

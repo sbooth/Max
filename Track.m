@@ -20,10 +20,13 @@
 
 #import "Track.h"
 #import "MissingResourceException.h"
-
 #import "UtilityFunctions.h"
 
 #include <IOKit/storage/IOCDTypes.h>
+
+@interface Track (Private)
+- (NSUndoManager *) undoManager;
+@end
 
 @implementation Track
 
@@ -57,21 +60,58 @@
 	}
 }
 
++ (BOOL) accessInstanceVariablesDirectly	{ return NO; }
+
 - (id) init
 {
 	if((self = [super init])) {
-		_activeEncoders = 0;
+
+		_document				= nil;
+		
+		_ripInProgress		= NO;
+		_activeEncoders		= 0;
+		
+		_selected			= NO;
+		
+		_title				= nil;
+		_artist				= nil;
+		_year				= 0;
+		_genre				= nil;
+		_composer			= nil;
+		
+		_number				= 0;
+		_firstSector		= 0;
+		_lastSector			= 0;
+		_channels			= 0;
+		_preEmphasis		= NO;
+		_copyPermitted		= NO;
+		_ISRC				= nil;
+		
 		return self;
 	}
 	return nil;
 }
 
+- (void) dealloc
+{
+	[_document release];
+	
+	[_title release];
+	[_artist release];
+	[_genre release];
+	[_composer release];
+
+	[_ISRC release];
+
+	[super dealloc];
+}
+
 - (NSString *) description
 {
-	NSString			*discArtist			= [_disc valueForKey:@"artist"];
-	NSString			*trackArtist		= _artist;
+	NSString			*discArtist			= [_document artist];
+	NSString			*trackArtist		= [self artist];
 	NSString			*artist;
-	NSString			*trackTitle			= _title;
+	NSString			*trackTitle			= [self title];
 	
 	artist = trackArtist;
 	if(nil == artist) {
@@ -85,7 +125,7 @@
 	}
 	
 	
-	if([[_disc valueForKey:@"multiArtist"] boolValue]) {
+	if([[_document valueForKey:@"multiArtist"] boolValue]) {
 		return [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
 	}
 	else {
@@ -95,84 +135,94 @@
 
 #pragma mark Accessors
 
-- (unsigned) getMinute
+- (unsigned) minute
 {
-	unsigned long	sector		= [_firstSector unsignedLongValue];
-	unsigned long	offset		= [_lastSector unsignedLongValue] - sector + 1;
+	unsigned long	sector		= _firstSector;
+	unsigned long	offset		= _lastSector - sector + 1;
 	
 	return (unsigned) (offset / (60 * 75));
 }
 
-- (unsigned) getSecond
+- (unsigned) second
 {
-	unsigned long	sector		= [_firstSector unsignedLongValue];
-	unsigned long	offset		= [_lastSector unsignedLongValue] - sector + 1;
+	unsigned long	sector		= _firstSector;
+	unsigned long	offset		= _lastSector - sector + 1;
 	
 	return (unsigned) ((offset / 75) % 60);
 }
 
-- (unsigned) getFrame
+- (unsigned) frame
 {
-	unsigned long	sector		= [_firstSector unsignedLongValue];
-	unsigned long	offset		= [_lastSector unsignedLongValue] - sector + 1;
+	unsigned long	sector		= _firstSector;
+	unsigned long	offset		= _lastSector - sector + 1;
 	
 	return (unsigned) (offset % 75);
 }
 
-- (BOOL) hasPreEmphasis
-{
-	return [_preEmphasis boolValue];
-}
 
-- (NSString *) getPreEmphasis
+/*- (NSString *) getPreEmphasis
 {
 	return [_preEmphasis boolValue] ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");
-}
+}*/
 
-- (NSString *) getCopyPermitted
-{
-	return [_copyPermitted boolValue] ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");
-}
+- (CompactDiscDocument *)	document			{ return _document; }
+- (NSUndoManager *)			undoManager			{ return [_document undoManager]; }
 
-- (NSNumber *) getSize
-{
-	unsigned long size = ([_lastSector unsignedLongValue] - [_firstSector unsignedLongValue]) * kCDSectorSizeCDDA;
-	return [NSNumber numberWithUnsignedLong:size];
-}
+- (BOOL)					ripInProgress		{ return _ripInProgress; }
+- (BOOL)					encodeInProgress	{ return (0 != _activeEncoders); }
 
-- (NSString *) getLength
-{
-	return [NSString stringWithFormat:@"%i:%02i", [self getMinute], [self getSecond]];
-}
+- (BOOL)					selected			{ return _selected; }
 
-- (NSColor *) getColor
+- (unsigned)				number				{ return _number; }
+- (unsigned long)			firstSector			{ return _firstSector; }
+- (unsigned long)			lastSector			{ return _lastSector; }
+- (unsigned)				channels			{ return _channels; }
+- (BOOL)					preEmphasis			{ return _preEmphasis; }
+- (BOOL)					copyPermitted		{ return _copyPermitted; }
+// ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");
+- (unsigned long)			size				{ return ((_lastSector - _firstSector) * kCDSectorSizeCDDA); }
+- (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
+
+- (NSString *)				title				{ return _title; }
+- (NSString *)				artist				{ return _artist; }
+- (unsigned)				year				{ return _year; }
+- (NSString *)				genre				{ return _genre; }
+- (NSString *)				composer			{ return _composer; }
+- (NSString *)				ISRC				{ return _ISRC; }
+
+
+- (NSColor *) color
 {
-	NSColor *result;
-	NSData *data;
+	NSColor		*result;
+	NSData		*data;
 	
 	result = nil;
 	
 	if(nil != _artist || nil != _year || nil != _genre) {
 		data = [[NSUserDefaults standardUserDefaults] dataForKey:@"customTrackColor"];
-		if(nil != data)
+		if(nil != data) {
 			result = (NSColor *)[NSUnarchiver unarchiveObjectWithData:data];
+		}
 	}
 	
 	return result;
 }
 
-- (void) clearFreeDBData
-{
-	[self setValue:nil forKey:@"title"];
-	[self setValue:nil forKey:@"artist"];
-	[self setValue:nil forKey:@"year"];
-	[self setValue:nil forKey:@"genre"];
-}
+#pragma mark Mutators
 
-- (CompactDiscDocument *) getCompactDiscDocument
-{
-	return _disc;
-}
+- (void) setDocument:(CompactDiscDocument *)document	{ [_document release]; _document = [document retain]; }
+
+- (void) setRipInProgress:(BOOL)ripInProgress			{ _ripInProgress = ripInProgress; }
+
+- (void) setSelected:(BOOL)selected						{ _selected = selected; }
+
+- (void) setNumber:(unsigned)number						{ _number = number; }
+- (void) setFirstSector:(unsigned long)firstSector		{ _firstSector = firstSector; }
+- (void) setLastSector:(unsigned long)lastSector		{ _lastSector = lastSector; }
+- (void) setChannels:(unsigned)channels					{ _channels = channels; }
+- (void) setPreEmphasis:(BOOL)preEmphasis				{ _preEmphasis = preEmphasis; }
+- (void) setCopyPermitted:(BOOL)copyPermitted			{ _copyPermitted = copyPermitted; }
+- (void) setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = ISRC; }
 
 - (void) encodeStarted
 {
@@ -188,9 +238,53 @@
 	[self didChangeValueForKey:@"encodeInProgress"];
 }
 
-- (NSNumber *) encodeInProgress
+- (void) setTitle:(NSString *)title
 {
-	return [NSNumber numberWithBool:(0 != _activeEncoders)];
+	if(NO == [_title isEqualToString:title]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setTitle:) object:_title];
+		[[self undoManager] setActionName:@"Track Title"];
+		[_title release];
+		_title = [title retain];
+	}
+}
+
+- (void) setArtist:(NSString *)artist
+{
+	if(NO == [_artist isEqualToString:artist]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setArtist:) object:_artist];
+		[[self undoManager] setActionName:@"Track Artist"];
+		[_artist release];
+		_artist = [artist retain];
+	}
+}
+
+- (void) setYear:(unsigned)year
+{
+	if(_year != year) {
+		[[[self undoManager] prepareWithInvocationTarget:self] setYear:_year];
+		[[self undoManager] setActionName:@"Track Year"];
+		_year = year;
+	}
+}
+
+- (void) setGenre:(NSString *)genre
+{
+	if(NO == [_genre isEqualToString:genre]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setGenre:) object:_genre];
+		[[self undoManager] setActionName:@"Track Genre"];
+		[_genre release];
+		_genre = [genre retain];
+	}
+}
+
+- (void) setComposer:(NSString *)composer
+{
+	if(NO == [_composer isEqualToString:composer]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComposer:) object:_composer];
+		[[self undoManager] setActionName:@"Track Composer"];
+		[_composer release];
+		_composer = [composer retain];
+	}
 }
 
 #pragma mark Save/Restore
@@ -199,20 +293,20 @@
 {
 	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
 	
-	[result setValue:_selected forKey:@"selected"];
-	[result setValue:_color forKey:@"color"];
+	[result setValue:[NSNumber numberWithBool:_selected] forKey:@"selected"];
+	//[result setValue:_color forKey:@"color"];
 
-	[result setValue:_title forKey:@"title"];
-	[result setValue:_artist forKey:@"artist"];
-	[result setValue:_year forKey:@"year"];
-	[result setValue:_genre forKey:@"genre"];
+	[result setValue:[self title] forKey:@"title"];
+	[result setValue:[self artist] forKey:@"artist"];
+	[result setValue:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
+	[result setValue:[self genre] forKey:@"genre"];
 
-	[result setValue:_number forKey:@"number"];
-	[result setValue:_firstSector forKey:@"firstSector"];
-	[result setValue:_lastSector forKey:@"lastSector"];
-	[result setValue:_channels forKey:@"channels"];
-	[result setValue:_preEmphasis forKey:@"preEmphasis"];
-	[result setValue:_copyPermitted forKey:@"copyPermitted"];
+	[result setValue:[NSNumber numberWithUnsignedInt:[self number]] forKey:@"number"];
+	[result setValue:[NSNumber numberWithUnsignedLong:[self firstSector]] forKey:@"firstSector"];
+	[result setValue:[NSNumber numberWithUnsignedLong:[self lastSector]] forKey:@"lastSector"];
+	[result setValue:[NSNumber numberWithUnsignedInt:[self channels]] forKey:@"channels"];
+	[result setValue:[NSNumber numberWithBool:[self preEmphasis]] forKey:@"preEmphasis"];
+	[result setValue:[NSNumber numberWithBool:[self copyPermitted]] forKey:@"copyPermitted"];
 	[result setValue:_ISRC forKey:@"ISRC"];
 	
 	return [[result retain] autorelease];
@@ -220,6 +314,17 @@
 
 - (void) setPropertiesFromDictionary:(NSDictionary *)properties
 {	
+	[_title release];
+	[_artist release];
+	[_genre release];
+	[_composer release];
+	
+	_title			= [[properties valueForKey:@"title"] retain];
+	_artist			= [[properties valueForKey:@"artist"] retain];
+	_year			= [[properties valueForKey:@"year"] intValue];
+	_genre			= [[properties valueForKey:@"genre"] retain];
+	_composer		= [[properties valueForKey:@"composer"] retain];	
+	
 	[self setValue:[properties valueForKey:@"selected"] forKey:@"selected"];
 	[self setValue:[properties valueForKey:@"color"] forKey:@"color"];
 	
@@ -241,24 +346,24 @@
 {
 	Track *copy = [[Track allocWithZone:zone] init];
 	
-	[copy setValue:_disc forKey:@"disc"];
+	[copy setDocument:_document];
 	
-	[copy setValue:_selected forKey:@"selected"];
-	[copy setValue:_color forKey:@"color"];
+	[copy setSelected:[self selected]];
+	//[copy setValue:_color forKey:@"color"];
 	
-	[copy setValue:_title forKey:@"title"];
-	[copy setValue:_artist forKey:@"artist"];
-	[copy setValue:_year forKey:@"year"];
-	[copy setValue:_genre forKey:@"genre"];
-	[copy setValue:_composer forKey:@"composer"];
+	[copy setTitle:[self title]];
+	[copy setArtist:[self artist]];
+	[copy setYear:[self year]];
+	[copy setGenre:[self genre]];
+	[copy setComposer:[self composer]];
 	
-	[copy setValue:_number forKey:@"number"];
-	[copy setValue:_firstSector forKey:@"firstSector"];
-	[copy setValue:_lastSector forKey:@"lastSector"];
-	[copy setValue:_channels forKey:@"channels"];
-	[copy setValue:_preEmphasis forKey:@"preEmphasis"];
-	[copy setValue:_copyPermitted forKey:@"copyPermitted"];
-	[copy setValue:_ISRC forKey:@"ISRC"];
+	[copy setNumber:_number];
+	[copy setFirstSector:_firstSector];
+	[copy setLastSector:_lastSector];
+	[copy setChannels:_channels];
+	[copy setPreEmphasis:_preEmphasis];
+	[copy setCopyPermitted:_copyPermitted];
+	[copy setISRC:_ISRC];
 
 	return copy;
 }
@@ -267,33 +372,40 @@
 {
 	AudioMetadata *result = [[AudioMetadata alloc] init];
 
-	[result setValue:_number forKey:@"trackNumber"];
-	[result setValue:_title forKey:@"trackTitle"];
-	[result setValue:_artist forKey:@"trackArtist"];
-	[result setValue:_year forKey:@"trackYear"];
-	[result setValue:_genre forKey:@"trackGenre"];
-	[result setValue:_composer forKey:@"trackComposer"];
-//	[result setValue:_comment forKey:@"trackComment"];
-	[result setValue:_ISRC forKey:@"ISRC"];
+	[result setTrackNumber:_number];
+	[result setTrackTitle:_title];
+	[result setTrackArtist:_artist];
+	[result setTrackYear:_year];
+	[result setTrackGenre:_genre];
+	[result setTrackComposer:_composer];
+//	[result setTrackComment:_comment];
+	[result setISRC:_ISRC];
 	
-	[result setValue:[NSNumber numberWithInt:[[_disc valueForKey:@"tracks"] count]] forKey:@"albumTrackCount"];
-	[result setValue:[_disc valueForKey:@"title"] forKey:@"albumTitle"];
-	[result setValue:[_disc valueForKey:@"artist"] forKey:@"albumArtist"];
-	[result setValue:[_disc valueForKey:@"year"] forKey:@"albumYear"];
-	[result setValue:[_disc valueForKey:@"genre"] forKey:@"albumGenre"];
-	[result setValue:[_disc valueForKey:@"composer"] forKey:@"albumComposer"];
-	[result setValue:[_disc valueForKey:@"comment"] forKey:@"albumComment"];
+	[result setAlbumTrackCount:[[_document valueForKey:@"tracks"] count]];
+	[result setAlbumTitle:[_document title]];
+	[result setAlbumArtist:[_document artist]];
+	[result setAlbumYear:[_document year]];
+	[result setAlbumGenre:[_document genre]];
+	[result setAlbumComposer:[_document composer]];
+	[result setAlbumComment:[_document comment]];
 		
-	[result setValue:[_disc valueForKey:@"discNumber"] forKey:@"discNumber"];
-	[result setValue:[_disc valueForKey:@"discsInSet"] forKey:@"discsInSet"];
-	[result setValue:[_disc valueForKey:@"multiArtist"] forKey:@"multipleArtists"];
+	[result setDiscNumber:[_document discNumber]];
+	[result setDiscsInSet:[_document discsInSet]];
+	[result setMultipleArtists:[_document multiArtist]];
 
-	[result setValue:[_disc valueForKey:@"albumArtBitmap"] forKey:@"albumArt"];
+	[result setAlbumArt:[_document valueForKey:@"albumArtBitmap"]];
 	
-	[result setValue:[_disc valueForKey:@"MCN"] forKey:@"MCN"];
+	[result setMCN:[_document MCN]];
 	
 	return [result autorelease];
 }
 
+- (void) clearFreeDBData
+{
+	[self setTitle:nil];
+	[self setArtist:nil];
+	[self setYear:0];
+	[self setGenre:nil];
+}
 
 @end

@@ -22,27 +22,27 @@
 
 @interface AudioMetadata : NSObject
 {
-	NSNumber				*_trackNumber;
+	unsigned				_trackNumber;
 	NSString				*_trackTitle;
 	NSString				*_trackArtist;
 	NSString				*_trackComposer;
-	NSNumber				*_trackYear;
+	unsigned				_trackYear;
 	NSString				*_trackGenre;
 	NSString				*_trackComment;
 
-	NSNumber				*_albumTrackCount;
+	unsigned				_albumTrackCount;
 	NSString				*_albumTitle;
 	NSString				*_albumArtist;
 	NSString				*_albumComposer;
-	NSNumber				*_albumYear;
+	unsigned				_albumYear;
 	NSString				*_albumGenre;
 	NSString				*_albumComment;
 
-	NSNumber				*_multipleArtists;
-	NSNumber				*_discNumber;
-	NSNumber				*_discsInSet;
+	BOOL					_multipleArtists;
+	unsigned				_discNumber;
+	unsigned				_discsInSet;
 
-	NSNumber				*_length;
+	unsigned				_length;
 	
 	NSBitmapImageRep		*_albumArt;
 	
@@ -58,5 +58,61 @@
 
 // Create output file's basename
 - (NSString *)			outputBasenameWithSubstitutions:(NSDictionary *)substitutions;
+
+// Accessors
+- (unsigned)	trackNumber;
+- (NSString *)	trackTitle;
+- (NSString *)	trackArtist;
+- (NSString	*)	trackComposer;
+- (unsigned)	trackYear;
+- (NSString	*)	trackGenre;
+- (NSString	*)	trackComment;
+
+- (unsigned)	albumTrackCount;
+- (NSString	*)	albumTitle;
+- (NSString	*)	albumArtist;
+- (NSString	*)	albumComposer;
+- (unsigned)	albumYear;
+- (NSString	*)	albumGenre;
+- (NSString	*)	albumComment;
+
+- (BOOL)		multipleArtists;
+- (unsigned)	discNumber;
+- (unsigned)	discsInSet;
+
+- (unsigned)	length;
+
+- (NSString *)	MCN;
+- (NSString *)	ISRC;
+
+- (NSBitmapImageRep *) albumArt;
+
+// Mutators
+- (void)		setTrackNumber:(unsigned)trackNumber;
+- (void)		setTrackTitle:(NSString *)trackTitle;
+- (void)		setTrackArtist:(NSString *)trackArtist;
+- (void)		setTrackComposer:(NSString *)trackComposer;
+- (void)		setTrackYear:(unsigned)trackYear;
+- (void)		setTrackGenre:(NSString *)trackGenre;
+- (void)		setTrackComment:(NSString *)trackComment;
+
+- (void)		setAlbumTrackCount:(unsigned)albumTrackCount;
+- (void)		setAlbumTitle:(NSString *)albumTitle;
+- (void)		setAlbumArtist:(NSString *)albumArtist;
+- (void)		setAlbumComposer:(NSString *)albumComposer;
+- (void)		setAlbumYear:(unsigned)albumYear;
+- (void)		setAlbumGenre:(NSString *)albumGenre;
+- (void)		setAlbumComment:(NSString *)albumComment;
+
+- (void)		setMultipleArtists:(BOOL)multipleArtists;
+- (void)		setDiscNumber:(unsigned)discNumber;
+- (void)		setDiscsInSet:(unsigned)discsInSet;
+
+- (void)		setLength:(unsigned)length;
+
+- (void)		setMCN:(NSString *)MCN;
+- (void)		setISRC:(NSString *)ISRC;
+
+- (void)		setAlbumArt:(NSBitmapImageRep *)albumArt;
 
 @end
