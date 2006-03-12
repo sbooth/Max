@@ -24,16 +24,6 @@ static UpdateChecker *sharedController = nil;
 
 @implementation UpdateChecker
 
-- (id) init
-{
-	if((self = [super initWithWindowNibName:@"UpdateChecker"])) {
-		_socket		= [[MacPADSocket alloc] init];
-
-		[_socket setDelegate:self];
-	}
-	return self;
-}
-
 + (UpdateChecker *) sharedController
 {
 	@synchronized(self) {
@@ -54,11 +44,26 @@ static UpdateChecker *sharedController = nil;
     return sharedController;
 }
 
-- (id) copyWithZone:(NSZone *)zone								{ return self; }
-- (id) retain													{ return self; }
-- (unsigned) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void) release												{ /* do nothing */ }
-- (id) autorelease												{ return self; }
+- (id)				copyWithZone:(NSZone *)zone					{ return self; }
+- (id)				retain										{ return self; }
+- (unsigned)		retainCount									{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (void)			release										{ /* do nothing */ }
+- (id)				autorelease									{ return self; }
+- (BOOL)			checkInProgress								{ return _checkInProgress; }
+- (void)			setCheckInProgress:(BOOL)checkInProgress	{ _checkInProgress = checkInProgress; }
+
+- (id) init
+{
+	if((self = [super initWithWindowNibName:@"UpdateChecker"])) {
+		_socket = [[MacPADSocket alloc] init];
+		[_socket setDelegate:self];
+		
+		[self setCheckInProgress:NO];
+		
+		return self;
+	}
+	return nil;
+}
 
 - (void) dealloc
 {
@@ -78,18 +83,21 @@ static UpdateChecker *sharedController = nil;
 	if(showWindow) {
 		[self showWindow:self];	
 	}
-	
+
+	[self setCheckInProgress:YES];
 	[_socket performCheck];
 }
 
 - (void) macPADErrorOccurred:(NSNotification *) aNotification
 {
 	NSWindow *updateWindow = [self window];
-
+	
+	[self setCheckInProgress:NO];
+	
 	if([updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText: NSLocalizedStringFromTable(@"MacPAD Error", @"Exceptions", @"")];
+		[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while checking for a newer version of Max.", @"Errors", @"")];
 		[alert setInformativeText: [[aNotification userInfo] objectForKey:MacPADErrorMessage]];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		
@@ -97,48 +105,43 @@ static UpdateChecker *sharedController = nil;
 	}
 }
 
-- (void) macPADCheckFinished:(NSNotification *) aNotification
+- (void) macPADCheckFinished:(NSNotification *)aNotification
 {
 	NSWindow *updateWindow = [self window];
 	
-	// Suppress up-to-date alert if our window isn't visible (called by ApplicationController at startup)
+	[self setCheckInProgress:NO];
+	
+	// Suppress up-to-date alert if our window isn't visible (called by ApplicationDelegate at startup)
 	if(kMacPADResultNoNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue] && [updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText: NSLocalizedStringFromTable(@"Software up-to-date", @"General", @"")];
-		[alert setInformativeText: NSLocalizedStringFromTable(@"You are running the most current version of Max", @"General", @"")];
-
-		[alert setAlertStyle: NSWarningAlertStyle];
+		[alert setMessageText: NSLocalizedStringFromTable(@"Max is up-to-date.", @"General", @"")];
+		[alert setInformativeText: NSLocalizedStringFromTable(@"You are running the current version of Max.", @"General", @"")];
+		
+		[alert setAlertStyle: NSInformationalAlertStyle];
 		
 		[alert beginSheetModalForWindow:updateWindow modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
 	}
 	else if(kMacPADResultNewVersion == [[[aNotification userInfo] objectForKey:MacPADErrorCode] intValue]) {
-		int			result;
 		NSAlert		*alert	= [[[NSAlert alloc] init] autorelease];
 		
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"More Info", @"General", @"")];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Download", @"General", @"")];
 		
-		[alert setMessageText: NSLocalizedStringFromTable(@"Newer version available", @"General", @"")];
-		[alert setInformativeText: [NSString stringWithFormat:NSLocalizedStringFromTable(@"Max %@ is available", @"General", @""), [_socket newVersion]]];
-
-		[alert setAlertStyle: NSWarningAlertStyle];
-
+		[alert setMessageText: NSLocalizedStringFromTable(@"A newer version of Max is available.", @"General", @"")];
+		[alert setInformativeText: [NSString stringWithFormat:NSLocalizedStringFromTable(@"Max %@ is available for download.", @"General", @""), [_socket newVersion]]];
+		
+		[alert setAlertStyle: NSInformationalAlertStyle];
+		
 		if([updateWindow isVisible]) {
 			[alert beginSheetModalForWindow:updateWindow modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
 		}
 		else {
-			result = [alert runModal];
-			
-			if(NSAlertFirstButtonReturn == result) {
-				// do nothing
-			}
-			else if(NSAlertSecondButtonReturn == result) {
-				[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productPageURL]]];
-			}
-			else if(NSAlertThirdButtonReturn == result) {
-				[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productDownloadURL]]];
+			switch([alert runModal]) {
+				case NSAlertFirstButtonReturn:		; /* do nothing */																			break;
+				case NSAlertSecondButtonReturn:		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productPageURL]]];		break;
+				case NSAlertThirdButtonReturn:		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productDownloadURL]]]; break;
 			}
 		}
 	}
@@ -148,16 +151,12 @@ static UpdateChecker *sharedController = nil;
 {
 	NSWindow *updateWindow = [self window];
 	
-	if(NSAlertFirstButtonReturn == returnCode) {
-		// do nothing
+	switch(returnCode) {
+		case NSAlertFirstButtonReturn:		; /* do nothing */																			break;
+		case NSAlertSecondButtonReturn:		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productPageURL]]];		break;
+		case NSAlertThirdButtonReturn:		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productDownloadURL]]]; break;
 	}
-	else if(NSAlertSecondButtonReturn == returnCode) {
-		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productPageURL]]];
-	}
-	else if(NSAlertThirdButtonReturn == returnCode) {
-		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[_socket productDownloadURL]]];
-	}
-
+	
 	if([updateWindow isVisible]) {
 		[updateWindow orderOut:self];
 	}

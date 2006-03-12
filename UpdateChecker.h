@@ -19,16 +19,19 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
 #import "MacPADSocket.h"
 
 @interface UpdateChecker : NSWindowController 
 {
 	MacPADSocket		*_socket;
+	BOOL				_checkInProgress;
 }
 
 + (UpdateChecker *) sharedController;
 
 - (void) checkForUpdate:(BOOL)showWindow;
+
+- (BOOL) checkInProgress;
+- (void) setCheckInProgress:(BOOL)checkInProgress;
 
 @end
