@@ -37,7 +37,8 @@
 - (NSArray *)		sectors;
 - (NSString *)		deviceName;
 
-- (NSArray *)		tracks;
+- (unsigned)		countOfTracks;
+- (Track *)			objectInTracksAtIndex:(unsigned)index;
 
 - (void)			ripperReady:(id)anObject;
 

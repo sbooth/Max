@@ -189,6 +189,7 @@
 		8CF5E4B2097085710025360B /* LibsndfileConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CA3D0953985B00A923AD /* LibsndfileConverter.m */; };
 		8CF5E4B3097085720025360B /* OggFLACConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230A6095684BF005D8698 /* OggFLACConverter.m */; };
 		8CF5E76A0970BCDE0025360B /* SpeexEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */; };
+		8CF914DD09C3C7800090494D /* BOOLToStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF914B709C3C5A30090494D /* BOOLToStringValueTransformer.m */; };
 		8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -574,10 +575,12 @@
 		8CF4D52309455D2300385BE4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FormatsPreferences.nib; sourceTree = "<group>"; };
 		8CF5E3360970432C0025360B /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		8CF5E3370970432C0025360B /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
+		8CF914B609C3C5A30090494D /* BOOLToStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BOOLToStringValueTransformer.h; sourceTree = "<group>"; };
+		8CF914B709C3C5A30090494D /* BOOLToStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BOOLToStringValueTransformer.m; sourceTree = "<group>"; };
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1018,6 +1021,8 @@
 				8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */,
 				8C73033C08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.h */,
 				8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */,
+				8CF914B609C3C5A30090494D /* BOOLToStringValueTransformer.h */,
+				8CF914B709C3C5A30090494D /* BOOLToStringValueTransformer.m */,
 			);
 			name = ValueTransformers;
 			sourceTree = "<group>";
@@ -1290,6 +1295,7 @@
 				8C039AD4098AA762007EFA10 /* FLACEncoderTask.m in Sources */,
 				8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */,
 				8CA3FB9A09BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m in Sources */,
+				8CF914DD09C3C7800090494D /* BOOLToStringValueTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

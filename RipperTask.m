@@ -32,12 +32,12 @@
 
 @implementation RipperTask
 
++ (BOOL) accessInstanceVariablesDirectly	{ return NO; }
+
 - (id) initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
 {
-	SectorRange			*range;
 	NSEnumerator		*enumerator;
 	Track				*track;
-	unsigned long		firstSector, lastSector;
 
 	if(0 == [tracks count]) {
 		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"Empty array passed to RipperTask::initWithTracks" userInfo:nil];
@@ -48,18 +48,13 @@
 		_connection		= nil;
 		
 		_tracks			= [tracks retain];
-		_deviceName		= [[[[_tracks objectAtIndex:0] getCompactDiscDocument] getDisc] deviceName];
+		_deviceName		= [[[[_tracks objectAtIndex:0] document] disc] deviceName];
 		_sectors		= [NSMutableArray arrayWithCapacity:[tracks count]];
 		enumerator		= [_tracks objectEnumerator];
 		
 		while((track = [enumerator nextObject])) {
-			[track setValue:[NSNumber numberWithBool:YES] forKey:@"ripInProgress"];
-
-			firstSector		= [[track valueForKey:@"firstSector"] unsignedLongValue];
-			lastSector		= [[track valueForKey:@"lastSector"] unsignedLongValue];
-			range			= [SectorRange rangeWithFirstSector:firstSector lastSector:lastSector];
-
-			[_sectors addObject:range];
+			[track setRipInProgress:YES];
+			[_sectors addObject:[SectorRange rangeWithFirstSector:[track firstSector] lastSector:[track lastSector]]];
 		}
 
 		[_sectors retain];
@@ -81,9 +76,10 @@
 	[super dealloc];
 }
 
-- (NSArray *)			sectors				{ return _sectors; }
-- (NSString *)			deviceName			{ return _deviceName; }
-- (NSArray *)			tracks				{ return _tracks; }
+- (NSArray *)			sectors								{ return _sectors; }
+- (NSString *)			deviceName							{ return _deviceName; }
+- (unsigned)			countOfTracks						{ return [_tracks count]; }
+- (Track *)				objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
 
 - (void) run
 {
@@ -125,7 +121,7 @@
 
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
-		[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+		[track setRipInProgress:NO];
 	}
 }
 
@@ -141,7 +137,7 @@
 	
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
-		[track setValue:[NSNumber numberWithBool:NO] forKey:@"ripInProgress"];
+		[track setRipInProgress:NO];
 	}
 }
 
@@ -157,7 +153,6 @@
 
 - (void) generateCueSheet
 {
-	
 }
 
 @end

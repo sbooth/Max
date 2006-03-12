@@ -40,16 +40,19 @@
 #import "AmazonAlbumArtSheet.h"
 #import "UtilityFunctions.h"
 
-#define kEncodeMenuItemTag					1
-#define kTrackInfoMenuItemTag				2
-#define kQueryFreeDBMenuItemTag				3
-#define kEjectDiscMenuItemTag				4
-#define kSubmitToFreeDBMenuItemTag			5
-#define kSelectNextTrackMenuItemTag			6
-#define kSelectPreviousTrackMenuItemTag		7
+enum {
+	kEncodeMenuItemTag					= 1,
+	kTrackInfoMenuItemTag				= 2,
+	kQueryFreeDBMenuItemTag				= 3,
+	kEjectDiscMenuItemTag				= 4,
+	kSubmitToFreeDBMenuItemTag			= 5,
+	kSelectNextTrackMenuItemTag			= 6,
+	kSelectPreviousTrackMenuItemTag		= 7
+};
 
 @interface CompactDiscDocument (Private)
-- (void) updateAlbumArtImageRep;
+- (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
+- (void)			updateAlbumArtImageRep;
 @end
 
 @implementation CompactDiscDocument
@@ -68,7 +71,8 @@
 		}
 		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
-		
+	
+		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtBitmap"];
 	}
 	
 	@catch(NSException *exception) {
@@ -97,11 +101,10 @@
 		_partOfSet			= NO;
 		
 		_albumArt			= nil;
-		_albumArtBitmap		= nil;
 		
 		_discNumber			= 0;
-		_discsInSet			= 0;
-		_multiArtist		= NO;
+		_discTotal			= 0;
+		_compilation		= NO;
 		
 		_MCN				= nil;
 		
@@ -123,7 +126,6 @@
 	[_comment release];
 
 	[_albumArt release];
-	[_albumArtBitmap release];
 
 	[_MCN release];
 	
@@ -183,10 +185,34 @@
 - (NSData *) dataOfType:(NSString *)typeName error:(NSError **)outError
 {
 	if([typeName isEqualToString:@"Max CD Information"]) {
-		NSData					*data;
-		NSString				*error;
+		NSData					*data					= nil;
+		NSString				*error					= nil;
+		NSMutableDictionary		*result					= [NSMutableDictionary dictionaryWithCapacity:10];
+		NSMutableArray			*tracks					= [NSMutableArray arrayWithCapacity:[self countOfTracks]];
+		unsigned				i;
 		
-		data = [NSPropertyListSerialization dataFromPropertyList:[self getDictionary] format:NSPropertyListXMLFormat_v1_0 errorDescription:&error];
+		[result setValue:[self title] forKey:@"title"];
+		[result setValue:[self artist] forKey:@"artist"];
+		[result setObject:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
+		[result setValue:[self genre] forKey:@"genre"];
+		[result setValue:[self composer] forKey:@"composer"];
+		[result setValue:[self comment] forKey:@"comment"];
+		[result setObject:[NSNumber numberWithUnsignedInt:[self discNumber]] forKey:@"discNumber"];
+		[result setObject:[NSNumber numberWithUnsignedInt:[self discTotal]] forKey:@"discTotal"];
+		[result setObject:[NSNumber numberWithBool:[self compilation]] forKey:@"compilation"];
+		[result setValue:[self MCN] forKey:@"MCN"];
+		[result setObject:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
+		
+		data = [[self albumArtBitmap] representationUsingType:NSPNGFileType properties:nil]; 
+		[result setValue:data forKey:@"albumArt"];
+		
+		for(i = 0; i < [self countOfTracks]; ++i) {
+			[tracks addObject:[[self objectInTracksAtIndex:i] getDictionary]];
+		}
+		
+		[result setObject:tracks forKey:@"tracks"];
+
+		data = [NSPropertyListSerialization dataFromPropertyList:result format:NSPropertyListXMLFormat_v1_0 errorDescription:&error];
 		if(nil != data) {
 			return data;
 		}
@@ -206,7 +232,50 @@
 		
 		dictionary = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&error];
 		if(nil != dictionary) {
-			[self setPropertiesFromDictionary:dictionary];
+			unsigned				i;
+			NSArray					*tracks			= [dictionary valueForKey:@"tracks"];
+			
+			if([self discInDrive] && [tracks count] != [self countOfTracks]) {
+				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
+			}
+			else if(0 == [self countOfTracks]) {
+//				[self willChangeValueForKey:@"tracks"];
+				for(i = 0; i < [tracks count]; ++i) {
+					Track *track = [[[Track alloc] init] autorelease];
+					[track setDocument:self];
+					[track setPropertiesFromDictionary:[tracks objectAtIndex:i]];
+					[self insertObject:track inTracksAtIndex:i];
+				}
+//				[self didChangeValueForKey:@"tracks"];
+			}
+			
+			[_title release];
+			[_artist release];
+			[_genre release];
+			[_composer release];
+			[_comment release];
+			
+			[_albumArt release];
+			
+			[_MCN release];
+			
+			_discID			= [[dictionary valueForKey:@"discID"] intValue];
+
+			_title			= [[dictionary valueForKey:@"title"] retain];
+			_artist			= [[dictionary valueForKey:@"artist"] retain];
+			_year			= [[dictionary valueForKey:@"year"] unsignedIntValue];
+			_genre			= [[dictionary valueForKey:@"genre"] retain];
+			_composer		= [[dictionary valueForKey:@"composer"] retain];
+			_comment		= [[dictionary valueForKey:@"comment"] retain];
+
+			_discNumber		= [[dictionary valueForKey:@"discNumber"] unsignedIntValue];
+			_discTotal		= [[dictionary valueForKey:@"discTotal"] unsignedIntValue];
+			_compilation	= [[dictionary valueForKey:@"compilation"] boolValue];	
+
+			_MCN			= [[dictionary valueForKey:@"MCN"] retain];
+
+			// Convert PNG data to an NSImage
+			_albumArt		= [[NSImage alloc] initWithData:[dictionary valueForKey:@"albumArt"]];
 		}
 		else {
 			[error release];
@@ -215,6 +284,7 @@
 	}
     return NO;
 }
+
 #pragma mark Delegate methods
 
 - (void) windowWillClose:(NSNotification *)notification
@@ -255,76 +325,39 @@
 
 #pragma mark Disc Management
 
-- (int) discID
-{
-	return ([self discInDrive] ? [_disc discID] : [_discID intValue]);
-}
 
-- (BOOL) discInDrive
-{
-	return _discInDrive;
-}
 
 - (void) discEjected
 {
 	[self setDisc:nil];
 }
 
-- (CompactDisc *) disc
+#pragma mark State
+
+- (BOOL) encodeAllowed			{ return ([self discInDrive] && (NO == [self emptySelection]) && (NO == [self ripInProgress]) && (NO == [self encodeInProgress])); }
+- (BOOL) queryFreeDBAllowed		{ return [self discInDrive]; }
+- (BOOL) ejectDiscAllowed		{ return [self discInDrive]; }
+- (BOOL) emptySelection			{ return (0 == [[self selectedTracks] count]); }
+
+- (BOOL) submitToFreeDBAllowed
 {
-	return _disc;
-}
+	unsigned i;
 
-- (void) setDisc:(CompactDisc *) disc
-{
-	unsigned			i;
-	
-	[_disc release];
-
-	if(nil == disc) {
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"discInDrive"];
-		return;
-	}
-	
-	_disc			= [disc retain];
-
-	[self setValue:[NSNumber numberWithBool:YES] forKey:@"discInDrive"];
-	
-	[self setValue:[_disc MCN] forKey:@"MCN"];
-	
-	[self willChangeValueForKey:@"tracks"];
-	if(0 == [_tracks count]) {
-		for(i = 0; i < [_disc trackCount]; ++i) {
-			Track *track = [[Track alloc] init];
-			[track setValue:self forKey:@"disc"];
-			[_tracks addObject:[[track retain] autorelease]];
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		if(nil == [[self objectInTracksAtIndex:i] title]) {
+			return NO;
 		}
 	}
-	[self didChangeValueForKey:@"tracks"];
 	
-	for(i = 0; i < [_disc trackCount]; ++i) {
-		Track			*track		= [_tracks objectAtIndex:i];
-		
-		[track setValue:[NSNumber numberWithUnsignedInt:i + 1] forKey:@"number"];
-		[track setValue:[NSNumber numberWithUnsignedLong:[_disc firstSectorForTrack:i]] forKey:@"firstSector"];
-		[track setValue:[NSNumber numberWithUnsignedLong:[_disc lastSectorForTrack:i]] forKey:@"lastSector"];
-		
-		[track setValue:[NSNumber numberWithUnsignedInt:[_disc channelsForTrack:i]] forKey:@"channels"];
-		[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackHasPreEmphasis:i]] forKey:@"preEmphasis"];
-		[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackAllowsDigitalCopy:i]] forKey:@"copyPermitted"];
-		[track setValue:[_disc ISRC:i] forKey:@"ISRC"];
-	}
+	return ([self discInDrive] && (nil != [self title]) && (nil != [self artist]) && (nil != [self genre]));
 }
-
-#pragma mark Track information
 
 - (BOOL) ripInProgress
 {
-	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
-	Track			*track;
+	unsigned i;
 	
-	while((track = [enumerator nextObject])) {
-		if([[track valueForKey:@"ripInProgress"] boolValue]) {
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		if(nil == [[self objectInTracksAtIndex:i] ripInProgress]) {
 			return YES;
 		}
 	}
@@ -334,11 +367,10 @@
 
 - (BOOL) encodeInProgress
 {
-	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
-	Track			*track;
+	unsigned i;
 	
-	while((track = [enumerator nextObject])) {
-		if([[track valueForKey:@"encodeInProgress"] boolValue]) {
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		if(nil == [[self objectInTracksAtIndex:i] encodeInProgress]) {
 			return YES;
 		}
 	}
@@ -346,86 +378,27 @@
 	return NO;
 }
 
-- (NSArray *)	tracks					{ return _tracks; }
+#pragma mark Action Methods
 
-- (NSArray *) selectedTracks
+- (IBAction) selectAll:(id)sender
 {
-	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[_disc trackCount]];
-	NSEnumerator	*enumerator		= [_tracks objectEnumerator];
-	Track			*track;
+	unsigned i;
 	
-	while((track = [enumerator nextObject])) {
-		if([[track valueForKey:@"selected"] boolValue]) {
-			[result addObject: track];
-		}
-	}
-	
-	return [[result retain] autorelease];
-}
-
-- (BOOL) emptySelection
-{
-	return (0 == [[self selectedTracks] count]);
-}
-
-- (IBAction) selectAll:(id) sender
-{
-	unsigned	i;
-	
-	for(i = 0; i < [_tracks count]; ++i) {
-		if(NO == [[[_tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue] && NO == [[[_tracks objectAtIndex:i] valueForKey:@"encodeInProgress"] boolValue]) {
-			[[_tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
-		}
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		[[self objectInTracksAtIndex:i] setSelected:YES];
 	}
 }
 
-- (IBAction) selectNone:(id) sender
+- (IBAction) selectNone:(id)sender
 {
-	unsigned	i;
+	unsigned i;
 	
-	for(i = 0; i < [_tracks count]; ++i) {
-		if(NO == [[[_tracks objectAtIndex:i] valueForKey:@"ripInProgress"] boolValue] && NO == [[[_tracks objectAtIndex:i] valueForKey:@"encodeInProgress"] boolValue]) {
-			[[_tracks objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-		}
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		[[self objectInTracksAtIndex:i] setSelected:NO];
 	}
 }
 
-#pragma mark State
-
-- (BOOL) encodeAllowed
-{
-	return ([self discInDrive] && (NO == [self emptySelection]) && (NO == [self ripInProgress]) && (NO == [self encodeInProgress]));
-}
-
-- (BOOL) queryFreeDBAllowed
-{
-	return [self discInDrive];
-}
-
-- (BOOL) submitToFreeDBAllowed
-{
-	NSEnumerator	*enumerator				= [_tracks objectEnumerator];
-	Track			*track;
-	BOOL			trackTitlesValid		= YES;
-	
-	while((track = [enumerator nextObject])) {
-		if(nil == [track valueForKey:@"title"]) {
-			trackTitlesValid = NO;
-			break;
-		}
-	}
-	
-	return ([self discInDrive] && (nil != _title) && (nil != _artist) && (nil != _genre) && trackTitlesValid);
-}
-
-- (BOOL) ejectDiscAllowed
-{
-	return [self discInDrive];	
-}
-
-#pragma mark Actions
-
-- (IBAction) encode:(id) sender
+- (IBAction) encode:(id)sender
 {
 	Track			*track;
 	NSArray			*selectedTracks;
@@ -451,11 +424,11 @@
 			
 			AudioMetadata *metadata = [[selectedTracks objectAtIndex:0] metadata];
 			
-			[metadata setValue:[NSNumber numberWithInt:0] forKey:@"trackNumber"];
-			[metadata setValue:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"") forKey:@"trackTitle"];
-			[metadata setValue:nil forKey:@"trackArtist"];
-			[metadata setValue:nil forKey:@"trackGenre"];
-			[metadata setValue:nil forKey:@"trackYear"];
+			[metadata setTrackNumber:0];
+			[metadata setTrackTitle:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"")];
+			[metadata setTrackArtist:nil];
+			[metadata setTrackGenre:nil];
+			[metadata setTrackYear:0];
 						
 			[[TaskMaster sharedController] encodeTracks:selectedTracks metadata:metadata];
 		}
@@ -500,14 +473,78 @@
 	[[MediaController sharedController] ejectDiscForCompactDiscDocument:self];
 }
 
-- (IBAction) selectNextTrack:(id) sender
+- (IBAction) queryFreeDB:(id)sender
 {
-	[_trackController selectNext:sender];
+	FreeDB				*freeDB				= nil;
+	NSArray				*matches			= nil;
+	FreeDBMatchSheet	*sheet				= nil;
+	
+	if(NO == [self queryFreeDBAllowed]) {
+		return;
+	}
+	
+	@try {
+		[self setFreeDBQueryInProgress:YES];
+		[self setFreeDBQuerySuccessful:NO];
+		
+		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
+		
+		matches = [freeDB fetchMatches];
+		
+		if(0 == [matches count]) {
+			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matches found for this disc", @"Exceptions", @"") userInfo:nil];
+		}
+		else if(1 == [matches count]) {
+			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
+		}
+		else {
+			sheet = [[[FreeDBMatchSheet alloc] initWithCompactDiscDocument:self] autorelease];
+			[sheet setValue:matches forKey:@"matches"];
+			[sheet showFreeDBMatches];
+		}
+	}
+	
+	@catch(NSException *exception) {
+		[self setFreeDBQueryInProgress:NO];
+		[self displayException:exception];
+	}
+	
+	@finally {
+		[freeDB release];
+	}
 }
 
-- (IBAction) selectPreviousTrack:(id) sender
+- (IBAction) submitToFreeDB:(id) sender
 {
-	[_trackController selectPrevious:sender];	
+	FreeDB				*freeDB				= nil;
+	
+	if(NO == [self submitToFreeDBAllowed]) {
+		return;
+	}
+	
+	@try {
+		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];		
+		[freeDB submitDisc];
+	}
+	
+	@catch(NSException *exception) {
+		[self displayException:exception];
+	}
+	
+	@finally {
+		[freeDB release];
+	}
+}
+
+- (IBAction) toggleTrackInformation:(id) sender				{ [_trackDrawer toggle:sender]; }
+- (IBAction) toggleAlbumArt:(id) sender						{ [_artDrawer toggle:sender]; }
+- (IBAction) selectNextTrack:(id)sender						{ [_trackController selectNext:sender]; }
+- (IBAction) selectPreviousTrack:(id)sender					{ [_trackController selectPrevious:sender];	 }
+
+- (IBAction) fetchAlbumArt:(id) sender
+{	
+	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithCompactDiscDocument:self] autorelease];
+	[art showAlbumArtMatches];
 }
 
 - (IBAction) selectAlbumArt:(id) sender
@@ -532,135 +569,33 @@
 		for(i = 0; i < count; ++i) {
 			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
 			if(nil != image) {
-				[self setValue:[image autorelease] forKey:@"albumArt"];
-				[self albumArtUpdated:self];
+				[self setAlbumArt:[image autorelease]];
 			}
 		}
 	}	
 }
 
-- (IBAction) albumArtUpdated:(id) sender
-{
-	[self updateChangeCount:NSChangeDone];
-	[self updateAlbumArtImageRep];
-}
-
-- (void) updateAlbumArtImageRep
-{
-	NSEnumerator		*enumerator;
-	NSImageRep			*currentRepresentation		= nil;
-	NSBitmapImageRep	*bitmapRep					= nil;
-	
-	if(nil == _albumArt) {
-		[self setValue:nil forKey:@"albumArtBitmap"];
-		return;
-	}
-	
-	enumerator = [[_albumArt representations] objectEnumerator];
-	while((currentRepresentation = [enumerator nextObject])) {
-		if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
-			bitmapRep = (NSBitmapImageRep *)currentRepresentation;
-			break;
-		}
-	}
-	
-	// Create a bitmap representation if one doesn't exist
-	if(nil == bitmapRep) {
-		NSSize size = [_albumArt size];
-		[_albumArt lockFocus];
-		bitmapRep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, size.width, size.height)] autorelease];
-		[_albumArt unlockFocus];
-	}
-	
-	[self setValue:bitmapRep forKey:@"albumArtBitmap"];
-}
-
-- (IBAction) fetchAlbumArt:(id) sender
-{	
-	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithCompactDiscDocument:self] autorelease];
-	[art showAlbumArtMatches];
-}
-
-#pragma mark FreeDB Functionality
+#pragma mark FreeDB
 
 - (void) clearFreeDBData
 {
-	unsigned i;
+	unsigned	i;
+	Track		*track;
 	
-	[self setValue:nil forKey:@"title"];
-	[self setValue:nil forKey:@"artist"];
-	[self setValue:nil forKey:@"year"];
-	[self setValue:nil forKey:@"genre"];
-	[self setValue:nil forKey:@"comment"];
-	[self setValue:nil forKey:@"discNumber"];
-	[self setValue:nil forKey:@"discsInSet"];
-	[self setValue:[NSNumber numberWithBool:NO] forKey:@"multiArtist"];
+	[self setTitle:nil];
+	[self setArtist:nil];
+	[self setYear:0];
+	[self setGenre:nil];
+	[self setComment:nil];
+	[self setDiscNumber:0];
+	[self setDiscTotal:0];
+	[self setCompilation:NO];
 	
-	for(i = 0; i < [_tracks count]; ++i) {
-		[[_tracks objectAtIndex:i] clearFreeDBData];
-	}
-}
-
-- (IBAction) queryFreeDB:(id)sender
-{
-	FreeDB				*freeDB				= nil;
-	NSArray				*matches			= nil;
-	FreeDBMatchSheet	*sheet				= nil;
-	
-	if(NO == [self queryFreeDBAllowed]) {
-		return;
-	}
-
-	@try {
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"freeDBQueryInProgress"];
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"freeDBQuerySuccessful"];
-
-		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
-		
-		matches = [freeDB fetchMatches];
-		
-		if(0 == [matches count]) {
-			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matches found for this disc", @"Exceptions", @"") userInfo:nil];
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		track = [self objectInTracksAtIndex:i];
+		if(NO == [track ripInProgress] && NO == [track encodeInProgress]) {
+			[track clearFreeDBData];
 		}
-		else if(1 == [matches count]) {
-			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
-		}
-		else {
-			sheet = [[[FreeDBMatchSheet alloc] initWithCompactDiscDocument:self] autorelease];
-			[sheet setValue:matches forKey:@"matches"];
-			[sheet showFreeDBMatches];
-		}
-	}
-	
-	@catch(NSException *exception) {
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"freeDBQueryInProgress"];
-		[self displayException:exception];
-	}
-	
-	@finally {
-		[freeDB release];
-	}
-}
-
-- (IBAction) submitToFreeDB:(id) sender
-{
-	FreeDB				*freeDB				= nil;
-	
-	if(NO == [self submitToFreeDBAllowed]) {
-		return;
-	}
-
-	@try {
-		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];		
-		[freeDB submitDisc];
-	}
-	
-	@catch(NSException *exception) {
-		[self displayException:exception];
-	}
-	
-	@finally {
-		[freeDB release];
 	}
 }
 
@@ -670,13 +605,13 @@
 	
 	@try {
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
-	
+		
 		[self updateChangeCount:NSChangeReadOtherContents];
 		[self clearFreeDBData];
 		
 		[freeDB updateDisc:info];
 		
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"freeDBQuerySuccessful"];
+		[self setFreeDBQueryInProgress:YES];
 	}
 	
 	@catch(NSException *exception) {
@@ -684,132 +619,156 @@
 	}
 	
 	@finally {
-		[self setValue:[NSNumber numberWithBool:NO] forKey:@"freeDBQueryInProgress"];
+		[self setFreeDBQueryInProgress:NO];
 		[freeDB release];		
-	}
-	
+	}	
 }
 
 #pragma mark Miscellaneous
 
-- (IBAction) toggleTrackInformation:(id) sender
+- (NSString *)		length								{ return [NSString stringWithFormat:@"%u:%.02u", [[self disc] length] / 60, [[self disc] length] % 60]; }
+- (NSArray *)		genres								{ return [Genres sharedGenres]; }
+
+- (NSArray *) selectedTracks
 {
-	[_trackDrawer toggle:sender];
-}
-
-- (IBAction) toggleAlbumArt:(id) sender
-{
-	[_artDrawer toggle:sender];
-}
-
-- (NSString *)		length			{ return [NSString stringWithFormat:@"%u:%.02u", [_disc length] / 60, [_disc length] % 60]; }
-
-- (NSArray *) genres
-{
-	return [Genres sharedGenres];
-}
-
-#pragma mark Save/Restore
-
-- (NSDictionary *) getDictionary
-{
-	unsigned				i;
-	NSMutableDictionary		*result					= [[NSMutableDictionary alloc] init];
-	NSMutableArray			*tracks					= [NSMutableArray arrayWithCapacity:[_tracks count]];
-	NSData					*data					= nil;
+	return [_tracks filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];
+/*	
+	unsigned		i;
+	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[[self disc] trackCount]];
+	NSEnumerator	*enumerator		= [[self tracks] objectEnumerator];
+	Track			*track;
 	
-	[result setValue:_title forKey:@"title"];
-	[result setValue:_artist forKey:@"artist"];
-	[result setValue:_year forKey:@"year"];
-	[result setValue:_genre forKey:@"genre"];
-	[result setValue:_composer forKey:@"composer"];
-	[result setValue:_comment forKey:@"comment"];
-	[result setValue:_discNumber forKey:@"discNumber"];
-	[result setValue:_discsInSet forKey:@"discsInSet"];
-	[result setValue:_multiArtist forKey:@"multiArtist"];				
-	[result setValue:_MCN forKey:@"MCN"];
-	[result setValue:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
-
-	data = [_albumArtBitmap representationUsingType:NSPNGFileType properties:nil]; 
-	[result setValue:data forKey:@"albumArt"];
-	
-	for(i = 0; i < [_tracks count]; ++i) {
-		[tracks addObject:[[_tracks objectAtIndex:i] getDictionary]];
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		
 	}
-	
-	[result setValue:tracks forKey:@"tracks"];
-	
-	return [[result retain] autorelease];
-}
-
-- (void) setPropertiesFromDictionary:(NSDictionary *) properties
-{
-	unsigned				i;
-	NSArray					*tracks			= [properties valueForKey:@"tracks"];
-	NSImage					*image			= nil;
-	
-	if([self discInDrive] && [tracks count] != [_tracks count]) {
-		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
-	}
-	else if(0 == [_tracks count]) {
-		[self willChangeValueForKey:@"tracks"];
-		for(i = 0; i < [tracks count]; ++i) {
-			Track *track = [[Track alloc] init];
-			[track setValue:self forKey:@"disc"];
-			[_tracks addObject:[[track retain] autorelease]];
+	while((track = [enumerator nextObject])) {
+		if([track selected]) {
+			[result addObject:track];
 		}
-		[self didChangeValueForKey:@"tracks"];
 	}
 	
-	for(i = 0; i < [tracks count]; ++i) {
-		[[_tracks objectAtIndex:i] setPropertiesFromDictionary:[tracks objectAtIndex:i]];
-	}
-	
-	[_title release];
-	[_artist release];
-	[_year release];
-	[_genre release];
-	[_composer release];
-	[_comment release];
-	[_discNumber release];
-	[_discsInSet release];
-	[_multiArtist release];
-	[_MCN release];
-
-	_title			= [[properties valueForKey:@"title"] retain];
-	_artist			= [[properties valueForKey:@"artist"] retain];
-	_year			= [[properties valueForKey:@"year"] retain];
-	_genre			= [[properties valueForKey:@"genre"] retain];
-	_composer		= [[properties valueForKey:@"composer"] retain];
-	_comment		= [[properties valueForKey:@"comment"] retain];
-	_discNumber		= [[properties valueForKey:@"discNumber"] retain];
-	_discsInSet		= [[properties valueForKey:@"discsInSet"] retain];
-	_multiArtist	= [[properties valueForKey:@"multiArtist"] retain];	
-	_MCN			= [[properties valueForKey:@"MCN"] retain];
-	
-	[self setValue:[properties valueForKey:@"discID"] forKey:@"discID"];	
-	
-	// Convert PNG data to an NSImage
-	image = [[NSImage alloc] initWithData:[properties valueForKey:@"albumArt"]];
-	[self setValue:(nil != image ? [image autorelease] : nil) forKey:@"albumArt"];
-	[self updateAlbumArtImageRep];
+	return [[result retain] autorelease];*/
 }
 
 #pragma mark Accessors
 
-- (NSString *)	title								{ return _title; }
-- (NSString *)	artist								{ return _artist; }
-- (unsigned)	year								{ return _year; }
-- (NSString *)	genre								{ return _genre; }
-- (NSString *)	composer							{ return _composer; }
-- (NSString *)	comment								{ return _comment; }
-- (BOOL)		partOfSet							{ return _partOfSet; }
-- (unsigned)	discNumber							{ return _discNumber; }
-- (unsigned)	discsInSet							{ return _discsInSet; }
-- (BOOL)		multiArtist							{ return _multiArtist; }
-- (NSString *)	MCN									{ return _MCN; }
+- (CompactDisc *)	disc								{ return _disc; }
+- (BOOL)			discInDrive							{ return _discInDrive; }
+- (int)				discID								{ return ([self discInDrive] ? [_disc discID] : _discID); }
+- (BOOL)			freeDBQueryInProgress				{ return _freeDBQueryInProgress; }
+- (BOOL)			freeDBQuerySuccessful				{ return _freeDBQuerySuccessful; }
+
+- (NSString *)		title								{ return _title; }
+- (NSString *)		artist								{ return _artist; }
+- (unsigned)		year								{ return _year; }
+- (NSString *)		genre								{ return _genre; }
+- (NSString *)		composer							{ return _composer; }
+- (NSString *)		comment								{ return _comment; }
+- (BOOL)			partOfSet							{ return _partOfSet; }
+
+- (NSImage *)		albumArt							{ return _albumArt; }
+
+- (unsigned)		discNumber							{ return _discNumber; }
+- (unsigned)		discTotal							{ return _discTotal; }
+- (BOOL)			compilation							{ return _compilation; }
+
+- (NSString *)		MCN									{ return _MCN; }
+
+- (unsigned)		countOfTracks						{ return [_tracks count]; }
+- (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
+
+- (NSBitmapImageRep *) albumArtBitmap
+{
+	NSEnumerator		*enumerator					= nil;
+	NSImageRep			*currentRepresentation		= nil;
+	NSBitmapImageRep	*bitmapRep					= nil;
+	NSSize				size;
+
+	if(nil == [self albumArt]) {
+		return nil;
+	}
+
+	enumerator = [[[self albumArt] representations] objectEnumerator];
+	while((currentRepresentation = [enumerator nextObject])) {
+		if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
+			return (NSBitmapImageRep *)currentRepresentation;
+		}
+	}
+
+	// Create a bitmap representation if one doesn't exist
+	size = [[self albumArt] size];
+	[[self albumArt] lockFocus];
+	bitmapRep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, size.width, size.height)] autorelease];
+	[[self albumArt] unlockFocus];
+
+	return bitmapRep;
+}
 
 #pragma mark Mutators
+
+- (void) setDisc:(CompactDisc *)disc
+{
+	unsigned			i;
+
+	if(NO == [_disc isEqual:disc]) {
+		[_disc release];
+		
+		if(nil == disc) {
+			[self setValue:[NSNumber numberWithBool:NO] forKey:@"discInDrive"];
+			return;
+		}
+		
+		_disc			= [disc retain];
+		
+		[self setValue:[NSNumber numberWithBool:YES] forKey:@"discInDrive"];
+		
+		[self setValue:[_disc MCN] forKey:@"MCN"];
+		
+//		[self willChangeValueForKey:@"tracks"];
+		if(0 == [_tracks count]) {
+			for(i = 0; i < [_disc trackCount]; ++i) {
+				Track *track = [[Track alloc] init];
+				[track setValue:self forKey:@"disc"];
+				[_tracks addObject:[[track retain] autorelease]];
+			}
+		}
+//		[self didChangeValueForKey:@"tracks"];
+		
+		for(i = 0; i < [_disc trackCount]; ++i) {
+			Track			*track		= [_tracks objectAtIndex:i];
+			
+			[track setValue:[NSNumber numberWithUnsignedInt:i + 1] forKey:@"number"];
+			[track setValue:[NSNumber numberWithUnsignedLong:[_disc firstSectorForTrack:i]] forKey:@"firstSector"];
+			[track setValue:[NSNumber numberWithUnsignedLong:[_disc lastSectorForTrack:i]] forKey:@"lastSector"];
+			
+			[track setValue:[NSNumber numberWithUnsignedInt:[_disc channelsForTrack:i]] forKey:@"channels"];
+			[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackHasPreEmphasis:i]] forKey:@"preEmphasis"];
+			[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackAllowsDigitalCopy:i]] forKey:@"copyPermitted"];
+			[track setValue:[_disc ISRC:i] forKey:@"ISRC"];
+		}
+	}
+}
+
+- (void) setDiscID:(int)discID
+{
+	if(_discID != discID) {
+		_discID = discID;
+	}
+}
+
+- (void) setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress
+{
+	if(_freeDBQueryInProgress != freeDBQueryInProgress) {
+		_freeDBQueryInProgress = freeDBQueryInProgress;
+	}
+}
+
+- (void) setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful;
+{
+	if(_freeDBQuerySuccessful != freeDBQuerySuccessful) {
+		_freeDBQuerySuccessful = freeDBQuerySuccessful;
+	}
+}
 
 - (void) setTitle:(NSString *)title
 {
@@ -834,7 +793,7 @@
 - (void) setYear:(unsigned)year
 {
 	if(_year != year) {
-		[[self undoManager] registerUndoWithTarget:self selector:@selector(setYear:) object:_year];
+		[[[self undoManager] prepareWithInvocationTarget:self] setYear:_year];
 		[[self undoManager] setActionName:@"Album Year"];
 		_year = year;
 	}
@@ -873,47 +832,65 @@
 - (void) setPartOfSet:(BOOL)partOfSet
 {
 	if(_partOfSet != partOfSet) {
-		[[self undoManager] registerUndoWithTarget:self selector:@selector(setPartOfSet:) object:_partOfSet];
+		[[[self undoManager] prepareWithInvocationTarget:self] setPartOfSet:_partOfSet];
 		[[self undoManager] setActionName:@"Album partOfSet"];
-		_partOfSet = partOfSet retain;
+		_partOfSet = partOfSet;
+	}
+}
+
+- (void) setAlbumArt:(NSImage *)albumArt
+{
+	if(NO == [_albumArt isEqual:albumArt]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArt:) object:_albumArt];
+		[[self undoManager] setActionName:@"Album Art"];
+		[_albumArt release];
+		_albumArt = [albumArt retain];
 	}
 }
 
 - (void) setDiscNumber:(unsigned)discNumber
 {
 	if(_discNumber != discNumber) {
-		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscNumber:) object:_discNumber];
+		[[[self undoManager] prepareWithInvocationTarget:self] setDiscNumber:_discNumber];
 		[[self undoManager] setActionName:@"Total Discs"];
 		_discNumber = discNumber;
 	}
 }
 
-- (void) setDiscsInSet:(unsigned)discsInSet
+- (void) setDiscTotal:(unsigned)discTotal
 {
-	if(_discsInSet != discsInSet) {
-		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscsInSet:) object:_discsInSet];
+	if(_discTotal != discTotal) {
+		[[[self undoManager] prepareWithInvocationTarget:self] setDiscTotal:_discTotal];
 		[[self undoManager] setActionName:@"Total Discs"];
-		_discsInSet = discsInSet;
+		_discTotal = discTotal;
 	}
 }
 
-- (void) setMultiArtist:(BOOL)multiArtist
+- (void) setCompilation:(BOOL)compilation
 {
-	if(_multiArtist != multiArtist) {
-		[[self undoManager] registerUndoWithTarget:self selector:@selector(setMultiArtist:) object:_multiArtist];
+	if(_compilation != compilation) {
+		[[[self undoManager] prepareWithInvocationTarget:self] setCompilation:_compilation];
 		[[self undoManager] setActionName:@"Compilation"];
-		_multiArtist = multiArtist;
+		_compilation = compilation;
 	}
 }
 
 - (void) setMCN:(NSString *)MCN
 {
 	if(NO == [_MCN isEqualToString:MCN]) {
-		[[self undoManager] registerUndoWithTarget:self selector:@selector(setMCN:) object:_MCN];
-		[[self undoManager] setActionName:@"Album MCN"];
 		[_MCN release];
 		_MCN = [MCN retain];
 	}
+}
+
+- (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)idx
+{
+	[_tracks insertObject:track atIndex:idx];
+}
+
+- (void) removeObjectFromTracksAtIndex:(unsigned)idx
+{
+	[_tracks removeObjectAtIndex:idx];
 }
 
 @end

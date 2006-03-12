@@ -104,13 +104,17 @@
 									[result setAlbumTrackCount:[value intValue]];
 								}
 								else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMPILATION"]) {
-									[result setMultipleArtists:[value intValue]];
+									[result setCompilation:[value intValue]];
 								}
 								else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCNUMBER"]) {
 									[result setDiscNumber:[value intValue]];
 								}
+								else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCTOTAL"]) {
+									[result setDiscTotal:[value intValue]];
+								}
+								// Maintain backwards compatibilty for DISCSINSET
 								else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCSINSET"]) {
-									[result setDiscsInSet:[value intValue]];
+									[result setDiscTotal:[value intValue]];
 								}
 								else if(NSOrderedSame == [key caseInsensitiveCompare:@"ISRC"]) {
 									[result setISRC:value];
@@ -251,7 +255,7 @@
 						if(NO == frameList.isEmpty()) {
 							// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
 							NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
-							[result setMultipleArtists:(BOOL)[value intValue]];
+							[result setCompilation:(BOOL)[value intValue]];
 						}			
 					}
 				}
@@ -280,14 +284,20 @@
 						[result setDiscNumber:[value intValue]];
 					}
 
-					if(fieldList.contains("DISCSINSET")) {
-						value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
-						[result setDiscsInSet:[value intValue]];
+					if(fieldList.contains("DISCTOTAL")) {
+						value = [NSString stringWithUTF8String:fieldList["DISCTOTAL"].toString().toCString(true)];
+						[result setDiscTotal:[value intValue]];
 					}
 
+					// Maintain backwards compatibility for DISCSINSET tag
+					if(fieldList.contains("DISCSINSET")) {
+						value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
+						[result setDiscTotal:[value intValue]];
+					}
+					
 					if(fieldList.contains("COMPILATION")) {
 						value = [NSString stringWithUTF8String:fieldList["COMPILATION"].toString().toCString(true)];
-						[result setMultipleArtists:(BOOL)[value intValue]];
+						[result setCompilation:(BOOL)[value intValue]];
 					}
 
 					if(fieldList.contains("ISRC")) {
@@ -313,8 +323,8 @@
 		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
 			char			*s									= NULL;
 			u_int16_t		trackNumber, totalTracks;
-			u_int16_t		discNumber, discsInSet;
-			u_int8_t		multipleArtists;
+			u_int16_t		discNumber, discTotal;
+			u_int8_t		compilation;
 			u_int64_t		duration;
 			u_int32_t		artCount;
 			u_int8_t		*bytes								= NULL;
@@ -368,18 +378,18 @@
 			}
 			
 			// Disc number
-			MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discsInSet);
+			MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discTotal);
 			if(0 != discNumber) {
 				[result setDiscNumber:discNumber];
 			}
-			if(0 != discsInSet) {
-				[result setDiscsInSet:discsInSet];
+			if(0 != discTotal) {
+				[result setDiscTotal:discTotal];
 			}
 			
 			// Compilation
-			MP4GetMetadataCompilation(mp4FileHandle, &multipleArtists);
-			if(multipleArtists) {
-				[result setMultipleArtists:YES];
+			MP4GetMetadataCompilation(mp4FileHandle, &compilation);
+			if(compilation) {
+				[result setCompilation:YES];
 			}
 			
 			// Length
@@ -425,9 +435,9 @@
 		_albumGenre			= nil;
 		_albumComment		= nil;
 		
-		_multipleArtists	= NO;
+		_compilation		= NO;
 		_discNumber			= 0;
-		_discsInSet			= 0;
+		_discTotal			= 0;
 		
 		_length				= 0;
 		
@@ -484,7 +494,7 @@
 		
 		// Get the elements needed to build the pathname
 		unsigned			discNumber			= [self discNumber];
-		unsigned			discsInSet			= [self discsInSet];
+		unsigned			discTotal			= [self discTotal];
 		NSString			*discArtist			= [self albumArtist];
 		NSString			*discTitle			= [self albumTitle];
 		NSString			*discGenre			= [self albumGenre];
@@ -521,11 +531,11 @@
 		else {
 			[customPath replaceOccurrencesOfString:@"{discNumber}" withString:[NSString stringWithFormat:@"%u", discNumber] options:nil range:NSMakeRange(0, [customPath length])];					
 		}
-		if(0 == discsInSet) {
-			[customPath replaceOccurrencesOfString:@"{discsInSet}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+		if(0 == discTotal) {
+			[customPath replaceOccurrencesOfString:@"{discTotal}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
 		}
 		else {
-			[customPath replaceOccurrencesOfString:@"{discsInSet}" withString:[NSString stringWithFormat:@"%u", discsInSet] options:nil range:NSMakeRange(0, [customPath length])];
+			[customPath replaceOccurrencesOfString:@"{discTotal}" withString:[NSString stringWithFormat:@"%u", discTotal] options:nil range:NSMakeRange(0, [customPath length])];
 		}
 		if(nil == discArtist) {
 			[customPath replaceOccurrencesOfString:@"{discArtist}" withString:@"Unknown Artist" options:nil range:NSMakeRange(0, [customPath length])];
@@ -600,11 +610,11 @@
 		basename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
 	}
 	// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
-	else if([self multipleArtists]) {
+	else if([self compilation]) {
 		NSString			*path;
 		
-		NSString			*discTitle			= [self valueForKey:@"albumTitle"];
-		NSString			*trackTitle			= [self valueForKey:@"trackTitle"];
+		NSString			*discTitle			= [self albumTitle];
+		NSString			*trackTitle			= [self trackTitle];
 		
 		if(nil == discTitle) {
 			discTitle = NSLocalizedStringFromTable(@"Unknown Album", @"CompactDisc", @"");
@@ -626,11 +636,11 @@
 	else {
 		NSString			*path;
 		
-		NSString			*discArtist			= [self valueForKey:@"albumArtist"];
-		NSString			*trackArtist		= [self valueForKey:@"trackArtist"];
+		NSString			*discArtist			= [self albumArtist];
+		NSString			*trackArtist		= [self trackArtist];
 		NSString			*artist;
-		NSString			*discTitle			= [self valueForKey:@"albumTitle"];
-		NSString			*trackTitle			= [self valueForKey:@"trackTitle"];
+		NSString			*discTitle			= [self albumTitle];
+		NSString			*trackTitle			= [self trackTitle];
 		
 		artist = trackArtist;
 		if(nil == artist) {
@@ -661,7 +671,7 @@
 
 - (NSString *) description
 {
-	if([self multipleArtists]) {
+	if([self compilation]) {
 		NSString	*artist		= [self trackArtist];
 		NSString	*title		= [self trackTitle];
 		
@@ -702,9 +712,9 @@
 - (NSString	*)	albumGenre					{ return _albumGenre; }
 - (NSString	*)	albumComment				{ return _albumComment; }
 
-- (BOOL)		multipleArtists				{ return _multipleArtists; }
+- (BOOL)		compilation					{ return _compilation; }
 - (unsigned)	discNumber					{ return _discNumber; }
-- (unsigned)	discsInSet					{ return _discsInSet; }
+- (unsigned)	discTotal					{ return _discTotal; }
 
 - (unsigned)	length						{ return _length; }
 
@@ -730,9 +740,9 @@
 - (void)		setAlbumGenre:(NSString *)albumGenre			{ [_albumGenre release]; _albumGenre = [albumGenre retain]; }
 - (void)		setAlbumComment:(NSString *)albumComment		{ [_albumComment release]; _albumComment = [albumComment retain]; }
 
-- (void)		setMultipleArtists:(BOOL)multipleArtists		{ _multipleArtists = multipleArtists; }
+- (void)		setCompilation:(BOOL)compilation				{ _compilation = compilation; }
 - (void)		setDiscNumber:(unsigned)discNumber				{ _discNumber = discNumber; }
-- (void)		setDiscsInSet:(unsigned)discsInSet				{ _discsInSet = discsInSet; }
+- (void)		setDiscTotal:(unsigned)discTotal				{ _discTotal = discTotal; }
 
 - (void)		setLength:(unsigned)length						{ _length = length; }
 

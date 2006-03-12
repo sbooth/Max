@@ -20,9 +20,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface FreeDBProtocolValueTransformer : NSObject 
+@interface FreeDBProtocolValueTransformer : NSValueTransformer 
 {
-
 }
 
 @end

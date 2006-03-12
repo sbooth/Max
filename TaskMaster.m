@@ -206,7 +206,7 @@ static TaskMaster *sharedController = nil;
 	
 	enumerator = [_rippingTasks objectEnumerator];
 	while((ripperTask = [enumerator nextObject])) {
-		if([document isEqual:[[[ripperTask tracks] objectAtIndex:0] getCompactDiscDocument]]) {
+		if([document isEqual:[[[ripperTask tracks] objectAtIndex:0] document]]) {
 			return YES;
 		}
 	}
@@ -221,7 +221,7 @@ static TaskMaster *sharedController = nil;
 	
 	enumerator = [_encodingTasks objectEnumerator];
 	while((encoderTask = [enumerator nextObject])) {
-		if(nil != [encoderTask tracks] && [document isEqual:[[[encoderTask tracks] objectAtIndex:0] getCompactDiscDocument]]) {
+		if(nil != [encoderTask tracks] && [document isEqual:[[[encoderTask tracks] objectAtIndex:0] document]]) {
 			return YES;
 		}
 	}
@@ -237,7 +237,7 @@ static TaskMaster *sharedController = nil;
 	
 	for(i = [_rippingTasks count] - 1; 0 <= i; --i) {
 		ripperTask = [_rippingTasks objectAtIndex:i];
-		if([document isEqual:[[[ripperTask valueForKey:@"tracks"] objectAtIndex:0] getCompactDiscDocument]]) {
+		if([document isEqual:[[ripperTask objectInTracksAtIndex:0] document]]) {
 			[tasks addObject:ripperTask];
 		}
 	}

@@ -20,18 +20,10 @@
 
 #import "NegateBooleanArrayValueTransformer.h"
 
-
 @implementation NegateBooleanArrayValueTransformer
 
-+ (Class) transformedValueClass
-{
-	return [NSNumber class];
-}
-
-+ (BOOL) allowsReverseTransformation
-{
-	return NO;
-}
++ (Class)	transformedValueClass			{ return [NSNumber class]; }
++ (BOOL)	allowsReverseTransformation		{ return NO; }
 
 - (id) transformedValue:(id) value;
 {

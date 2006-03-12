@@ -154,23 +154,23 @@
 - (unsigned long)	firstSector								{ return [_firstSector unsignedLongValue]; }
 - (unsigned long)	lastSector								{ return [_lastSector unsignedLongValue]; }
 
-- (unsigned long)	firstSectorForTrack:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"firstSector"] unsignedLongValue]; }
-- (unsigned long)	lastSectorForTrack:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"lastSector"] unsignedLongValue]; }
+- (unsigned long)	firstSectorForTrack:(unsigned)track		{ return [[_tracks objectAtIndex:track] firstSector]; }
+- (unsigned long)	lastSectorForTrack:(unsigned)track		{ return [[_tracks objectAtIndex:track] lastSector]; }
 
-- (unsigned)		channelsForTrack:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"channels"] unsignedIntValue]; }
+- (unsigned)		channelsForTrack:(unsigned)track		{ return [[_tracks objectAtIndex:track] channels]; }
 
-- (BOOL)			trackContainsAudio:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"containsAudio"] boolValue]; }
-- (BOOL)			trackHasPreEmphasis:(unsigned)track		{ return [[[_tracks objectAtIndex:track] valueForKey:@"hasPreEmphasis"] boolValue]; }
-- (BOOL)			trackAllowsDigitalCopy:(unsigned)track	{ return [[[_tracks objectAtIndex:track] valueForKey:@"allowsDigitalCopy"] boolValue]; }
+- (BOOL)			trackContainsAudio:(unsigned)track		{ return [[_tracks objectAtIndex:track] containsAudio]; }
+- (BOOL)			trackHasPreEmphasis:(unsigned)track		{ return [[_tracks objectAtIndex:track] hasPreEmphasis]; }
+- (BOOL)			trackAllowsDigitalCopy:(unsigned)track	{ return [[_tracks objectAtIndex:track] allowsDigitalCopy]; }
 
-- (NSString *)		ISRC:(unsigned) track					{ return [[_tracks objectAtIndex:track] valueForKey:@"ISRC"]; }
+- (NSString *)		ISRC:(unsigned)track					{ return [[_tracks objectAtIndex:track] ISRC]; }
 
 - (int)				discID									{ return cddb_disc_get_discid(_freeDBDisc); }
 - (unsigned)		length									{ return _length; }
 
 // KVC
 - (unsigned int)	countOfTracks								{ return [_tracks count]; }
-- (NSDictionary *)	objectInTracksAtIndex:(unsigned int)index	{ return [_tracks objectAtIndex:index]; }
+- (NSDictionary *)	objectInTracksAtIndex:(unsigned int)idx		{ return [_tracks objectAtIndex:idx]; }
 
 - (cddb_disc_t *)	getFreeDBDisc								{ return _freeDBDisc; }
 

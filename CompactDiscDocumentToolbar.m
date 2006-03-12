@@ -29,14 +29,16 @@ static NSString		*QueryFreeDBToolbarItemIdentifier			= @"QueryFreeDB";
 static NSString		*SubmitToFreeDBToolbarItemIdentifier		= @"SubmitToFreeDB";
 static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 
-#define kEncodeToolbarItemTag					1
-#define kTrackInfoToolbarItemTag				2
-#define kQueryFreeDBToolbarItemTag				3
-#define kSubmitToFreeDBToolbarItemTag			4
-#define kEjectDiscToolbarItemTag				5
-#define kSelectNextTrackToolbarItemTag			6
-#define kSelectPreviousTrackToolbarItemTag		7
-#define kAlbumArtToolbarItemTag					8
+enum {
+	kEncodeToolbarItemTag					= 1,
+	kTrackInfoToolbarItemTag				= 2,
+	kQueryFreeDBToolbarItemTag				= 3,
+	kSubmitToFreeDBToolbarItemTag			= 4,
+	kEjectDiscToolbarItemTag				= 5,
+	kSelectNextTrackToolbarItemTag			= 6,
+	kSelectPreviousTrackToolbarItemTag		= 7,
+	kAlbumArtToolbarItemTag					= 8	
+};
 
 @implementation CompactDiscDocumentToolbar
 
@@ -99,8 +101,8 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide detailed track information", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"TrackInfoToolbarImage"]];
 		
-		[toolbarItem setTarget:[_document valueForKey:@"trackDrawer"]];
-		[toolbarItem setAction:@selector(toggle:)];
+		[toolbarItem setTarget:_document];
+		[toolbarItem setAction:@selector(toggleTrackInformation:)];
 	}
     else if([itemIdentifier isEqualToString:AlbumArtToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
@@ -111,8 +113,8 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the artwork associated with this album", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"AlbumArtToolbarImage"]];
 		
-		[toolbarItem setTarget:[_document valueForKey:@"artDrawer"]];
-		[toolbarItem setAction:@selector(toggle:)];
+		[toolbarItem setTarget:_document];
+		[toolbarItem setAction:@selector(toggleAlbumArt:)];
 	}
     else if([itemIdentifier isEqualToString:SelectNextTrackToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
@@ -123,8 +125,8 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select the next track for editing", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"SelectNextTrackToolbarImage"]];
 		
-		[toolbarItem setTarget:[_document valueForKey:@"trackController"]];
-		[toolbarItem setAction:@selector(selectNext:)];
+		[toolbarItem setTarget:_document];
+		[toolbarItem setAction:@selector(selectNextTrack:)];
 	}
     else if([itemIdentifier isEqualToString:SelectPreviousTrackToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
@@ -135,8 +137,8 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
 		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select the previous track for editing", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"SelectPreviousTrackToolbarImage"]];
 		
-		[toolbarItem setTarget:[_document valueForKey:@"trackController"]];
-		[toolbarItem setAction:@selector(selectPrevious:)];
+		[toolbarItem setTarget:_document];
+		[toolbarItem setAction:@selector(selectPreviousTrack:)];
 	}
     else if([itemIdentifier isEqualToString:QueryFreeDBToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];

@@ -2,7 +2,6 @@
     IBClasses = (
         {
             ACTIONS = {
-                albumArtUpdated = id; 
                 eject = id; 
                 encode = id; 
                 fetchAlbumArt = id; 

@@ -39,11 +39,11 @@
 - (void) writeTags
 {
 	AudioMetadata								*metadata				= [_task metadata];
-	NSNumber									*trackNumber			= nil;
+	unsigned									trackNumber				= 0;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*title					= nil;
-	NSNumber									*year					= nil;
+	unsigned									year					= 0;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	TagLib::Ogg::FLAC::File						f						([_outputFilename fileSystemRepresentation], false);
@@ -54,40 +54,40 @@
 	}
 	
 	// Album title
-	album = [metadata valueForKey:@"albumTitle"];
+	album = [metadata albumTitle];
 	if(nil != album) {
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Artist
-	artist = [metadata valueForKey:@"trackArtist"];
+	artist = [metadata trackArtist];
 	if(nil == artist) {
-		artist = [metadata valueForKey:@"albumArtist"];
+		artist = [metadata albumArtist];
 	}
 	if(nil != artist) {
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
-	genre = [metadata valueForKey:@"trackGenre"];
+	genre = [metadata trackGenre];
 	if(nil == genre) {
-		genre = [metadata valueForKey:@"albumGenre"];
+		genre = [metadata albumGenre];
 	}
 	if(nil != genre) {
 		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year
-	year = [metadata valueForKey:@"trackYear"];
-	if(nil == year) {
-		year = [metadata valueForKey:@"albumYear"];
+	year = [metadata trackYear];
+	if(0 == year) {
+		year = [metadata albumYear];
 	}
-	if(nil != year) {
-		f.tag()->setYear([year intValue]);
+	if(0 != year) {
+		f.tag()->setYear(year);
 	}
 	
 	// Comment
-	comment = [metadata valueForKey:@"albumComment"];
+	comment = [metadata albumComment];
 	if(_writeSettingsToComment) {
 		comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 	}
@@ -96,15 +96,15 @@
 	}
 	
 	// Track title
-	title = [metadata valueForKey:@"trackTitle"];
+	title = [metadata trackTitle];
 	if(nil != title) {
 		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track number
-	trackNumber = [metadata valueForKey:@"trackNumber"];
-	if(nil != trackNumber) {
-		f.tag()->setTrack([trackNumber unsignedIntValue]);
+	trackNumber = [metadata trackNumber];
+	if(0 != trackNumber) {
+		f.tag()->setTrack(trackNumber);
 	}
 	
 	f.save();

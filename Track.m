@@ -19,6 +19,7 @@
  */
 
 #import "Track.h"
+#import "CompactDiscDocument.h"
 #import "MissingResourceException.h"
 #import "UtilityFunctions.h"
 
@@ -108,7 +109,7 @@
 
 - (NSString *) description
 {
-	NSString			*discArtist			= [_document artist];
+	NSString			*discArtist			= [[self document] artist];
 	NSString			*trackArtist		= [self artist];
 	NSString			*artist;
 	NSString			*trackTitle			= [self title];
@@ -125,7 +126,7 @@
 	}
 	
 	
-	if([[_document valueForKey:@"multiArtist"] boolValue]) {
+	if([[self document] compilation]) {
 		return [NSString stringWithFormat:@"%@ - %@", artist, trackTitle];
 	}
 	else {
@@ -137,24 +138,24 @@
 
 - (unsigned) minute
 {
-	unsigned long	sector		= _firstSector;
-	unsigned long	offset		= _lastSector - sector + 1;
+	unsigned long	sector		= [self firstSector];
+	unsigned long	offset		= [self lastSector] - sector + 1;
 	
 	return (unsigned) (offset / (60 * 75));
 }
 
 - (unsigned) second
 {
-	unsigned long	sector		= _firstSector;
-	unsigned long	offset		= _lastSector - sector + 1;
+	unsigned long	sector		= [self firstSector];
+	unsigned long	offset		= [self lastSector] - sector + 1;
 	
 	return (unsigned) ((offset / 75) % 60);
 }
 
 - (unsigned) frame
 {
-	unsigned long	sector		= _firstSector;
-	unsigned long	offset		= _lastSector - sector + 1;
+	unsigned long	sector		= [self firstSector];
+	unsigned long	offset		= [self lastSector] - sector + 1;
 	
 	return (unsigned) (offset % 75);
 }
@@ -190,15 +191,12 @@
 - (NSString *)				composer			{ return _composer; }
 - (NSString *)				ISRC				{ return _ISRC; }
 
-
 - (NSColor *) color
 {
-	NSColor		*result;
 	NSData		*data;
+	NSColor		*result		= nil;
 	
-	result = nil;
-	
-	if(nil != _artist || nil != _year || nil != _genre) {
+	if(nil != [self artist] || 0 != [self year] || nil != [self genre]) {
 		data = [[NSUserDefaults standardUserDefaults] dataForKey:@"customTrackColor"];
 		if(nil != data) {
 			result = (NSColor *)[NSUnarchiver unarchiveObjectWithData:data];
@@ -222,7 +220,7 @@
 - (void) setChannels:(unsigned)channels					{ _channels = channels; }
 - (void) setPreEmphasis:(BOOL)preEmphasis				{ _preEmphasis = preEmphasis; }
 - (void) setCopyPermitted:(BOOL)copyPermitted			{ _copyPermitted = copyPermitted; }
-- (void) setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = ISRC; }
+- (void) setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = [ISRC retain]; }
 
 - (void) encodeStarted
 {
@@ -291,23 +289,24 @@
 
 - (NSDictionary *) getDictionary
 {
-	NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+	NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:10];
 	
-	[result setValue:[NSNumber numberWithBool:_selected] forKey:@"selected"];
-	//[result setValue:_color forKey:@"color"];
+	[result setObject:[NSNumber numberWithBool:[self selected]] forKey:@"selected"];
+	//[result setObject:[self color] forKey:@"color"];
 
 	[result setValue:[self title] forKey:@"title"];
 	[result setValue:[self artist] forKey:@"artist"];
-	[result setValue:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
+	[result setObject:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
 	[result setValue:[self genre] forKey:@"genre"];
+	[result setValue:[self composer] forKey:@"composer"];
 
-	[result setValue:[NSNumber numberWithUnsignedInt:[self number]] forKey:@"number"];
-	[result setValue:[NSNumber numberWithUnsignedLong:[self firstSector]] forKey:@"firstSector"];
-	[result setValue:[NSNumber numberWithUnsignedLong:[self lastSector]] forKey:@"lastSector"];
-	[result setValue:[NSNumber numberWithUnsignedInt:[self channels]] forKey:@"channels"];
-	[result setValue:[NSNumber numberWithBool:[self preEmphasis]] forKey:@"preEmphasis"];
-	[result setValue:[NSNumber numberWithBool:[self copyPermitted]] forKey:@"copyPermitted"];
-	[result setValue:_ISRC forKey:@"ISRC"];
+	[result setObject:[NSNumber numberWithUnsignedInt:[self number]] forKey:@"number"];
+	[result setObject:[NSNumber numberWithUnsignedLong:[self firstSector]] forKey:@"firstSector"];
+	[result setObject:[NSNumber numberWithUnsignedLong:[self lastSector]] forKey:@"lastSector"];
+	[result setObject:[NSNumber numberWithUnsignedInt:[self channels]] forKey:@"channels"];
+	[result setObject:[NSNumber numberWithBool:[self preEmphasis]] forKey:@"preEmphasis"];
+	[result setObject:[NSNumber numberWithBool:[self copyPermitted]] forKey:@"copyPermitted"];
+	[result setValue:[self ISRC] forKey:@"ISRC"];
 	
 	return [[result retain] autorelease];
 }
@@ -319,37 +318,32 @@
 	[_genre release];
 	[_composer release];
 	
+	[_ISRC release];
+
+	_selected		= [[properties valueForKey:@"selected"] boolValue];
+
 	_title			= [[properties valueForKey:@"title"] retain];
 	_artist			= [[properties valueForKey:@"artist"] retain];
 	_year			= [[properties valueForKey:@"year"] intValue];
 	_genre			= [[properties valueForKey:@"genre"] retain];
-	_composer		= [[properties valueForKey:@"composer"] retain];	
+	_composer		= [[properties valueForKey:@"composer"] retain];
 	
-	[self setValue:[properties valueForKey:@"selected"] forKey:@"selected"];
-	[self setValue:[properties valueForKey:@"color"] forKey:@"color"];
-	
-	[self setValue:[properties valueForKey:@"title"] forKey:@"title"];
-	[self setValue:[properties valueForKey:@"artist"] forKey:@"artist"];
-	[self setValue:[properties valueForKey:@"year"] forKey:@"year"];
-	[self setValue:[properties valueForKey:@"genre"] forKey:@"genre"];
-
-	[self setValue:[properties valueForKey:@"number"] forKey:@"number"];
-	[self setValue:[properties valueForKey:@"firstSector"] forKey:@"firstSector"];
-	[self setValue:[properties valueForKey:@"lastSector"] forKey:@"lastSector"];
-	[self setValue:[properties valueForKey:@"channels"] forKey:@"channels"];
-	[self setValue:[properties valueForKey:@"preEmphasis"] forKey:@"preEmphasis"];
-	[self setValue:[properties valueForKey:@"copyPermitted"] forKey:@"copyPermitted"];
-	[self setValue:[properties valueForKey:@"ISRC"] forKey:@"ISRC"];
+	_number			= [[properties valueForKey:@"number"] unsignedIntValue];
+	_firstSector	= [[properties valueForKey:@"firstSector"] unsignedLongValue];
+	_lastSector		= [[properties valueForKey:@"lastSector"] unsignedLongValue];
+	_channels		= [[properties valueForKey:@"channels"] unsignedIntValue];
+	_preEmphasis	= [[properties valueForKey:@"preEmphasis"] boolValue];
+	_copyPermitted	= [[properties valueForKey:@"copyPermitted"] boolValue];
+	_ISRC			= [[properties valueForKey:@"ISRC"] retain];
 }
 
 - (id) copyWithZone:(NSZone *)zone
 {
 	Track *copy = [[Track allocWithZone:zone] init];
 	
-	[copy setDocument:_document];
+	[copy setDocument:[self document]];
 	
 	[copy setSelected:[self selected]];
-	//[copy setValue:_color forKey:@"color"];
 	
 	[copy setTitle:[self title]];
 	[copy setArtist:[self artist]];
@@ -357,13 +351,13 @@
 	[copy setGenre:[self genre]];
 	[copy setComposer:[self composer]];
 	
-	[copy setNumber:_number];
-	[copy setFirstSector:_firstSector];
-	[copy setLastSector:_lastSector];
-	[copy setChannels:_channels];
-	[copy setPreEmphasis:_preEmphasis];
-	[copy setCopyPermitted:_copyPermitted];
-	[copy setISRC:_ISRC];
+	[copy setNumber:[self number]];
+	[copy setFirstSector:[self firstSector]];
+	[copy setLastSector:[self lastSector]];
+	[copy setChannels:[self channels]];
+	[copy setPreEmphasis:[self preEmphasis]];
+	[copy setCopyPermitted:[self copyPermitted]];
+	[copy setISRC:[self ISRC]];
 
 	return copy;
 }
@@ -372,30 +366,30 @@
 {
 	AudioMetadata *result = [[AudioMetadata alloc] init];
 
-	[result setTrackNumber:_number];
-	[result setTrackTitle:_title];
-	[result setTrackArtist:_artist];
-	[result setTrackYear:_year];
-	[result setTrackGenre:_genre];
-	[result setTrackComposer:_composer];
-//	[result setTrackComment:_comment];
-	[result setISRC:_ISRC];
+	[result setTrackNumber:[self number]];
+	[result setTrackTitle:[self title]];
+	[result setTrackArtist:[self artist]];
+	[result setTrackYear:[self year]];
+	[result setTrackGenre:[self genre]];
+	[result setTrackComposer:[self composer]];
+//	[result setTrackComment:[self comment]];
+	[result setISRC:[self ISRC]];
 	
-	[result setAlbumTrackCount:[[_document valueForKey:@"tracks"] count]];
-	[result setAlbumTitle:[_document title]];
-	[result setAlbumArtist:[_document artist]];
-	[result setAlbumYear:[_document year]];
-	[result setAlbumGenre:[_document genre]];
-	[result setAlbumComposer:[_document composer]];
-	[result setAlbumComment:[_document comment]];
+	[result setAlbumTrackCount:[[self document] countOfTracks]];
+	[result setAlbumTitle:[[self document] title]];
+	[result setAlbumArtist:[[self document] artist]];
+	[result setAlbumYear:[[self document] year]];
+	[result setAlbumGenre:[[self document] genre]];
+	[result setAlbumComposer:[[self document] composer]];
+	[result setAlbumComment:[[self document] comment]];
 		
-	[result setDiscNumber:[_document discNumber]];
-	[result setDiscsInSet:[_document discsInSet]];
-	[result setMultipleArtists:[_document multiArtist]];
+	[result setDiscNumber:[[self document] discNumber]];
+	[result setDiscTotal:[[self document] discTotal]];
+	[result setCompilation:[[self document] compilation]];
 
-	[result setAlbumArt:[_document valueForKey:@"albumArtBitmap"]];
+	[result setAlbumArt:[[self document] valueForKey:@"albumArtBitmap"]];
 	
-	[result setMCN:[_document MCN]];
+	[result setMCN:[[self document] MCN]];
 	
 	return [result autorelease];
 }

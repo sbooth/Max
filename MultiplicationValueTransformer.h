@@ -20,9 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface MultiplicationValueTransformer : NSObject 
+@interface MultiplicationValueTransformer : NSValueTransformer 
 {
-	int _multiplier;
+	int		_multiplier;
 }
 
 - (id) initWithMultiplier:(int)multiplier;

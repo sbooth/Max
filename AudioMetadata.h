@@ -38,9 +38,9 @@
 	NSString				*_albumGenre;
 	NSString				*_albumComment;
 
-	BOOL					_multipleArtists;
+	BOOL					_compilation;
 	unsigned				_discNumber;
-	unsigned				_discsInSet;
+	unsigned				_discTotal;
 
 	unsigned				_length;
 	
@@ -76,9 +76,9 @@
 - (NSString	*)	albumGenre;
 - (NSString	*)	albumComment;
 
-- (BOOL)		multipleArtists;
+- (BOOL)		compilation;
 - (unsigned)	discNumber;
-- (unsigned)	discsInSet;
+- (unsigned)	discTotal;
 
 - (unsigned)	length;
 
@@ -104,9 +104,9 @@
 - (void)		setAlbumGenre:(NSString *)albumGenre;
 - (void)		setAlbumComment:(NSString *)albumComment;
 
-- (void)		setMultipleArtists:(BOOL)multipleArtists;
+- (void)		setCompilation:(BOOL)compilation;
 - (void)		setDiscNumber:(unsigned)discNumber;
-- (void)		setDiscsInSet:(unsigned)discsInSet;
+- (void)		setDiscTotal:(unsigned)discTotal;
 
 - (void)		setLength:(unsigned)length;
 

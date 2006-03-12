@@ -47,18 +47,18 @@
 	FLAC__StreamMetadata						*block					= NULL;
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
-	NSNumber									*trackNumber			= nil;
-	NSNumber									*totalTracks			= nil;
+	unsigned									trackNumber				= 0;
+	unsigned									totalTracks				= 0;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*composer				= nil;
 	NSString									*title					= nil;
-	NSNumber									*year					= nil;
+	unsigned									year					= 0;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
-	NSNumber									*discNumber				= nil;
-	NSNumber									*discsInSet				= nil;
-	NSNumber									*multiArtist			= nil;
+	unsigned									discNumber				= 0;
+	unsigned									discTotal				= 0;
+	BOOL										compilation				= NO;
 	NSString									*isrc					= nil;
 	
 	
@@ -111,49 +111,49 @@
 		}
 
 		// Album title
-		album = [metadata valueForKey:@"albumTitle"];
+		album = [metadata albumTitle];
 		if(nil != album) {
 			addVorbisComment(block, @"ALBUM", album);
 		}
 		
 		// Artist
-		artist = [metadata valueForKey:@"trackArtist"];
+		artist = [metadata trackArtist];
 		if(nil == artist) {
-			artist = [metadata valueForKey:@"albumArtist"];
+			artist = [metadata albumArtist];
 		}
 		if(nil != artist) {
 			addVorbisComment(block, @"ARTIST", artist);
 		}
 
 		// Composer
-		composer = [metadata valueForKey:@"trackComposer"];
+		composer = [metadata trackComposer];
 		if(nil == composer) {
-			composer = [metadata valueForKey:@"albumComposer"];
+			composer = [metadata albumComposer];
 		}
 		if(nil != composer) {
 			addVorbisComment(block, @"COMPOSER", composer);
 		}
 		
 		// Genre
-		genre = [metadata valueForKey:@"trackGenre"];
+		genre = [metadata trackGenre];
 		if(nil == genre) {
-			genre = [metadata valueForKey:@"albumGenre"];
+			genre = [metadata albumGenre];
 		}
 		if(nil != genre) {
 			addVorbisComment(block, @"GENRE", genre);
 		}
 		
 		// Year
-		year = [metadata valueForKey:@"trackYear"];
-		if(nil == year) {
-			year = [metadata valueForKey:@"albumYear"];
+		year = [metadata trackYear];
+		if(0 == year) {
+			year = [metadata albumYear];
 		}
-		if(nil != year) {
-			addVorbisComment(block, @"DATE", [year stringValue]);
+		if(0 != year) {
+			addVorbisComment(block, @"DATE", [NSString stringWithFormat:@"%u", year]);
 		}
 		
 		// Comment
-		comment = [metadata valueForKey:@"albumComment"];
+		comment = [metadata albumComment];
 		if(_writeSettingsToComment) {
 			comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 		}
@@ -162,43 +162,43 @@
 		}
 		
 		// Track title
-		title = [metadata valueForKey:@"trackTitle"];
+		title = [metadata trackTitle];
 		if(nil != title) {
 			addVorbisComment(block, @"TITLE", title);
 		}
 		
 		// Track number
-		trackNumber = [metadata valueForKey:@"trackNumber"];
-		if(nil != trackNumber) {
-			addVorbisComment(block, @"TRACKNUMBER", [trackNumber stringValue]);
+		trackNumber = [metadata trackNumber];
+		if(0 != trackNumber) {
+			addVorbisComment(block, @"TRACKNUMBER", [NSString stringWithFormat:@"%u", trackNumber]);
 		}
 
 		// Total tracks
-		totalTracks = [metadata valueForKey:@"albumTrackCount"];
-		if(nil != totalTracks) {
-			addVorbisComment(block, @"TRACKTOTAL", [totalTracks stringValue]);
+		totalTracks = [metadata albumTrackCount];
+		if(0 != totalTracks) {
+			addVorbisComment(block, @"TRACKTOTAL", [NSString stringWithFormat:@"%u", totalTracks]);
 		}
 
 		// Compilation
-		multiArtist = [metadata valueForKey:@"multipleArtists"];
-		if(nil != multiArtist && [multiArtist boolValue]) {
+		compilation = [metadata compilation];
+		if(compilation) {
 			addVorbisComment(block, @"COMPILATION", @"1");
 		}
 		
 		// Disc number
-		discNumber = [metadata valueForKey:@"discNumber"];
-		if(nil != discNumber) {
-			addVorbisComment(block, @"DISCNUMBER", [discNumber stringValue]);
+		discNumber = [metadata discNumber];
+		if(0 != discNumber) {
+			addVorbisComment(block, @"DISCNUMBER", [NSString stringWithFormat:@"%u", discNumber]);
 		}
 		
 		// Discs in set
-		discsInSet = [metadata valueForKey:@"discsInSet"];
-		if(nil != discsInSet) {
-			addVorbisComment(block, @"DISCSINSET", [discsInSet stringValue]);
+		discTotal = [metadata discTotal];
+		if(0 != discTotal) {
+			addVorbisComment(block, @"DISCTOTAL", [NSString stringWithFormat:@"%u", discTotal]);
 		}
 		
 		// ISRC
-		isrc = [metadata valueForKey:@"ISRC"];
+		isrc = [metadata ISRC];
 		if(nil != isrc) {
 			addVorbisComment(block, @"ISRC", isrc);
 		}
@@ -295,7 +295,7 @@
 		}
 		
 		// MCN
-		mcn = [[[_tracks objectAtIndex:0] getCompactDiscDocument] valueForKey:@"MCN"];
+		mcn = [[[_tracks objectAtIndex:0] document] MCN];
 		if(nil != mcn) {
 			strncpy(block->data.cue_sheet.media_catalog_number, [mcn UTF8String], sizeof(block->data.cue_sheet.media_catalog_number));
 		}
@@ -311,11 +311,11 @@
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
 			}
 			
-			track->number		= [[currentTrack valueForKey:@"number"] intValue];
+			track->number		= [currentTrack number];
 			track->type			= 0;
-			track->pre_emphasis	= [currentTrack hasPreEmphasis];
+			track->pre_emphasis	= [currentTrack preEmphasis];
 			
-			isrc = [currentTrack valueForKey:@"ISRC"];
+			isrc = [currentTrack ISRC];
 			if(nil != isrc) {
 				strncpy(track->isrc, [isrc UTF8String], sizeof(track->isrc));
 			}
@@ -324,19 +324,19 @@
 			track->offset = (((60 * m) + s) * 44100) + (f * 588);
 			
 			// Update times
-			f += [currentTrack getFrame];
+			f += [currentTrack frame];
 			while(75 < f) {
 				f /= 75;
 				++s;
 			}
 			
-			s += [currentTrack getSecond];
+			s += [currentTrack second];
 			while(60 < s) {
 				s /= 60;
 				++m;
 			}
 			
-			m += [currentTrack getMinute];
+			m += [currentTrack minute];
 
 			if(NO == FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO)) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];

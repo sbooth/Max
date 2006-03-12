@@ -22,15 +22,8 @@
 
 @implementation MultiplicationValueTransformer
 
-+ (Class) transformedValueClass
-{
-	return [NSNumber class];
-}
-
-+ (BOOL) allowsReverseTransformation
-{
-	return YES;
-}
++ (Class)	transformedValueClass			{ return [NSNumber class]; }
++ (BOOL)	allowsReverseTransformation		{ return YES; }
 
 - (id) init
 {

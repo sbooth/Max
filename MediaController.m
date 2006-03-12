@@ -193,7 +193,7 @@ static MediaController *sharedController = nil;
 		// Automatic rip/encode functionality
 		else if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && (NO == [[NSUserDefaults standardUserDefaults] boolForKey:@"onFirstInsertOnly"] || newDisc)) {
 			[doc selectAll:self];
-			//[[[doc valueForKey:@"tracks"] objectAtIndex:0] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
+			//[[doc objectInTracksAtIndex:0] setSelected:YES];
 			[doc encode:self];
 			
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
@@ -221,7 +221,7 @@ static MediaController *sharedController = nil;
 	CompactDisc				*disc;
 	
 	while((document = [documentEnumerator nextObject])) {
-		disc = [document getDisc];
+		disc = [document disc];
 		// If disc is nil, disc was unmounted by another agency (most likely user pressed eject key)
 		if(nil != disc && [[disc bsdName] isEqualToString:bsdName]) {
 			[document discEjected];
@@ -231,7 +231,7 @@ static MediaController *sharedController = nil;
 
 - (void) ejectDiscForCompactDiscDocument:(CompactDiscDocument *)document
 {
-	NSString	*bsdName	= [[document getDisc] bsdName];
+	NSString	*bsdName	= [[document disc] bsdName];
 	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [bsdName fileSystemRepresentation]);
 	
 	// Close all open connections to the drive
@@ -260,7 +260,7 @@ static MediaController *sharedController = nil;
 		
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && [[doc valueForKey:@"_freeDBQuerySuccessful"] boolValue]) {
 			[doc selectAll:self];
-			//[[[doc valueForKey:@"tracks"] objectAtIndex:0] setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
+			//[[doc objectInTracksAtIndex:0] setSelected:YES];
 			[doc encode:self];
 			
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {

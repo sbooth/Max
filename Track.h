@@ -32,7 +32,6 @@
 
 	// View properties
 	BOOL					_selected;
-//	NSColor					*_color;
 	
 	// Metadata information
 	NSString				*_title;

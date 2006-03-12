@@ -41,6 +41,7 @@
 #import "BooleanArrayValueTransformer.h"
 #import "NegateBooleanArrayValueTransformer.h"
 #import "MultiplicationValueTransformer.h"
+#import "BOOLToStringValueTransformer.h"
 
 static ApplicationController *sharedController = nil;
 
@@ -65,6 +66,9 @@ static ApplicationController *sharedController = nil;
 
 	transformer = [[[MultiplicationValueTransformer alloc] initWithMultiplier:10] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"MultiplyByTenValueTransformer"];
+
+	transformer = [[[BOOLToStringValueTransformer alloc] init] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"BOOLToStringValueTransformer"];
 	
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];

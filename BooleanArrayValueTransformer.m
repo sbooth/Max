@@ -20,18 +20,10 @@
 
 #import "BooleanArrayValueTransformer.h"
 
-
 @implementation BooleanArrayValueTransformer
 
-+ (Class) transformedValueClass
-{
-	return [NSNumber class];
-}
-
-+ (BOOL) allowsReverseTransformation
-{
-	return NO;
-}
++ (Class)	transformedValueClass			{ return [NSNumber class]; }
++ (BOOL)	allowsReverseTransformation		{ return NO; }
 
 - (id) transformedValue:(id) value;
 {

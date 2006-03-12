@@ -34,8 +34,8 @@
 		_doc		= [doc retain];
 		_images		= [[NSMutableArray arrayWithCapacity:10] retain];
 
-		[_artistTextField setStringValue:[_doc valueForKey:@"artist"]];
-		[_titleTextField setStringValue:[_doc valueForKey:@"title"]];
+		[_artistTextField setStringValue:[_doc artist]];
+		[_titleTextField setStringValue:[_doc title]];
 		
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"searchInProgress"];
 		
@@ -118,7 +118,7 @@
 		return;
 	}
 	
-	NSLog(@"xmlDoc=%@",xmlDoc);
+//	NSLog(@"xmlDoc=%@",xmlDoc);
 		
 	images	= [self mutableArrayValueForKey:@"images"];
 	[images removeAllObjects];
@@ -155,8 +155,7 @@
 	
 	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[_images objectAtIndex:[_table selectedRow]] valueForKey:@"URL"]]];
 	if(nil != image) {
-		[_doc setValue:[image autorelease] forKey:@"albumArt"];	
-		[_doc albumArtUpdated:self];
+		[_doc setAlbumArt:[image autorelease]];	
 	}
     [[NSApplication sharedApplication] endSheet:_sheet];
 }

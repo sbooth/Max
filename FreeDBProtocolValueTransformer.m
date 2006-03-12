@@ -24,15 +24,8 @@
 
 @implementation FreeDBProtocolValueTransformer
 
-+ (Class) transformedValueClass
-{
-	return [NSString class];
-}
-
-+ (BOOL) allowsReverseTransformation
-{
-	return YES;
-}
++ (Class)	transformedValueClass			{ return [NSString class]; }
++ (BOOL)	allowsReverseTransformation		{ return YES; }
 
 - (id) transformedValue:(id) value;
 {

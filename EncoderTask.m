@@ -78,8 +78,8 @@
 	
 		while((track = [enumerator nextObject])) {
 			[track encodeCompleted];
-			if(NO == [[track encodeInProgress] boolValue]) {
-				[track setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+			if(NO == [track encodeInProgress]) {
+				[track setSelected:NO];
 			}
 		}
 
@@ -302,7 +302,7 @@
 		}
 		
 		// TITLE
-		temp	= [NSString stringWithFormat:@"TITLE \"%@\"\n", [[[_tracks objectAtIndex:0] getCompactDiscDocument] valueForKey:@"title"]];
+		temp	= [NSString stringWithFormat:@"TITLE \"%@\"\n", [[[_tracks objectAtIndex:0] document] title]];
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
@@ -311,7 +311,7 @@
 		}
 
 		// PERFORMER
-		temp	= [NSString stringWithFormat:@"PERFORMER \"%@\"\n", [[[_tracks objectAtIndex:0] getCompactDiscDocument] valueForKey:@"artist"]];
+		temp	= [NSString stringWithFormat:@"PERFORMER \"%@\"\n", [[[_tracks objectAtIndex:0] document] artist]];
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
@@ -332,7 +332,7 @@
 			currentTrack = [_tracks objectAtIndex:i];
 
 			// TRACK xx
-			temp	= [NSString stringWithFormat:@"  TRACK %.02u AUDIO\n", [[currentTrack valueForKey:@"number"] intValue]];
+			temp	= [NSString stringWithFormat:@"  TRACK %.02u AUDIO\n", [currentTrack number]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
@@ -341,7 +341,7 @@
 			}
 
 			// ISRC
-			temp	= [NSString stringWithFormat:@"    ISRC %@\n", [currentTrack valueForKey:@"ISRC"]];
+			temp	= [NSString stringWithFormat:@"    ISRC %@\n", [currentTrack ISRC]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
@@ -350,7 +350,7 @@
 			}
 
 			// TITLE
-			temp	= [NSString stringWithFormat:@"    TITLE \"%@\"\n", [currentTrack valueForKey:@"title"]];
+			temp	= [NSString stringWithFormat:@"    TITLE \"%@\"\n", [currentTrack title]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
@@ -359,7 +359,7 @@
 			}
 
 			// PERFORMER
-			temp	= [NSString stringWithFormat:@"    PERFORMER \"%@\"\n", [currentTrack valueForKey:@"artist"]];
+			temp	= [NSString stringWithFormat:@"    PERFORMER \"%@\"\n", [currentTrack artist]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
@@ -377,19 +377,19 @@
 			}
 			
 			// Update times
-			f += [currentTrack getFrame];
+			f += [currentTrack frame];
 			while(75 < f) {
 				f /= 75;
 				++s;
 			}
 			
-			s += [currentTrack getSecond];
+			s += [currentTrack second];
 			while(60 < s) {
 				s /= 60;
 				++m;
 			}
 			
-			m += [currentTrack getMinute];
+			m += [currentTrack minute];
 		}
 	}
 
