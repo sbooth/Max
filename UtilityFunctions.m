@@ -149,7 +149,7 @@ validateAndCreateDirectory(NSString *path)
 										 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
 		}
 	}
-	else if(FALSE == isDir) {
+	else if(NO == isDir) {
 		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory", @"Exceptions", @"")
 									 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
 	}	

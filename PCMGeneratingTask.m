@@ -92,6 +92,8 @@
 				tmpDir = _PATH_TMP;
 			}
 			
+			validateAndCreateDirectory(tmpDir);
+			
 			tmpDirLen	= strlen(tmpDir);
 			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
 			if(NULL == path) {
