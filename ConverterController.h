@@ -19,17 +19,34 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
-@class TaskMaster;
+#import "ConverterTask.h"
 
 @interface ConverterController : NSWindowController
 {
 	IBOutlet NSTableView		*_taskTable;
-	TaskMaster					*_taskMaster;
+	IBOutlet NSArrayController	*_tasksController;
+	
+	NSArray						*_tasks;
 	NSTimer						*_timer;
 	NSString					*_freeSpace;
+	BOOL						_freeze;
 }
 
 + (ConverterController *)	sharedController;
+
+// Functionality
+- (void)			convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata;
+
+- (BOOL)			hasTasks;
+- (unsigned)		countOfTasks;
+
+// Action methods
+- (IBAction)		stopSelectedTasks:(id)sender;
+- (IBAction)		stopAllTasks:(id)sender;
+
+// Callbacks
+- (void)			converterTaskDidStart:(ConverterTask *)task;
+- (void)			converterTaskDidStop:(ConverterTask *)task;
+- (void)			converterTaskDidComplete:(ConverterTask *)task;
 
 @end

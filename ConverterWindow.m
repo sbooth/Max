@@ -20,7 +20,6 @@
 
 #import "ConverterWindow.h"
 #import "ApplicationController.h"
-#import "TaskMaster.h"
 #import "FileFormatNotSupportedException.h"
 #import "UtilityFunctions.h"
 

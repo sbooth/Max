@@ -27,7 +27,7 @@
 #import "FreeDB.h"
 #import "FreeDBMatchSheet.h"
 #import "Genres.h"
-#import "TaskMaster.h"
+#import "RipperController.h"
 #import "Encoder.h"
 #import "MediaController.h"
 
@@ -326,10 +326,7 @@ enum {
 
 #pragma mark Disc Management
 
-- (void) discEjected
-{
-	[self setDisc:nil];
-}
+- (void) discEjected			{ [self setDisc:nil]; }
 
 #pragma mark State
 
@@ -429,14 +426,14 @@ enum {
 			[metadata setTrackGenre:nil];
 			[metadata setTrackYear:0];
 						
-			[[TaskMaster sharedController] encodeTracks:selectedTracks metadata:metadata];
+			[[RipperController sharedController] ripTracks:selectedTracks metadata:metadata];
 		}
 		// Create one file per track
 		else {			
 			enumerator		= [selectedTracks objectEnumerator];
 			
 			while((track = [enumerator nextObject])) {
-				[[TaskMaster sharedController] encodeTrack:track];
+				[[RipperController sharedController] ripTrack:track];
 			}
 		}
 	}
@@ -465,7 +462,7 @@ enum {
 		}
 		// Stop all associated rip tasks
 		else {
-			[[TaskMaster sharedController] stopRippingTasksForCompactDiscDocument:self];
+			[[RipperController sharedController] stopRipperTasksForCompactDiscDocument:self];
 		}
 	}
 	
@@ -677,6 +674,7 @@ enum {
 
 - (void) setDisc:(CompactDisc *)disc
 {
+	NSLog(@"setDisc:%@",disc);
 	unsigned			i;
 
 	if(NO == [_disc isEqual:disc]) {
@@ -694,11 +692,11 @@ enum {
 		[self setMCN:[_disc MCN]];
 		
 //		[self willChangeValueForKey:@"tracks"];
-		if(0 == [_tracks count]) {
+		if(0 == [self countOfTracks]) {
 			for(i = 0; i < [_disc countOfTracks]; ++i) {
 				Track *track = [[Track alloc] init];
 				[track setDocument:self];
-				[_tracks addObject:[[track retain] autorelease]];
+				[_tracks addObject:[track autorelease]];
 			}
 		}
 //		[self didChangeValueForKey:@"tracks"];

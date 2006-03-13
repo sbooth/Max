@@ -20,7 +20,6 @@
 
 #import "ServicesProvider.h"
 #import "ApplicationController.h"
-#import "TaskMaster.h"
 #import "FileFormatNotSupportedException.h"
 #import "IOException.h"
 

@@ -22,7 +22,8 @@
 
 #import "CompactDisc.h"
 #import "CompactDiscDocument.h"
-#import "TaskMaster.h"
+#import "RipperController.h"
+#import "EncoderController.h"
 #import "IOException.h"
 #import "MissingResourceException.h"
 
@@ -154,7 +155,7 @@ static MediaController *sharedController = nil;
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 
-- (void) volumeMounted:(NSString *) bsdName
+- (void) volumeMounted:(NSString *)bsdName
 {
 	CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
 	NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
@@ -213,7 +214,7 @@ static MediaController *sharedController = nil;
 	}
 }
 
-- (void) volumeUnmounted:(NSString *) bsdName
+- (void) volumeUnmounted:(NSString *)bsdName
 {
 	NSArray					*documents				= [[NSDocumentController sharedDocumentController] documents];
 	NSEnumerator			*documentEnumerator		= [documents objectEnumerator];
@@ -244,7 +245,7 @@ static MediaController *sharedController = nil;
 }
 
 // This elaborate scheme is necessary since multiple threads are going at the same time
-- (void) observeValueForKeyPath:(NSString *) keyPath ofObject:(id) object change:(NSDictionary *) change context:(void *) context
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	CompactDiscDocument		*doc		= (CompactDiscDocument *)context;
 	NSArray					*tracks		= nil;
@@ -258,7 +259,7 @@ static MediaController *sharedController = nil;
 			[doc saveDocument:self];
 		}
 		
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && [[doc valueForKey:@"_freeDBQuerySuccessful"] boolValue]) {
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && [doc freeDBQuerySuccessful]) {
 			[doc selectAll:self];
 			//[[doc objectInTracksAtIndex:0] setSelected:YES];
 			[doc encode:self];
@@ -276,7 +277,7 @@ static MediaController *sharedController = nil;
 		}
 	}
 	else if([keyPath isEqualToString:@"ripInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		if(NO == [[TaskMaster sharedController] compactDiscDocumentHasRippingTasks:doc]) {
+		if(NO == [[RipperController sharedController] documentHasRippingTasks:doc]) {
 			tracks		= [doc valueForKey:@"tracks"];
 			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
 			
@@ -286,7 +287,7 @@ static MediaController *sharedController = nil;
 		}
 	}
 	else if([keyPath isEqualToString:@"encodeInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		if(NO == [[TaskMaster sharedController] compactDiscDocumentHasRippingTasks:doc] && NO == [[TaskMaster sharedController] compactDiscDocumentHasEncodingTasks:doc]) {
+		if(NO == [[RipperController sharedController] documentHasRipperTasks:doc] && NO == [[EncoderController sharedController] documentHasEncoderTasks:doc]) {
 			tracks		= [doc valueForKey:@"tracks"];
 			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
 			

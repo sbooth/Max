@@ -19,17 +19,38 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
-@class TaskMaster;
+#import "PCMGeneratingTask.h"
+#import "EncoderTask.h"
 
 @interface EncoderController : NSWindowController
 {
 	IBOutlet NSTableView		*_taskTable;
-	TaskMaster					*_taskMaster;
+	IBOutlet NSArrayController	*_tasksController;
+	
+	NSArray						*_tasks;
 	NSTimer						*_timer;
 	NSString					*_freeSpace;
+	BOOL						_freeze;
 }
 
 + (EncoderController *)	sharedController;
+
+// Functionality
+- (void)			runEncodersForTask:(PCMGeneratingTask *)task;
+
+- (BOOL)			documentHasEncoderTasks:(CompactDiscDocument *)document;
+- (void)			stopEncoderTasksForDocument:(CompactDiscDocument *)document;
+
+- (BOOL)			hasTasks;
+- (unsigned)		countOfTasks;
+
+// Action methods
+- (IBAction)		stopSelectedTasks:(id)sender;
+- (IBAction)		stopAllTasks:(id)sender;
+
+// Callbacks
+- (void)			encoderTaskDidStart:(EncoderTask *)task;
+- (void)			encoderTaskDidStop:(EncoderTask *)task;
+- (void)			encoderTaskDidComplete:(EncoderTask *)task;
 
 @end

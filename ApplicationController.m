@@ -25,7 +25,6 @@
 #import "AcknowledgmentsController.h"
 #import "ComponentVersionsController.h"
 #import "MediaController.h"
-#import "TaskMaster.h"
 #import "RipperController.h"
 #import "ConverterController.h"
 #import "EncoderController.h"
@@ -172,7 +171,7 @@ static ApplicationController *sharedController = nil;
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
 {
-	if([[TaskMaster sharedController] hasTasks]) {
+	if([[RipperController sharedController] hasTasks] || [[ConverterController sharedController] hasTasks] || [[EncoderController sharedController] hasTasks]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
@@ -185,14 +184,16 @@ static ApplicationController *sharedController = nil;
 		}
 		// Remove all tasks
 		else {
-			[[TaskMaster sharedController] stopAllTasks:self];
+			[[RipperController sharedController] stopAllTasks:self];
+			[[ConverterController sharedController] stopAllTasks:self];
+			[[EncoderController sharedController] stopAllTasks:self];
 		}
 	}
 	
 	return NSTerminateNow;
 }
 
-/*- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
+- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
 {
 	NSError *error;
 	
@@ -202,7 +203,7 @@ static ApplicationController *sharedController = nil;
 	}		
 	
 	return YES;
-}*/
+}
 
 - (IBAction) encodeFile:(id)sender
 {
@@ -260,7 +261,7 @@ static ApplicationController *sharedController = nil;
 						metadata = [AudioMetadata metadataFromFile:composedPath];
 						
 						@try {
-							[[TaskMaster sharedController] encodeFile:composedPath metadata:metadata];
+							[[ConverterController sharedController] convertFile:composedPath metadata:metadata];
 						}
 						
 						@catch(FileFormatNotSupportedException *exception) {
@@ -271,7 +272,7 @@ static ApplicationController *sharedController = nil;
 			}
 			else {
 				metadata = [AudioMetadata metadataFromFile:filename];						
-				[[TaskMaster sharedController] encodeFile:filename metadata:metadata];
+				[[ConverterController sharedController] convertFile:filename metadata:metadata];
 			}
 		}
 		else {

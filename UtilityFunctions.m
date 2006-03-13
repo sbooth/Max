@@ -340,3 +340,17 @@ getPNGDataForImage(NSImage *image)
 	
 	return [bitmapRep representationUsingType:NSPNGFileType properties:nil]; 
 }
+
+BOOL
+outputFormatsSelected()
+{
+	BOOL		outputLibsndfile	= (0 != [[[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"] count]);
+	BOOL		outputCoreAudio		= (0 != [[[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"] count]);
+	BOOL		outputMP3			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"];
+	BOOL		outputFLAC			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"];
+	BOOL		outputOggFLAC		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"];
+	BOOL		outputOggVorbis		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"];
+	BOOL		outputSpeex			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"];
+	
+	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis || outputSpeex);
+}

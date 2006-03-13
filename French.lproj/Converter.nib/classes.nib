@@ -1,9 +1,10 @@
 {
     IBClasses = (
         {
+            ACTIONS = {stopAllTasks = id; stopSelectedTasks = id; }; 
             CLASS = ConverterController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_taskTable" = NSTableView; }; 
+            OUTLETS = {"_taskTable" = NSTableView; "_tasksController" = NSArrayController; }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = ConverterWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 

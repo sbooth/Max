@@ -39,8 +39,14 @@
 
 - (id)				initWithTask:(PCMGeneratingTask *)task;
 
-- (NSArray *)		tracks;
+- (unsigned)		countOfTracks;
+- (Track *)			objectInTracksAtIndex:(unsigned)index;
+
+//- (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)index;
+//- (void) removeObjectFromTracksAtIndex:(unsigned)index;
+
 - (void)			setTracks:(NSArray *)tracks;
+//- (NSArray *)		tracks;
 
 - (void)			run;
 - (void)			stop;

@@ -19,7 +19,6 @@
 		8C137F730981CF4B00EBFC77 /* ConverterTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C137F720981CF4A00EBFC77 /* ConverterTaskDefaults.plist */; };
 		8C1A6C52093ED45A006176C4 /* LAMEToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */; };
 		8C1A6C59093ED65F006176C4 /* OggVorbisToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */; };
-		8C206F150929486C00793FD0 /* TaskMaster.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C206F130929486C00793FD0 /* TaskMaster.m */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
@@ -1226,7 +1225,6 @@
 				8CBEC6CF08ED88950064F794 /* EmptySelectionException.m in Sources */,
 				8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */,
 				8CBB8BCD08EFB0BF007197C3 /* MissingResourceException.m in Sources */,
-				8C206F150929486C00793FD0 /* TaskMaster.m in Sources */,
 				8C040A31092AB41A0052D881 /* RipperTask.m in Sources */,
 				8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */,
 				8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */,

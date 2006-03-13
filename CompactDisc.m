@@ -51,6 +51,7 @@
 		}
 
 		_bsdName		= [bsdName retain];
+		NSLog(@"_bsdName = %@", _bsdName);
 		_deviceName		= [[NSString stringWithUTF8String:drive->device_name] retain];
 		
 		// Disc information

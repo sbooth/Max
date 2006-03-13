@@ -50,8 +50,6 @@
 	NSString				*_ISRC;
 }
 
-//- (NSString *)				getPreEmphasis;
-
 - (NSString *)				length;
 
 - (CompactDiscDocument *)	document;

@@ -160,12 +160,7 @@
 	return (unsigned) (offset % 75);
 }
 
-
-/*- (NSString *) getPreEmphasis
-{
-	return [_preEmphasis boolValue] ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");
-}*/
-
+- (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
 - (CompactDiscDocument *)	document			{ return _document; }
 - (NSUndoManager *)			undoManager			{ return [_document undoManager]; }
 
@@ -174,21 +169,20 @@
 
 - (BOOL)					selected			{ return _selected; }
 
+- (NSString *)				title				{ return _title; }
+- (NSString *)				artist				{ return _artist; }
+- (unsigned)				year				{ return _year; }
+- (NSString *)				genre				{ return _genre; }
+- (NSString *)				composer			{ return _composer; }
+
+- (unsigned long)			size				{ return ((_lastSector - _firstSector) * kCDSectorSizeCDDA); }
+
 - (unsigned)				number				{ return _number; }
 - (unsigned long)			firstSector			{ return _firstSector; }
 - (unsigned long)			lastSector			{ return _lastSector; }
 - (unsigned)				channels			{ return _channels; }
 - (BOOL)					preEmphasis			{ return _preEmphasis; }
 - (BOOL)					copyPermitted		{ return _copyPermitted; }
-// ? NSLocalizedStringFromTable(@"Yes", @"General", @"") : NSLocalizedStringFromTable(@"No", @"General", @"");
-- (unsigned long)			size				{ return ((_lastSector - _firstSector) * kCDSectorSizeCDDA); }
-- (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
-
-- (NSString *)				title				{ return _title; }
-- (NSString *)				artist				{ return _artist; }
-- (unsigned)				year				{ return _year; }
-- (NSString *)				genre				{ return _genre; }
-- (NSString *)				composer			{ return _composer; }
 - (NSString *)				ISRC				{ return _ISRC; }
 
 - (NSColor *) color
@@ -291,8 +285,7 @@
 {
 	NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:10];
 	
-	[result setObject:[NSNumber numberWithBool:[self selected]] forKey:@"selected"];
-	//[result setObject:[self color] forKey:@"color"];
+//	[result setObject:[NSNumber numberWithBool:[self selected]] forKey:@"selected"];
 
 	[result setValue:[self title] forKey:@"title"];
 	[result setValue:[self artist] forKey:@"artist"];
@@ -320,7 +313,7 @@
 	
 	[_ISRC release];
 
-	_selected		= [[properties valueForKey:@"selected"] boolValue];
+//	_selected		= [[properties valueForKey:@"selected"] boolValue];
 
 	_title			= [[properties valueForKey:@"title"] retain];
 	_artist			= [[properties valueForKey:@"artist"] retain];

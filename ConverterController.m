@@ -19,9 +19,21 @@
  */
 
 #import "ConverterController.h"
-
-#import "TaskMaster.h"
+#import "CoreAudioConverterTask.h"
+#import "LibsndfileConverterTask.h"
+#import "OggVorbisConverterTask.h"
+#import "FLACConverterTask.h"
+#import "OggFLACConverterTask.h"
+#import "SpeexConverterTask.h"
+#import "UtilityFunctions.h"
+#import "CoreAudioUtilities.h"
+#import "LogController.h"
+#import "EncoderController.h"
+#import "PreferencesController.h"
 #import "IOException.h"
+#import "FileFormatNotSupportedException.h"
+
+#import <Growl/GrowlApplicationBridge.h>
 
 #include <paths.h>			// _PATH_TMP
 #include <sys/param.h>		// statfs
@@ -30,33 +42,14 @@
 static ConverterController *sharedController = nil;
 
 @interface ConverterController (Private)
-- (void) updateFreeSpace:(NSTimer *)theTimer;
+- (void)	updateFreeSpace:(NSTimer *)theTimer;
+- (void)	addTask:(ConverterTask *)task;
+- (void)	removeTask:(ConverterTask *)task;
+- (void)	spawnThreads;
+- (BOOL)	verifyOutputFormats;
 @end
 
 @implementation ConverterController
-
-- (id) init
-{
-	if((self = [super initWithWindowNibName:@"Converter"])) {
-		
-		_timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(updateFreeSpace:) userInfo:nil repeats:YES];
-		
-		return self;
-	}
-	
-	return nil;
-}
-
-- (void) dealloc
-{
-	[_timer invalidate];
-	[super dealloc];
-}
-
-- (void) awakeFromNib
-{
-	[_taskTable setAutosaveTableColumns:YES];
-}
 
 + (ConverterController *) sharedController
 {
@@ -83,6 +76,33 @@ static ConverterController *sharedController = nil;
 - (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
+
+- (id) init
+{
+	if((self = [super initWithWindowNibName:@"Converter"])) {
+		
+		_timer		= [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(updateFreeSpace:) userInfo:nil repeats:YES];
+		_tasks		= [[NSMutableArray arrayWithCapacity:50] retain];
+		_freeze		= NO;
+		
+		return self;
+	}
+	
+	return nil;
+}
+
+- (void) dealloc
+{
+	[_timer invalidate];
+	[_tasks release];
+	
+	[super dealloc];
+}
+
+- (void) awakeFromNib
+{
+	[_taskTable setAutosaveTableColumns:YES];
+}
 
 - (void) windowDidLoad
 {
@@ -130,6 +150,204 @@ static ConverterController *sharedController = nil;
 		case 4:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f TB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
 		case 5:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f PB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
 	}
+}
+
+#pragma mark Functionality
+
+- (void) convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata
+{
+	ConverterTask	*converterTask			= nil;
+	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
+	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
+	NSString		*extension				= [filename pathExtension];
+	
+	// Verify an output format is selected
+	if(NO == [self verifyOutputFormats]) {
+		return;
+	}
+	
+	// Determine which type of converter to use and create it
+	if([coreAudioExtensions containsObject:extension]) {
+		converterTask = [[CoreAudioConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else if([libsndfileExtensions containsObject:extension]) {
+		converterTask = [[LibsndfileConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"ogg"]) {
+		converterTask = [[OggVorbisConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"flac"]) {
+		converterTask = [[FLACConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"oggflac"]) {
+		converterTask = [[OggFLACConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"spx"]) {
+		converterTask = [[SpeexConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else {
+		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"File format not supported", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
+	}
+	
+	// Show the converter window if it is hidden
+	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+		[[self window] orderFront:self];
+	}
+	
+	// Add the converter to our list of converting tasks
+	[self addTask:[converterTask autorelease]];
+	[self spawnThreads];
+}
+
+#pragma Action Methods
+
+- (IBAction) stopSelectedTasks:(id)sender
+{
+	NSEnumerator		*enumerator;
+	ConverterTask		*current;
+	
+	_freeze = YES;
+	enumerator = [[_tasksController selectedObjects] reverseObjectEnumerator];
+	while((current = [enumerator nextObject])) {
+		[current stop];
+	}
+	_freeze = NO;
+}
+
+- (IBAction) stopAllTasks:(id)sender
+{
+	NSEnumerator		*enumerator;
+	ConverterTask		*current;
+	
+	_freeze = YES;
+	enumerator = [[_tasksController arrangedObjects] reverseObjectEnumerator];
+	while((current = [enumerator nextObject])) {
+		[current stop];
+	}
+	_freeze = NO;
+}
+
+#pragma mark Callbacks
+
+- (void) converterTaskDidStart:(ConverterTask *)task
+{
+	NSString	*filename		= [task description];
+	NSString	*type			= [task inputFormat];
+	
+	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert started for %@ [%@]", @"Log", @""), filename, type]];
+	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert started", @"Log", @"") 
+								description:[NSString stringWithFormat:@"%@\n%@", filename, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
+						   notificationName:@"Convert started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+}
+
+- (void) converterTaskDidStop:(ConverterTask *)task
+{
+	NSString	*filename		= [task description];
+	NSString	*type			= [task inputFormat];
+	
+	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert stopped for %@ [%@]", @"Log", @""), filename, type]];
+	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert stopped", @"Log", @"") 
+								description:[NSString stringWithFormat:@"%@\n%@", filename, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
+						   notificationName:@"Convert stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	
+	[self removeTask:task];
+	[self spawnThreads];
+}
+
+- (void) converterTaskDidComplete:(ConverterTask *)task
+{
+	NSDate			*startTime		= [task startTime];
+	NSDate			*endTime		= [task endTime];
+	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
+	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
+	NSString		*filename		= [task description];
+	NSString		*type			= [task inputFormat];
+	
+	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Convert completed for %@ [%@]", @"Log", @""), filename, type]];
+	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Convert completed", @"Log", @"") 
+								description:[NSString stringWithFormat:@"%@\n%@\n%@", filename, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type], [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
+						   notificationName:@"Convert completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	
+	[self removeTask:task];
+	[self spawnThreads];
+	
+	if(NO == [self hasTasks]) {
+		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Conversion completed", @"Log", @"")
+									description:NSLocalizedStringFromTable(@"All converting tasks completed", @"Log", @"")
+							   notificationName:@"Conversion completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	}
+	
+	[[EncoderController sharedController] runEncodersForTask:task];
+}
+
+#pragma mark Task Management
+
+- (unsigned)	countOfTasks							{ return [_tasks count]; }
+- (BOOL)		hasTasks								{ return (0 != [_tasks count]); }
+- (void)		addTask:(ConverterTask *)task			{ [_tasksController addObject:task]; }
+
+- (void) removeTask:(ConverterTask *)task
+{
+	[_tasksController removeObject:task];
+	
+	// Hide the window if no more tasks
+	if(NO == [self hasTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+		[[self window] performClose:self];
+	}
+}
+
+- (void) spawnThreads
+{
+	int		maxThreads			= [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumConverterThreads"];
+	int		i, limit, delta;
+	
+	if(0 == [_tasks count] || _freeze) {
+		return;
+	}
+	
+	limit = (maxThreads < (int)[_tasks count] ? maxThreads : (int)[_tasks count]);
+	
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"balanceConverters"]) {
+		delta = 2 * [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"] - [[EncoderController sharedController] countOfTasks];
+		limit = (limit <= delta ? limit : delta);
+	}
+	
+	for(i = 0; i < limit; ++i) {
+		if(NO == [[_tasks objectAtIndex:i] started]) {
+			[[_tasks objectAtIndex:i] run];
+		}
+	}
+}
+
+- (BOOL) verifyOutputFormats
+{
+	// Verify at least one output format is selected
+	if(NO == outputFormatsSelected()) {
+		int		result;
+		
+		NSBeep();
+		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats selected", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats", @"General", @"")];
+		[alert setAlertStyle: NSWarningAlertStyle];
+		
+		result = [alert runModal];
+		
+		if(NSAlertFirstButtonReturn == result) {
+			// do nothing
+		}
+		else if(NSAlertSecondButtonReturn == result) {
+			[[PreferencesController sharedPreferences] showWindow:self];
+		}
+		
+		return NO;
+	}
+	
+	return YES;
 }
 
 @end

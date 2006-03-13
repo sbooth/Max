@@ -1,10 +1,10 @@
 {
     IBClasses = (
         {
-            ACTIONS = {s = id; }; 
+            ACTIONS = {stopAllTasks = id; stopSelectedTasks = id; }; 
             CLASS = EncoderController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_taskTable" = NSTableView; }; 
+            OUTLETS = {"_taskTable" = NSTableView; "_tasksController" = NSArrayController; }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }

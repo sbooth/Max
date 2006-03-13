@@ -20,7 +20,8 @@
 
 #import "EncoderTask.h"
 #import "EncoderMethods.h"
-#import "TaskMaster.h"
+#import "EncoderController.h"
+#import "ConverterTask.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
@@ -103,17 +104,20 @@
 	[super dealloc];
 }
 
-- (NSString *)		outputFilename					{ return _outputFilename; }
-- (NSString *)		inputFilename					{ return [_task outputFilename]; }
-- (NSString *)		outputFormat					{ return nil; }
-- (NSArray *)		tracks							{ return _tracks; }
-- (NSString *)		extension						{ return nil; }
-- (void)			writeTags						{}
-- (NSString *)		description						{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
-- (NSString *)		settings						{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
-- (BOOL)			formatLegalForCueSheet			{ return NO; }
-- (NSString *)		cueSheetFormatName				{ return nil; }
+- (NSString *)		outputFilename						{ return _outputFilename; }
+- (NSString *)		inputFilename						{ return [_task outputFilename]; }
+- (NSString *)		outputFormat						{ return nil; }
+- (unsigned)		countOfTracks						{ return [_tracks count]; }
+- (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
+- (NSString *)		extension							{ return nil; }
+- (void)			writeTags							{}
+- (NSString *)		description							{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
+- (NSString *)		settings							{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
+- (BOOL)			formatLegalForCueSheet				{ return NO; }
+- (NSString *)		cueSheetFormatName					{ return nil; }
 
+//- (void)			insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
+//- (void)			removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
 - (void) setTracks:(NSArray *)tracks
 {
 	NSEnumerator	*enumerator;
@@ -207,14 +211,14 @@
 - (void) setStarted
 {
 	[super setStarted];
-	[[TaskMaster sharedController] encodeDidStart:self]; 
+	[[EncoderController sharedController] encoderTaskDidStart:self]; 
 }
 
 - (void) setStopped 
 {
 	[super setStopped]; 
 	[_connection invalidate];
-	[[TaskMaster sharedController] encodeDidStop:self]; 
+	[[EncoderController sharedController] encoderTaskDidStop:self]; 
 }
 
 - (void) setCompleted 
@@ -226,7 +230,7 @@
 		
 		[super setCompleted]; 
 		[_connection invalidate];
-		[[TaskMaster sharedController] encodeDidComplete:self]; 
+		[[EncoderController sharedController] encoderTaskDidComplete:self]; 
 		
 		// Delete input file if requested
 		if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {

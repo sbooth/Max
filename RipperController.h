@@ -19,17 +19,38 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
-@class TaskMaster;
+#import "RipperTask.h"
 
 @interface RipperController : NSWindowController
 {
 	IBOutlet NSTableView		*_taskTable;
-	TaskMaster					*_taskMaster;
+	IBOutlet NSArrayController	*_tasksController;
+	
+	NSArray						*_tasks;
 	NSTimer						*_timer;
 	NSString					*_freeSpace;
+	BOOL						_freeze;
 }
 
 + (RipperController *)	sharedController;
+
+// Functionality
+- (void)			ripTrack:(Track *)track;
+- (void)			ripTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
+
+- (BOOL)			documentHasRipperTasks:(CompactDiscDocument *)document;
+- (void)			stopRipperTasksForDocument:(CompactDiscDocument *)document;
+
+- (BOOL)			hasTasks;
+- (unsigned)		countOfTasks;
+
+// Action methods
+- (IBAction)		stopSelectedTasks:(id)sender;
+- (IBAction)		stopAllTasks:(id)sender;
+
+// Callbacks
+- (void)			ripperTaskDidStart:(RipperTask *)task;
+- (void)			ripperTaskDidStop:(RipperTask *)task;
+- (void)			ripperTaskDidComplete:(RipperTask *)task;
 
 @end

@@ -326,7 +326,6 @@
 			u_int32_t		artCount;
 			u_int8_t		*bytes								= NULL;
 			u_int32_t		length								= 0;
-			NSImage			*image								= nil;
 			
 			// Album title
 			MP4GetMetadataAlbum(mp4FileHandle, &s);

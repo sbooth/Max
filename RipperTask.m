@@ -19,8 +19,9 @@
  */
 
 #import "RipperTask.h"
-#import "TaskMaster.h"
+#import "RipperController.h"
 #import "SectorRange.h"
+#import "CompactDiscDocument.h"
 #import "IOException.h"
 #import "StopException.h"
 
@@ -107,7 +108,7 @@
 - (void) setStarted
 {
 	[super setStarted];
-	[[TaskMaster sharedController] ripDidStart:self]; 
+	[[RipperController sharedController] ripperTaskDidStart:self]; 
 }
 
 - (void) setStopped 
@@ -117,7 +118,7 @@
 
 	[super setStopped];
 	[_connection invalidate];
-	[[TaskMaster sharedController] ripDidStop:self]; 
+	[[RipperController sharedController] ripperTaskDidStop:self]; 
 
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
@@ -133,7 +134,7 @@
 	[super setCompleted];
 	[_connection invalidate];
 	
-	[[TaskMaster sharedController] ripDidComplete:self];
+	[[RipperController sharedController] ripperTaskDidComplete:self];
 	
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {

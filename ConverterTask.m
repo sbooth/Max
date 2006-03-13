@@ -20,7 +20,7 @@
 
 #import "ConverterMethods.h"
 #import "ConverterTask.h"
-#import "TaskMaster.h"
+#import "ConverterController.h"
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
@@ -107,21 +107,21 @@
 - (void) setStarted
 {
 	[super setStarted];
-	[[TaskMaster sharedController] convertDidStart:self]; 
+	[[ConverterController sharedController] converterTaskDidStart:self]; 
 }
 
 - (void) setStopped 
 {
 	[super setStopped]; 
 	[_connection invalidate];
-	[[TaskMaster sharedController] convertDidStop:self]; 
+	[[ConverterController sharedController] converterTaskDidStop:self]; 
 }
 
 - (void) setCompleted 
 {
 	[super setCompleted]; 
 	[_connection invalidate];
-	[[TaskMaster sharedController] convertDidComplete:self];	
+	[[ConverterController sharedController] converterTaskDidComplete:self];	
 }
 
 - (void) stop
