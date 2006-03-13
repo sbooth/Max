@@ -34,7 +34,7 @@
 	if((self = [super init])) {
 		unsigned			i;
 		unsigned long		discLength	= 150;
-		NSString			*bsdPath	= [NSString stringWithFormat:@"%@r%@", [NSString stringWithUTF8String:_PATH_DEV], bsdName];
+		NSString			*bsdPath	= [NSString stringWithFormat:@"%@r%@", [NSString stringWithCString:_PATH_DEV encoding:NSASCIIStringEncoding], bsdName];
 		char				*MCN		= NULL;
 		cdrom_drive			*drive		= NULL;
 		unsigned			trackCount	= 0;
@@ -51,7 +51,7 @@
 		}
 
 		_bsdName		= [bsdName retain];
-		_deviceName		= [[NSString stringWithUTF8String:drive->device_name] retain];
+		_deviceName		= [[NSString stringWithCString:drive->device_name encoding:NSASCIIStringEncoding] retain];
 		
 		// Disc information
 		_firstSector	= cdda_disc_firstsector(drive);
@@ -100,7 +100,7 @@
 		_freeDBDisc	= cddb_disc_new();
 		if(NULL == _freeDBDisc) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		for(i = 0; i < [self countOfTracks]; ++i) {
@@ -109,7 +109,7 @@
 			cddb_track = cddb_track_new();
 			if(NULL == cddb_track) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			cddb_track_set_frame_offset(cddb_track, [self firstSectorForTrack:i] + 150);

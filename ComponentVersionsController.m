@@ -63,14 +63,14 @@ static ComponentVersionsController *sharedController = nil;
 		_lameVersion		= [NSString stringWithFormat:@"LAME %s", get_lame_version()];
 
 		if(NULL != speexVersion) {
-			_speexVersion		= [NSString stringWithUTF8String:speexVersion];
+			_speexVersion		= [NSString stringWithCString:speexVersion encoding:NSASCIIStringEncoding];
 		}
 		else {
 			_speexVersion		= NSLocalizedStringFromTable(@"Unknown", @"General", @"");
 		}
 
 		if(NULL != buffer) {
-			_libsndfileVersion	= [NSString stringWithUTF8String:buffer];
+			_libsndfileVersion	= [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
 		}
 		else {
 			_libsndfileVersion	= NSLocalizedStringFromTable(@"Unknown", @"General", @"");

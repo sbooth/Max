@@ -40,12 +40,12 @@
 
 static void diskAppearedCallback(DADiskRef disk, void * context)
 {
-	[[MediaController sharedController] volumeMounted:[NSString stringWithUTF8String:DADiskGetBSDName(disk)]];
+	[[MediaController sharedController] volumeMounted:[NSString stringWithCString:DADiskGetBSDName(disk) encoding:NSASCIIStringEncoding]];
 }
 
 static void diskDisappearedCallback(DADiskRef disk, void * context)
 {
-	[[MediaController sharedController] volumeUnmounted:[NSString stringWithUTF8String:DADiskGetBSDName(disk)]];
+	[[MediaController sharedController] volumeUnmounted:[NSString stringWithCString:DADiskGetBSDName(disk) encoding:NSASCIIStringEncoding]];
 }
 
 static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * context)
@@ -55,7 +55,7 @@ static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * con
 		if(unix_err(status)) {
 			int code = err_get_code(status);
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithUTF8String:strerror(code)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		else {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc", @"Exceptions", @"") 
@@ -71,7 +71,7 @@ static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * conte
 		if(unix_err(status)) {
 			int code = err_get_code(status);
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithUTF8String:strerror(code)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		else {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc", @"Exceptions", @"") 

@@ -63,7 +63,7 @@
 		_freeDB = cddb_new();
 		if(NULL == _freeDB) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		cddb_set_server_name(_freeDB, [[[NSUserDefaults standardUserDefaults] stringForKey:@"freeDBServer"] UTF8String]);
@@ -133,7 +133,7 @@
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	if(FALSE == cddb_sites(_freeDB)) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to obtain the list of FreeDB mirrors", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
 	site = cddb_first_site(_freeDB);
@@ -141,14 +141,14 @@
 		currentSite = [NSMutableDictionary dictionaryWithCapacity:20];
 		
 		if(CDDB_ERR_OK == cddb_site_get_address(site, &tempString, &i)) {
-			[currentSite setObject:[NSString stringWithUTF8String:tempString] forKey:@"address"];
+			[currentSite setObject:[NSString stringWithCString:tempString encoding:NSASCIIStringEncoding] forKey:@"address"];
 			[currentSite setObject:[NSNumber numberWithUnsignedInt:i] forKey:@"port"];
 		}
 		
 		[currentSite setObject:[NSNumber numberWithInt:cddb_site_get_protocol(site)] forKey:@"protocol"];
 		
 		if(CDDB_ERR_OK == cddb_site_get_description(site, &tempString)) {
-			[currentSite setObject:[NSString stringWithUTF8String:tempString] forKey:@"siteDescription"];
+			[currentSite setObject:[NSString stringWithCString:tempString encoding:NSASCIIStringEncoding] forKey:@"siteDescription"];
 		}
 		
 		if(CDDB_ERR_OK == cddb_site_get_location(site, &latitude, &longitude)) {
@@ -181,7 +181,7 @@
 	matches = cddb_query(_freeDB, freeDBDisc);
 	if(-1 == matches) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB query failed", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	while(matches > 0) {
@@ -195,11 +195,11 @@
 		discid		= cddb_disc_get_discid(freeDBDisc);
 		
 		if(NULL != artist) {
-			[currentMatch setObject:[NSString stringWithUTF8String:artist] forKey:@"artist"];
+			[currentMatch setObject:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding] forKey:@"artist"];
 		}
 		
 		if(NULL != title) {
-			[currentMatch setObject:[NSString stringWithUTF8String:title] forKey:@"title"];
+			[currentMatch setObject:[NSString stringWithCString:title encoding:NSASCIIStringEncoding] forKey:@"title"];
 		}
 		
 		if(0 != year) {
@@ -207,7 +207,7 @@
 		}
 		
 		if(NULL != genre) {
-			[currentMatch setObject:[NSString stringWithUTF8String:genre] forKey:@"genre"];
+			[currentMatch setObject:[NSString stringWithCString:genre encoding:NSASCIIStringEncoding] forKey:@"genre"];
 		}
 		
 		if(CDDB_CAT_INVALID != category) {
@@ -224,7 +224,7 @@
 		if(0 < matches) {
 			if(0 == cddb_query_next(_freeDB, freeDBDisc)) {
 				@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB query index out of bounds", @"Exceptions", @"")
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
 	}
@@ -247,7 +247,7 @@
 	disc = cddb_disc_new();
 	if(NULL == disc) {
 		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	cddb_disc_set_category(disc, [[info valueForKey:@"category"] intValue]);
@@ -255,7 +255,7 @@
 	
 	if(0 == cddb_read(_freeDB, disc)) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB read failed", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	artist		= cddb_disc_get_artist(disc);
@@ -265,11 +265,11 @@
 	ext_data	= cddb_disc_get_ext_data(disc);
 
 	if(NULL != artist) {
-		[_disc setArtist:[NSString stringWithUTF8String:artist]];
+		[_disc setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
 	}
 
 	if(NULL != artist) {
-		[_disc setTitle:[NSString stringWithUTF8String:title]];
+		[_disc setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
 	}
 		
 	if(0 != year) {
@@ -277,11 +277,11 @@
 	}
 	
 	if(NULL != genre) {
-		[_disc setGenre:[NSString stringWithUTF8String:genre]];
+		[_disc setGenre:[NSString stringWithCString:genre encoding:NSASCIIStringEncoding]];
 	}
 	
 	if(NULL != ext_data) {
-		[_disc setComment:[NSString stringWithUTF8String:ext_data]];
+		[_disc setComment:[NSString stringWithCString:ext_data encoding:NSASCIIStringEncoding]];
 	}
 	
 	
@@ -299,12 +299,12 @@
 		}
 		
 		if(NULL != title) {
-			[[_disc objectInTracksAtIndex:trackNum - 1] setTitle:[NSString stringWithUTF8String:title]];
+			[[_disc objectInTracksAtIndex:trackNum - 1] setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
 		}
 
-		if(NULL != artist && NO == [[NSString stringWithUTF8String:artist] isEqualToString:[_disc artist]]) {
+		if(NULL != artist && NO == [[NSString stringWithCString:artist encoding:NSASCIIStringEncoding] isEqualToString:[_disc artist]]) {
 			[_disc setCompilation:YES];
-			[[_disc objectInTracksAtIndex:trackNum - 1] setArtist:[NSString stringWithUTF8String:artist]];
+			[[_disc objectInTracksAtIndex:trackNum - 1] setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
 		}
 		
 		track = cddb_disc_get_track_next(disc);
@@ -329,7 +329,7 @@
 	disc = cddb_disc_clone([[_disc disc] getFreeDBDisc]);
 	if(NULL == disc) {
 		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
 	genre = [_disc genre];
@@ -383,7 +383,7 @@
 
 	if(0 == cddb_write(_freeDB, disc)) {
 		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB write failed", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithUTF8String:cddb_error_str(cddb_errno(_freeDB))], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
 	// Clean up

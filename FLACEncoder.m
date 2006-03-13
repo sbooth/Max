@@ -86,13 +86,13 @@
 		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
 		if(noErr != err) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
 
 		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileOpen failed", @"Exceptions", @"")
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
@@ -100,7 +100,7 @@
 		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
 		if(err != noErr) {
 			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileGetProperty failed", @"Exceptions", @"")
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		framesToRead = totalFrames;
@@ -113,7 +113,7 @@
 		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));
 		if(NULL == buf.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Create the FLAC encoder
@@ -124,25 +124,25 @@
 
 		// Setup FLAC encoder
 		if(NO == FLAC__file_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(NO == FLAC__file_encoder_set_do_mid_side_stereo(_flac, _enableMidSide)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(NO == FLAC__file_encoder_set_loose_mid_side_stereo(_flac, _enableLooseMidSide)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(NO == FLAC__file_encoder_set_qlp_coeff_precision(_flac, _QLPCoeffPrecision)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(NO == FLAC__file_encoder_set_min_residual_partition_order(_flac, _minPartitionOrder)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(NO == FLAC__file_encoder_set_max_residual_partition_order(_flac, _maxPartitionOrder)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(NO == FLAC__file_encoder_set_max_lpc_order(_flac, _maxLPCOrder)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 
 		// Create the padding metadata block if desired
@@ -153,19 +153,19 @@
 			metadata[0]			= &padding;
 			
 			if(NO == FLAC__file_encoder_set_metadata(_flac, metadata, 1)) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+				@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 			}
 		}
 		
 		// Initialize the FLAC encoder
 		if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalFrames)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(NO == FLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		if(FLAC__FILE_ENCODER_OK != FLAC__file_encoder_init(_flac)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}		
 
 		// Iteratively get the PCM data and encode it
@@ -176,7 +176,7 @@
 			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
 			if(err != noErr) {
 				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileRead failed", @"Exceptions", @"")
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
 			// We're finished if no frames were returned
@@ -235,7 +235,7 @@
 		err = ExtAudioFileDispose(extAudioFileRef);
 		if(noErr != err) {
 			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 				
@@ -260,7 +260,7 @@
 		rawPCM[1] = calloc(frameCount, sizeof(int32_t));
 		if(NULL == rawPCM[0] || NULL == rawPCM[1]) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Split PCM into channels and convert to 32-bits
@@ -277,7 +277,7 @@
 		flacResult = FLAC__file_encoder_process(_flac, (const int32_t * const *)rawPCM, frameCount);
 		
 		if(NO == flacResult) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithUTF8String:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]] userInfo:nil];
+			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 	}
 		

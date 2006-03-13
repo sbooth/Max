@@ -99,7 +99,6 @@ enum {
 		_genre				= nil;
 		_composer			= nil;
 		_comment			= nil;
-		_partOfSet			= NO;
 		
 		_albumArt			= nil;
 		
@@ -655,7 +654,6 @@ enum {
 - (NSString *)		genre								{ return _genre; }
 - (NSString *)		composer							{ return _composer; }
 - (NSString *)		comment								{ return _comment; }
-- (BOOL)			partOfSet							{ return _partOfSet; }
 
 - (NSImage *)		albumArt							{ return _albumArt; }
 - (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
@@ -774,15 +772,6 @@ enum {
 		[[self undoManager] setActionName:@"Album Comment"];
 		[_comment release];
 		_comment = [comment retain];
-	}
-}
-
-- (void) setPartOfSet:(BOOL)partOfSet
-{
-	if(_partOfSet != partOfSet) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setPartOfSet:_partOfSet];
-		[[self undoManager] setActionName:@"Album partOfSet"];
-		_partOfSet = partOfSet;
 	}
 }
 

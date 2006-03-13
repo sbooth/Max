@@ -44,7 +44,6 @@
 	NSString						*_genre;
 	NSString						*_composer;
 	NSString						*_comment;
-	BOOL							_partOfSet;
 
 	NSImage							*_albumArt;
 
@@ -107,7 +106,6 @@
 - (NSString *)		genre;
 - (NSString *)		composer;
 - (NSString *)		comment;
-- (BOOL)			partOfSet;
 
 - (NSImage *)		albumArt;
 - (unsigned)		albumArtWidth;
@@ -135,7 +133,6 @@
 - (void) setGenre:(NSString *)genre;
 - (void) setComposer:(NSString *)composer;
 - (void) setComment:(NSString *)comment;
-- (void) setPartOfSet:(BOOL)partOfSet;
 
 - (void) setAlbumArt:(NSImage *)albumArt;
 

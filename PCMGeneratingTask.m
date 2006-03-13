@@ -92,13 +92,13 @@
 				tmpDir = _PATH_TMP;
 			}
 			
-			validateAndCreateDirectory(tmpDir);
+			validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);
 			
 			tmpDirLen	= strlen(tmpDir);
 			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
 			if(NULL == path) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			memcpy(path, tmpDir, tmpDirLen);
 			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
@@ -107,10 +107,10 @@
 			fd = mkstemps(path, strlen(TEMPFILE_SUFFIX));
 			if(-1 == fd) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
-			_outputFilename = [[NSString stringWithUTF8String:path] retain];
+			_outputFilename = [[NSString stringWithCString:path encoding:NSASCIIStringEncoding] retain];
 		}
 				
 		@finally {
@@ -119,7 +119,7 @@
 			// And close it
 			if(-1 != fd && -1 == close(fd)) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
 	}	
@@ -132,7 +132,7 @@
 	// Delete output file if it exists
 	if(0 == stat([_outputFilename fileSystemRepresentation], &sourceStat) && -1 == unlink([_outputFilename fileSystemRepresentation])) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithUTF8String:strerror(errno)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}	
 }
 

@@ -174,7 +174,6 @@
 		8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA309613414009CFC49 /* CoreAudioException.m */; };
 		8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
-		8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
 		8CF1EC5C096664EE0058BE92 /* FLACPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */; };
 		8CF1EC9E09666E690058BE92 /* FLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */; };
@@ -278,8 +277,6 @@
 		8C137F720981CF4A00EBFC77 /* ConverterTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ConverterTaskDefaults.plist; sourceTree = "<group>"; };
 		8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LAMEToolbarImage.png; sourceTree = "<group>"; };
 		8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OggVorbisToolbarImage.png; sourceTree = "<group>"; };
-		8C206F120929486C00793FD0 /* TaskMaster.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TaskMaster.h; sourceTree = "<group>"; };
-		8C206F130929486C00793FD0 /* TaskMaster.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TaskMaster.m; sourceTree = "<group>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -556,7 +553,6 @@
 		8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileFormatNotSupportedException.m; sourceTree = "<group>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
-		8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = TaskMasterDefaults.plist; sourceTree = "<group>"; };
 		8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BooleanArrayValueTransformer.m; sourceTree = "<group>"; };
 		8CF1EC59096664EE0058BE92 /* FLACPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACPreferencesController.h; sourceTree = "<group>"; };
@@ -752,7 +748,6 @@
 				8CBB8BBC08EFAF4E007197C3 /* CompactDiscDocumentDefaults.plist */,
 				8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */,
 				8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */,
-				8CF0B93D092C36F400CBF7BD /* TaskMasterDefaults.plist */,
 				8C8B0DA1092E641200418C45 /* MacPAD.url */,
 				8C3280F5096D0C7500608C9D /* UpdateChecker.nib */,
 				8C328101096D0C9C00608C9D /* Log.nib */,
@@ -962,8 +957,6 @@
 			isa = PBXGroup;
 			children = (
 				8C81CEFC09795DD300B24C55 /* TaskMethods.h */,
-				8C206F120929486C00793FD0 /* TaskMaster.h */,
-				8C206F130929486C00793FD0 /* TaskMaster.m */,
 				8CA5C441095277F7006FB5B7 /* PCMGeneratingTask.h */,
 				8CA5C442095277F7006FB5B7 /* PCMGeneratingTask.m */,
 				8CF5E3360970432C0025360B /* Task.h */,
@@ -1137,7 +1130,6 @@
 				8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */,
 				8CBB8BA808EFAE60007197C3 /* FreeDBDefaults.plist in Resources */,
 				8CBB8BBD08EFAF4E007197C3 /* CompactDiscDocumentDefaults.plist in Resources */,
-				8CF0B93E092C36F500CBF7BD /* TaskMasterDefaults.plist in Resources */,
 				8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */,
 				8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */,
 				8C3280F6096D0C7500608C9D /* UpdateChecker.nib in Resources */,

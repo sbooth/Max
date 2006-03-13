@@ -56,7 +56,7 @@
 			
 			sf_command(NULL, SFC_GET_FORMAT_MAJOR, &formatInfo, sizeof(formatInfo));
 			
-			type		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:formatInfo.format], [NSString stringWithUTF8String:formatInfo.name], [NSString stringWithUTF8String:formatInfo.extension], nil] 
+			type		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:formatInfo.format], [NSString stringWithCString:formatInfo.name encoding:NSASCIIStringEncoding], [NSString stringWithCString:formatInfo.extension encoding:NSASCIIStringEncoding], nil] 
 															 forKeys:[NSArray arrayWithObjects:@"sndfileFormat", @"type", @"extension", nil]];
 			subtypes	= [NSMutableArray arrayWithCapacity:20];
 			format		= formatInfo.format;
@@ -71,7 +71,7 @@
 				info.format		= format;
 				
 				if(sf_format_check(&info)) {
-					subtype = [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:info.format], [NSString stringWithUTF8String:formatInfo.name], nil]  
+					subtype = [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:info.format], [NSString stringWithCString:formatInfo.name encoding:NSASCIIStringEncoding], nil]  
 																 forKeys:[NSArray arrayWithObjects:@"sndfileFormat", @"kind", nil]];
 					[subtypes addObject:subtype];
 				}
