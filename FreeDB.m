@@ -141,19 +141,19 @@
 		currentSite = [NSMutableDictionary dictionaryWithCapacity:20];
 		
 		if(CDDB_ERR_OK == cddb_site_get_address(site, &tempString, &i)) {
-			[currentSite setValue:[NSString stringWithUTF8String:tempString] forKey:@"address"];
-			[currentSite setValue:[NSNumber numberWithUnsignedInt:i] forKey:@"port"];
+			[currentSite setObject:[NSString stringWithUTF8String:tempString] forKey:@"address"];
+			[currentSite setObject:[NSNumber numberWithUnsignedInt:i] forKey:@"port"];
 		}
 		
-		[currentSite setValue:[NSNumber numberWithInt:cddb_site_get_protocol(site)] forKey:@"protocol"];
+		[currentSite setObject:[NSNumber numberWithInt:cddb_site_get_protocol(site)] forKey:@"protocol"];
 		
 		if(CDDB_ERR_OK == cddb_site_get_description(site, &tempString)) {
-			[currentSite setValue:[NSString stringWithUTF8String:tempString] forKey:@"siteDescription"];
+			[currentSite setObject:[NSString stringWithUTF8String:tempString] forKey:@"siteDescription"];
 		}
 		
 		if(CDDB_ERR_OK == cddb_site_get_location(site, &latitude, &longitude)) {
-			[currentSite setValue:[NSNumber numberWithFloat:latitude] forKey:@"latitude"];
-			[currentSite setValue:[NSNumber numberWithFloat:longitude] forKey:@"longitude"];
+			[currentSite setObject:[NSNumber numberWithFloat:latitude] forKey:@"latitude"];
+			[currentSite setObject:[NSNumber numberWithFloat:longitude] forKey:@"longitude"];
 		}
 		
 		[sites addObject:currentSite];

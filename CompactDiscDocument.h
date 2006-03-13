@@ -110,6 +110,9 @@
 - (BOOL)			partOfSet;
 
 - (NSImage *)		albumArt;
+- (unsigned)		albumArtWidth;
+- (unsigned)		albumArtHeight;
+
 - (NSBitmapImageRep *) albumArtBitmap;
 
 - (unsigned)		discNumber;
@@ -123,6 +126,7 @@
 
 // Mutators
 - (void) setDisc:(CompactDisc *)disc;
+- (void) setDiscInDrive:(BOOL)discInDrive;
 - (void) setDiscID:(int)discID;
 - (void) setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress;
 - (void) setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful;

@@ -955,8 +955,6 @@
 			children = (
 				8C8B0D1F092E617B00418C45 /* MacPADSocket.h */,
 				8C8B0D20092E617B00418C45 /* MacPADSocket.m */,
-				8C8B0DAA092E64D900418C45 /* UpdateChecker.h */,
-				8C8B0DAB092E64D900418C45 /* UpdateChecker.m */,
 			);
 			name = MacPAD;
 			sourceTree = "<group>";
@@ -1061,6 +1059,8 @@
 		8CF5E7600970BC530025360B /* Helper Classes */ = {
 			isa = PBXGroup;
 			children = (
+				8C8B0DAA092E64D900418C45 /* UpdateChecker.h */,
+				8C8B0DAB092E64D900418C45 /* UpdateChecker.m */,
 				8CE09C1D09513ED90020C8B1 /* AudioMetadata.h */,
 				8CA5C39B09526FA9006FB5B7 /* AudioMetadata.mm */,
 				8C752A8208C507CE001F588B /* Genres.h */,

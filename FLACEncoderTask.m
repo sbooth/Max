@@ -60,6 +60,7 @@
 	unsigned									discTotal				= 0;
 	BOOL										compilation				= NO;
 	NSString									*isrc					= nil;
+	NSString									*mcn					= nil;
 	
 	
 	@try  {
@@ -201,6 +202,12 @@
 		isrc = [metadata ISRC];
 		if(nil != isrc) {
 			addVorbisComment(block, @"ISRC", isrc);
+		}
+
+		// MCN
+		mcn = [metadata MCN];
+		if(nil != mcn) {
+			addVorbisComment(block, @"MCN", mcn);
 		}
 		
 		// Encoded by

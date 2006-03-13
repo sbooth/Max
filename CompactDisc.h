@@ -30,8 +30,8 @@
 
 	NSMutableArray		*_tracks;
 	NSString			*_MCN;
-	NSNumber			*_firstSector;
-	NSNumber			*_lastSector;
+	unsigned long		_firstSector;
+	unsigned long		_lastSector;
 	
 	cddb_disc_t			*_freeDBDisc;
 	unsigned			_length;
@@ -43,8 +43,6 @@
 - (NSString *)			deviceName;
 
 // Physical disc properties
-- (unsigned)			trackCount;
-
 - (unsigned long)		firstSector;
 - (unsigned long)		lastSector;
 
@@ -59,7 +57,7 @@
 - (BOOL)				trackHasPreEmphasis:(unsigned) track;
 - (BOOL)				trackAllowsDigitalCopy:(unsigned) track;
 
-- (NSString *)			ISRC:(unsigned) track;
+- (NSString *)			ISRCForTrack:(unsigned) track;
 
 // KVC accessors
 - (unsigned int)		countOfTracks;

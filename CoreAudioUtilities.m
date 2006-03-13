@@ -138,7 +138,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 			tf.mFormatID	= formatIDs[j];
 			dfi				= [NSMutableDictionary dictionaryWithCapacity:5];
 			
-			[dfi setValue:[NSNumber numberWithUnsignedLong:formatIDs[j]] forKey:@"formatID"];
+			[dfi setObject:[NSNumber numberWithUnsignedLong:formatIDs[j]] forKey:@"formatID"];
 			
 			err				= AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_AvailableStreamDescriptionsForFormat, sizeof(AudioFileTypeAndFormatID), &tf, &size);
 			if(noErr != err) {
@@ -163,15 +163,15 @@ getCoreAudioFileDataFormats(OSType filetype)
 				desc	= &variants[k];
 				d		= [NSMutableDictionary dictionaryWithCapacity:8];
 		
-				[d setValue:[NSNumber numberWithDouble:desc->mSampleRate] forKey:@"sampleRate"];
-				[d setValue:[NSNumber numberWithUnsignedLong:desc->mFormatID] forKey:@"formatID"];
-				[d setValue:[NSNumber numberWithUnsignedLong:desc->mFormatFlags] forKey:@"formatFlags"];
-				[d setValue:[NSNumber numberWithUnsignedLong:desc->mBitsPerChannel] forKey:@"bitsPerChannel"];
-				[d setValue:[NSNumber numberWithBool:formatIDValidForOutput(desc->mFormatID)] forKey:@"writable"];
+				[d setObject:[NSNumber numberWithDouble:desc->mSampleRate] forKey:@"sampleRate"];
+				[d setObject:[NSNumber numberWithUnsignedLong:desc->mFormatID] forKey:@"formatID"];
+				[d setObject:[NSNumber numberWithUnsignedLong:desc->mFormatFlags] forKey:@"formatFlags"];
+				[d setObject:[NSNumber numberWithUnsignedLong:desc->mBitsPerChannel] forKey:@"bitsPerChannel"];
+				[d setObject:[NSNumber numberWithBool:formatIDValidForOutput(desc->mFormatID)] forKey:@"writable"];
 				
 				// FIXME: Hack for AAC VBR mode
 				if(kAudioFormatMPEG4AAC == desc->mFormatID) {
-					[d setValue:[NSNumber numberWithBool:YES] forKey:@"vbrAvailable"];
+					[d setObject:[NSNumber numberWithBool:YES] forKey:@"vbrAvailable"];
 				}
 							
 				// Interleaved 16-bit PCM audio
@@ -212,7 +212,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 						
 						// For some reason some codec return {0.,0.} as bitrates multiple times (alac)
 						if(0 != [bitratesA count]) {
-							[d setValue:bitratesA forKey:@"bitrates"];
+							[d setObject:bitratesA forKey:@"bitrates"];
 						}
 						
 						size	= sizeof(defaultBitrate);
@@ -220,7 +220,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 						if(noErr != err) {
 							NSLog(@"kAudioConverterEncodeBitRate failed: err = %@", UTCreateStringForOSType(err));
 						}
-						[d setValue:[NSNumber numberWithUnsignedLong:defaultBitrate / 1000] forKey:@"bitrate"];
+						[d setObject:[NSNumber numberWithUnsignedLong:defaultBitrate / 1000] forKey:@"bitrate"];
 						
 						free(bitrates);
 						bitrates = NULL;
@@ -230,7 +230,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 					size	= sizeof(defaultQuality);
 					err		= AudioConverterGetProperty(dummyConverter, kAudioConverterCodecQuality, &size, &defaultQuality);
 					if(noErr == err) {
-						[d setValue:[NSNumber numberWithUnsignedLong:defaultQuality] forKey:@"quality"];
+						[d setObject:[NSNumber numberWithUnsignedLong:defaultQuality] forKey:@"quality"];
 					}
 
 					// Cleanup
@@ -247,7 +247,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 					description = NSLocalizedStringFromTable(@"Unknown", @"General", @"");
 				}
 				
-				[d setValue:description forKey:@"description"];
+				[d setObject:description forKey:@"description"];
 							
 				[variantsA addObject:d];
 			}			
@@ -285,7 +285,7 @@ getCoreAudioFileTypeInfo(OSType filetype)
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	if(fileTypeName) {
-		[result setValue:fileTypeName forKey:@"fileTypeName"];
+		[result setObject:fileTypeName forKey:@"fileTypeName"];
 	}
 	
 	// file extensions
@@ -296,10 +296,10 @@ getCoreAudioFileTypeInfo(OSType filetype)
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithUTF8String:GetMacOSStatusErrorString(err)], [NSString stringWithUTF8String:GetMacOSStatusCommentString(err)], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	if(extensions) {
-		[result setValue:(1 == [extensions count] ? [extensions objectAtIndex:0] : extensions) forKey:@"extensionsForType"];
+		[result setObject:(1 == [extensions count] ? [extensions objectAtIndex:0] : extensions) forKey:@"extensionsForType"];
 	}
 	
-	[result setValue:getCoreAudioFileDataFormats(filetype) forKey:@"dataFormats"];
+	[result setObject:getCoreAudioFileDataFormats(filetype) forKey:@"dataFormats"];
 	
 	return [[result retain] autorelease];
 }
@@ -343,7 +343,7 @@ getCoreAudioWritableTypes()
 					BOOL					writable			= NO;
 					unsigned				dataFormatsCount;
 					
-					[d setValue:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
+					[d setObject:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
 					[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];
 					
 					dataFormats			= [d valueForKey:@"dataFormats"];
@@ -415,7 +415,7 @@ getCoreAudioReadableTypes()
 				for(i = 0; i < numFileFormats; ++i) {
 					NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:3];
 					
-					[d setValue:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
+					[d setObject:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
 					[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];
 					
 					[result addObject:d];		

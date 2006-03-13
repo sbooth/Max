@@ -244,12 +244,12 @@
 			if(noErr == err) {
 				
 				bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-				[info setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
+				[info setObject:[NSString stringWithFormat:@"Max %@", bundleVersion] forKey:@kAFInfoDictionary_EncodingApplication];
 				
 				// Album title
 				album = [metadata albumTitle];
 				if(nil != album) {
-					[info setValue:album forKey:@kAFInfoDictionary_Album];
+					[info setObject:album forKey:@kAFInfoDictionary_Album];
 				}
 				
 				// Artist
@@ -258,7 +258,7 @@
 					artist = [metadata albumArtist];
 				}
 				if(nil != artist) {
-					[info setValue:artist forKey:@kAFInfoDictionary_Artist];
+					[info setObject:artist forKey:@kAFInfoDictionary_Artist];
 				}
 				
 				// Genre
@@ -269,7 +269,7 @@
 					genre = [metadata albumGenre];
 				}
 				if(nil != genre) {
-					[info setValue:genre forKey:@kAFInfoDictionary_Genre];
+					[info setObject:genre forKey:@kAFInfoDictionary_Genre];
 				}
 				
 				// Year
@@ -278,7 +278,7 @@
 					year = [metadata albumYear];
 				}
 				if(0 != year) {
-					[info setValue:[NSNumber numberWithUnsignedInt:year] forKey:@kAFInfoDictionary_Year];
+					[info setObject:[NSNumber numberWithUnsignedInt:year] forKey:@kAFInfoDictionary_Year];
 				}
 				
 				// Comment
@@ -287,19 +287,19 @@
 					comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 				}
 				if(nil != comment) {
-					[info setValue:comment forKey:@kAFInfoDictionary_Comments];
+					[info setObject:comment forKey:@kAFInfoDictionary_Comments];
 				}
 				
 				// Track title
 				title = [metadata trackTitle];
 				if(nil != title) {
-					[info setValue:title forKey:@kAFInfoDictionary_Title];
+					[info setObject:title forKey:@kAFInfoDictionary_Title];
 				}
 				
 				// Track number
 				trackNumber = [metadata trackNumber];
 				if(0 != trackNumber) {
-					[info setValue:[NSNumber numberWithUnsignedInt:trackNumber] forKey:@kAFInfoDictionary_TrackNumber];
+					[info setObject:[NSNumber numberWithUnsignedInt:trackNumber] forKey:@kAFInfoDictionary_TrackNumber];
 				}
 				
 				size = sizeof(info);

@@ -67,7 +67,7 @@
 {
 	if((self = [super init])) {
 
-		_document				= nil;
+		_document			= nil;
 		
 		_ripInProgress		= NO;
 		_activeEncoders		= 0;
@@ -387,7 +387,7 @@
 	[result setDiscTotal:[[self document] discTotal]];
 	[result setCompilation:[[self document] compilation]];
 
-	[result setAlbumArt:[[self document] valueForKey:@"albumArtBitmap"]];
+	[result setAlbumArt:[[self document] albumArtBitmap]];
 	
 	[result setMCN:[[self document] MCN]];
 	

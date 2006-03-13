@@ -73,6 +73,8 @@ enum {
 		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
 	
 		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtBitmap"];
+		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtWidth"];
+		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtHeight"];
 	}
 	
 	@catch(NSException *exception) {
@@ -325,8 +327,6 @@ enum {
 
 #pragma mark Disc Management
 
-
-
 - (void) discEjected
 {
 	[self setDisc:nil];
@@ -334,7 +334,7 @@ enum {
 
 #pragma mark State
 
-- (BOOL) encodeAllowed			{ return ([self discInDrive] && (NO == [self emptySelection]) && (NO == [self ripInProgress]) && (NO == [self encodeInProgress])); }
+- (BOOL) encodeAllowed			{ return ([self discInDrive] && NO == [self emptySelection] && NO == [self ripInProgress] && NO == [self encodeInProgress]); }
 - (BOOL) queryFreeDBAllowed		{ return [self discInDrive]; }
 - (BOOL) ejectDiscAllowed		{ return [self discInDrive]; }
 - (BOOL) emptySelection			{ return (0 == [[self selectedTracks] count]); }
@@ -349,7 +349,7 @@ enum {
 		}
 	}
 	
-	return ([self discInDrive] && (nil != [self title]) && (nil != [self artist]) && (nil != [self genre]));
+	return ([self discInDrive] && nil != [self title] && nil != [self artist] && nil != [self genre]);
 }
 
 - (BOOL) ripInProgress
@@ -357,7 +357,7 @@ enum {
 	unsigned i;
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
-		if(nil == [[self objectInTracksAtIndex:i] ripInProgress]) {
+		if([[self objectInTracksAtIndex:i] ripInProgress]) {
 			return YES;
 		}
 	}
@@ -370,7 +370,7 @@ enum {
 	unsigned i;
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
-		if(nil == [[self objectInTracksAtIndex:i] encodeInProgress]) {
+		if([[self objectInTracksAtIndex:i] encodeInProgress]) {
 			return YES;
 		}
 	}
@@ -631,23 +631,18 @@ enum {
 
 - (NSArray *) selectedTracks
 {
-	return [_tracks filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];
-/*	
 	unsigned		i;
-	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[[self disc] trackCount]];
-	NSEnumerator	*enumerator		= [[self tracks] objectEnumerator];
+	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[self countOfTracks]];
 	Track			*track;
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
-		
-	}
-	while((track = [enumerator nextObject])) {
+		track = [self objectInTracksAtIndex:i];
 		if([track selected]) {
 			[result addObject:track];
 		}
 	}
-	
-	return [[result retain] autorelease];*/
+
+	return [[result retain] autorelease];
 }
 
 #pragma mark Accessors
@@ -667,6 +662,8 @@ enum {
 - (BOOL)			partOfSet							{ return _partOfSet; }
 
 - (NSImage *)		albumArt							{ return _albumArt; }
+- (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
+- (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
 
 - (unsigned)		discNumber							{ return _discNumber; }
 - (unsigned)		discTotal							{ return _discTotal; }
@@ -714,61 +711,45 @@ enum {
 		[_disc release];
 		
 		if(nil == disc) {
-			[self setValue:[NSNumber numberWithBool:NO] forKey:@"discInDrive"];
+			[self setDiscInDrive:NO];
 			return;
 		}
 		
-		_disc			= [disc retain];
+		_disc = [disc retain];
 		
-		[self setValue:[NSNumber numberWithBool:YES] forKey:@"discInDrive"];
+		[self setDiscInDrive:YES];
 		
-		[self setValue:[_disc MCN] forKey:@"MCN"];
+		[self setMCN:[_disc MCN]];
 		
 //		[self willChangeValueForKey:@"tracks"];
 		if(0 == [_tracks count]) {
-			for(i = 0; i < [_disc trackCount]; ++i) {
+			for(i = 0; i < [_disc countOfTracks]; ++i) {
 				Track *track = [[Track alloc] init];
-				[track setValue:self forKey:@"disc"];
+				[track setDocument:self];
 				[_tracks addObject:[[track retain] autorelease]];
 			}
 		}
 //		[self didChangeValueForKey:@"tracks"];
 		
-		for(i = 0; i < [_disc trackCount]; ++i) {
+		for(i = 0; i < [_disc countOfTracks]; ++i) {
 			Track			*track		= [_tracks objectAtIndex:i];
 			
-			[track setValue:[NSNumber numberWithUnsignedInt:i + 1] forKey:@"number"];
-			[track setValue:[NSNumber numberWithUnsignedLong:[_disc firstSectorForTrack:i]] forKey:@"firstSector"];
-			[track setValue:[NSNumber numberWithUnsignedLong:[_disc lastSectorForTrack:i]] forKey:@"lastSector"];
+			[track setNumber:i + 1];
+			[track setFirstSector:[_disc firstSectorForTrack:i]];
+			[track setLastSector:[_disc lastSectorForTrack:i]];
 			
-			[track setValue:[NSNumber numberWithUnsignedInt:[_disc channelsForTrack:i]] forKey:@"channels"];
-			[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackHasPreEmphasis:i]] forKey:@"preEmphasis"];
-			[track setValue:[NSNumber numberWithUnsignedInt:[_disc trackAllowsDigitalCopy:i]] forKey:@"copyPermitted"];
-			[track setValue:[_disc ISRC:i] forKey:@"ISRC"];
+			[track setChannels:[_disc channelsForTrack:i]];
+			[track setPreEmphasis:[_disc trackHasPreEmphasis:i]];
+			[track setCopyPermitted:[_disc trackAllowsDigitalCopy:i]];
+			[track setISRC:[_disc ISRCForTrack:i]];
 		}
 	}
 }
 
-- (void) setDiscID:(int)discID
-{
-	if(_discID != discID) {
-		_discID = discID;
-	}
-}
-
-- (void) setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress
-{
-	if(_freeDBQueryInProgress != freeDBQueryInProgress) {
-		_freeDBQueryInProgress = freeDBQueryInProgress;
-	}
-}
-
-- (void) setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful;
-{
-	if(_freeDBQuerySuccessful != freeDBQuerySuccessful) {
-		_freeDBQuerySuccessful = freeDBQuerySuccessful;
-	}
-}
+- (void) setDiscInDrive:(BOOL)discInDrive						{ _discInDrive = discInDrive; }
+- (void) setDiscID:(int)discID									{ _discID = discID; }
+- (void) setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress	{ _freeDBQueryInProgress = freeDBQueryInProgress; }
+- (void) setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful	{ _freeDBQuerySuccessful = freeDBQuerySuccessful; }
 
 - (void) setTitle:(NSString *)title
 {
@@ -875,22 +856,9 @@ enum {
 	}
 }
 
-- (void) setMCN:(NSString *)MCN
-{
-	if(NO == [_MCN isEqualToString:MCN]) {
-		[_MCN release];
-		_MCN = [MCN retain];
-	}
-}
+- (void) setMCN:(NSString *)MCN { [_MCN release]; _MCN = [MCN retain]; }
 
-- (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)idx
-{
-	[_tracks insertObject:track atIndex:idx];
-}
-
-- (void) removeObjectFromTracksAtIndex:(unsigned)idx
-{
-	[_tracks removeObjectAtIndex:idx];
-}
+- (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
+- (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
 
 @end

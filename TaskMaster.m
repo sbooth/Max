@@ -206,7 +206,7 @@ static TaskMaster *sharedController = nil;
 	
 	enumerator = [_rippingTasks objectEnumerator];
 	while((ripperTask = [enumerator nextObject])) {
-		if([document isEqual:[[[ripperTask tracks] objectAtIndex:0] document]]) {
+		if([document isEqual:[[ripperTask objectInTracksAtIndex:0] document]]) {
 			return YES;
 		}
 	}
@@ -547,7 +547,7 @@ static TaskMaster *sharedController = nil;
 				encoderTask = [[CoreAudioEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
 				
 				if([task isKindOfClass:[RipperTask class]]) {
-					[encoderTask setTracks:[(RipperTask *)task tracks]];
+					[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
 				}
 
 				// Show the encoder window if it is hidden
@@ -571,7 +571,7 @@ static TaskMaster *sharedController = nil;
 				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
 
 				if([task isKindOfClass:[RipperTask class]]) {
-					[encoderTask setTracks:[(RipperTask *)task tracks]];
+					[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
 				}
 
 				// Show the encoder window if it is hidden
@@ -597,7 +597,7 @@ static TaskMaster *sharedController = nil;
 	EncoderTask *encoderTask = [[encoderClass alloc] initWithTask:task];
 
 	if([task isKindOfClass:[RipperTask class]]) {
-		[encoderTask setTracks:[(RipperTask *)task tracks]];
+		[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
 	}
 
 	// Show the encoder window if it is hidden
