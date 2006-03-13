@@ -63,7 +63,7 @@
 	unsigned									length					= 0;
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= NULL;
 	TagLib::ID3v2::AttachedPictureFrame			*pictureFrame			= NULL;
-	NSBitmapImageRep							*albumArt				= nil;
+	NSImage										*albumArt				= nil;
 	NSData										*data					= nil;
 	TagLib::MPEG::File							f						([_outputFilename fileSystemRepresentation], false);
 	NSString									*bundleVersion			= nil;
@@ -237,7 +237,7 @@
 	// Album art
 	albumArt = [metadata albumArt];
 	if(nil != albumArt) {
-		data			= [albumArt representationUsingType:NSPNGFileType properties:nil]; 
+		data			= getPNGDataForImage(albumArt); 
 		pictureFrame	= new TagLib::ID3v2::AttachedPictureFrame();
 		if(nil == pictureFrame) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 

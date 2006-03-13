@@ -68,6 +68,9 @@ void addVorbisComment(FLAC__StreamMetadata		*block,
 					  NSString					*key,
 					  NSString					*value);
 
+// Convert an NSImage to PNG data
+NSData * getPNGDataForImage(NSImage *image);
+
 #ifdef __cplusplus
 }
 #endif

@@ -113,8 +113,6 @@
 - (unsigned)		albumArtWidth;
 - (unsigned)		albumArtHeight;
 
-- (NSBitmapImageRep *) albumArtBitmap;
-
 - (unsigned)		discNumber;
 - (unsigned)		discTotal;
 - (BOOL)			compilation;

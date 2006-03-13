@@ -44,7 +44,7 @@
 
 	unsigned				_length;
 	
-	NSBitmapImageRep		*_albumArt;
+	NSImage					*_albumArt;
 	
 	NSString				*_MCN;
 	NSString				*_ISRC;
@@ -85,7 +85,7 @@
 - (NSString *)	MCN;
 - (NSString *)	ISRC;
 
-- (NSBitmapImageRep *) albumArt;
+- (NSImage *)	albumArt;
 
 // Mutators
 - (void)		setTrackNumber:(unsigned)trackNumber;
@@ -113,6 +113,6 @@
 - (void)		setMCN:(NSString *)MCN;
 - (void)		setISRC:(NSString *)ISRC;
 
-- (void)		setAlbumArt:(NSBitmapImageRep *)albumArt;
+- (void)		setAlbumArt:(NSImage *)albumArt;
 
 @end

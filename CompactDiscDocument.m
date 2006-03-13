@@ -72,7 +72,6 @@ enum {
 		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
 	
-		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtBitmap"];
 		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtWidth"];
 		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtHeight"];
 	}
@@ -205,7 +204,7 @@ enum {
 		[result setValue:[self MCN] forKey:@"MCN"];
 		[result setObject:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
 		
-		data = [[self albumArtBitmap] representationUsingType:NSPNGFileType properties:nil]; 
+		data = getPNGDataForImage([self albumArt]); 
 		[result setValue:data forKey:@"albumArt"];
 		
 		for(i = 0; i < [self countOfTracks]; ++i) {
@@ -673,33 +672,6 @@ enum {
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
 - (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
-
-- (NSBitmapImageRep *) albumArtBitmap
-{
-	NSEnumerator		*enumerator					= nil;
-	NSImageRep			*currentRepresentation		= nil;
-	NSBitmapImageRep	*bitmapRep					= nil;
-	NSSize				size;
-
-	if(nil == [self albumArt]) {
-		return nil;
-	}
-
-	enumerator = [[[self albumArt] representations] objectEnumerator];
-	while((currentRepresentation = [enumerator nextObject])) {
-		if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
-			return (NSBitmapImageRep *)currentRepresentation;
-		}
-	}
-
-	// Create a bitmap representation if one doesn't exist
-	size = [[self albumArt] size];
-	[[self albumArt] lockFocus];
-	bitmapRep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, size.width, size.height)] autorelease];
-	[[self albumArt] unlockFocus];
-
-	return bitmapRep;
-}
 
 #pragma mark Mutators
 

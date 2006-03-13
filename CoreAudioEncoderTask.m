@@ -20,12 +20,12 @@
 
 #import "CoreAudioEncoderTask.h"
 #import "CoreAudioEncoder.h"
+#import "UtilityFunctions.h"
 #import "CoreAudioException.h"
 #import "IOException.h"
 
-#include <mp4v2/mp4.h>
-
 #include <AudioToolbox/AudioFile.h>
+#include <mp4v2/mp4.h>
 
 @implementation CoreAudioEncoderTask
 
@@ -112,7 +112,7 @@
 	NSString				*genre					= nil;
 	NSString				*comment				= nil;
 	BOOL					compilation				= NO;
-	NSBitmapImageRep		*albumArt				= nil;
+	NSImage					*albumArt				= nil;
 	NSData					*data					= nil;
 
 	
@@ -207,7 +207,7 @@
 			// Album art
 			albumArt = [metadata albumArt];
 			if(nil != albumArt) {
-				data = [albumArt representationUsingType:NSPNGFileType properties:nil]; 
+				data = getPNGDataForImage(albumArt); 
 				MP4SetMetadataCoverArt(mp4FileHandle, (u_int8_t *)[data bytes], [data length]);
 			}
 

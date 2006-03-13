@@ -243,11 +243,8 @@
 					frameList = id3v2tag->frameListMap()["APIC"];
 					if(NO == frameList.isEmpty() && NULL != (picture = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front()))) {
 						TagLib::ByteVector bv = picture->picture();
-						NSImage *image = [[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]];
-						if(nil != image) {
-							[result setAlbumArt:[image autorelease]];
-						}
-					}			
+						[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]] autorelease]];
+					}
 					
 					// Extract compilation if present (iTunes TCMP tag)
 					if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
@@ -402,10 +399,7 @@
 			artCount = MP4GetMetadataCoverArtCount(mp4FileHandle);
 			if(0 < artCount) {
 				MP4GetMetadataCoverArt(mp4FileHandle, &bytes, &length);
-				image = [[NSImage alloc] initWithData:[NSData dataWithBytes:bytes length:length]];
-				if(nil != image) {
-					[result setAlbumArt:[image autorelease]];
-				}
+				[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bytes length:length]] autorelease]];
 			}
 			
 			MP4Close(mp4FileHandle);
@@ -721,7 +715,7 @@
 - (NSString *)	MCN							{ return _MCN; }
 - (NSString *)	ISRC						{ return _ISRC; }
 
-- (NSBitmapImageRep *) albumArt				{ return _albumArt; }
+- (NSImage *)	albumArt					{ return _albumArt; }
 
 // Mutators
 - (void)		setTrackNumber:(unsigned)trackNumber			{ _trackNumber = trackNumber; }
@@ -749,6 +743,6 @@
 - (void)		setMCN:(NSString *)MCN							{ [_MCN release]; _MCN = [MCN retain]; }
 - (void)		setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = [ISRC retain]; }
 
-- (void)		setAlbumArt:(NSBitmapImageRep *)albumArt		{ [_albumArt release]; _albumArt = [albumArt retain]; }
+- (void)		setAlbumArt:(NSImage *)albumArt					{ [_albumArt release]; _albumArt = [albumArt retain]; }
 
 @end

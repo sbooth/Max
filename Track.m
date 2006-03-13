@@ -387,7 +387,7 @@
 	[result setDiscTotal:[[self document] discTotal]];
 	[result setCompilation:[[self document] compilation]];
 
-	[result setAlbumArt:[[self document] albumArtBitmap]];
+	[result setAlbumArt:[[self document] albumArt]];
 	
 	[result setMCN:[[self document] MCN]];
 	
