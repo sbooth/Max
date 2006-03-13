@@ -190,7 +190,7 @@ getLibsndfileExtensions()
 			for(i = 0; i < majorCount; ++i) {	
 				formatInfo.format = i;
 				sf_command(NULL, SFC_GET_FORMAT_MAJOR, &formatInfo, sizeof(formatInfo));
-				[(NSMutableArray *)sAudioExtensions addObject:[NSString stringWithUTF8String:formatInfo.extension]];
+				[(NSMutableArray *)sAudioExtensions addObject:[NSString stringWithCString:formatInfo.extension encoding:NSASCIIStringEncoding]];
 			}
 			
 			[sAudioExtensions retain];
@@ -298,16 +298,15 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 	FLAC__StreamMetadata_VorbisComment_Entry	entry;
 	
 	string			= [NSString stringWithFormat:@"%@=%@", key, value];
-	entry.length	= [string length];
-	entry.entry		= NULL;
 	entry.entry		= (unsigned char *)strdup([string UTF8String]);
 	if(NULL == entry.entry) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+		@throw [NSException exceptionWithName:@"MallocException" reason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 	}
 	
+	entry.length	= strlen((const char *)entry.entry);
 	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
 		free(entry.entry);
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+		@throw [NSException exceptionWithName:@"FLACException" reason:NSLocalizedStringFromTable(@"FLAC error (FLAC__metadata_object_vorbiscomment_append_comment)", @"Exceptions", @"") userInfo:nil];
 	}	
 }
 
