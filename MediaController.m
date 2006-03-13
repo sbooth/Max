@@ -216,8 +216,7 @@ static MediaController *sharedController = nil;
 
 - (void) volumeUnmounted:(NSString *)bsdName
 {
-	NSArray					*documents				= [[NSDocumentController sharedDocumentController] documents];
-	NSEnumerator			*documentEnumerator		= [documents objectEnumerator];
+	NSEnumerator			*documentEnumerator		= [[[NSDocumentController sharedDocumentController] documents] objectEnumerator];
 	CompactDiscDocument		*document;
 	CompactDisc				*disc;
 	
@@ -230,7 +229,7 @@ static MediaController *sharedController = nil;
 	}
 }
 
-- (void) ejectDiscForCompactDiscDocument:(CompactDiscDocument *)document
+- (void) ejectDiscForDocument:(CompactDiscDocument *)document
 {
 	NSString	*bsdName	= [[document disc] bsdName];
 	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [bsdName fileSystemRepresentation]);
@@ -277,7 +276,7 @@ static MediaController *sharedController = nil;
 		}
 	}
 	else if([keyPath isEqualToString:@"ripInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		if(NO == [[RipperController sharedController] documentHasRippingTasks:doc]) {
+		if(NO == [[RipperController sharedController] documentHasRipperTasks:doc]) {
 			tracks		= [doc valueForKey:@"tracks"];
 			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
 			

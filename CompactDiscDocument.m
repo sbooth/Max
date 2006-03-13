@@ -462,11 +462,11 @@ enum {
 		}
 		// Stop all associated rip tasks
 		else {
-			[[RipperController sharedController] stopRipperTasksForCompactDiscDocument:self];
+			[[RipperController sharedController] stopRipperTasksForDocument:self];
 		}
 	}
 	
-	[[MediaController sharedController] ejectDiscForCompactDiscDocument:self];
+	[[MediaController sharedController] ejectDiscForDocument:self];
 }
 
 - (IBAction) queryFreeDB:(id)sender
@@ -674,24 +674,22 @@ enum {
 
 - (void) setDisc:(CompactDisc *)disc
 {
-	NSLog(@"setDisc:%@",disc);
 	unsigned			i;
 
 	if(NO == [_disc isEqual:disc]) {
+
 		[_disc release];
+		_disc = [disc retain];
 		
 		if(nil == disc) {
 			[self setDiscInDrive:NO];
 			return;
 		}
 		
-		_disc = [disc retain];
-		
 		[self setDiscInDrive:YES];
 		
 		[self setMCN:[_disc MCN]];
 		
-//		[self willChangeValueForKey:@"tracks"];
 		if(0 == [self countOfTracks]) {
 			for(i = 0; i < [_disc countOfTracks]; ++i) {
 				Track *track = [[Track alloc] init];
@@ -699,7 +697,6 @@ enum {
 				[_tracks addObject:[track autorelease]];
 			}
 		}
-//		[self didChangeValueForKey:@"tracks"];
 		
 		for(i = 0; i < [_disc countOfTracks]; ++i) {
 			Track			*track		= [_tracks objectAtIndex:i];
