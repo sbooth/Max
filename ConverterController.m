@@ -24,6 +24,7 @@
 #import "OggVorbisConverterTask.h"
 #import "FLACConverterTask.h"
 #import "OggFLACConverterTask.h"
+#import "MonkeysAudioConverterTask.h"
 #import "SpeexConverterTask.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioUtilities.h"
@@ -181,6 +182,9 @@ static ConverterController *sharedController = nil;
 	}
 	else if([extension isEqualToString:@"oggflac"]) {
 		converterTask = [[OggFLACConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"ape"] || [extension isEqualToString:@"apl"] || [extension isEqualToString:@"mac"]) {
+		converterTask = [[MonkeysAudioConverterTask alloc] initWithInputFile:filename metadata:metadata];
 	}
 	else if([extension isEqualToString:@"spx"]) {
 		converterTask = [[SpeexConverterTask alloc] initWithInputFile:filename metadata:metadata];		

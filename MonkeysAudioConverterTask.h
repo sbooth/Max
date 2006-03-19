@@ -20,15 +20,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ComponentVersionsController : NSWindowController
+#import "ConverterTask.h"
+
+@interface MonkeysAudioConverterTask : ConverterTask 
 {
-	NSString		*_flacVersion;
-	NSString		*_lameVersion;
-	NSString		*_speexVersion;
-	NSString		*_libsndfileVersion;
-	NSString		*_macVersion;
 }
 
-+ (ComponentVersionsController *)		sharedController;
+- (id)			initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
 
 @end

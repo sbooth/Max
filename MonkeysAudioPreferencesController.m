@@ -18,17 +18,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import <Cocoa/Cocoa.h>
+#import "MonkeysAudioPreferencesController.h"
 
-@interface ComponentVersionsController : NSWindowController
+@implementation MonkeysAudioPreferencesController
+
+- (id) init
 {
-	NSString		*_flacVersion;
-	NSString		*_lameVersion;
-	NSString		*_speexVersion;
-	NSString		*_libsndfileVersion;
-	NSString		*_macVersion;
+	if((self = [super initWithWindowNibName:@"MonkeysAudioPreferences"])) {
+		return self;		
+	}
+	return nil;
 }
-
-+ (ComponentVersionsController *)		sharedController;
 
 @end

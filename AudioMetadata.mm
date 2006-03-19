@@ -19,7 +19,7 @@
  */
 
 #import "AudioMetadata.h"
-
+#import "MallocException.h"
 #import "UtilityFunctions.h"
 
 #include <TagLib/fileref.h>					// TagLib::FileRef
@@ -30,7 +30,13 @@
 #include <TagLib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
 #include <TagLib/xiphcomment.h>				// TagLib::Ogg::XiphComment
 #include <TagLib/tbytevector.h>				// TagLib::ByteVector
+
 #include <mp4v2/mp4.h>						// MP4FileHandle
+
+#include <MAC/All.h>
+#include <MAC/MACLib.h>
+#include <MAC/APETag.h>
+#include <MAC/CharacterHelper.h>
 
 @implementation AudioMetadata
 
@@ -146,8 +152,8 @@
 		}
 	}
 	
-	// Try TagLib
-	if(NO == parsed) {
+	// Try TagLib second
+	if(NO == parsed && ([extension isEqualToString:@"ogg"] || [extension isEqualToString:@"mp3"])) {
 		TagLib::FileRef							f						([filename fileSystemRepresentation]);
 		TagLib::MPEG::File						*mpegFile				= NULL;
 		TagLib::Ogg::Vorbis::File				*vorbisFile				= NULL;
@@ -314,7 +320,7 @@
 	}
 
 	// Try mp4v2
-	if(NO == parsed) {
+	if(NO == parsed && ([extension isEqualToString:@"m4a"] || [extension isEqualToString:@"mp4"])) {
 		MP4FileHandle mp4FileHandle = MP4Read([filename fileSystemRepresentation], 0);
 		
 		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
@@ -402,6 +408,117 @@
 			}
 			
 			MP4Close(mp4FileHandle);
+		}
+	}
+	
+	
+	// Try Monkey's Audio
+	if(NO == parsed && ([extension isEqualToString:@"ape"] || [extension isEqualToString:@"apl"] || [extension isEqualToString:@"mac"])) {
+		str_utf16						*chars					= NULL;
+		CAPETag							*f						= NULL;
+		CAPETagField					*tag					= NULL;		
+		
+		@try {
+			chars = GetUTF16FromUTF8((const unsigned char *)[filename UTF8String]);
+			if(NULL == chars) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			f = new CAPETag(chars);
+			if(NULL == f) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			
+			// Album title
+			tag = f->GetTagField(APE_TAG_FIELD_ALBUM);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setAlbumTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+						
+			// Artist
+			tag = f->GetTagField(APE_TAG_FIELD_ARTIST);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setAlbumArtist:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+			
+			// Composer
+			tag = f->GetTagField(APE_TAG_FIELD_COMPOSER);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setAlbumComposer:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+			
+			// Genre
+			tag = f->GetTagField(APE_TAG_FIELD_GENRE);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setAlbumGenre:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+			
+			// Year
+			tag = f->GetTagField(APE_TAG_FIELD_YEAR);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setAlbumYear:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+			}
+			
+			// Comment
+			tag = f->GetTagField(APE_TAG_FIELD_COMMENT);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setAlbumComment:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+			
+			// Track title
+			tag = f->GetTagField(APE_TAG_FIELD_TITLE);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setTrackTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+			
+			// Track number
+			tag = f->GetTagField(APE_TAG_FIELD_TRACK);
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setTrackNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+			}
+			
+			// Track total
+			tag = f->GetTagField(L"TRACKTOTAL");
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setTrackTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+			}
+			
+			// Disc number
+			tag = f->GetTagField(L"DISCNUMBER");
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setDiscNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+			}
+			
+			// Discs in set
+			tag = f->GetTagField(L"DISCTOTAL");
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setDiscTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+			}
+			
+			// Compilation
+			tag = f->GetTagField(L"COMPILATION");
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setCompilation:(BOOL)[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+			}
+			
+			// ISRC
+			tag = f->GetTagField(L"ISRC");
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setISRC:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+			
+			// MCN
+			tag = f->GetTagField(L"MCN");
+			if(NULL != tag && tag->GetIsUTF8Text()) {
+				[result setMCN:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+			}
+			
+		}
+		
+		@finally {
+			delete f;
+			free(chars);
 		}
 	}
 

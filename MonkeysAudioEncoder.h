@@ -20,15 +20,24 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ComponentVersionsController : NSWindowController
-{
-	NSString		*_flacVersion;
-	NSString		*_lameVersion;
-	NSString		*_speexVersion;
-	NSString		*_libsndfileVersion;
-	NSString		*_macVersion;
-}
+#include <MAC/All.h>
+#include <MAC/MACLib.h>
+#include <MAC/APECompress.h>
 
-+ (ComponentVersionsController *)		sharedController;
+#import "Encoder.h"
+
+enum {
+	MAC_COMPRESSION_LEVEL_FAST			= 1,
+	MAC_COMPRESSION_LEVEL_NORMAL		= 2,
+	MAC_COMPRESSION_LEVEL_HIGH			= 3,
+	MAC_COMPRESSION_LEVEL_EXTRA_HIGH	= 4,
+	MAC_COMPRESSION_LEVEL_INSANE		= 5
+};
+
+@interface MonkeysAudioEncoder : Encoder
+{
+	IAPECompress			*_compressor;
+	int						_compressionLevel;
+}
 
 @end

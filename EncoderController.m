@@ -27,6 +27,7 @@
 #import "OggVorbisEncoderTask.h"
 #import "CoreAudioEncoderTask.h"
 #import "LibsndfileEncoderTask.h"
+#import "MonkeysAudioEncoderTask.h"
 #import "SpeexEncoderTask.h"
 #import "LogController.h"
 #import "ConverterController.h"
@@ -160,6 +161,9 @@ static EncoderController *sharedController = nil;
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"]) {
 			[self runEncoder:[OggVorbisEncoderTask class] forTask:task];
+		}
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMonkeysAudio"]) {
+			[self runEncoder:[MonkeysAudioEncoderTask class] forTask:task];
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"]) {
 			[self runEncoder:[SpeexEncoderTask class] forTask:task];

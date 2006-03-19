@@ -20,15 +20,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface ComponentVersionsController : NSWindowController
-{
-	NSString		*_flacVersion;
-	NSString		*_lameVersion;
-	NSString		*_speexVersion;
-	NSString		*_libsndfileVersion;
-	NSString		*_macVersion;
-}
+#import "Converter.h"
 
-+ (ComponentVersionsController *)		sharedController;
+@interface MonkeysAudioConverter : Converter 
+{
+}
 
 @end

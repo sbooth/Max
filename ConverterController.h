@@ -19,6 +19,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+
 #import "ConverterTask.h"
 
 @interface ConverterController : NSWindowController

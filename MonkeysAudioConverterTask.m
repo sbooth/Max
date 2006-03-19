@@ -18,17 +18,23 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import <Cocoa/Cocoa.h>
+#import "MonkeysAudioConverterTask.h"
+#import "MonkeysAudioConverter.h"
 
-@interface ComponentVersionsController : NSWindowController
+@implementation MonkeysAudioConverterTask
+
+- (id) initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata
 {
-	NSString		*_flacVersion;
-	NSString		*_lameVersion;
-	NSString		*_speexVersion;
-	NSString		*_libsndfileVersion;
-	NSString		*_macVersion;
+	if((self = [super initWithInputFile:inputFilename metadata:metadata])) {
+		_converterClass = [MonkeysAudioConverter class];
+		return self;
+	}
+	return nil;
 }
 
-+ (ComponentVersionsController *)		sharedController;
+- (NSString *) inputFormat
+{
+	return NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @"");
+}
 
 @end
