@@ -19,6 +19,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+
 #include <CoreAudio/CoreAudioTypes.h>
 
 #import "ConverterMethods.h"

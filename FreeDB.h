@@ -20,9 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDiscDocument.h"
-
 #include <cddb/cddb.h>
+
+#import "CompactDiscDocument.h"
 
 @interface FreeDB : NSObject 
 {

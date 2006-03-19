@@ -239,14 +239,12 @@ enum {
 				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
 			}
 			else if(0 == [self countOfTracks]) {
-//				[self willChangeValueForKey:@"tracks"];
 				for(i = 0; i < [tracks count]; ++i) {
 					Track *track = [[[Track alloc] init] autorelease];
 					[track setDocument:self];
 					[track setPropertiesFromDictionary:[tracks objectAtIndex:i]];
 					[self insertObject:track inTracksAtIndex:i];
 				}
-//				[self didChangeValueForKey:@"tracks"];
 			}
 			
 			[_title release];
@@ -424,6 +422,7 @@ enum {
 			[metadata setTrackArtist:nil];
 			[metadata setTrackGenre:nil];
 			[metadata setTrackYear:0];
+			[metadata setISRC:nil];
 						
 			[[RipperController sharedController] ripTracks:selectedTracks metadata:metadata];
 		}
@@ -520,6 +519,14 @@ enum {
 	@try {
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];		
 		[freeDB submitDisc];
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText: [NSString stringWithFormat:NSLocalizedStringFromTable(@"The information for the CD \"%@\" has been successfully submitted to FreeDB.", @"General", @""), [self title]]];
+		[alert setInformativeText: NSLocalizedStringFromTable(@"Thank you for using FreeDB!", @"General", @"")];
+		
+		[alert setAlertStyle: NSInformationalAlertStyle];
+		
+		[alert beginSheetModalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
 	}
 	
 	@catch(NSException *exception) {

@@ -20,8 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
 #include <LAME/lame.h>
+
+#import "Encoder.h"
 
 // Tag values for NSPopupButton
 enum {

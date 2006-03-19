@@ -166,7 +166,7 @@
 - (NSArray *) fetchMatches
 {
 	NSMutableArray			*result			= [NSMutableArray arrayWithCapacity:10];
-	cddb_disc_t				*freeDBDisc		= [[_disc disc] getFreeDBDisc];
+	cddb_disc_t				*freeDBDisc		= [[_disc disc] freeDBDisc];
 	NSMutableDictionary		*currentMatch;
 	const char				*artist;
 	const char				*title;
@@ -326,7 +326,7 @@
 	unsigned			i;
 
 	
-	disc = cddb_disc_clone([[_disc disc] getFreeDBDisc]);
+	disc = cddb_disc_clone([[_disc disc] freeDBDisc]);
 	if(NULL == disc) {
 		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

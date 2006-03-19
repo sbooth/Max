@@ -18,24 +18,25 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import <Cocoa/Cocoa.h>
+#import "UppercaseStringValueTransformer.h"
 
-#include <OggFLAC/file_encoder.h>
+@implementation UppercaseStringValueTransformer
 
-#import "Encoder.h"
++ (Class)	transformedValueClass				{ return [NSString class]; }
++ (BOOL)	allowsReverseTransformation			{ return YES; }
+- (id)		reverseTransformedValue:(id)value	{ return value; }
 
-@interface OggFLACEncoder : Encoder
+- (id) transformedValue:(id)value;
 {
-	OggFLAC__FileEncoder	*_flac;
+	if(nil == value) {
+		return nil;		
+	}
 	
-	BOOL					_exhaustiveModelSearch;
-	BOOL					_enableMidSide;
-	BOOL					_enableLooseMidSide;
-	int						_QLPCoeffPrecision;
-	int						_minPartitionOrder;
-	int						_maxPartitionOrder;
-	int						_maxLPCOrder;
-	unsigned				_padding;
+	if(NO == [value isKindOfClass:[NSString class]]) {
+		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Value was not NSString." userInfo:nil];
+	}
+	
+	return [value uppercaseString];
 }
 
 @end

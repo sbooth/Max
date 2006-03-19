@@ -434,7 +434,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		while(NO == eos || totalFrames > framesEncoded) {
 			
 			// Read a single frame of PCM input
-			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerPacket;
+			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerFrame;
 			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
 			if(err != noErr) {
 				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileRead failed", @"Exceptions", @"")

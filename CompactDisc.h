@@ -67,6 +67,6 @@
 - (int)					discID;
 - (unsigned)			length;
 
-- (cddb_disc_t *)		getFreeDBDisc;
+- (cddb_disc_t *)		freeDBDisc;
 
 @end

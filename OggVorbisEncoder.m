@@ -102,8 +102,6 @@ enum {
 	float						*left,				*right;
 	int16_t						*alias,				*limit;
 		
-	NSString					*bundleVersion;
-
 	BOOL						eos											= NO;
 
 	AudioBufferList				buf;
@@ -189,10 +187,7 @@ enum {
 			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
 		}
 		
-		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-		
 		vorbis_comment_init(&vc);
-		vorbis_comment_add_tag(&vc, "ENCODER", (char *)[[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String]);
 		
 		vorbis_analysis_init(&vd, &vi);
 		vorbis_block_init(&vd, &vb);
@@ -231,7 +226,7 @@ enum {
 		while(NO == eos) {
 			
 			// Read a chunk of PCM input
-			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerPacket;
+			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerFrame;
 			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
 			if(err != noErr) {
 				@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileRead failed", @"Exceptions", @"")
@@ -268,7 +263,7 @@ enum {
 				// Update UI
 				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval;
+				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
 				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
 				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];

@@ -28,6 +28,10 @@
 #include <FLAC/metadata.h>
 #include <FLAC/format.h>
 
+@interface FLACEncoderTask (Private)
+- (NSString *) customizeTag:(NSString *)tag;
+@end
+
 @implementation FLACEncoderTask
 
 - (id) initWithTask:(PCMGeneratingTask *)task
@@ -37,6 +41,14 @@
 		return self;
 	}
 	return nil;
+}
+
+- (NSString *) customizeTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"FLACTag_%@", tag]];
+	return (nil == customTag ? tag : customTag);
 }
 
 - (void) writeTags
@@ -114,7 +126,7 @@
 		// Album title
 		album = [metadata albumTitle];
 		if(nil != album) {
-			addVorbisComment(block, @"ALBUM", album);
+			addVorbisComment(block, [self customizeTag:@"ALBUM"], album);
 		}
 		
 		// Artist
@@ -123,7 +135,7 @@
 			artist = [metadata albumArtist];
 		}
 		if(nil != artist) {
-			addVorbisComment(block, @"ARTIST", artist);
+			addVorbisComment(block, [self customizeTag:@"ARTIST"], artist);
 		}
 
 		// Composer
@@ -132,7 +144,7 @@
 			composer = [metadata albumComposer];
 		}
 		if(nil != composer) {
-			addVorbisComment(block, @"COMPOSER", composer);
+			addVorbisComment(block, [self customizeTag:@"COMPOSER"], composer);
 		}
 		
 		// Genre
@@ -141,7 +153,7 @@
 			genre = [metadata albumGenre];
 		}
 		if(nil != genre) {
-			addVorbisComment(block, @"GENRE", genre);
+			addVorbisComment(block, [self customizeTag:@"GENRE"], genre);
 		}
 		
 		// Year
@@ -150,7 +162,7 @@
 			year = [metadata albumYear];
 		}
 		if(0 != year) {
-			addVorbisComment(block, @"DATE", [NSString stringWithFormat:@"%u", year]);
+			addVorbisComment(block, [self customizeTag:@"YEAR"], [NSString stringWithFormat:@"%u", year]);
 		}
 		
 		// Comment
@@ -159,64 +171,64 @@
 			comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 		}
 		if(nil != comment) {
-			addVorbisComment(block, @"DESCRIPTION", comment);
+			addVorbisComment(block, [self customizeTag:@"COMMENT"], comment);
 		}
 		
 		// Track title
 		title = [metadata trackTitle];
 		if(nil != title) {
-			addVorbisComment(block, @"TITLE", title);
+			addVorbisComment(block, [self customizeTag:@"TITLE"], title);
 		}
 		
 		// Track number
 		trackNumber = [metadata trackNumber];
 		if(0 != trackNumber) {
-			addVorbisComment(block, @"TRACKNUMBER", [NSString stringWithFormat:@"%u", trackNumber]);
+			addVorbisComment(block, [self customizeTag:@"TRACKNUMBER"], [NSString stringWithFormat:@"%u", trackNumber]);
 		}
 
 		// Total tracks
 		totalTracks = [metadata albumTrackCount];
 		if(0 != totalTracks) {
-			addVorbisComment(block, @"TRACKTOTAL", [NSString stringWithFormat:@"%u", totalTracks]);
+			addVorbisComment(block, [self customizeTag:@"TRACKTOTAL"], [NSString stringWithFormat:@"%u", totalTracks]);
 		}
 
 		// Compilation
 		compilation = [metadata compilation];
 		if(compilation) {
-			addVorbisComment(block, @"COMPILATION", @"1");
+			addVorbisComment(block, [self customizeTag:@"COMPILATION"], @"1");
 		}
 		
 		// Disc number
 		discNumber = [metadata discNumber];
 		if(0 != discNumber) {
-			addVorbisComment(block, @"DISCNUMBER", [NSString stringWithFormat:@"%u", discNumber]);
+			addVorbisComment(block, [self customizeTag:@"DISCNUMBER"], [NSString stringWithFormat:@"%u", discNumber]);
 		}
 		
 		// Discs in set
 		discTotal = [metadata discTotal];
 		if(0 != discTotal) {
-			addVorbisComment(block, @"DISCTOTAL", [NSString stringWithFormat:@"%u", discTotal]);
+			addVorbisComment(block, [self customizeTag:@"DISCTOTAL"], [NSString stringWithFormat:@"%u", discTotal]);
 		}
 		
 		// ISRC
 		isrc = [metadata ISRC];
 		if(nil != isrc) {
-			addVorbisComment(block, @"ISRC", isrc);
+			addVorbisComment(block, [self customizeTag:@"ISRC"], isrc);
 		}
 
 		// MCN
 		mcn = [metadata MCN];
 		if(nil != mcn) {
-			addVorbisComment(block, @"MCN", mcn);
+			addVorbisComment(block, [self customizeTag:@"MCN"], mcn);
 		}
 		
 		// Encoded by
 		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
-		addVorbisComment(block, @"ENCODER", versionString);
+		addVorbisComment(block, [self customizeTag:@"ENCODER"], versionString);
 
 		// Encoder settings
-		addVorbisComment(block, @"ENCODING", [self settings]);
+		addVorbisComment(block, [self customizeTag:@"ENCODING"], [self settings]);
 		
 		// Write the new metadata to the file
 		if(NO == FLAC__metadata_chain_write(chain, YES, NO)) {

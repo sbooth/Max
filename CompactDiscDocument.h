@@ -23,7 +23,6 @@
 #import "CompactDisc.h"
 #import "Track.h"
 
-
 @interface CompactDiscDocument : NSDocument 
 {
     IBOutlet NSArrayController		*_trackController;

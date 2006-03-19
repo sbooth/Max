@@ -19,6 +19,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+
 #import "RipperTask.h"
 
 @interface RipperController : NSWindowController

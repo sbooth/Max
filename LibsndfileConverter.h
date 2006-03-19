@@ -20,9 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Converter.h"
-
 #include <sndfile/sndfile.h>
+
+#import "Converter.h"
 
 @interface LibsndfileConverter : Converter
 {

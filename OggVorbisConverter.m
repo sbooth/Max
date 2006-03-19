@@ -20,6 +20,8 @@
 
 #import "OggVorbisConverter.h"
 
+#include <Vorbis/vorbisfile.h>
+
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>
 #include <AudioToolbox/AudioConverter.h>
@@ -29,7 +31,6 @@
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
-#import "FLACException.h"
 #import "CoreAudioException.h"
 
 #include <unistd.h>		// lseek
@@ -144,7 +145,7 @@
 				// Update UI
 				double percentComplete = ((double)(totalSamples - samplesToRead)/(double) totalSamples) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = interval / ((double)(totalSamples - samplesToRead)/(double) totalSamples) - interval;
+				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalSamples - samplesToRead)/(double) totalSamples) - interval);
 				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
 				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];

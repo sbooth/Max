@@ -20,10 +20,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
-
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFile.h>
+
+#import "Encoder.h"
 
 @interface CoreAudioEncoder : Encoder
 {

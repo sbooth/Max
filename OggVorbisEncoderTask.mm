@@ -25,6 +25,10 @@
 #include <TagLib/vorbisfile.h>			// TagLib::Ogg::Vorbis::File
 #include <TagLib/tag.h>					// TagLib::Tag
 
+@interface OggVorbisEncoderTask (Private)
+- (TagLib::String) customizeTag:(NSString *)tag;
+@end
+
 @implementation OggVorbisEncoderTask
 
 - (id) initWithTask:(PCMGeneratingTask *)task
@@ -34,6 +38,14 @@
 		return self;
 	}
 	return nil;
+}
+
+- (TagLib::String) customizeTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"OggVorbisTag_%@", tag]];
+	return (nil == customTag ? TagLib::String([tag UTF8String], TagLib::String::UTF8) : TagLib::String([customTag UTF8String], TagLib::String::UTF8));
 }
 
 - (void) writeTags
@@ -53,6 +65,7 @@
 	NSString									*comment				= nil;
 	NSString									*isrc					= nil;
 	NSString									*mcn					= nil;
+	NSString									*bundleVersion, *versionString;
 	TagLib::Ogg::Vorbis::File					f						([_outputFilename fileSystemRepresentation], false);
 
 	
@@ -63,7 +76,7 @@
 	// Album title
 	album = [metadata albumTitle];
 	if(nil != album) {
-		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"ALBUM"], TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Artist
@@ -72,7 +85,7 @@
 		artist = [metadata albumArtist];
 	}
 	if(nil != artist) {
-		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"ARTIST"], TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 
 	// Composer
@@ -81,7 +94,7 @@
 		composer = [metadata albumComposer];
 	}
 	if(nil != composer) {
-		f.tag()->addField("COMPOSER", TagLib::String([composer UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"COMPOSER"], TagLib::String([composer UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
@@ -90,7 +103,7 @@
 		genre = [metadata albumGenre];
 	}
 	if(nil != genre) {
-		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"GENRE"], TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year
@@ -99,7 +112,7 @@
 		year = [metadata albumYear];
 	}
 	if(0 != year) {
-		f.tag()->setYear(year);
+		f.tag()->addField([self customizeTag:@"YEAR"], TagLib::String([[NSString stringWithFormat:@"%u", year] UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Comment
@@ -108,59 +121,64 @@
 		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 	}
 	if(nil != comment) {
-		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"COMMENT"], TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track title
 	title = [metadata trackTitle];
 	if(nil != title) {
-		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"TITLE"], TagLib::String([title UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track number
 	trackNumber = [metadata trackNumber];
 	if(0 != trackNumber) {
-		f.tag()->setTrack(trackNumber);
+		f.tag()->addField([self customizeTag:@"TRACKNUMBER"], TagLib::String([[NSString stringWithFormat:@"%u", trackNumber] UTF8String], TagLib::String::UTF8));
 	}
 
 	// Track total
 	trackTotal = [metadata albumTrackCount];
 	if(0 != trackTotal) {
-		f.tag()->addField("TRACKTOTAL", TagLib::String([[NSString stringWithFormat:@"%u", trackTotal] UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"TRACKTOTAL"], TagLib::String([[NSString stringWithFormat:@"%u", trackTotal] UTF8String], TagLib::String::UTF8));
 	}
 
 	// Disc number
 	discNumber = [metadata discNumber];
 	if(0 != discNumber) {
-		f.tag()->addField("DISCNUMBER", TagLib::String([[NSString stringWithFormat:@"%u", discNumber] UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"DISCNUMBER"], TagLib::String([[NSString stringWithFormat:@"%u", discNumber] UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Discs in set
 	discTotal = [metadata discTotal];
 	if(0 != discTotal) {
-		f.tag()->addField("DISCTOTAL", TagLib::String([[NSString stringWithFormat:@"%u", discTotal] UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"DISCTOTAL"], TagLib::String([[NSString stringWithFormat:@"%u", discTotal] UTF8String], TagLib::String::UTF8));
 	}
 
 	// Compilation
 	compilation = [metadata compilation];
 	if(compilation) {
-		f.tag()->addField("COMPILATION", TagLib::String([@"1" UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"COMPILATION"], TagLib::String([@"1" UTF8String], TagLib::String::UTF8));
 	}
 	
 	// ISRC
 	isrc = [metadata ISRC];
 	if(nil != isrc) {
-		f.tag()->addField("ISRC", TagLib::String([isrc UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"ISRC"], TagLib::String([isrc UTF8String], TagLib::String::UTF8));
 	}
 
 	// MCN
 	mcn = [metadata MCN];
 	if(nil != mcn) {
-		f.tag()->addField("MCN", TagLib::String([mcn UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([self customizeTag:@"MCN"], TagLib::String([mcn UTF8String], TagLib::String::UTF8));
 	}
 	
+	// Encoded by
+	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+	versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
+	f.tag()->addField([self customizeTag:@"ENCODER"], TagLib::String([versionString UTF8String], TagLib::String::UTF8));
+
 	// Encoder settings
-	f.tag()->addField("ENCODING", TagLib::String([[self settings] UTF8String], TagLib::String::UTF8));
+	f.tag()->addField([self customizeTag:@"ENCODING"], TagLib::String([[self settings] UTF8String], TagLib::String::UTF8));
 	
 	f.save();
 }

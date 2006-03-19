@@ -19,6 +19,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+
 #import "MacPADSocket.h"
 
 @interface UpdateChecker : NSWindowController 

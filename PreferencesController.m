@@ -29,11 +29,13 @@ static PreferencesController	*sharedPreferences					= nil;
 static NSString		*GeneralPreferencesToolbarItemIdentifier		= @"GeneralPreferences";
 static NSString		*FormatsPreferencesToolbarItemIdentifier		= @"FormatsPreferences";
 static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences";
+static NSString		*TaggingPreferencesToolbarItemIdentifier		= @"TaggingPreferences";
 static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences";
 static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences";
 static NSString		*LAMEPreferencesToolbarItemIdentifier			= @"LAMEPreferences";
 static NSString		*FLACPreferencesToolbarItemIdentifier			= @"FLACPreferences";
 static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPreferences";
+static NSString		*MonkeysAudioPreferencesToolbarItemIdentifier	= @"MonkeysAudioPreferences";
 static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 
 @interface PreferencesController (Private)
@@ -55,7 +57,8 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
 		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults", @"FreeDBDefaults",
 			@"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"OggVorbisDefaults", 
-			@"FLACDefaults", @"SpeexDefaults", @"PCMGeneratingTaskDefaults", @"ConverterTaskDefaults", @"EncoderTaskDefaults", nil];
+			@"FLACDefaults", @"MonkeysAudioDefaults", @"SpeexDefaults", 
+			@"PCMGeneratingTaskDefaults", @"ConverterTaskDefaults", @"EncoderTaskDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
@@ -169,6 +172,17 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	}
+    else if([itemIdentifier isEqualToString:TaggingPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Tagging", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Tagging", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify custom tag names for FLAC, Ogg Vorbis and Monkey's Audio files", @"Preferences", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"TaggingToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
+	}
     else if([itemIdentifier isEqualToString:FreeDBPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
@@ -224,6 +238,17 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPrefsPane:)];
 	} 
+    else if([itemIdentifier isEqualToString:MonkeysAudioPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Monkey's Audio", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Monkey's Audio", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the Monkey's Audio compressor", @"Preferences", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"MonkeysAudioToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPrefsPane:)];
+	} 
     else if([itemIdentifier isEqualToString:SpeexPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
@@ -245,20 +270,22 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
-		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+		OutputPreferencesToolbarItemIdentifier, TaggingPreferencesToolbarItemIdentifier,
+		FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		SpeexPreferencesToolbarItemIdentifier,
+		MonkeysAudioPreferencesToolbarItemIdentifier, SpeexPreferencesToolbarItemIdentifier,
 		nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
-		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+		OutputPreferencesToolbarItemIdentifier, TaggingPreferencesToolbarItemIdentifier,
+		FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		SpeexPreferencesToolbarItemIdentifier,
+		MonkeysAudioPreferencesToolbarItemIdentifier, SpeexPreferencesToolbarItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
@@ -267,10 +294,11 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 - (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
     return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
-		OutputPreferencesToolbarItemIdentifier, FreeDBPreferencesToolbarItemIdentifier,
+		OutputPreferencesToolbarItemIdentifier, TaggingPreferencesToolbarItemIdentifier, 
+		FreeDBPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
 		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		SpeexPreferencesToolbarItemIdentifier,
+		MonkeysAudioPreferencesToolbarItemIdentifier, SpeexPreferencesToolbarItemIdentifier,
 		nil];
 }
 

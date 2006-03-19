@@ -20,9 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "AudioMetadata.h"
-
 #include <FLAC/metadata.h>
+
+#import "AudioMetadata.h"
 
 #ifdef __cplusplus
 extern "C" {

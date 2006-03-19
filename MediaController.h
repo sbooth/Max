@@ -20,9 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <DiskArbitration/DASession.h>
-
 #import "CompactDiscDocument.h"
+
+#import <DiskArbitration/DASession.h>
 
 @interface MediaController : NSObject
 {

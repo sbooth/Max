@@ -165,9 +165,9 @@
 - (unsigned)		length									{ return _length; }
 
 // KVC
-- (unsigned int)	countOfTracks								{ return [_tracks count]; }
-- (NSDictionary *)	objectInTracksAtIndex:(unsigned int)idx		{ return [_tracks objectAtIndex:idx]; }
+- (unsigned int)	countOfTracks							{ return [_tracks count]; }
+- (NSDictionary *)	objectInTracksAtIndex:(unsigned int)idx	{ return [_tracks objectAtIndex:idx]; }
 
-- (cddb_disc_t *)	getFreeDBDisc								{ return _freeDBDisc; }
+- (cddb_disc_t *)	freeDBDisc								{ return _freeDBDisc; }
 
 @end

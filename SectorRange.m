@@ -38,19 +38,9 @@
 	return nil;
 }
 
-- (unsigned long) firstSector
-{
-	return _firstSector;
-}
+- (unsigned long) firstSector						{ return _firstSector; }
+- (unsigned long) lastSector						{ return _lastSector; }
 
-- (unsigned long) lastSector
-{
-	return _lastSector;
-}
-
-- (unsigned long) totalSectors
-{
-	return (_lastSector - _firstSector) + 1;
-}
+- (unsigned long) totalSectors						{ return (_lastSector - _firstSector) + 1; }
 
 @end

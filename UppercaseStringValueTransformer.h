@@ -20,22 +20,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <OggFLAC/file_encoder.h>
-
-#import "Encoder.h"
-
-@interface OggFLACEncoder : Encoder
+@interface UppercaseStringValueTransformer : NSValueTransformer
 {
-	OggFLAC__FileEncoder	*_flac;
-	
-	BOOL					_exhaustiveModelSearch;
-	BOOL					_enableMidSide;
-	BOOL					_enableLooseMidSide;
-	int						_QLPCoeffPrecision;
-	int						_minPartitionOrder;
-	int						_maxPartitionOrder;
-	int						_maxLPCOrder;
-	unsigned				_padding;
 }
 
 @end

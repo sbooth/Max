@@ -41,6 +41,7 @@
 #import "NegateBooleanArrayValueTransformer.h"
 #import "MultiplicationValueTransformer.h"
 #import "BOOLToStringValueTransformer.h"
+#import "UppercaseStringValueTransformer.h"
 
 static ApplicationController *sharedController = nil;
 
@@ -68,6 +69,9 @@ static ApplicationController *sharedController = nil;
 
 	transformer = [[[BOOLToStringValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"BOOLToStringValueTransformer"];
+
+	transformer = [[[UppercaseStringValueTransformer alloc] init] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"UppercaseStringValueTransformer"];
 	
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];

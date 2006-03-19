@@ -20,11 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "RipperMethods.h"
-#import "Track.h"
-
 #include <cdparanoia/cdda_interface.h>
 #include <cdparanoia/cdda_paranoia.h>
+
+#import "RipperMethods.h"
+#import "Track.h"
 
 @interface Ripper : NSObject <RipperMethods>
 {

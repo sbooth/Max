@@ -19,6 +19,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+
 #import "AudioMetadata.h"
 
 @class CompactDiscDocument;

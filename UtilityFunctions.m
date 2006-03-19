@@ -160,7 +160,7 @@ getBuiltinExtensions()
 {
 	@synchronized(sBuiltinExtensions) {
 		if(nil == sBuiltinExtensions) {
-			sBuiltinExtensions = [NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", nil];
+			sBuiltinExtensions = [NSArray arrayWithObjects:@"ogg", @"flac", @"oggflac", @"spx", @"ape", @"apl", @"mac", nil];
 			[sBuiltinExtensions retain];
 		}
 	}
@@ -349,7 +349,8 @@ outputFormatsSelected()
 	BOOL		outputFLAC			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"];
 	BOOL		outputOggFLAC		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"];
 	BOOL		outputOggVorbis		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"];
+	BOOL		outputMonkeysAudio	= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputMonkeysAudio"];
 	BOOL		outputSpeex			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"];
 	
-	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis || outputSpeex);
+	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis || outputMonkeysAudio || outputSpeex);
 }
