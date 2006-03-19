@@ -24,8 +24,11 @@
 
 enum {
 	kAmazonLocaleUSMenuItemTag			= 1,
-	kAmazonLocaleUKMenuItemTag			= 2,
-	kAmazonLocaleJapanMenuItemTag		= 3
+	kAmazonLocaleFRMenuItemTag			= 2,
+	kAmazonLocaleCAMenuItemTag			= 3,
+	kAmazonLocaleDEMenuItemTag			= 4,
+	kAmazonLocaleUKMenuItemTag			= 5,
+	kAmazonLocaleJAMenuItemTag			= 6
 };
 
 @interface AmazonAlbumArtSheet : NSObject

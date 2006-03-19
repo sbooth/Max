@@ -79,8 +79,11 @@
 	
 	switch([[_localePopUpButton selectedItem] tag]) {
 		case kAmazonLocaleUSMenuItemTag:		locale = @"com";			break;
+		case kAmazonLocaleFRMenuItemTag:		locale = @"fr";				break;
+		case kAmazonLocaleCAMenuItemTag:		locale = @"ca";				break;
+		case kAmazonLocaleDEMenuItemTag:		locale = @"de";				break;
 		case kAmazonLocaleUKMenuItemTag:		locale = @"co.uk";			break;
-		case kAmazonLocaleJapanMenuItemTag:		locale = @"co.jp";			break;
+		case kAmazonLocaleJAMenuItemTag:		locale = @"co.jp";			break;
 	}
 
 	urlString	= [NSString stringWithFormat:@"http://webservices.amazon.%@/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=%@&Title=%@", locale, artist, title];
