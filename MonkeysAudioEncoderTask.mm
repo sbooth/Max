@@ -27,8 +27,8 @@
 #include <MAC/APETag.h>
 #include <MAC/CharacterHelper.h>
 
-@interface MonkeysAudioEncoderTask (Private)
-- (str_utf16 *) customizeTag:(NSString *)tag;
+@interface AudioMetadata (TagMappings)
++ (str_utf16 *)			customizeAPETag:(NSString *)tag;
 @end
 
 @implementation MonkeysAudioEncoderTask
@@ -40,21 +40,6 @@
 		return self;
 	}
 	return nil;
-}
-
-- (str_utf16 *) customizeTag:(NSString *)tag
-{
-	NSString		*customTag;
-	str_utf16		*result;
-	
-	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"APETag_%@", tag]];
-	result = GetUTF16FromUTF8((const unsigned char *)[(nil == customTag ? tag : customTag) UTF8String]);
-	if(NULL == result) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-	
-	return result;
 }
 
 - (void) writeTags
@@ -96,7 +81,7 @@
 		// Album title
 		album = [metadata albumTitle];
 		if(nil != album) {
-			tagName = [self customizeTag:@"ALBUM"];
+			tagName = [AudioMetadata customizeAPETag:@"ALBUM"];
 			f->SetFieldString(tagName, [album UTF8String], TRUE);
 			free(tagName);
 		}
@@ -107,7 +92,7 @@
 			artist = [metadata albumArtist];
 		}
 		if(nil != artist) {
-			tagName = [self customizeTag:@"ARTIST"];
+			tagName = [AudioMetadata customizeAPETag:@"ARTIST"];
 			f->SetFieldString(tagName, [artist UTF8String], TRUE);
 			free(tagName);
 		}
@@ -118,7 +103,7 @@
 			composer = [metadata albumComposer];
 		}
 		if(nil != composer) {
-			tagName = [self customizeTag:@"COMPOSER"];
+			tagName = [AudioMetadata customizeAPETag:@"COMPOSER"];
 			f->SetFieldString(tagName, [composer UTF8String], TRUE);
 			free(tagName);
 		}
@@ -129,7 +114,7 @@
 			genre = [metadata albumGenre];
 		}
 		if(nil != genre) {
-			tagName = [self customizeTag:@"GENRE"];
+			tagName = [AudioMetadata customizeAPETag:@"GENRE"];
 			f->SetFieldString(tagName, [genre UTF8String], TRUE);
 			free(tagName);
 		}
@@ -140,7 +125,7 @@
 			year = [metadata albumYear];
 		}
 		if(0 != year) {
-			tagName = [self customizeTag:@"YEAR"];
+			tagName = [AudioMetadata customizeAPETag:@"YEAR"];
 			f->SetFieldString(tagName, [[NSString stringWithFormat:@"%u", year] UTF8String], TRUE);
 			free(tagName);
 		}
@@ -151,7 +136,7 @@
 			comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 		}
 		if(nil != comment) {
-			tagName = [self customizeTag:@"COMMENT"];
+			tagName = [AudioMetadata customizeAPETag:@"COMMENT"];
 			f->SetFieldString(tagName, [comment UTF8String], TRUE);
 			free(tagName);
 		}
@@ -159,7 +144,7 @@
 		// Track title
 		title = [metadata trackTitle];
 		if(nil != title) {
-			tagName = [self customizeTag:@"TITLE"];
+			tagName = [AudioMetadata customizeAPETag:@"TITLE"];
 			f->SetFieldString(tagName, [title UTF8String], TRUE);
 			free(tagName);
 		}
@@ -167,7 +152,7 @@
 		// Track number
 		trackNumber = [metadata trackNumber];
 		if(0 != trackNumber) {
-			tagName = [self customizeTag:@"TRACK"];
+			tagName = [AudioMetadata customizeAPETag:@"TRACK"];
 			f->SetFieldString(tagName, [[NSString stringWithFormat:@"%u", trackNumber] UTF8String], TRUE);
 			free(tagName);
 		}
@@ -175,7 +160,7 @@
 		// Track total
 		trackTotal = [metadata albumTrackCount];
 		if(0 != trackTotal) {
-			tagName = [self customizeTag:@"TRACKTOTAL"];
+			tagName = [AudioMetadata customizeAPETag:@"TRACKTOTAL"];
 			f->SetFieldString(tagName, [[NSString stringWithFormat:@"%u", trackTotal] UTF8String], TRUE);
 			free(tagName);
 		}
@@ -183,7 +168,7 @@
 		// Disc number
 		discNumber = [metadata discNumber];
 		if(0 != discNumber) {
-			tagName = [self customizeTag:@"DISCNUMBER"];
+			tagName = [AudioMetadata customizeAPETag:@"DISCNUMBER"];
 			f->SetFieldString(tagName, [[NSString stringWithFormat:@"%u", discNumber] UTF8String], TRUE);
 			free(tagName);
 		}
@@ -191,7 +176,7 @@
 		// Discs in set
 		discTotal = [metadata discTotal];
 		if(0 != discTotal) {
-			tagName = [self customizeTag:@"DISCTOTAL"];
+			tagName = [AudioMetadata customizeAPETag:@"DISCTOTAL"];
 			f->SetFieldString(tagName, [[NSString stringWithFormat:@"%u", discTotal] UTF8String], TRUE);
 			free(tagName);
 		}
@@ -199,7 +184,7 @@
 		// Compilation
 		compilation = [metadata compilation];
 		if(compilation) {
-			tagName = [self customizeTag:@"COMPILATION"];
+			tagName = [AudioMetadata customizeAPETag:@"COMPILATION"];
 			f->SetFieldString(tagName, [@"1" UTF8String], TRUE);
 			free(tagName);
 		}
@@ -207,7 +192,7 @@
 		// ISRC
 		isrc = [metadata ISRC];
 		if(nil != isrc) {
-			tagName = [self customizeTag:@"ISRC"];
+			tagName = [AudioMetadata customizeAPETag:@"ISRC"];
 			f->SetFieldString(tagName, [isrc UTF8String], TRUE);
 			free(tagName);
 		}
@@ -215,22 +200,18 @@
 		// MCN
 		mcn = [metadata MCN];
 		if(nil != mcn) {
-			tagName = [self customizeTag:@"MCN"];
+			tagName = [AudioMetadata customizeAPETag:@"MCN"];
 			f->SetFieldString(tagName, [mcn UTF8String], TRUE);
 			free(tagName);
 		}
 		
 		// Encoder information
 		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-		tagName = [self customizeTag:@"TOOL NAME"];
-		f->SetFieldString(tagName, [@"Max" UTF8String], TRUE);
-		free(tagName);
+		f->SetFieldString(L"TOOL NAME", [@"Max" UTF8String], TRUE);
 		f->SetFieldString(APE_TAG_FIELD_TOOL_VERSION, [bundleVersion UTF8String], TRUE);
 
 		// Encoder settings
-		tagName = [self customizeTag:@"ENCODING"];
-		f->SetFieldString(tagName, [[self settings] UTF8String], TRUE);
-		free(tagName);
+		f->SetFieldString(L"ENCODING", [[self settings] UTF8String], TRUE);
 		
 		result = f->Save();
 		if(ERROR_SUCCESS != result) {

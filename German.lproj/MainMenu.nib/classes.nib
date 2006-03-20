@@ -22,10 +22,12 @@
                 "" = id; 
                 ejectDisc = id; 
                 encode = id; 
+                fetchAlbumArt = id; 
                 queryFreeDB = id; 
                 selectNextTrack = id; 
                 selectPreviousTrack = id; 
                 submitToFreeDB = id; 
+                toggleAlbumArt = id; 
                 toggleTrackInformation = id; 
             }; 
             CLASS = FirstResponder; 

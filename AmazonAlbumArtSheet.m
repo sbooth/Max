@@ -92,7 +92,7 @@
 		if(error) {
 			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 			[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-			[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Errors", @"")];
+			[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Exceptions", @"")];
 			[alert setInformativeText: [error localizedDescription]];
 			[alert setAlertStyle: NSWarningAlertStyle];
 			
@@ -106,7 +106,7 @@
 	if(error) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Errors", @"")];
+		[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Exceptions", @"")];
 		[alert setInformativeText: [error localizedDescription]];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		

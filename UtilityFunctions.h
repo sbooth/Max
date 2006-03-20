@@ -53,16 +53,6 @@ NSArray * getLibsndfileExtensions();
 // Get a timestamp in the ID3v2 format
 NSString * getID3v2Timestamp();
 
-// Display a modal alert for exception
-void displayExceptionAlert(NSException *exception);
-
-// Display an alert sheet for an exception
-void displayExceptionSheet(NSException	*exception,
-						   NSWindow		*window,
-						   id			delegate,
-						   SEL			selector,
-						   void			*userInfo);
-
 // Add a Vorbis comment to a FLAC file
 void addVorbisComment(FLAC__StreamMetadata		*block,
 					  NSString					*key,

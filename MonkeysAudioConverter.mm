@@ -133,7 +133,7 @@
 			// Decode the data
 			result = decompressor->GetData(buf, 512, &samplesRead);
 			if(ERROR_SUCCESS != result) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Monkey's Audio invalid checksum", @"Exceptions", @"") userInfo:nil];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Monkey's Audio invalid checksum.", @"Exceptions", @"") userInfo:nil];
 			}
 			bytesRead = samplesRead * apeBlockSize;
 						

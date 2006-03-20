@@ -184,8 +184,8 @@ static ApplicationController *sharedController = nil;
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
-		[alert setMessageText:NSLocalizedStringFromTable(@"Really Quit?", @"General", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping/encoding tasks", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"Do you want to quit while there are tasks in progress?", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"The resulting files will be lost if you quit now.", @"General", @"")];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
 		if(NSAlertSecondButtonReturn == [alert runModal]) {

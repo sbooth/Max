@@ -262,7 +262,7 @@
 				[self generateCueSheet];
 			}
 			/*else {
-				@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"Cue sheets are not supported for this output format", @"Exceptions", @"")
+				@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"Cue sheets are not supported for this output format.", @"Exceptions", @"")
 																   userInfo:[NSDictionary dictionaryWithObject:[self outputFormat] forKey:@"fileFormat"]];
 			}*/
 		}

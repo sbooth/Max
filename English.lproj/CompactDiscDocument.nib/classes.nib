@@ -1,15 +1,7 @@
 {
     IBClasses = (
         {
-            ACTIONS = {
-                eject = id; 
-                encode = id; 
-                fetchAlbumArt = id; 
-                queryFreeDB = id; 
-                selectAlbumArt = id; 
-                selectAll = id; 
-                selectNone = id; 
-            }; 
+            ACTIONS = {eject = id; encode = id; queryFreeDB = id; selectAll = id; selectNone = id; }; 
             CLASS = CompactDiscDocument; 
             LANGUAGE = ObjC; 
             OUTLETS = {

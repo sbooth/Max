@@ -122,7 +122,7 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 		// Create Ogg FLAC decoder
 		flac = OggFLAC__file_decoder_new();
 		if(NULL == flac) {
-			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create Ogg FLAC decoder.", @"Exceptions", @"") userInfo:nil];
+			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the Ogg FLAC decoder.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		if(NO == OggFLAC__file_decoder_set_filename(flac, [_inputFilename fileSystemRepresentation])) {

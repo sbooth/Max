@@ -97,7 +97,7 @@ static UpdateChecker *sharedController = nil;
 	if([updateWindow isVisible]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while checking for a newer version of Max.", @"Errors", @"")];
+		[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while checking for a newer version of Max.", @"Exceptions", @"")];
 		[alert setInformativeText: [[aNotification userInfo] objectForKey:MacPADErrorMessage]];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		

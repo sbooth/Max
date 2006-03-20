@@ -41,7 +41,12 @@
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionSheet(exception, [[PreferencesController sharedPreferences] window], self, @selector(alertDidEnd:returnCode:contextInfo:), NULL);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred while downloading the list of FreeDB mirrors.", @"Exceptions", @"")];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];
+		[alert beginSheetModalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 	}
 }
 

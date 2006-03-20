@@ -150,7 +150,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		// Create FLAC decoder
 		flac = FLAC__file_decoder_new();
 		if(NULL == flac) {
-			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create FLAC decoder.", @"Exceptions", @"") userInfo:nil];
+			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the FLAC decoder.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		if(NO == FLAC__file_decoder_set_filename(flac, [_inputFilename fileSystemRepresentation])) {

@@ -335,8 +335,8 @@ static ConverterController *sharedController = nil;
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
-		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats selected", @"General", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		
 		result = [alert runModal];

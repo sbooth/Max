@@ -316,7 +316,7 @@ callback(long inpos, int function, void *userdata)
 	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
 	if(-1 == where) {
 		[_delegate setStopped];
-		@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to access CD.", @"Exceptions", @"") userInfo:nil];
+		@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to access the disc.", @"Exceptions", @"") userInfo:nil];
 	}
 
 	// Rip the track
@@ -325,7 +325,7 @@ callback(long inpos, int function, void *userdata)
 		// Read a chunk
 		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"CD skip tolerance exceeded", @"Exceptions", @"") userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"The CD skip tolerance was exceeded.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Put the data in an AudioBufferList
