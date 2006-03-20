@@ -21,9 +21,10 @@
 #import "RipperController.h"
 #import "LogController.h"
 #import "EncoderController.h"
-#import "UtilityFunctions.h"
 #import "PreferencesController.h"
+#import "CompactDiscDocument.h"
 #import "IOException.h"
+#import "UtilityFunctions.h"
 
 #import <Growl/GrowlApplicationBridge.h>
 
@@ -261,7 +262,7 @@ static RipperController *sharedController = nil;
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Rip completed", @"Log", @"") 
 								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-	
+		
 	[self removeTask:task];
 	[self spawnThreads];
 	
@@ -271,6 +272,10 @@ static RipperController *sharedController = nil;
 							   notificationName:@"Ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
 	
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"] && NO == [self documentHasRipperTasks:[[task objectInTracksAtIndex:0] document]]) {
+		[[[task objectInTracksAtIndex:0] document] ejectDisc:self];
+	}
+
 	[[EncoderController sharedController] runEncodersForTask:task];
 }
 

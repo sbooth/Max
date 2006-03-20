@@ -83,8 +83,7 @@
 		enumerator = [_tracks objectEnumerator];
 	
 		while((track = [enumerator nextObject])) {
-			[track encodeCompleted];
-			if(NO == [track encodeInProgress]) {
+			if(NO == [track ripInProgress] && NO == [track encodeInProgress]) {
 				[track setSelected:NO];
 			}
 		}
@@ -221,13 +220,30 @@
 
 - (void) setStopped 
 {
+	NSEnumerator	*enumerator;
+	Track			*track;
+
 	[super setStopped]; 
+	
 	[_connection invalidate];
+	[_connection release];
+	_connection = nil;
+
+	if(nil != _tracks) {
+		enumerator = [_tracks objectEnumerator];			
+		while((track = [enumerator nextObject])) {
+			[track encodeCompleted];
+		}
+	}
+	
 	[[EncoderController sharedController] encoderTaskDidStop:self]; 
 }
 
 - (void) setCompleted 
 {
+	NSEnumerator	*enumerator;
+	Track			*track;
+	
 	@try {
 		if(nil != [_task metadata]) {
 			[self writeTags];
@@ -244,9 +260,11 @@
 	}
 	
 	@try {
-		[super setCompleted]; 
+		[super setCompleted];
+		
 		[_connection invalidate];
-		[[EncoderController sharedController] encoderTaskDidComplete:self]; 
+		[_connection release];
+		_connection = nil;
 		
 		// Delete input file if requested
 		if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
@@ -266,6 +284,15 @@
 																   userInfo:[NSDictionary dictionaryWithObject:[self outputFormat] forKey:@"fileFormat"]];
 			}*/
 		}
+
+		if(nil != _tracks) {
+			enumerator = [_tracks objectEnumerator];			
+			while((track = [enumerator nextObject])) {
+				[track encodeCompleted];
+			}
+		}
+			
+		[[EncoderController sharedController] encoderTaskDidComplete:self];
 	}
 	
 	@catch(NSException *exception) {

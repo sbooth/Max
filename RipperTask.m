@@ -117,13 +117,17 @@
 	Track				*track;
 
 	[super setStopped];
+
 	[_connection invalidate];
-	[[RipperController sharedController] ripperTaskDidStop:self]; 
+	[_connection release];
+	_connection = nil;
 
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
 		[track setRipInProgress:NO];
 	}
+
+	[[RipperController sharedController] ripperTaskDidStop:self]; 
 }
 
 - (void) setCompleted 
@@ -132,14 +136,17 @@
 	Track				*track;
 
 	[super setCompleted];
-	[_connection invalidate];
 	
-	[[RipperController sharedController] ripperTaskDidComplete:self];
+	[_connection invalidate];
+	[_connection release];
+	_connection = nil;
 	
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
 		[track setRipInProgress:NO];
 	}
+
+	[[RipperController sharedController] ripperTaskDidComplete:self];
 }
 
 - (void) stop

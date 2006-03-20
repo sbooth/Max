@@ -117,15 +117,23 @@
 
 - (void) setStopped 
 {
-	[super setStopped]; 
+	[super setStopped];
+	
 	[_connection invalidate];
+	[_connection release];
+	_connection = nil;
+	
 	[[ConverterController sharedController] converterTaskDidStop:self]; 
 }
 
 - (void) setCompleted 
 {
 	[super setCompleted]; 
+	
 	[_connection invalidate];
+	[_connection release];
+	_connection = nil;
+	
 	[[ConverterController sharedController] converterTaskDidComplete:self];	
 }
 

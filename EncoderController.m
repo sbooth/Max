@@ -359,6 +359,12 @@ static EncoderController *sharedController = nil;
 									description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
 							   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
+
+	if(0 != [task countOfTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"] && NO == [self documentHasEncoderTasks:[[task objectInTracksAtIndex:0] document]]) {
+		CompactDiscDocument *doc = [[task objectInTracksAtIndex:0] document];
+		[doc saveDocument:self];
+		[[doc windowForSheet] performClose:self];
+	}	
 }
 
 #pragma mark Task Management
