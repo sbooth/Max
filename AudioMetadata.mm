@@ -44,9 +44,12 @@
 + (AudioMetadata *)		metadataFromMP4File:(NSString *)filename;
 + (AudioMetadata *)		metadataFromOggVorbisFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMonkeysAudioFile:(NSString *)filename;
+@end
+
+@interface AudioMetadata (TagMappings)
 + (NSString *)			customizeFLACTag:(NSString *)tag;
-+ (NSString *)			customizeOggVorbisTag:(NSString *)tag;
-+ (NSString *)			customizeAPETag:(NSString *)tag;
++ (TagLib::String)		customizeOggVorbisTag:(NSString *)tag;
++ (str_utf16 *)			customizeAPETag:(NSString *)tag;
 @end
 
 @implementation AudioMetadata
@@ -77,8 +80,6 @@
 		return [[[AudioMetadata alloc] init] autorelease];
 	}
 }
-
-#pragma mark FLAC metadata handling
 
 + (AudioMetadata *) metadataFromFLACFile:(NSString *)filename
 {
@@ -195,16 +196,6 @@
 	return [result autorelease];
 }
 
-+ (NSString *) customizeFLACTag:(NSString *)tag
-{
-	NSString *customTag;
-	
-	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"FLACTag_%@", tag]];
-	return (nil == customTag ? tag : customTag);
-}
-
-#pragma mark MP3 metadata handling
-
 + (AudioMetadata *) metadataFromMP3File:(NSString *)filename
 {
 	AudioMetadata							*result;
@@ -261,7 +252,7 @@
 		}
 		
 		// Length
-		if(0 != f.audioProperties()->length()) {
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
 			[result setLength:f.audioProperties()->length()];
 		}
 		
@@ -316,8 +307,6 @@
 
 	return [result autorelease];
 }
-
-#pragma mark MP4 metadata handling
 
 + (AudioMetadata *) metadataFromMP4File:(NSString *)filename
 {
@@ -414,8 +403,6 @@
 	return [result autorelease];
 }
 
-#pragma mark Ogg Vorbis metadata handling
-
 + (AudioMetadata *)	metadataFromOggVorbisFile:(NSString *)filename
 {
 	AudioMetadata							*result;
@@ -427,110 +414,119 @@
 	result = [[AudioMetadata alloc] init];
 	
 	if(f.isValid()) {
-		// Album title
-		s = f.tag()->album();
-		if(false == s.isNull()) {
-			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Artist
-		s = f.tag()->artist();
-		if(false == s.isNull()) {
-			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Genre
-		s = f.tag()->genre();
-		if(false == s.isNull()) {
-			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Year
-		if(0 != f.tag()->year()) {
-			[result setAlbumYear:f.tag()->year()];
-		}
-		
-		// Comment
-		s = f.tag()->comment();
-		if(false == s.isNull()) {
-			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Track title
-		s = f.tag()->title();
-		if(false == s.isNull()) {
-			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Track number
-		if(0 != f.tag()->track()) {
-			[result setTrackNumber:f.tag()->track()];
-		}
-		
-		// Length
-		if(0 != f.audioProperties()->length()) {
-			[result setLength:f.audioProperties()->length()];
-		}
 		
 		xiphComment = f.tag();
 		
 		if(NULL != xiphComment) {
 			TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
 			NSString						*value		= nil;
+			TagLib::String					tag;
 			
-			if(fieldList.contains("COMPOSER")) {
-				value = [NSString stringWithUTF8String:fieldList["COMPOSER"].toString().toCString(true)];
+			tag = [self customizeOggVorbisTag:@"ALBUM"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumTitle:value];
+			}
+
+			tag = [self customizeOggVorbisTag:@"ARTIST"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumArtist:value];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"GENRE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumGenre:value];
+			}
+
+			tag = [self customizeOggVorbisTag:@"YEAR"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumYear:[value intValue]];
+			}
+
+			tag = [self customizeOggVorbisTag:@"COMMENT"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
+
+			tag = [self customizeOggVorbisTag:@"TITLE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackTitle:value];
+			}
+
+			tag = [self customizeOggVorbisTag:@"TRACKNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackNumber:[value intValue]];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"COMPOSER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setAlbumComposer:value];
 			}
 			
-			if(fieldList.contains("TRACKTOTAL")) {
-				value = [NSString stringWithUTF8String:fieldList["TRACKTOTAL"].toString().toCString(true)];
+			tag = [self customizeOggVorbisTag:@"TRACKTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setAlbumTrackCount:[value intValue]];
 			}
 			
-			if(fieldList.contains("DISCNUMBER")) {
-				value = [NSString stringWithUTF8String:fieldList["DISCNUMBER"].toString().toCString(true)];
+			tag = [self customizeOggVorbisTag:@"DISCNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setDiscNumber:[value intValue]];
 			}
 			
-			if(fieldList.contains("DISCTOTAL")) {
-				value = [NSString stringWithUTF8String:fieldList["DISCTOTAL"].toString().toCString(true)];
+			tag = [self customizeOggVorbisTag:@"DISCTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setDiscTotal:[value intValue]];
 			}
 			
-			if(fieldList.contains("COMPILATION")) {
-				value = [NSString stringWithUTF8String:fieldList["COMPILATION"].toString().toCString(true)];
+			tag = [self customizeOggVorbisTag:@"COMPILATION"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setCompilation:(BOOL)[value intValue]];
 			}
 			
-			if(fieldList.contains("ISRC")) {
-				value = [NSString stringWithUTF8String:fieldList["ISRC"].toString().toCString(true)];
+			tag = [self customizeOggVorbisTag:@"ISRC"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setISRC:value];
 			}					
 			
-			if(fieldList.contains("MCN")) {
-				value = [NSString stringWithUTF8String:fieldList["MCN"].toString().toCString(true)];
+			tag = [self customizeOggVorbisTag:@"MCN"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setMCN:value];
 			}					
 
 			// Maintain backwards compatibility for DISCSINSET tag
-			if(fieldList.contains("DISCSINSET")) {
+			if(fieldList.contains("DISCSINSET") && 0 != [result discTotal]) {
 				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
 				[result setDiscTotal:[value intValue]];
-			}
-			
+			}			
+		}
+		
+		// Length
+		if(NULL !=f.audioProperties() && 0 != f.audioProperties()->length()) {
+			[result setLength:f.audioProperties()->length()];
 		}
 	}
 
 	return [result autorelease];
 }
 
-#pragma mark Monkey's Audio metadata handling
-
 + (AudioMetadata *) metadataFromMonkeysAudioFile:(NSString *)filename
 {
 	AudioMetadata					*result					= [[AudioMetadata alloc] init];
 	str_utf16						*chars					= NULL;
+	str_utf16						*tagName				= NULL;
 	CAPETag							*f						= NULL;
 	CAPETagField					*tag					= NULL;		
 	
@@ -547,88 +543,116 @@
 		}
 		
 		// Album title
-		tag = f->GetTagField(APE_TAG_FIELD_ALBUM);
+		tagName = [self customizeAPETag:@"ALBUM"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setAlbumTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 		// Artist
-		tag = f->GetTagField(APE_TAG_FIELD_ARTIST);
+		tagName = [self customizeAPETag:@"ARTIST"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setAlbumArtist:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 		// Composer
-		tag = f->GetTagField(APE_TAG_FIELD_COMPOSER);
+		tagName = [self customizeAPETag:@"COMPOSER"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setAlbumComposer:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 		// Genre
-		tag = f->GetTagField(APE_TAG_FIELD_GENRE);
+		tagName = [self customizeAPETag:@"GENRE"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setAlbumGenre:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 		// Year
-		tag = f->GetTagField(APE_TAG_FIELD_YEAR);
+		tagName = [self customizeAPETag:@"YEAR"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setAlbumYear:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
 		}
+		free(tagName);
 		
 		// Comment
-		tag = f->GetTagField(APE_TAG_FIELD_COMMENT);
+		tagName = [self customizeAPETag:@"COMMENT"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setAlbumComment:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 		// Track title
-		tag = f->GetTagField(APE_TAG_FIELD_TITLE);
+		tagName = [self customizeAPETag:@"TITLE"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setTrackTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 		// Track number
-		tag = f->GetTagField(APE_TAG_FIELD_TRACK);
+		tagName = [self customizeAPETag:@"TRACK"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setTrackNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
 		}
+		free(tagName);
 		
 		// Track total
-		tag = f->GetTagField(L"TRACKTOTAL");
+		tagName = [self customizeAPETag:@"TRACKTOTAL"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setAlbumTrackCount:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
 		}
+		free(tagName);
 		
 		// Disc number
-		tag = f->GetTagField(L"DISCNUMBER");
+		tagName = [self customizeAPETag:@"DISCNUMBER"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setDiscNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
 		}
+		free(tagName);
 		
 		// Discs in set
-		tag = f->GetTagField(L"DISCTOTAL");
+		tagName = [self customizeAPETag:@"DISCTOTAL"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setDiscTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
 		}
+		free(tagName);
 		
 		// Compilation
-		tag = f->GetTagField(L"COMPILATION");
+		tagName = [self customizeAPETag:@"COMPILATION"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setCompilation:(BOOL)[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
 		}
+		free(tagName);
 		
 		// ISRC
-		tag = f->GetTagField(L"ISRC");
+		tagName = [self customizeAPETag:@"ISRC"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setISRC:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 		// MCN
-		tag = f->GetTagField(L"MCN");
+		tagName = [self customizeAPETag:@"MCN"];
+		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
 			[result setMCN:[NSString stringWithUTF8String:tag->GetFieldValue()]];
 		}
+		free(tagName);
 		
 	}
 	
@@ -639,6 +663,42 @@
 
 	return [result autorelease];
 }
+
+#pragma mark Custom Tag Mapping
+
++ (NSString *) customizeFLACTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"FLACTag_%@", tag]];
+	return (nil == customTag ? tag : customTag);
+}
+
++ (TagLib::String) customizeOggVorbisTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"OggVorbisTag_%@", tag]];
+	return (nil == customTag ? TagLib::String([tag UTF8String], TagLib::String::UTF8) : TagLib::String([customTag UTF8String], TagLib::String::UTF8));
+}
+
++ (str_utf16 *) customizeAPETag:(NSString *)tag
+{
+	NSString		*customTag		= nil;
+	str_utf16		*result			= NULL;
+	
+	customTag	= [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"APETag_%@", tag]];
+	result		= GetUTF16FromUTF8((const unsigned char *)[(nil == customTag ? tag : customTag) UTF8String]);
+	
+	if(NULL == result) {
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	}
+	
+	return result;
+}
+
+#pragma mark Class
 
 - (id) init
 {
@@ -920,7 +980,8 @@
 	}
 }
 
-// Accessors
+#pragma mark Accessors
+
 - (unsigned)	trackNumber					{ return _trackNumber; }
 - (NSString *)	trackTitle					{ return _trackTitle; }
 - (NSString *)	trackArtist					{ return _trackArtist; }
@@ -948,7 +1009,8 @@
 
 - (NSImage *)	albumArt					{ return _albumArt; }
 
-// Mutators
+#pragma mark Mutators
+
 - (void)		setTrackNumber:(unsigned)trackNumber			{ _trackNumber = trackNumber; }
 - (void)		setTrackTitle:(NSString *)trackTitle			{ [_trackTitle release]; _trackTitle = [trackTitle retain]; }
 - (void)		setTrackArtist:(NSString *)trackArtist			{ [_trackArtist release]; _trackArtist = [trackArtist retain]; }
