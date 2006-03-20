@@ -404,7 +404,7 @@ enum {
 			return;
 		}
 		else if([self emptySelection]) {
-			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"No tracks selected for encoding.", @"Exceptions", @"") userInfo:nil];
+			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @"") userInfo:nil];
 		}
 		else if([self ripInProgress] || [self encodeInProgress]) {
 			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
@@ -847,5 +847,15 @@ enum {
 
 - (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
 - (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
+
+#pragma mark Scripting Additions
+
+- (id) handleEncodeScriptCommand:(NSScriptCommand *)command				{ [self encode:command]; return nil; }
+- (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command			{ [self ejectDisc:command]; return nil; }
+- (id) handleQueryFreeDBScriptCommand:(NSScriptCommand *)command		{ [self queryFreeDB:command]; return nil; }
+- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command		{ [self submitToFreeDB:command]; return nil; }
+- (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command { [self toggleTrackInformation:command]; return nil; }
+- (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self toggleAlbumArt:command]; return nil; }
+- (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self fetchAlbumArt:command]; return nil; }
 
 @end

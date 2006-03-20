@@ -252,6 +252,139 @@
 			</responds-to>
 		</class>
 
+		<class name="document" code="docu" description="A compact disc document.">
+			<cocoa class="CompactDiscDocument"/>
+			<property name="name" code="pnam" type="text" access="r"
+				description="The document's name.">
+				<cocoa key="displayName"/>
+			</property>
+			<property name="modified" code="imod" type="boolean" access="r"
+				description="Has the document been modified since the last save?">
+				<cocoa key="isDocumentEdited"/>
+			</property>
+			<property name="file" code="file" type="file" access="r"
+				description="The document's location on disk.">
+				<cocoa key="fileURL"/>
+			</property>
+			<element type="track"/>
+			<property name="encodeAllowed" code="enco" type="boolean" access="r" 
+				description="Does the state of the document allow the selected tracks to be encoded?">
+				<cocoa key="encodeAllowed"/>
+			</property>
+			<property name="queryFreeDBAllowed" code="quer" type="boolean" access="r" 
+				description="Does the state of the document allow FreeDB to be queried for disc information?">
+				<cocoa key="queryFreeDBAllowed"/>
+			</property>
+			<property name="submitToFreeDBAllowed" code="subm" type="boolean" access="r" 
+				description="Does the state of the document allow submission of the disc's data to FreeDB?">
+				<cocoa key="submitToFreeDBAllowed"/>
+			</property>
+			<property name="ejectDiscAllowed" code="ejct" type="boolean" access="r" 
+				description="Does the state of the document allow the disc to be ejected?">
+				<cocoa key="ejectDiscAllowed"/>
+			</property>
+			<property name="ripInProgress" code="rip " type="boolean" access="r" 
+				description="Does this document contain tracks currently being ripped?">
+				<cocoa key="ripInProgress"/>
+			</property>
+			<property name="encodeInProgress" code="eip " type="boolean" access="r" 
+				description="Does this document contain tracks currently being encoded?">
+				<cocoa key="encodeInProgress"/>
+			</property>
+			<property name="discInDrive" code="disc" type="boolean"
+				description="Is the disc associated with this document in the drive?">
+				<cocoa key="discInDrive"/>
+			</property>
+			<property name="discID" code="id  " type="integer"
+				description="The disc's FreeDB ID.">
+				<cocoa key="discID"/>
+			</property>
+			<property name="title" code="titl" type="text"
+				description="The disc's title.">
+				<cocoa key="title"/>
+			</property>
+			<property name="artist" code="arts" type="text"
+				description="The disc's artist.">
+				<cocoa key="artist"/>
+			</property>
+			<property name="year" code="year" type="integer"
+				description="The disc's year.">
+				<cocoa key="year"/>
+			</property>
+			<property name="genre" code="genr" type="text"
+				description="The disc's genre.">
+				<cocoa key="genre"/>
+			</property>
+			<property name="composer" code="comp" type="text"
+				description="The disc's composer.">
+				<cocoa key="composer"/>
+			</property>
+			<property name="comment" code="comm" type="text"
+				description="The disc's comment.">
+				<cocoa key="comment"/>
+			</property>
+			<property name="albumArt" code="art " type="image"
+				description="The album artwork associated with the disc.">
+				<cocoa key="albumArt"/>
+			</property>
+			<property name="albumArtWidth" code="artw" type="integer" access="r"
+				description="The width, in pixels, of the disc's album art.">
+				<cocoa key="albumArtWidth"/>
+			</property>
+			<property name="albumArtHeight" code="arth" type="integer" access="r"
+				description="The height, in pixels, of the disc's album art.">
+				<cocoa key="albumArtHeight"/>
+			</property>
+			<property name="discNumber" code="comm" type="integer"
+				description="The number of this disc in the set.">
+				<cocoa key="discNumber"/>
+			</property>
+			<property name="discTotal" code="comm" type="integer"
+				description="The total number of discs in the set.">
+				<cocoa key="discTotal"/>
+			</property>
+			<property name="compilation" code="comm" type="boolean"
+				description="Is this disc a compilation?">
+				<cocoa key="compilation"/>
+			</property>
+			<property name="MCN" code="mcn " type="text"
+				description="The disc's media catalog number (MCN).">
+				<cocoa key="MCN"/>
+			</property>
+			<responds-to name="close">
+				<cocoa method="handleCloseScriptCommand:"/>
+			</responds-to>
+			<!--
+			<responds-to name="print">
+				<cocoa method="handlePrintScriptCommand:"/>
+			</responds-to>
+			-->
+			<responds-to name="save">
+				<cocoa method="handleSaveScriptCommand:"/>
+			</responds-to>
+			<responds-to name="encode">
+				<cocoa method="handleEncodeScriptCommand:"/>
+			</responds-to>
+			<responds-to name="ejectDisc">
+				<cocoa method="handleEjectDiscScriptCommand:"/>
+			</responds-to>
+			<responds-to name="queryFreeDB">
+				<cocoa method="handleQueryFreeDBScriptCommand:"/>
+			</responds-to>
+			<responds-to name="submitToFreeDB">
+				<cocoa method="handleSubmitToFreeDBScriptCommand:"/>
+			</responds-to>
+			<responds-to name="toggleTrackInformation">
+				<cocoa method="handleToggleTrackInformationScriptCommand:"/>
+			</responds-to>
+			<responds-to name="toggleAlbumArt">
+				<cocoa method="handleToggleAlbumArtScriptCommand:"/>
+			</responds-to>
+			<responds-to name="fetchAlbumArt">
+				<cocoa method="handleFetchAlbumArtScriptCommand:"/>
+			</responds-to>
+		</class>
+
 		<class name="window" code="cwin" description="A window.">
 			<cocoa class="NSWindow"/>
 			<property name="name" code="pnam" type="text" access="r"
@@ -461,141 +594,86 @@
 	<suite name="Max Suite" code="MaxX" 
 		description="Max specific classes.">
 			
-		<class name="document" code="docu" description="A compact disc document.">
-			<cocoa class="CompactDiscDocument"/>
-			<property name="name" code="pnam" type="text" access="r"
-				description="The document's name.">
-				<cocoa key="displayName"/>
-			</property>
-			<property name="modified" code="imod" type="boolean" access="r"
-				description="Has the document been modified since the last save?">
-				<cocoa key="isDocumentEdited"/>
-			</property>
-			<property name="file" code="file" type="file" access="r"
-				description="The document's location on disk.">
-				<cocoa key="fileURL"/>
-			</property>
-			<element type="track"/>
-			<property name="title" code="dtit" type="text"
-				description="The title of the disc.">
-				<cocoa key="title"/>
-			</property>
-			<property name="artist" code="dart" type="text"
-				description="The disc's artist.">
-				<cocoa key="artist"/>
-			</property>
-			<property name="year" code="dyea" type="integer"
-				description="The disc's year.">
-				<cocoa key="year"/>
-			</property>
-			<property name="genre" code="dgen" type="text"
-				description="The disc's genre.">
-				<cocoa key="genre"/>
-			</property>
-			<property name="composer" code="dcom" type="text"
-				description="The disc's composer.">
-				<cocoa key="composer"/>
-			</property>
-			<property name="comment" code="dcmm" type="text"
-				description="The disc's comment.">
-				<cocoa key="comment"/>
-			</property>
-			<responds-to name="close">
-				<cocoa method="handleCloseScriptCommand:"/>
-			</responds-to>
-			<!--
-			<responds-to name="print">
-				<cocoa method="handlePrintScriptCommand:"/>
-			</responds-to>
-			-->
-			<responds-to name="save">
-				<cocoa method="handleSaveScriptCommand:"/>
-			</responds-to>
-			<responds-to name="encode">
-				<cocoa method="handleEncodeScriptCommand:"/>
-			</responds-to>
-		</class>
-
 		<class name="track" plural="tracks" code="trck"
 			description="A CD track.">
 			<cocoa class="Track"/>
-			<property name="ripInProgress" code="trip" type="boolean" access="r" 
+			<property name="ripInProgress" code="rip " type="boolean" access="r" 
 				description="Is this track is currently being ripped?">
 				<cocoa key="ripInProgress"/>
 			</property>
-			<property name="encodeInProgress" code="teip" type="boolean" access="r" 
+			<property name="encodeInProgress" code="eip " type="boolean" access="r" 
 				description="Is this track is currently being encoded?">
 				<cocoa key="encodeInProgress"/>
 			</property>
-			<property name="selected" code="tsel" type="boolean"
+			<property name="selected" code="selc" type="boolean"
 				description="Is this track is currently selected?">
 				<cocoa key="selected"/>
 			</property>
-			<property name="color" code="tcol" type="color" access="r" 
+			<property name="color" code="colr" type="color" access="r" 
 				description="The color used to display this track.">
 				<cocoa key="color"/>
 			</property>
-			<property name="title" code="ttit" type="text"
+			<property name="title" code="titl" type="text"
 				description="The title of the track.">
 				<cocoa key="title"/>
 			</property>
-			<property name="artist" code="tart" type="text"
+			<property name="artist" code="arts" type="text"
 				description="The track's artist.">
 				<cocoa key="artist"/>
 			</property>
-			<property name="year" code="tyea" type="integer"
+			<property name="year" code="year" type="integer"
 				description="The track's year.">
 				<cocoa key="year"/>
 			</property>
-			<property name="genre" code="tgen" type="text"
+			<property name="genre" code="genr" type="text"
 				description="The track's genre.">
 				<cocoa key="genre"/>
 			</property>
-			<property name="composer" code="tcom" type="text"
+			<property name="composer" code="comp" type="text"
 				description="The track's composer.">
 				<cocoa key="composer"/>
 			</property>
-			<property name="size" code="tsiz" type="integer" access="r" 
+			<property name="size" code="size" type="integer" access="r" 
 				description="The track's size, in bytes.">
 				<cocoa key="size"/>
 			</property>
-			<property name="minute" code="tmin" type="integer" access="r" 
+			<property name="minute" code="min " type="integer" access="r" 
 				description="The track's minute.">
 				<cocoa key="size"/>
 			</property>
-			<property name="second" code="tsec" type="integer" access="r" 
+			<property name="second" code="sec " type="integer" access="r" 
 				description="The track's second.">
 				<cocoa key="size"/>
 			</property>
-			<property name="frame" code="tfra" type="integer" access="r" 
+			<property name="frame" code="fram" type="integer" access="r" 
 				description="The track's frame.">
 				<cocoa key="size"/>
 			</property>
-			<property name="number" code="tnum" type="integer" access="r" 
+			<property name="number" code="num " type="integer" access="r" 
 				description="The track's number.">
 				<cocoa key="number"/>
 			</property>
-			<property name="firstSector" code="tfse" type="integer" access="r" 
+			<property name="firstSector" code="fsec" type="integer" access="r" 
 				description="The track's first sector.">
 				<cocoa key="firstSector"/>
 			</property>
-			<property name="lastSector" code="tlse" type="integer" access="r" 
+			<property name="lastSector" code="lsec" type="integer" access="r" 
 				description="The track's last sector.">
 				<cocoa key="lastSector"/>
 			</property>
-			<property name="channels" code="tcha" type="integer" access="r" 
+			<property name="channels" code="chan" type="integer" access="r" 
 				description="The number of channels in the track.">
 				<cocoa key="size"/>
 			</property>
-			<property name="preEmphasis" code="tpre" type="boolean" access="r" 
+			<property name="preEmphasis" code="pree" type="boolean" access="r" 
 				description="Does this track have pre-emphasis?">
 				<cocoa key="preEmphasis"/>
 			</property>
-			<property name="copyPermitted" code="tcop" type="boolean" access="r" 
+			<property name="copyPermitted" code="copy" type="boolean" access="r" 
 				description="Does this track allows digital copies?">
 				<cocoa key="copyPermitted"/>
 			</property>
-			<property name="ISRC" code="tisr" type="text"
+			<property name="ISRC" code="isrc" type="text" access="r"
 				description="The track's international standard recording code (ISRC).">
 				<cocoa key="ISRC"/>
 			</property>
@@ -603,7 +681,38 @@
 
 		<command name="encode" code="Maxencod" 
 			description="Encode the selected tracks.">
-			<cocoa method="encode:"/>
+			<direct-parameter type="specifier"
+				description="The document(s) containing the tracks to encode."/>
+		</command>
+		<command name="ejectDisc" code="Maxeject" 
+			description="Eject the disc.">
+			<direct-parameter type="specifier"
+				description="The document(s) containing the disc to eject."/>
+		</command>
+		<command name="queryFreeDB" code="Maxquery" 
+			description="Query FreeDB for disc information.">
+			<direct-parameter type="specifier"
+				description="The document(s) containing the disc for which information is desired."/>
+		</command>
+		<command name="submitToFreeDB" code="Maxsubmi" 
+			description="Submit disc information to FreeDB.">
+			<direct-parameter type="specifier"
+				description="The document(s) containing the disc with the information to submit."/>
+		</command>
+		<command name="toggleTrackInformation" code="Maxtgtrc" 
+			description="Toggle the display of the track information drawer.">
+			<direct-parameter type="specifier"
+				description="The document(s) containing the drawers to show."/>
+		</command>
+		<command name="toggleAlbumArt" code="Maxtgart" 
+			description="Toggle the display of the album artwork information drawer.">
+			<direct-parameter type="specifier"
+				description="The document(s) containing the drawers to show."/>
+		</command>
+		<command name="fetchAlbumArt" code="Maxfetch" 
+			description="Download album artwork from Amazon.">
+			<direct-parameter type="specifier"
+				description="The document(s) containing the disc for which information is desired."/>
 		</command>
 	
 	</suite>

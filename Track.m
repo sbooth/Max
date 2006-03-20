@@ -399,4 +399,20 @@
 	[self setGenre:nil];
 }
 
+#pragma Scripting
+
+- (NSScriptObjectSpecifier *) objectSpecifier
+{
+    NSArray		*tracks		= [[self document] valueForKey:@"tracks"];
+    unsigned	idx			= [tracks indexOfObjectIdenticalTo:self];
+
+    if(NSNotFound != idx) {
+        NSScriptObjectSpecifier *containerRef = [[self document] objectSpecifier];
+        return [[[NSIndexSpecifier allocWithZone:[self zone]] initWithContainerClassDescription:[containerRef keyClassDescription] containerSpecifier:containerRef key:@"tracks" index:idx] autorelease];
+    }
+	else {
+        return nil;
+    }
+}
+
 @end

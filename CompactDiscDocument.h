@@ -144,3 +144,13 @@
 - (void) removeObjectFromTracksAtIndex:(unsigned)index;
 
 @end
+
+@interface CompactDiscDocument (ScriptingAdditions)
+- (id) handleEncodeScriptCommand:(NSScriptCommand *)command;
+- (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command;
+- (id) handleQueryFreeDBScriptCommand:(NSScriptCommand *)command;
+- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command;
+- (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command;
+- (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command;
+- (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command;
+@end

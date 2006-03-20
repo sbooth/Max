@@ -151,6 +151,7 @@
 		8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD7B0CC094E7F2600BA2427 /* SectorRange.m */; };
 		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
 		8CD9ED95094FEB6700F67AC8 /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */; };
+		8CDBB4D909CEAAF50018BEC8 /* Max.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 8CDBB4D809CEAAF50018BEC8 /* Max.sdef */; };
 		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
 		8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */; };
 		8CDD96CC097361DE00A5F2C1 /* SpeexToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD96CB097361DE00A5F2C1 /* SpeexToolbarImage.png */; };
@@ -339,6 +340,7 @@
 		8C51308F0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		8C675CA009CEF2D5002CB034 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8C6819B30982CA5100A35119 /* OggFLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggFLACEncoderTask.mm; sourceTree = "<group>"; };
 		8C6C4F5409CC59A600F234E5 /* TaggingToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TaggingToolbarImage.png; sourceTree = "<group>"; };
 		8C6C4F5F09CC5A9500F234E5 /* TaggingPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaggingPreferencesController.h; sourceTree = "<group>"; };
@@ -530,6 +532,7 @@
 		8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverter.m; sourceTree = "<group>"; };
 		8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterTask.h; sourceTree = "<group>"; };
 		8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterTask.m; sourceTree = "<group>"; };
+		8CDBB4D809CEAAF50018BEC8 /* Max.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = Max.sdef; sourceTree = "<group>"; };
 		8CDD2B9109442A9100D2DD96 /* CDInfo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CDInfo.icns; sourceTree = "<group>"; };
 		8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SubmitToFreeDBToolbarImage.png; sourceTree = "<group>"; };
 		8CDD96CB097361DE00A5F2C1 /* SpeexToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpeexToolbarImage.png; sourceTree = "<group>"; };
@@ -804,6 +807,7 @@
 				8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */,
 				8C137F720981CF4A00EBFC77 /* ConverterTaskDefaults.plist */,
 				8C14685409CC305100F91A97 /* MonkeysAudioPreferences.nib */,
+				8CDBB4D809CEAAF50018BEC8 /* Max.sdef */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1248,6 +1252,7 @@
 				8C6C4F5509CC59A600F234E5 /* TaggingToolbarImage.png in Resources */,
 				8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */,
 				8CE74CF709CDA02900D73B4B /* MonkeysAudioToolbarImage.png in Resources */,
+				8CDBB4D909CEAAF50018BEC8 /* Max.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1365,6 +1370,7 @@
 			children = (
 				089C165DFE840E0CC02AAC07 /* English */,
 				8C794DFB097F191C0081CD7F /* French */,
+				8C675CA009CEF2D5002CB034 /* German */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

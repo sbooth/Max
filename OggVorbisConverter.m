@@ -107,7 +107,7 @@
 			
 			// Check for errors
 			if(0 > bytesRead) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Ogg Vorbis decode error", @"Exceptions", @"") userInfo:nil];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Ogg Vorbis decode error.", @"Exceptions", @"") userInfo:nil];
 			}
 			
 			// EOF?
