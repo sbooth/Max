@@ -111,32 +111,32 @@
 		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
 		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file", @"Exceptions", @"")
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
 		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &_outputASBD, 0, &audioFile);
 		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileInitialize failed", @"Exceptions", @"")
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
 		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrapAudioFileID failed", @"Exceptions", @"")
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 				
 		// Open the input file
 		in_fd = open([_inputFilename fileSystemRepresentation], O_RDONLY);
 		if(-1 == in_fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
 		struct stat sourceStat;
 		if(-1 == fstat(in_fd, &sourceStat)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
@@ -157,7 +157,7 @@
 			// Read bitstream from input file
 			bytesRead = read(in_fd, data, 200);
 			if(-1 == bytesRead) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			else if(0 == bytesRead) {
@@ -186,29 +186,29 @@
 						
 						header = speex_packet_to_header((char*)op.packet, op.bytes);
 						if(NULL == header) {
-							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Cannot read Speex header", @"Exceptions", @"") userInfo:nil];
+							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read the Speex header.", @"Exceptions", @"") userInfo:nil];
 						}
 						if(SPEEX_NB_MODES <= header->mode) {
-							@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unrecognized Speex mode number %i", @"Exceptions", @""), header->mode] userInfo:nil];
+							@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The Speex mode number %i was not recognized.", @"Exceptions", @""), header->mode] userInfo:nil];
 						}
 						
 						mode = speex_lib_get_mode(header->mode);
 						
 						if(1 < header->speex_version_id) {
-							@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to decode Speex bitstream version %i", @"Exceptions", @""), header->speex_version_id] userInfo:nil];
+							@throw [SpeexException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to decode Speex bitstream version %i.", @"Exceptions", @""), header->speex_version_id] userInfo:nil];
 						}
 						
 						if(mode->bitstream_version < header->mode_bitstream_version) {
-							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"This file was encoded with a newer version of Speex", @"Exceptions", @"") userInfo:nil];
+							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"This file was encoded with a newer version of Speex.", @"Exceptions", @"") userInfo:nil];
 						}
 						
 						if(mode->bitstream_version > header->mode_bitstream_version)  {
-							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"This file was encoded with an older version of Speex", @"Exceptions", @"") userInfo:nil];
+							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"This file was encoded with an older version of Speex.", @"Exceptions", @"") userInfo:nil];
 						}
 						
 						st = speex_decoder_init(mode);
 						if(NULL == st) {
-							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to intialize Speex decoder", @"Exceptions", @"") userInfo:nil];
+							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to intialize the Speex decoder.", @"Exceptions", @"") userInfo:nil];
 						}
 						speex_decoder_ctl(st, SPEEX_SET_ENH, &enh_enabled);
 						speex_decoder_ctl(st, SPEEX_GET_FRAME_SIZE, &frameSize);
@@ -238,7 +238,7 @@
 							
 							err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
 							if(noErr != err) {
-								@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileSetProperty failed", @"Exceptions", @"")
+								@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty"]
 																	  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 							}
 						}
@@ -276,10 +276,10 @@
 								break;
 							}
 							if(-2 == ret) {
-								@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Decoding error: possible corrupted stream", @"Exceptions", @"") userInfo:nil];
+								@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Decoding error: possible corrupted stream.", @"Exceptions", @"") userInfo:nil];
 							}
 							if(0 > speex_bits_remaining(&bits)) {
-								@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Decoding overflow: possible corrupted stream", @"Exceptions", @"") userInfo:nil];
+								@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Decoding overflow: possible corrupted stream.", @"Exceptions", @"") userInfo:nil];
 							}
 							if(2 == channels) {
 								speex_decode_stereo_int(output, frameSize, &stereo);
@@ -302,7 +302,7 @@
 							// Write the data
 							err = ExtAudioFileWrite(extAudioFileRef, frameSize, &bufferList);
 							if(noErr != err) {
-								@throw [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileWrite failed", @"Exceptions", @"")
+								@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrite"]
 																	  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 							}
 						}
@@ -350,7 +350,7 @@
 		
 		// Close the input file
 		if(-1 == close(in_fd)) {
-			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file", @"Exceptions", @"") 
+			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the input file.", @"Exceptions", @"") 
 												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
@@ -358,7 +358,7 @@
 		// Close the output file
 		err = ExtAudioFileDispose(extAudioFileRef);
 		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"ExtAudioFileDispose failed", @"Exceptions", @"")
+			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
@@ -366,7 +366,7 @@
 		// Close the output file
 		err = AudioFileClose(audioFile);
 		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:NSLocalizedStringFromTable(@"AudioFileClose failed", @"Exceptions", @"")
+			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose"]
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}		

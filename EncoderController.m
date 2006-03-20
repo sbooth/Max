@@ -118,7 +118,7 @@ static EncoderController *sharedController = nil;
 	unsigned				divisions;
 	
 	if(-1 == statfs([[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] fileSystemRepresentation], &buf)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics", @"Exceptions", @"") 
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
@@ -220,8 +220,12 @@ static EncoderController *sharedController = nil;
 	}
 	
 	@catch(NSException *exception) {
-		NSLog(@"encoder exception:%@",exception);
-//		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[task outputFilename] lastPathComponent]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 

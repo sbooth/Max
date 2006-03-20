@@ -78,18 +78,18 @@
 	@try  {
 		chain = FLAC__metadata_chain_new();
 		if(NULL == chain) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename fileSystemRepresentation])) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		FLAC__metadata_chain_sort_padding(chain);
 		
 		iterator = FLAC__metadata_iterator_new();
 		if(NULL == iterator) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		FLAC__metadata_iterator_init(iterator, chain);
@@ -111,7 +111,7 @@
 			
 			block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT);
 			if(NULL == block) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 			}
 			
 			// Add our metadata
@@ -268,18 +268,18 @@
 	@try  {
 		chain = FLAC__metadata_chain_new();
 		if(NULL == chain) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename fileSystemRepresentation])) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging", @"Exceptions", @"") userInfo:nil];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		FLAC__metadata_chain_sort_padding(chain);
 		
 		iterator = FLAC__metadata_iterator_new();
 		if(NULL == iterator) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		FLAC__metadata_iterator_init(iterator, chain);
@@ -301,7 +301,7 @@
 			
 			block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_CUESHEET);
 			if(NULL == block) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 			}
 			
 			// Add our metadata
@@ -327,7 +327,7 @@
 			currentTrack	= [_tracks objectAtIndex:i];
 			track			= FLAC__metadata_object_cuesheet_track_new();
 			if(NULL == track) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 			}
 			
 			track->number		= [currentTrack number];
@@ -358,18 +358,18 @@
 			m += [currentTrack minute];
 
 			if(NO == FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO)) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 			}
 			
 			if(NO == FLAC__metadata_object_cuesheet_track_insert_blank_index(block, i, 0)) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 			}			
 		}
 		
 		// Lead-out
 		track = FLAC__metadata_object_cuesheet_track_new();
 		if(NULL == track) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		track->number		= 0xAA;
@@ -378,7 +378,7 @@
 		track->indices		= NULL;
 
 		if(NO == FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO)) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") userInfo:nil];
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}			
 		
 		// Write the new metadata to the file

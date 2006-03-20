@@ -32,7 +32,7 @@
 
 @implementation PCMGeneratingTask
 
-+ (void)initialize
++ (void) initialize
 {
 	NSString					*defaultsValuesPath;
     NSDictionary				*defaultsValuesDictionary;
@@ -40,7 +40,7 @@
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"PCMGeneratingTaskDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"PCMGeneratingTaskDefaults.plist" forKey:@"filename"]];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
@@ -48,7 +48,12 @@
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"PCMGeneratingTask"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -97,7 +102,7 @@
 			tmpDirLen	= strlen(tmpDir);
 			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
 			if(NULL == path) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			memcpy(path, tmpDir, tmpDirLen);
@@ -106,7 +111,7 @@
 			
 			fd = mkstemps(path, strlen(TEMPFILE_SUFFIX));
 			if(-1 == fd) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
@@ -118,7 +123,7 @@
 			
 			// And close it
 			if(-1 != fd && -1 == close(fd)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
@@ -131,7 +136,7 @@
 	
 	// Delete output file if it exists
 	if(0 == stat([_outputFilename fileSystemRepresentation], &sourceStat) && -1 == unlink([_outputFilename fileSystemRepresentation])) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file", @"Exceptions", @"") 
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}	
 }

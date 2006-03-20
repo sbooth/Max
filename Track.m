@@ -21,7 +21,6 @@
 #import "Track.h"
 #import "CompactDiscDocument.h"
 #import "MissingResourceException.h"
-#import "UtilityFunctions.h"
 
 #include <IOKit/storage/IOCDTypes.h>
 
@@ -31,7 +30,7 @@
 
 @implementation Track
 
-+ (void)initialize 
++ (void) initialize 
 {
 	NSString				*trackDefaultsValuesPath;
     NSDictionary			*trackDefaultsValuesDictionary;
@@ -39,7 +38,7 @@
 	@try {
 		trackDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TrackDefaults" ofType:@"plist"];
 		if(nil == trackDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"TrackDefaults.plist" forKey:@"filename"]];
 		}
 		trackDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:trackDefaultsValuesPath];
@@ -57,7 +56,12 @@
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"Track"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 

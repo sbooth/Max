@@ -97,13 +97,7 @@
 
 - (void) setOutputFormat:(NSString *)outputFormat				{ [_outputFormat release]; _outputFormat = [outputFormat retain]; }
 
-- (void) setException:(NSException *)exception
-{
-	[_exception release];
-	_exception = [exception retain];
-	
-	displayExceptionAlert(exception);
-}
+- (void) setException:(NSException *)exception					{ [_exception release]; _exception = [exception retain]; }
 
 - (void) updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining
 {

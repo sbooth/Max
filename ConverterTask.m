@@ -36,7 +36,7 @@
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ConverterTaskDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"ConverterTaskDefaults.plist" forKey:@"filename"]];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
@@ -44,7 +44,12 @@
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"ConverterController"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -132,6 +137,20 @@
 	else {
 		[self setStopped];
 	}
+}
+
+- (void) setException:(NSException *)exception
+{
+	NSAlert		*alert		= nil;
+	
+	[super setException:exception];
+	
+	alert = [[[NSAlert alloc] init] autorelease];
+	[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+	[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while converting the file \"%@\".", @"Exceptions", @""), [[self inputFilename] lastPathComponent]]];
+	[alert setInformativeText:[[self exception] reason]];
+	[alert setAlertStyle:NSWarningAlertStyle];		
+	[alert runModal];
 }
 
 - (NSString *)		inputFilename					{ return _inputFilename; }

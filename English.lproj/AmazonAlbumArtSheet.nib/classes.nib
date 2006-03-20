@@ -1,7 +1,7 @@
 {
     IBClasses = (
         {
-            ACTIONS = {cancel = id; search = id; useSelected = id; }; 
+            ACTIONS = {cancel = id; search = id; useSelected = id; visitAmazon = id; }; 
             CLASS = AmazonAlbumArtSheet; 
             LANGUAGE = ObjC; 
             OUTLETS = {

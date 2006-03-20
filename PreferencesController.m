@@ -63,7 +63,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
 			if(nil == defaultsPath) {
-				@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+				@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 															userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@.plist", [defaultFiles objectAtIndex:i]] forKey:@"filename"]];
 			}
 			[defaultsDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:defaultsPath]];
@@ -74,7 +74,12 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"PreferencesController"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 

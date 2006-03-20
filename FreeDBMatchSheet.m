@@ -28,7 +28,7 @@
 {
 	if((self = [super init])) {
 		if(NO == [NSBundle loadNibNamed:@"FreeDBMatches" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"FreeDBMatches.nib" forKey:@"filename"]];
 		}
 		

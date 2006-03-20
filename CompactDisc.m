@@ -43,11 +43,11 @@
 		// cdparanoia setup
 		drive = cdda_identify([bsdPath fileSystemRepresentation], 0, NULL);
 		if(NULL == drive) {
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_identify failed", @"Exceptions", @"") userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_identify"] userInfo:nil];
 		}
 		
 		if(0 != cdda_open(drive)) {
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"cdda_open failed", @"Exceptions", @"") userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_open"] userInfo:nil];
 		}
 
 		_bsdName		= [bsdName retain];
@@ -99,7 +99,7 @@
 		// Setup libcddb data structures
 		_freeDBDisc	= cddb_disc_new();
 		if(NULL == _freeDBDisc) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
@@ -108,7 +108,7 @@
 			
 			cddb_track = cddb_track_new();
 			if(NULL == cddb_track) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
@@ -120,7 +120,7 @@
 		cddb_disc_set_length(_freeDBDisc, _length);
 		
 		if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
-			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to calculate disc id", @"Exceptions", @"") userInfo:nil];
+			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to calculate the disc's FreeDB ID.", @"Exceptions", @"") userInfo:nil];
 		}
 				
 		return self;

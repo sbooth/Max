@@ -51,5 +51,6 @@ enum {
 - (IBAction)		search:(id)sender;
 - (IBAction)		cancel:(id)sender;
 - (IBAction)		useSelected:(id)sender;
+- (IBAction)		visitAmazon:(id)sender;
 
 @end

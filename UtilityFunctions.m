@@ -56,11 +56,11 @@ getApplicationDataDirectory()
 
 			if(NO == [manager fileExistsAtPath:sDataDirectory isDirectory:&isDir]) {
 				if(NO == [manager createDirectoryAtPath:sDataDirectory attributes:nil]) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create application data directory", @"Exceptions", @"") userInfo:nil];
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the application data directory.", @"Exceptions", @"") userInfo:nil];
 				}
 			}
 			else if(NO == isDir) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create application data directory", @"Exceptions", @"") userInfo:nil];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the application data directory.", @"Exceptions", @"") userInfo:nil];
 			}
 		}
 	}
@@ -145,12 +145,12 @@ validateAndCreateDirectory(NSString *path)
 
 	if(NO == [manager fileExistsAtPath:path isDirectory:&isDir]) {
 		if(NO == [manager createDirectoryAtPath:path attributes:nil]) {
-			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory", @"Exceptions", @"")
+			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory.", @"Exceptions", @"")
 										 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
 		}
 	}
 	else if(NO == isDir) {
-		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory", @"Exceptions", @"")
+		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory.", @"Exceptions", @"")
 									 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
 	}	
 }
@@ -306,7 +306,7 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 	entry.length	= strlen((const char *)entry.entry);
 	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
 		free(entry.entry);
-		@throw [NSException exceptionWithName:@"FLACException" reason:NSLocalizedStringFromTable(@"FLAC error (FLAC__metadata_object_vorbiscomment_append_comment)", @"Exceptions", @"") userInfo:nil];
+		@throw [FLACException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_append_comment"]];
 	}	
 }
 

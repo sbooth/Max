@@ -58,7 +58,6 @@
 }
 
 - (NSArray *)		genres;
-- (void)			displayException:(NSException *)exception;
 
 // State
 - (BOOL)			encodeAllowed;

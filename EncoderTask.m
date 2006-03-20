@@ -43,7 +43,7 @@
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"EncoderTaskDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"EncoderTaskDefaults.plist" forKey:@"filename"]];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
@@ -51,7 +51,12 @@
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"EncoderTask"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -138,7 +143,7 @@
 - (void) removeOutputFile
 {
 	if(nil != _outputFilename && -1 == unlink([_outputFilename fileSystemRepresentation])) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the output file", @"Exceptions", @"") 
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}	
 }
@@ -152,7 +157,7 @@
 			// Create the file (don't overwrite)
 			fd = open([_outputFilename fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			if(-1 == fd) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
@@ -160,7 +165,7 @@
 		@finally {
 			// And close it
 			if(-1 != fd && -1 == close(fd)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
@@ -227,7 +232,18 @@
 		if(nil != [_task metadata]) {
 			[self writeTags];
 		}
-		
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while tagging the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+	}
+	
+	@try {
 		[super setCompleted]; 
 		[_connection invalidate];
 		[[EncoderController sharedController] encoderTaskDidComplete:self]; 
@@ -235,7 +251,7 @@
 		// Delete input file if requested
 		if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
 			if(-1 == unlink([[(ConverterTask *)_task inputFilename] fileSystemRepresentation])) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}	
 		}
@@ -245,15 +261,20 @@
 			if([self formatLegalForCueSheet]) {
 				[self generateCueSheet];
 			}
-			else {
-				@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"Cue sheets not supported for this output format", @"Exceptions", @"")
+			/*else {
+				@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"Cue sheets are not supported for this output format", @"Exceptions", @"")
 																   userInfo:[NSDictionary dictionaryWithObject:[self outputFormat] forKey:@"fileFormat"]];
-			}
+			}*/
 		}
 	}
 	
-	@catch(NSException *e) {
-		displayExceptionAlert(e);
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -265,6 +286,20 @@
 	else {
 		[self setStopped];
 	}
+}
+
+- (void) setException:(NSException *)exception
+{
+	NSAlert		*alert		= nil;
+	
+	[super setException:exception];
+	
+	alert = [[[NSAlert alloc] init] autorelease];
+	[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+	[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+	[alert setInformativeText:[[self exception] reason]];
+	[alert setAlertStyle:NSWarningAlertStyle];		
+	[alert runModal];
 }
 
 - (void) generateCueSheet
@@ -291,7 +326,7 @@
 		// Create the file (don't overwrite)
 		fd = open([cueSheetFilename fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the cue sheet", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the cue sheet.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
@@ -301,7 +336,7 @@
 		buf				= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
@@ -310,7 +345,7 @@
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 
@@ -319,7 +354,7 @@
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 
@@ -328,7 +363,7 @@
 		buf		= [temp fileSystemRepresentation];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
@@ -340,7 +375,7 @@
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 
@@ -349,7 +384,7 @@
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 
@@ -358,7 +393,7 @@
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 
@@ -367,7 +402,7 @@
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 
@@ -376,7 +411,7 @@
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet", @"Exceptions", @"") 
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			
@@ -401,7 +436,7 @@
 	@finally {
 		// And close it
 		if(-1 != fd && -1 == close(fd)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the cue sheet", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the cue sheet.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 	}

@@ -33,24 +33,29 @@
 
 + (void) initialize
 {
-	NSString				*cddbDefaultsValuesPath;
-    NSDictionary			*cddbDefaultsValuesDictionary;
+	NSString				*freeDBDefaultsValuesPath;
+    NSDictionary			*freeDBDefaultsValuesDictionary;
     
 	@try {
-		cddbDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"FreeDBDefaults" ofType:@"plist"];
-		if(nil == cddbDefaultsValuesPath) {
+		freeDBDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"FreeDBDefaults" ofType:@"plist"];
+		if(nil == freeDBDefaultsValuesPath) {
 			// Hardcode default value to avoid a crash
 			NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"freedb.freedb.org", @"8880", @"1", nil] forKeys:[NSArray arrayWithObjects:@"freeDBServer", @"freeDBPort", @"freeDBProtocol", nil]];
 			[[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"FreeDBDefaults.plist" forKey:@"filename"]];
 		}
-		cddbDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:cddbDefaultsValuesPath];
-		[[NSUserDefaults standardUserDefaults] registerDefaults:cddbDefaultsValuesDictionary];
+		freeDBDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:freeDBDefaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:freeDBDefaultsValuesDictionary];
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"FreeDB"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -62,7 +67,7 @@
 		
 		_freeDB = cddb_new();
 		if(NULL == _freeDB) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
@@ -132,7 +137,7 @@
 	cddb_sites(_freeDB);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	if(FALSE == cddb_sites(_freeDB)) {
-		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to obtain the list of FreeDB mirrors", @"Exceptions", @"")
+		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to obtain the list of FreeDB mirrors.", @"Exceptions", @"")
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
@@ -180,7 +185,7 @@
 	// Run query to find matches
 	matches = cddb_query(_freeDB, freeDBDisc);
 	if(-1 == matches) {
-		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB query failed", @"Exceptions", @"")
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FreeDB query"]
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
@@ -223,7 +228,7 @@
 		--matches;
 		if(0 < matches) {
 			if(0 == cddb_query_next(_freeDB, freeDBDisc)) {
-				@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB query index out of bounds", @"Exceptions", @"")
+				@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"The FreeDB query index was out of bounds.", @"Exceptions", @"")
 												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 		}
@@ -246,7 +251,7 @@
 	// Create disc structure
 	disc = cddb_disc_new();
 	if(NULL == disc) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
@@ -254,7 +259,7 @@
 	cddb_disc_set_discid(disc, [[info valueForKey:@"discid"] unsignedIntValue]);
 	
 	if(0 == cddb_read(_freeDB, disc)) {
-		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB read failed", @"Exceptions", @"")
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FreeDB read"]
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
@@ -328,7 +333,7 @@
 	
 	disc = cddb_disc_clone([[_disc disc] freeDBDisc]);
 	if(NULL == disc) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory", @"Exceptions", @"") 
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 
@@ -382,7 +387,7 @@
 	}
 
 	if(0 == cddb_write(_freeDB, disc)) {
-		@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"FreeDB write failed", @"Exceptions", @"")
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FreeDB write"]
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	

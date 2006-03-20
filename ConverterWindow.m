@@ -21,7 +21,6 @@
 #import "ConverterWindow.h"
 #import "ApplicationController.h"
 #import "FileFormatNotSupportedException.h"
-#import "UtilityFunctions.h"
 
 @interface ConverterWindow (Private)
 - (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo;
@@ -51,12 +50,22 @@
 	}
 	
 	@catch(FileFormatNotSupportedException *exception) {
-		displayExceptionSheet(exception, self, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert beginSheetModalForWindow:self modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 		return NO;
 	}
 
 	@catch(NSException *exception) {
-		displayExceptionSheet(exception, self, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert beginSheetModalForWindow:self modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 		return NO;
 	}
 	

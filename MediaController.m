@@ -54,11 +54,11 @@ static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * con
 		DAReturn status = DADissenterGetStatus(dissenter);
 		if(unix_err(status)) {
 			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		else {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
 		}
 	}
@@ -70,11 +70,11 @@ static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * conte
 		DAReturn status = DADissenterGetStatus(dissenter);
 		if(unix_err(status)) {
 			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		else {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc", @"Exceptions", @"") 
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
 		}
 	}
@@ -92,7 +92,7 @@ static MediaController *sharedController = nil;
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"MediaControllerDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"MediaControllerDefaults.plist" forKey:@"filename"]];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
@@ -100,7 +100,12 @@ static MediaController *sharedController = nil;
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"MediaController"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 

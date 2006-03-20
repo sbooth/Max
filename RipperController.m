@@ -119,7 +119,7 @@ static RipperController *sharedController = nil;
 	}
 	
 	if(-1 == statfs(tmpDir, &buf)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics", @"Exceptions", @"") 
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	

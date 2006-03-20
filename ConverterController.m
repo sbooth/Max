@@ -130,7 +130,7 @@ static ConverterController *sharedController = nil;
 	}
 
 	if(-1 == statfs(tmpDir, &buf)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics", @"Exceptions", @"") 
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
@@ -190,7 +190,7 @@ static ConverterController *sharedController = nil;
 		converterTask = [[SpeexConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else {
-		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"File format not supported", @"Exceptions", @"") 
+		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @"") 
 														   userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
 	}
 	

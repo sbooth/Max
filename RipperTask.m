@@ -41,7 +41,7 @@
 	Track				*track;
 
 	if(0 == [tracks count]) {
-		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"Empty array passed to RipperTask::initWithTracks" userInfo:nil];
+		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"Empty array passed to RipperTask::initWithTracks." userInfo:nil];
 	}
 
 	if((self = [super initWithMetadata:metadata])) {
@@ -150,6 +150,20 @@
 	else {
 		[self setStopped];
 	}
+}
+
+- (void) setException:(NSException *)exception
+{
+	NSAlert		*alert		= nil;
+	
+	[super setException:exception];
+	
+	alert = [[[NSAlert alloc] init] autorelease];
+	[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+	[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), [[[self objectInTracksAtIndex:0] document] title]]];
+	[alert setInformativeText:[[self exception] reason]];
+	[alert setAlertStyle:NSWarningAlertStyle];		
+	[alert runModal];
 }
 
 - (void) generateCueSheet

@@ -21,13 +21,17 @@
 #import "AmazonAlbumArtSheet.h"
 #import "MissingResourceException.h"
 
+@interface AmazonAlbumArtSheet (Private)
+- (NSString *) localeDomain;
+@end
+
 @implementation AmazonAlbumArtSheet
 
 - (id) initWithCompactDiscDocument:(CompactDiscDocument *)doc;
 {
 	if((self = [super init])) {
 		if(NO == [NSBundle loadNibNamed:@"AmazonAlbumArtSheet" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"AmazonAlbumArtSheet.nib" forKey:@"filename"]];
 		}
 		
@@ -62,7 +66,7 @@
 	// http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=Kid+Rock&Title=Cocky
 	
 	NSError					*error;
-	NSString				*urlString, *artist, *title, *locale;
+	NSString				*urlString, *artist, *title;
 	NSURL					*url;
 	NSXMLDocument			*xmlDoc;
 
@@ -77,16 +81,7 @@
 	artist		= [_artistTextField stringValue];
 	title		= [_titleTextField stringValue];
 	
-	switch([[_localePopUpButton selectedItem] tag]) {
-		case kAmazonLocaleUSMenuItemTag:		locale = @"com";			break;
-		case kAmazonLocaleFRMenuItemTag:		locale = @"fr";				break;
-		case kAmazonLocaleCAMenuItemTag:		locale = @"ca";				break;
-		case kAmazonLocaleDEMenuItemTag:		locale = @"de";				break;
-		case kAmazonLocaleUKMenuItemTag:		locale = @"co.uk";			break;
-		case kAmazonLocaleJAMenuItemTag:		locale = @"co.jp";			break;
-	}
-
-	urlString	= [NSString stringWithFormat:@"http://webservices.amazon.%@/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=%@&Title=%@", locale, artist, title];
+	urlString	= [NSString stringWithFormat:@"http://webservices.amazon.%@/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=%@&Title=%@", [self localeDomain], artist, title];
 	url			= [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 	
 	xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:(NSXMLNodePreserveWhitespace | NSXMLNodePreserveCDATA) error:&error];
@@ -120,9 +115,7 @@
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"searchInProgress"];
 		return;
 	}
-	
-//	NSLog(@"xmlDoc=%@",xmlDoc);
-		
+			
 	images	= [self mutableArrayValueForKey:@"images"];
 	[images removeAllObjects];
 	node	= [xmlDoc rootElement];
@@ -139,7 +132,6 @@
 				}
 				
 				[images addObject:dictionary];
-				//NSLog(@"dictionary = %@", dictionary);
 			}
 		}
 	}
@@ -166,6 +158,24 @@
 - (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
     [sheet orderOut:self];
+}
+
+- (IBAction) visitAmazon:(id)sender
+{
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[@"http://www.amazon." stringByAppendingString:[self localeDomain]]]];
+}
+
+- (NSString *) localeDomain
+{
+	switch([[_localePopUpButton selectedItem] tag]) {
+		case kAmazonLocaleUSMenuItemTag:		return @"com";				break;
+		case kAmazonLocaleFRMenuItemTag:		return @"fr";				break;
+		case kAmazonLocaleCAMenuItemTag:		return @"ca";				break;
+		case kAmazonLocaleDEMenuItemTag:		return @"de";				break;
+		case kAmazonLocaleUKMenuItemTag:		return @"co.uk";			break;
+		case kAmazonLocaleJAMenuItemTag:		return @"co.jp";			break;
+		default:								return nil;					break;
+	}	
 }
 
 @end

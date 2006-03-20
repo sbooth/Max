@@ -169,6 +169,7 @@
 		8CE50938099347B70047CE1D /* OggFLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE5091B099347B70047CE1D /* OggFLAC.framework */; };
 		8CE50939099347C20047CE1D /* FLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE5091A099347B70047CE1D /* FLAC.framework */; };
 		8CE5093A099347C20047CE1D /* OggFLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE5091B099347B70047CE1D /* OggFLAC.framework */; };
+		8CE74CF709CDA02900D73B4B /* MonkeysAudioToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE74CF609CDA02900D73B4B /* MonkeysAudioToolbarImage.png */; };
 		8CE9744909461DE2000127B6 /* ApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */; };
 		8CE974770946262B000127B6 /* FLAC.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE974760946262B000127B6 /* FLAC.png */; };
 		8CE9747909462638000127B6 /* libsndfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CE9747809462638000127B6 /* libsndfile.png */; };
@@ -556,6 +557,7 @@
 		8CE5091A099347B70047CE1D /* FLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FLAC.framework; sourceTree = "<group>"; };
 		8CE5091B099347B70047CE1D /* OggFLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OggFLAC.framework; sourceTree = "<group>"; };
 		8CE6F51D08CD60970028DA37 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		8CE74CF609CDA02900D73B4B /* MonkeysAudioToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MonkeysAudioToolbarImage.png; sourceTree = "<group>"; };
 		8CE9743C09461DB6000127B6 /* ComponentVersionsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentVersionsController.h; sourceTree = "<group>"; };
 		8CE9746209461F35000127B6 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ComponentVersions.nib; sourceTree = "<group>"; };
 		8CE974760946262B000127B6 /* FLAC.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FLAC.png; sourceTree = "<group>"; };
@@ -736,6 +738,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CE74CF609CDA02900D73B4B /* MonkeysAudioToolbarImage.png */,
 				8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */,
 				8C6C4F5409CC59A600F234E5 /* TaggingToolbarImage.png */,
 				8C14688A09CC322A00F91A97 /* MonkeysAudioDefaults.plist */,
@@ -1244,6 +1247,7 @@
 				8C14685609CC305100F91A97 /* MonkeysAudioPreferences.nib in Resources */,
 				8C6C4F5509CC59A600F234E5 /* TaggingToolbarImage.png in Resources */,
 				8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */,
+				8CE74CF709CDA02900D73B4B /* MonkeysAudioToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

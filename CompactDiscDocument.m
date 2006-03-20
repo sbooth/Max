@@ -53,6 +53,7 @@ enum {
 @interface CompactDiscDocument (Private)
 - (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
 - (void)			updateAlbumArtImageRep;
+- (void)			displayExceptionAlert:(NSAlert *)alert;
 @end
 
 @implementation CompactDiscDocument
@@ -66,7 +67,7 @@ enum {
 		// Set up defaults
 		compactDiscDocumentDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CompactDiscDocumentDefaults" ofType:@"plist"];
 		if(nil == compactDiscDocumentDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"CompactDiscDocumentDefaults.plist" forKey:@"filename"]];
 		}
 		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
@@ -77,7 +78,12 @@ enum {
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"CompactDiscDocument"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -236,7 +242,7 @@ enum {
 			NSArray					*tracks			= [dictionary valueForKey:@"tracks"];
 			
 			if([self discInDrive] && [tracks count] != [self countOfTracks]) {
-				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch" userInfo:nil];
+				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Track count mismatch between the disc and the saved document." userInfo:nil];
 			}
 			else if(0 == [self countOfTracks]) {
 				for(i = 0; i < [tracks count]; ++i) {
@@ -293,11 +299,6 @@ enum {
 	}
 }
 
-- (void) controlTextDidEndEditing:(NSNotification *)notification
-{
-//	[self updateChangeCount:NSChangeDone];
-}
-
 - (NSUndoManager *) windowWillReturnUndoManager:(NSWindow *)sender
 {
 	return [self undoManager];
@@ -305,14 +306,14 @@ enum {
 
 #pragma mark Exception Display
 
-- (void) displayException:(NSException *)exception
+- (void) displayExceptionAlert:(NSAlert *)alert
 {
 	NSWindow *window = [self windowForSheet];
 	if(nil == window) {
-		displayExceptionAlert(exception);
+		[alert runModal];
 	}
 	else {
-		displayExceptionSheet(exception, window, self, @selector(alertDidEnd:returnCode:contextInfo:), nil);
+		[alert beginSheetModalForWindow:window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 	}
 }
 
@@ -403,10 +404,10 @@ enum {
 			return;
 		}
 		else if([self emptySelection]) {
-			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"Please select one or more tracks to encode", @"Exceptions", @"") userInfo:nil];
+			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"No tracks selected for encoding.", @"Exceptions", @"") userInfo:nil];
 		}
 		else if([self ripInProgress] || [self encodeInProgress]) {
-			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A rip or encode operation is already in progress", @"Exceptions", @"") userInfo:nil];
+			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Iterate through the selected tracks and rip/encode them
@@ -437,7 +438,12 @@ enum {
 	}
 	
 	@catch(NSException *exception) {
-		[self displayException:exception];
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), [self title]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[self displayExceptionAlert:alert];
 	}
 }
 
@@ -451,8 +457,8 @@ enum {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
-		[alert setMessageText:NSLocalizedStringFromTable(@"Really eject the disc?", @"CompactDisc", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"There are active ripping tasks", @"CompactDisc", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Do you want to eject the disc \"%@\" while ripping is in progress?", @"CompactDisc", @""), [self title]]];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"Your incomplete rips will be lost.", @"CompactDisc", @"")];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
 		if(NSAlertSecondButtonReturn == [alert runModal]) {
@@ -486,7 +492,7 @@ enum {
 		matches = [freeDB fetchMatches];
 		
 		if(0 == [matches count]) {
-			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matches found for this disc", @"Exceptions", @"") userInfo:nil];
+			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @"") userInfo:nil];
 		}
 		else if(1 == [matches count]) {
 			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
@@ -499,8 +505,15 @@ enum {
 	}
 	
 	@catch(NSException *exception) {
+		NSAlert				*alert				= nil;
+		
 		[self setFreeDBQueryInProgress:NO];
-		[self displayException:exception];
+		alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while querying FreeDB for the disc \"%@\".", @"Exceptions", @""), [self title]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[self displayExceptionAlert:alert];
 	}
 	
 	@finally {
@@ -511,6 +524,7 @@ enum {
 - (IBAction) submitToFreeDB:(id) sender
 {
 	FreeDB				*freeDB				= nil;
+	NSAlert				*alert				= nil;
 	
 	if(NO == [self submitToFreeDBAllowed]) {
 		return;
@@ -519,9 +533,9 @@ enum {
 	@try {
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];		
 		[freeDB submitDisc];
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText: [NSString stringWithFormat:NSLocalizedStringFromTable(@"The information for the CD \"%@\" has been successfully submitted to FreeDB.", @"General", @""), [self title]]];
+		[alert setMessageText: [NSString stringWithFormat:NSLocalizedStringFromTable(@"The information for the disc \"%@\" has been successfully submitted to FreeDB.", @"General", @""), [self title]]];
 		[alert setInformativeText: NSLocalizedStringFromTable(@"Thank you for using FreeDB!", @"General", @"")];
 		
 		[alert setAlertStyle: NSInformationalAlertStyle];
@@ -530,7 +544,12 @@ enum {
 	}
 	
 	@catch(NSException *exception) {
-		[self displayException:exception];
+		alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while submitting information for the disc \"%@\" to FreeDB.", @"Exceptions", @""), [self title]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[self displayExceptionAlert:alert];
 	}
 	
 	@finally {
@@ -617,7 +636,12 @@ enum {
 	}
 	
 	@catch(NSException *exception) {
-		[self displayException:exception];
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while retrieving information for the disc \"%@\" from FreeDB.", @"Exceptions", @""), [self title]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[self displayExceptionAlert:alert];
 	}
 	
 	@finally {

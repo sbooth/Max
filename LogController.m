@@ -111,7 +111,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 			NSData			*rtf			= [storage RTFFromRange:NSMakeRange(0, [storage length]) documentAttributes:nil];
 			
 			if(NO == [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil]) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file", @"Exceptions", @"") userInfo:@""];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") userInfo:@""];
 			}
 		}	
 	}

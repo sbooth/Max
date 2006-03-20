@@ -47,7 +47,7 @@ static ApplicationController *sharedController = nil;
 
 @implementation ApplicationController
 
-+ (void)initialize
++ (void) initialize
 {
 	// Set up the ValueTransformers
 	NSValueTransformer			*transformer;
@@ -76,7 +76,7 @@ static ApplicationController *sharedController = nil;
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to load required resource", @"Exceptions", @"")
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"ApplicationControllerDefaults.plist" forKey:@"filename"]];
 		}
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
@@ -84,7 +84,12 @@ static ApplicationController *sharedController = nil;
 	}
 	
 	@catch(NSException *exception) {
-		displayExceptionAlert(exception);
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"ApplicationController"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -221,9 +226,23 @@ static ApplicationController *sharedController = nil;
 			[self encodeFiles:[panel filenames]];
 		}
 		
+		@catch(FileFormatNotSupportedException *exception) {
+			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+			[alert setInformativeText:[exception reason]];
+			[alert setAlertStyle:NSWarningAlertStyle];		
+			[alert runModal];
+		}
+		
 		@catch(NSException *exception) {
-			displayExceptionAlert(exception);
-		}		
+			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+			[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
+			[alert setInformativeText:[exception reason]];
+			[alert setAlertStyle:NSWarningAlertStyle];		
+			[alert runModal];
+		}
 	}
 }
 
@@ -279,7 +298,7 @@ static ApplicationController *sharedController = nil;
 			}
 		}
 		else {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"File not found", @"Exceptions", @"") userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"The file was not found.", @"Exceptions", @"") userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
 		}
 	}					
 }
