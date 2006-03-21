@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {cancel = id; search = id; useSelected = id; visitAmazon = id; }; 
+            CLASS = AmazonAlbumArtSheet; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_artistTextField" = NSTextField; 
+                "_localePopUpButton" = NSPopUpButton; 
+                "_sheet" = NSWindow; 
+                "_table" = NSTableView; 
+                "_titleTextField" = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
