@@ -323,6 +323,7 @@
 				description="The disc's comment.">
 				<cocoa key="comment"/>
 			</property>
+			<!--
 			<property name="albumArt" code="art " type="image"
 				description="The album artwork associated with the disc.">
 				<cocoa key="albumArt"/>
@@ -335,11 +336,12 @@
 				description="The height, in pixels, of the disc's album art.">
 				<cocoa key="albumArtHeight"/>
 			</property>
-			<property name="discNumber" code="comm" type="integer"
+			-->
+			<property name="discNumber" code="dnum" type="integer"
 				description="The number of this disc in the set.">
 				<cocoa key="discNumber"/>
 			</property>
-			<property name="discTotal" code="comm" type="integer"
+			<property name="discTotal" code="dcnt" type="integer"
 				description="The total number of discs in the set.">
 				<cocoa key="discTotal"/>
 			</property>
@@ -585,216 +587,6 @@
 				<cocoa key="filename"/>
 			</property>
 		</class>
-
-	</suite>
-
-	<!--
-		IMAGE SUITE
-	-->
-	<suite name="Image Suite" code="imgs" description="Terms and Events for controlling Images">
-
-	<command name="close" code="coreclos" description="Close an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="saving" code="savo" type="savo" optional="yes" description="Specifies whether changes should be saved before closing."/>
-		<parameter name="saving in" code="kfil" type="Unicode text" optional="yes" description="The file in which to save the image."/>
-	</command>
-	
-	<command name="crop" code="imgscrop" description="Crop an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="to dimensions" code="Dmns" type="list" description="the width and height of the new image, respectively, in pixels, as a pair of integers"/>
-	</command>
-	
-	<command name="embed" code="synccsEI" description="Embed an image with an ICC profile">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="with source" code="ePrf" type="profile" description="the profile to embed in the image"/>
-	</command>
-	
-	<command name="flip" code="imgsflip" description="Flip an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="horizontal" code="hori" type="boolean" optional="yes" description="flip horizontally"/>
-		<parameter name="vertical" code="vert" type="boolean" optional="yes" description="flip vertically"/>
-	</command>
-	
-	<command name="match" code="synccsMI" description="Match an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="to destination" code="dPrf" type="profile" description="the destination profile for the match"/>
-	</command>
-	
-	<command name="pad" code="imgspadd" description="Pad an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="to dimensions" code="Dmns" type="list" description="the width and height of the new image, respectively, in pixels, as a pair of integers"/>
-	</command>
-	
-	<command name="rotate" code="icasrota" description="Rotate an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="to angle" code="angl" type="real" description="rotate using an angle"/>
-	</command>
-	
-	<command name="save" code="coresave" description="Save an image to a file in one of various formats">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="as" code="fltp" type="typv" optional="yes" description="file type in which to save the image ( default is to make no change )"/>
-		<parameter name="icon" code="iimg" type="boolean" optional="yes" description="Shall an icon be added? ( default is false )"/>
-		<parameter name="in" code="kfil" type="disk item" optional="yes" description="file path in which to save the image, in HFS or POSIX form"/>
-		<parameter name="PackBits" code="pack" type="boolean" optional="yes" description="Are the bytes to be compressed with PackBits? ( default is false, applies only to TIFF )"/>
-		<result type="alias"/>
-	</command>
-	
-	<command name="scale" code="icasscal" description="Scale an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-		<parameter name="by factor" code="fact" type="real" optional="yes" description="scale using a scalefactor"/>
-		<parameter name="to size" code="maxi" type="integer" optional="yes" description="scale using a max width/length"/>
-	</command>
-	
-	<command name="unembed" code="synccsUI" description="Remove any embedded ICC profiles from an image">
-		<direct-parameter type="reference" description="the object for the command"/>
-	</command>
-	
-	<class name="display" code="disp" description="A monitor connected to the computer" inherits="item" plural="displays">
-		<property name="display profile" code="mPrf" type="profile" access="r" description="the profile for the display"/>
-		<property name="name" code="pnam" type="Unicode text" access="r" description="the name of the display"/>
-		<property name="number" code="mNum" type="unsigned integer" access="r" description="the number of the display"/>
-	</class>
-	
-	<class name="image" code="imag" description="An image contained in a file" inherits="item" plural="images">
-		<element type="metadata tag"/>
-		<element type="profile"/>
-		<property name="bit depth" code="pdpt" type="bitz" access="r" description="bit depth of the image's color representation"/>
-		<property name="color space" code="pSpc" type="pSpc" access="r" description="color space of the image's color representation"/>
-		<property name="dimensions" code="dmns" type="list" access="r" description="the width and height of the image, respectively, in pixels, as a pair of integers"/>
-		<property name="embedded profile" code="eprf" type="profile" access="r" description="the profile, if any, embedded in the image"/>
-		<property name="file type" code="asty" type="typz" access="r" description="file type of the image's file"/>
-		<property name="image file" code="imgf" type="file" access="r" description="the file that contains the image"/>
-		<property name="location" code="pLoc" type="disk item" access="r" description="the folder or disk that encloses the file that contains the image"/>
-		<property name="name" code="pnam" type="Unicode text" access="r" description="the name of the image"/>
-		<property name="resolution" code="reso" type="list" access="r" description="the pixel density of the image, in dots per inch, as a pair of integers"/>
-	</class>
-	
-	<class name="metadata tag" code="tag " description="A metadata tag: EXIF, IPDC, etc." inherits="item" plural="metadata tags">
-		<property name="description" code="dscr" type="Unicode text" access="r" description="the description of the tag's function"/>
-		<property name="name" code="pnam" type="Unicode text" access="r" description="the name of the tag"/>
-		<property name="value" code="valL" type="item" access="r" description="the current setting of the tag"/>
-	</class>
-	
-	<class name="profile" code="prof" description="A ColorSync ICC profile." inherits="item" plural="profiles">
-		<property name="color space" code="pSpc" type="pSpc" access="r" description="the color space of the profile"/>
-		<property name="connection space" code="pPCS" type="pPCS" access="r" description="the connection space of the profile"/>
-		<property name="creation date" code="ascd" type="date" access="r" description="the creation date of the profile"/>
-		<property name="creator" code="pCre" type="Unicode text" access="r" description="the creator type of the profile"/>
-		<property name="device class" code="pCla" type="pCla" access="r" description="the device class of the profile"/>
-		<property name="device manufacturer" code="pMan" type="Unicode text" access="r" description="the device manufacturer of the profile"/>
-		<property name="device model" code="pMod" type="integer" access="r" description="the device model of the profile"/>
-		<property name="location" code="pLoc" type="alias" access="r" description="the file location of the profile"/>
-		<property name="name" code="pnam" type="Unicode text" access="r" description="the description text of the profile"/>
-		<property name="platform" code="pPlt" type="Unicode text" access="r" description="the intended platform of the profile"/>
-		<property name="preferred CMM" code="pcmm" type="Unicode text" access="r" description="the preferred CMM of the profile"/>
-		<property name="quality" code="pQal" type="pQua" access="r" description="the quality of the profile"/>
-		<property name="rendering intent" code="pRdr" type="pRdr" access="r" description="the rendering intent of the profile"/>
-		<property name="size" code="size" type="integer" access="r" description="the size of the profile in bytes"/>
-		<property name="version" code="pVer" type="Unicode text" access="r" description="the version number of the profile"/>
-	</class>
-	
-	<enumeration name="pQua" code="pQua">
-		<enumerator name="best" code="Qua2" description="best"/>
-		<enumerator name="draft" code="Qua1" description="draft"/>
-		<enumerator name="normal" code="Qua0" description="normal"/>
-	</enumeration>
-	
-	<enumeration name="pCla" code="pCla">
-		<enumerator name="abstract" code="abst" description="abstract profile"/>
-		<enumerator name="colorspace" code="spac" description="colorspace profile"/>
-		<enumerator name="input" code="scnr" description="input device"/>
-		<enumerator name="link" code="link" description="device-link profile"/>
-		<enumerator name="monitor" code="mntr" description="display device"/>
-		<enumerator name="named" code="nmcl" description="named color space profile"/>
-		<enumerator name="output" code="prtr" description="output device"/>
-	</enumeration>
-	
-	<enumeration name="typz" code="typz">
-		<enumerator name="BMP" code="BMPf" description="BMP"/>
-		<enumerator name="GIF" code="GIF " description="GIF"/>
-		<enumerator name="JPEG" code="JPEG" description="JPEG"/>
-		<enumerator name="JPEG2" code="jpg2" description="JPEG2"/>
-		<enumerator name="MacPaint" code="PNTG" description="MacPaint"/>
-		<enumerator name="PDF" code="PDF " description="PDF"/>
-		<enumerator name="Photoshop" code="8BPS" description="Photoshop"/>
-		<enumerator name="PICT" code="PICT" description="PICT"/>
-		<enumerator name="PNG" code="PNGf" description="PNG"/>
-		<enumerator name="PSD" code="psd " description="PSD"/>
-		<enumerator name="QuickTime Image" code="qtif" description="QuickTime Image"/>
-		<enumerator name="SGI" code=".SGI" description="SGI"/>
-		<enumerator name="Text" code="TEXT" description="Text"/>
-		<enumerator name="TGA" code="tga " description="TGA"/>
-		<enumerator name="TIFF" code="TIFF" description="TIFF"/>
-	</enumeration>
-	
-	<enumeration name="savo" code="savo">
-		<enumerator name="no" code="no  " description="Do not save the image."/>
-		<enumerator name="yes" code="yes " description="Save the image."/>
-	</enumeration>
-	
-	<enumeration name="pRdr" code="pRdr">
-		<enumerator name="absolute colorimetric intent" code="Rdr3" description="absolute colorimetric"/>
-		<enumerator name="perceptual intent" code="Rdr0" description="perceptual"/>
-		<enumerator name="relative colorimetric intent" code="Rdr1" description="relative colorimetric"/>
-		<enumerator name="saturation intent" code="Rdr2" description="saturation"/>
-	</enumeration>
-	
-	<enumeration name="typv" code="typv">
-		<enumerator name="BMP" code="BMPf" description="BMP"/>
-		<enumerator name="JPEG" code="JPEG" description="JPEG"/>
-		<enumerator name="JPEG2" code="jpg2" description="JPEG2"/>
-		<enumerator name="PICT" code="PICT" description="PICT"/>
-		<enumerator name="PNG" code="PNGf" description="PNG"/>
-		<enumerator name="PSD" code="psd " description="PSD"/>
-		<enumerator name="QuickTime Image" code="qtif" description="QuickTime Image"/>
-		<enumerator name="TIFF" code="TIFF" description="TIFF"/>
-	</enumeration>
-	
-	<enumeration name="pSpc" code="pSpc">
-		<enumerator name="CMYK" code="CMYK" description="CMYK"/>
-		<enumerator name="Eight channel" code="MCH8" description="Eight channel"/>
-		<enumerator name="Eight color" code="8CLR" description="Eight color"/>
-		<enumerator name="Five channel" code="MCH5" description="Five channel"/>
-		<enumerator name="Five color" code="5CLR" description="Five color"/>
-		<enumerator name="Gray" code="GRAY" description="Gray"/>
-		<enumerator name="Lab" code="Lab " description="Lab"/>
-		<enumerator name="Named" code="NAME" description="Named"/>
-		<enumerator name="RGB" code="RGB " description="RGB"/>
-		<enumerator name="Seven channel" code="MCH7" description="Seven channel"/>
-		<enumerator name="Seven color" code="7CLR" description="Seven color"/>
-		<enumerator name="Six channel" code="MCH6" description="Six channel"/>
-		<enumerator name="Six color" code="6CLR" description="Six color"/>
-		<enumerator name="XYZ" code="XYZ " description="XYZ"/>
-	</enumeration>
-	
-	<enumeration name="pPCS" code="pPCS">
-		<enumerator name="Lab" code="Lab " description="Lab"/>
-		<enumerator name="XYZ" code="XYZ " description="XYZ"/>
-	</enumeration>
-	
-	<enumeration name="qual" code="qual">
-		<enumerator name="best" code="best" description="best"/>
-		<enumerator name="high" code="high" description="high"/>
-		<enumerator name="least" code="leas" description="least"/>
-		<enumerator name="low" code="low " description="low"/>
-		<enumerator name="medium" code="medi" description="medium"/>
-	</enumeration>
-	
-	<enumeration name="bitz" code="bitz">
-		<enumerator name="best" code="best" description="best"/>
-		<enumerator name="black &amp; white" code="b&amp;w " description="black &amp; white"/>
-		<enumerator name="color" code="colr" description="color"/>
-		<enumerator name="four colors" code="4clr" description="four colors"/>
-		<enumerator name="four grays" code="4gry" description="four grays"/>
-		<enumerator name="grayscale" code="gray" description="grayscale"/>
-		<enumerator name="millions of colors" code="mill" description="millions of colors"/>
-		<enumerator name="millions of colors plus" code="mil+" description="millions of colors plus"/>
-		<enumerator name="sixteen colors" code="16cl" description="sixteen colors"/>
-		<enumerator name="sixteen grays" code="16gr" description="sixteen grays"/>
-		<enumerator name="thousands of colors" code="thou" description="thousands of colors"/>
-		<enumerator name="two hundred fifty six colors" code="256c" description="two hundred fifty six colors"/>
-		<enumerator name="two hundred fifty six grays" code="256g" description="two hundred fifty six grays"/>
-	</enumeration>
 
 	</suite>
 
