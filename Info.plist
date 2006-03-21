@@ -102,7 +102,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Max/Encode Selected File</string>
+				<string>Max/Convert Selected File</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>encodeFile</string>
