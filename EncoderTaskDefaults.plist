@@ -8,5 +8,7 @@
 	<false/>
 	<key>convertInPlace</key>
 	<false/>
+	<key>automaticallyAddToiTunes</key>
+	<false/>
 </dict>
 </plist>

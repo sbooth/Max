@@ -32,8 +32,11 @@
 #import "LogController.h"
 #import "ConverterController.h"
 #import "IOException.h"
+#import "MissingResourceException.h"
 
 #import <Growl/GrowlApplicationBridge.h>
+
+#include <Carbon/Carbon.h>
 
 #include <sys/param.h>		// statfs
 #include <sys/mount.h>
@@ -46,6 +49,7 @@ static EncoderController *sharedController = nil;
 - (void)	addTask:(EncoderTask *)task;
 - (void)	removeTask:(EncoderTask *)task;
 - (void)	spawnThreads;
+- (void)	addFileToiTunesLibrary:(NSString *)filename;
 @end
 
 @implementation EncoderController
@@ -364,7 +368,11 @@ static EncoderController *sharedController = nil;
 		CompactDiscDocument *doc = [[task objectInTracksAtIndex:0] document];
 		[doc saveDocument:self];
 		[[doc windowForSheet] performClose:self];
-	}	
+	}
+	
+	if([task isKindOfClass:[MPEGEncoderTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"]) {
+		[self addFileToiTunesLibrary:[task outputFilename]];
+	}
 }
 
 #pragma mark Task Management
@@ -405,6 +413,60 @@ static EncoderController *sharedController = nil;
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"balanceConverters"]) {
 		[[ConverterController sharedController] spawnThreads];
 	}
+}
+
+- (void) addFileToiTunesLibrary:(NSString *)filename
+{
+	NSDictionary				*errors				= [NSDictionary dictionary];
+	NSString					*path;
+	NSAppleScript				*appleScript;
+	NSAppleEventDescriptor		*firstParameter;
+	NSAppleEventDescriptor		*parameters;
+	ProcessSerialNumber			psn					= { 0, kCurrentProcess };
+	NSAppleEventDescriptor		*target;
+	NSAppleEventDescriptor		*handler;
+	NSAppleEventDescriptor		*event;
+	NSAppleEventDescriptor		*result;
+	
+	
+	@try {
+		path = [[NSBundle mainBundle] pathForResource:@"Add to iTunes Library" ofType:@"scpt"];
+		if(nil == path) {
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"Add to iTunes Library.scpt" forKey:@"filename"]];
+		}
+
+		appleScript = [[[NSAppleScript alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] error:&errors] autorelease];
+		if(nil == appleScript) {
+			@throw [NSException exceptionWithName:@"AppleScriptError" reason:@"Unable to setup AppleScript." userInfo:nil];
+		}
+
+		firstParameter	= [NSAppleEventDescriptor descriptorWithString:filename];
+		parameters		= [NSAppleEventDescriptor listDescriptor];
+		[parameters insertDescriptor:firstParameter atIndex:1];
+		
+		target			= [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber bytes:&psn length:sizeof(ProcessSerialNumber)];
+		handler			= [NSAppleEventDescriptor descriptorWithString:[@"add_file_to_itunes_library" lowercaseString]];
+		event			= [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite eventID:kASSubroutineEvent targetDescriptor:target returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
+
+		[event setParamDescriptor:handler forKeyword:keyASSubroutineName];
+		[event setParamDescriptor:parameters forKeyword:keyDirectObject];
+
+		// Call the event in AppleScript
+		result = [appleScript executeAppleEvent:event error:&errors];
+		if(nil == result) {
+			@throw [NSException exceptionWithName:@"AppleScriptError" reason:[errors objectForKey:NSAppleScriptErrorMessage] userInfo:nil];
+		}
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while adding the file \"%@\" to the iTunes library.", @"Exceptions", @""), [filename lastPathComponent]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+	}	
 }
 
 @end

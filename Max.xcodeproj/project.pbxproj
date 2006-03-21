@@ -138,6 +138,9 @@
 		8CBEC69808ED85670064F794 /* LAMEException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC69708ED85670064F794 /* LAMEException.m */; };
 		8CBEC6B208ED861C0064F794 /* StopException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6B108ED861C0064F794 /* StopException.m */; };
 		8CBEC6CF08ED88950064F794 /* EmptySelectionException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */; };
+		8CBF379309CF9B3700E89546 /* Add to iTunes Library.scpt in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF379209CF9B3700E89546 /* Add to iTunes Library.scpt */; };
+		8CBF379409CF9B4500E89546 /* Add to iTunes Library.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF379209CF9B3700E89546 /* Add to iTunes Library.scpt */; };
+		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
 		8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */; };
 		8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CCED19C0935AA5E00413C0A /* CompactDisc.m */; };
 		8CD0172209925F2100A31DE0 /* LAME.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CD0171D09925F2100A31DE0 /* LAME.framework */; };
@@ -257,6 +260,7 @@
 				8CD017C60992630400A31DE0 /* Ogg.framework in Copy Frameworks */,
 				8CD0174609925FB700A31DE0 /* LAME.framework in Copy Frameworks */,
 				8C9A24B40925ADB200FB244D /* Growl.framework in Copy Frameworks */,
+				8CBF379309CF9B3700E89546 /* Add to iTunes Library.scpt in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,13 +301,13 @@
 		8C14691F09CC347C00F91A97 /* ComponentVersionsController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ComponentVersionsController.mm; sourceTree = "<group>"; };
 		8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LAMEToolbarImage.png; sourceTree = "<group>"; };
 		8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OggVorbisToolbarImage.png; sourceTree = "<group>"; };
-		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
-		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
-		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
-		8C29D946097F442200E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Genres.strings; sourceTree = "<group>"; };
-		8C29D97C097F469D00E8B766 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Log.strings; sourceTree = "<group>"; };
+		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
+		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
+		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
+		8C29D946097F442200E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Genres.strings; sourceTree = "<group>"; };
+		8C29D97C097F469D00E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Log.strings; sourceTree = "<group>"; };
 		8C3101270931297C000A50FC /* Max.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Max.icns; sourceTree = "<group>"; };
-		8C32817D096D12C400608C9D /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Exceptions.strings; sourceTree = "<group>"; };
+		8C32817D096D12C400608C9D /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		8C4015720948E433003413BE /* CoreAudioEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoderTask.h; sourceTree = "<group>"; };
 		8C4015730948E433003413BE /* CoreAudioEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoderTask.m; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -517,6 +521,8 @@
 		8CBEC6B108ED861C0064F794 /* StopException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopException.m; sourceTree = "<group>"; };
 		8CBEC6CD08ED88950064F794 /* EmptySelectionException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptySelectionException.h; sourceTree = "<group>"; };
 		8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmptySelectionException.m; sourceTree = "<group>"; };
+		8CBF379209CF9B3700E89546 /* Add to iTunes Library.scpt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.scpt; path = "Add to iTunes Library.scpt"; sourceTree = "<group>"; };
+		8CBF384009CFA0FE00E89546 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscController.h; sourceTree = "<group>"; };
 		8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
 		8CC111C308CA4538008BB9B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CompactDiscDocument.nib; sourceTree = "<group>"; };
@@ -612,7 +618,7 @@
 		8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Max.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Max.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -639,6 +645,7 @@
 				8CE50938099347B70047CE1D /* OggFLAC.framework in Frameworks */,
 				8C80FEFE09CB1BA200AEBDD9 /* MAC.framework in Frameworks */,
 				8C80055109CBA19600AEBDD9 /* MAC.framework in Frameworks */,
+				8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -741,6 +748,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CBF379209CF9B3700E89546 /* Add to iTunes Library.scpt */,
 				8CE74CF609CDA02900D73B4B /* MonkeysAudioToolbarImage.png */,
 				8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */,
 				8C6C4F5409CC59A600F234E5 /* TaggingToolbarImage.png */,
@@ -815,6 +823,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8CBF384009CFA0FE00E89546 /* Carbon.framework */,
 				8C80FEFB09CB1BA200AEBDD9 /* MAC.framework */,
 				8CE5091A099347B70047CE1D /* FLAC.framework */,
 				8CE5091B099347B70047CE1D /* OggFLAC.framework */,
@@ -1180,6 +1189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CBF379409CF9B4500E89546 /* Add to iTunes Library.scpt in Resources */,
 				8C14689609CC32AC00F91A97 /* MonkeysAudioDefaults.plist in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
