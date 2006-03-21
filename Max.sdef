@@ -250,6 +250,9 @@
 			<responds-to name="quit">
 				<cocoa method="handleQuitScriptCommand:"/>
 			</responds-to>
+			<responds-to name="convert">
+				<cocoa method="handleConvertScriptCommand:"/>
+			</responds-to>
 		</class>
 
 		<class name="document" code="docu" description="A compact disc document.">
@@ -680,6 +683,14 @@
 				<cocoa key="ISRC"/>
 			</property>
 		</class>
+
+		<command name="convert" code="Maxconvr"
+			description="Convert an audio file to a different format.">
+			<direct-parameter description="The file(s) to be converted.">
+				<type type="file"/>
+				<type type="file" list="yes"/>
+			</direct-parameter>
+		</command>
 
 		<command name="encode" code="Maxencod" 
 			description="Encode the selected tracks.">

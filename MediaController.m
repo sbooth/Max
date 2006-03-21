@@ -201,17 +201,6 @@ static MediaController *sharedController = nil;
 			[doc selectAll:self];
 			//[[doc objectInTracksAtIndex:0] setSelected:YES];
 			[doc encode:self];
-			
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
-				tracks		= [doc valueForKey:@"tracks"];
-				indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
-				
-				[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
-				
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"]) {					
-					[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"encodeInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
-				}
-			}
 		}
 	}
 	else {
@@ -256,7 +245,6 @@ static MediaController *sharedController = nil;
 	NSIndexSet				*indexSet	= nil;
 	
 	if([keyPath isEqualToString:@"freeDBQueryInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-
 		[doc removeObserver:self forKeyPath:@"freeDBQueryInProgress"];
 
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallySaveFreeDBInfo"]) {
@@ -266,39 +254,7 @@ static MediaController *sharedController = nil;
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && [doc freeDBQuerySuccessful]) {
 			[doc selectAll:self];
 			//[[doc objectInTracksAtIndex:0] setSelected:YES];
-			[doc encode:self];
-			
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"]) {
-				tracks		= [doc valueForKey:@"tracks"];
-				indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
-				
-				[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
-				
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"]) {					
-					[tracks addObserver:self toObjectsAtIndexes:indexSet forKeyPath:@"encodeInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
-				}
-			}
-		}
-	}
-	else if([keyPath isEqualToString:@"ripInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		if(NO == [[RipperController sharedController] documentHasRipperTasks:doc]) {
-			tracks		= [doc valueForKey:@"tracks"];
-			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
-			
-			[tracks removeObserver:self fromObjectsAtIndexes:indexSet forKeyPath:@"ripInProgress"];
-			
-			[doc ejectDisc:self];
-		}
-	}
-	else if([keyPath isEqualToString:@"encodeInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		if(NO == [[RipperController sharedController] documentHasRipperTasks:doc] && NO == [[EncoderController sharedController] documentHasEncoderTasks:doc]) {
-			tracks		= [doc valueForKey:@"tracks"];
-			indexSet	= [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [tracks count])];
-			
-			[tracks removeObserver:self fromObjectsAtIndexes:indexSet forKeyPath:@"encodeInProgress"];
-			
-			[doc saveDocument:self];
-			[[doc windowForSheet] performClose:self];
+			[doc encode:self];			
 		}
 	}
 }

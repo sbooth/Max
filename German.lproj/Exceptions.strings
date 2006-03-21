@@ -5,6 +5,9 @@
 "An error occurred during file conversion." = "An error occurred during file conversion.";
 
 /* No comment provided by engineer. */
+"An error occurred while adding the file \"%@\" to the iTunes library." = "An error occurred while adding the file \"%@\" to the iTunes library.";
+
+/* No comment provided by engineer. */
 "An error occurred while attempting to download album artwork." = "An error occurred while attempting to download album artwork.";
 
 /* No comment provided by engineer. */

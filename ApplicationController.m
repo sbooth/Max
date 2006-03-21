@@ -238,7 +238,12 @@ static ApplicationController *sharedController = nil;
 		@catch(NSException *exception) {
 			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-			[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
+			if(nil != [exception userInfo] && nil != [[exception userInfo] objectForKey:@"filename"]) {
+				[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+			}
+			else {
+				[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
+			}
 			[alert setInformativeText:[exception reason]];
 			[alert setAlertStyle:NSWarningAlertStyle];		
 			[alert runModal];
@@ -397,6 +402,72 @@ static ApplicationController *sharedController = nil;
 		defaultNotifications, GROWL_NOTIFICATIONS_DEFAULT,
 		nil];
 	return regDict;
+}
+
+@end
+
+#pragma mark Scripting
+
+@implementation NSApplication (ScriptingAdditions)
+
+- (id) handleConvertScriptCommand:(NSScriptCommand *)command
+{
+	id			directParameter			= [command directParameter];
+	Class		directParameterClass	= [directParameter class];
+	
+	@try {
+		if([directParameterClass isEqual:[NSURL class]]) {
+			NSURL	*url	= (NSURL *)directParameter;
+			
+			if([url isFileURL]) {
+				[[ApplicationController sharedController] encodeFiles:[NSArray arrayWithObject:[url path]]];
+			}
+			
+		}
+		else if([directParameterClass isEqual:[NSArray class]]) {
+			NSArray			*urlArray;
+			NSEnumerator	*enumerator;
+			NSURL			*url;
+			NSMutableArray	*filenamesArray;
+			
+			urlArray		= (NSArray *)directParameter;
+			filenamesArray	= [NSMutableArray arrayWithCapacity:[urlArray count]];
+			enumerator		= [urlArray objectEnumerator];
+			
+			while((url = [enumerator nextObject])) {
+				if([url isFileURL]) {
+					[filenamesArray addObject:[url path]];
+				}
+			}
+			
+			[[ApplicationController sharedController] encodeFiles:filenamesArray];
+		}	
+	}
+	
+	@catch(FileFormatNotSupportedException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		if(nil != [exception userInfo] && nil != [[exception userInfo] objectForKey:@"filename"]) {
+			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+		}
+		else {
+			[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
+		}
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+	}
+
+	return nil;
 }
 
 @end

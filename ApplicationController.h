@@ -22,6 +22,10 @@
 
 #import <Growl/GrowlApplicationBridge.h>
 
+@interface NSApplication (ScriptingAdditions)
+- (id) handleConvertScriptCommand:(NSScriptCommand *)command;
+@end
+
 @interface ApplicationController : NSObject <GrowlApplicationBridgeDelegate>
 {
 	NSArray		*_allowedTypes;
