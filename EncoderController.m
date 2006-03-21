@@ -35,6 +35,8 @@
 #import "MissingResourceException.h"
 
 #import <Growl/GrowlApplicationBridge.h>
+#include <AudioToolbox/AudioFile.h>
+#include <sndfile/sndfile.h>
 
 #include <Carbon/Carbon.h>
 
@@ -369,8 +371,11 @@ static EncoderController *sharedController = nil;
 		[doc saveDocument:self];
 		[[doc windowForSheet] performClose:self];
 	}
-	
-	if([task isKindOfClass:[MPEGEncoderTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"]) {
+
+	// Add MP3 and AIFF files to iTunes if desired
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && ([task isKindOfClass:[MPEGEncoderTask class]] ||
+		([task isKindOfClass:[CoreAudioEncoderTask class]] && kAudioFileAIFFType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue]) ||
+		([task isKindOfClass:[LibsndfileEncoderTask class]] && SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task getFormat] & SF_FORMAT_TYPEMASK)))) {
 		[self addFileToiTunesLibrary:[task outputFilename]];
 	}
 }

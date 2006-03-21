@@ -53,7 +53,7 @@
 		case kAudioFileWAVEType:	return @"WAVE";				break;
 		case kAudioFileAIFFType:	return @"AIFF";				break;
 		case kAudioFileMP3Type:		return @"MP3";				break;
-		default:					return NO;					break;
+		default:					return nil;					break;
 	}
 }
 
