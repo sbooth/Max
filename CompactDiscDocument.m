@@ -751,7 +751,7 @@ enum {
 {
 	if(NO == [_title isEqualToString:title]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setTitle:) object:_title];
-		[[self undoManager] setActionName:@"Album Title"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Title", @"UndoRedo", @"")];
 		[_title release];
 		_title = [title retain];
 	}
@@ -761,7 +761,7 @@ enum {
 {
 	if(NO == [_artist isEqualToString:artist]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setArtist:) object:_artist];
-		[[self undoManager] setActionName:@"Album Artist"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Artist", @"UndoRedo", @"")];
 		[_artist release];
 		_artist = [artist retain];
 	}
@@ -771,7 +771,7 @@ enum {
 {
 	if(_year != year) {
 		[[[self undoManager] prepareWithInvocationTarget:self] setYear:_year];
-		[[self undoManager] setActionName:@"Album Year"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Year", @"UndoRedo", @"")];
 		_year = year;
 	}
 }
@@ -780,7 +780,7 @@ enum {
 {
 	if(NO == [_genre isEqualToString:genre]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setGenre:) object:_genre];
-		[[self undoManager] setActionName:@"Album Genre"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Genre", @"UndoRedo", @"")];
 		[_genre release];
 		_genre = [genre retain];
 	}
@@ -790,7 +790,7 @@ enum {
 {
 	if(NO == [_composer isEqualToString:composer]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComposer:) object:_composer];
-		[[self undoManager] setActionName:@"Album Composer"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Composer", @"UndoRedo", @"")];
 		[_composer release];
 		_composer = [composer retain];
 	}
@@ -800,7 +800,7 @@ enum {
 {
 	if(NO == [_comment isEqualToString:comment]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComment:) object:_comment];
-		[[self undoManager] setActionName:@"Album Comment"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Comment", @"UndoRedo", @"")];
 		[_comment release];
 		_comment = [comment retain];
 	}
@@ -810,7 +810,7 @@ enum {
 {
 	if(NO == [_albumArt isEqual:albumArt]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArt:) object:_albumArt];
-		[[self undoManager] setActionName:@"Album Art"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Art", @"UndoRedo", @"")];
 		[_albumArt release];
 		_albumArt = [albumArt retain];
 	}
@@ -820,7 +820,7 @@ enum {
 {
 	if(_discNumber != discNumber) {
 		[[[self undoManager] prepareWithInvocationTarget:self] setDiscNumber:_discNumber];
-		[[self undoManager] setActionName:@"Total Discs"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Total Discs", @"UndoRedo", @"")];
 		_discNumber = discNumber;
 	}
 }
@@ -829,7 +829,7 @@ enum {
 {
 	if(_discTotal != discTotal) {
 		[[[self undoManager] prepareWithInvocationTarget:self] setDiscTotal:_discTotal];
-		[[self undoManager] setActionName:@"Total Discs"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Total Discs", @"UndoRedo", @"")];
 		_discTotal = discTotal;
 	}
 }
@@ -838,7 +838,7 @@ enum {
 {
 	if(_compilation != compilation) {
 		[[[self undoManager] prepareWithInvocationTarget:self] setCompilation:_compilation];
-		[[self undoManager] setActionName:@"Compilation"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Compilation", @"UndoRedo", @"")];
 		_compilation = compilation;
 	}
 }

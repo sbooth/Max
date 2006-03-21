@@ -238,7 +238,7 @@
 {
 	if(NO == [_title isEqualToString:title]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setTitle:) object:_title];
-		[[self undoManager] setActionName:@"Track Title"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Title", @"UndoRedo", @"")];
 		[_title release];
 		_title = [title retain];
 	}
@@ -248,7 +248,7 @@
 {
 	if(NO == [_artist isEqualToString:artist]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setArtist:) object:_artist];
-		[[self undoManager] setActionName:@"Track Artist"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Artist", @"UndoRedo", @"")];
 		[_artist release];
 		_artist = [artist retain];
 	}
@@ -258,7 +258,7 @@
 {
 	if(_year != year) {
 		[[[self undoManager] prepareWithInvocationTarget:self] setYear:_year];
-		[[self undoManager] setActionName:@"Track Year"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Year", @"UndoRedo", @"")];
 		_year = year;
 	}
 }
@@ -267,7 +267,7 @@
 {
 	if(NO == [_genre isEqualToString:genre]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setGenre:) object:_genre];
-		[[self undoManager] setActionName:@"Track Genre"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Genre", @"UndoRedo", @"")];
 		[_genre release];
 		_genre = [genre retain];
 	}
@@ -277,7 +277,7 @@
 {
 	if(NO == [_composer isEqualToString:composer]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComposer:) object:_composer];
-		[[self undoManager] setActionName:@"Track Composer"];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Composer", @"UndoRedo", @"")];
 		[_composer release];
 		_composer = [composer retain];
 	}
