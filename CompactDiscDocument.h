@@ -45,6 +45,8 @@
 	NSString						*_comment;
 
 	NSImage							*_albumArt;
+	
+	NSDate							*_albumArtDownloadDate;
 
 	// Other disc info
 	unsigned						_discNumber;
@@ -106,6 +108,7 @@
 - (NSString *)		comment;
 
 - (NSImage *)		albumArt;
+- (NSDate *)		albumArtDownloadDate;
 - (unsigned)		albumArtWidth;
 - (unsigned)		albumArtHeight;
 
@@ -133,6 +136,7 @@
 - (void) setComment:(NSString *)comment;
 
 - (void) setAlbumArt:(NSImage *)albumArt;
+- (void) setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
 
 - (void) setDiscNumber:(unsigned)discNumber;
 - (void) setDiscTotal:(unsigned)discTotal;

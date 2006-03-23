@@ -150,7 +150,8 @@
 	
 	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[_images objectAtIndex:[_table selectedRow]] valueForKey:@"URL"]]];
 	if(nil != image) {
-		[_doc setAlbumArt:[image autorelease]];	
+		[_doc setAlbumArt:[image autorelease]];
+		[_doc setAlbumArtDownloadDate:[NSDate date]];
 	}
     [[NSApplication sharedApplication] endSheet:_sheet];
 }

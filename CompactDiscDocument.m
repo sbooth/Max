@@ -107,6 +107,7 @@ enum {
 		_comment			= nil;
 		
 		_albumArt			= nil;
+		_albumArtDownloadDate = nil;
 		
 		_discNumber			= 0;
 		_discTotal			= 0;
@@ -132,6 +133,7 @@ enum {
 	[_comment release];
 
 	[_albumArt release];
+	[_albumArtDownloadDate release];
 
 	[_MCN release];
 	
@@ -211,6 +213,7 @@ enum {
 		
 		data = getPNGDataForImage([self albumArt]); 
 		[result setValue:data forKey:@"albumArt"];
+		[result setValue:[self albumArtDownloadDate] forKey:@"albumArtDownloadDate"];
 		
 		for(i = 0; i < [self countOfTracks]; ++i) {
 			[tracks addObject:[[self objectInTracksAtIndex:i] getDictionary]];
@@ -260,6 +263,7 @@ enum {
 			[_comment release];
 			
 			[_albumArt release];
+			[_albumArtDownloadDate release];
 			
 			[_MCN release];
 			
@@ -280,6 +284,15 @@ enum {
 
 			// Convert PNG data to an NSImage
 			_albumArt		= [[NSImage alloc] initWithData:[dictionary valueForKey:@"albumArt"]];
+			_albumArtDownloadDate = [[dictionary valueForKey:@"albumArtDownloadDate"] retain];
+			
+			// Album art downloaded from amazon can only be kept for 30 days
+			if(nil != [self albumArtDownloadDate] && (NSTimeInterval)(-30 * 24 * 60 * 60) >= [[self albumArtDownloadDate] timeIntervalSinceNow]) {
+				_albumArt				= nil;
+				_albumArtDownloadDate	= nil;
+				
+				[self saveDocument:self];
+			}	
 		}
 		else {
 			[error release];
@@ -687,6 +700,7 @@ enum {
 - (NSString *)		comment								{ return _comment; }
 
 - (NSImage *)		albumArt							{ return _albumArt; }
+- (NSDate *)		albumArtDownloadDate				{ return _albumArtDownloadDate; }
 - (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
 - (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
 
@@ -746,6 +760,7 @@ enum {
 - (void) setDiscID:(int)discID									{ _discID = discID; }
 - (void) setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress	{ _freeDBQueryInProgress = freeDBQueryInProgress; }
 - (void) setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful	{ _freeDBQuerySuccessful = freeDBQuerySuccessful; }
+- (void) setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate { [_albumArtDownloadDate release]; _albumArtDownloadDate = [albumArtDownloadDate retain]; }
 
 - (void) setTitle:(NSString *)title
 {
@@ -809,10 +824,14 @@ enum {
 - (void) setAlbumArt:(NSImage *)albumArt
 {
 	if(NO == [_albumArt isEqual:albumArt]) {
+		[[self undoManager] beginUndoGrouping];
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArt:) object:_albumArt];
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArtDownloadDate:) object:_albumArtDownloadDate];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Art", @"UndoRedo", @"")];
+		[[self undoManager] endUndoGrouping];
 		[_albumArt release];
 		_albumArt = [albumArt retain];
+		[self setAlbumArtDownloadDate:nil];
 	}
 }
 
