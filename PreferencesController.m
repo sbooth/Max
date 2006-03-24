@@ -330,7 +330,7 @@ NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
 	toolbar					= [myWindow toolbar];
 	itemIdentifier			= [toolbar selectedItemIdentifier];
 	prefPaneClass			= NSClassFromString([itemIdentifier stringByAppendingString:@"Controller"]);
-	prefPaneObject			= [[[prefPaneClass alloc] init] autorelease];
+	prefPaneObject			= [[prefPaneClass alloc] init];
 	prefView				= [[prefPaneObject window] contentView];
 		
 	float windowHeight		= NSHeight([[myWindow contentView] frame]);
