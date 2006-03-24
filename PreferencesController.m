@@ -133,7 +133,15 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 {
 	NSToolbar *toolbar = [[self window] toolbar];
 
-	[toolbar setSelectedItemIdentifier:[[[toolbar visibleItems] objectAtIndex:0] itemIdentifier]];
+	if(nil != [toolbar visibleItems] && 0 != [[toolbar visibleItems] count]) {
+		[toolbar setSelectedItemIdentifier:[[[toolbar visibleItems] objectAtIndex:0] itemIdentifier]];
+	}
+	else if(nil != [toolbar items] && 0 != [[toolbar items] count]) {
+		[toolbar setSelectedItemIdentifier:[[[toolbar items] objectAtIndex:0] itemIdentifier]];
+	}
+	else {
+		[toolbar setSelectedItemIdentifier:GeneralPreferencesToolbarItemIdentifier];
+	}
 	[self selectPrefsPane:self];
 
 	[self setShouldCascadeWindows:NO];
