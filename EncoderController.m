@@ -30,6 +30,7 @@
 #import "MonkeysAudioEncoderTask.h"
 #import "SpeexEncoderTask.h"
 #import "LogController.h"
+#import "RipperController.h"
 #import "ConverterController.h"
 #import "IOException.h"
 #import "MissingResourceException.h"
@@ -365,20 +366,20 @@ static EncoderController *sharedController = nil;
 	[self removeTask:task];
 	[self spawnThreads];
 	
-	if(0 != [task countOfTracks] && NO == [self documentHasEncoderTasks:[[task objectInTracksAtIndex:0] document]]) {
+	if(0 != [task countOfTracks] && NO == [[[task objectInTracksAtIndex:0] document] ripInProgress] && NO == [[[task objectInTracksAtIndex:0] document] encodeInProgress]) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"")
 									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[task metadata] albumTitle]]
 							   notificationName:@"Disc encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 		justNotified = YES;
 	}
 
-	if(NO == [self hasTasks] && NO == justNotified) {
+	if(NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks] && NO == [[ConverterController sharedController] hasTasks] && NO == justNotified) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encoding completed", @"Log", @"")
 									description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
 							   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
 
-	if(0 != [task countOfTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && NO == [self documentHasEncoderTasks:[[task objectInTracksAtIndex:0] document]]) {
+	if(0 != [task countOfTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && NO == [[[task objectInTracksAtIndex:0] document] ripInProgress] && NO == [[[task objectInTracksAtIndex:0] document] encodeInProgress]) {
 		CompactDiscDocument *doc = [[task objectInTracksAtIndex:0] document];
 		[doc saveDocument:self];
 		[[doc windowForSheet] performClose:self];
