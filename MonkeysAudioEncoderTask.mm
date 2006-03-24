@@ -57,6 +57,7 @@
 	unsigned									year					= 0;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
+	NSString									*trackComment			= nil;
 	NSString									*isrc					= nil;
 	NSString									*mcn					= nil;
 	NSString									*bundleVersion			= nil;
@@ -131,7 +132,11 @@
 		}
 		
 		// Comment
-		comment = [metadata albumComment];
+		comment			= [metadata albumComment];
+		trackComment	= [metadata trackComment];
+		if(nil != trackComment) {
+			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
+		}
 		if(_writeSettingsToComment) {
 			comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 		}

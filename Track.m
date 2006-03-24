@@ -83,6 +83,7 @@
 		_year				= 0;
 		_genre				= nil;
 		_composer			= nil;
+		_comment			= nil;
 		
 		_number				= 0;
 		_firstSector		= 0;
@@ -178,6 +179,7 @@
 - (unsigned)				year				{ return _year; }
 - (NSString *)				genre				{ return _genre; }
 - (NSString *)				composer			{ return _composer; }
+- (NSString *)				comment				{ return _comment; }
 
 - (unsigned long)			size				{ return ((_lastSector - _firstSector) * kCDSectorSizeCDDA); }
 
@@ -283,6 +285,16 @@
 	}
 }
 
+- (void) setComment:(NSString *)comment
+{
+	if(NO == [_comment isEqualToString:comment]) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComment:) object:_comment];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Comment", @"UndoRedo", @"")];
+		[_comment release];
+		_comment = [comment retain];
+	}
+}
+
 #pragma mark Save/Restore
 
 - (NSDictionary *) getDictionary
@@ -296,6 +308,7 @@
 	[result setObject:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
 	[result setValue:[self genre] forKey:@"genre"];
 	[result setValue:[self composer] forKey:@"composer"];
+	[result setValue:[self comment] forKey:@"comment"];
 
 	[result setObject:[NSNumber numberWithUnsignedInt:[self number]] forKey:@"number"];
 	[result setObject:[NSNumber numberWithUnsignedLong:[self firstSector]] forKey:@"firstSector"];
@@ -314,6 +327,7 @@
 	[_artist release];
 	[_genre release];
 	[_composer release];
+	[_comment release];
 	
 	[_ISRC release];
 
@@ -324,6 +338,7 @@
 	_year			= [[properties valueForKey:@"year"] intValue];
 	_genre			= [[properties valueForKey:@"genre"] retain];
 	_composer		= [[properties valueForKey:@"composer"] retain];
+	_comment		= [[properties valueForKey:@"comment"] retain];
 	
 	_number			= [[properties valueForKey:@"number"] unsignedIntValue];
 	_firstSector	= [[properties valueForKey:@"firstSector"] unsignedLongValue];
@@ -347,6 +362,7 @@
 	[copy setYear:[self year]];
 	[copy setGenre:[self genre]];
 	[copy setComposer:[self composer]];
+	[copy setComment:[self comment]];
 	
 	[copy setNumber:[self number]];
 	[copy setFirstSector:[self firstSector]];
@@ -369,7 +385,7 @@
 	[result setTrackYear:[self year]];
 	[result setTrackGenre:[self genre]];
 	[result setTrackComposer:[self composer]];
-//	[result setTrackComment:[self comment]];
+	[result setTrackComment:[self comment]];
 	[result setISRC:[self ISRC]];
 	
 	[result setAlbumTrackCount:[[self document] countOfTracks]];

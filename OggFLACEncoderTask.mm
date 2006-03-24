@@ -25,6 +25,10 @@
 #include <TagLib/oggflacfile.h>			// TagLib::File
 #include <TagLib/tag.h>					// TagLib::Tag
 
+@interface AudioMetadata (TagMappings)
++ (TagLib::String)		customizeOggFLACTag:(NSString *)tag;
+@end
+
 @implementation OggFLACEncoderTask
 
 - (id) initWithTask:(PCMGeneratingTask *)task
@@ -38,14 +42,26 @@
 
 - (void) writeTags
 {
+	// TagLib corrupts Ogg FLAC streams (http://bugs.kde.org/show_bug.cgi?id=124171)
+	return;
+	
 	AudioMetadata								*metadata				= [self metadata];
 	unsigned									trackNumber				= 0;
+	unsigned									trackTotal				= 0;
+	unsigned									discNumber				= 0;
+	unsigned									discTotal				= 0;
+	BOOL										compilation				= NO;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
+	NSString									*composer				= nil;
 	NSString									*title					= nil;
 	unsigned									year					= 0;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
+	NSString									*trackComment			= nil;
+	NSString									*isrc					= nil;
+	NSString									*mcn					= nil;
+	NSString									*bundleVersion, *versionString;
 	TagLib::Ogg::FLAC::File						f						([_outputFilename fileSystemRepresentation], false);
 	
 	
@@ -56,7 +72,7 @@
 	// Album title
 	album = [metadata albumTitle];
 	if(nil != album) {
-		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"ALBUM"], TagLib::String([album UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Artist
@@ -65,7 +81,16 @@
 		artist = [metadata albumArtist];
 	}
 	if(nil != artist) {
-		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"ARTIST"], TagLib::String([artist UTF8String], TagLib::String::UTF8));
+	}
+	
+	// Composer
+	composer = [metadata trackComposer];
+	if(nil == composer) {
+		composer = [metadata albumComposer];
+	}
+	if(nil != composer) {
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"COMPOSER"], TagLib::String([composer UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Genre
@@ -74,7 +99,7 @@
 		genre = [metadata albumGenre];
 	}
 	if(nil != genre) {
-		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"GENRE"], TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year
@@ -83,29 +108,77 @@
 		year = [metadata albumYear];
 	}
 	if(0 != year) {
-		f.tag()->setYear(year);
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"YEAR"], TagLib::String([[NSString stringWithFormat:@"%u", year] UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Comment
-	comment = [metadata albumComment];
+	comment			= [metadata albumComment];
+	trackComment	= [metadata trackComment];
+	if(nil != trackComment) {
+		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
+	}
 	if(_writeSettingsToComment) {
-		comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
+		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 	}
 	if(nil != comment) {
-		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"COMMENT"], TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track title
 	title = [metadata trackTitle];
 	if(nil != title) {
-		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"TITLE"], TagLib::String([title UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track number
 	trackNumber = [metadata trackNumber];
 	if(0 != trackNumber) {
-		f.tag()->setTrack(trackNumber);
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"TRACKNUMBER"], TagLib::String([[NSString stringWithFormat:@"%u", trackNumber] UTF8String], TagLib::String::UTF8));
 	}
+	
+	// Track total
+	trackTotal = [metadata albumTrackCount];
+	if(0 != trackTotal) {
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"TRACKTOTAL"], TagLib::String([[NSString stringWithFormat:@"%u", trackTotal] UTF8String], TagLib::String::UTF8));
+	}
+	
+	// Disc number
+	discNumber = [metadata discNumber];
+	if(0 != discNumber) {
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"DISCNUMBER"], TagLib::String([[NSString stringWithFormat:@"%u", discNumber] UTF8String], TagLib::String::UTF8));
+	}
+	
+	// Discs in set
+	discTotal = [metadata discTotal];
+	if(0 != discTotal) {
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"DISCTOTAL"], TagLib::String([[NSString stringWithFormat:@"%u", discTotal] UTF8String], TagLib::String::UTF8));
+	}
+	
+	// Compilation
+	compilation = [metadata compilation];
+	if(compilation) {
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"COMPILATION"], TagLib::String([@"1" UTF8String], TagLib::String::UTF8));
+	}
+	
+	// ISRC
+	isrc = [metadata ISRC];
+	if(nil != isrc) {
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"ISRC"], TagLib::String([isrc UTF8String], TagLib::String::UTF8));
+	}
+	
+	// MCN
+	mcn = [metadata MCN];
+	if(nil != mcn) {
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"MCN"], TagLib::String([mcn UTF8String], TagLib::String::UTF8));
+	}
+	
+	// Encoded by
+	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+	versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
+	f.tag()->addField("ENCODER", TagLib::String([versionString UTF8String], TagLib::String::UTF8));
+	
+	// Encoder settings
+	f.tag()->addField("ENCODING", TagLib::String([[self settings] UTF8String], TagLib::String::UTF8));
 	
 	f.save();
 }

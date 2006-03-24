@@ -40,6 +40,7 @@
 	unsigned				_year;
 	NSString				*_genre;
 	NSString				*_composer;
+	NSString				*_comment;
 	
 	// Physical track properties
 	unsigned 				_number;
@@ -66,6 +67,7 @@
 - (unsigned)		year;
 - (NSString *)		genre;
 - (NSString *)		composer;
+- (NSString *)		comment;
 
 - (unsigned long)	size;
 
@@ -95,6 +97,7 @@
 - (void) setYear:(unsigned)year;
 - (void) setGenre:(NSString *)genre;
 - (void) setComposer:(NSString *)composer;
+- (void) setComment:(NSString *)comment;
 
 - (void) setNumber:(unsigned)number;
 - (void) setFirstSector:(unsigned long)firstSector;
