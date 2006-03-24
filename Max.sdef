@@ -344,11 +344,11 @@
 				description="The number of this disc in the set.">
 				<cocoa key="discNumber"/>
 			</property>
-			<property name="discTotal" code="dcnt" type="integer"
+			<property name="discTotal" code="dtot" type="integer"
 				description="The total number of discs in the set.">
 				<cocoa key="discTotal"/>
 			</property>
-			<property name="compilation" code="comm" type="boolean"
+			<property name="compilation" code="cmpl" type="boolean"
 				description="Is this disc a compilation?">
 				<cocoa key="compilation"/>
 			</property>
@@ -614,10 +614,12 @@
 				description="Is this track is currently selected?">
 				<cocoa key="selected"/>
 			</property>
+			<!--
 			<property name="color" code="colr" type="color" access="r" 
 				description="The color used to display this track.">
 				<cocoa key="color"/>
 			</property>
+			-->
 			<property name="title" code="titl" type="text"
 				description="The title of the track.">
 				<cocoa key="title"/>

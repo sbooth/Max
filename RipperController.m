@@ -265,6 +265,12 @@ static RipperController *sharedController = nil;
 		
 	[self removeTask:task];
 	[self spawnThreads];
+
+	if(NO == [self documentHasRipperTasks:[[task objectInTracksAtIndex:0] document]]) {
+		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc ripping completed", @"Log", @"")
+									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All ripping tasks completed for %@", @"Log", @""), [[task metadata] albumTitle]]
+							   notificationName:@"Disc ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	}
 	
 	if(NO == [self hasTasks]) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Ripping completed", @"Log", @"")

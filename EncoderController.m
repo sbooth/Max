@@ -360,6 +360,12 @@ static EncoderController *sharedController = nil;
 	[self removeTask:task];
 	[self spawnThreads];
 	
+	if(0 != [task countOfTracks] && NO == [self documentHasEncoderTasks:[[task objectInTracksAtIndex:0] document]]) {
+		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"")
+									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[task metadata] albumTitle]]
+							   notificationName:@"Disc encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	}
+
 	if(NO == [self hasTasks]) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encoding completed", @"Log", @"")
 									description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
@@ -372,9 +378,9 @@ static EncoderController *sharedController = nil;
 		[[doc windowForSheet] performClose:self];
 	}
 
-	// Add MP3 and AIFF files to iTunes if desired
+	// Add files to iTunes if desired
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && ([task isKindOfClass:[MPEGEncoderTask class]] ||
-		([task isKindOfClass:[CoreAudioEncoderTask class]] && kAudioFileAIFFType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue]) ||
+		([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue] || kAudioFileM4AType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue])) ||
 		([task isKindOfClass:[LibsndfileEncoderTask class]] && SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task getFormat] & SF_FORMAT_TYPEMASK)))) {
 		[self addFileToiTunesLibrary:[task outputFilename]];
 	}

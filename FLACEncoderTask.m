@@ -45,7 +45,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [_task metadata];
+	AudioMetadata								*metadata				= [self metadata];
 	FLAC__Metadata_Chain						*chain					= NULL;
 	FLAC__Metadata_Iterator						*iterator				= NULL;
 	FLAC__StreamMetadata						*block					= NULL;

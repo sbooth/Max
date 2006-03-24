@@ -97,7 +97,7 @@
 	NSMutableDictionary		*info;
 	UInt32					size;
 	MP4FileHandle			mp4FileHandle;
-	AudioMetadata			*metadata				= [_task metadata];
+	AudioMetadata			*metadata				= [self metadata];
 	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
 	NSString				*bundleVersion			= nil;
 	NSString				*versionString			= nil;

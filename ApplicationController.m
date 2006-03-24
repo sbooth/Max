@@ -384,6 +384,7 @@ static ApplicationController *sharedController = nil;
 		@"Rip completed",
 		@"Rip stopped",
 		@"Ripping completed",
+		@"Disc ripping completed",
 		@"Convert started",
 		@"Convert completed",
 		@"Convert stopped",
@@ -392,6 +393,7 @@ static ApplicationController *sharedController = nil;
 		@"Encode completed",
 		@"Encode stopped",
 		@"Encoding completed",
+		@"Disc encoding completed",
 		nil
 		];
 	

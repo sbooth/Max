@@ -38,7 +38,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [_task metadata];
+	AudioMetadata								*metadata				= [self metadata];
 	unsigned									trackNumber				= 0;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;

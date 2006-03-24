@@ -114,6 +114,7 @@
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
 - (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
 - (NSString *)		extension							{ return nil; }
+- (AudioMetadata *) metadata							{ return [_task metadata]; }
 - (void)			writeTags							{}
 - (NSString *)		description							{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
 - (NSString *)		settings							{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }

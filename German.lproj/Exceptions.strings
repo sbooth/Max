@@ -1,50 +1,50 @@
 /* No comment provided by engineer. */
-"A ripping or encoding operation is already in progress." = "A ripping or encoding operation is already in progress.";
+"A ripping or encoding operation is already in progress." = "Es läuft bereits ein Auslese- oder Enkodierungsvorgang.";
 
 /* No comment provided by engineer. */
-"An error occurred during file conversion." = "An error occurred during file conversion.";
+"An error occurred during file conversion." = "Während der Konvertierung ist ein Fehler aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while adding the file \"%@\" to the iTunes library." = "An error occurred while adding the file \"%@\" to the iTunes library.";
+"An error occurred while adding the file \"%@\" to the iTunes library." = "Beim Hinzufügen der Datei \"%@\" zur iTunes Bibliothek ist ein Fehler aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while attempting to download album artwork." = "An error occurred while attempting to download album artwork.";
+"An error occurred while attempting to download album artwork." = "Es ist ein Fehler während des Versuchs aufgetreten, ein CD-Cover herunterzuladen.";
 
 /* No comment provided by engineer. */
-"An error occurred while checking for a newer version of Max." = "An error occurred while checking for a newer version of Max.";
+"An error occurred while checking for a newer version of Max." = "Es ist ein Fehler aufgetreten während nach einer neueren Version von Max gesucht wurde.";
 
 /* No comment provided by engineer. */
-"An error occurred while converting the file \"%@\"." = "An error occurred while converting the file \"%@\".";
+"An error occurred while converting the file \"%@\"." = "Es ist ein Fehler während der Konvertierung der Datei \"%@\" aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while downloading the list of FreeDB mirrors." = "An error occurred while downloading the list of FreeDB mirrors.";
+"An error occurred while downloading the list of FreeDB mirrors." = "Während die Liste der FreeDB Mirrorseiten geladen wurde ist ein Fehler aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while encoding the file \"%@\"." = "An error occurred while encoding the file \"%@\".";
+"An error occurred while encoding the file \"%@\"." = "Es ist ein Fehler während der Encodierung der Datei \"%@\" aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while initializing the %@ class." = "An error occurred while initializing the %@ class.";
+"An error occurred while initializing the %@ class." = "Es ist ein Fehler während der Initialisierung der Klasse %@ aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while opening the file \"%@\" for conversion." = "An error occurred while opening the file \"%@\" for conversion.";
+"An error occurred while opening the file \"%@\" for conversion." = "Es ist ein Fehler aufgetreten während die Datei \"%@\" zum Konvertieren geöffnet wurde.";
 
 /* No comment provided by engineer. */
-"An error occurred while querying FreeDB for the disc \"%@\"." = "An error occurred while querying FreeDB for the disc \"%@\".";
+"An error occurred while querying FreeDB for the disc \"%@\"." = "Bei der Abfrage der FreeDB nach CD \"%@\" ist ein Fehler aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while retrieving information for the disc \"%@\" from FreeDB." = "An error occurred while retrieving information for the disc \"%@\" from FreeDB.";
+"An error occurred while retrieving information for the disc \"%@\" from FreeDB." = "Während des Erhalts von Informationen von FreeDB zu CD \"%@\" ist ein Fehler aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while ripping tracks from the disc \"%@\"." = "An error occurred while ripping tracks from the disc \"%@\".";
+"An error occurred while ripping tracks from the disc \"%@\"." = "Während des Auslesens der CD \"%@\" ist ein Fehler aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while submitting information for the disc \"%@\" to FreeDB." = "An error occurred while submitting information for the disc \"%@\" to FreeDB.";
+"An error occurred while submitting information for the disc \"%@\" to FreeDB." = "Während der Übermittlung von Informationen der CD \"%@\" an FreeDB ist ein Fehler aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while tagging the file \"%@\"." = "An error occurred while tagging the file \"%@\".";
+"An error occurred while tagging the file \"%@\"." = "Es ist ein Fehler aufgetreten während die Datei \"%@\" getaggt wurde.";
 
 /* No comment provided by engineer. */
-"Cue sheets are not supported for this output format." = "Cue sheets are not supported for this output format.";
+"Cue sheets are not supported for this output format." = "Cue Sheets werden für dieses Ausgabeformat nicht unterstüzt.";
 
 /* No comment provided by engineer. */
 "Decoding error: possible corrupted stream." = "Fehler beim Dekodieren: Datenstrom möglicherweise korrupt.";
@@ -53,19 +53,19 @@
 "Decoding overflow: possible corrupted stream." = "Überlauf beim Dekodieren: Datenstrom möglicherweise korrupt.";
 
 /* No comment provided by engineer. */
-"LAME encoding error." = "LAME encoding error.";
+"LAME encoding error." = "LAME Kodierungsfehler.";
 
 /* No comment provided by engineer. */
-"LAME was unable to flush the buffers." = "LAME was unable to flush the buffers.";
+"LAME was unable to flush the buffers." = "LAME konnte den Puffer nicht leeren.";
 
 /* No comment provided by engineer. */
-"Monkey's Audio compressor error." = "Monkey's Audio compressor error.";
+"Monkey's Audio compressor error." = "Monkey's Audio Compressor-Fehler.";
 
 /* No comment provided by engineer. */
-"Monkey's Audio invalid checksum." = "Monkey's Audio invalid checksum.";
+"Monkey's Audio invalid checksum." = "Monkey's Audio ungültige Checksumme.";
 
 /* No comment provided by engineer. */
-"No matching discs were found." = "No matching discs were found.";
+"No matching discs were found." = "Es wurden keine passende CDs gefunden.";
 
 /* No comment provided by engineer. */
 "No tracks are selected for encoding." = "No tracks are selected for encoding.";
@@ -74,161 +74,161 @@
 "Ogg Vorbis decode error." = "Ogg Vorbis decode error.";
 
 /* No comment provided by engineer. */
-"The call to %@ failed." = "The call to %@ failed.";
+"The call to %@ failed." = "Aufruf von %@ fehlgeschlagen.";
 
 /* No comment provided by engineer. */
-"The CD skip tolerance was exceeded." = "The CD skip tolerance was exceeded.";
+"The CD skip tolerance was exceeded." = "CD Skip-Toleranz überschritten.";
 
 /* No comment provided by engineer. */
-"The file does not appear to be a valid Ogg Vorbis file." = "The file does not appear to be a valid Ogg Vorbis file.";
+"The file does not appear to be a valid Ogg Vorbis file." = "Die Datei scheint keine gültige Ogg Vorbis Datei zu sein.";
 
 /* No comment provided by engineer. */
-"The file was not found." = "The file was not found.";
+"The file was not found." = "Die Datei wurde nicht gefunden.";
 
 /* No comment provided by engineer. */
-"The file's format was not recognized." = "The file's format was not recognized.";
+"The file's format was not recognized." = "Das Dateiformat wurde nicht erkannt.";
 
 /* No comment provided by engineer. */
-"The FLAC stream is not 16-bit stereo." = "The FLAC stream is not 16-bit stereo.";
+"The FLAC stream is not 16-bit stereo." = "Der FLAC Datenstrom ist nicht 16-bit Stereo.";
 
 /* No comment provided by engineer. */
-"The FreeDB query index was out of bounds." = "The FreeDB query index was out of bounds.";
+"The FreeDB query index was out of bounds." = "Die FreeDB Abfrage war ausserhalb der Indexgrenzen.";
 
 /* No comment provided by engineer. */
-"The Ogg FLAC stream is not 16-bit stereo." = "The Ogg FLAC stream is not 16-bit stereo.";
+"The Ogg FLAC stream is not 16-bit stereo." = "Der Ogg FLAC Datenstrom ist nicht 16-bit Stereo.";
 
 /* No comment provided by engineer. */
-"The Speex mode number %i was not recognized." = "The Speex mode number %i was not recognized.";
+"The Speex mode number %i was not recognized." = "Die Speex Modus-Nummer %i wurde nicht erkannt.";
 
 /* No comment provided by engineer. */
-"This file was encoded with a newer version of Speex." = "This file was encoded with a newer version of Speex.";
+"This file was encoded with a newer version of Speex." = "Diese Datei wurde mit einer neueren Version von Speex enkodiert.";
 
 /* No comment provided by engineer. */
-"This file was encoded with an older version of Speex." = "This file was encoded with an older version of Speex.";
+"This file was encoded with an older version of Speex." = "Diese Datei wurde mit einer älteren Version von Speex enkodiert.";
 
 /* No comment provided by engineer. */
-"Unable to access the disc." = "Unable to access the disc.";
+"Unable to access the disc." = "Kann nicht auf die CD zugreifen.";
 
 /* No comment provided by engineer. */
 "Unable to allocate memory." = "Kann Speicher nicht zuteilen.";
 
 /* No comment provided by engineer. */
-"Unable to calculate the disc's FreeDB ID." = "Unable to calculate the disc's FreeDB ID.";
+"Unable to calculate the disc's FreeDB ID." = "Kann die FreeDB-ID dieser CD nicht errechnen.";
 
 /* No comment provided by engineer. */
-"Unable to close the cue sheet." = "Unable to close the cue sheet";
+"Unable to close the cue sheet." = "Kann den Cue Sheet nicht schließen.";
 
 /* No comment provided by engineer. */
-"Unable to close the input file." = "Kann Eingabedatei nicht schließen";
+"Unable to close the input file." = "Kann Eingabedatei nicht schließen.";
 
 /* No comment provided by engineer. */
-"Unable to close the output file." = "Kann Ausgabedatei nicht schließen";
+"Unable to close the output file." = "Kann Ausgabedatei nicht schließen.";
 
 /* No comment provided by engineer. */
-"Unable to close the temporary file." = "Kann temporäre Datei nicht schließen";
+"Unable to close the temporary file." = "Kann temporäre Datei nicht schließen.";
 
 /* No comment provided by engineer. */
-"Unable to create a temporary file." = "Kann Ausgabedatei nicht erzeugen";
+"Unable to create a temporary file." = "Kann Ausgabedatei nicht erzeugen.";
 
 /* No comment provided by engineer. */
-"Unable to create directory." = "Kann Verzeichnis nicht erzeugen";
+"Unable to create directory." = "Kann Verzeichnis nicht erzeugen.";
 
 /* No comment provided by engineer. */
-"Unable to create the application data directory." = "Unable to create the application data directory.";
+"Unable to create the application data directory." = "Kann das Datenverzeichnis der Applikation nicht erstellen.";
 
 /* No comment provided by engineer. */
-"Unable to create the cue sheet." = "Cue Sheet kann nicht erstellt werden";
+"Unable to create the cue sheet." = "Cue Sheet kann nicht erstellt werden.";
 
 /* No comment provided by engineer. */
-"Unable to create the FLAC decoder." = "Unable to create the FLAC decoder.";
+"Unable to create the FLAC decoder." = "Kann FLAC Dekoder nicht erstellen.";
 
 /* No comment provided by engineer. */
-"Unable to create the FLAC encoder." = "Unable to create the FLAC encoder.";
+"Unable to create the FLAC encoder." = "Kann FLAC Enkoder nicht erstellen.";
 
 /* No comment provided by engineer. */
-"Unable to create the Monkey's Audio compressor." = "Unable to create the Monkey's Audio compressor.";
+"Unable to create the Monkey's Audio compressor." = "Kann Monkey's Audio Compressor nicht erstellen.";
 
 /* No comment provided by engineer. */
-"Unable to create the Ogg FLAC decoder." = "Unable to create the Ogg FLAC decoder.";
+"Unable to create the Ogg FLAC decoder." = "Kann Ogg FLAC Dekoder nicht erstellen.";
 
 /* No comment provided by engineer. */
-"Unable to create the Ogg FLAC encoder." = "Unable to create the Ogg FLAC encoder.";
+"Unable to create the Ogg FLAC encoder." = "Kann Ogg FLAC Enkoder nicht erstellen.";
 
 /* No comment provided by engineer. */
-"Unable to create the output file." = "Unable to create the output file.";
+"Unable to create the output file." = "Kann Ausgabedatei nicht erstellen.";
 
 /* No comment provided by engineer. */
-"Unable to decode Speex bitstream version %i." = "Unable to decode Speex bitstream version %i.";
+"Unable to decode Speex bitstream version %i." = "Kann Speex Bitstream Version %i nicht dekodieren.";
 
 /* No comment provided by engineer. */
-"Unable to delete the input file." = "Eingabedatei kann nicht gelöscht werden";
+"Unable to delete the input file." = "Eingabedatei kann nicht gelöscht werden.";
 
 /* No comment provided by engineer. */
-"Unable to delete the output file." = "Kann Ausgabedatei nicht löschen";
+"Unable to delete the output file." = "Kann Ausgabedatei nicht löschen.";
 
 /* No comment provided by engineer. */
-"Unable to delete the temporary file." = "Kann temporäre Datei nicht löschen";
+"Unable to delete the temporary file." = "Kann temporäre Datei nicht löschen.";
 
 /* No comment provided by engineer. */
-"Unable to eject the disc." = "Kann CD nicht auswerfen";
+"Unable to eject the disc." = "Kann CD nicht auswerfen.";
 
 /* No comment provided by engineer. */
 "Unable to get file system statistics." = "Erhalte keine Statistik des Dateisystems.";
 
 /* No comment provided by engineer. */
-"Unable to get information on the input file." = "Erhalte keine Informationen über die Eingabedatei";
+"Unable to get information on the input file." = "Erhalte keine Informationen über die Eingabedatei.";
 
 /* No comment provided by engineer. */
-"Unable to initialize the LAME encoder." = "Unable to initialize the LAME encoder.";
+"Unable to initialize the LAME encoder." = "Kann den LAME Enkoder nicht initialisieren.";
 
 /* No comment provided by engineer. */
-"Unable to initialize the Monkey's Audio compressor." = "Unable to initialize the Monkey's Audio compressor.";
+"Unable to initialize the Monkey's Audio compressor." = "Kann den Monkey's Audio Compressor nicht initialisieren.";
 
 /* No comment provided by engineer. */
-"Unable to initialize the ogg stream." = "Unable to initialize the ogg stream.";
+"Unable to initialize the ogg stream." = "Kann den Ogg Datenstrom nicht initialisieren.";
 
 /* No comment provided by engineer. */
-"Unable to initialize the Ogg Vorbis encoder." = "Unable to initialize the Ogg Vorbis encoder.";
+"Unable to initialize the Ogg Vorbis encoder." = "Kann den Ogg Vorbis Enkoder nicht initialisieren.";
 
 /* No comment provided by engineer. */
-"Unable to intialize the Speex decoder." = "Unable to intialize the Speex decoder.";
+"Unable to intialize the Speex decoder." = "Kann den Speex Dekoder nicht initialisieren.";
 
 /* No comment provided by engineer. */
 "Unable to locate the input file." = "Kann Eingabedatei nicht lokalisieren.";
 
 /* No comment provided by engineer. */
-"Unable to locate the output file." = "Kann Ausgabedatei nicht lokalisieren";
+"Unable to locate the output file." = "Kann Ausgabedatei nicht lokalisieren.";
 
 /* No comment provided by engineer. */
-"Unable to open the input file." = "Kann Eingabedatei nicht öffnen";
+"Unable to open the input file." = "Kann Eingabedatei nicht öffnen.";
 
 /* No comment provided by engineer. */
-"Unable to open the output file for tagging." = "Ausgabedatei kann nicht zum Taggen geöffnet werden";
+"Unable to open the output file for tagging." = "Ausgabedatei kann nicht zum Taggen geöffnet werden.";
 
 /* No comment provided by engineer. */
-"Unable to open the output file." = "Kann Ausgabedatei nicht öffnen";
+"Unable to open the output file." = "Kann Ausgabedatei nicht öffnen.";
 
 /* No comment provided by engineer. */
-"Unable to read from the input file." = "Kann Eingabedatei nicht lesen";
+"Unable to read from the input file." = "Kann Eingabedatei nicht lesen.";
 
 /* No comment provided by engineer. */
-"Unable to read the Speex header." = "Unable to read the Speex header.";
+"Unable to read the Speex header." = "Kann den Speex Header nicht lesen.";
 
 /* No comment provided by engineer. */
-"Unable to start the Monkey's Audio compressor." = "Unable to start the Monkey's Audio compressor.";
+"Unable to start the Monkey's Audio compressor." = "Kann den Monkey's Audio Compressor nicht starten.";
 
 /* No comment provided by engineer. */
-"Unable to unmount the disc." = "Kann CD nicht unmounten";
+"Unable to unmount the disc." = "Kann CD nicht unmounten.";
 
 /* No comment provided by engineer. */
-"Unable to write the APE tags." = "Unable to write the APE tags.";
+"Unable to write the APE tags." = "Kann die APE Tags nicht schreiben.";
 
 /* No comment provided by engineer. */
-"Unable to write to the cue sheet." = "Cue Sheet kann nicht beschrieben werden";
+"Unable to write to the cue sheet." = "Cue Sheet kann nicht beschrieben werden.";
 
 /* No comment provided by engineer. */
-"Unable to write to the output file." = "Kann Ausgabedatei nicht schreiben";
+"Unable to write to the output file." = "Kann Ausgabedatei nicht schreiben.";
 
 /* No comment provided by engineer. */
-"Your installation of Max appears to be incomplete." = "Kann benötigte Ressource nicht laden";
+"Your installation of Max appears to be incomplete." = "Kann benötigte Ressource nicht laden.";
 

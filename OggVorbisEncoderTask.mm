@@ -42,7 +42,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [_task metadata];
+	AudioMetadata								*metadata				= [self metadata];
 	unsigned									trackNumber				= 0;
 	unsigned									trackTotal				= 0;
 	unsigned									discNumber				= 0;

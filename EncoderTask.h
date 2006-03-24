@@ -60,6 +60,8 @@
 
 - (void)			removeOutputFile;
 
+- (AudioMetadata *) metadata;
+
 - (void)			writeTags;
 
 - (NSString *)		settings;
