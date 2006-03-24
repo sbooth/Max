@@ -247,74 +247,78 @@
 	const char				*ext_data;
 	int						trackNum;
 	
-	// Create disc structure
-	disc = cddb_disc_new();
-	if(NULL == disc) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
+	@try {
+		// Create disc structure
+		disc = cddb_disc_new();
+		if(NULL == disc) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
 
-	cddb_disc_set_category(disc, [[info valueForKey:@"category"] intValue]);
-	cddb_disc_set_discid(disc, [[info valueForKey:@"discid"] unsignedIntValue]);
-	
-	if(0 == cddb_read(_freeDB, disc)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FreeDB read"]
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-
-	artist		= cddb_disc_get_artist(disc);
-	title		= cddb_disc_get_title(disc);
-	year		= cddb_disc_get_year(disc);
-	genre		= cddb_disc_get_genre(disc);
-	ext_data	= cddb_disc_get_ext_data(disc);
-
-	if(NULL != artist) {
-		[_disc setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
-	}
-
-	if(NULL != artist) {
-		[_disc setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
-	}
+		cddb_disc_set_category(disc, [[info valueForKey:@"category"] intValue]);
+		cddb_disc_set_discid(disc, [[info valueForKey:@"discid"] unsignedIntValue]);
 		
-	if(0 != year) {
-		[_disc setYear:year];
-	}
-	
-	if(NULL != genre) {
-		[_disc setGenre:[NSString stringWithCString:genre encoding:NSASCIIStringEncoding]];
-	}
-	
-	if(NULL != ext_data) {
-		[_disc setComment:[NSString stringWithCString:ext_data encoding:NSASCIIStringEncoding]];
-	}
-	
-	
-	track = cddb_disc_get_track_first(disc);
-	while(NULL != track) {
+		if(0 == cddb_read(_freeDB, disc)) {
+			@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FreeDB read"]
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+
+		artist		= cddb_disc_get_artist(disc);
+		title		= cddb_disc_get_title(disc);
+		year		= cddb_disc_get_year(disc);
+		genre		= cddb_disc_get_genre(disc);
+		ext_data	= cddb_disc_get_ext_data(disc);
+
+		if(NULL != artist) {
+			[_disc setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
+		}
+
+		if(NULL != artist) {
+			[_disc setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
+		}
+			
+		if(0 != year) {
+			[_disc setYear:year];
+		}
 		
-		title		= cddb_track_get_title(track);
-		artist		= cddb_track_get_artist(track);
-		trackNum	= cddb_track_get_number(track);
+		if(NULL != genre) {
+			[_disc setGenre:[NSString stringWithCString:genre encoding:NSASCIIStringEncoding]];
+		}
 		
-		// Just skip this track if the number is bogus
-		if(-1 == trackNum) {
+		if(NULL != ext_data) {
+			[_disc setComment:[NSString stringWithCString:ext_data encoding:NSASCIIStringEncoding]];
+		}
+		
+		
+		track = cddb_disc_get_track_first(disc);
+		while(NULL != track) {
+			
+			title		= cddb_track_get_title(track);
+			artist		= cddb_track_get_artist(track);
+			trackNum	= cddb_track_get_number(track);
+			
+			// Just skip this track if the number is bogus
+			if(-1 == trackNum) {
+				track = cddb_disc_get_track_next(disc);
+				continue;
+			}
+			
+			if(NULL != title) {
+				[[_disc objectInTracksAtIndex:trackNum - 1] setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
+			}
+
+			if(NULL != artist && NO == [[NSString stringWithCString:artist encoding:NSASCIIStringEncoding] isEqualToString:[_disc artist]]) {
+				[_disc setCompilation:YES];
+				[[_disc objectInTracksAtIndex:trackNum - 1] setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
+			}
+			
 			track = cddb_disc_get_track_next(disc);
-			continue;
 		}
-		
-		if(NULL != title) {
-			[[_disc objectInTracksAtIndex:trackNum - 1] setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
-		}
-
-		if(NULL != artist && NO == [[NSString stringWithCString:artist encoding:NSASCIIStringEncoding] isEqualToString:[_disc artist]]) {
-			[_disc setCompilation:YES];
-			[[_disc objectInTracksAtIndex:trackNum - 1] setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
-		}
-		
-		track = cddb_disc_get_track_next(disc);
 	}
-
-	cddb_disc_destroy(disc);
+	
+	@finally {
+		cddb_disc_destroy(disc);
+	}
 }
 
 - (void) submitDisc
@@ -329,69 +333,72 @@
 	Track				*currentTrack;
 	unsigned			i;
 
-	
-	disc = cddb_disc_clone([[_disc disc] freeDBDisc]);
-	if(NULL == disc) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
+	@try {
+		disc = cddb_disc_clone([[_disc disc] freeDBDisc]);
+		if(NULL == disc) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
 
-	genre = [_disc genre];
-	if(nil != genre) {
-		cddb_disc_set_category_str(disc, [[genre lowercaseString] UTF8String]);
-	}
-	else {
-		cddb_disc_set_category(disc, CDDB_CAT_MISC);
-	}
-	
-	// Fill in the cddb_disc_t with data from the CompactDiscDocument
-	title = [_disc title];
-	if(nil != title) {
-		cddb_disc_set_title(disc, [title UTF8String]);
-	}
-
-	artist = [_disc artist];
-	if(nil != artist) {
-		cddb_disc_set_artist(disc, [artist UTF8String]);
-	}
-
-	genre = [_disc genre];
-	if(nil != genre) {
-		cddb_disc_set_genre(disc, [genre UTF8String]);
-	}
-
-	year = [_disc year];
-	if(0 != year) {
-		cddb_disc_set_year(disc, year);
-	}
-
-	comment = [_disc comment];
-	if(nil != comment) {
-		cddb_disc_set_ext_data(disc, [comment UTF8String]);
-	}
-			
-	for(i = 0; i < [_disc countOfTracks]; ++i) {
-		currentTrack	= [_disc objectInTracksAtIndex:i];
-		track			= cddb_disc_get_track(disc, i);
-
-		title = [currentTrack title];
+		genre = [_disc genre];
+		if(nil != genre) {
+			cddb_disc_set_category_str(disc, [[genre lowercaseString] UTF8String]);
+		}
+		else {
+			cddb_disc_set_category(disc, CDDB_CAT_MISC);
+		}
+		
+		// Fill in the cddb_disc_t with data from the CompactDiscDocument
+		title = [_disc title];
 		if(nil != title) {
-			cddb_track_set_title(track, [title UTF8String]);
+			cddb_disc_set_title(disc, [title UTF8String]);
 		}
 
-		artist = ([_disc compilation] ? [currentTrack artist] : [_disc artist]);
+		artist = [_disc artist];
 		if(nil != artist) {
-			cddb_track_set_artist(track, [artist UTF8String]);
+			cddb_disc_set_artist(disc, [artist UTF8String]);
+		}
+
+		genre = [_disc genre];
+		if(nil != genre) {
+			cddb_disc_set_genre(disc, [genre UTF8String]);
+		}
+
+		year = [_disc year];
+		if(0 != year) {
+			cddb_disc_set_year(disc, year);
+		}
+
+		comment = [_disc comment];
+		if(nil != comment) {
+			cddb_disc_set_ext_data(disc, [comment UTF8String]);
+		}
+				
+		for(i = 0; i < [_disc countOfTracks]; ++i) {
+			currentTrack	= [_disc objectInTracksAtIndex:i];
+			track			= cddb_disc_get_track(disc, i);
+
+			title = [currentTrack title];
+			if(nil != title) {
+				cddb_track_set_title(track, [title UTF8String]);
+			}
+
+			artist = ([_disc compilation] ? [currentTrack artist] : [_disc artist]);
+			if(nil != artist) {
+				cddb_track_set_artist(track, [artist UTF8String]);
+			}
+		}
+
+		if(0 == cddb_write(_freeDB, disc)) {
+			@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FreeDB write"]
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 	}
 
-	if(0 == cddb_write(_freeDB, disc)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FreeDB write"]
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:cddb_errno(_freeDB)], [NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	@finally {
+		// Clean up
+		cddb_disc_destroy(disc);
 	}
-	
-	// Clean up
-	cddb_disc_destroy(disc);
 }
 
 @end

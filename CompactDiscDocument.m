@@ -497,8 +497,8 @@ enum {
 	}
 	
 	@try {
-		[self setFreeDBQueryInProgress:YES];
 		[self setFreeDBQuerySuccessful:NO];
+		[self setFreeDBQueryInProgress:YES];
 		
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
@@ -640,12 +640,13 @@ enum {
 	@try {
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
-		[self updateChangeCount:NSChangeReadOtherContents];
-		[self clearFreeDBData];
-		
+		[[self undoManager] beginUndoGrouping];
+		[self clearFreeDBData];		
 		[freeDB updateDisc:info];
+		[[self undoManager] endUndoGrouping];
+		[self updateChangeCount:NSChangeReadOtherContents];
 		
-		[self setFreeDBQueryInProgress:YES];
+		[self setFreeDBQuerySuccessful:YES];
 	}
 	
 	@catch(NSException *exception) {
