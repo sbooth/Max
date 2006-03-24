@@ -351,6 +351,7 @@ static EncoderController *sharedController = nil;
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
 	NSString		*type			= [task outputFormat];
+	BOOL			justNotified	= NO;
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode completed", @"Log", @"") 
@@ -364,15 +365,16 @@ static EncoderController *sharedController = nil;
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"")
 									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[task metadata] albumTitle]]
 							   notificationName:@"Disc encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		justNotified = YES;
 	}
 
-	if(NO == [self hasTasks]) {
+	if(NO == [self hasTasks] && NO == justNotified) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encoding completed", @"Log", @"")
 									description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
 							   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
 
-	if(0 != [task countOfTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"] && NO == [self documentHasEncoderTasks:[[task objectInTracksAtIndex:0] document]]) {
+	if(0 != [task countOfTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && NO == [self documentHasEncoderTasks:[[task objectInTracksAtIndex:0] document]]) {
 		CompactDiscDocument *doc = [[task objectInTracksAtIndex:0] document];
 		[doc saveDocument:self];
 		[[doc windowForSheet] performClose:self];

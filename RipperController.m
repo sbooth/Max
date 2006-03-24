@@ -257,6 +257,7 @@ static RipperController *sharedController = nil;
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
+	BOOL			justNotified	= NO;
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Rip completed for %@", @"Log", @""), trackName]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Rip completed", @"Log", @"") 
@@ -270,9 +271,10 @@ static RipperController *sharedController = nil;
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc ripping completed", @"Log", @"")
 									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All ripping tasks completed for %@", @"Log", @""), [[task metadata] albumTitle]]
 							   notificationName:@"Disc ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		justNotified = YES;
 	}
 	
-	if(NO == [self hasTasks]) {
+	if(NO == [self hasTasks] && NO == justNotified) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Ripping completed", @"Log", @"")
 									description:NSLocalizedStringFromTable(@"All ripping tasks completed", @"Log", @"")
 							   notificationName:@"Ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
