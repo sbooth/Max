@@ -168,8 +168,6 @@ static MediaController *sharedController = nil;
 	CompactDiscDocument		*doc		= nil;
 	NSError					*err		= nil;
 	BOOL					newDisc		= NO;
-	NSArray					*tracks		= nil;
-	NSIndexSet				*indexSet	= nil;
 	
 	
 	// Ugly hack to avoid letting the user specify the save filename
@@ -241,8 +239,6 @@ static MediaController *sharedController = nil;
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 	CompactDiscDocument		*doc		= (CompactDiscDocument *)context;
-	NSArray					*tracks		= nil;
-	NSIndexSet				*indexSet	= nil;
 	
 	if([keyPath isEqualToString:@"freeDBQueryInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
 		[doc removeObserver:self forKeyPath:@"freeDBQueryInProgress"];

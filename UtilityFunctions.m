@@ -231,7 +231,7 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 	entry.length	= strlen((const char *)entry.entry);
 	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
 		free(entry.entry);
-		@throw [FLACException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_append_comment"]];
+		@throw [FLACException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_append_comment"] userInfo:nil];
 	}	
 }
 
