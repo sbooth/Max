@@ -641,9 +641,11 @@ enum {
 		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
 		
 		[[self undoManager] beginUndoGrouping];
-		[self clearFreeDBData];		
+		[self clearFreeDBData];
 		[freeDB updateDisc:info];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"FreeDB", @"UndoRedo", @"")];
 		[[self undoManager] endUndoGrouping];
+		
 		[self updateChangeCount:NSChangeReadOtherContents];
 		
 		[self setFreeDBQuerySuccessful:YES];
