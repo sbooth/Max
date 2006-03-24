@@ -247,8 +247,8 @@ enum {
 			limit	= alias + (buf.mBuffers[0].mNumberChannels * frameCount);
 			while(alias < limit) {
 				// Preserve sign bit
-				*left++		= (int16_t)OSSwapBigToHostInt16(*alias++) / 32768.0f;
-				*right++	= (int16_t)OSSwapBigToHostInt16(*alias++) / 32768.0f;
+				*left++		= ((int16_t)OSSwapBigToHostInt16(*alias++)) / 32768.0f;
+				*right++	= ((int16_t)OSSwapBigToHostInt16(*alias++)) / 32768.0f;
 			}
 			
 			// Tell the library how much data we actually submitted
