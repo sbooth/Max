@@ -69,7 +69,7 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 {
 	//OggFLACConverter *converter = (OggFLACConverter *) client_data;
 		
-	@throw [FLACException exceptionWithReason:[NSString stringWithCString:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(decoder)] encoding:NSASCIIStringEncoding] userInfo:nil];
+	@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__StreamDecoderErrorStatusString[status] encoding:NSASCIIStringEncoding] userInfo:nil];
 }
 
 @implementation OggFLACConverter

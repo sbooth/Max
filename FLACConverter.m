@@ -54,10 +54,10 @@ static void
 metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
 	//FLACConverter *converter = (FLACConverter *) client_data;
-	const FLAC__StreamMetadata_CueSheet		*cueSheet			= NULL;
-	FLAC__StreamMetadata_CueSheet_Track		*currentTrack		= NULL;
-	FLAC__StreamMetadata_CueSheet_Index		*currentIndex		= NULL;
-	unsigned								i, j;
+//	const FLAC__StreamMetadata_CueSheet		*cueSheet			= NULL;
+//	FLAC__StreamMetadata_CueSheet_Track		*currentTrack		= NULL;
+//	FLAC__StreamMetadata_CueSheet_Index		*currentIndex		= NULL;
+//	unsigned								i, j;
 	
 	switch(metadata->type) {
 		case FLAC__METADATA_TYPE_STREAMINFO:
@@ -65,29 +65,22 @@ metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *m
 				@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"The FLAC stream is not 16-bit stereo.", @"Exceptions", @"") userInfo:nil];
 			}
 			break;
-			
+
+/*
 		case FLAC__METADATA_TYPE_CUESHEET:
 			cueSheet = &(metadata->data.cue_sheet);
-			
-//			NSLog(@"[FLAC cue sheet entry] media_catalog_number:%s lead_in:%i is_cd:%i num_tracks:%i", cueSheet->media_catalog_number, cueSheet->lead_in, 
-//				  cueSheet->is_cd, cueSheet->num_tracks);
 			
 			for(i = 0; i < cueSheet->num_tracks; ++i) {
 				currentTrack = &(cueSheet->tracks[i]);
 
 				FLAC__uint64 offset = currentTrack->offset;
-				NSLog(@"offset = %qu", offset);
-//				NSLog(@"  [FLAC cue sheet track] offset:%i number:%i isrc:%i type:%i pre_emphasis:%i num_indices:%i", currentTrack->offset,
-//					  currentTrack->number, currentTrack->isrc, currentTrack->type, currentTrack->pre_emphasis, currentTrack->num_indices);
 				
 				for(j = 0; j < currentTrack->num_indices; ++j) {
-					currentIndex = &(currentTrack->indices[j]);
-					
-//					NSLog(@"    [FLAC cue sheet index] offset:%i number:%i", currentIndex->offset, currentIndex->number);
+					currentIndex = &(currentTrack->indices[j]);					
 				}
 			}
-			
 			break;
+*/
 	}
 }
 
@@ -96,7 +89,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 {
 	//FLACConverter *converter = (FLACConverter *) client_data;
 	
-	@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(decoder)] encoding:NSASCIIStringEncoding] userInfo:nil];
+	@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__StreamDecoderErrorStatusString[status] encoding:NSASCIIStringEncoding] userInfo:nil];
 }
 
 @implementation FLACConverter
@@ -157,10 +150,12 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
 		
+/*
 		// Process cue sheets
 		if(NO == FLAC__file_decoder_set_metadata_respond(flac, FLAC__METADATA_TYPE_CUESHEET)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
+ */
 				
 		// Setup callbacks
 		if(NO == FLAC__file_decoder_set_write_callback(flac, writeCallback)) {
