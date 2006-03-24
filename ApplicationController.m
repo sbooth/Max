@@ -217,6 +217,10 @@ static ApplicationController *sharedController = nil;
 {
 	NSOpenPanel			*panel			= [NSOpenPanel openPanel];
 	
+	if(YES == [self displayAlertIfNoOutputFormats]) {
+		return;
+	}
+	
 	[panel setAllowsMultipleSelection:YES];
 	[panel setCanChooseDirectories:YES];
 		
@@ -404,6 +408,35 @@ static ApplicationController *sharedController = nil;
 		defaultNotifications, GROWL_NOTIFICATIONS_DEFAULT,
 		nil];
 	return regDict;
+}
+
+- (BOOL) displayAlertIfNoOutputFormats
+{
+	// Verify at least one output format is selected
+	if(NO == outputFormatsSelected()) {
+		int		result;
+		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
+		[alert setAlertStyle: NSWarningAlertStyle];
+		
+		result = [alert runModal];
+		
+		if(NSAlertFirstButtonReturn == result) {
+			// do nothing
+		}
+		else if(NSAlertSecondButtonReturn == result) {
+			[[PreferencesController sharedPreferences] showWindow:self];
+			[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesItemIdentifier];
+		}
+		
+		return YES;
+	}
+	
+	return NO;
 }
 
 @end

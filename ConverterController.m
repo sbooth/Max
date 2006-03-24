@@ -30,7 +30,7 @@
 #import "CoreAudioUtilities.h"
 #import "LogController.h"
 #import "EncoderController.h"
-#import "PreferencesController.h"
+#import "ApplicationController.h"
 #import "IOException.h"
 #import "FileFormatNotSupportedException.h"
 
@@ -47,7 +47,6 @@ static ConverterController *sharedController = nil;
 - (void)	addTask:(ConverterTask *)task;
 - (void)	removeTask:(ConverterTask *)task;
 - (void)	spawnThreads;
-- (BOOL)	verifyOutputFormats;
 @end
 
 @implementation ConverterController
@@ -163,7 +162,7 @@ static ConverterController *sharedController = nil;
 	NSString		*extension				= [filename pathExtension];
 	
 	// Verify an output format is selected
-	if(NO == [self verifyOutputFormats]) {
+	if(YES == [[ApplicationController sharedController] displayAlertIfNoOutputFormats]) {
 		return;
 	}
 	
@@ -322,36 +321,6 @@ static ConverterController *sharedController = nil;
 			[[_tasks objectAtIndex:i] run];
 		}
 	}
-}
-
-- (BOOL) verifyOutputFormats
-{
-	// Verify at least one output format is selected
-	if(NO == outputFormatsSelected()) {
-		int		result;
-		
-		NSBeep();
-		
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
-		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
-		[alert setAlertStyle: NSWarningAlertStyle];
-		
-		result = [alert runModal];
-		
-		if(NSAlertFirstButtonReturn == result) {
-			// do nothing
-		}
-		else if(NSAlertSecondButtonReturn == result) {
-			[[PreferencesController sharedPreferences] showWindow:self];
-		}
-		
-		return NO;
-	}
-	
-	return YES;
 }
 
 @end

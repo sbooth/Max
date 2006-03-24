@@ -45,6 +45,10 @@
 
 static EncoderController *sharedController = nil;
 
+@interface ConverterController (Private)
+- (void)	spawnThreads;
+@end
+
 @interface EncoderController (Private)
 - (void)	updateFreeSpace:(NSTimer *)theTimer;
 - (void)	runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task;

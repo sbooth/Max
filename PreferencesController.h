@@ -20,10 +20,24 @@
 
 #import <Cocoa/Cocoa.h>
 
+extern NSString	*		GeneralPreferencesItemIdentifier;
+extern NSString *		FormatsPreferencesItemIdentifier;
+extern NSString *		OutputPreferencesItemIdentifier;
+extern NSString *		TaggingPreferencesItemIdentifier;
+extern NSString *		FreeDBPreferencesItemIdentifier;
+extern NSString *		RipperPreferencesItemIdentifier;
+extern NSString *		LAMEPreferencesItemIdentifier;
+extern NSString *		FLACPreferencesItemIdentifier;
+extern NSString *		OggVorbisPreferencesItemIdentifier;
+extern NSString *		MonkeysAudioPreferencesItemIdentifier;
+extern NSString *		SpeexPreferencesItemIdentifier;
+
 @interface PreferencesController : NSWindowController
 {
 }
 
-+ (PreferencesController *) sharedPreferences;
++ (PreferencesController *)		sharedPreferences;
+
+- (void)						selectPreferencePane:(NSString *)itemIdentifier;
 
 @end

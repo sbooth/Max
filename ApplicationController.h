@@ -45,6 +45,8 @@
 - (IBAction)			checkForUpdate:(id)sender;
 - (IBAction)			openHomeURL:(id)sender;
 
+- (BOOL)				displayAlertIfNoOutputFormats;
+
 - (IBAction)			encodeFile:(id)sender;
 
 - (void)				encodeFiles:(NSArray *)filenames;

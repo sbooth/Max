@@ -177,11 +177,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 				// Interleaved 16-bit PCM audio
 				inputASBD.mSampleRate			= 44100.f;
 				inputASBD.mFormatID				= kAudioFormatLinearPCM;
-#if __BIG_ENDIAN__
 				inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
-#else
-				inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger;
-#endif
 				inputASBD.mBytesPerPacket		= 4;
 				inputASBD.mFramesPerPacket		= 1;
 				inputASBD.mBytesPerFrame		= 4;
@@ -369,6 +365,8 @@ getCoreAudioWritableTypes()
 				
 				sd				= [[[NSSortDescriptor alloc] initWithKey:@"fileTypeName" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
 				sWritableTypes	= [result sortedArrayUsingDescriptors:[NSArray arrayWithObject:sd]];
+				
+				[sWritableTypes retain];
 			}
 			
 			@finally {
@@ -423,6 +421,8 @@ getCoreAudioReadableTypes()
 				
 				sd				= [[[NSSortDescriptor alloc] initWithKey:@"fileTypeName" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
 				sReadableTypes	= [result sortedArrayUsingDescriptors:[NSArray arrayWithObject:sd]];
+
+				[sReadableTypes retain];
 			}
 					
 			@finally {
@@ -443,13 +443,14 @@ getCoreAudioExtensions()
 	
 	@synchronized(sAudioExtensions) {
 		if(nil == sAudioExtensions) {
-			
 			size	= sizeof(sAudioExtensions);
 			err		= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AllExtensions, 0, NULL, &size, &sAudioExtensions);
 			if(noErr != err) {
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileGetGlobalInfo"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}			
+			}
+			
+			[sAudioExtensions retain];
 		}
 	}
 	

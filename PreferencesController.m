@@ -24,22 +24,22 @@
 #import "UtilityFunctions.h"
 
 
-static PreferencesController	*sharedPreferences					= nil;
+static PreferencesController	*sharedPreferences			= nil;
 
-static NSString		*GeneralPreferencesToolbarItemIdentifier		= @"GeneralPreferences";
-static NSString		*FormatsPreferencesToolbarItemIdentifier		= @"FormatsPreferences";
-static NSString		*OutputPreferencesToolbarItemIdentifier			= @"OutputPreferences";
-static NSString		*TaggingPreferencesToolbarItemIdentifier		= @"TaggingPreferences";
-static NSString		*FreeDBPreferencesToolbarItemIdentifier			= @"FreeDBPreferences";
-static NSString		*RipperPreferencesToolbarItemIdentifier			= @"RipperPreferences";
-static NSString		*LAMEPreferencesToolbarItemIdentifier			= @"LAMEPreferences";
-static NSString		*FLACPreferencesToolbarItemIdentifier			= @"FLACPreferences";
-static NSString		*OggVorbisPreferencesToolbarItemIdentifier		= @"OggVorbisPreferences";
-static NSString		*MonkeysAudioPreferencesToolbarItemIdentifier	= @"MonkeysAudioPreferences";
-static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
+NSString *		GeneralPreferencesItemIdentifier			= @"GeneralPreferences";
+NSString *		FormatsPreferencesItemIdentifier			= @"FormatsPreferences";
+NSString *		OutputPreferencesItemIdentifier				= @"OutputPreferences";
+NSString *		TaggingPreferencesItemIdentifier			= @"TaggingPreferences";
+NSString *		FreeDBPreferencesItemIdentifier				= @"FreeDBPreferences";
+NSString *		RipperPreferencesItemIdentifier				= @"RipperPreferences";
+NSString *		LAMEPreferencesItemIdentifier				= @"LAMEPreferences";
+NSString *		FLACPreferencesItemIdentifier				= @"FLACPreferences";
+NSString *		OggVorbisPreferencesItemIdentifier			= @"OggVorbisPreferences";
+NSString *		MonkeysAudioPreferencesItemIdentifier		= @"MonkeysAudioPreferences";
+NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
 
 @interface PreferencesController (Private)
-- (void) selectPrefsPane:(id)sender;
+- (void) selectPreferencePaneUsingToolbar:(id)sender;
 @end
 
 @implementation PreferencesController
@@ -140,9 +140,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbar setSelectedItemIdentifier:[[[toolbar items] objectAtIndex:0] itemIdentifier]];
 	}
 	else {
-		[toolbar setSelectedItemIdentifier:GeneralPreferencesToolbarItemIdentifier];
+		[toolbar setSelectedItemIdentifier:GeneralPreferencesItemIdentifier];
 	}
-	[self selectPrefsPane:self];
+	[self selectPreferencePaneUsingToolbar:self];
 
 	[self setShouldCascadeWindows:NO];
 	[[self window] center];
@@ -152,7 +152,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 {
     NSToolbarItem *toolbarItem = nil;
     
-    if([itemIdentifier isEqualToString:GeneralPreferencesToolbarItemIdentifier]) {
+    if([itemIdentifier isEqualToString:GeneralPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"General", @"Preferences", @"")];
@@ -161,9 +161,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"GeneralToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-    else if([itemIdentifier isEqualToString:FormatsPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:FormatsPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Formats", @"Preferences", @"")];
@@ -172,9 +172,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"FormatsToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-    else if([itemIdentifier isEqualToString:OutputPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:OutputPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
@@ -183,9 +183,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-    else if([itemIdentifier isEqualToString:TaggingPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:TaggingPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Tagging", @"Preferences", @"")];
@@ -194,9 +194,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"TaggingToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-    else if([itemIdentifier isEqualToString:FreeDBPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:FreeDBPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"FreeDB", @"Preferences", @"")];
@@ -205,9 +205,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"FreeDBToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-    else if([itemIdentifier isEqualToString:RipperPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:RipperPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Ripper", @"Preferences", @"")];
@@ -216,9 +216,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"RipperToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-    else if([itemIdentifier isEqualToString:LAMEPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:LAMEPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"MP3", @"Preferences", @"")];
@@ -227,9 +227,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"LAMEToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	} 
-    else if([itemIdentifier isEqualToString:FLACPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:FLACPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"FLAC", @"Preferences", @"")];
@@ -238,9 +238,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"FLAC"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	} 
-    else if([itemIdentifier isEqualToString:OggVorbisPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:OggVorbisPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Ogg Vorbis", @"Preferences", @"")];
@@ -249,9 +249,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"OggVorbisToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	} 
-    else if([itemIdentifier isEqualToString:MonkeysAudioPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:MonkeysAudioPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Monkey's Audio", @"Preferences", @"")];
@@ -260,9 +260,9 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"MonkeysAudioToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	} 
-    else if([itemIdentifier isEqualToString:SpeexPreferencesToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:SpeexPreferencesItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Speex", @"Preferences", @"")];
@@ -271,7 +271,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 		[toolbarItem setImage: [NSImage imageNamed:@"SpeexToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPrefsPane:)];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	} 
 	else {
 		toolbarItem = nil;
@@ -282,23 +282,23 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
-    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
-		OutputPreferencesToolbarItemIdentifier, TaggingPreferencesToolbarItemIdentifier,
-		FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
-		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		MonkeysAudioPreferencesToolbarItemIdentifier, SpeexPreferencesToolbarItemIdentifier,
+    return [NSArray arrayWithObjects: GeneralPreferencesItemIdentifier, FormatsPreferencesItemIdentifier, 
+		OutputPreferencesItemIdentifier, TaggingPreferencesItemIdentifier,
+		FreeDBPreferencesItemIdentifier,
+		RipperPreferencesItemIdentifier, LAMEPreferencesItemIdentifier, 
+		FLACPreferencesItemIdentifier, OggVorbisPreferencesItemIdentifier,
+		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier,
 		nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
 {
-    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
-		OutputPreferencesToolbarItemIdentifier, TaggingPreferencesToolbarItemIdentifier,
-		FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
-		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		MonkeysAudioPreferencesToolbarItemIdentifier, SpeexPreferencesToolbarItemIdentifier,
+    return [NSArray arrayWithObjects: GeneralPreferencesItemIdentifier, FormatsPreferencesItemIdentifier, 
+		OutputPreferencesItemIdentifier, TaggingPreferencesItemIdentifier,
+		FreeDBPreferencesItemIdentifier,
+		RipperPreferencesItemIdentifier, LAMEPreferencesItemIdentifier, 
+		FLACPreferencesItemIdentifier, OggVorbisPreferencesItemIdentifier,
+		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
@@ -306,16 +306,16 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 
 - (NSArray *) toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
-    return [NSArray arrayWithObjects: GeneralPreferencesToolbarItemIdentifier, FormatsPreferencesToolbarItemIdentifier, 
-		OutputPreferencesToolbarItemIdentifier, TaggingPreferencesToolbarItemIdentifier, 
-		FreeDBPreferencesToolbarItemIdentifier,
-		RipperPreferencesToolbarItemIdentifier, LAMEPreferencesToolbarItemIdentifier, 
-		FLACPreferencesToolbarItemIdentifier, OggVorbisPreferencesToolbarItemIdentifier,
-		MonkeysAudioPreferencesToolbarItemIdentifier, SpeexPreferencesToolbarItemIdentifier,
+    return [NSArray arrayWithObjects: GeneralPreferencesItemIdentifier, FormatsPreferencesItemIdentifier, 
+		OutputPreferencesItemIdentifier, TaggingPreferencesItemIdentifier, 
+		FreeDBPreferencesItemIdentifier,
+		RipperPreferencesItemIdentifier, LAMEPreferencesItemIdentifier, 
+		FLACPreferencesItemIdentifier, OggVorbisPreferencesItemIdentifier,
+		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier,
 		nil];
 }
 
-- (void) selectPrefsPane:(id)sender
+- (void) selectPreferencePaneUsingToolbar:(id)sender
 {
 	NSToolbar				*toolbar;
 	NSString				*itemIdentifier;
@@ -330,7 +330,7 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 	toolbar					= [myWindow toolbar];
 	itemIdentifier			= [toolbar selectedItemIdentifier];
 	prefPaneClass			= NSClassFromString([itemIdentifier stringByAppendingString:@"Controller"]);
-	prefPaneObject			= [[prefPaneClass alloc] init];
+	prefPaneObject			= [[[prefPaneClass alloc] init] autorelease];
 	prefView				= [[prefPaneObject window] contentView];
 		
 	float windowHeight		= NSHeight([[myWindow contentView] frame]);
@@ -349,7 +349,13 @@ static NSString		*SpeexPreferencesToolbarItemIdentifier			= @"SpeexPreferences";
 	[myWindow setContentView:[[[NSView alloc] init] autorelease]];
 	[myWindow setTitle:[[self toolbar:toolbar itemForItemIdentifier:itemIdentifier willBeInsertedIntoToolbar:NO] label]];
 	[myWindow setFrame:newWindowFrame display:YES animate:[myWindow isVisible]];
-	[myWindow setContentView:prefView];
+	[myWindow setContentView:[prefView retain]];
+}
+
+- (void) selectPreferencePane:(NSString *)itemIdentifier
+{
+	[[[self window] toolbar] setSelectedItemIdentifier:itemIdentifier];
+	[self selectPreferencePaneUsingToolbar:self];
 }
 
 @end
