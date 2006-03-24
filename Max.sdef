@@ -255,7 +255,7 @@
 			</responds-to>
 		</class>
 
-		<class name="document" code="docu" description="A compact disc document.">
+		<class name="document" code="docu" description="A document representing a compact disc.">
 			<cocoa class="CompactDiscDocument"/>
 			<property name="name" code="pnam" type="text" access="r"
 				description="The document's name.">
@@ -270,35 +270,31 @@
 				<cocoa key="fileURL"/>
 			</property>
 			<element type="track"/>
-			<property name="encodeAllowed" code="enco" type="boolean" access="r" 
+			<property name="encode allowed" code="enco" type="boolean" access="r" 
 				description="Does the state of the document allow the selected tracks to be encoded?">
 				<cocoa key="encodeAllowed"/>
 			</property>
-			<property name="queryFreeDBAllowed" code="quer" type="boolean" access="r" 
+			<property name="query FreeDB allowed" code="quer" type="boolean" access="r" 
 				description="Does the state of the document allow FreeDB to be queried for disc information?">
 				<cocoa key="queryFreeDBAllowed"/>
 			</property>
-			<property name="submitToFreeDBAllowed" code="subm" type="boolean" access="r" 
+			<property name="submit to FreeDB allowed" code="subm" type="boolean" access="r" 
 				description="Does the state of the document allow submission of the disc's data to FreeDB?">
 				<cocoa key="submitToFreeDBAllowed"/>
 			</property>
-			<property name="ejectDiscAllowed" code="ejct" type="boolean" access="r" 
-				description="Does the state of the document allow the disc to be ejected?">
-				<cocoa key="ejectDiscAllowed"/>
-			</property>
-			<property name="ripInProgress" code="rip " type="boolean" access="r" 
+			<property name="rip in progress" code="rip " type="boolean" access="r" 
 				description="Does this document contain tracks currently being ripped?">
 				<cocoa key="ripInProgress"/>
 			</property>
-			<property name="encodeInProgress" code="eip " type="boolean" access="r" 
+			<property name="encode in progress" code="eip " type="boolean" access="r" 
 				description="Does this document contain tracks currently being encoded?">
 				<cocoa key="encodeInProgress"/>
 			</property>
-			<property name="discInDrive" code="disc" type="boolean"
+			<property name="disc in drive" code="disc" type="boolean" access="r"
 				description="Is the disc associated with this document in the drive?">
 				<cocoa key="discInDrive"/>
 			</property>
-			<property name="discID" code="id  " type="integer"
+			<property name="disc ID" code="id  " type="integer" access="r"
 				description="The disc's FreeDB ID.">
 				<cocoa key="discID"/>
 			</property>
@@ -340,11 +336,15 @@
 				<cocoa key="albumArtHeight"/>
 			</property>
 			-->
-			<property name="discNumber" code="dnum" type="integer"
+			<property name="total tracks" code="ttot" type="integer" access="r"
+				description="The total number of tracks on the disc.">
+				<cocoa key="countOfTracks"/>
+			</property>
+			<property name="disc number" code="dnum" type="integer"
 				description="The number of this disc in the set.">
 				<cocoa key="discNumber"/>
 			</property>
-			<property name="discTotal" code="dtot" type="integer"
+			<property name="total discs" code="dtot" type="integer"
 				description="The total number of discs in the set.">
 				<cocoa key="discTotal"/>
 			</property>
@@ -352,7 +352,7 @@
 				description="Is this disc a compilation?">
 				<cocoa key="compilation"/>
 			</property>
-			<property name="MCN" code="mcn " type="text"
+			<property name="MCN" code="mcn " type="text" access="r"
 				description="The disc's media catalog number (MCN).">
 				<cocoa key="MCN"/>
 			</property>
@@ -370,22 +370,22 @@
 			<responds-to name="encode">
 				<cocoa method="handleEncodeScriptCommand:"/>
 			</responds-to>
-			<responds-to name="ejectDisc">
+			<responds-to name="eject disc">
 				<cocoa method="handleEjectDiscScriptCommand:"/>
 			</responds-to>
-			<responds-to name="queryFreeDB">
+			<responds-to name="query FreeDB">
 				<cocoa method="handleQueryFreeDBScriptCommand:"/>
 			</responds-to>
-			<responds-to name="submitToFreeDB">
+			<responds-to name="submit to FreeDB">
 				<cocoa method="handleSubmitToFreeDBScriptCommand:"/>
 			</responds-to>
-			<responds-to name="toggleTrackInformation">
+			<responds-to name="toggle track information">
 				<cocoa method="handleToggleTrackInformationScriptCommand:"/>
 			</responds-to>
-			<responds-to name="toggleAlbumArt">
+			<responds-to name="toggle album art">
 				<cocoa method="handleToggleAlbumArtScriptCommand:"/>
 			</responds-to>
-			<responds-to name="fetchAlbumArt">
+			<responds-to name="download album art">
 				<cocoa method="handleFetchAlbumArtScriptCommand:"/>
 			</responds-to>
 		</class>
@@ -600,13 +600,13 @@
 		description="Max specific classes.">
 			
 		<class name="track" plural="tracks" code="trck"
-			description="A CD track.">
+			description="A track contained in a CD.">
 			<cocoa class="Track"/>
-			<property name="ripInProgress" code="rip " type="boolean" access="r" 
+			<property name="rip in progress" code="rip " type="boolean" access="r" 
 				description="Is this track is currently being ripped?">
 				<cocoa key="ripInProgress"/>
 			</property>
-			<property name="encodeInProgress" code="eip " type="boolean" access="r" 
+			<property name="encode in progress" code="eip " type="boolean" access="r" 
 				description="Is this track is currently being encoded?">
 				<cocoa key="encodeInProgress"/>
 			</property>
@@ -660,11 +660,11 @@
 				description="The track's number.">
 				<cocoa key="number"/>
 			</property>
-			<property name="firstSector" code="fsec" type="integer" access="r" 
+			<property name="first sector" code="fsec" type="integer" access="r" 
 				description="The track's first sector.">
 				<cocoa key="firstSector"/>
 			</property>
-			<property name="lastSector" code="lsec" type="integer" access="r" 
+			<property name="last sector" code="lsec" type="integer" access="r" 
 				description="The track's last sector.">
 				<cocoa key="lastSector"/>
 			</property>
@@ -672,11 +672,11 @@
 				description="The number of channels in the track.">
 				<cocoa key="size"/>
 			</property>
-			<property name="preEmphasis" code="pree" type="boolean" access="r" 
+			<property name="has pre-emphasis" code="pree" type="boolean" access="r" 
 				description="Does this track have pre-emphasis?">
 				<cocoa key="preEmphasis"/>
 			</property>
-			<property name="copyPermitted" code="copy" type="boolean" access="r" 
+			<property name="digital copy permitted" code="copy" type="boolean" access="r" 
 				description="Does this track allows digital copies?">
 				<cocoa key="copyPermitted"/>
 			</property>
@@ -699,32 +699,32 @@
 			<direct-parameter type="specifier"
 				description="The document(s) containing the tracks to encode."/>
 		</command>
-		<command name="ejectDisc" code="Maxeject" 
+		<command name="eject disc" code="Maxeject" 
 			description="Eject the disc.">
 			<direct-parameter type="specifier"
 				description="The document(s) containing the disc to eject."/>
 		</command>
-		<command name="queryFreeDB" code="Maxquery" 
+		<command name="query FreeDB" code="Maxquery" 
 			description="Query FreeDB for disc information.">
 			<direct-parameter type="specifier"
 				description="The document(s) containing the disc for which information is desired."/>
 		</command>
-		<command name="submitToFreeDB" code="Maxsubmi" 
+		<command name="submit to FreeDB" code="Maxsubmi" 
 			description="Submit disc information to FreeDB.">
 			<direct-parameter type="specifier"
 				description="The document(s) containing the disc with the information to submit."/>
 		</command>
-		<command name="toggleTrackInformation" code="Maxtgtrc" 
+		<command name="toggle track information" code="Maxtgtrc" 
 			description="Toggle the display of the track information drawer.">
 			<direct-parameter type="specifier"
 				description="The document(s) containing the drawers to show."/>
 		</command>
-		<command name="toggleAlbumArt" code="Maxtgart" 
+		<command name="toggle album art" code="Maxtgart" 
 			description="Toggle the display of the album artwork information drawer.">
 			<direct-parameter type="specifier"
 				description="The document(s) containing the drawers to show."/>
 		</command>
-		<command name="fetchAlbumArt" code="Maxfetch" 
+		<command name="download album art" code="Maxfetch" 
 			description="Download album artwork from Amazon.">
 			<direct-parameter type="specifier"
 				description="The document(s) containing the disc for which information is desired."/>
