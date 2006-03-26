@@ -346,6 +346,15 @@
 		8C51308F0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		8C643A7009D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
+		8C643A7109D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		8C643A7209D7392400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/CompactDisc.strings; sourceTree = "<group>"; };
+		8C643A7309D7392400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/Exceptions.strings; sourceTree = "<group>"; };
+		8C643A7409D7392400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/General.strings; sourceTree = "<group>"; };
+		8C643A7509D7392400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/Genres.strings; sourceTree = "<group>"; };
+		8C643A7609D7392400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/Log.strings; sourceTree = "<group>"; };
+		8C643A7709D7392400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/Preferences.strings; sourceTree = "<group>"; };
+		8C643A7809D7393400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Dutch; path = Dutch.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8C675CA009CEF2D5002CB034 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8C6819B30982CA5100A35119 /* OggFLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggFLACEncoderTask.mm; sourceTree = "<group>"; };
 		8C6C4F5409CC59A600F234E5 /* TaggingToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TaggingToolbarImage.png; sourceTree = "<group>"; };
@@ -1187,6 +1196,13 @@
 				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
 			);
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Dutch,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* cocoa test */;
 			projectDirPath = "";
 			targets = (
@@ -1403,6 +1419,7 @@
 				29B97319FDCFA39411CA2CEA /* English */,
 				8C794E0A097F19460081CD7F /* French */,
 				8C91B7C0099AF5D80040C8DE /* German */,
+				8C643A7109D7391000F6C1F6 /* Dutch */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -1423,6 +1440,7 @@
 				8C29D8D6097F3D5500E8B766 /* English */,
 				8C51308F0984CD1C00F41352 /* French */,
 				8CBA9F540999B3AA007C9F11 /* German */,
+				8C643A7709D7392400F6C1F6 /* Dutch */,
 			);
 			name = Preferences.strings;
 			sourceTree = "<group>";
@@ -1433,6 +1451,7 @@
 				8C29D8F8097F3EB700E8B766 /* English */,
 				8C51308B0984CD1C00F41352 /* French */,
 				8CBA9F450999B374007C9F11 /* German */,
+				8C643A7209D7392400F6C1F6 /* Dutch */,
 			);
 			name = CompactDisc.strings;
 			sourceTree = "<group>";
@@ -1443,6 +1462,7 @@
 				8C29D923097F424400E8B766 /* English */,
 				8C51308C0984CD1C00F41352 /* French */,
 				8CBA9F4B0999B38B007C9F11 /* German */,
+				8C643A7409D7392400F6C1F6 /* Dutch */,
 			);
 			name = General.strings;
 			sourceTree = "<group>";
@@ -1453,6 +1473,7 @@
 				8C29D946097F442200E8B766 /* English */,
 				8C51308D0984CD1C00F41352 /* French */,
 				8CBA9F4E0999B396007C9F11 /* German */,
+				8C643A7509D7392400F6C1F6 /* Dutch */,
 			);
 			name = Genres.strings;
 			sourceTree = "<group>";
@@ -1463,6 +1484,7 @@
 				8C29D97C097F469D00E8B766 /* English */,
 				8C51308E0984CD1C00F41352 /* French */,
 				8CBA9F510999B3A1007C9F11 /* German */,
+				8C643A7609D7392400F6C1F6 /* Dutch */,
 			);
 			name = Log.strings;
 			sourceTree = "<group>";
@@ -1583,6 +1605,7 @@
 				8C4D489F093E932600A88927 /* English */,
 				8C794DFE097F19450081CD7F /* French */,
 				8CBA9F570999B409007C9F11 /* German */,
+				8C643A7009D7391000F6C1F6 /* Dutch */,
 			);
 			name = Acknowledgments.nib;
 			sourceTree = "<group>";
@@ -1593,6 +1616,7 @@
 				8C32817D096D12C400608C9D /* English */,
 				8C794E2A097F1C480081CD7F /* French */,
 				8CBA9F480999B381007C9F11 /* German */,
+				8C643A7309D7392400F6C1F6 /* Dutch */,
 			);
 			name = Exceptions.strings;
 			sourceTree = "<group>";
@@ -1711,6 +1735,7 @@
 				8CE6F51D08CD60970028DA37 /* English */,
 				8CD7F7D1098B0B19002C4D9F /* French */,
 				8CB34D16099AFF63001532C3 /* German */,
+				8C643A7809D7393400F6C1F6 /* Dutch */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
