@@ -61,7 +61,7 @@ metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *m
 	
 	switch(metadata->type) {
 		case FLAC__METADATA_TYPE_STREAMINFO:
-			if(16 != metadata->data.stream_info.bits_per_sample && 2 != metadata->data.stream_info.channels) {
+			if(16 != metadata->data.stream_info.bits_per_sample || 2 != metadata->data.stream_info.channels) {
 				@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"The FLAC stream is not 16-bit stereo.", @"Exceptions", @"") userInfo:nil];
 			}
 			break;

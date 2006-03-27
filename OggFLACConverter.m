@@ -58,7 +58,7 @@ metadataCallback(const OggFLAC__FileDecoder *decoder, const FLAC__StreamMetadata
 	
 	// Only accept 16-bit 2-channel FLAC files
 	if(FLAC__METADATA_TYPE_STREAMINFO == metadata->type) {
-		if(16 != metadata->data.stream_info.bits_per_sample && 2 != metadata->data.stream_info.channels) {
+		if(16 != metadata->data.stream_info.bits_per_sample || 2 != metadata->data.stream_info.channels) {
 			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"The Ogg FLAC stream is not 16-bit stereo.", @"Exceptions", @"") userInfo:nil];
 		}
 	}
