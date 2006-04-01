@@ -37,6 +37,7 @@ NSString *		FLACPreferencesItemIdentifier				= @"FLACPreferences";
 NSString *		OggVorbisPreferencesItemIdentifier			= @"OggVorbisPreferences";
 NSString *		MonkeysAudioPreferencesItemIdentifier		= @"MonkeysAudioPreferences";
 NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
+NSString *		WavPackPreferencesItemIdentifier			= @"WavPackPreferences";
 
 @interface PreferencesController (Private)
 - (void) selectPreferencePaneUsingToolbar:(id)sender;
@@ -57,7 +58,7 @@ NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
 		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults", @"FreeDBDefaults",
 			@"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"LAMEDefaults", @"TrackDefaults", @"OggVorbisDefaults", 
-			@"FLACDefaults", @"MonkeysAudioDefaults", @"SpeexDefaults", 
+			@"FLACDefaults", @"MonkeysAudioDefaults", @"SpeexDefaults", @"WavPackDefaults",
 			@"PCMGeneratingTaskDefaults", @"ConverterTaskDefaults", @"EncoderTaskDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
@@ -273,6 +274,17 @@ NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	} 
+    else if([itemIdentifier isEqualToString:WavPackPreferencesItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"WavPack", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"WavPack", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the WavPack encoder", @"Preferences", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"WavPackToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
+	} 
 	else {
 		toolbarItem = nil;
     }
@@ -287,7 +299,7 @@ NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
 		FreeDBPreferencesItemIdentifier,
 		RipperPreferencesItemIdentifier, LAMEPreferencesItemIdentifier, 
 		FLACPreferencesItemIdentifier, OggVorbisPreferencesItemIdentifier,
-		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier,
+		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier, WavPackPreferencesItemIdentifier,
 		nil];
 }
 
@@ -298,7 +310,7 @@ NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
 		FreeDBPreferencesItemIdentifier,
 		RipperPreferencesItemIdentifier, LAMEPreferencesItemIdentifier, 
 		FLACPreferencesItemIdentifier, OggVorbisPreferencesItemIdentifier,
-		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier,
+		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier, WavPackPreferencesItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
@@ -311,7 +323,7 @@ NSString *		SpeexPreferencesItemIdentifier				= @"SpeexPreferences";
 		FreeDBPreferencesItemIdentifier,
 		RipperPreferencesItemIdentifier, LAMEPreferencesItemIdentifier, 
 		FLACPreferencesItemIdentifier, OggVorbisPreferencesItemIdentifier,
-		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier,
+		MonkeysAudioPreferencesItemIdentifier, SpeexPreferencesItemIdentifier, WavPackPreferencesItemIdentifier,
 		nil];
 }
 

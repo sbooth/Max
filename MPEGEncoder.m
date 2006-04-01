@@ -142,6 +142,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME target" userInfo:nil];
 			}
 			
+			//lame_set_findReplayGain(_gfp, 1);
+			
 			lameResult = lame_init_params(_gfp);
 			if(-1 == lameResult) {
 				@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @"") userInfo:nil];

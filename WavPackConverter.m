@@ -20,7 +20,7 @@
 
 #import "WavPackConverter.h"
 
-#include <WavPack/wavpack.h>
+#include <WavPack/wputils.h>
 
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>

@@ -12,6 +12,8 @@
 	<false/>
 	<key>outputSpeex</key>
 	<false/>
+	<key>outputWavPack</key>
+	<false/>
 	<key>libsndfileOutputFormats</key>
 	<array/>
 	<key>coreAudioOutputFormats</key>

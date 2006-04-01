@@ -20,27 +20,8 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
-
-@interface SpeexEncoder : Encoder
+@interface WavPackPreferencesController : NSWindowController 
 {
-	// Settings flags
-	int						_mode;
-	int						_target;
-	int						_quality;
-	int						_bitrate;	
-	int						_complexity;
-	int						_framesPerPacket;
-
-	BOOL					_resampleInput;
-	BOOL					_denoiseEnabled;
-	BOOL					_agcEnabled;
-	BOOL					_vbrEnabled;
-	BOOL					_abrEnabled;
-	BOOL					_dtxEnabled;
-	BOOL					_vadEnabled;
-	
-	BOOL					_writeSettingsToComment;
 }
 
 @end

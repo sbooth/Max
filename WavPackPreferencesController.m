@@ -18,29 +18,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import <Cocoa/Cocoa.h>
+#import "WavPackPreferencesController.h"
 
-#import "Encoder.h"
+@implementation WavPackPreferencesController
 
-@interface SpeexEncoder : Encoder
+- (id) init
 {
-	// Settings flags
-	int						_mode;
-	int						_target;
-	int						_quality;
-	int						_bitrate;	
-	int						_complexity;
-	int						_framesPerPacket;
-
-	BOOL					_resampleInput;
-	BOOL					_denoiseEnabled;
-	BOOL					_agcEnabled;
-	BOOL					_vbrEnabled;
-	BOOL					_abrEnabled;
-	BOOL					_dtxEnabled;
-	BOOL					_vadEnabled;
-	
-	BOOL					_writeSettingsToComment;
+	if((self = [super initWithWindowNibName:@"WavPackPreferences"])) {
+		return self;		
+	}
+	return nil;
 }
 
 @end

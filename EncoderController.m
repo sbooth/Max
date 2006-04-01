@@ -29,6 +29,7 @@
 #import "LibsndfileEncoderTask.h"
 #import "MonkeysAudioEncoderTask.h"
 #import "SpeexEncoderTask.h"
+#import "WavPackEncoderTask.h"
 #import "LogController.h"
 #import "RipperController.h"
 #import "ConverterController.h"
@@ -178,6 +179,9 @@ static EncoderController *sharedController = nil;
 		}
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"]) {
 			[self runEncoder:[SpeexEncoderTask class] forTask:task];
+		}
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputWavPack"]) {
+			[self runEncoder:[WavPackEncoderTask class] forTask:task];
 		}
 		
 		// Core Audio encoders

@@ -89,6 +89,7 @@
 		8C8B0DA2092E641200418C45 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0DA1092E641200418C45 /* MacPAD.url */; };
 		8C8B0DAD092E64D900418C45 /* UpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0DAB092E64D900418C45 /* UpdateChecker.m */; };
 		8C8CAF6E096C4A9700A1A4E0 /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */; };
+		8C8FD36E09DDB3AF0093271D /* WavPackPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C8FD36809DDB3AF0093271D /* WavPackPreferences.nib */; };
 		8C925856097E1B3C008BE59E /* ClearLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925855097E1B3C008BE59E /* ClearLogToolbarImage.png */; };
 		8C925861097E1C1C008BE59E /* SaveLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C925860097E1C1C008BE59E /* SaveLogToolbarImage.png */; };
 		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
@@ -96,6 +97,7 @@
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
 		8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD973F0973663300A5F2C1 /* SpeexConverter.m */; };
 		8C9EB766096DAA760037CE20 /* SpeexEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */; };
+		8CA0885409DA63CA00AF1D7F /* WavPackEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA0885209DA63C900AF1D7F /* WavPackEncoderTask.m */; };
 		8CA3FB9A09BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */; };
 		8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */; };
 		8CA522790938E44100250BE8 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA522770938E44100250BE8 /* LogController.m */; };
@@ -143,7 +145,6 @@
 		8CBEC69808ED85670064F794 /* LAMEException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC69708ED85670064F794 /* LAMEException.m */; };
 		8CBEC6B208ED861C0064F794 /* StopException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6B108ED861C0064F794 /* StopException.m */; };
 		8CBEC6CF08ED88950064F794 /* EmptySelectionException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBEC6CE08ED88950064F794 /* EmptySelectionException.m */; };
-		8CBF379309CF9B3700E89546 /* Add to iTunes Library.scpt in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF379209CF9B3700E89546 /* Add to iTunes Library.scpt */; };
 		8CBF379409CF9B4500E89546 /* Add to iTunes Library.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 8CBF379209CF9B3700E89546 /* Add to iTunes Library.scpt */; };
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
 		8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC1115408CA2FFF008BB9B0 /* CompactDiscController.m */; };
@@ -188,6 +189,9 @@
 		8CEA91E009437B5500207809 /* TrackInfoToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA91DF09437B5500207809 /* TrackInfoToolbarImage.png */; };
 		8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */; };
 		8CEA94620943A0F500207809 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */; };
+		8CED703909DEEF030062F2B3 /* WavPackPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CED703709DEEF030062F2B3 /* WavPackPreferencesController.m */; };
+		8CED705809DEEFE20062F2B3 /* WavPackToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CED705709DEEFE20062F2B3 /* WavPackToolbarImage.png */; };
+		8CED707109DEF0FA0062F2B3 /* WavPackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CED707009DEF0FA0062F2B3 /* WavPackDefaults.plist */; };
 		8CEDBB73094B47B20023DD01 /* CoreAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */; };
 		8CEDBFFF094B8ECE0023DD01 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */; };
 		8CEDC02B094BE6E10023DD01 /* RipperController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDC029094BE6E10023DD01 /* RipperController.m */; };
@@ -196,6 +200,7 @@
 		8CEDCBA1096133A4009CFC49 /* ConverterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCB9F096133A4009CFC49 /* ConverterWindow.m */; };
 		8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA309613414009CFC49 /* CoreAudioException.m */; };
 		8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */; };
+		8CEE8AF609D9EC9000029BCF /* WavPackEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEE8AF409D9EC9000029BCF /* WavPackEncoder.m */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
 		8CF1EC5C096664EE0058BE92 /* FLACPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */; };
@@ -266,7 +271,6 @@
 				8CD017C60992630400A31DE0 /* Ogg.framework in Copy Frameworks */,
 				8CD0174609925FB700A31DE0 /* LAME.framework in Copy Frameworks */,
 				8C9A24B40925ADB200FB244D /* Growl.framework in Copy Frameworks */,
-				8CBF379309CF9B3700E89546 /* Add to iTunes Library.scpt in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -438,6 +442,7 @@
 		8C8B0EC8092E710200418C45 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/UpdateChecker.nib; sourceTree = "<group>"; };
 		8C8CAF6B096C4A9700A1A4E0 /* ServicesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServicesProvider.h; sourceTree = "<group>"; };
 		8C8CAF6C096C4A9700A1A4E0 /* ServicesProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServicesProvider.m; sourceTree = "<group>"; };
+		8C8FD36909DDB3AF0093271D /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/WavPackPreferences.nib; sourceTree = "<group>"; };
 		8C91B790099AF1780040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FLACPreferences.nib; sourceTree = "<group>"; };
 		8C91B798099AF1FE0040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FormatsPreferences.nib; sourceTree = "<group>"; };
 		8C91B7A0099AF2FF0040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FreeDBMatches.nib; sourceTree = "<group>"; };
@@ -456,6 +461,8 @@
 		8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoderTask.m; sourceTree = "<group>"; };
 		8C9EB779096DAAEA0037CE20 /* SpeexEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeexEncoder.h; sourceTree = "<group>"; };
 		8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoder.m; sourceTree = "<group>"; };
+		8CA0885109DA63C900AF1D7F /* WavPackEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WavPackEncoderTask.h; sourceTree = "<group>"; };
+		8CA0885209DA63C900AF1D7F /* WavPackEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoderTask.m; sourceTree = "<group>"; };
 		8CA3FB9709BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
 		8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
 		8CA3FB9B09BF5B1A00BB1BD4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
@@ -609,6 +616,10 @@
 		8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
 		8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
 		8CEA94610943A0F500207809 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
+		8CED703609DEEF030062F2B3 /* WavPackPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WavPackPreferencesController.h; sourceTree = "<group>"; };
+		8CED703709DEEF030062F2B3 /* WavPackPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WavPackPreferencesController.m; sourceTree = "<group>"; };
+		8CED705709DEEFE20062F2B3 /* WavPackToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WavPackToolbarImage.png; sourceTree = "<group>"; };
+		8CED707009DEF0FA0062F2B3 /* WavPackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WavPackDefaults.plist; sourceTree = "<group>"; };
 		8CEDBB70094B47B20023DD01 /* CoreAudioUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioUtilities.h; sourceTree = "<group>"; };
 		8CEDBB71094B47B20023DD01 /* CoreAudioUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioUtilities.m; sourceTree = "<group>"; };
 		8CEDC010094BE2D70023DD01 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Ripper.nib; sourceTree = "<group>"; };
@@ -624,6 +635,8 @@
 		8CEDCBA309613414009CFC49 /* CoreAudioException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioException.m; sourceTree = "<group>"; };
 		8CEDCBA7096134AD009CFC49 /* FileFormatNotSupportedException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileFormatNotSupportedException.h; sourceTree = "<group>"; };
 		8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileFormatNotSupportedException.m; sourceTree = "<group>"; };
+		8CEE8AF309D9EC9000029BCF /* WavPackEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WavPackEncoder.h; sourceTree = "<group>"; };
+		8CEE8AF409D9EC9000029BCF /* WavPackEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoder.m; sourceTree = "<group>"; };
 		8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
 		8CF0BA5F092C44C400CBF7BD /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
@@ -705,6 +718,8 @@
 				8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */,
 				8C8000BF09CB2FD200AEBDD9 /* MonkeysAudioEncoder.h */,
 				8C8000C009CB2FD200AEBDD9 /* MonkeysAudioEncoder.mm */,
+				8CEE8AF309D9EC9000029BCF /* WavPackEncoder.h */,
+				8CEE8AF409D9EC9000029BCF /* WavPackEncoder.m */,
 			);
 			name = Encoder;
 			sourceTree = "<group>";
@@ -779,6 +794,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CED707009DEF0FA0062F2B3 /* WavPackDefaults.plist */,
+				8CED705709DEEFE20062F2B3 /* WavPackToolbarImage.png */,
+				8C8FD36809DDB3AF0093271D /* WavPackPreferences.nib */,
 				8CBF379209CF9B3700E89546 /* Add to iTunes Library.scpt */,
 				8CE74CF609CDA02900D73B4B /* MonkeysAudioToolbarImage.png */,
 				8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */,
@@ -933,6 +951,8 @@
 				8C14683809CC2E3600F91A97 /* MonkeysAudioPreferencesController.m */,
 				8C6C4F5F09CC5A9500F234E5 /* TaggingPreferencesController.h */,
 				8C6C4F6009CC5A9500F234E5 /* TaggingPreferencesController.m */,
+				8CED703609DEEF030062F2B3 /* WavPackPreferencesController.h */,
+				8CED703709DEEF030062F2B3 /* WavPackPreferencesController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -994,6 +1014,8 @@
 				8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */,
 				8C8000AA09CB2F8000AEBDD9 /* MonkeysAudioEncoderTask.h */,
 				8C8000AB09CB2F8000AEBDD9 /* MonkeysAudioEncoderTask.mm */,
+				8CA0885109DA63C900AF1D7F /* WavPackEncoderTask.h */,
+				8CA0885209DA63C900AF1D7F /* WavPackEncoderTask.m */,
 			);
 			name = "Encoder Tasks";
 			sourceTree = "<group>";
@@ -1234,6 +1256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CBF379409CF9B4500E89546 /* Add to iTunes Library.scpt in Resources */,
+				8CED707109DEF0FA0062F2B3 /* WavPackDefaults.plist in Resources */,
 				8C14689609CC32AC00F91A97 /* MonkeysAudioDefaults.plist in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
@@ -1308,6 +1331,8 @@
 				8CE74CF709CDA02900D73B4B /* MonkeysAudioToolbarImage.png in Resources */,
 				8CDBB4D909CEAAF50018BEC8 /* Max.sdef in Resources */,
 				8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */,
+				8C8FD36E09DDB3AF0093271D /* WavPackPreferences.nib in Resources */,
+				8CED705809DEEFE20062F2B3 /* WavPackToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1416,6 +1441,9 @@
 				8C6C4F7B09CC5C0700F234E5 /* UppercaseStringValueTransformer.m in Sources */,
 				8CBAB55309D7B7DB00F97BDC /* WavPackConverter.m in Sources */,
 				8CBAB60409D7C1E800F97BDC /* WavPackConverterTask.m in Sources */,
+				8CEE8AF609D9EC9000029BCF /* WavPackEncoder.m in Sources */,
+				8CA0885409DA63CA00AF1D7F /* WavPackEncoderTask.m in Sources */,
+				8CED703909DEEF030062F2B3 /* WavPackPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1727,6 +1755,14 @@
 				8C8B0CC2092E5DAA00418C45 /* English */,
 			);
 			name = "Max Help";
+			sourceTree = "<group>";
+		};
+		8C8FD36809DDB3AF0093271D /* WavPackPreferences.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C8FD36909DDB3AF0093271D /* English */,
+			);
+			name = WavPackPreferences.nib;
 			sourceTree = "<group>";
 		};
 		8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */ = {

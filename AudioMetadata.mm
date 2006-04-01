@@ -20,6 +20,7 @@
 
 #import "AudioMetadata.h"
 #import "MallocException.h"
+#import "IOException.h"
 #import "UtilityFunctions.h"
 
 #include <TagLib/fileref.h>					// TagLib::FileRef
@@ -39,6 +40,8 @@
 #include <MAC/APETag.h>
 #include <MAC/CharacterHelper.h>
 
+#include <WavPack/wputils.h>
+
 @interface AudioMetadata (Private)
 + (AudioMetadata *)		metadataFromFLACFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMP3File:(NSString *)filename;
@@ -46,6 +49,7 @@
 + (AudioMetadata *)		metadataFromOggVorbisFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromOggFLACFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMonkeysAudioFile:(NSString *)filename;
++ (AudioMetadata *)		metadataFromWavPackFile:(NSString *)filename;
 @end
 
 @interface AudioMetadata (TagMappings)
@@ -53,6 +57,7 @@
 + (TagLib::String)		customizeOggVorbisTag:(NSString *)tag;
 + (TagLib::String)		customizeOggFLACTag:(NSString *)tag;
 + (str_utf16 *)			customizeAPETag:(NSString *)tag;
++ (NSString *)			customizeWavPackTag:(NSString *)tag;
 @end
 
 @implementation AudioMetadata
@@ -81,6 +86,9 @@
 	}
 	else if([extension isEqualToString:@"ape"] || [extension isEqualToString:@"apl"] || [extension isEqualToString:@"mac"]) {
 		return [self metadataFromMonkeysAudioFile:filename];
+	}
+	else if([extension isEqualToString:@"wv"]) {
+		return [self metadataFromWavPackFile:filename];
 	}
 	else {
 		return [[[AudioMetadata alloc] init] autorelease];
@@ -789,6 +797,254 @@
 	return [result autorelease];
 }
 
++ (AudioMetadata *) metadataFromWavPackFile:(NSString *)filename
+{
+	AudioMetadata					*result					= [[AudioMetadata alloc] init];
+	char							error [80];
+	const char						*tagName				= NULL;
+	char							*tagValue				= NULL;
+    WavpackContext					*wpc					= NULL;
+	int								len;
+	
+	@try {
+		wpc = WavpackOpenFileInput([filename fileSystemRepresentation], error, 0, 0);
+		if(NULL == wpc) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
+		}
+
+		// Album title
+		tagName		= [[self customizeWavPackTag:@"ALBUM"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setAlbumTitle:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+
+		// Artist
+		tagName		= [[self customizeWavPackTag:@"ARTIST"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setAlbumArtist:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+
+		// Composer
+		tagName		= [[self customizeWavPackTag:@"COMPOSER"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setAlbumComposer:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+
+		// Genre
+		tagName		= [[self customizeWavPackTag:@"GENRE"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setAlbumGenre:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+
+		// Year
+		tagName		= [[self customizeWavPackTag:@"YEAR"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setAlbumYear:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+
+		// Comment
+		tagName		= [[self customizeWavPackTag:@"COMMENT"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setAlbumComment:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+
+		// Track title
+		tagName		= [[self customizeWavPackTag:@"TITLE"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setTrackTitle:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+
+		// Track number
+		tagName		= [[self customizeWavPackTag:@"TRACK"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setTrackNumber:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+
+		// Total tracks
+		tagName		= [[self customizeWavPackTag:@"TRACKTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setAlbumTrackCount:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+
+		// Disc number
+		tagName		= [[self customizeWavPackTag:@"DISCNUMBER"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setDiscNumber:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+		
+		// Discs in set
+		tagName		= [[self customizeWavPackTag:@"DISCTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setDiscTotal:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+
+		// Compilation
+		tagName		= [[self customizeWavPackTag:@"COMPILATION"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setCompilation:(BOOL)[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+
+		// MCN
+		tagName		= [[self customizeWavPackTag:@"MCN"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setMCN:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+
+		// ISRC
+		tagName		= [[self customizeWavPackTag:@"ISRC"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len);
+			[result setISRC:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+
+/*		for(i = 0; i < WavpackGetNumTagItems(wpc); ++i) {
+
+			// Get the tag's name
+			len			= WavpackGetTagItemIndexed(wpc, i, NULL, 0);
+			tagName		= (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagName) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}			
+			len			= WavpackGetTagItemIndexed(wpc, i, tagName, len);
+			
+			// Get the tag's value
+			len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+			tagValue	= (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			len			= WavpackGetTagItem(wpc, tagName, tagValue, len);
+			
+			name		= [NSString stringWithCString:tagName encoding:NSASCIIStringEncoding];
+			value		= [NSString stringWithUTF8String:tagValue];
+			
+			free(tagName);
+			free(tagValue);
+		}*/
+	}
+	
+	@finally {
+		WavpackCloseFile(wpc);
+	}
+	
+	return [result autorelease];
+}
+
 #pragma mark Custom Tag Mapping
 
 + (NSString *) customizeFLACTag:(NSString *)tag
@@ -829,6 +1085,14 @@
 	}
 	
 	return result;
+}
+
++ (NSString *) customizeWavPackTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"APETag_%@", tag]];
+	return (nil == customTag ? tag : customTag);
 }
 
 #pragma mark Class

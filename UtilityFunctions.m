@@ -276,6 +276,7 @@ outputFormatsSelected()
 	BOOL		outputOggVorbis		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"];
 	BOOL		outputMonkeysAudio	= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputMonkeysAudio"];
 	BOOL		outputSpeex			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"];
+	BOOL		outputWavPack		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputWavPack"];
 	
-	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis || outputMonkeysAudio || outputSpeex);
+	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis || outputMonkeysAudio || outputSpeex || outputWavPack);
 }

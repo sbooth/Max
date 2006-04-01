@@ -22,25 +22,26 @@
 
 #import "Encoder.h"
 
-@interface SpeexEncoder : Encoder
-{
-	// Settings flags
-	int						_mode;
-	int						_target;
-	int						_quality;
-	int						_bitrate;	
-	int						_complexity;
-	int						_framesPerPacket;
+// Tag values for NSPopupButton
+enum {	
+	WAVPACK_STEREO_MODE_DEFAULT				= 0,
+	WAVPACK_STEREO_MODE_STEREO				= 1,
+	WAVPACK_STEREO_MODE_JOINT_STEREO		= 2,
 
-	BOOL					_resampleInput;
-	BOOL					_denoiseEnabled;
-	BOOL					_agcEnabled;
-	BOOL					_vbrEnabled;
-	BOOL					_abrEnabled;
-	BOOL					_dtxEnabled;
-	BOOL					_vadEnabled;
+	WAVPACK_COMPRESSION_MODE_DEFAULT		= 0,
+	WAVPACK_COMPRESSION_MODE_HIGH			= 1,
+	WAVPACK_COMPRESSION_MODE_FAST			= 2,
 	
-	BOOL					_writeSettingsToComment;
+	WAVPACK_HYBRID_MODE_BITS_PER_SAMPLE		= 0,
+	WAVPACK_HYBRID_MODE_BITRATE				= 1,
+	
+};
+
+@interface WavPackEncoder : Encoder
+{
+	int				_flags;
+	float			_noiseShaping;
+	float			_bitrate;
 }
 
 @end
