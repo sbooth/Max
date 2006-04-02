@@ -192,7 +192,17 @@
 		// Create the directory hierarchy if required
 		createDirectoryStructure(basename);
 	}
-		
+	
+	// Save album art if desired
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveAlbumArtToFile"] && nil != [[_task metadata] albumArt]) {
+		NSData		*bitmapData			= getBitmapDataForImage([[_task metadata] albumArt], NSJPEGFileType);
+		NSString	*bitmapFilename		= [[basename stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"cover.jpg"];
+
+		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:bitmapFilename]) {
+			[bitmapData writeToFile:bitmapFilename atomically:NO];		
+		}
+	}
+	
 	// Generate a unique filename and touch the file
 	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];
 	[self touchOutputFile];

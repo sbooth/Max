@@ -57,7 +57,7 @@ static EncoderController *sharedController = nil;
 - (void)	addTask:(EncoderTask *)task;
 - (void)	removeTask:(EncoderTask *)task;
 - (void)	spawnThreads;
-- (void)	addFileToiTunesLibrary:(NSString *)filename;
+- (void)	addFileToiTunesLibrary:(NSString *)filename playlist:(NSString *)playlist;
 @end
 
 @implementation EncoderController
@@ -393,7 +393,7 @@ static EncoderController *sharedController = nil;
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && ([task isKindOfClass:[MPEGEncoderTask class]] ||
 		([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue] || kAudioFileM4AType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue])) ||
 		([task isKindOfClass:[LibsndfileEncoderTask class]] && SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task getFormat] & SF_FORMAT_TYPEMASK)))) {
-		[self addFileToiTunesLibrary:[task outputFilename]];
+		[self addFileToiTunesLibrary:[task outputFilename] playlist:[[task metadata] playlist]];
 	}
 }
 
@@ -437,12 +437,12 @@ static EncoderController *sharedController = nil;
 	}
 }
 
-- (void) addFileToiTunesLibrary:(NSString *)filename
+- (void) addFileToiTunesLibrary:(NSString *)filename playlist:(NSString *)playlist
 {
 	NSDictionary				*errors				= [NSDictionary dictionary];
 	NSString					*path;
 	NSAppleScript				*appleScript;
-	NSAppleEventDescriptor		*firstParameter;
+	NSAppleEventDescriptor		*firstParameter, *secondParameter;
 	NSAppleEventDescriptor		*parameters;
 	ProcessSerialNumber			psn					= { 0, kCurrentProcess };
 	NSAppleEventDescriptor		*target;
@@ -464,8 +464,10 @@ static EncoderController *sharedController = nil;
 		}
 
 		firstParameter	= [NSAppleEventDescriptor descriptorWithString:filename];
+		secondParameter	= [NSAppleEventDescriptor descriptorWithString:(nil == playlist ? @"" : playlist)];
 		parameters		= [NSAppleEventDescriptor listDescriptor];
 		[parameters insertDescriptor:firstParameter atIndex:1];
+		[parameters insertDescriptor:secondParameter atIndex:2];
 		
 		target			= [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber bytes:&psn length:sizeof(ProcessSerialNumber)];
 		handler			= [NSAppleEventDescriptor descriptorWithString:[@"add_file_to_itunes_library" lowercaseString]];

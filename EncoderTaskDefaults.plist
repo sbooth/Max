@@ -10,5 +10,7 @@
 	<false/>
 	<key>automaticallyAddToiTunes</key>
 	<false/>
+	<key>createiTunesAlbumPlaylist</key>
+	<false/>
 </dict>
 </plist>

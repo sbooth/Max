@@ -48,6 +48,8 @@
 	
 	NSString				*_MCN;
 	NSString				*_ISRC;
+	
+	NSString				*_playlist;
 }
 
 // Attempt to parse metadata from filename
@@ -87,6 +89,8 @@
 
 - (NSImage *)	albumArt;
 
+- (NSString *)	playlist;
+
 // Mutators
 - (void)		setTrackNumber:(unsigned)trackNumber;
 - (void)		setTrackTitle:(NSString *)trackTitle;
@@ -114,5 +118,7 @@
 - (void)		setISRC:(NSString *)ISRC;
 
 - (void)		setAlbumArt:(NSImage *)albumArt;
+
+- (void)		setPlaylist:(NSString *)playlist;
 
 @end

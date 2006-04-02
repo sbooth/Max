@@ -90,6 +90,7 @@
 - (void)			updateDiscFromFreeDB:(NSDictionary *) info;
 
 // Miscellaneous
+- (void)			encodeToPlaylist:(NSString *)playlist;
 - (void)			discEjected;
 - (NSArray *)		selectedTracks;
 

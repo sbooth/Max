@@ -238,6 +238,13 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 NSData *
 getPNGDataForImage(NSImage *image)
 {
+	return getBitmapDataForImage(image, NSPNGFileType); 
+}
+
+NSData *
+getBitmapDataForImage(NSImage					*image,
+					  NSBitmapImageFileType		type)
+{
 	NSEnumerator		*enumerator					= nil;
 	NSImageRep			*currentRepresentation		= nil;
 	NSBitmapImageRep	*bitmapRep					= nil;
@@ -262,7 +269,7 @@ getPNGDataForImage(NSImage *image)
 		[image unlockFocus];
 	}
 	
-	return [bitmapRep representationUsingType:NSPNGFileType properties:nil]; 
+	return [bitmapRep representationUsingType:type properties:nil]; 
 }
 
 BOOL

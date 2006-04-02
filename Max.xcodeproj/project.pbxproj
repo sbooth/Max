@@ -160,6 +160,8 @@
 		8CD7B0CE094E7F2600BA2427 /* SectorRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD7B0CC094E7F2600BA2427 /* SectorRange.m */; };
 		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
 		8CD9ED95094FEB6700F67AC8 /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */; };
+		8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CDBA03A09DF925800126090 /* GetPlaylistName.nib */; };
+		8CDBA04509DF927A00126090 /* GetPlaylistNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDBA04309DF927A00126090 /* GetPlaylistNameSheet.m */; };
 		8CDBB4D909CEAAF50018BEC8 /* Max.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 8CDBB4D809CEAAF50018BEC8 /* Max.sdef */; };
 		8CDD2B9209442A9100D2DD96 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD2B9109442A9100D2DD96 /* CDInfo.icns */; };
 		8CDD66DE0946770300DE4137 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */; };
@@ -571,6 +573,9 @@
 		8CD9ECBC094FE19000F67AC8 /* CoreAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverter.m; sourceTree = "<group>"; };
 		8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterTask.h; sourceTree = "<group>"; };
 		8CD9ED93094FEB6700F67AC8 /* CoreAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterTask.m; sourceTree = "<group>"; };
+		8CDBA03B09DF925800126090 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
+		8CDBA04209DF927A00126090 /* GetPlaylistNameSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetPlaylistNameSheet.h; sourceTree = "<group>"; };
+		8CDBA04309DF927A00126090 /* GetPlaylistNameSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GetPlaylistNameSheet.m; sourceTree = "<group>"; };
 		8CDBB4D809CEAAF50018BEC8 /* Max.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = Max.sdef; sourceTree = "<group>"; };
 		8CDD2B9109442A9100D2DD96 /* CDInfo.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CDInfo.icns; sourceTree = "<group>"; };
 		8CDD66DD0946770300DE4137 /* SubmitToFreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SubmitToFreeDBToolbarImage.png; sourceTree = "<group>"; };
@@ -794,6 +799,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CDBA03A09DF925800126090 /* GetPlaylistName.nib */,
 				8CED707009DEF0FA0062F2B3 /* WavPackDefaults.plist */,
 				8CED705709DEEFE20062F2B3 /* WavPackToolbarImage.png */,
 				8C8FD36809DDB3AF0093271D /* WavPackPreferences.nib */,
@@ -1023,6 +1029,8 @@
 		8C7C894308EC3FFE00F6FCB1 /* Compact Disc */ = {
 			isa = PBXGroup;
 			children = (
+				8CDBA04209DF927A00126090 /* GetPlaylistNameSheet.h */,
+				8CDBA04309DF927A00126090 /* GetPlaylistNameSheet.m */,
 				8CA3FB9709BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h */,
 				8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */,
 				8CCED19C0935AA5E00413C0A /* CompactDisc.m */,
@@ -1333,6 +1341,7 @@
 				8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */,
 				8C8FD36E09DDB3AF0093271D /* WavPackPreferences.nib in Resources */,
 				8CED705809DEEFE20062F2B3 /* WavPackToolbarImage.png in Resources */,
+				8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1444,6 +1453,7 @@
 				8CEE8AF609D9EC9000029BCF /* WavPackEncoder.m in Sources */,
 				8CA0885409DA63CA00AF1D7F /* WavPackEncoderTask.m in Sources */,
 				8CED703909DEEF030062F2B3 /* WavPackPreferencesController.m in Sources */,
+				8CDBA04509DF927A00126090 /* GetPlaylistNameSheet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1794,6 +1804,14 @@
 				8C643A7809D7393400F6C1F6 /* Dutch */,
 			);
 			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		8CDBA03A09DF925800126090 /* GetPlaylistName.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8CDBA03B09DF925800126090 /* English */,
+			);
+			name = GetPlaylistName.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

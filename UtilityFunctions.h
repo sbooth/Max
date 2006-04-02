@@ -61,6 +61,10 @@ void addVorbisComment(FLAC__StreamMetadata		*block,
 // Convert an NSImage to PNG data
 NSData * getPNGDataForImage(NSImage *image);
 
+// Convert an NSImage to bitmapped data
+NSData * getBitmapDataForImage(NSImage					*image,
+							   NSBitmapImageFileType	type);
+	
 // Return YES if at least one output format is selected
 BOOL outputFormatsSelected();
 

@@ -1125,6 +1125,8 @@
 		
 		_albumArt			= nil;
 		
+		_playlist			= nil;
+		
 		_MCN				= nil;
 		_ISRC				= nil;
 		
@@ -1149,6 +1151,8 @@
 	[_albumComment release];
 	
 	[_albumArt release];
+	
+	[_playlist release];
 	
 	[_MCN release];
 	[_ISRC release];
@@ -1406,6 +1410,8 @@
 
 - (NSImage *)	albumArt					{ return _albumArt; }
 
+- (NSString *)	playlist					{ return _playlist; }
+
 #pragma mark Mutators
 
 - (void)		setTrackNumber:(unsigned)trackNumber			{ _trackNumber = trackNumber; }
@@ -1434,5 +1440,7 @@
 - (void)		setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = [ISRC retain]; }
 
 - (void)		setAlbumArt:(NSImage *)albumArt					{ [_albumArt release]; _albumArt = [albumArt retain]; }
+
+- (void)		setPlaylist:(NSString *)playlist				{ [_playlist release]; _playlist = [playlist retain]; }
 
 @end

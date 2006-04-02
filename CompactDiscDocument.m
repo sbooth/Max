@@ -30,6 +30,7 @@
 #import "RipperController.h"
 #import "Encoder.h"
 #import "MediaController.h"
+#import "GetPlaylistNameSheet.h"
 
 #import "MallocException.h"
 #import "IOException.h"
@@ -423,6 +424,16 @@ enum {
 			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
 		}
 		
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"createiTunesAlbumPlaylist"]) {
+			GetPlaylistNameSheet *sheet = [[GetPlaylistNameSheet alloc] initWithCompactDiscDocument:self];
+			[sheet showSheet];
+		}
+		else {
+			[self encodeToPlaylist:nil];
+		}
+
+		return;
+		
 		// Iterate through the selected tracks and rip/encode them
 		selectedTracks	= [self selectedTracks];
 		
@@ -446,6 +457,57 @@ enum {
 			
 			while((track = [enumerator nextObject])) {
 				[[RipperController sharedController] ripTrack:track];
+			}
+		}
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), [self title]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[self displayExceptionAlert:alert];
+	}
+}
+
+- (void) encodeToPlaylist:(NSString *)playlist
+{
+	Track			*track;
+	NSArray			*selectedTracks;
+	NSEnumerator	*enumerator;
+	AudioMetadata	*metadata;
+	
+	@try {
+		// Iterate through the selected tracks and rip/encode them
+		selectedTracks	= [self selectedTracks];
+		
+		// Create one single file for more than one track
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && 1 < [selectedTracks count]) {
+			
+			metadata = [[selectedTracks objectAtIndex:0] metadata];
+			
+			[metadata setTrackNumber:0];
+			[metadata setTrackTitle:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"")];
+			[metadata setTrackArtist:nil];
+			[metadata setTrackGenre:nil];
+			[metadata setTrackYear:0];
+			[metadata setISRC:nil];
+
+			[metadata setPlaylist:playlist];
+			
+			[[RipperController sharedController] ripTracks:selectedTracks metadata:metadata];
+		}
+		// Create one file per track
+		else {			
+			enumerator		= [selectedTracks objectEnumerator];
+			
+			while((track = [enumerator nextObject])) {
+				metadata = [[selectedTracks objectAtIndex:0] metadata];
+				
+				[metadata setPlaylist:playlist];
+				
+				[[RipperController sharedController] ripTracks:[NSArray arrayWithObject:track] metadata:metadata];
 			}
 		}
 	}
