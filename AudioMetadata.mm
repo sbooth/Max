@@ -664,7 +664,7 @@
 	CAPETagField					*tag					= NULL;		
 	
 	@try {
-		chars = GetUTF16FromUTF8((const unsigned char *)[filename UTF8String]);
+		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
 		if(NULL == chars) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
