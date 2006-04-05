@@ -31,6 +31,8 @@ extern NSString *		FLACPreferencesItemIdentifier;
 extern NSString *		OggVorbisPreferencesItemIdentifier;
 extern NSString *		MonkeysAudioPreferencesItemIdentifier;
 extern NSString *		SpeexPreferencesItemIdentifier;
+extern NSString *		WavPackPreferencesItemIdentifier;
+extern NSString *		AlbumArtPreferencesItemIdentifier;
 
 @interface PreferencesController : NSWindowController
 {

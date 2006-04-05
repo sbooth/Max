@@ -75,7 +75,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Max 0.5.6</string>
+	<string>Max 0.5.7</string>
 	<key>CFBundleHelpBookFolder</key>
 	<string>Max Help</string>
 	<key>CFBundleHelpBookName</key>
@@ -91,7 +91,7 @@
 	<key>CFBundleSignature</key>
 	<string>Maxx</string>
 	<key>CFBundleVersion</key>
-	<string>0.5.6</string>
+	<string>0.5.7</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

@@ -72,6 +72,9 @@
 		8C75C81D09538A4B00A923AD /* UtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75C81C09538A4B00A923AD /* UtilityFunctions.m */; };
 		8C75CA23095393EC00A923AD /* LibsndfileConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CA21095393EC00A923AD /* LibsndfileConverterTask.m */; };
 		8C75CB6E0953C36900A923AD /* FLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CB6C0953C36900A923AD /* FLACConverterTask.m */; };
+		8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */; };
+		8C76350109E0F2EE00616BE9 /* AlbumArtPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7634FF09E0F2EE00616BE9 /* AlbumArtPreferencesController.m */; };
+		8C76355409E0F8EC00616BE9 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */; };
 		8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */; };
 		8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */; };
 		8C794DD9097F0DC10081CD7F /* SpeexPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C794DD8097F0DC10081CD7F /* SpeexPreferences.nib */; };
@@ -391,6 +394,10 @@
 		8C75CAA10953B72C00A923AD /* FLACConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACConverter.m; sourceTree = "<group>"; };
 		8C75CB6B0953C36900A923AD /* FLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACConverterTask.h; sourceTree = "<group>"; };
 		8C75CB6C0953C36900A923AD /* FLACConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACConverterTask.m; sourceTree = "<group>"; };
+		8C7634F509E0F11D00616BE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
+		8C7634FE09E0F2EE00616BE9 /* AlbumArtPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumArtPreferencesController.h; sourceTree = "<group>"; };
+		8C7634FF09E0F2EE00616BE9 /* AlbumArtPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumArtPreferencesController.m; sourceTree = "<group>"; };
+		8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = AlbumArtDefaults.plist; sourceTree = "<group>"; };
 		8C76E43208C6DE1A00F4F9A1 /* CompactDiscDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocument.h; sourceTree = "<group>"; };
 		8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocument.m; sourceTree = "<group>"; };
 		8C76E43908C6DE3900F4F9A1 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
@@ -871,6 +878,8 @@
 				8C137F720981CF4A00EBFC77 /* ConverterTaskDefaults.plist */,
 				8C14685409CC305100F91A97 /* MonkeysAudioPreferences.nib */,
 				8CDBB4D809CEAAF50018BEC8 /* Max.sdef */,
+				8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */,
+				8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -959,6 +968,8 @@
 				8C6C4F6009CC5A9500F234E5 /* TaggingPreferencesController.m */,
 				8CED703609DEEF030062F2B3 /* WavPackPreferencesController.h */,
 				8CED703709DEEF030062F2B3 /* WavPackPreferencesController.m */,
+				8C7634FE09E0F2EE00616BE9 /* AlbumArtPreferencesController.h */,
+				8C7634FF09E0F2EE00616BE9 /* AlbumArtPreferencesController.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -1342,6 +1353,8 @@
 				8C8FD36E09DDB3AF0093271D /* WavPackPreferences.nib in Resources */,
 				8CED705809DEEFE20062F2B3 /* WavPackToolbarImage.png in Resources */,
 				8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */,
+				8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */,
+				8C76355409E0F8EC00616BE9 /* AlbumArtDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1454,6 +1467,7 @@
 				8CA0885409DA63CA00AF1D7F /* WavPackEncoderTask.m in Sources */,
 				8CED703909DEEF030062F2B3 /* WavPackPreferencesController.m in Sources */,
 				8CDBA04509DF927A00126090 /* GetPlaylistNameSheet.m in Sources */,
+				8C76350109E0F2EE00616BE9 /* AlbumArtPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1747,6 +1761,14 @@
 				8CDE899609D3B9F600FBD401 /* German */,
 			);
 			name = TaggingPreferences.nib;
+			sourceTree = "<group>";
+		};
+		8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C7634F509E0F11D00616BE9 /* English */,
+			);
+			name = AlbumArtPreferences.nib;
 			sourceTree = "<group>";
 		};
 		8C794DD8097F0DC10081CD7F /* SpeexPreferences.nib */ = {

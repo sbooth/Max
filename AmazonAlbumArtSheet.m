@@ -55,6 +55,11 @@
 	[super dealloc];
 }
 
+- (void) awakeFromNib
+{
+	[_localePopUpButton selectItemWithTag:[[NSUserDefaults standardUserDefaults] integerForKey:@"amazonDefaultLocale"]];
+}
+
 - (void) showAlbumArtMatches
 {
     [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_doc windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];

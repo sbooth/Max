@@ -61,6 +61,9 @@
 // Create output file's basename
 - (NSString *)			outputBasenameWithSubstitutions:(NSDictionary *)substitutions;
 
+// Substitute our values for {} keywords in string
+- (NSString *)			replaceKeywordsInString:(NSString *)namingScheme;
+
 // Accessors
 - (unsigned)	trackNumber;
 - (NSString *)	trackTitle;

@@ -33,6 +33,15 @@
 - (void) touchOutputFile;
 @end
 
+enum {
+	kTIFFFileFormatMenuItemTag			= 0,
+	kBMPFileFormatMenuItemTag			= 1,
+	kGIFFileFormatMenuItemTag			= 2,
+	kJPEGFileFormatMenuItemTag			= 3,
+	kPNGFileFormatMenuItemTag			= 4,
+	kJPEG200FileFormatMenuItemTag		= 5
+};
+
 @implementation EncoderTask
 
 + (void) initialize
@@ -195,8 +204,29 @@
 	
 	// Save album art if desired
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveAlbumArtToFile"] && nil != [[_task metadata] albumArt]) {
-		NSData		*bitmapData			= getBitmapDataForImage([[_task metadata] albumArt], NSJPEGFileType);
-		NSString	*bitmapFilename		= [[basename stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"cover.jpg"];
+		NSBitmapImageFileType	fileType;
+		NSString				*extension, *namingScheme;
+		NSData					*bitmapData;
+		NSString				*bitmapBasename, *bitmapFilename;
+
+		switch([[NSUserDefaults standardUserDefaults] integerForKey:@"albumArtFileFormat"]) {
+			case kTIFFFileFormatMenuItemTag:		fileType = NSTIFFFileType;			extension = @"tiff";		break;
+			case kBMPFileFormatMenuItemTag:			fileType = NSBMPFileType;			extension = @"bmp";			break;
+			case kGIFFileFormatMenuItemTag:			fileType = NSGIFFileType;			extension = @"gif";			break;
+			case kJPEGFileFormatMenuItemTag:		fileType = NSJPEGFileType;			extension = @"jpeg";		break;
+			case kPNGFileFormatMenuItemTag:			fileType = NSPNGFileType;			extension = @"png";			break;
+			case kJPEG200FileFormatMenuItemTag:		fileType = NSJPEG2000FileType;		extension = @"jpeg";		break;
+				
+		}
+
+		namingScheme		= [[NSUserDefaults standardUserDefaults] stringForKey:@"albumArtNamingScheme"];
+		if(nil == namingScheme) {
+			namingScheme = @"cover";
+		}
+		
+		bitmapData			= getBitmapDataForImage([[_task metadata] albumArt], fileType);
+		bitmapBasename		= [[basename stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[_task metadata] replaceKeywordsInString:makeStringSafeForFilename(namingScheme)]];
+		bitmapFilename		= generateUniqueFilename(bitmapBasename, extension);
 
 		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:bitmapFilename]) {
 			[bitmapData writeToFile:bitmapFilename atomically:NO];		
