@@ -51,6 +51,9 @@ static ApplicationController *sharedController = nil;
 {
 	// Set up the ValueTransformers
 	NSValueTransformer			*transformer;
+	NSArray						*array;
+	NSEnumerator				*enumerator;
+	NSString					*filename;
 	NSString					*defaultsValuesPath;
     NSDictionary				*defaultsValuesDictionary;
     
@@ -74,13 +77,18 @@ static ApplicationController *sharedController = nil;
 	[NSValueTransformer setValueTransformer:transformer forName:@"UppercaseStringValueTransformer"];
 	
 	@try {
-		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
-		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"ApplicationControllerDefaults.plist" forKey:@"filename"]];
+		// Load other defaults so displayAlertIfNoOutputFormats will work correctly
+		array = [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"CompactDiscDocumentDefaults", nil];
+		enumerator = [array objectEnumerator];
+		while((filename = [enumerator nextObject])) {
+			defaultsValuesPath = [[NSBundle mainBundle] pathForResource:filename ofType:@"plist"];
+			if(nil == defaultsValuesPath) {
+				@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
+															userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@.plist", filename] forKey:@"filename"]];
+			}
+			defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+			[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 		}
-		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
-		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}
 	
 	@catch(NSException *exception) {
