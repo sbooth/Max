@@ -424,40 +424,12 @@ enum {
 			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"createiTunesAlbumPlaylist"]) {
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"createiTunesAlbumPlaylist"]) {
 			GetPlaylistNameSheet *sheet = [[GetPlaylistNameSheet alloc] initWithCompactDiscDocument:self];
 			[sheet showSheet];
 		}
 		else {
 			[self encodeToPlaylist:nil];
-		}
-
-		return;
-		
-		// Iterate through the selected tracks and rip/encode them
-		selectedTracks	= [self selectedTracks];
-		
-		// Create one single file for more than one track
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && 1 < [selectedTracks count]) {
-			
-			AudioMetadata *metadata = [[selectedTracks objectAtIndex:0] metadata];
-			
-			[metadata setTrackNumber:0];
-			[metadata setTrackTitle:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"")];
-			[metadata setTrackArtist:nil];
-			[metadata setTrackGenre:nil];
-			[metadata setTrackYear:0];
-			[metadata setISRC:nil];
-						
-			[[RipperController sharedController] ripTracks:selectedTracks metadata:metadata];
-		}
-		// Create one file per track
-		else {			
-			enumerator		= [selectedTracks objectEnumerator];
-			
-			while((track = [enumerator nextObject])) {
-				[[RipperController sharedController] ripTrack:track];
-			}
 		}
 	}
 	
