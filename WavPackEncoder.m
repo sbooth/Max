@@ -348,7 +348,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		(_flags & CONFIG_HIGH_FLAG ? @"high " : @""),
 		(_flags & CONFIG_FAST_FLAG ? @"fast " : @""),
 		(_flags & CONFIG_HYBRID_FLAG ? @"hybrid " : @""),
-		(_flags & CONFIG_JOINT_OVERRIDE ? (_flags & CONFIG_JOINT_STEREO ? @"joint stereo " : @"stereo "): @"")];
+		(_flags & CONFIG_JOINT_OVERRIDE ? (_flags & CONFIG_JOINT_STEREO ? @"joint stereo " : @"stereo ") : @"")];
 }
 
 @end
