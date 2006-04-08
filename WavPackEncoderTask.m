@@ -57,7 +57,7 @@
 	NSString									*trackComment			= nil;
 	NSString									*isrc					= nil;
 	NSString									*mcn					= nil;
-	NSString									*bundleVersion, *versionString;
+	NSString									*bundleVersion;
     WavpackContext								*wpc					= NULL;
 	char										error [80];
 	
@@ -132,7 +132,7 @@
 	// Track number
 	trackNumber = [metadata trackNumber];
 	if(0 != trackNumber) {
-		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TRACKNUMBER"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", trackNumber] UTF8String], strlen([[NSString stringWithFormat:@"%u", trackNumber] UTF8String]));
+		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TRACK"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", trackNumber] UTF8String], strlen([[NSString stringWithFormat:@"%u", trackNumber] UTF8String]));
 	}
 	
 	// Track total
@@ -173,8 +173,8 @@
 	
 	// Encoded by
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-	versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
-	WavpackAppendTagItem(wpc, "ENCODER", [versionString UTF8String], strlen([versionString UTF8String]));
+	WavpackAppendTagItem(wpc, "TOOL NAME", "Max", strlen("Max"));
+	WavpackAppendTagItem(wpc, "TOOL VERSION", [bundleVersion UTF8String], strlen([bundleVersion UTF8String]));
 	
 	// Encoder settings
 	WavpackAppendTagItem(wpc, "ENCODING", [[self settings] UTF8String], strlen([[self settings] UTF8String]));	
