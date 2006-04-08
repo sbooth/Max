@@ -377,12 +377,23 @@ static EncoderController *sharedController = nil;
 		justNotified = YES;
 	}
 
-	if(NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks] && NO == [[ConverterController sharedController] hasTasks] && NO == justNotified) {
-		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encoding completed", @"Log", @"")
-									description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
-							   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	// No more tasks in any queues
+	if(NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks] && NO == [[ConverterController sharedController] hasTasks]) {
+
+		// Bounce dock icon if we're not the active application
+		if(NO == [[NSApplication sharedApplication] isActive]) {
+			[[NSApplication sharedApplication] requestUserAttention:NSInformationalRequest];			
+		}
+		
+		// Try to avoid Growl floods
+		if(NO == justNotified) {
+			[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encoding completed", @"Log", @"")
+										description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
+								   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		}
 	}
 
+	
 	if(0 != [task countOfTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && NO == [[[task objectInTracksAtIndex:0] document] ripInProgress] && NO == [[[task objectInTracksAtIndex:0] document] encodeInProgress]) {
 		CompactDiscDocument *doc = [[task objectInTracksAtIndex:0] document];
 		[doc saveDocument:self];
