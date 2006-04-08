@@ -101,6 +101,9 @@
 "The Speex mode number %i was not recognized." = "Die Speex Modus-Nummer %i wurde nicht erkannt.";
 
 /* No comment provided by engineer. */
+"The WavPack stream is not 16-bit stereo." = "Der WavPack Datenstrom ist nicht 16-bit Stereo.";
+
+/* No comment provided by engineer. */
 "This file was encoded with a newer version of Speex." = "Diese Datei wurde mit einer neueren Version von Speex enkodiert.";
 
 /* No comment provided by engineer. */
@@ -158,6 +161,9 @@
 "Unable to create the output file." = "Kann Ausgabedatei nicht erstellen.";
 
 /* No comment provided by engineer. */
+"Unable to create the WavPack encoder." = "Kann WavPack Enkoder nicht erstellen.";
+
+/* No comment provided by engineer. */
 "Unable to decode Speex bitstream version %i." = "Kann Speex Bitstream Version %i nicht dekodieren.";
 
 /* No comment provided by engineer. */
@@ -189,6 +195,9 @@
 
 /* No comment provided by engineer. */
 "Unable to initialize the Ogg Vorbis encoder." = "Kann den Ogg Vorbis Enkoder nicht initialisieren.";
+
+/* No comment provided by engineer. */
+"Unable to initialize the WavPack encoder." = "Kann den WavPack Enkoder nicht initialisieren.";
 
 /* No comment provided by engineer. */
 "Unable to intialize the Speex decoder." = "Kann den Speex Dekoder nicht initialisieren.";

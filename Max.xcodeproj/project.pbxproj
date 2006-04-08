@@ -424,6 +424,9 @@
 		8C794E10097F19470081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/SpeexPreferences.nib; sourceTree = "<group>"; };
 		8C794E11097F19480081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/UpdateChecker.nib; sourceTree = "<group>"; };
 		8C794E2A097F1C480081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Exceptions.strings; sourceTree = "<group>"; };
+		8C7C837909E799E600A6B846 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
+		8C7C837F09E79AA300A6B846 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
+		8C7C838609E79AEB00A6B846 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/WavPackPreferences.nib; sourceTree = "<group>"; };
 		8C7C88BB08EC37D800F6FCB1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		8C7C891208EC3EC500F6FCB1 /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
 		8C7C891308EC3EC500F6FCB1 /* ApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ApplicationController.m; sourceTree = "<group>"; };
@@ -1767,6 +1770,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C7634F509E0F11D00616BE9 /* English */,
+				8C7C837909E799E600A6B846 /* French */,
 			);
 			name = AlbumArtPreferences.nib;
 			sourceTree = "<group>";
@@ -1793,6 +1797,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C8FD36909DDB3AF0093271D /* English */,
+				8C7C838609E79AEB00A6B846 /* French */,
 			);
 			name = WavPackPreferences.nib;
 			sourceTree = "<group>";
@@ -1832,6 +1837,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8CDBA03B09DF925800126090 /* English */,
+				8C7C837F09E79AA300A6B846 /* French */,
 			);
 			name = GetPlaylistName.nib;
 			sourceTree = "<group>";
