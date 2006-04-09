@@ -402,6 +402,9 @@
 		8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocument.m; sourceTree = "<group>"; };
 		8C76E43908C6DE3900F4F9A1 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		8C76E43A08C6DE3900F4F9A1 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		8C781DE709E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
+		8C781DE809E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
+		8C781DE909E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/WavPackPreferences.nib; sourceTree = "<group>"; };
 		8C794DFB097F191C0081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8C794DFE097F19450081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
 		8C794DFF097F19450081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/CompactDiscDocument.nib; sourceTree = "<group>"; };
@@ -1771,6 +1774,7 @@
 			children = (
 				8C7634F509E0F11D00616BE9 /* English */,
 				8C7C837909E799E600A6B846 /* French */,
+				8C781DE709E8B61C001D85EF /* German */,
 			);
 			name = AlbumArtPreferences.nib;
 			sourceTree = "<group>";
@@ -1798,6 +1802,7 @@
 			children = (
 				8C8FD36909DDB3AF0093271D /* English */,
 				8C7C838609E79AEB00A6B846 /* French */,
+				8C781DE909E8B61C001D85EF /* German */,
 			);
 			name = WavPackPreferences.nib;
 			sourceTree = "<group>";
@@ -1838,6 +1843,7 @@
 			children = (
 				8CDBA03B09DF925800126090 /* English */,
 				8C7C837F09E79AA300A6B846 /* French */,
+				8C781DE809E8B61C001D85EF /* German */,
 			);
 			name = GetPlaylistName.nib;
 			sourceTree = "<group>";

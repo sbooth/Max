@@ -71,7 +71,7 @@
 "Specify custom tag names for FLAC, Ogg Vorbis and Monkey's Audio files" = "Benutzerdefinierte Tags für FLAC, Ogg Vorbis und Monkey's Audio Dateien auswählen";
 
 /* No comment provided by engineer. */
-"Specify whether to save album art with the encoded files" = "Specify whether to save album art with the encoded files";
+"Specify whether to save album art with the encoded files" = "Angeben, ob das CD-Cover zusammen mit den enkodierten Dateien gespeichert werden soll";
 
 /* No comment provided by engineer. */
 "Speex" = "Speex";
