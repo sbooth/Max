@@ -402,8 +402,8 @@ static EncoderController *sharedController = nil;
 
 	// Add files to iTunes if desired
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && ([task isKindOfClass:[MPEGEncoderTask class]] ||
-		([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue] || kAudioFileM4AType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue])) ||
-		([task isKindOfClass:[LibsndfileEncoderTask class]] && SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task getFormat] & SF_FORMAT_TYPEMASK)))) {
+		([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue] || kAudioFileM4AType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue] || kAudioFileWAVEType == [[task valueForKeyPath:@"formatInfo.fileType"] unsignedLongValue])) ||
+		([task isKindOfClass:[LibsndfileEncoderTask class]] && (SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task getFormat] & SF_FORMAT_TYPEMASK) || SF_FORMAT_WAV == ([(LibsndfileEncoderTask *)task getFormat] & SF_FORMAT_TYPEMASK))))) {
 		[self addFileToiTunesLibrary:[task outputFilename] playlist:[[task metadata] playlist]];
 	}
 }
