@@ -19,6 +19,7 @@
  */
 
 #import "AmazonAlbumArtSheet.h"
+#import "LogController.h"
 #import "MissingResourceException.h"
 
 @interface AmazonAlbumArtSheet (Private)
@@ -98,6 +99,7 @@
 			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 			[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
 			[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Exceptions", @"")];
+			[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Exceptions", @"")];
 			[alert setInformativeText: [error localizedDescription]];
 			[alert setAlertStyle: NSWarningAlertStyle];
 			
@@ -112,6 +114,7 @@
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert setMessageText: NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Exceptions", @"")];
+		[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"An error occurred while attempting to download album artwork.", @"Exceptions", @"")];
 		[alert setInformativeText: [error localizedDescription]];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		

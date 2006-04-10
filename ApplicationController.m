@@ -95,6 +95,7 @@ static ApplicationController *sharedController = nil;
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"ApplicationController"]];
+		[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"ApplicationController"]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];
@@ -152,9 +153,6 @@ static ApplicationController *sharedController = nil;
 - (void) awakeFromNib
 {
 	[GrowlApplicationBridge setGrowlDelegate:self];
-	
-	// Force the log window to load (so log messages will show up)
-	[[LogController sharedController] window];
 }
 
 - (BOOL) applicationShouldOpenUntitledFile:(NSApplication *)sender
@@ -184,6 +182,9 @@ static ApplicationController *sharedController = nil;
 	
 	// Register services
 	[[NSApplication sharedApplication] setServicesProvider:[[ServicesProvider alloc] init]];
+	
+	// Log startup
+	[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"Max successfully launched", @"Log", @"")];
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
@@ -242,6 +243,7 @@ static ApplicationController *sharedController = nil;
 			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
 			[alert setInformativeText:[exception reason]];
 			[alert setAlertStyle:NSWarningAlertStyle];		
 			[alert runModal];
@@ -252,9 +254,11 @@ static ApplicationController *sharedController = nil;
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 			if(nil != [exception userInfo] && nil != [[exception userInfo] objectForKey:@"filename"]) {
 				[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+				[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
 			}
 			else {
 				[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
+				[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
 			}
 			[alert setInformativeText:[exception reason]];
 			[alert setAlertStyle:NSWarningAlertStyle];		
@@ -491,6 +495,7 @@ static ApplicationController *sharedController = nil;
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+		[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];
@@ -501,9 +506,11 @@ static ApplicationController *sharedController = nil;
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		if(nil != [exception userInfo] && nil != [[exception userInfo] objectForKey:@"filename"]) {
 			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
+			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
 		}
 		else {
 			[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
+			[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
 		}
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		

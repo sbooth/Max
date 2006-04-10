@@ -5,7 +5,7 @@
             ACTIONS = {clear = id; save = id; }; 
             CLASS = LogController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_logTextView" = NSTextView; }; 
+            OUTLETS = {}; 
             SUPERCLASS = NSWindowController; 
         }
     ); 

@@ -26,6 +26,11 @@ static LogController	*sharedLog = nil;
 static NSString			*SaveLogToolbarItemIdentifier		= @"SaveLog";
 static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 
+@interface LogController (Private)
+- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)idx;
+- (void) removeObjectFromLogEntriesAtIndex:(unsigned)idx;
+@end
+
 @implementation LogController
 
 + (LogController *) sharedController
@@ -53,12 +58,21 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 	[[LogController sharedController] logMessage:message];
 }
 
++ (BOOL) accessInstanceVariablesDirectly	{ return NO; }
+
 - (id)init
 {
 	if((self = [super initWithWindowNibName:@"Log"])) {
+		_logEntries = [[NSMutableArray alloc] init];
 		return self;
 	}
 	return nil;
+}
+
+- (void) dealloc
+{
+	[_logEntries release];
+	[super dealloc];
 }
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
@@ -88,8 +102,10 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 
 - (IBAction) clear:(id)sender
 {
-	@synchronized(self) {
-		[[_logTextView textStorage] deleteCharactersInRange:NSMakeRange(0, [[_logTextView textStorage] length])];
+	@synchronized(self) {		
+		[self willChangeValueForKey:@"logEntries"];
+		[_logEntries removeAllObjects];
+		[self didChangeValueForKey:@"logEntries"];
 	}
 }
 
@@ -106,9 +122,26 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 {
     if(NSOKButton == returnCode) {
 		@synchronized(self) {
-			NSString		*filename		= [sheet filename];
-			NSTextStorage	*storage		= [_logTextView textStorage];
-			NSData			*rtf			= [storage RTFFromRange:NSMakeRange(0, [storage length]) documentAttributes:nil];
+			NSString						*filename		= [sheet filename];
+			NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
+			NSDictionary					*current;
+			unsigned						i;
+			
+			// Build the strings
+			for(i = 0; i < [self countOfLogEntries]; ++i) {
+				
+				current = [self objectInLogEntriesAtIndex:i];
+				
+				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[NSString stringWithFormat:@"%@", [current objectForKey:@"timestamp"]]];
+				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\t"];
+				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[current objectForKey:@"message"]];
+				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
+			}
+			
+			// Apply style
+			[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
+			
+			NSData							*rtf			= [logMessage RTFFromRange:NSMakeRange(0, [logMessage length]) documentAttributes:nil];
 			
 			if(NO == [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil]) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") userInfo:@""];
@@ -120,25 +153,10 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 - (void) logMessage:(NSString *)message
 {
 	@synchronized(self) {
-		NSTextStorage					*storage		= [_logTextView textStorage];
-		NSRange							range			= NSMakeRange([storage length], 0);
-		NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
-		NSDate							*now			= [NSDate date];
+		NSDictionary *newEntry = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSDate date], @"unknown", message, nil]
+															 forKeys:[NSArray arrayWithObjects:@"timestamp", @"component", @"message", nil]];
 		
-		// Build the string
-		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[NSString stringWithFormat:@"%@", now]];
-		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@": "];
-		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:message];
-		[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
-		
-		// Apply styles
-		[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
-		
-		[storage beginEditing];
-		[storage replaceCharactersInRange:range withAttributedString:logMessage];
-		[storage endEditing];
-		
-		[logMessage release];
+		[self insertObject:newEntry inLogEntriesAtIndex:[self countOfLogEntries]];
 	}
 }
 
@@ -178,7 +196,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
     return [NSArray arrayWithObjects: SaveLogToolbarItemIdentifier, ClearLogToolbarItemIdentifier, 
-		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,nil];
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
@@ -187,6 +205,23 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
+}
+
+- (unsigned)		countOfLogEntries								{ return [_logEntries count]; }
+- (NSDictionary *)	objectInLogEntriesAtIndex:(unsigned)idx			{ return [_logEntries objectAtIndex:idx]; }
+
+- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)idx
+{
+	[self willChangeValueForKey:@"logEntries"];
+	[_logEntries insertObject:entry atIndex:idx];
+	[self didChangeValueForKey:@"logEntries"];
+}
+
+- (void) removeObjectFromLogEntriesAtIndex:(unsigned)idx
+{
+	[self willChangeValueForKey:@"logEntries"];
+	[_logEntries removeObjectAtIndex:idx];
+	[self didChangeValueForKey:@"logEntries"];
 }
 
 @end

@@ -22,7 +22,7 @@
 
 @interface LogController : NSWindowController 
 {
-    IBOutlet NSTextView				*_logTextView;
+	NSMutableArray					*_logEntries;
 }
 
 + (LogController *)		sharedController;
@@ -32,5 +32,8 @@
 - (IBAction)			save:(id)sender;
 
 - (void)				logMessage:(NSString *)message;
+
+- (unsigned)			countOfLogEntries;
+- (NSDictionary *)		objectInLogEntriesAtIndex:(unsigned)index;
 
 @end
