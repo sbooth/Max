@@ -211,16 +211,24 @@ static ApplicationController *sharedController = nil;
 	return NSTerminateNow;
 }
 
-/*- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
+- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename
 {
-	NSError *error;
+	NSDocument	*document;
+	NSError		*error;
 	
-	if(nil == [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES error:&error]) {
+	// First try our document types
+	document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES error:&error];
+	
+	if(nil != document) {
+		return YES;
+	}
+	else if([_allowedTypes containsObject:[filename pathExtension]]) {
 		[self encodeFiles:[NSArray arrayWithObject:filename]];
+		return YES;
 	}		
 	
-	return YES;
-}*/
+	return NO;
+}
 
 - (IBAction) encodeFile:(id)sender
 {
