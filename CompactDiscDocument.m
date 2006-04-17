@@ -463,6 +463,7 @@ enum {
 			[metadata setTrackTitle:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"")];
 			[metadata setTrackArtist:nil];
 			[metadata setTrackGenre:nil];
+			[metadata setTrackComposer:nil];
 			[metadata setTrackYear:0];
 			[metadata setISRC:nil];
 
@@ -475,8 +476,7 @@ enum {
 			enumerator		= [selectedTracks objectEnumerator];
 			
 			while((track = [enumerator nextObject])) {
-				metadata = [[selectedTracks objectAtIndex:0] metadata];
-				
+				metadata = [track metadata];
 				[metadata setPlaylist:playlist];
 				
 				[[RipperController sharedController] ripTracks:[NSArray arrayWithObject:track] metadata:metadata];
