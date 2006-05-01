@@ -21,12 +21,12 @@
 #import <Cocoa/Cocoa.h>
 
 #import "PCMGeneratingTask.h"
-#import "Ripper.h"
 #import "Track.h"
 
 @interface RipperTask : PCMGeneratingTask
 {
 	NSConnection			*_connection;
+	Class					_ripperClass;
 	NSArray					*_tracks;
 	NSMutableArray			*_sectors;
 	NSString				*_deviceName;

@@ -19,17 +19,12 @@
  */
 
 #import "RipperTask.h"
+#import "RipperMethods.h"
 #import "RipperController.h"
 #import "SectorRange.h"
 #import "CompactDiscDocument.h"
 #import "IOException.h"
 #import "StopException.h"
-
-#include <cdparanoia/cdda_interface.h>
-
-@interface RipperTask (Private)
-- (void) generateCueSheet;
-@end
 
 @implementation RipperTask
 
@@ -39,13 +34,13 @@
 {
 	NSEnumerator		*enumerator;
 	Track				*track;
-
+	
 	if(0 == [tracks count]) {
 		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"Empty array passed to RipperTask::initWithTracks." userInfo:nil];
 	}
-
+	
 	if((self = [super initWithMetadata:metadata])) {
-
+		
 		_connection		= nil;
 		
 		_tracks			= [tracks retain];
@@ -57,9 +52,9 @@
 			[track setRipInProgress:YES];
 			[_sectors addObject:[SectorRange rangeWithFirstSector:[track firstSector] lastSector:[track lastSector]]];
 		}
-
+		
 		[_sectors retain];
-			
+		
 		return self;
 	}
 	return nil;
@@ -95,7 +90,7 @@
 	
 	[super setStarted];
 	
-	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:[Ripper class] withObject:portArray];
+	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_ripperClass withObject:portArray];
 }
 
 - (void) ripperReady:(id)anObject
@@ -115,18 +110,18 @@
 {
 	NSEnumerator		*enumerator;
 	Track				*track;
-
+	
 	[super setStopped];
-
+	
 	[_connection invalidate];
 	[_connection release];
 	_connection = nil;
-
+	
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
 		[track setRipInProgress:NO];
 	}
-
+	
 	[[RipperController sharedController] ripperTaskDidStop:self]; 
 }
 
@@ -134,7 +129,7 @@
 {
 	NSEnumerator		*enumerator;
 	Track				*track;
-
+	
 	[super setCompleted];
 	
 	[_connection invalidate];
@@ -145,7 +140,7 @@
 	while((track = [enumerator nextObject])) {
 		[track setRipInProgress:NO];
 	}
-
+	
 	[[RipperController sharedController] ripperTaskDidComplete:self];
 }
 
