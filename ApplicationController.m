@@ -450,7 +450,7 @@ static ApplicationController *sharedController = nil;
 		}
 		else if(NSAlertSecondButtonReturn == result) {
 			[[PreferencesController sharedPreferences] showWindow:self];
-			[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesItemIdentifier];
+			[[PreferencesController sharedPreferences] selectPreferencePane:@"org.sbooth.Max.Preferences.Formats"];
 		}
 		
 		return YES;
