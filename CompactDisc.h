@@ -20,48 +20,46 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <cdparanoia/cdda_interface.h>
 #include <cddb/cddb_disc.h>
 
 @interface CompactDisc : NSObject
 {
-	NSString			*_bsdName;
 	NSString			*_deviceName;
 
 	NSMutableArray		*_tracks;
 	NSString			*_MCN;
-	unsigned long		_firstSector;
-	unsigned long		_lastSector;
+	
+	unsigned			_firstSector;
+	unsigned			_lastSector;
 	
 	cddb_disc_t			*_freeDBDisc;
 	unsigned			_length;
 }
 
-- (id)					initWithBSDName:(NSString *)bsdName;
+- (id)					initWithDeviceName:(NSString *)deviceName;
 
-- (NSString *)			bsdName;
 - (NSString *)			deviceName;
 
 // Physical disc properties
-- (unsigned long)		firstSector;
-- (unsigned long)		lastSector;
+- (unsigned)			firstSector;
+- (unsigned)			lastSector;
 
 - (NSString *)			MCN;
 
-- (unsigned long)		firstSectorForTrack:(unsigned) track;
-- (unsigned long)		lastSectorForTrack:(unsigned) track;
+- (unsigned)			firstSectorForTrack:(unsigned)track;
+- (unsigned)			lastSectorForTrack:(unsigned)track;
 
-- (unsigned)			channelsForTrack:(unsigned) track;
+- (unsigned)			channelsForTrack:(unsigned)track;
 
-- (BOOL)				trackContainsAudio:(unsigned) track;
-- (BOOL)				trackHasPreEmphasis:(unsigned) track;
-- (BOOL)				trackAllowsDigitalCopy:(unsigned) track;
+- (BOOL)				trackContainsAudio:(unsigned)track;
+- (BOOL)				trackHasPreEmphasis:(unsigned)track;
+- (BOOL)				trackAllowsDigitalCopy:(unsigned)track;
 
-- (NSString *)			ISRCForTrack:(unsigned) track;
+- (NSString *)			ISRCForTrack:(unsigned)track;
 
 // KVC accessors
-- (unsigned int)		countOfTracks;
-- (NSDictionary *)		objectInTracksAtIndex:(unsigned int)index;
+- (unsigned)			countOfTracks;
+- (NSDictionary *)		objectInTracksAtIndex:(unsigned)index;
 
 // Derived properties
 - (int)					discID;

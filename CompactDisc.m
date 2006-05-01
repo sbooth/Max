@@ -21,81 +21,64 @@
 #import "CompactDisc.h"
 
 #import "MallocException.h"
+#import "Drive.h"
 #import "IOException.h"
-#import "ParanoiaException.h"
 #import "FreeDBException.h"
 
 #include <paths.h>			// _PATH_DEV
 
 @implementation CompactDisc
 
-- (id) initWithBSDName:(NSString *)bsdName;
+- (id) initWithDeviceName:(NSString *)deviceName;
 {
 	if((self = [super init])) {
-		unsigned			i;
-		unsigned long		discLength	= 150;
-		NSString			*bsdPath	= [NSString stringWithFormat:@"%@r%@", [NSString stringWithCString:_PATH_DEV encoding:NSASCIIStringEncoding], bsdName];
-		char				*MCN		= NULL;
-		cdrom_drive			*drive		= NULL;
-		unsigned			trackCount	= 0;
+		unsigned				i;
+		unsigned long			discLength		= 150;
+		Drive					*drive			= nil;
+		TrackDescriptor			*track			= nil;
+		NSMutableDictionary		*trackInfo		= nil;
+		NSString				*ISRC			= nil;
 
+		_deviceName		= [deviceName retain];
 
-		// cdparanoia setup
-		drive = cdda_identify([bsdPath fileSystemRepresentation], 0, NULL);
-		if(NULL == drive) {
-			@throw [ParanoiaException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_identify"] userInfo:nil];
-		}
-		
-		if(0 != cdda_open(drive)) {
-			@throw [ParanoiaException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_open"] userInfo:nil];
-		}
-
-		_bsdName		= [bsdName retain];
-		_deviceName		= [[NSString stringWithCString:drive->device_name encoding:NSASCIIStringEncoding] retain];
+		// To avoid keeping an open file descriptor, read the disc's properties from the drive
+		// and store them in our ivars
+		drive = [[[Drive alloc] initWithDeviceName:[self deviceName]] autorelease];
 		
 		// Disc information
-		_firstSector	= cdda_disc_firstsector(drive);
-		_lastSector		= cdda_disc_lastsector(drive);
+		_firstSector	= [[drive trackNumber:[drive firstTrack]] firstSector];
+		_lastSector		= [drive leadOut];
 
-		MCN = cdda_disc_mcn(drive);		
-		if(NULL != MCN) {
-			_MCN = [[NSString stringWithCString:MCN encoding:NSASCIIStringEncoding] retain];
-			free(MCN);
-		}
+		_MCN = [[drive readMCN] retain];
 		
 		// Iterate through the tracks and get their information
-		trackCount	= cdda_tracks(drive);
-		_tracks		= [[NSMutableArray arrayWithCapacity:trackCount + 1] retain];
+		_tracks		= [[NSMutableArray arrayWithCapacity:[drive countOfTracks] + 1] retain];
 		
-		// paranoia's tracks are 1-based
-		for(i = 1; i <= trackCount; ++i) {
-			NSMutableDictionary		*trackInfo;
-			char					*ISRC;
+		for(i = [drive firstTrack]; i <= [drive lastTrack]; ++i) {
 
+			track = [drive trackNumber:i];
+			
 			trackInfo = [NSMutableDictionary dictionaryWithCapacity:6];
 		
 			[trackInfo setObject:[NSNumber numberWithUnsignedInt:i] forKey:@"number"];
 
-			[trackInfo setObject:[NSNumber numberWithUnsignedLong:cdda_track_firstsector(drive, i)] forKey:@"firstSector"];
-			[trackInfo setObject:[NSNumber numberWithUnsignedLong:cdda_track_lastsector(drive, i)] forKey:@"lastSector"];
+			[trackInfo setObject:[NSNumber numberWithUnsignedInt:[drive firstSectorForTrack:i]] forKey:@"firstSector"];
+			[trackInfo setObject:[NSNumber numberWithUnsignedInt:[drive lastSectorForTrack:i]] forKey:@"lastSector"];
 
-			[trackInfo setObject:[NSNumber numberWithUnsignedInt:cdda_track_channels(drive, i)] forKey:@"channels"];
+			[trackInfo setObject:[NSNumber numberWithUnsignedInt:[track channels]] forKey:@"channels"];
 
-			[trackInfo setObject:[NSNumber numberWithBool:cdda_track_audiop(drive, i)] forKey:@"containsAudio"];
-			[trackInfo setObject:[NSNumber numberWithBool:cdda_track_preemp(drive, i)] forKey:@"preEmphasis"];
-			[trackInfo setObject:[NSNumber numberWithBool:cdda_track_copyp(drive, i)] forKey:@"allowsDigitalCopy"];
+			[trackInfo setObject:[NSNumber numberWithBool:(NO == [track dataTrack])] forKey:@"containsAudio"];
+			[trackInfo setObject:[NSNumber numberWithBool:[track preEmphasis]] forKey:@"preEmphasis"];
+			[trackInfo setObject:[NSNumber numberWithBool:[track copyPermitted]] forKey:@"allowsDigitalCopy"];
 
-			ISRC = cdda_track_isrc(drive, i);
-			if(NULL != ISRC) {
-				[trackInfo setObject:[NSString stringWithCString:ISRC encoding:NSASCIIStringEncoding] forKey:@"ISRC"];
-				free(ISRC);
+			ISRC = [drive readISRC:i];
+			if(nil != ISRC) {
+				[trackInfo setObject:ISRC forKey:@"ISRC"];
 			}
 			
 			[_tracks addObject:trackInfo];
 		}
 		
-		cdda_close(drive);
-
 		// Setup libcddb data structures
 		_freeDBDisc	= cddb_disc_new();
 		if(NULL == _freeDBDisc) {
@@ -125,12 +108,12 @@
 				
 		return self;
 	}
+	
 	return nil;
 }
 
 - (void) dealloc
 {
-	[_bsdName release];
 	[_deviceName release];
 	[_tracks release];
 	[_MCN release];
@@ -142,16 +125,15 @@
 	[super dealloc];
 }
 
-- (NSString *)		bsdName									{ return _bsdName; }
 - (NSString *)		deviceName								{ return _deviceName; }
 
 - (NSString *)		MCN										{ return _MCN; }
 
-- (unsigned long)	firstSector								{ return _firstSector; }
-- (unsigned long)	lastSector								{ return _lastSector; }
+- (unsigned)		firstSector								{ return _firstSector; }
+- (unsigned)		lastSector								{ return _lastSector; }
 
-- (unsigned long)	firstSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"firstSector"] unsignedLongValue]; }
-- (unsigned long)	lastSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"lastSector"] unsignedLongValue]; }
+- (unsigned)		firstSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"firstSector"] unsignedIntValue]; }
+- (unsigned)		lastSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"lastSector"] unsignedIntValue]; }
 
 - (unsigned)		channelsForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"channels"] unsignedIntValue]; }
 
@@ -165,8 +147,8 @@
 - (unsigned)		length									{ return _length; }
 
 // KVC
-- (unsigned int)	countOfTracks							{ return [_tracks count]; }
-- (NSDictionary *)	objectInTracksAtIndex:(unsigned int)idx	{ return [_tracks objectAtIndex:idx]; }
+- (unsigned)		countOfTracks							{ return [_tracks count]; }
+- (NSDictionary *)	objectInTracksAtIndex:(unsigned)idx		{ return [_tracks objectAtIndex:idx]; }
 
 - (cddb_disc_t *)	freeDBDisc								{ return _freeDBDisc; }
 
