@@ -24,6 +24,6 @@
 {
 }
 
-- (void) encodeFile:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
+- (void)	encodeFile:(NSPasteboard *)pboard userData:(NSString *)userData error:(NSString **)error;
 
 @end
