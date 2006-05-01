@@ -30,9 +30,9 @@
 
 + (UpdateChecker *) sharedController;
 
-- (void) checkForUpdate:(BOOL)showWindow;
+- (void)	checkForUpdate:(BOOL)showWindow;
 
-- (BOOL) checkInProgress;
-- (void) setCheckInProgress:(BOOL)checkInProgress;
+- (BOOL)	checkInProgress;
+- (void)	setCheckInProgress:(BOOL)checkInProgress;
 
 @end
