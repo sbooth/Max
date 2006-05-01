@@ -20,33 +20,22 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <cdparanoia/cdda_interface.h>
-#include <cdparanoia/cdda_paranoia.h>
-
 #import "RipperMethods.h"
-#import "Track.h"
 
 @interface Ripper : NSObject <RipperMethods>
 {
 	id <TaskMethods>		_delegate;
-
-	cdrom_drive				*_drive;
-	cdrom_paranoia			*_paranoia;
-	
-	BOOL					_logActivity;
-	
-	int						_maximumRetries;
 	
 	NSArray					*_sectors;
-
-	NSNumber				*_grandTotalSectors;
-	NSNumber				*_sectorsRead;
-	NSNumber				*_sectorsWritten;
-	NSDate					*_startTime;
+	NSString				*_deviceName;
+	BOOL					_logActivity;
 }
 
 - (id)						initWithSectors:(NSArray *)sectors deviceName:(NSString *)deviceName;
 
 - (NSString *)				deviceName;
+
+- (BOOL)					logActivity;
+- (void)					setLogActivity:(BOOL)logActivity;
 
 @end
