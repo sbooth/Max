@@ -20,27 +20,65 @@
 
 #import "SectorRange.h"
 
+#include <IOKit/storage/IOCDTypes.h>
+
 @implementation SectorRange
 
-+ (id) rangeWithFirstSector:(unsigned long)firstSector lastSector:(unsigned long)lastSector
++ (id) rangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector
 {
-	return [[[[SectorRange alloc] initWithFirstSector:firstSector lastSector:lastSector] retain] autorelease];
+	SectorRange *range = [[SectorRange alloc] init];
+	
+	[range setFirstSector:firstSector];
+	[range setLastSector:lastSector];
+	
+	return [range autorelease];
 }
 
-- (id) initWithFirstSector:(unsigned long)firstSector lastSector:(unsigned long)lastSector
++ (id) rangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount
+{
+	SectorRange *range = [[SectorRange alloc] init];
+	
+	[range setFirstSector:firstSector];
+	[range setLastSector:firstSector + sectorCount - 1];
+	
+	return [range autorelease];
+}
+
++ (id)				rangeWithSector:(unsigned)sector
+{
+	SectorRange *range = [[SectorRange alloc] init];
+	
+	[range setFirstSector:sector];
+	[range setLastSector:sector];
+	
+	return [range autorelease];
+}
+
+
+- (id) init
 {
 	if((self = [super init])) {
-		_firstSector	= firstSector;
-		_lastSector		= lastSector;
+		_firstSector	= 0;
+		_lastSector		= 0;
 		return self;
 	}
 	
 	return nil;
 }
 
-- (unsigned long) firstSector						{ return _firstSector; }
-- (unsigned long) lastSector						{ return _lastSector; }
+- (unsigned)		firstSector										{ return _firstSector; }
+- (void)			setFirstSector:(unsigned)sector					{ _firstSector = sector; }
 
-- (unsigned long) totalSectors						{ return (_lastSector - _firstSector) + 1; }
+- (unsigned)		lastSector										{ return _lastSector; }
+- (void)			setLastSector:(unsigned)sector					{ _lastSector = sector; }
+
+- (unsigned)		length											{ return ([self lastSector] - [self firstSector] + 1); }
+- (unsigned)		byteSize										{ return kCDSectorSizeCDDA * [self length]; }
+
+- (unsigned)		indexForSector:(unsigned)sector					{ return ([self containsSector:sector] ? sector - [self firstSector] : NSNotFound); }
+- (unsigned)		sectorForIndex:(unsigned)idx					{ return ([self length] > idx ? [self firstSector] + idx : NSNotFound); }
+
+- (BOOL)			containsSector:(unsigned)sector					{ return ([self firstSector] <= sector && [self lastSector] >= sector); }
+- (BOOL)			containsSectorRange:(SectorRange *)range		{ return ([self containsSector:[range firstSector]] && [self containsSector:[range lastSector]]); }
 
 @end

@@ -22,16 +22,27 @@
 
 @interface SectorRange : NSObject 
 {
-	unsigned long	_firstSector;
-	unsigned long	_lastSector;
+	unsigned	_firstSector;
+	unsigned	_lastSector;
 }
 
-+ (id)					rangeWithFirstSector:(unsigned long)firstSector lastSector:(unsigned long)lastSector;
++ (id)				rangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector;
++ (id)				rangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount;
++ (id)				rangeWithSector:(unsigned)sector;
 
-- (id)					initWithFirstSector:(unsigned long)firstSector lastSector:(unsigned long)lastSector;
+- (unsigned)		firstSector;
+- (void)			setFirstSector:(unsigned)sector;
 
-- (unsigned long)		firstSector;
-- (unsigned long)		lastSector;
-- (unsigned long)		totalSectors;
+- (unsigned)		lastSector;
+- (void)			setLastSector:(unsigned)sector;
+
+- (unsigned)		length;
+- (unsigned)		byteSize;
+
+- (unsigned)		indexForSector:(unsigned)sector;
+- (unsigned)		sectorForIndex:(unsigned)index;
+
+- (BOOL)			containsSector:(unsigned)sector;
+- (BOOL)			containsSectorRange:(SectorRange *)range;
 
 @end
