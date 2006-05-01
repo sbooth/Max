@@ -26,21 +26,25 @@
 @protocol TaskMethods
 
 - (NSDate *)		startTime;
-- (NSDate *)		endTime;
-
 - (void)			setStartTime:(NSDate *)startTime;
+
+- (NSDate *)		endTime;
 - (void)			setEndTime:(NSDate *)endTime;
 
 - (BOOL)			started;
-- (BOOL)			completed;
-- (BOOL)			stopped;
-
 - (void)			setStarted;
+
+- (BOOL)			completed;
 - (void)			setCompleted;
+
+- (BOOL)			stopped;
 - (void)			setStopped;
 
 - (double)			percentComplete;
 - (void)			setPercentComplete:(double)percentComplete;
+
+- (NSString *)		phase;
+- (void)			setPhase:(NSString *)phase;
 
 - (BOOL)			shouldStop;
 - (void)			setShouldStop;
@@ -55,6 +59,9 @@
 
 - (NSString *)		outputFormat;
 - (void)			setOutputFormat:(NSString *)outputFormat;
+
+- (NSDictionary *)	userInfo;
+- (void)			setUserInfo:(NSDictionary *)userInfo;
 
 - (NSException *)	exception;
 - (void)			setException:(NSException *)exception;

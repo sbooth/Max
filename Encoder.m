@@ -59,19 +59,15 @@
 - (id) initWithPCMFilename:(NSString *)inputFilename
 {
 	if((self = [super init])) {
-		_inputFilename = [inputFilename retain];
-
-		bzero(&_inputASBD, sizeof(AudioStreamBasicDescription));
 		
-		// Input format is interleaved 16-bit PCM audio
-		_inputASBD.mSampleRate			= 44100.f;
-		_inputASBD.mFormatID			= kAudioFormatLinearPCM;
-		_inputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
-		_inputASBD.mBytesPerPacket		= 4;
-		_inputASBD.mFramesPerPacket		= 1;
-		_inputASBD.mBytesPerFrame		= 4;
-		_inputASBD.mChannelsPerFrame	= 2;
-		_inputASBD.mBitsPerChannel		= 16;
+		_inputFilename		= [inputFilename retain];
+
+		// Default is CD-DA format
+		_sampleRate			= 44100.f;
+		_channelsPerFrame	= 2;
+		_bitsPerChannel		= 16;
+		
+		_framesPerPacket	= 1;
 
 		return self;
 	}
@@ -84,11 +80,43 @@
 	[super dealloc];
 }
 
-- (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
-- (id <TaskMethods>)	delegate									{ return _delegate; }
+- (AudioStreamBasicDescription) inputDescription
+{
+	AudioStreamBasicDescription		result;
+	
+	bzero(&result, sizeof(AudioStreamBasicDescription));
+	
+	result.mFormatID			= kAudioFormatLinearPCM;
+	result.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+	
+	result.mSampleRate			= [self sampleRate];
+	result.mChannelsPerFrame	= [self channelsPerFrame];
+	result.mBitsPerChannel		= [self bitsPerChannel];
+	
+	result.mBytesPerPacket		= [self bytesPerPacket];
+	result.mFramesPerPacket		= [self framesPerPacket];
+	result.mBytesPerFrame		= [self bytesPerFrame];
+	
+	return result;
+}
 
-- (oneway void)			encodeToFile:(NSString *)filename			{}
+- (Float64)				sampleRate										{ return _sampleRate; }
+- (UInt32)				bitsPerChannel									{ return _bitsPerChannel; }
+- (UInt32)				channelsPerFrame								{ return _channelsPerFrame; }
+- (UInt32)				framesPerPacket									{ return _framesPerPacket; }
+- (UInt32)				bytesPerPacket									{ return [self channelsPerFrame] * ([self bitsPerChannel] / 8); }
+- (UInt32)				bytesPerFrame									{ return [self framesPerPacket] * [self bytesPerPacket]; }
 
-- (NSString *)			settings									{ return @"Encoder settings unknown"; }
+- (void)				setSampleRate:(Float64)sampleRate				{ _sampleRate = sampleRate; }
+- (void)				setBitsPerChannel:(UInt32)bitsPerChannel		{ _bitsPerChannel = bitsPerChannel; }
+- (void)				setChannelsPerFrame:(UInt32)channelsPerFrame	{ _channelsPerFrame = channelsPerFrame; }
+- (void)				setFramesPerPacket:(UInt32)framesPerPacket		{ _framesPerPacket = framesPerPacket; }
+
+- (id <TaskMethods>)	delegate										{ return _delegate; }
+- (void)				setDelegate:(id <TaskMethods>)delegate			{ _delegate = delegate; }
+
+- (oneway void)			encodeToFile:(NSString *)filename				{}
+
+- (NSString *)			settings										{ return @"Encoder settings unknown"; }
 
 @end

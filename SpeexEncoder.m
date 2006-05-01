@@ -203,7 +203,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	SpeexBits					bits;
 
 	int							rate										= 44100;
-	int							chan										= 2;
 	int							frameID										= -1;
 	int							frameSize;
 	char						*comments									= NULL;
@@ -229,23 +228,28 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 
 	unsigned long				iterations									= 0;
 
-	AudioBufferList				buf;
-	ssize_t						buflen										= 0;
+	AudioBufferList				bufferList;
+	ssize_t						bufferLen									= 0;
 	OSStatus					err;
 	FSRef						ref;
 	ExtAudioFileRef				extAudioFileRef								= NULL;
+	AudioStreamBasicDescription asbd;
 	SInt64						totalFileFrames, framesToRead;
 	UInt32						size, frameCount;
 
-	int16_t						*iter, *limit;
-	
+	int8_t						*buffer8									= NULL;
+	int16_t						*buffer16									= NULL;
+	int32_t						*buffer32									= NULL;
+	float						*floatBuffer								= NULL;
+	unsigned					sample;
    
+	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 
 	@try {
-		buf.mBuffers[0].mData = NULL;
+		bufferList.mBuffers[0].mData = NULL;
 		
 		// Open the input file
 		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
@@ -261,6 +265,21 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		}
 		
 		// Get input file information
+		size	= sizeof(asbd);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		[self setSampleRate:asbd.mSampleRate];
+		[self setBitsPerChannel:asbd.mBitsPerChannel];
+		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+
+		if(1 != [self channelsPerFrame] && 2 != [self channelsPerFrame]) {
+			@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
+		}
+		
 		size	= sizeof(totalFileFrames);
 		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFileFrames);
 		if(err != noErr) {
@@ -272,7 +291,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		// Resample input if requested
 		if(_resampleInput) {
-			AudioStreamBasicDescription asbd;
 			
 			// Determine the desired sample rate
 			switch(_mode) {
@@ -284,15 +302,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized speex mode" userInfo:nil];
 					break;
 			}
-			
-			asbd.mSampleRate			= (float)rate;
-			asbd.mFormatID				= kAudioFormatLinearPCM;
-			asbd.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian;
-			asbd.mBytesPerPacket		= 4;
-			asbd.mFramesPerPacket		= 1;
-			asbd.mBytesPerFrame			= 4;
-			asbd.mChannelsPerFrame		= 2;
-			asbd.mBitsPerChannel		= 16;
+
+			asbd				= [self inputDescription];
+			asbd.mSampleRate	= (float)rate;
 			
 			err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
 			if(noErr != err) {
@@ -335,7 +347,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		header.frames_per_packet	= _framesPerPacket;
 		header.vbr					= _vbrEnabled;
-		header.nb_channels			= chan;
+		header.nb_channels			= [self channelsPerFrame];
 		
 		// Setup the encoder
 		speexState = speex_encoder_init(mode);
@@ -419,13 +431,36 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			bytesWritten += currentBytesWritten;
 		}
 		
-		// Allocate the input buffer
-		buflen								= 2 * frameSize;
-		buf.mNumberBuffers					= 1;
-		buf.mBuffers[0].mNumberChannels		= 2;
-		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
-		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));
-		if(NULL == buf.mBuffers[0].mData) {
+		// Set up the AudioBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		
+		// Allocate the buffer that will hold the interleaved audio data
+		bufferLen									= 2 * frameSize;
+		switch([self bitsPerChannel]) {
+			
+			case 8:				
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
+				break;
+				
+			case 16:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
+				break;
+				
+			case 24:
+			case 32:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;				
+		}
+		
+		if(NULL == bufferList.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -439,8 +474,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		while(NO == eos || totalFrames > framesEncoded) {
 			
 			// Read a single frame of PCM input
-			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerFrame;
-			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
+			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
+			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
 			if(err != noErr) {
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -450,26 +485,96 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				eos = YES;
 			}
 			
-			// Adjust for host endian-ness
-			iter	= buf.mBuffers[0].mData;
-			limit	= iter + (buf.mBuffers[0].mNumberChannels * frameCount);
-			while(iter < limit) {
-				*iter = OSSwapBigToHostInt16(*iter);
-				++iter;
+			// Fill Speex buffer, converting to host endian byte order
+			// Speex only supports 16-bit or floating point samples, so renormalize accordingly
+			switch([self bitsPerChannel]) {
+				
+				case 8:
+					floatBuffer = calloc(frameCount, sizeof(float));
+					if(NULL == floatBuffer) {
+						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+					}
+						
+					buffer8 = bufferList.mBuffers[0].mData;
+					for(sample = 0; sample < frameCount; ++sample) {
+						floatBuffer[sample] = (float)(buffer8[sample] / 128.f);
+					}
+					break;
+					
+				case 16:
+					buffer16 = bufferList.mBuffers[0].mData;
+					for(sample = 0; sample < frameCount; ++sample) {
+						buffer16[sample] = (int16_t)OSSwapBigToHostInt16(buffer16[sample]);
+					}
+					break;
+					
+				case 24:
+					floatBuffer = calloc(frameCount, sizeof(float));
+					if(NULL == floatBuffer) {
+						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+					}
+						
+					buffer32 = bufferList.mBuffers[0].mData;
+					for(sample = 0; sample < frameCount; ++sample) {
+						floatBuffer[sample] = (float)(OSSwapBigToHostInt32(buffer32[sample]) / 8388608.f);
+					}
+					break;
+
+				case 32:
+					floatBuffer = calloc(frameCount, sizeof(float));
+					if(NULL == floatBuffer) {
+						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+					}
+
+					buffer32 = bufferList.mBuffers[0].mData;
+					for(sample = 0; sample < frameCount; ++sample) {
+						floatBuffer[sample] = (float)(OSSwapBigToHostInt32(buffer32[sample]) / 2147483648.f);
+					}
+					break;
+					
+				default:
+					@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+					break;				
 			}
 
 			totalFrames += frameCount;			
 			++frameID;
 			
-			if(2 == chan) {
-				speex_encode_stereo_int(buf.mBuffers[0].mData, frameSize, &bits);
+			switch([self bitsPerChannel]) {
+
+				case 8:
+				case 24:
+				case 32:
+					if(2 == [self channelsPerFrame]) {
+						speex_encode_stereo(floatBuffer, frameSize, &bits);
+					}
+
+					if(NULL != preprocess) {
+						NSLog(@"Speex preprocessing is only supported for 16-bit samples");
+					}
+					
+					speex_encode(speexState, floatBuffer, &bits);
+
+					free(floatBuffer);
+					floatBuffer = NULL;
+					break;
+							
+				case 16:
+					if(2 == [self channelsPerFrame]) {
+						speex_encode_stereo_int(bufferList.mBuffers[0].mData, frameSize, &bits);
+					}
+					
+					if(NULL != preprocess) {
+						speex_preprocess(preprocess, bufferList.mBuffers[0].mData, NULL);
+					}
+					
+					speex_encode_int(speexState, bufferList.mBuffers[0].mData, &bits);
+					break;
 			}
 			
-			if(NULL != preprocess) {
-				speex_preprocess(preprocess, buf.mBuffers[0].mData, NULL);
-			}
-			
-			speex_encode_int(speexState, buf.mBuffers[0].mData, &bits);
 			
 			framesEncoded	+= frameSize;
 			
@@ -609,7 +714,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		// Clean up
 		free(comments);
-		free(buf.mBuffers[0].mData);
+		free(bufferList.mBuffers[0].mData);
+		free(floatBuffer);
 		
 		speex_encoder_destroy(speexState);
 		speex_bits_destroy(&bits);

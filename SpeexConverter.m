@@ -68,7 +68,6 @@
 	void							*st						= NULL;
 	const SpeexMode					*mode					= NULL;
 	SpeexHeader						*header					= NULL;
-	SpeexCallback					callback;
 	SpeexBits						bits;
 	SpeexStereoState				stereo					= SPEEX_STEREO_STATE_INIT;
 	
@@ -81,11 +80,8 @@
 	ogg_packet						op;
 	ogg_stream_state				os;
 	
-	int								enh_enabled				= 1;
 	int								framesPerPacket			= 2;
 	BOOL							eos						= NO;
-	int								channels				= -1;
-	int								rate					= 0;
 	int								extraHeaders;
 	
 	char							*data					= NULL;
@@ -98,7 +94,8 @@
 	FSRef							ref;
 	AudioFileID						audioFile;
 	ExtAudioFileRef					extAudioFileRef;
-	AudioBufferList					bufferList;	
+	AudioBufferList					bufferList;
+	AudioStreamBasicDescription		asbd;
 
 	int16_t							*iter, *limit;
 
@@ -108,24 +105,6 @@
 	[_delegate setStarted];
 	
 	@try {
-		// Open the output file
-		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &_outputASBD, 0, &audioFile);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-				
 		// Open the input file
 		in_fd = open([_inputFilename fileSystemRepresentation], O_RDONLY);
 		if(-1 == in_fd) {
@@ -210,46 +189,44 @@
 						if(NULL == st) {
 							@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to intialize the Speex decoder.", @"Exceptions", @"") userInfo:nil];
 						}
-						speex_decoder_ctl(st, SPEEX_SET_ENH, &enh_enabled);
 						speex_decoder_ctl(st, SPEEX_GET_FRAME_SIZE, &frameSize);
+						speex_decoder_ctl(st, SPEEX_SET_SAMPLING_RATE, &header->rate);
+												
+						[self setSampleRate:header->rate];
+						[self setChannelsPerFrame:header->nb_channels];
 						
-						if(1 != channels) {
-							callback.callback_id	= SPEEX_INBAND_STEREO;
-							callback.func			= speex_std_stereo_request_handler;
-							callback.data			= &stereo;
-							
-							speex_decoder_ctl(st, SPEEX_SET_HANDLER, &callback);
-						}
-						rate = header->rate;
-						
-						speex_decoder_ctl(st, SPEEX_SET_SAMPLING_RATE, &rate);
-						
-						if(44100 != rate) {
-							AudioStreamBasicDescription asbd;
-							
-							asbd.mSampleRate			= (float)rate;
-							asbd.mFormatID				= kAudioFormatLinearPCM;
-							asbd.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian;
-							asbd.mBytesPerPacket		= 4;
-							asbd.mFramesPerPacket		= 1;
-							asbd.mBytesPerFrame			= 4;
-							asbd.mChannelsPerFrame		= 2;
-							asbd.mBitsPerChannel		= 16;
-							
-							err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
-							if(noErr != err) {
-								@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty"]
-																	  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-							}
-						}
+						// Use 16 bit sample size (should be adequate)
+						[self setBitsPerChannel:16];
 						
 						framesPerPacket		= header->frames_per_packet;
-						channels			= header->nb_channels;
 						extraHeaders		= header->extra_headers;
 						
 						if(0 == framesPerPacket) {
 							framesPerPacket = 1;
 						}
+						
+						// Open the output file
+						err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
+						if(noErr != err) {
+							@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+						}
+						asbd = [self outputDescription];
+						err = AudioFileInitialize(&ref, kAudioFileAIFFType, &asbd, 0, &audioFile);
+						if(noErr != err) {
+							@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
+																  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+						}
+						
+						err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
+						if(noErr != err) {
+							@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
+																  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+						}
+						
+						// Set up the AudioBufferList
+						bufferList.mNumberBuffers					= 1;
+						bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];						
 					} 
 					else if(1 == packetCount) {
 						// Ignore comments
@@ -281,23 +258,19 @@
 							if(0 > speex_bits_remaining(&bits)) {
 								@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Decoding overflow: possible corrupted stream.", @"Exceptions", @"") userInfo:nil];
 							}
-							if(2 == channels) {
+							if(2 == [self channelsPerFrame]) {
 								speex_decode_stereo_int(output, frameSize, &stereo);
 							}
 							
-							// Adjust for host endian-ness
 							iter	= output;
-							limit	= iter + (channels * frameSize);
+							limit	= iter + ([self channelsPerFrame] * frameSize);
 							while(iter < limit) {
 								*iter = OSSwapHostToBigInt16(*iter);
 								++iter;
 							}
 							
-							// Put the data in an AudioBufferList
-							bufferList.mNumberBuffers					= 1;
 							bufferList.mBuffers[0].mData				= output;
-							bufferList.mBuffers[0].mDataByteSize		= sizeof(int16_t) * frameSize * channels;
-							bufferList.mBuffers[0].mNumberChannels		= channels;
+							bufferList.mBuffers[0].mDataByteSize		= frameSize * [self channelsPerFrame] * sizeof(int16_t);
 
 							// Write the data
 							err = ExtAudioFileWrite(extAudioFileRef, frameSize, &bufferList);
@@ -374,7 +347,9 @@
 		// Clean up
 		free(header);
 
-		speex_decoder_destroy(st);
+		if(NULL != st) {
+			speex_decoder_destroy(st);
+		}
 		speex_bits_destroy(&bits);
 		ogg_stream_clear(&os);
 		ogg_sync_clear(&oy);

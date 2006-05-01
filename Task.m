@@ -36,6 +36,8 @@
 		_shouldStop			= NO;
 		
 		_percentComplete	= 0.0;
+		
+		_phase				= nil;
 
 		_timeRemaining		= nil;
 		
@@ -53,53 +55,56 @@
 {
 	[_startTime release];
 	[_endTime release];
+	[_phase release];
 	[_timeRemaining release];
 	[_inputFormat release];
 	[_outputFormat release];
+	[_userInfo release];
 	[_exception release];
 	
 	[super dealloc];
 }
 
 - (NSDate *)		startTime									{ return _startTime; }
+- (void)			setStartTime:(NSDate *)startTime			{ [_startTime release]; _startTime = [startTime retain]; }
+
 - (NSDate *)		endTime										{ return _endTime; }
+- (void)			setEndTime:(NSDate *)endTime				{ [_endTime release]; _endTime = [endTime retain]; }
 
 - (BOOL)			started										{ return _started; }
+- (void)			setStarted									{ [self setPercentComplete:0.0]; _started = YES; }
+
 - (BOOL)			completed									{ return _completed; }
+- (void)			setCompleted								{  [self setPercentComplete:100.0]; _completed = YES; }
+
 - (BOOL)			stopped										{ return _stopped; }
+- (void)			setStopped									{ _stopped  = YES; }
 
 - (double)			percentComplete								{ return _percentComplete; }
+- (void)			setPercentComplete:(double)percentComplete	{ _percentComplete = percentComplete; }
+
+- (NSString *)		phase										{ return _phase; }
+- (void)			setPhase:(NSString *)phase					{ [_phase release]; _phase = [phase retain]; }
 
 - (BOOL)			shouldStop									{ return _shouldStop; }
+- (void)			setShouldStop								{ _shouldStop = YES; }
 
 - (NSString *)		timeRemaining								{ return _timeRemaining; }
+- (void)			setTimeRemaining:(NSString *)timeRemaining	{ [_timeRemaining release]; _timeRemaining = [timeRemaining retain]; }
 
 - (NSString *)		inputFormat									{ return _inputFormat; }
+- (void)			setInputFormat:(NSString *)inputFormat		{ [_inputFormat release]; _inputFormat = [inputFormat retain]; }
+
 - (NSString *)		outputFormat								{ return _outputFormat; }
+- (void)			setOutputFormat:(NSString *)outputFormat	{ [_outputFormat release]; _outputFormat = [outputFormat retain]; }
+
+- (NSDictionary *)	userInfo									{ return _userInfo; }
+- (void)			setUserInfo:(NSDictionary *)userInfo		{ [_userInfo release]; _userInfo = [userInfo retain]; }
 
 - (NSException *)	exception									{ return _exception; }
+- (void)			setException:(NSException *)exception		{ [_exception release]; _exception = [exception retain]; }
 
-- (void) setStartTime:(NSDate *)startTime						{ [_startTime release]; _startTime = [startTime retain]; }
-- (void) setEndTime:(NSDate *)endTime							{ [_endTime release]; _endTime = [endTime retain]; }
-
-- (void) setStarted												{ [self setPercentComplete:0.0]; _started = YES; }
-- (void) setCompleted											{  [self setPercentComplete:100.0]; _completed = YES; }
-
-- (void) setStopped												{ _stopped  = YES; }
-
-- (void) setPercentComplete:(double)percentComplete				{ _percentComplete = percentComplete; }
-
-- (void) setShouldStop											{ _shouldStop = YES; }
-
-- (void) setTimeRemaining:(NSString *)timeRemaining				{ [_timeRemaining release]; _timeRemaining = [timeRemaining retain]; }
-
-- (void) setInputFormat:(NSString *)inputFormat					{ [_inputFormat release]; _inputFormat = [inputFormat retain]; }
-
-- (void) setOutputFormat:(NSString *)outputFormat				{ [_outputFormat release]; _outputFormat = [outputFormat retain]; }
-
-- (void) setException:(NSException *)exception					{ [_exception release]; _exception = [exception retain]; }
-
-- (void) updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining
+- (void)			updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining
 {
 	[self setPercentComplete:percentComplete];
 	[self setTimeRemaining:timeRemaining];

@@ -33,12 +33,16 @@
 	
 	double				_percentComplete;
 	
+	NSString			*_phase;
+	
 	BOOL				_shouldStop;
 	
 	NSString			*_timeRemaining;
 	
 	NSString			*_inputFormat;
 	NSString			*_outputFormat;
+	
+	NSDictionary		*_userInfo;
 	
 	NSException			*_exception;
 }

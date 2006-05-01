@@ -78,8 +78,10 @@ enum {
 		_outputFilename				= nil;
 		_tracks						= nil;
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
+	
 		return self;
 	}
+	
 	return nil;
 }
 
@@ -100,18 +102,9 @@ enum {
 		[_tracks release];
 	}
 	
-	if(nil != _connection) {
-		[_connection release];
-	}
-
-	if(nil != _encoder) {
-		[(NSObject *)_encoder release];
-	}
-	
-	if(nil != _outputFilename) {
-		[_outputFilename release];
-	}	
-
+	[_connection release];
+	[(NSObject *)_encoder release];
+	[_outputFilename release];
 	[_task release];
 	
 	[super dealloc];
@@ -240,7 +233,7 @@ enum {
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
 	[_connection setRootObject:self];
 	
-	portArray = [NSArray arrayWithObjects:port2, port1, nil];
+	portArray = [NSArray arrayWithObjects:port2, port1, [self userInfo], nil];
 	
 	[super setStarted];
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_encoderClass withObject:portArray];

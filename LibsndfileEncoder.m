@@ -99,9 +99,7 @@
 	
 	@try {
 		// Open the input file
-		info.format			= SF_FORMAT_AIFF | SF_FORMAT_PCM_16;
-		info.samplerate		= 44100;
-		info.channels		= 2;
+		info.format			= SF_FORMAT_AIFF;
 		in					= sf_open([_inputFilename fileSystemRepresentation], SFM_READ, &info);
 		if(NULL == in) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") 

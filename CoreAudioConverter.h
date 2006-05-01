@@ -28,8 +28,6 @@
 @interface CoreAudioConverter : Converter
 {
 	ExtAudioFileRef					_in;
-	AudioBufferList					_buf;
-	ssize_t							_buflen;
 	NSString						*_fileType;
 }
 

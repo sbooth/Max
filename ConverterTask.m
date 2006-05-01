@@ -18,8 +18,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "ConverterMethods.h"
 #import "ConverterTask.h"
+#import "ConverterMethods.h"
 #import "ConverterController.h"
 #import "MallocException.h"
 #import "IOException.h"

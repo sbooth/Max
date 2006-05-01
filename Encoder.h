@@ -27,11 +27,28 @@
 
 @interface Encoder : NSObject <EncoderMethods>
 {
-	id <TaskMethods>				_delegate;
-	NSString						*_inputFilename;
-	AudioStreamBasicDescription		_inputASBD;
+	id <TaskMethods>		_delegate;
+	NSString				*_inputFilename;
+	Float64					_sampleRate;
+	UInt32					_bitsPerChannel;
+	UInt32					_channelsPerFrame;
+	UInt32					_framesPerPacket;
 }
 
-- (id)						initWithPCMFilename:(NSString *)inputFilename;
+- (id)								initWithPCMFilename:(NSString *)inputFilename;
+
+- (AudioStreamBasicDescription)		inputDescription;
+
+- (Float64)							sampleRate;
+- (UInt32)							bitsPerChannel;
+- (UInt32)							channelsPerFrame;
+- (UInt32)							framesPerPacket;
+- (UInt32)							bytesPerPacket;
+- (UInt32)							bytesPerFrame;
+
+- (void)							setSampleRate:(Float64)sampleRate;
+- (void)							setBitsPerChannel:(UInt32)bitsPerChannel;
+- (void)							setChannelsPerFrame:(UInt32)channelsPerFrame;
+- (void)							setFramesPerPacket:(UInt32)framesPerPacket;
 
 @end

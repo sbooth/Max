@@ -87,7 +87,7 @@ enum {
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
-	NSDate						*startTime									= [NSDate date];	
+	NSDate						*startTime							= [NSDate date];	
 	ogg_packet					header;
 	ogg_packet					header_comm;
 	ogg_packet					header_code;
@@ -104,29 +104,33 @@ enum {
 		
 	float						**buffer;
 	
-	float						*left,				*right;
-	int16_t						*alias,				*limit;
-		
-	BOOL						eos											= NO;
+	int8_t						*buffer8							= NULL;
+	int16_t						*buffer16							= NULL;
+	int32_t						*buffer32							= NULL;
+	unsigned					wideSample;
+	unsigned					sample, channel;
+	
+	BOOL						eos									= NO;
 
-	AudioBufferList				buf;
-	ssize_t						buflen										= 0;
+	AudioBufferList				bufferList;
+	ssize_t						bufferLen							= 0;
 	OSStatus					err;
 	FSRef						ref;
-	ExtAudioFileRef				extAudioFileRef								= NULL;
+	ExtAudioFileRef				extAudioFileRef						= NULL;
+	AudioStreamBasicDescription asbd;
 	SInt64						totalFrames, framesToRead;
 	UInt32						size, frameCount;
 	
 	int							bytesWritten;
 	
-	unsigned long				iterations									= 0;
+	unsigned long				iterations							= 0;
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
-		buf.mBuffers[0].mData = NULL;
+		bufferList.mBuffers[0].mData = NULL;
 		
 		// Open the input file
 		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
@@ -142,6 +146,17 @@ enum {
 		}
 		
 		// Get input file information
+		size	= sizeof(asbd);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		[self setSampleRate:asbd.mSampleRate];
+		[self setBitsPerChannel:asbd.mBitsPerChannel];
+		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+		
 		size	= sizeof(totalFrames);
 		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
 		if(err != noErr) {
@@ -151,13 +166,36 @@ enum {
 		
 		framesToRead = totalFrames;
 		
-		// Allocate the input buffer
-		buflen								= 1024;
-		buf.mNumberBuffers					= 1;
-		buf.mBuffers[0].mNumberChannels		= 2;
-		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
-		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));
-		if(NULL == buf.mBuffers[0].mData) {
+		// Set up the AudioBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		
+		// Allocate the buffer that will hold the interleaved audio data
+		bufferLen									= 1024;
+		switch([self bitsPerChannel]) {
+			
+			case 8:				
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
+				break;
+				
+			case 16:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
+				break;
+				
+			case 24:
+			case 32:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;				
+		}
+		
+		if(NULL == bufferList.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -179,12 +217,12 @@ enum {
 		
 		// Use quality-based VBR
 		if(VORBIS_MODE_QUALITY == _mode) {
-			if(vorbis_encode_init_vbr(&vi, 2, 44100, _quality)) {
+			if(vorbis_encode_init_vbr(&vi, [self channelsPerFrame], [self sampleRate], _quality)) {
 				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @"") userInfo:nil];
 			}
 		}
 		else if(VORBIS_MODE_BITRATE == _mode) {
-			if(vorbis_encode_init(&vi, 2, 44100, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
+			if(vorbis_encode_init(&vi, [self channelsPerFrame], [self sampleRate], (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
 				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @"") userInfo:nil];
 			}
 		}
@@ -231,8 +269,8 @@ enum {
 		while(NO == eos) {
 			
 			// Read a chunk of PCM input
-			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerFrame;
-			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &buf);
+			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
+			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
 			if(err != noErr) {
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -241,14 +279,48 @@ enum {
 			// Expose the buffer to submit data
 			buffer = vorbis_analysis_buffer(&vd, frameCount);
 			
-			left	= buffer[0];
-			right	= buffer[1];
-			alias	= buf.mBuffers[0].mData;
-			limit	= alias + (buf.mBuffers[0].mNumberChannels * frameCount);
-			while(alias < limit) {
-				// Preserve sign bit
-				*left++		= ((int16_t)OSSwapBigToHostInt16(*alias++)) / 32768.0f;
-				*right++	= ((int16_t)OSSwapBigToHostInt16(*alias++)) / 32768.0f;
+			// Split PCM data into channels and convert to 32-bit float samples for Vorbis
+			switch([self bitsPerChannel]) {
+				
+				case 8:
+					buffer8 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							buffer[channel][wideSample] = buffer8[sample] / 128.f;
+						}
+					}
+					break;
+					
+				case 16:
+					buffer16 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							buffer[channel][wideSample] = ((int16_t)OSSwapBigToHostInt16(buffer16[sample])) / 32768.f;
+						}
+					}
+					break;
+					
+				case 24:
+					buffer32 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							buffer[channel][wideSample] = ((int32_t)OSSwapBigToHostInt32(buffer32[sample])) / 8388608.f;
+						}
+					}
+					break;
+
+				case 32:
+					buffer32 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							buffer[channel][wideSample] = ((int32_t)OSSwapBigToHostInt32(buffer32[sample])) / 2147483648.f;
+						}
+					}
+					break;
+					
+				default:
+					@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+					break;
 			}
 			
 			// Tell the library how much data we actually submitted
@@ -347,7 +419,7 @@ enum {
 		vorbis_comment_clear(&vc);
 		vorbis_info_clear(&vi);
 
-		free(buf.mBuffers[0].mData);
+		free(bufferList.mBuffers[0].mData);
 		
 	}
 	

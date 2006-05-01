@@ -54,13 +54,14 @@ writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, con
 static void
 metadataCallback(const OggFLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
-	//OggFLACConverter *converter = (OggFLACConverter *) client_data;
+	OggFLACConverter *converter = (OggFLACConverter *)client_data;
 	
-	// Only accept 16-bit 2-channel FLAC files
-	if(FLAC__METADATA_TYPE_STREAMINFO == metadata->type) {
-		if(16 != metadata->data.stream_info.bits_per_sample || 2 != metadata->data.stream_info.channels) {
-			@throw [FLACException exceptionWithReason:NSLocalizedStringFromTable(@"The Ogg FLAC stream is not 16-bit stereo.", @"Exceptions", @"") userInfo:nil];
-		}
+	switch(metadata->type) {
+		case FLAC__METADATA_TYPE_STREAMINFO:
+			[converter setSampleRate:metadata->data.stream_info.sample_rate];			
+			[converter setBitsPerChannel:metadata->data.stream_info.bits_per_sample];
+			[converter setChannelsPerFrame:metadata->data.stream_info.channels];
+			break;
 	}
 }
 
@@ -80,6 +81,7 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 	OggFLAC__FileDecoder		*flac				= NULL;
 	OSStatus					err;
 	FSRef						ref;
+	AudioStreamBasicDescription asbd;
 	AudioFileID					audioFile;
 	FLAC__uint64				bytesToRead			= 0;
 	FLAC__uint64				totalBytes			= 0;
@@ -92,24 +94,6 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 	[_delegate setStarted];
 	
 	@try {
-		// Open the output file
-		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &_outputASBD, 0, &audioFile);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &_extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
 		// Get input file information
 		if(-1 == stat([_inputFilename fileSystemRepresentation], &sourceStat)) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get information on the input file.", @"Exceptions", @"") 
@@ -144,9 +128,30 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 		}
 		
 		// Initialize decoder
+		// This will set our bitsPerSample, etc. appropriately
 		if(OggFLAC__FILE_DECODER_OK != OggFLAC__file_decoder_init(flac)) {
 			@throw [FLACException exceptionWithReason:[NSString stringWithCString:OggFLAC__FileDecoderStateString[OggFLAC__file_decoder_get_state(flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
 		}
+
+		// Open the output file
+		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
+		if(noErr != err) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+		}
+		asbd = [self outputDescription];
+		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &asbd, 0, &audioFile);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &_extAudioFileRef);
+		if(noErr != err) {
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
 		
 		for(;;) {
 			
@@ -215,51 +220,116 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 
 - (void) writeFrame:(const FLAC__Frame *)frame buffer:(const FLAC__int32 * const [])buffer
 {
-	// We need to interleave the buffers for PCM output
-	ssize_t				pcmBufferLen;
-	int16_t				*pcmBuffer				= NULL;
-	int16_t				*pos, *limit;
-	FLAC__int32			*leftPCM, *rightPCM;
+	ssize_t				bufferLen				= 0;
+	int8_t				*buffer8				= NULL;
+	int8_t				*alias8					= NULL;
+	int16_t				*buffer16				= NULL;
+	int16_t				*alias16				= NULL;
+	int32_t				*buffer32				= NULL;
+	int32_t				*alias32				= NULL;
+	unsigned			sample, channel;
 	OSStatus			err;
 	AudioBufferList		bufferList;
-	UInt32				frameCount;
 	
 	@try {
-		pcmBufferLen	= frame->header.channels * frame->header.blocksize;
-		pcmBuffer		= calloc(pcmBufferLen, sizeof(int16_t));
-		if(NULL == pcmBuffer) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
 		
-		// Interleave (16-bit sample size hard-coded)
-		leftPCM			= (FLAC__int32 *)buffer[0];
-		rightPCM		= (FLAC__int32 *)buffer[1];
-		pos				= pcmBuffer;
-		limit			= pcmBuffer + pcmBufferLen;
-		while(pos < limit) {
-			*pos++ = OSSwapHostToBigInt16(*leftPCM++);
-			*pos++ = OSSwapHostToBigInt16(*rightPCM++);
-		}
-		
-		// Put the data in an AudioBufferList
+		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
-		bufferList.mBuffers[0].mData				= pcmBuffer;
-		bufferList.mBuffers[0].mDataByteSize		= pcmBufferLen * sizeof(int16_t);
-		bufferList.mBuffers[0].mNumberChannels		= 2;
+		bufferList.mBuffers[0].mNumberChannels		= frame->header.channels;
 		
-		frameCount									= pcmBufferLen / 2;
+		// Calculate the number of audio data points contained in the frame (should be one for each channel)
+		bufferLen									= frame->header.blocksize * frame->header.channels;
+		
+		switch(frame->header.bits_per_sample) {
+			
+			case 8:
+				
+				// Allocate the buffer that will hold the interleaved audio data
+				buffer8 = calloc(bufferLen, sizeof(int8_t));
+				if(NULL == buffer8) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+					
+				// Interleave the audio, converting to big endian byte order for the AIFF file
+				alias8 = buffer8;
+				for(sample = 0; sample < frame->header.blocksize; ++sample) {
+					for(channel = 0; channel < frame->header.channels; ++channel) {
+						*alias8++ = (int8_t)OSSwapHostToBigInt32(buffer[channel][sample]);
+					}
+				}
+					
+				// Place the interleaved data in the buffer
+				bufferList.mBuffers[0].mData				= buffer8;
+				bufferList.mBuffers[0].mDataByteSize		= bufferLen * sizeof(int8_t);
+				
+				break;
+				
+			case 16:
+				
+				// Allocate the buffer that will hold the interleaved audio data
+				buffer16 = calloc(bufferLen, sizeof(int16_t));
+				if(NULL == buffer16) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+					
+				// Interleave the audio, converting to big endian byte order for the AIFF file
+				alias16 = buffer16;
+				for(sample = 0; sample < frame->header.blocksize; ++sample) {
+					for(channel = 0; channel < frame->header.channels; ++channel) {
+						*alias16++ = (int16_t)OSSwapHostToBigInt32(buffer[channel][sample]);
+					}
+				}
+					
+				// Place the interleaved data in the buffer
+				bufferList.mBuffers[0].mData				= buffer16;
+				bufferList.mBuffers[0].mDataByteSize		= bufferLen * sizeof(int16_t);
+				
+				break;
+				
+			case 24:
+			case 32:
+				
+				// Allocate the buffer that will hold the interleaved audio data
+				buffer32 = calloc(bufferLen, sizeof(int32_t));
+				if(NULL == buffer32) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+					
+				// Interleave the audio, converting to big endian byte order for the AIFF file
+				alias32 = buffer32;
+				for(sample = 0; sample < frame->header.blocksize; ++sample) {
+					for(channel = 0; channel < frame->header.channels; ++channel) {
+						*alias32++ = OSSwapHostToBigInt32(buffer[channel][sample]);
+					}
+				}
+					
+				// Place the interleaved data in the buffer
+				bufferList.mBuffers[0].mData				= buffer32;
+				bufferList.mBuffers[0].mDataByteSize		= bufferLen * sizeof(int32_t);
+				
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;				
+		}
 		
 		// Write the data
-		err = ExtAudioFileWrite(_extAudioFileRef, frameCount, &bufferList);
+		err = ExtAudioFileWrite(_extAudioFileRef, frame->header.blocksize, &bufferList);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrite"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 	}
-
+	
+	// Clean up
 	@finally {
-		free(pcmBuffer);
+		free(buffer8);
+		free(buffer16);
+		free(buffer32);
 	}
 }
 

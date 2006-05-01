@@ -81,9 +81,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 {
 	int			mode;
 	int			quality;
-	int			bitrate;
-	int			lameResult;
-	
+	int			bitrate;	
 	
 	if((self = [super initWithPCMFilename:inputFilename])) {
 		
@@ -95,10 +93,6 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
-			
-			// We know the input is coming from a CD
-			lame_set_num_channels(_gfp, 2);
-			lame_set_in_samplerate(_gfp, 44100);
 			
 			// Write the Xing VBR tag
 			lame_set_bWriteVbrTag(_gfp, 1);
@@ -142,12 +136,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME target" userInfo:nil];
 			}
 			
-			//lame_set_findReplayGain(_gfp, 1);
-			
-			lameResult = lame_init_params(_gfp);
-			if(-1 == lameResult) {
-				@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @"") userInfo:nil];
-			}
+			//lame_set_findReplayGain(_gfp, 1);			
 		}
 
 		@catch(NSException *exception) {
@@ -173,23 +162,25 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
-	NSDate				*startTime						= [NSDate date];
-	FILE				*file							= NULL;
-	AudioBufferList		buf;
-	ssize_t				buflen							= 0;
-	OSStatus			err;
-	FSRef				ref;
-	ExtAudioFileRef		inExtAudioFile					= NULL;
-	SInt64				totalFrames, framesToRead;
-	UInt32				size, frameCount;
-	unsigned long		iterations						= 0;
+	NSDate							*startTime						= [NSDate date];
+	FILE							*file							= NULL;
+	int								lameResult;
+	AudioBufferList					bufferList;
+	ssize_t							bufferLen						= 0;
+	OSStatus						err;
+	FSRef							ref;
+	ExtAudioFileRef					extAudioFileRef					= NULL;
+	AudioStreamBasicDescription		asbd;
+	SInt64							totalFrames, framesToRead;
+	UInt32							size, frameCount;
+	unsigned long					iterations						= 0;
 
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
-		buf.mBuffers[0].mData = NULL;
+		bufferList.mBuffers[0].mData = NULL;
 		
 		// Open the input file
 		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
@@ -198,15 +189,30 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
 		
-		err = ExtAudioFileOpen(&ref, &inExtAudioFile);
+		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileOpen"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
+		size	= sizeof(asbd);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+				
+		[self setSampleRate:asbd.mSampleRate];
+		[self setBitsPerChannel:asbd.mBitsPerChannel];
+		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+		
+		if(1 != [self channelsPerFrame] && 2 != [self channelsPerFrame]) {
+			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
+		}
+
 		size	= sizeof(totalFrames);
-		err		= ExtAudioFileGetProperty(inExtAudioFile, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
 		if(err != noErr) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -214,17 +220,49 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		
 		framesToRead = totalFrames;
 		
-		// Allocate the input buffer
-		buflen								= 1024;
-		buf.mNumberBuffers					= 1;
-		buf.mBuffers[0].mNumberChannels		= 2;
-		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
-		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));
-		if(NULL == buf.mBuffers[0].mData) {
+		// Set up the AudioBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		
+		// Allocate the buffer that will hold the interleaved audio data
+		bufferLen									= 1024;
+		switch([self bitsPerChannel]) {
+			
+			case 8:				
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
+				break;
+				
+			case 16:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
+				break;
+				
+			case 24:
+			case 32:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;				
+		}
+		
+		if(NULL == bufferList.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
+		// Initialize the LAME encoder
+		lame_set_num_channels(_gfp, [self channelsPerFrame]);
+		lame_set_in_samplerate(_gfp, [self sampleRate]);
+		
+		lameResult = lame_init_params(_gfp);
+		if(-1 == lameResult) {
+			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @"") userInfo:nil];
+		}
+
 		// Open the output file
 		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 		if(-1 == _out) {
@@ -236,8 +274,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		for(;;) {
 			
 			// Read a chunk of PCM input
-			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerFrame;
-			err			= ExtAudioFileRead(inExtAudioFile, &frameCount, &buf);
+			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
+			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
 			if(err != noErr) {
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -249,7 +287,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 			}
 			
 			// Encode the PCM data
-			[self encodeChunk:&buf frameCount:frameCount];
+			[self encodeChunk:&bufferList frameCount:frameCount];
 			
 			// Update status
 			framesToRead -= frameCount;
@@ -306,7 +344,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		NSException *exception;
 		
 		// Close the input file
-		err = ExtAudioFileDispose(inExtAudioFile);
+		err = ExtAudioFileDispose(extAudioFileRef);
 		if(noErr != err) {
 			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -327,7 +365,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 			NSLog(@"%@", exception);
 		}		
 
-		free(buf.mBuffers[0].mData);
+		free(bufferList.mBuffers[0].mData);
 	}
 
 	[_delegate setEndTime:[NSDate date]];
@@ -336,53 +374,165 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 {
-	int16_t			*iter, *limit;
-	u_int8_t		*buf;
-	int				buflen;
+	unsigned char	*buffer					= NULL;
+	unsigned		bufferLen				= 0;
+	
+	void			**channelBuffers		= NULL;
+	short			**channelBuffers16		= NULL;
+	long			**channelBuffers32		= NULL;
+	
+	int8_t			*buffer8				= NULL;
+	int16_t			*buffer16				= NULL;
+	int32_t			*buffer32				= NULL;
 
 	int				lameResult;
 	long			bytesWritten;
-	
-	
-	buf = NULL;
+
+	unsigned		wideSample;
+	unsigned		sample, channel;
 	
 	@try {
 		// Allocate the MP3 buffer using LAME guide for size
-		buflen = 1.25 * (chunk->mBuffers[0].mNumberChannels * frameCount) + 7200;
-		buf = (u_int8_t *) calloc(buflen, sizeof(u_int8_t));
-		if(NULL == buf) {
+		bufferLen	= 1.25 * (chunk->mBuffers[0].mNumberChannels * frameCount) + 7200;
+		buffer		= (unsigned char *) calloc(bufferLen, sizeof(unsigned char));
+		if(NULL == buffer) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+				
+		// Allocate channel buffers for sample de-interleaving
+		channelBuffers = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(void *));
+		if(NULL == channelBuffers) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		// Adjust for host endian-ness
-		iter	= chunk->mBuffers[0].mData;
-		limit	= iter + (chunk->mBuffers[0].mNumberChannels * frameCount);
-		while(iter < limit) {
-			*iter = OSSwapBigToHostInt16(*iter);
-			++iter;
+		// Initialize each channel buffer to zero
+		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+			channelBuffers[channel] = NULL;
 		}
 		
-		lameResult = lame_encode_buffer_interleaved(_gfp, chunk->mBuffers[0].mData, frameCount, buf, buflen);
+		// Split PCM data into channels and convert to appropriate sample size for LAME
+		switch([self bitsPerChannel]) {
+			
+			case 8:				
+				channelBuffers16 = (short **)channelBuffers;
+
+				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+					channelBuffers16[channel] = calloc(frameCount, sizeof(short));
+					if(NULL == channelBuffers16[channel]) {
+						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+					}
+				}
+				
+				buffer8 = chunk->mBuffers[0].mData;
+				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+						// Rescale values to short
+						channelBuffers16[channel][wideSample] = (short)((buffer8[sample] / 128.f) * 32768.f);
+					}
+				}
+
+				lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+
+				break;
+				
+			case 16:
+				channelBuffers16 = (short **)channelBuffers;
+				
+				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+					channelBuffers16[channel] = calloc(frameCount, sizeof(short));
+					if(NULL == channelBuffers16[channel]) {
+						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+					}
+				}
+
+				buffer16 = chunk->mBuffers[0].mData;
+				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+						channelBuffers16[channel][wideSample] = (short)OSSwapBigToHostInt16(buffer16[sample]);
+					}
+				}
+					
+				lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+
+				break;
+				
+			case 24:
+				channelBuffers32 = (long **)channelBuffers;
+				
+				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
+					if(NULL == channelBuffers32[channel]) {
+						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+					}
+				}
+					
+				buffer32 = chunk->mBuffers[0].mData;
+				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+						channelBuffers32[channel][wideSample] = (long)((OSSwapBigToHostInt32((double)buffer32[sample]) / 8388608.f) * 2147483648.f);
+					}
+				}
+					
+				lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
+				
+				break;
+
+			case 32:
+				channelBuffers32 = (long **)channelBuffers;
+				
+				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
+					if(NULL == channelBuffers32[channel]) {
+						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+					}
+				}
+
+				buffer32 = chunk->mBuffers[0].mData;
+				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+						channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(buffer32[sample]);
+					}
+				}
+				
+				lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
+
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;
+		}
+		
 		if(0 > lameResult) {
 			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME encoding error.", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		bytesWritten = write(_out, buf, lameResult);
+		bytesWritten = write(_out, buffer, lameResult);
 		if(-1 == bytesWritten) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		}		
 	}
-		
+	
 	@finally {
-		free(buf);
+		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+			free(channelBuffers[channel]);
+		}
+		free(channelBuffers);
+		
+		free(buffer);
 	}
 }
 
 - (void) finishEncode
 {
-	u_int8_t		*buf;
+	unsigned char	*buf;
 	int				bufSize;
 	
 	int				lameResult;
@@ -392,8 +542,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		buf = NULL;
 		
 		// Allocate the MP3 buffer using LAME guide for size
-		bufSize = 7200;
-		buf = (u_int8_t *) calloc(bufSize, sizeof(u_int8_t));
+		bufSize		= 7200;
+		buf			= (unsigned char *) calloc(bufSize, sizeof(unsigned char));
 		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

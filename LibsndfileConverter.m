@@ -73,6 +73,16 @@
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithCString:sf_strerror(NULL) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
+	[self setSampleRate:info.samplerate];
+	[self setChannelsPerFrame:info.channels];
+	
+	switch(SF_FORMAT_SUBMASK & info.format) {
+		case SF_FORMAT_PCM_S8:			[self setBitsPerChannel:8];				break;
+		case SF_FORMAT_PCM_16:			[self setBitsPerChannel:16];			break;
+		case SF_FORMAT_PCM_24:			[self setBitsPerChannel:24];			break;
+		case SF_FORMAT_PCM_32:			[self setBitsPerChannel:32];			break;
+	}
+	
 	// Get format info
 	formatInfo.format = info.format;
 	
@@ -104,6 +114,7 @@
 	NSDate						*startTime			= [NSDate date];
 	SNDFILE						*out				= NULL;
 	SF_INFO						info;
+	int							subtype;
 	const char					*string				= NULL;
 	int							i;
 	int							err					= 0 ;
@@ -125,9 +136,20 @@
 		[self openInputFile];
 		
 		// Setup libsndfile output file
-		info.format			= SF_FORMAT_AIFF | SF_FORMAT_PCM_16;
-		info.samplerate		= 44100;
-		info.channels		= 2;
+		switch([self bitsPerChannel]) {
+			case 8:			subtype = SF_FORMAT_PCM_S8;			break;
+			case 16:		subtype = SF_FORMAT_PCM_16;			break;
+			case 24:		subtype = SF_FORMAT_PCM_24;			break;
+			case 32:		subtype = SF_FORMAT_PCM_32;			break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;
+		}
+		
+		info.format			= SF_FORMAT_AIFF | subtype;
+		info.samplerate		= [self sampleRate];
+		info.channels		= [self channelsPerFrame];
 		out					= sf_open([filename fileSystemRepresentation], SFM_WRITE, &info);
 		if(NULL == out) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @"") 

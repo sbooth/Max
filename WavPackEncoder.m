@@ -138,28 +138,31 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
-	NSDate					*startTime							= [NSDate date];
-	OSStatus				err;
-	AudioBufferList			buf;
-	ssize_t					buflen								= 0;
-	int16_t					*iter, *limit;
-	int32_t					*wpBuf								= NULL;
-	int32_t					*wpAlias;
-	SInt64					totalFrames, framesToRead;
-	UInt32					size, frameCount;
-	FSRef					ref;
-	ExtAudioFileRef			inExtAudioFile;
-	int						fd, cfd;
-    WavpackContext			*wpc								= NULL;
-	WavpackConfig			config;
-	unsigned long			iterations							= 0;
+	NSDate							*startTime							= [NSDate date];
+	OSStatus						err;
+	AudioBufferList					bufferList;
+	ssize_t							bufferLen							= 0;
+	int8_t							*buffer8							= NULL;
+	int16_t							*buffer16							= NULL;
+	int32_t							*buffer32							= NULL;
+	int32_t							*wpBuf								= NULL;
+	SInt64							totalFrames, framesToRead;
+	UInt32							size, frameCount;
+	FSRef							ref;
+	ExtAudioFileRef					extAudioFileRef;
+	AudioStreamBasicDescription		asbd;
+	int								fd, cfd;
+    WavpackContext					*wpc								= NULL;
+	WavpackConfig					config;
+	unsigned long					iterations							= 0;
+	unsigned						wideSample, sample, channel;
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
-		buf.mBuffers[0].mData = NULL;
+		bufferList.mBuffers[0].mData = NULL;
 		
 		// Open the input file
 		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
@@ -168,15 +171,26 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
 		
-		err = ExtAudioFileOpen(&ref, &inExtAudioFile);
+		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileOpen"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Get input file information
+		size	= sizeof(asbd);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
+		if(err != noErr) {
+			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		[self setSampleRate:asbd.mSampleRate];
+		[self setBitsPerChannel:asbd.mBitsPerChannel];
+		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+		
 		size	= sizeof(totalFrames);
-		err		= ExtAudioFileGetProperty(inExtAudioFile, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
+		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
 		if(err != noErr) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -184,18 +198,41 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		
 		framesToRead = totalFrames;
 		
-		// Allocate the input buffers
-		buflen								= 1024;
-		buf.mNumberBuffers					= 1;
-		buf.mBuffers[0].mNumberChannels		= 2;
-		buf.mBuffers[0].mDataByteSize		= buflen * sizeof(int16_t);
-		buf.mBuffers[0].mData				= calloc(buflen, sizeof(int16_t));
-		if(NULL == buf.mBuffers[0].mData) {
+		// Set up the AudioBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		
+		// Allocate the buffer that will hold the interleaved audio data
+		bufferLen									= 1024;
+		switch([self bitsPerChannel]) {
+			
+			case 8:				
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
+				break;
+				
+			case 16:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
+				break;
+				
+			case 24:
+			case 32:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;				
+		}
+		
+		if(NULL == bufferList.mBuffers[0].mData) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		wpBuf								= (int32_t *)calloc(buflen, sizeof(int32_t));
+		wpBuf = (int32_t *)calloc(bufferLen, sizeof(int32_t));
 		if(NULL == wpBuf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -227,10 +264,10 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		
 		bzero(&config, sizeof(config));
 		
-		config.num_channels				= 2;
+		config.num_channels				= [self channelsPerFrame];
 		config.channel_mask				= 3;
-		config.sample_rate				= 44100;
-		config.bits_per_sample			= 16;
+		config.sample_rate				= [self sampleRate];
+		config.bits_per_sample			= [self bitsPerChannel];
 		config.bytes_per_sample			= config.bits_per_sample / 8;
 		
 		config.flags					= _flags;
@@ -253,8 +290,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		for(;;) {
 			
 			// Read a chunk of PCM input
-			frameCount	= buf.mBuffers[0].mDataByteSize / _inputASBD.mBytesPerFrame;
-			err			= ExtAudioFileRead(inExtAudioFile, &frameCount, &buf);
+			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
+			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
 			if(err != noErr) {
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -265,14 +302,42 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 				break;
 			}
 			
-			// Fill WavPack buffer
-			iter		= (int16_t *)buf.mBuffers[0].mData;
-			limit		= iter + (buf.mBuffers[0].mNumberChannels * frameCount);
-			wpAlias		= wpBuf;
-			while(iter < limit) {
-				*wpAlias++ = (int32_t)((int16_t)OSSwapBigToHostInt16(*iter++));
+			// Fill WavPack buffer, converting to host endian byte order
+			switch([self bitsPerChannel]) {
+				
+				case 8:
+					buffer8 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							wpBuf[sample] = (int32_t)buffer8[sample];
+						}
+					}
+					break;
+					
+				case 16:
+					buffer16 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							wpBuf[sample] = (int32_t)(int16_t)OSSwapBigToHostInt16(buffer16[sample]);
+						}
+					}
+					break;
+					
+				case 24:
+				case 32:
+					buffer32 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							wpBuf[sample] = (int32_t)OSSwapBigToHostInt32(buffer32[sample]);
+						}
+					}
+					break;
+					
+				default:
+					@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+					break;				
 			}
-			
+
 			// Write the data
 			if(FALSE == WavpackPackSamples(wpc, wpBuf, frameCount)) {
 				@throw [NSException exceptionWithName:@"WavPackException" reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"WavpackPackSamples"] userInfo:nil];
@@ -320,7 +385,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		NSException *exception;
 		
 		// Close the input file
-		err = ExtAudioFileDispose(inExtAudioFile);
+		err = ExtAudioFileDispose(extAudioFileRef);
 		if(noErr != err) {
 			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -334,7 +399,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		close(fd);
 		close(cfd);
 		
-		free(buf.mBuffers[0].mData);
+		free(bufferList.mBuffers[0].mData);
 		free(wpBuf);
 	}
 	

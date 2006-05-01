@@ -477,10 +477,11 @@ static EncoderController *sharedController = nil;
 		firstParameter	= [NSAppleEventDescriptor descriptorWithString:filename];
 		secondParameter	= [NSAppleEventDescriptor descriptorWithString:(nil == playlist ? @"" : playlist)];
 		parameters		= [NSAppleEventDescriptor listDescriptor];
+		
 		[parameters insertDescriptor:firstParameter atIndex:1];
 		[parameters insertDescriptor:secondParameter atIndex:2];
 		
-		target			= [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber bytes:&psn length:sizeof(ProcessSerialNumber)];
+		target			= [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber bytes:&psn length:sizeof(psn)];
 		handler			= [NSAppleEventDescriptor descriptorWithString:[@"add_file_to_itunes_library" lowercaseString]];
 		event			= [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite eventID:kASSubroutineEvent targetDescriptor:target returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
 

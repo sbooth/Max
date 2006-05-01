@@ -41,39 +41,59 @@
 
 - (oneway void) convertToFile:(NSString *)filename
 {
-	NSDate				*startTime			= [NSDate date];
-    WavpackContext		*wpc;
-	char				error [80];
-	int					channels;
-	int					bitsPerSample;
-	UInt32				samplesRead			= 0;
-	UInt32				samplesToRead		= 0;
-	UInt32				totalSamples		= 0;
-	UInt32				frameSize;
-	OSStatus			err;
-	FSRef				ref;
-	AudioFileID			audioFile;
-	ExtAudioFileRef		extAudioFileRef;
-	AudioBufferList		bufferList;
-	int32_t				*buf				= NULL;
-	int32_t				*alias;
-	int16_t				*pcmBuffer			= NULL;
-	int16_t				*iter, *limit;
-	unsigned			buflen;
-	unsigned long		iterations			= 0;
+	NSDate							*startTime			= [NSDate date];
+    WavpackContext					*wpc;
+	char							error [80];
+	UInt32							sample				= 0;
+	UInt32							samplesRead			= 0;
+	UInt32							samplesToRead		= 0;
+	UInt32							totalSamples		= 0;
+	UInt32							bytesPerFrame;
+	OSStatus						err;
+	FSRef							ref;
+	AudioFileID						audioFile;
+	ExtAudioFileRef					extAudioFileRef;
+	AudioStreamBasicDescription		asbd;
+	AudioBufferList					bufferList;
+	unsigned						bufferLen;
+	int32_t							*buffer				= NULL;
+	int8_t							*buffer8			= NULL;
+	int8_t							*alias8				= NULL;
+	int16_t							*buffer16			= NULL;
+	int16_t							*alias16			= NULL;
+	int32_t							*buffer32			= NULL;
+	int32_t							*alias32			= NULL;
+	unsigned long					iterations			= 0;
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
 	[_delegate setStarted];
 	
 	@try {
+		// Setup converter
+		wpc = WavpackOpenFileInput([_inputFilename fileSystemRepresentation], error, 0, 0);
+		if(NULL == wpc) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
+		}
+
+		[self setSampleRate:WavpackGetSampleRate(wpc)];
+		[self setBitsPerChannel:WavpackGetBitsPerSample(wpc)];
+		[self setChannelsPerFrame:WavpackGetNumChannels(wpc)];
+				
+		// Get input file information
+		totalSamples		= WavpackGetNumSamples(wpc);
+		samplesToRead		= totalSamples;
+		bytesPerFrame		= [self channelsPerFrame] * ([self bitsPerChannel] / 8);
+
 		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
 		if(noErr != err) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
-		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &_outputASBD, 0, &audioFile);
+		asbd = [self outputDescription];
+		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &asbd, 0, &audioFile);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -85,62 +105,111 @@
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		// Setup converter
-		wpc = WavpackOpenFileInput([_inputFilename fileSystemRepresentation], error, 0, 0);
-		if(NULL == wpc) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
-		}
+		// Set up the AudioBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
 
-		// Verify input is 16-bit 2 channel audio
-		channels		= WavpackGetNumChannels(wpc);
-		bitsPerSample	= WavpackGetBitsPerSample(wpc);
-		frameSize		= bitsPerSample / 8;
-		if(16 != bitsPerSample || 2 != channels) {
-			@throw [NSException exceptionWithName:@"WavPackException" reason:NSLocalizedStringFromTable(@"The WavPack stream is not 16-bit stereo.", @"Exceptions", @"") userInfo:nil];
-		}
-		
-		// Get input file information
-		totalSamples		= WavpackGetNumSamples(wpc);
-		samplesToRead		= totalSamples;
+		// Allocate the input buffer
+		bufferLen									= 1024;
 
-		// Allocate buffers
-		buflen = 1024;
-
-		buf = (int32_t *)calloc(buflen, sizeof(int32_t));
-		if(NULL == buf) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		pcmBuffer = (int16_t *)calloc(buflen, sizeof(int16_t));
-		if(NULL == pcmBuffer) {
+		buffer = (int32_t *)calloc(bufferLen, sizeof(int32_t));
+		if(NULL == buffer) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
+		// Allocate the buffer that will hold the interleaved audio data
+		switch([self bitsPerChannel]) {
+			
+			case 8:				
+				buffer8 = calloc(bufferLen, sizeof(int8_t));
+				if(NULL == buffer8) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+				break;
+				
+			case 16:
+				buffer16 = calloc(bufferLen, sizeof(int16_t));
+				if(NULL == buffer16) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+				break;
+				
+			case 24:
+			case 32:
+				buffer32 = calloc(bufferLen, sizeof(int32_t));
+				if(NULL == buffer32) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;				
+		}
+				
 		for(;;) {
 			
 			// Decode the data
-			samplesRead = WavpackUnpackSamples(wpc, buf, buflen / (channels * frameSize));
+			samplesRead = WavpackUnpackSamples(wpc, buffer, bufferLen / bytesPerFrame);
 
 			// EOF?
 			if(0 == samplesRead) {
 				break;
 			}
 			
-			// Adjust for host endian-ness
-			alias	= buf;
-			iter	= pcmBuffer;
-			limit	= iter + (channels * samplesRead);
-			while(iter < limit) {
-				*iter++ = (int16_t)OSSwapHostToBigInt32(*alias++);
+			switch([self bitsPerChannel]) {
+				
+				case 8:
+					
+					// Interleave the audio, converting to big endian byte order for the AIFF file
+					alias8 = buffer8;
+					for(sample = 0; sample < samplesRead; ++sample) {
+						*alias8++ = (int8_t)OSSwapHostToBigInt32(buffer[sample]);
+					}
+						
+					// Place the interleaved data in the buffer
+					bufferList.mBuffers[0].mData				= buffer8;
+					bufferList.mBuffers[0].mDataByteSize		= samplesRead * sizeof(int8_t);
+					
+					break;
+					
+				case 16:
+					
+					// Interleave the audio, converting to big endian byte order for the AIFF file
+					alias16 = buffer16;
+					for(sample = 0; sample < samplesRead; ++sample) {
+						*alias16++ = (int16_t)OSSwapHostToBigInt32(buffer[sample]);
+					}
+						
+					// Place the interleaved data in the buffer
+					bufferList.mBuffers[0].mData				= buffer16;
+					bufferList.mBuffers[0].mDataByteSize		= samplesRead * sizeof(int16_t);
+					
+					break;
+					
+				case 24:
+				case 32:
+					
+					// Interleave the audio, converting to big endian byte order for the AIFF file
+					alias32 = buffer32;
+					for(sample = 0; sample < samplesRead; ++sample) {
+						*alias32++ = OSSwapHostToBigInt32(buffer[sample]);
+					}
+						
+					// Place the interleaved data in the buffer
+					bufferList.mBuffers[0].mData				= buffer32;
+					bufferList.mBuffers[0].mDataByteSize		= samplesRead * sizeof(int32_t);
+					
+					break;
+					
+				default:
+					@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+					break;				
 			}
-
-			// Put the data in an AudioBufferList
-			bufferList.mNumberBuffers					= 1;
-			bufferList.mBuffers[0].mData				= pcmBuffer;
-			bufferList.mBuffers[0].mDataByteSize		= (channels * frameSize) * samplesRead;
-			bufferList.mBuffers[0].mNumberChannels		= channels;
 			
 			// Write the data
 			err = ExtAudioFileWrite(extAudioFileRef, samplesRead, &bufferList);
@@ -204,8 +273,10 @@
 		// Close input file
 		WavpackCloseFile(wpc);
 		
-		free(buf);
-		free(pcmBuffer);
+		free(buffer);
+		free(buffer8);
+		free(buffer16);
+		free(buffer32);
 	}
 	
 	[_delegate setEndTime:[NSDate date]];
