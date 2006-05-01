@@ -9,11 +9,9 @@
 /* Begin PBXBuildFile section */
 		8C0230950956848A005D8698 /* OggFLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230930956848A005D8698 /* OggFLACConverterTask.m */; };
 		8C0230F909570F26005D8698 /* OggVorbisConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230F709570F26005D8698 /* OggVorbisConverterTask.m */; };
-		8C02310D09570F9D005D8698 /* OggVorbisConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C02310B09570F9D005D8698 /* OggVorbisConverter.m */; };
 		8C039AD4098AA762007EFA10 /* FLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C039AD3098AA761007EFA10 /* FLACEncoderTask.m */; };
-		8C040A31092AB41A0052D881 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C040A2F092AB41A0052D881 /* RipperTask.m */; };
-		8C04524A0947F0EC0041AAA8 /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */; };
 		8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C08573808DE90DD004B42F0 /* FreeDB.m */; };
+		8C08740009E981E000BE4CE8 /* General.prefPane in Copy PreferencePanes */ = {isa = PBXBuildFile; fileRef = 8C0873EC09E981D900BE4CE8 /* General.prefPane */; };
 		8C137F160981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */; };
 		8C137F170981BCB800EBFC77 /* SelectNextTrackToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C137F150981BCB800EBFC77 /* SelectNextTrackToolbarImage.png */; };
 		8C137F730981CF4B00EBFC77 /* ConverterTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C137F720981CF4A00EBFC77 /* ConverterTaskDefaults.plist */; };
@@ -23,6 +21,14 @@
 		8C14692009CC347C00F91A97 /* ComponentVersionsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C14691F09CC347C00F91A97 /* ComponentVersionsController.mm */; };
 		8C1A6C52093ED45A006176C4 /* LAMEToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */; };
 		8C1A6C59093ED65F006176C4 /* OggVorbisToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */; };
+		8C2874EB0A0350B20039BC5F /* ComparisonRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2874E70A0350B20039BC5F /* ComparisonRipper.m */; };
+		8C2874ED0A0350B20039BC5F /* ParanoiaRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2874E90A0350B20039BC5F /* ParanoiaRipper.m */; };
+		8C2874FE0A0351360039BC5F /* ComparisonRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2874FA0A0351360039BC5F /* ComparisonRipperTask.m */; };
+		8C2875000A0351360039BC5F /* ParanoiaRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2874FC0A0351360039BC5F /* ParanoiaRipperTask.m */; };
+		8C2875130A0351970039BC5F /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2875110A0351970039BC5F /* RipperTask.m */; };
+		8C2875730A0354280039BC5F /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2875710A0354280039BC5F /* Ripper.m */; };
+		8C2877720A0388440039BC5F /* BasicRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2877700A0388440039BC5F /* BasicRipper.m */; };
+		8C2877DB0A038B8C0039BC5F /* BasicRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2877D90A038B8C0039BC5F /* BasicRipperTask.m */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
@@ -44,7 +50,7 @@
 		8C328182096D12CA00608C9D /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C328181096D12CA00608C9D /* Exceptions.strings */; };
 		8C4015750948E433003413BE /* CoreAudioEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4015730948E433003413BE /* CoreAudioEncoderTask.m */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
-		8C4961F309472D95006E1765 /* OggFLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4961F109472D95006E1765 /* OggFLACEncoder.m */; };
+		8C48D41009FB4CA40089395E /* PrefPaneIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C48D40E09FB4CA40089395E /* PrefPaneIcon.m */; };
 		8C4BF180099C54AA009C7C07 /* AlbumArtToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C4BF17F099C54AA009C7C07 /* AlbumArtToolbarImage.png */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4538093E6D7D00A88927 /* GeneralPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D4536093E6D7D00A88927 /* GeneralPreferencesController.m */; };
@@ -60,6 +66,9 @@
 		8C4D48A8093E93AC00A88927 /* AcknowledgmentsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D48A6093E93AC00A88927 /* AcknowledgmentsController.m */; };
 		8C4DDD71097A55C60000245A /* PCMGeneratingTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */; };
 		8C5266BB0970E6FB008F1B55 /* Acknowledgments.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */; };
+		8C53F7830A058D5000890518 /* FreeDB.prefPane in Copy PreferencePanes */ = {isa = PBXBuildFile; fileRef = 8C53F7740A058D5000890518 /* FreeDB.prefPane */; };
+		8C53F8590A0591F600890518 /* Tagging.prefPane in Copy PreferencePanes */ = {isa = PBXBuildFile; fileRef = 8C53F84A0A0591F600890518 /* Tagging.prefPane */; };
+		8C53F8A90A05949300890518 /* AlbumArt.prefPane in Copy PreferencePanes */ = {isa = PBXBuildFile; fileRef = 8C53F8990A05949300890518 /* AlbumArt.prefPane */; };
 		8C6819B40982CA5100A35119 /* OggFLACEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C6819B30982CA5100A35119 /* OggFLACEncoderTask.mm */; };
 		8C6C4F5509CC59A600F234E5 /* TaggingToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C4F5409CC59A600F234E5 /* TaggingToolbarImage.png */; };
 		8C6C4F6209CC5A9500F234E5 /* TaggingPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6C4F6009CC5A9500F234E5 /* TaggingPreferencesController.m */; };
@@ -68,6 +77,17 @@
 		8C6EC5C2092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C6EC5C0092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.m */; };
 		8C73004E08ECAA5B0008D7E0 /* FreeDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73004D08ECAA5B0008D7E0 /* FreeDBMatchSheet.m */; };
 		8C73033E08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C73033D08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.m */; };
+		8C73E2320A0049F500CC1E81 /* WavPackConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBAB55109D7B7DB00F97BDC /* WavPackConverter.m */; };
+		8C73E2740A00520100CC1E81 /* OggVorbisConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C02310B09570F9D005D8698 /* OggVorbisConverter.m */; };
+		8C73E29C0A005A8600CC1E81 /* MonkeysAudioConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C80FF7909CB212000AEBDD9 /* MonkeysAudioConverter.mm */; };
+		8C73E38C0A00737500CC1E81 /* OggFLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4961F109472D95006E1765 /* OggFLACEncoder.m */; };
+		8C73E3AC0A00752400CC1E81 /* WavPackEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEE8AF409D9EC9000029BCF /* WavPackEncoder.m */; };
+		8C73E3EA0A007A9F00CC1E81 /* OggVorbisEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D3E2F093DE4C300A88927 /* OggVorbisEncoder.m */; };
+		8C73E3F30A007BB200CC1E81 /* MonkeysAudioEncoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C8000C009CB2FD200AEBDD9 /* MonkeysAudioEncoder.mm */; };
+		8C73E5140A008F1500CC1E81 /* MPEGEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */; };
+		8C73E5A20A009D5C00CC1E81 /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */; };
+		8C73E5BE0A009E5E00CC1E81 /* LibsndfileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */; };
+		8C73E6330A00A67B00CC1E81 /* SpeexEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */; };
 		8C752A8408C507CE001F588B /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C752A8308C507CE001F588B /* Genres.m */; };
 		8C75C81D09538A4B00A923AD /* UtilityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75C81C09538A4B00A923AD /* UtilityFunctions.m */; };
 		8C75CA23095393EC00A923AD /* LibsndfileConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CA21095393EC00A923AD /* LibsndfileConverterTask.m */; };
@@ -77,15 +97,17 @@
 		8C76355409E0F8EC00616BE9 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */; };
 		8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43308C6DE1A00F4F9A1 /* CompactDiscDocument.m */; };
 		8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C76E43A08C6DE3900F4F9A1 /* Track.m */; };
+		8C781EF809E8D211001D85EF /* cuetools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C781EEE09E8D211001D85EF /* cuetools.framework */; };
+		8C781EF909E8D219001D85EF /* cuetools.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C781EEE09E8D211001D85EF /* cuetools.framework */; };
+		8C781F3B09E8D9D2001D85EF /* CueSheetDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C781F3909E8D9D2001D85EF /* CueSheetDocument.m */; };
+		8C781F5109E8DAB4001D85EF /* CueSheetDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C781F4F09E8DAB4001D85EF /* CueSheetDocument.nib */; };
 		8C794DD9097F0DC10081CD7F /* SpeexPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C794DD8097F0DC10081CD7F /* SpeexPreferences.nib */; };
 		8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C7C897808EC435700F6FCB1 /* MediaController.m */; };
 		8C8000AD09CB2F8000AEBDD9 /* MonkeysAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C8000AB09CB2F8000AEBDD9 /* MonkeysAudioEncoderTask.mm */; };
-		8C8000C209CB2FD200AEBDD9 /* MonkeysAudioEncoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C8000C009CB2FD200AEBDD9 /* MonkeysAudioEncoder.mm */; };
 		8C80055109CBA19600AEBDD9 /* MAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C80FEFB09CB1BA200AEBDD9 /* MAC.framework */; };
 		8C80055209CBA1B100AEBDD9 /* MAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C80FEFB09CB1BA200AEBDD9 /* MAC.framework */; };
 		8C80FEFE09CB1BA200AEBDD9 /* MAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C80FEFB09CB1BA200AEBDD9 /* MAC.framework */; };
 		8C80FF1E09CB1CBB00AEBDD9 /* MonkeysAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C80FF1C09CB1CBB00AEBDD9 /* MonkeysAudioConverterTask.m */; };
-		8C80FF7A09CB212000AEBDD9 /* MonkeysAudioConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C80FF7909CB212000AEBDD9 /* MonkeysAudioConverter.mm */; };
 		8C881036097AE43800ED2843 /* SpeexException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C88102A097AE41A00ED2843 /* SpeexException.m */; };
 		8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0CC1092E5DAA00418C45 /* Max Help */; };
 		8C8B0D22092E617B00418C45 /* MacPADSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8B0D20092E617B00418C45 /* MacPADSocket.m */; };
@@ -98,9 +120,12 @@
 		8C9A24AB0925ACD100FB244D /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9A24B40925ADB200FB244D /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9A24A30925ACD100FB244D /* Growl.framework */; };
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
-		8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD973F0973663300A5F2C1 /* SpeexConverter.m */; };
 		8C9EB766096DAA760037CE20 /* SpeexEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */; };
+		8C9FC78F09EF745600F2A157 /* PrefPaneIconView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9FC78D09EF745600F2A157 /* PrefPaneIconView.m */; };
 		8CA0885409DA63CA00AF1D7F /* WavPackEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA0885209DA63C900AF1D7F /* WavPackEncoderTask.m */; };
+		8CA318AC09FFE97100FEB2BB /* FLAC.prefPane in Copy PreferencePanes */ = {isa = PBXBuildFile; fileRef = 8CA3189B09FFE95F00FEB2BB /* FLAC.prefPane */; };
+		8CA38F5B0A01B3E400C5742C /* sha256-stdenis.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA38F5A0A01B3E400C5742C /* sha256-stdenis.c */; };
+		8CA38F6C0A01B46F00C5742C /* Rip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA38F6A0A01B46F00C5742C /* Rip.m */; };
 		8CA3FB9A09BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */; };
 		8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */; };
 		8CA522790938E44100250BE8 /* LogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA522770938E44100250BE8 /* LogController.m */; };
@@ -109,8 +134,131 @@
 		8CA64B4209732D8600505EB7 /* MultiplicationValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA64B4009732D8600505EB7 /* MultiplicationValueTransformer.m */; };
 		8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA660650941A87B00CC84F2 /* VorbisException.m */; };
 		8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CA6E46C09D065260047C35C /* UndoRedo.strings */; };
-		8CA8C03E093A5F2B00FDA506 /* MPEGEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */; };
+		8CAA56990A05550000551C5D /* Drive.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CAA56970A05550000551C5D /* Drive.h */; };
+		8CAA569A0A05550000551C5D /* Drive.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAA56980A05550000551C5D /* Drive.m */; };
+		8CAA569D0A05551C00551C5D /* TrackDescriptor.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CAA569B0A05551B00551C5D /* TrackDescriptor.h */; };
+		8CAA569E0A05551C00551C5D /* TrackDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAA569C0A05551C00551C5D /* TrackDescriptor.m */; };
 		8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */; };
+		8CAA93120A02AA8B00AC6072 /* BitArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CAA93100A02AA8B00AC6072 /* BitArray.m */; };
+		8CAB36360A04966B001234AC /* AcknowledgmentsController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4D48A5093E93AC00A88927 /* AcknowledgmentsController.h */; };
+		8CAB36370A04966C001234AC /* AlbumArtPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7634FE09E0F2EE00616BE9 /* AlbumArtPreferencesController.h */; };
+		8CAB36380A04966D001234AC /* AmazonAlbumArtSheet.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3FB9709BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h */; };
+		8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
+		8CAB363A0A04966E001234AC /* ApplicationController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7C891208EC3EC500F6FCB1 /* ApplicationController.h */; };
+		8CAB363B0A049671001234AC /* AudioMetadata.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE09C1D09513ED90020C8B1 /* AudioMetadata.h */; };
+		8CAB363D0A049674001234AC /* BasicRipper.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C28776F0A0388440039BC5F /* BasicRipper.h */; };
+		8CAB363E0A049676001234AC /* BasicRipperTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2877D80A038B8C0039BC5F /* BasicRipperTask.h */; };
+		8CAB363F0A049677001234AC /* BitArray.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CAA930F0A02AA8B00AC6072 /* BitArray.h */; };
+		8CAB36400A049679001234AC /* BOOLToStringValueTransformer.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF914B609C3C5A30090494D /* BOOLToStringValueTransformer.h */; };
+		8CAB36430A04967C001234AC /* CompactDisc.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE165B60933FAD400A99A68 /* CompactDisc.h */; };
+		8CAB36440A04967F001234AC /* CompactDiscController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC1115308CA2FFF008BB9B0 /* CompactDiscController.h */; };
+		8CAB36450A049680001234AC /* CompactDiscDocument.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C76E43208C6DE1A00F4F9A1 /* CompactDiscDocument.h */; };
+		8CAB36460A049683001234AC /* CompactDiscDocumentToolbar.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */; };
+		8CAB36470A049684001234AC /* ComparisonRipper.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2874E60A0350B20039BC5F /* ComparisonRipper.h */; };
+		8CAB36480A049685001234AC /* ComparisonRipperTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2874F90A0351360039BC5F /* ComparisonRipperTask.h */; };
+		8CAB36490A049686001234AC /* ComponentVersionsController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9743C09461DB6000127B6 /* ComponentVersionsController.h */; };
+		8CAB364A0A049687001234AC /* Converter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE09951095109BF0020C8B1 /* Converter.h */; };
+		8CAB364B0A049688001234AC /* ConverterController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE098FB095107DD0020C8B1 /* ConverterController.h */; };
+		8CAB364C0A049689001234AC /* ConverterMethods.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C81CFD8097969EE00B24C55 /* ConverterMethods.h */; };
+		8CAB364D0A049689001234AC /* ConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE099150951089A0020C8B1 /* ConverterTask.h */; };
+		8CAB364E0A04968A001234AC /* ConverterWindow.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEDCB9E096133A4009CFC49 /* ConverterWindow.h */; };
+		8CAB364F0A04968D001234AC /* CoreAudioConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CD9ECBB094FE19000F67AC8 /* CoreAudioConverter.h */; };
+		8CAB36500A04968E001234AC /* CoreAudioConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CD9ED92094FEB6700F67AC8 /* CoreAudioConverterTask.h */; };
+		8CAB36510A04968F001234AC /* CoreAudioEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0452470947F0EC0041AAA8 /* CoreAudioEncoder.h */; };
+		8CAB36520A049690001234AC /* CoreAudioEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4015720948E433003413BE /* CoreAudioEncoderTask.h */; };
+		8CAB36530A049691001234AC /* CoreAudioException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEDCBA209613414009CFC49 /* CoreAudioException.h */; };
+		8CAB36540A049693001234AC /* CoreAudioUtilities.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEDBB70094B47B20023DD01 /* CoreAudioUtilities.h */; };
+		8CAB36550A049696001234AC /* CueSheetDocument.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C781F3809E8D9D2001D85EF /* CueSheetDocument.h */; };
+		8CAB36560A049699001234AC /* CustomNamingException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB892B08EEEFE0007197C3 /* CustomNamingException.h */; };
+		8CAB36570A04969B001234AC /* EmptySelectionException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBEC6CD08ED88950064F794 /* EmptySelectionException.h */; };
+		8CAB36580A04969C001234AC /* Encoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB6DE8908DA844000345B8F /* Encoder.h */; };
+		8CAB36590A04969D001234AC /* EncoderController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEDC0DB094BEB710023DD01 /* EncoderController.h */; };
+		8CAB365A0A04969E001234AC /* EncoderMethods.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBCD19A0979D81E001931E4 /* EncoderMethods.h */; };
+		8CAB365B0A04969F001234AC /* EncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF0B58C092BF58E00CBF7BD /* EncoderTask.h */; };
+		8CAB365C0A0496A1001234AC /* FileFormatNotSupportedException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEDCBA7096134AD009CFC49 /* FileFormatNotSupportedException.h */; };
+		8CAB365D0A0496A6001234AC /* FLACConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C75CAA00953B72C00A923AD /* FLACConverter.h */; };
+		8CAB365E0A0496A7001234AC /* FLACConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C75CB6B0953C36900A923AD /* FLACConverterTask.h */; };
+		8CAB365F0A0496A9001234AC /* FLACEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0AE61093AE12000968F66 /* FLACEncoder.h */; };
+		8CAB36600A0496AA001234AC /* FLACEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0B38B093B301400968F66 /* FLACEncoderTask.h */; };
+		8CAB36610A0496AB001234AC /* FLACException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0AED7093AE96C00968F66 /* FLACException.h */; };
+		8CAB36620A0496B0001234AC /* FLACPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF1EC59096664EE0058BE92 /* FLACPreferencesController.h */; };
+		8CAB36630A0496B1001234AC /* FormatsPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF4D50E09455C7800385BE4 /* FormatsPreferencesController.h */; };
+		8CAB36640A0496B4001234AC /* FreeDB.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C08573708DE90DD004B42F0 /* FreeDB.h */; };
+		8CAB36650A0496B6001234AC /* FreeDBException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBEC4EE08ED6F770064F794 /* FreeDBException.h */; };
+		8CAB36660A0496B8001234AC /* FreeDBMatchSheet.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73004C08ECAA5B0008D7E0 /* FreeDBMatchSheet.h */; };
+		8CAB36670A0496BD001234AC /* FreeDBPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4D4655093E7A6100A88927 /* FreeDBPreferencesController.h */; };
+		8CAB36680A0496BF001234AC /* FreeDBProtocolValueTransformer.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C73033C08ECEA500008D7E0 /* FreeDBProtocolValueTransformer.h */; };
+		8CAB36690A0496C2001234AC /* GeneralPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4D4537093E6D7D00A88927 /* GeneralPreferencesController.h */; };
+		8CAB366A0A0496C4001234AC /* Genres.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C752A8208C507CE001F588B /* Genres.h */; };
+		8CAB366B0A0496C8001234AC /* GetPlaylistNameSheet.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CDBA04209DF927A00126090 /* GetPlaylistNameSheet.h */; };
+		8CAB366C0A0496CC001234AC /* IOException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBEC57A08ED75DA0064F794 /* IOException.h */; };
+		8CAB366D0A0496CF001234AC /* LAMEException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBEC69608ED85670064F794 /* LAMEException.h */; };
+		8CAB366E0A0496D3001234AC /* LAMEPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4D461A093E75E100A88927 /* LAMEPreferencesController.h */; };
+		8CAB366F0A0496D4001234AC /* LibsndfileConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C75CA3C0953985B00A923AD /* LibsndfileConverter.h */; };
+		8CAB36700A0496D6001234AC /* LibsndfileConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C75CA20095393EC00A923AD /* LibsndfileConverterTask.h */; };
+		8CAB36710A0496DB001234AC /* LibsndfileEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF4D3F40945138900385BE4 /* LibsndfileEncoder.h */; };
+		8CAB36720A0496DC001234AC /* LibsndfileEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF4D47209454CD700385BE4 /* LibsndfileEncoderTask.h */; };
+		8CAB36730A0496E0001234AC /* LogController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA522760938E44100250BE8 /* LogController.h */; };
+		8CAB36740A0496E1001234AC /* MacPADSocket.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8B0D1F092E617B00418C45 /* MacPADSocket.h */; };
+		8CAB36750A0496E4001234AC /* MallocException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBEC55408ED74E90064F794 /* MallocException.h */; };
+		8CAB36770A0496E5001234AC /* Max_Prefix.pch in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* Max_Prefix.pch */; };
+		8CAB36780A0496E6001234AC /* MediaController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C7C897908EC435700F6FCB1 /* MediaController.h */; };
+		8CAB36790A0496EB001234AC /* MissingResourceException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB8BCB08EFB0BF007197C3 /* MissingResourceException.h */; };
+		8CAB367A0A0496EC001234AC /* MonkeysAudioConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C80FF3009CB1D8600AEBDD9 /* MonkeysAudioConverter.h */; };
+		8CAB367B0A0496ED001234AC /* MonkeysAudioConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C80FF1B09CB1CBB00AEBDD9 /* MonkeysAudioConverterTask.h */; };
+		8CAB367C0A0496ED001234AC /* MonkeysAudioEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8000BF09CB2FD200AEBDD9 /* MonkeysAudioEncoder.h */; };
+		8CAB367D0A0496EE001234AC /* MonkeysAudioEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8000AA09CB2F8000AEBDD9 /* MonkeysAudioEncoderTask.h */; };
+		8CAB367E0A0496F0001234AC /* MonkeysAudioPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C14683709CC2E3600F91A97 /* MonkeysAudioPreferencesController.h */; };
+		8CAB367F0A0496F2001234AC /* MPEGEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA8C03B093A5F2B00FDA506 /* MPEGEncoder.h */; };
+		8CAB36800A0496F3001234AC /* MPEGEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB0B085093AFBF300968F66 /* MPEGEncoderTask.h */; };
+		8CAB36810A0496F4001234AC /* MultiplicationValueTransformer.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA64B3F09732D8600505EB7 /* MultiplicationValueTransformer.h */; };
+		8CAB36820A0496F6001234AC /* NegateBooleanArrayValueTransformer.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6EC5BF092FFDE6006DB0A5 /* NegateBooleanArrayValueTransformer.h */; };
+		8CAB36830A0496F8001234AC /* OggFLACConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0230A5095684BF005D8698 /* OggFLACConverter.h */; };
+		8CAB36840A0496F9001234AC /* OggFLACConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0230920956848A005D8698 /* OggFLACConverterTask.h */; };
+		8CAB36850A0496FA001234AC /* OggFLACEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4961F009472D95006E1765 /* OggFLACEncoder.h */; };
+		8CAB36860A0496FB001234AC /* OggFLACEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C49624D09473168006E1765 /* OggFLACEncoderTask.h */; };
+		8CAB36870A0496FB001234AC /* OggVorbisConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C02310A09570F9D005D8698 /* OggVorbisConverter.h */; };
+		8CAB36880A0496FC001234AC /* OggVorbisConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0230F609570F26005D8698 /* OggVorbisConverterTask.h */; };
+		8CAB36890A0496FE001234AC /* OggVorbisEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4D3E2E093DE4C300A88927 /* OggVorbisEncoder.h */; };
+		8CAB368A0A049701001234AC /* OggVorbisEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB861FB093F177200A60FC1 /* OggVorbisEncoderTask.h */; };
+		8CAB368B0A049703001234AC /* OggVorbisPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CB860E6093EF4DC00A60FC1 /* OggVorbisPreferencesController.h */; };
+		8CAB368C0A049706001234AC /* OutputPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4D471E093E843F00A88927 /* OutputPreferencesController.h */; };
+		8CAB368D0A049707001234AC /* ParanoiaException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE1687B0934681C00A99A68 /* ParanoiaException.h */; };
+		8CAB368E0A049708001234AC /* ParanoiaRipper.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2874E80A0350B20039BC5F /* ParanoiaRipper.h */; };
+		8CAB368F0A049709001234AC /* ParanoiaRipperTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2874FB0A0351360039BC5F /* ParanoiaRipperTask.h */; };
+		8CAB36900A04970A001234AC /* PCMGeneratingTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA5C441095277F7006FB5B7 /* PCMGeneratingTask.h */; };
+		8CAB36910A04970E001234AC /* PreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CFDC71308EC4ACB00EBB077 /* PreferencesController.h */; };
+		8CAB36920A04970F001234AC /* PrefPaneIcon.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C48D40D09FB4CA40089395E /* PrefPaneIcon.h */; };
+		8CAB36930A049711001234AC /* PrefPaneIconView.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9FC78C09EF745600F2A157 /* PrefPaneIconView.h */; };
+		8CAB36940A049711001234AC /* Rip.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA38F690A01B46F00C5742C /* Rip.h */; };
+		8CAB36950A049712001234AC /* Ripper.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2875700A0354280039BC5F /* Ripper.h */; };
+		8CAB36960A049714001234AC /* RipperController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEDC02A094BE6E10023DD01 /* RipperController.h */; };
+		8CAB36970A049715001234AC /* RipperMethods.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBCD0600979CC2E001931E4 /* RipperMethods.h */; };
+		8CAB36980A049718001234AC /* RipperPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4D46FA093E815800A88927 /* RipperPreferencesController.h */; };
+		8CAB36990A049719001234AC /* RipperTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2875100A0351970039BC5F /* RipperTask.h */; };
+		8CAB369A0A04971A001234AC /* SectorRange.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CD7B0CB094E7F2600BA2427 /* SectorRange.h */; };
+		8CAB369B0A04971B001234AC /* ServicesProvider.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8CAF6B096C4A9700A1A4E0 /* ServicesProvider.h */; };
+		8CAB369C0A04971E001234AC /* SpeexConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CDD973E0973663300A5F2C1 /* SpeexConverter.h */; };
+		8CAB369D0A04971E001234AC /* SpeexConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDD973F0973663300A5F2C1 /* SpeexConverter.m */; };
+		8CAB369E0A049722001234AC /* SpeexConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CDD972D097365F600A5F2C1 /* SpeexConverterTask.h */; };
+		8CAB369F0A049723001234AC /* SpeexEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9EB779096DAAEA0037CE20 /* SpeexEncoder.h */; };
+		8CAB36A00A049723001234AC /* SpeexEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9EB763096DAA760037CE20 /* SpeexEncoderTask.h */; };
+		8CAB36A10A049724001234AC /* SpeexException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C881029097AE41A00ED2843 /* SpeexException.h */; };
+		8CAB36A20A049726001234AC /* SpeexPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CDD96D20973624800A5F2C1 /* SpeexPreferencesController.h */; };
+		8CAB36A30A049727001234AC /* StopException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBEC6B008ED861C0064F794 /* StopException.h */; };
+		8CAB36A40A049729001234AC /* TaggingPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C4F5F09CC5A9500F234E5 /* TaggingPreferencesController.h */; };
+		8CAB36A50A04972B001234AC /* Task.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CF5E3360970432C0025360B /* Task.h */; };
+		8CAB36A60A04972C001234AC /* TaskMethods.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C81CEFC09795DD300B24C55 /* TaskMethods.h */; };
+		8CAB36A70A04972D001234AC /* Track.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C76E43908C6DE3900F4F9A1 /* Track.h */; };
+		8CAB36A80A04972F001234AC /* UpdateChecker.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8B0DAA092E64D900418C45 /* UpdateChecker.h */; };
+		8CAB36A90A049732001234AC /* UppercaseStringValueTransformer.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C6C4F7809CC5C0700F234E5 /* UppercaseStringValueTransformer.h */; };
+		8CAB36AA0A049733001234AC /* UtilityFunctions.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBB882208EE57D4007197C3 /* UtilityFunctions.h */; };
+		8CAB36AB0A049734001234AC /* VorbisException.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA660640941A87B00CC84F2 /* VorbisException.h */; };
+		8CAB36AC0A049735001234AC /* WavPackConverter.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBAB55009D7B7DB00F97BDC /* WavPackConverter.h */; };
+		8CAB36AD0A049738001234AC /* WavPackConverterTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBAB60109D7C1E800F97BDC /* WavPackConverterTask.h */; };
+		8CAB36AE0A049739001234AC /* WavPackEncoder.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEE8AF309D9EC9000029BCF /* WavPackEncoder.h */; };
+		8CAB36AF0A04973A001234AC /* WavPackEncoderTask.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA0885109DA63C900AF1D7F /* WavPackEncoderTask.h */; };
+		8CAB36B00A04973B001234AC /* WavPackPreferencesController.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CED703609DEEF030062F2B3 /* WavPackPreferencesController.h */; };
 		8CB0AE64093AE12100968F66 /* FLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0AE62093AE12000968F66 /* FLACEncoder.m */; };
 		8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0AED8093AE96C00968F66 /* FLACException.m */; };
 		8CB0B088093AFBF300968F66 /* MPEGEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0B086093AFBF300968F66 /* MPEGEncoderTask.mm */; };
@@ -128,14 +276,11 @@
 		8CB8602A093EE7E200A60FC1 /* RipperToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB86029093EE7E200A60FC1 /* RipperToolbarImage.png */; };
 		8CB8603D093EE8A100A60FC1 /* FreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CB8603C093EE8A100A60FC1 /* FreeDBToolbarImage.png */; };
 		8CB860E9093EF4DC00A60FC1 /* OggVorbisPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB860E7093EF4DC00A60FC1 /* OggVorbisPreferencesController.m */; };
-		8CB861A4093F0E4700A60FC1 /* OggVorbisEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C4D3E2F093DE4C300A88927 /* OggVorbisEncoder.m */; };
 		8CB861FE093F177200A60FC1 /* OggVorbisEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CB861FC093F177200A60FC1 /* OggVorbisEncoderTask.mm */; };
 		8CB86247093F18CF00A60FC1 /* OggVorbisDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CB86246093F18CF00A60FC1 /* OggVorbisDefaults.plist */; };
-		8CBAB55309D7B7DB00F97BDC /* WavPackConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBAB55109D7B7DB00F97BDC /* WavPackConverter.m */; };
 		8CBAB58009D7B8F500F97BDC /* WavPack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBAB57809D7B8F500F97BDC /* WavPack.framework */; };
 		8CBAB58109D7B8FB00F97BDC /* WavPack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBAB57809D7B8F500F97BDC /* WavPack.framework */; };
 		8CBAB60409D7C1E800F97BDC /* WavPackConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBAB60209D7C1E800F97BDC /* WavPackConverterTask.m */; };
-		8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB3C5708D8CC7A005266A8 /* Ripper.m */; };
 		8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */; };
 		8CBB8BA408EFAE53007197C3 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA308EFAE53007197C3 /* TrackDefaults.plist */; };
 		8CBB8BA608EFAE5B007197C3 /* LAMEDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CBB8BA508EFAE5B007197C3 /* LAMEDefaults.plist */; };
@@ -205,12 +350,10 @@
 		8CEDCBA1096133A4009CFC49 /* ConverterWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCB9F096133A4009CFC49 /* ConverterWindow.m */; };
 		8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA309613414009CFC49 /* CoreAudioException.m */; };
 		8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEDCBA8096134AD009CFC49 /* FileFormatNotSupportedException.m */; };
-		8CEE8AF609D9EC9000029BCF /* WavPackEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CEE8AF409D9EC9000029BCF /* WavPackEncoder.m */; };
 		8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0B58D092BF58E00CBF7BD /* EncoderTask.m */; };
 		8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0BA60092C44C400CBF7BD /* BooleanArrayValueTransformer.m */; };
 		8CF1EC5C096664EE0058BE92 /* FLACPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1EC5A096664EE0058BE92 /* FLACPreferencesController.m */; };
 		8CF1EC9E09666E690058BE92 /* FLACDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF1EC9D09666E690058BE92 /* FLACDefaults.plist */; };
-		8CF4D3F70945138900385BE4 /* LibsndfileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D3F50945138900385BE4 /* LibsndfileEncoder.m */; };
 		8CF4D47509454CD700385BE4 /* LibsndfileEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D47309454CD700385BE4 /* LibsndfileEncoderTask.m */; };
 		8CF4D4E10945531F00385BE4 /* FormatsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF4D4E00945531F00385BE4 /* FormatsToolbarImage.png */; };
 		8CF4D51109455C7800385BE4 /* FormatsPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF4D50F09455C7800385BE4 /* FormatsPreferencesController.m */; };
@@ -219,7 +362,6 @@
 		8CF5E4B10970856F0025360B /* FLACConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CAA10953B72C00A923AD /* FLACConverter.m */; };
 		8CF5E4B2097085710025360B /* LibsndfileConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C75CA3D0953985B00A923AD /* LibsndfileConverter.m */; };
 		8CF5E4B3097085720025360B /* OggFLACConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0230A6095684BF005D8698 /* OggFLACConverter.m */; };
-		8CF5E76A0970BCDE0025360B /* SpeexEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */; };
 		8CF914DD09C3C7800090494D /* BOOLToStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF914B709C3C5A30090494D /* BOOLToStringValueTransformer.m */; };
 		8CFDC71508EC4ACB00EBB077 /* PreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFDC71408EC4ACB00EBB077 /* PreferencesController.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -256,12 +398,28 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		8C78236C09E8DFD4001D85EF /* Copy PreferencePanes */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = PreferencePanes;
+			dstSubfolderSpec = 7;
+			files = (
+				8C53F8A90A05949300890518 /* AlbumArt.prefPane in Copy PreferencePanes */,
+				8C53F8590A0591F600890518 /* Tagging.prefPane in Copy PreferencePanes */,
+				8C53F7830A058D5000890518 /* FreeDB.prefPane in Copy PreferencePanes */,
+				8CA318AC09FFE97100FEB2BB /* FLAC.prefPane in Copy PreferencePanes */,
+				8C08740009E981E000BE4CE8 /* General.prefPane in Copy PreferencePanes */,
+			);
+			name = "Copy PreferencePanes";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C9A24AC0925ACF400FB244D /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8C781EF909E8D219001D85EF /* cuetools.framework in Copy Frameworks */,
 				8CBAB58109D7B8FB00F97BDC /* WavPack.framework in Copy Frameworks */,
 				8C80055209CBA1B100AEBDD9 /* MAC.framework in Copy Frameworks */,
 				8CE50939099347C20047CE1D /* FLAC.framework in Copy Frameworks */,
@@ -276,6 +434,125 @@
 				8CD017C60992630400A31DE0 /* Ogg.framework in Copy Frameworks */,
 				8CD0174609925FB700A31DE0 /* LAME.framework in Copy Frameworks */,
 				8C9A24B40925ADB200FB244D /* Growl.framework in Copy Frameworks */,
+				8CAB36360A04966B001234AC /* AcknowledgmentsController.h in Copy Frameworks */,
+				8CAB36370A04966C001234AC /* AlbumArtPreferencesController.h in Copy Frameworks */,
+				8CAB36380A04966D001234AC /* AmazonAlbumArtSheet.h in Copy Frameworks */,
+				8CAB363A0A04966E001234AC /* ApplicationController.h in Copy Frameworks */,
+				8CAB363B0A049671001234AC /* AudioMetadata.h in Copy Frameworks */,
+				8CAB363D0A049674001234AC /* BasicRipper.h in Copy Frameworks */,
+				8CAB363E0A049676001234AC /* BasicRipperTask.h in Copy Frameworks */,
+				8CAB363F0A049677001234AC /* BitArray.h in Copy Frameworks */,
+				8CAB36400A049679001234AC /* BOOLToStringValueTransformer.h in Copy Frameworks */,
+				8CAB36430A04967C001234AC /* CompactDisc.h in Copy Frameworks */,
+				8CAB36440A04967F001234AC /* CompactDiscController.h in Copy Frameworks */,
+				8CAB36450A049680001234AC /* CompactDiscDocument.h in Copy Frameworks */,
+				8CAB36460A049683001234AC /* CompactDiscDocumentToolbar.h in Copy Frameworks */,
+				8CAB36470A049684001234AC /* ComparisonRipper.h in Copy Frameworks */,
+				8CAB36480A049685001234AC /* ComparisonRipperTask.h in Copy Frameworks */,
+				8CAB36490A049686001234AC /* ComponentVersionsController.h in Copy Frameworks */,
+				8CAB364A0A049687001234AC /* Converter.h in Copy Frameworks */,
+				8CAB364B0A049688001234AC /* ConverterController.h in Copy Frameworks */,
+				8CAB364C0A049689001234AC /* ConverterMethods.h in Copy Frameworks */,
+				8CAB364D0A049689001234AC /* ConverterTask.h in Copy Frameworks */,
+				8CAB364E0A04968A001234AC /* ConverterWindow.h in Copy Frameworks */,
+				8CAB364F0A04968D001234AC /* CoreAudioConverter.h in Copy Frameworks */,
+				8CAB36500A04968E001234AC /* CoreAudioConverterTask.h in Copy Frameworks */,
+				8CAB36510A04968F001234AC /* CoreAudioEncoder.h in Copy Frameworks */,
+				8CAB36520A049690001234AC /* CoreAudioEncoderTask.h in Copy Frameworks */,
+				8CAB36530A049691001234AC /* CoreAudioException.h in Copy Frameworks */,
+				8CAB36540A049693001234AC /* CoreAudioUtilities.h in Copy Frameworks */,
+				8CAB36550A049696001234AC /* CueSheetDocument.h in Copy Frameworks */,
+				8CAB36560A049699001234AC /* CustomNamingException.h in Copy Frameworks */,
+				8CAB36570A04969B001234AC /* EmptySelectionException.h in Copy Frameworks */,
+				8CAB36580A04969C001234AC /* Encoder.h in Copy Frameworks */,
+				8CAB36590A04969D001234AC /* EncoderController.h in Copy Frameworks */,
+				8CAB365A0A04969E001234AC /* EncoderMethods.h in Copy Frameworks */,
+				8CAB365B0A04969F001234AC /* EncoderTask.h in Copy Frameworks */,
+				8CAB365C0A0496A1001234AC /* FileFormatNotSupportedException.h in Copy Frameworks */,
+				8CAB365D0A0496A6001234AC /* FLACConverter.h in Copy Frameworks */,
+				8CAB365E0A0496A7001234AC /* FLACConverterTask.h in Copy Frameworks */,
+				8CAB365F0A0496A9001234AC /* FLACEncoder.h in Copy Frameworks */,
+				8CAB36600A0496AA001234AC /* FLACEncoderTask.h in Copy Frameworks */,
+				8CAB36610A0496AB001234AC /* FLACException.h in Copy Frameworks */,
+				8CAB36620A0496B0001234AC /* FLACPreferencesController.h in Copy Frameworks */,
+				8CAB36630A0496B1001234AC /* FormatsPreferencesController.h in Copy Frameworks */,
+				8CAB36640A0496B4001234AC /* FreeDB.h in Copy Frameworks */,
+				8CAB36650A0496B6001234AC /* FreeDBException.h in Copy Frameworks */,
+				8CAB36660A0496B8001234AC /* FreeDBMatchSheet.h in Copy Frameworks */,
+				8CAB36670A0496BD001234AC /* FreeDBPreferencesController.h in Copy Frameworks */,
+				8CAB36680A0496BF001234AC /* FreeDBProtocolValueTransformer.h in Copy Frameworks */,
+				8CAB36690A0496C2001234AC /* GeneralPreferencesController.h in Copy Frameworks */,
+				8CAB366A0A0496C4001234AC /* Genres.h in Copy Frameworks */,
+				8CAB366B0A0496C8001234AC /* GetPlaylistNameSheet.h in Copy Frameworks */,
+				8CAB366C0A0496CC001234AC /* IOException.h in Copy Frameworks */,
+				8CAB366D0A0496CF001234AC /* LAMEException.h in Copy Frameworks */,
+				8CAB366E0A0496D3001234AC /* LAMEPreferencesController.h in Copy Frameworks */,
+				8CAB366F0A0496D4001234AC /* LibsndfileConverter.h in Copy Frameworks */,
+				8CAB36700A0496D6001234AC /* LibsndfileConverterTask.h in Copy Frameworks */,
+				8CAB36710A0496DB001234AC /* LibsndfileEncoder.h in Copy Frameworks */,
+				8CAB36720A0496DC001234AC /* LibsndfileEncoderTask.h in Copy Frameworks */,
+				8CAB36730A0496E0001234AC /* LogController.h in Copy Frameworks */,
+				8CAB36740A0496E1001234AC /* MacPADSocket.h in Copy Frameworks */,
+				8CAB36750A0496E4001234AC /* MallocException.h in Copy Frameworks */,
+				8CAB36770A0496E5001234AC /* Max_Prefix.pch in Copy Frameworks */,
+				8CAB36780A0496E6001234AC /* MediaController.h in Copy Frameworks */,
+				8CAB36790A0496EB001234AC /* MissingResourceException.h in Copy Frameworks */,
+				8CAB367A0A0496EC001234AC /* MonkeysAudioConverter.h in Copy Frameworks */,
+				8CAB367B0A0496ED001234AC /* MonkeysAudioConverterTask.h in Copy Frameworks */,
+				8CAB367C0A0496ED001234AC /* MonkeysAudioEncoder.h in Copy Frameworks */,
+				8CAB367D0A0496EE001234AC /* MonkeysAudioEncoderTask.h in Copy Frameworks */,
+				8CAB367E0A0496F0001234AC /* MonkeysAudioPreferencesController.h in Copy Frameworks */,
+				8CAB367F0A0496F2001234AC /* MPEGEncoder.h in Copy Frameworks */,
+				8CAB36800A0496F3001234AC /* MPEGEncoderTask.h in Copy Frameworks */,
+				8CAB36810A0496F4001234AC /* MultiplicationValueTransformer.h in Copy Frameworks */,
+				8CAB36820A0496F6001234AC /* NegateBooleanArrayValueTransformer.h in Copy Frameworks */,
+				8CAB36830A0496F8001234AC /* OggFLACConverter.h in Copy Frameworks */,
+				8CAB36840A0496F9001234AC /* OggFLACConverterTask.h in Copy Frameworks */,
+				8CAB36850A0496FA001234AC /* OggFLACEncoder.h in Copy Frameworks */,
+				8CAB36860A0496FB001234AC /* OggFLACEncoderTask.h in Copy Frameworks */,
+				8CAB36870A0496FB001234AC /* OggVorbisConverter.h in Copy Frameworks */,
+				8CAB36880A0496FC001234AC /* OggVorbisConverterTask.h in Copy Frameworks */,
+				8CAB36890A0496FE001234AC /* OggVorbisEncoder.h in Copy Frameworks */,
+				8CAB368A0A049701001234AC /* OggVorbisEncoderTask.h in Copy Frameworks */,
+				8CAB368B0A049703001234AC /* OggVorbisPreferencesController.h in Copy Frameworks */,
+				8CAB368C0A049706001234AC /* OutputPreferencesController.h in Copy Frameworks */,
+				8CAB368D0A049707001234AC /* ParanoiaException.h in Copy Frameworks */,
+				8CAB368E0A049708001234AC /* ParanoiaRipper.h in Copy Frameworks */,
+				8CAB368F0A049709001234AC /* ParanoiaRipperTask.h in Copy Frameworks */,
+				8CAB36900A04970A001234AC /* PCMGeneratingTask.h in Copy Frameworks */,
+				8CAB36910A04970E001234AC /* PreferencesController.h in Copy Frameworks */,
+				8CAB36920A04970F001234AC /* PrefPaneIcon.h in Copy Frameworks */,
+				8CAB36930A049711001234AC /* PrefPaneIconView.h in Copy Frameworks */,
+				8CAB36940A049711001234AC /* Rip.h in Copy Frameworks */,
+				8CAB36950A049712001234AC /* Ripper.h in Copy Frameworks */,
+				8CAB36960A049714001234AC /* RipperController.h in Copy Frameworks */,
+				8CAB36970A049715001234AC /* RipperMethods.h in Copy Frameworks */,
+				8CAB36980A049718001234AC /* RipperPreferencesController.h in Copy Frameworks */,
+				8CAB36990A049719001234AC /* RipperTask.h in Copy Frameworks */,
+				8CAB369A0A04971A001234AC /* SectorRange.h in Copy Frameworks */,
+				8CAB369B0A04971B001234AC /* ServicesProvider.h in Copy Frameworks */,
+				8CAB369C0A04971E001234AC /* SpeexConverter.h in Copy Frameworks */,
+				8CAB369E0A049722001234AC /* SpeexConverterTask.h in Copy Frameworks */,
+				8CAB369F0A049723001234AC /* SpeexEncoder.h in Copy Frameworks */,
+				8CAB36A00A049723001234AC /* SpeexEncoderTask.h in Copy Frameworks */,
+				8CAB36A10A049724001234AC /* SpeexException.h in Copy Frameworks */,
+				8CAB36A20A049726001234AC /* SpeexPreferencesController.h in Copy Frameworks */,
+				8CAB36A30A049727001234AC /* StopException.h in Copy Frameworks */,
+				8CAB36A40A049729001234AC /* TaggingPreferencesController.h in Copy Frameworks */,
+				8CAB36A50A04972B001234AC /* Task.h in Copy Frameworks */,
+				8CAB36A60A04972C001234AC /* TaskMethods.h in Copy Frameworks */,
+				8CAB36A70A04972D001234AC /* Track.h in Copy Frameworks */,
+				8CAB36A80A04972F001234AC /* UpdateChecker.h in Copy Frameworks */,
+				8CAB36A90A049732001234AC /* UppercaseStringValueTransformer.h in Copy Frameworks */,
+				8CAB36AA0A049733001234AC /* UtilityFunctions.h in Copy Frameworks */,
+				8CAB36AB0A049734001234AC /* VorbisException.h in Copy Frameworks */,
+				8CAB36AC0A049735001234AC /* WavPackConverter.h in Copy Frameworks */,
+				8CAB36AD0A049738001234AC /* WavPackConverterTask.h in Copy Frameworks */,
+				8CAB36AE0A049739001234AC /* WavPackEncoder.h in Copy Frameworks */,
+				8CAB36AF0A04973A001234AC /* WavPackEncoderTask.h in Copy Frameworks */,
+				8CAB36B00A04973B001234AC /* WavPackPreferencesController.h in Copy Frameworks */,
+				8CAA56990A05550000551C5D /* Drive.h in Copy Frameworks */,
+				8CAA569D0A05551C00551C5D /* TrackDescriptor.h in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,12 +577,11 @@
 		8C02310A09570F9D005D8698 /* OggVorbisConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggVorbisConverter.h; sourceTree = "<group>"; };
 		8C02310B09570F9D005D8698 /* OggVorbisConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggVorbisConverter.m; sourceTree = "<group>"; };
 		8C039AD3098AA761007EFA10 /* FLACEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACEncoderTask.m; sourceTree = "<group>"; };
-		8C040A2E092AB41A0052D881 /* RipperTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperTask.h; sourceTree = "<group>"; };
-		8C040A2F092AB41A0052D881 /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C0452470947F0EC0041AAA8 /* CoreAudioEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoder.h; sourceTree = "<group>"; };
 		8C0452480947F0EC0041AAA8 /* CoreAudioEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoder.m; sourceTree = "<group>"; };
 		8C08573708DE90DD004B42F0 /* FreeDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDB.h; sourceTree = "<group>"; };
 		8C08573808DE90DD004B42F0 /* FreeDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDB.m; sourceTree = "<group>"; };
+		8C0873EC09E981D900BE4CE8 /* General.prefPane */ = {isa = PBXFileReference; lastKnownFileType = folder; path = General.prefPane; sourceTree = "<group>"; };
 		8C137F140981BCB800EBFC77 /* SelectPreviousTrackToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectPreviousTrackToolbarImage.png; sourceTree = "<group>"; };
 		8C137F150981BCB800EBFC77 /* SelectNextTrackToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectNextTrackToolbarImage.png; sourceTree = "<group>"; };
 		8C137F720981CF4A00EBFC77 /* ConverterTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ConverterTaskDefaults.plist; sourceTree = "<group>"; };
@@ -316,6 +592,22 @@
 		8C14691F09CC347C00F91A97 /* ComponentVersionsController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = ComponentVersionsController.mm; sourceTree = "<group>"; };
 		8C1A6C51093ED45A006176C4 /* LAMEToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LAMEToolbarImage.png; sourceTree = "<group>"; };
 		8C1A6C58093ED65F006176C4 /* OggVorbisToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OggVorbisToolbarImage.png; sourceTree = "<group>"; };
+		8C2874E60A0350B20039BC5F /* ComparisonRipper.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ComparisonRipper.h; sourceTree = "<group>"; };
+		8C2874E70A0350B20039BC5F /* ComparisonRipper.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ComparisonRipper.m; sourceTree = "<group>"; };
+		8C2874E80A0350B20039BC5F /* ParanoiaRipper.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ParanoiaRipper.h; sourceTree = "<group>"; };
+		8C2874E90A0350B20039BC5F /* ParanoiaRipper.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ParanoiaRipper.m; sourceTree = "<group>"; };
+		8C2874F90A0351360039BC5F /* ComparisonRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ComparisonRipperTask.h; sourceTree = "<group>"; };
+		8C2874FA0A0351360039BC5F /* ComparisonRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ComparisonRipperTask.m; sourceTree = "<group>"; };
+		8C2874FB0A0351360039BC5F /* ParanoiaRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ParanoiaRipperTask.h; sourceTree = "<group>"; };
+		8C2874FC0A0351360039BC5F /* ParanoiaRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ParanoiaRipperTask.m; sourceTree = "<group>"; };
+		8C2875100A0351970039BC5F /* RipperTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperTask.h; sourceTree = "<group>"; };
+		8C2875110A0351970039BC5F /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
+		8C2875700A0354280039BC5F /* Ripper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ripper.h; sourceTree = "<group>"; };
+		8C2875710A0354280039BC5F /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
+		8C28776F0A0388440039BC5F /* BasicRipper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicRipper.h; sourceTree = "<group>"; };
+		8C2877700A0388440039BC5F /* BasicRipper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicRipper.m; sourceTree = "<group>"; };
+		8C2877D80A038B8C0039BC5F /* BasicRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicRipperTask.h; sourceTree = "<group>"; };
+		8C2877D90A038B8C0039BC5F /* BasicRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicRipperTask.m; sourceTree = "<group>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -328,6 +620,8 @@
 		8C4015730948E433003413BE /* CoreAudioEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoderTask.m; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		8C440DBB092E8B3000A053AA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FreeDBMatches.nib; sourceTree = "<group>"; };
+		8C48D40D09FB4CA40089395E /* PrefPaneIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefPaneIcon.h; sourceTree = "<group>"; };
+		8C48D40E09FB4CA40089395E /* PrefPaneIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrefPaneIcon.m; sourceTree = "<group>"; };
 		8C4961F009472D95006E1765 /* OggFLACEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoder.h; sourceTree = "<group>"; };
 		8C4961F109472D95006E1765 /* OggFLACEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OggFLACEncoder.m; sourceTree = "<group>"; };
 		8C49624D09473168006E1765 /* OggFLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoderTask.h; sourceTree = "<group>"; };
@@ -359,6 +653,9 @@
 		8C51308E0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Log.strings; sourceTree = "<group>"; };
 		8C51308F0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
+		8C53F7740A058D5000890518 /* FreeDB.prefPane */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FreeDB.prefPane; sourceTree = "<group>"; };
+		8C53F84A0A0591F600890518 /* Tagging.prefPane */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tagging.prefPane; sourceTree = "<group>"; };
+		8C53F8990A05949300890518 /* AlbumArt.prefPane */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AlbumArt.prefPane; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		8C643A7009D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
 		8C643A7109D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -405,6 +702,10 @@
 		8C781DE709E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
 		8C781DE809E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
 		8C781DE909E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/WavPackPreferences.nib; sourceTree = "<group>"; };
+		8C781EEE09E8D211001D85EF /* cuetools.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = cuetools.framework; sourceTree = "<group>"; };
+		8C781F3809E8D9D2001D85EF /* CueSheetDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueSheetDocument.h; sourceTree = "<group>"; };
+		8C781F3909E8D9D2001D85EF /* CueSheetDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueSheetDocument.m; sourceTree = "<group>"; };
+		8C781F5009E8DAB4001D85EF /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
 		8C794DFB097F191C0081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8C794DFE097F19450081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
 		8C794DFF097F19450081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/CompactDiscDocument.nib; sourceTree = "<group>"; };
@@ -476,8 +777,14 @@
 		8C9EB764096DAA760037CE20 /* SpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoderTask.m; sourceTree = "<group>"; };
 		8C9EB779096DAAEA0037CE20 /* SpeexEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeexEncoder.h; sourceTree = "<group>"; };
 		8C9EB77A096DAAEA0037CE20 /* SpeexEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoder.m; sourceTree = "<group>"; };
+		8C9FC78C09EF745600F2A157 /* PrefPaneIconView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefPaneIconView.h; sourceTree = "<group>"; };
+		8C9FC78D09EF745600F2A157 /* PrefPaneIconView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrefPaneIconView.m; sourceTree = "<group>"; };
 		8CA0885109DA63C900AF1D7F /* WavPackEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WavPackEncoderTask.h; sourceTree = "<group>"; };
 		8CA0885209DA63C900AF1D7F /* WavPackEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoderTask.m; sourceTree = "<group>"; };
+		8CA3189B09FFE95F00FEB2BB /* FLAC.prefPane */ = {isa = PBXFileReference; lastKnownFileType = folder; path = FLAC.prefPane; sourceTree = "<group>"; };
+		8CA38F5A0A01B3E400C5742C /* sha256-stdenis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = "sha256-stdenis.c"; sourceTree = "<group>"; };
+		8CA38F690A01B46F00C5742C /* Rip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rip.h; sourceTree = "<group>"; };
+		8CA38F6A0A01B46F00C5742C /* Rip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rip.m; sourceTree = "<group>"; };
 		8CA3FB9709BF5B0700BB1BD4 /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
 		8CA3FB9809BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
 		8CA3FB9B09BF5B1A00BB1BD4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
@@ -497,7 +804,13 @@
 		8CA6E46D09D065260047C35C /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8CA8C03B093A5F2B00FDA506 /* MPEGEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPEGEncoder.h; sourceTree = "<group>"; };
 		8CA8C03C093A5F2B00FDA506 /* MPEGEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPEGEncoder.m; sourceTree = "<group>"; };
+		8CAA56970A05550000551C5D /* Drive.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
+		8CAA56980A05550000551C5D /* Drive.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Drive.m; sourceTree = "<group>"; };
+		8CAA569B0A05551B00551C5D /* TrackDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TrackDescriptor.h; sourceTree = "<group>"; };
+		8CAA569C0A05551C00551C5D /* TrackDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TrackDescriptor.m; sourceTree = "<group>"; };
 		8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
+		8CAA930F0A02AA8B00AC6072 /* BitArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitArray.h; sourceTree = "<group>"; };
+		8CAA93100A02AA8B00AC6072 /* BitArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitArray.m; sourceTree = "<group>"; };
 		8CB0AE61093AE12000968F66 /* FLACEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACEncoder.h; sourceTree = "<group>"; };
 		8CB0AE62093AE12000968F66 /* FLACEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLACEncoder.m; sourceTree = "<group>"; };
 		8CB0AED7093AE96C00968F66 /* FLACException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLACException.h; sourceTree = "<group>"; };
@@ -544,8 +857,6 @@
 		8CBAB57809D7B8F500F97BDC /* WavPack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WavPack.framework; sourceTree = "<group>"; };
 		8CBAB60109D7C1E800F97BDC /* WavPackConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WavPackConverterTask.h; sourceTree = "<group>"; };
 		8CBAB60209D7C1E800F97BDC /* WavPackConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WavPackConverterTask.m; sourceTree = "<group>"; };
-		8CBB3C5608D8CC7A005266A8 /* Ripper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ripper.h; sourceTree = "<group>"; };
-		8CBB3C5708D8CC7A005266A8 /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
 		8CBB882208EE57D4007197C3 /* UtilityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UtilityFunctions.h; sourceTree = "<group>"; };
 		8CBB892B08EEEFE0007197C3 /* CustomNamingException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNamingException.h; sourceTree = "<group>"; };
 		8CBB892C08EEEFE0007197C3 /* CustomNamingException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNamingException.m; sourceTree = "<group>"; };
@@ -708,6 +1019,8 @@
 				8C80055109CBA19600AEBDD9 /* MAC.framework in Frameworks */,
 				8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */,
 				8CBAB58009D7B8F500F97BDC /* WavPack.framework in Frameworks */,
+				8C781EF809E8D211001D85EF /* cuetools.framework in Frameworks */,
+				8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -771,6 +1084,7 @@
 		29B97314FDCFA39411CA2CEA /* cocoa test */ = {
 			isa = PBXGroup;
 			children = (
+				8CAA56960A0554E300551C5D /* Drive */,
 				8C7C894308EC3FFE00F6FCB1 /* Compact Disc */,
 				8CF5E7600970BC530025360B /* Helper Classes */,
 				8C7C897408EC42BC00F6FCB1 /* Controllers */,
@@ -886,6 +1200,7 @@
 				8CDBB4D809CEAAF50018BEC8 /* Max.sdef */,
 				8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */,
 				8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */,
+				8C781F4F09E8DAB4001D85EF /* CueSheetDocument.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -893,6 +1208,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C781EEE09E8D211001D85EF /* cuetools.framework */,
 				8CBAB57809D7B8F500F97BDC /* WavPack.framework */,
 				8CBF384009CFA0FE00E89546 /* Carbon.framework */,
 				8C80FEFB09CB1BA200AEBDD9 /* MAC.framework */,
@@ -922,13 +1238,53 @@
 		8C0408DA092A89770052D881 /* Ripper */ = {
 			isa = PBXGroup;
 			children = (
-				8CD7B0CB094E7F2600BA2427 /* SectorRange.h */,
-				8CD7B0CC094E7F2600BA2427 /* SectorRange.m */,
-				8CBB3C5608D8CC7A005266A8 /* Ripper.h */,
-				8CBB3C5708D8CC7A005266A8 /* Ripper.m */,
+				8C2874E60A0350B20039BC5F /* ComparisonRipper.h */,
+				8C2874E70A0350B20039BC5F /* ComparisonRipper.m */,
+				8C2874E80A0350B20039BC5F /* ParanoiaRipper.h */,
+				8C2874E90A0350B20039BC5F /* ParanoiaRipper.m */,
+				8CA38F5A0A01B3E400C5742C /* sha256-stdenis.c */,
 				8CBCD0600979CC2E001931E4 /* RipperMethods.h */,
+				8CA38F690A01B46F00C5742C /* Rip.h */,
+				8CA38F6A0A01B46F00C5742C /* Rip.m */,
+				8CAA930F0A02AA8B00AC6072 /* BitArray.h */,
+				8CAA93100A02AA8B00AC6072 /* BitArray.m */,
+				8C2875700A0354280039BC5F /* Ripper.h */,
+				8C2875710A0354280039BC5F /* Ripper.m */,
+				8C28776F0A0388440039BC5F /* BasicRipper.h */,
+				8C2877700A0388440039BC5F /* BasicRipper.m */,
 			);
 			name = Ripper;
+			sourceTree = "<group>";
+		};
+		8C0873D809E981B800BE4CE8 /* General.prefPane */ = {
+			isa = PBXGroup;
+			children = (
+				8C0873D909E981B800BE4CE8 /* Contents */,
+			);
+			path = General.prefPane;
+			sourceTree = "<group>";
+		};
+		8C0873D909E981B800BE4CE8 /* Contents */ = {
+			isa = PBXGroup;
+			children = (
+				8C0873DB09E981B800BE4CE8 /* MacOS */,
+				8C0873DD09E981B800BE4CE8 /* Resources */,
+			);
+			path = Contents;
+			sourceTree = "<group>";
+		};
+		8C0873DB09E981B800BE4CE8 /* MacOS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MacOS;
+			sourceTree = "<group>";
+		};
+		8C0873DD09E981B800BE4CE8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		8C32817C096D12A600608C9D /* Strings */ = {
@@ -948,6 +1304,12 @@
 		8C4D4265093E0E5F00A88927 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				8C53F8990A05949300890518 /* AlbumArt.prefPane */,
+				8C53F84A0A0591F600890518 /* Tagging.prefPane */,
+				8C53F7740A058D5000890518 /* FreeDB.prefPane */,
+				8CA3189B09FFE95F00FEB2BB /* FLAC.prefPane */,
+				8C0873EC09E981D900BE4CE8 /* General.prefPane */,
+				8C0873D809E981B800BE4CE8 /* General.prefPane */,
 				8CDD96D20973624800A5F2C1 /* SpeexPreferencesController.h */,
 				8CDD96D30973624800A5F2C1 /* SpeexPreferencesController.m */,
 				8CB860E6093EF4DC00A60FC1 /* OggVorbisPreferencesController.h */,
@@ -976,6 +1338,10 @@
 				8CED703709DEEF030062F2B3 /* WavPackPreferencesController.m */,
 				8C7634FE09E0F2EE00616BE9 /* AlbumArtPreferencesController.h */,
 				8C7634FF09E0F2EE00616BE9 /* AlbumArtPreferencesController.m */,
+				8C9FC78C09EF745600F2A157 /* PrefPaneIconView.h */,
+				8C9FC78D09EF745600F2A157 /* PrefPaneIconView.m */,
+				8C48D40D09FB4CA40089395E /* PrefPaneIcon.h */,
+				8C48D40E09FB4CA40089395E /* PrefPaneIcon.m */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -1060,6 +1426,8 @@
 				8CE165B60933FAD400A99A68 /* CompactDisc.h */,
 				8CEA931109438E8100207809 /* CompactDiscDocumentToolbar.h */,
 				8CEA931209438E8100207809 /* CompactDiscDocumentToolbar.m */,
+				8C781F3809E8D9D2001D85EF /* CueSheetDocument.h */,
+				8C781F3909E8D9D2001D85EF /* CueSheetDocument.m */,
 			);
 			name = "Compact Disc";
 			sourceTree = "<group>";
@@ -1110,6 +1478,19 @@
 				8CF5E3370970432C0025360B /* Task.m */,
 			);
 			name = Tasks;
+			sourceTree = "<group>";
+		};
+		8CAA56960A0554E300551C5D /* Drive */ = {
+			isa = PBXGroup;
+			children = (
+				8CD7B0CB094E7F2600BA2427 /* SectorRange.h */,
+				8CD7B0CC094E7F2600BA2427 /* SectorRange.m */,
+				8CAA569B0A05551B00551C5D /* TrackDescriptor.h */,
+				8CAA569C0A05551C00551C5D /* TrackDescriptor.m */,
+				8CAA56970A05550000551C5D /* Drive.h */,
+				8CAA56980A05550000551C5D /* Drive.m */,
+			);
+			name = Drive;
 			sourceTree = "<group>";
 		};
 		8CBEC4EB08ED6F640064F794 /* Exceptions */ = {
@@ -1195,8 +1576,14 @@
 		8CF5E610097092190025360B /* Ripper Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				8C040A2E092AB41A0052D881 /* RipperTask.h */,
-				8C040A2F092AB41A0052D881 /* RipperTask.m */,
+				8C2874F90A0351360039BC5F /* ComparisonRipperTask.h */,
+				8C2874FA0A0351360039BC5F /* ComparisonRipperTask.m */,
+				8C2874FB0A0351360039BC5F /* ParanoiaRipperTask.h */,
+				8C2874FC0A0351360039BC5F /* ParanoiaRipperTask.m */,
+				8C2875100A0351970039BC5F /* RipperTask.h */,
+				8C2875110A0351970039BC5F /* RipperTask.m */,
+				8C2877D80A038B8C0039BC5F /* BasicRipperTask.h */,
+				8C2877D90A038B8C0039BC5F /* BasicRipperTask.m */,
 			);
 			name = "Ripper Tasks";
 			sourceTree = "<group>";
@@ -1225,6 +1612,7 @@
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				8C9A24AC0925ACF400FB244D /* Copy Frameworks */,
+				8C78236C09E8DFD4001D85EF /* Copy PreferencePanes */,
 			);
 			buildRules = (
 			);
@@ -1361,6 +1749,7 @@
 				8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */,
 				8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */,
 				8C76355409E0F8EC00616BE9 /* AlbumArtDefaults.plist in Resources */,
+				8C781F5109E8DAB4001D85EF /* CueSheetDocument.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1376,7 +1765,6 @@
 				8C76E43408C6DE1A00F4F9A1 /* CompactDiscDocument.m in Sources */,
 				8C76E43B08C6DE3900F4F9A1 /* Track.m in Sources */,
 				8CC1115508CA2FFF008BB9B0 /* CompactDiscController.m in Sources */,
-				8CBB3C5808D8CC7A005266A8 /* Ripper.m in Sources */,
 				8CB6DE8B08DA844000345B8F /* Encoder.m in Sources */,
 				8C08573908DE90DD004B42F0 /* FreeDB.m in Sources */,
 				8C7C897A08EC435700F6FCB1 /* MediaController.m in Sources */,
@@ -1391,7 +1779,6 @@
 				8CBEC6CF08ED88950064F794 /* EmptySelectionException.m in Sources */,
 				8CBB892D08EEEFE0007197C3 /* CustomNamingException.m in Sources */,
 				8CBB8BCD08EFB0BF007197C3 /* MissingResourceException.m in Sources */,
-				8C040A31092AB41A0052D881 /* RipperTask.m in Sources */,
 				8CF0B717092C06A400CBF7BD /* EncoderTask.m in Sources */,
 				8CF0BA62092C44C400CBF7BD /* BooleanArrayValueTransformer.m in Sources */,
 				8C8B0D22092E617B00418C45 /* MacPADSocket.m in Sources */,
@@ -1400,7 +1787,6 @@
 				8CE1687E0934681C00A99A68 /* ParanoiaException.m in Sources */,
 				8CCED19D0935AA5E00413C0A /* CompactDisc.m in Sources */,
 				8CA522790938E44100250BE8 /* LogController.m in Sources */,
-				8CA8C03E093A5F2B00FDA506 /* MPEGEncoder.m in Sources */,
 				8CB0AE64093AE12100968F66 /* FLACEncoder.m in Sources */,
 				8CB0AEDA093AE96C00968F66 /* FLACException.m in Sources */,
 				8CB0B088093AFBF300968F66 /* MPEGEncoderTask.mm in Sources */,
@@ -1411,16 +1797,12 @@
 				8C4D4721093E843F00A88927 /* OutputPreferencesController.m in Sources */,
 				8C4D48A8093E93AC00A88927 /* AcknowledgmentsController.m in Sources */,
 				8CB860E9093EF4DC00A60FC1 /* OggVorbisPreferencesController.m in Sources */,
-				8CB861A4093F0E4700A60FC1 /* OggVorbisEncoder.m in Sources */,
 				8CB861FE093F177200A60FC1 /* OggVorbisEncoderTask.mm in Sources */,
 				8CA660670941A87B00CC84F2 /* VorbisException.m in Sources */,
 				8CEA931409438E8100207809 /* CompactDiscDocumentToolbar.m in Sources */,
-				8CF4D3F70945138900385BE4 /* LibsndfileEncoder.m in Sources */,
 				8CF4D47509454CD700385BE4 /* LibsndfileEncoderTask.m in Sources */,
 				8CF4D51109455C7800385BE4 /* FormatsPreferencesController.m in Sources */,
 				8CE9744909461DE2000127B6 /* ApplicationController.m in Sources */,
-				8C4961F309472D95006E1765 /* OggFLACEncoder.m in Sources */,
-				8C04524A0947F0EC0041AAA8 /* CoreAudioEncoder.m in Sources */,
 				8C4015750948E433003413BE /* CoreAudioEncoderTask.m in Sources */,
 				8CEDBB73094B47B20023DD01 /* CoreAudioUtilities.m in Sources */,
 				8CEDC02B094BE6E10023DD01 /* RipperController.m in Sources */,
@@ -1437,7 +1819,6 @@
 				8C75CB6E0953C36900A923AD /* FLACConverterTask.m in Sources */,
 				8C0230950956848A005D8698 /* OggFLACConverterTask.m in Sources */,
 				8C0230F909570F26005D8698 /* OggVorbisConverterTask.m in Sources */,
-				8C02310D09570F9D005D8698 /* OggVorbisConverter.m in Sources */,
 				8CEDCBA1096133A4009CFC49 /* ConverterWindow.m in Sources */,
 				8CEDCBA509613414009CFC49 /* CoreAudioException.m in Sources */,
 				8CEDCBAA096134AD009CFC49 /* FileFormatNotSupportedException.m in Sources */,
@@ -1449,31 +1830,53 @@
 				8CF5E4B10970856F0025360B /* FLACConverter.m in Sources */,
 				8CF5E4B2097085710025360B /* LibsndfileConverter.m in Sources */,
 				8CF5E4B3097085720025360B /* OggFLACConverter.m in Sources */,
-				8CF5E76A0970BCDE0025360B /* SpeexEncoder.m in Sources */,
 				8CA64B4209732D8600505EB7 /* MultiplicationValueTransformer.m in Sources */,
 				8CDD96D50973624800A5F2C1 /* SpeexPreferencesController.m in Sources */,
 				8CDD9730097365F600A5F2C1 /* SpeexConverterTask.m in Sources */,
 				8C881036097AE43800ED2843 /* SpeexException.m in Sources */,
 				8C6819B40982CA5100A35119 /* OggFLACEncoderTask.mm in Sources */,
 				8C039AD4098AA762007EFA10 /* FLACEncoderTask.m in Sources */,
-				8C9B856409A7C29800E998E3 /* SpeexConverter.m in Sources */,
 				8CA3FB9A09BF5B0700BB1BD4 /* AmazonAlbumArtSheet.m in Sources */,
 				8CF914DD09C3C7800090494D /* BOOLToStringValueTransformer.m in Sources */,
 				8C80FF1E09CB1CBB00AEBDD9 /* MonkeysAudioConverterTask.m in Sources */,
-				8C80FF7A09CB212000AEBDD9 /* MonkeysAudioConverter.mm in Sources */,
 				8C8000AD09CB2F8000AEBDD9 /* MonkeysAudioEncoderTask.mm in Sources */,
-				8C8000C209CB2FD200AEBDD9 /* MonkeysAudioEncoder.mm in Sources */,
 				8C14683A09CC2E3600F91A97 /* MonkeysAudioPreferencesController.m in Sources */,
 				8C14692009CC347C00F91A97 /* ComponentVersionsController.mm in Sources */,
 				8C6C4F6209CC5A9500F234E5 /* TaggingPreferencesController.m in Sources */,
 				8C6C4F7B09CC5C0700F234E5 /* UppercaseStringValueTransformer.m in Sources */,
-				8CBAB55309D7B7DB00F97BDC /* WavPackConverter.m in Sources */,
 				8CBAB60409D7C1E800F97BDC /* WavPackConverterTask.m in Sources */,
-				8CEE8AF609D9EC9000029BCF /* WavPackEncoder.m in Sources */,
 				8CA0885409DA63CA00AF1D7F /* WavPackEncoderTask.m in Sources */,
 				8CED703909DEEF030062F2B3 /* WavPackPreferencesController.m in Sources */,
 				8CDBA04509DF927A00126090 /* GetPlaylistNameSheet.m in Sources */,
 				8C76350109E0F2EE00616BE9 /* AlbumArtPreferencesController.m in Sources */,
+				8C781F3B09E8D9D2001D85EF /* CueSheetDocument.m in Sources */,
+				8C9FC78F09EF745600F2A157 /* PrefPaneIconView.m in Sources */,
+				8C48D41009FB4CA40089395E /* PrefPaneIcon.m in Sources */,
+				8C73E2320A0049F500CC1E81 /* WavPackConverter.m in Sources */,
+				8C73E2740A00520100CC1E81 /* OggVorbisConverter.m in Sources */,
+				8C73E29C0A005A8600CC1E81 /* MonkeysAudioConverter.mm in Sources */,
+				8C73E38C0A00737500CC1E81 /* OggFLACEncoder.m in Sources */,
+				8C73E3AC0A00752400CC1E81 /* WavPackEncoder.m in Sources */,
+				8C73E3EA0A007A9F00CC1E81 /* OggVorbisEncoder.m in Sources */,
+				8C73E3F30A007BB200CC1E81 /* MonkeysAudioEncoder.mm in Sources */,
+				8C73E5140A008F1500CC1E81 /* MPEGEncoder.m in Sources */,
+				8C73E5A20A009D5C00CC1E81 /* CoreAudioEncoder.m in Sources */,
+				8C73E5BE0A009E5E00CC1E81 /* LibsndfileEncoder.m in Sources */,
+				8C73E6330A00A67B00CC1E81 /* SpeexEncoder.m in Sources */,
+				8CA38F5B0A01B3E400C5742C /* sha256-stdenis.c in Sources */,
+				8CA38F6C0A01B46F00C5742C /* Rip.m in Sources */,
+				8CAA93120A02AA8B00AC6072 /* BitArray.m in Sources */,
+				8C2874EB0A0350B20039BC5F /* ComparisonRipper.m in Sources */,
+				8C2874ED0A0350B20039BC5F /* ParanoiaRipper.m in Sources */,
+				8C2874FE0A0351360039BC5F /* ComparisonRipperTask.m in Sources */,
+				8C2875000A0351360039BC5F /* ParanoiaRipperTask.m in Sources */,
+				8C2875130A0351970039BC5F /* RipperTask.m in Sources */,
+				8C2875730A0354280039BC5F /* Ripper.m in Sources */,
+				8C2877720A0388440039BC5F /* BasicRipper.m in Sources */,
+				8C2877DB0A038B8C0039BC5F /* BasicRipperTask.m in Sources */,
+				8CAB369D0A04971E001234AC /* SpeexConverter.m in Sources */,
+				8CAA569A0A05550000551C5D /* Drive.m in Sources */,
+				8CAA569E0A05551C00551C5D /* TrackDescriptor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1777,6 +2180,14 @@
 				8C781DE709E8B61C001D85EF /* German */,
 			);
 			name = AlbumArtPreferences.nib;
+			sourceTree = "<group>";
+		};
+		8C781F4F09E8DAB4001D85EF /* CueSheetDocument.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C781F5009E8DAB4001D85EF /* English */,
+			);
+			name = CueSheetDocument.nib;
 			sourceTree = "<group>";
 		};
 		8C794DD8097F0DC10081CD7F /* SpeexPreferences.nib */ = {
