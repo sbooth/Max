@@ -94,59 +94,67 @@
 - (void)			discEjected;
 - (NSArray *)		selectedTracks;
 
-// Accessors
 - (CompactDisc *)	disc;
-- (BOOL)			discInDrive;
-- (int)				discID;
-- (BOOL)			freeDBQueryInProgress;
-- (BOOL)			freeDBQuerySuccessful;
+- (void)			setDisc:(CompactDisc *)disc;
 
+- (BOOL)			discInDrive;
+- (void)			setDiscInDrive:(BOOL)discInDrive;
+
+- (int)				discID;
+- (void)			setDiscID:(int)discID;
+
+- (BOOL)			freeDBQueryInProgress;
+- (void)			setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress;
+
+- (BOOL)			freeDBQuerySuccessful;
+- (void)			setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful;
+
+// Metadata
 - (NSString *)		title;
+- (void)			setTitle:(NSString *)title;
+
 - (NSString *)		artist;
+- (void)			setArtist:(NSString *)artist;
+
 - (unsigned)		year;
+- (void)			setYear:(unsigned)year;
+
 - (NSString *)		genre;
+- (void)			setGenre:(NSString *)genre;
+
 - (NSString *)		composer;
+- (void)			setComposer:(NSString *)composer;
+
 - (NSString *)		comment;
+- (void)			setComment:(NSString *)comment;
 
 - (NSImage *)		albumArt;
+- (void)			setAlbumArt:(NSImage *)albumArt;
+
 - (NSDate *)		albumArtDownloadDate;
+- (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
+
 - (unsigned)		albumArtWidth;
 - (unsigned)		albumArtHeight;
 
 - (unsigned)		discNumber;
+- (void)			setDiscNumber:(unsigned)discNumber;
+
 - (unsigned)		discTotal;
+- (void)			setDiscTotal:(unsigned)discTotal;
+
 - (BOOL)			compilation;
+- (void)			setCompilation:(BOOL)compilation;
 
 - (NSString *)		MCN;
+- (void)			setMCN:(NSString *)MCN;
 
+// KVC methods
 - (unsigned)		countOfTracks;
 - (Track *)			objectInTracksAtIndex:(unsigned)index;
 
-// Mutators
-- (void) setDisc:(CompactDisc *)disc;
-- (void) setDiscInDrive:(BOOL)discInDrive;
-- (void) setDiscID:(int)discID;
-- (void) setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress;
-- (void) setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful;
-
-- (void) setTitle:(NSString *)title;
-- (void) setArtist:(NSString *)artist;
-- (void) setYear:(unsigned)year;
-- (void) setGenre:(NSString *)genre;
-- (void) setComposer:(NSString *)composer;
-- (void) setComment:(NSString *)comment;
-
-- (void) setAlbumArt:(NSImage *)albumArt;
-- (void) setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
-
-- (void) setDiscNumber:(unsigned)discNumber;
-- (void) setDiscTotal:(unsigned)discTotal;
-- (void) setCompilation:(BOOL)compilation;
-
-- (void) setMCN:(NSString *)MCN;
-
-- (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)index;
-- (void) removeObjectFromTracksAtIndex:(unsigned)index;
+- (void)			insertObject:(Track *)track inTracksAtIndex:(unsigned)index;
+- (void)			removeObjectFromTracksAtIndex:(unsigned)index;
 
 @end
 

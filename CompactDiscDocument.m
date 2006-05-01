@@ -408,10 +408,6 @@ enum {
 
 - (IBAction) encode:(id)sender
 {
-	Track			*track;
-	NSArray			*selectedTracks;
-	NSEnumerator	*enumerator;
-	
 	@try {
 		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
 		if(NO == [self discInDrive]) {
