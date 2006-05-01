@@ -24,6 +24,7 @@
 #import "CompactDiscDocument.h"
 #import "RipperController.h"
 #import "EncoderController.h"
+#import "LogController.h"
 #import "IOException.h"
 #import "MissingResourceException.h"
 
@@ -32,11 +33,16 @@
 #include <DiskArbitration/DADisk.h>
 
 @interface MediaController (Private)
-- (void) volumeMounted:(NSString *)bsdName;
-- (void) volumeUnmounted:(NSString *)bsdName;
+- (void) volumeMounted:(NSString *)deviceName;
+- (void) volumeUnmounted:(NSString *)deviceName;
 @end
 
 #pragma mark DiskArbitration callback functions
+
+static void diskAppearedCallback(DADiskRef disk, void * context);
+static void diskDisppearedCallback(DADiskRef disk, void * context);
+static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * context);
+static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * context);
 
 static void diskAppearedCallback(DADiskRef disk, void * context)
 {
@@ -50,33 +56,63 @@ static void diskDisappearedCallback(DADiskRef disk, void * context)
 
 static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * context)
 {
-	if(NULL != dissenter) {
-		DAReturn status = DADissenterGetStatus(dissenter);
-		if(unix_err(status)) {
-			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	@try {
+		if(NULL != dissenter) {
+			DAReturn status = DADissenterGetStatus(dissenter);
+			if(unix_err(status)) {
+				int code = err_get_code(status);
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			else {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
+			}
 		}
-		else {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
-		}
+		
+		// Only try to eject the disc if it was already successfully unmounted
+		DADiskEject(disk, kDADiskEjectOptionDefault, ejectCallback, context);
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred on device %s.", @"Exceptions", @""), DADiskGetBSDName(disk)]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
 static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * context)
 {
-	if(NULL != dissenter) {
-		DAReturn status = DADissenterGetStatus(dissenter);
-		if(unix_err(status)) {
-			int code = err_get_code(status);
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	CompactDiscDocument		*document	= (CompactDiscDocument *)context;
+
+	@try {
+		if(NULL != dissenter) {
+			DAReturn status = DADissenterGetStatus(dissenter);
+			if(unix_err(status)) {
+				int code = err_get_code(status);
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			else {
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
+			}
 		}
-		else {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
-		}
+		
+		// Let the document know the disc has been ejected
+		[document discEjected];
+	}
+
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred on device %s.", @"Exceptions", @""), DADiskGetBSDName(disk)]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
@@ -160,53 +196,70 @@ static MediaController *sharedController = nil;
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 
-- (void) volumeMounted:(NSString *)bsdName
+- (void) volumeMounted:(NSString *)deviceName
 {
-	CompactDisc				*disc		= [[[CompactDisc alloc] initWithBSDName:bsdName] autorelease];
-	NSString				*filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
-	NSURL					*url		= [NSURL fileURLWithPath:filename];
+	CompactDisc				*disc		= nil;
+	NSString				*filename	= nil;
+	NSURL					*url		= nil;
 	CompactDiscDocument		*doc		= nil;
 	NSError					*err		= nil;
 	BOOL					newDisc		= NO;
 	
-	
-	// Ugly hack to avoid letting the user specify the save filename
-	if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
-		[[NSFileManager defaultManager] createFileAtPath:filename contents:nil attributes:nil];
-		newDisc = YES;
-	}
-
-	doc	= [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:NO error:&err];
-	
-	if(nil != doc) {
-		[doc setDisc:disc];
+	@try {
 		
-		if(0 == [[doc windowControllers] count]) {
-			[doc makeWindowControllers];
-			[doc showWindows];
+		[LogController logMessage:[NSString stringWithFormat:@"Found CD on device %@", deviceName]];
+		
+		disc		= [[[CompactDisc alloc] initWithDeviceName:deviceName] autorelease];
+		filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
+		url			= [NSURL fileURLWithPath:filename];
+		
+		// Ugly hack to avoid letting the user specify the save filename
+		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+			[[NSFileManager defaultManager] createFileAtPath:filename contents:nil attributes:nil];
+			newDisc = YES;
 		}
 		
-		// Automatically query FreeDB for new discs if desired
-		if(newDisc) {
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
-				[doc addObserver:self forKeyPath:@"freeDBQueryInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
-				[doc queryFreeDB:self];
+		doc	= [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:NO error:&err];
+		
+		if(nil != doc) {
+			[doc setDisc:disc];
+			
+			if(0 == [[doc windowControllers] count]) {
+				[doc makeWindowControllers];
+				[doc showWindows];
+			}
+			
+			// Automatically query FreeDB for new discs if desired
+			if(newDisc) {
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
+					[doc addObserver:self forKeyPath:@"freeDBQueryInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
+					[doc queryFreeDB:self];
+				}
+			}
+			
+			// Automatic rip/encode functionality
+			else if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && (NO == [[NSUserDefaults standardUserDefaults] boolForKey:@"onFirstInsertOnly"] || newDisc)) {
+				[doc selectAll:self];
+				//[[doc objectInTracksAtIndex:0] setSelected:YES];
+				[doc encode:self];
 			}
 		}
-		
-		// Automatic rip/encode functionality
-		else if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && (NO == [[NSUserDefaults standardUserDefaults] boolForKey:@"onFirstInsertOnly"] || newDisc)) {
-			[doc selectAll:self];
-			//[[doc objectInTracksAtIndex:0] setSelected:YES];
-			[doc encode:self];
+		else {
+			[[NSDocumentController sharedDocumentController] presentError:err];
 		}
 	}
-	else {
-		[[NSDocumentController sharedDocumentController] presentError:err];
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while accessing the CD on device %@.", @"Exceptions", @""), deviceName]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
 	}
 }
 
-- (void) volumeUnmounted:(NSString *)bsdName
+- (void) volumeUnmounted:(NSString *)deviceName
 {
 	NSEnumerator			*documentEnumerator		= [[[NSDocumentController sharedDocumentController] documents] objectEnumerator];
 	CompactDiscDocument		*document;
@@ -215,7 +268,7 @@ static MediaController *sharedController = nil;
 	while((document = [documentEnumerator nextObject])) {
 		disc = [document disc];
 		// If disc is nil, disc was unmounted by another agency (most likely user pressed eject key)
-		if(nil != disc && [[disc bsdName] isEqualToString:bsdName]) {
+		if(nil != disc && [[disc deviceName] isEqualToString:deviceName]) {
 			[document discEjected];
 		}
 	}
@@ -223,14 +276,11 @@ static MediaController *sharedController = nil;
 
 - (void) ejectDiscForDocument:(CompactDiscDocument *)document
 {
-	NSString	*bsdName	= [[document disc] bsdName];
-	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [bsdName fileSystemRepresentation]);
-	
-	// Close all open connections to the drive
-	[document discEjected];
-	
-	DADiskUnmount(disk, kDADiskUnmountOptionDefault, unmountCallback, NULL);
-	DADiskEject(disk, kDADiskEjectOptionDefault, ejectCallback, NULL);
+	NSString	*deviceName	= [[document disc] deviceName];
+	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [deviceName fileSystemRepresentation]);
+
+	// If the disc is successfully unmounted, unmountCallback will eject it
+	DADiskUnmount(disk, kDADiskUnmountOptionDefault, unmountCallback, document);
 	
 	CFRelease(disk);
 }

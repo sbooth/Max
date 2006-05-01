@@ -30,6 +30,7 @@
 }
 
 + (MediaController *)		sharedController;
-- (void)					ejectDiscForDocument:(CompactDiscDocument *)document;
+
+- (void)	ejectDiscForDocument:(CompactDiscDocument *)document;
 
 @end
