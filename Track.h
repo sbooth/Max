@@ -52,22 +52,40 @@
 	NSString				*_ISRC;
 }
 
-- (NSString *)				length;
-
 - (CompactDiscDocument *)	document;
+- (void)					setDocument:(CompactDiscDocument *)document;
+
+- (NSString *)		length;
 
 - (BOOL)			ripInProgress;
+- (void)			setRipInProgress:(BOOL)ripInProgress;
+
 - (BOOL)			encodeInProgress;
+- (void)			encodeStarted;
+- (void)			encodeCompleted;
 
 - (BOOL)			selected;
+- (void)			setSelected:(BOOL)selected;
+
 - (NSColor *)		color;
 
 - (NSString *)		title;
+- (void)			setTitle:(NSString *)title;
+
 - (NSString *)		artist;
+- (void)			setArtist:(NSString *)artist;
+
 - (unsigned)		year;
+- (void)			setYear:(unsigned)year;
+
 - (NSString *)		genre;
+- (void)			setGenre:(NSString *)genre;
+
 - (NSString *)		composer;
+- (void)			setComposer:(NSString *)composer;
+
 - (NSString *)		comment;
+- (void)			setComment:(NSString *)comment;
 
 - (unsigned long)	size;
 
@@ -76,36 +94,25 @@
 - (unsigned)		frame;
 
 - (unsigned)		number;
+- (void)			setNumber:(unsigned)number;
+
 - (unsigned long)	firstSector;
+- (void)			setFirstSector:(unsigned long)firstSector;
+
 - (unsigned long)	lastSector;
+- (void)			setLastSector:(unsigned long)lastSector;
+
 - (unsigned)		channels;
+- (void)			setChannels:(unsigned)channels;
+
 - (BOOL)			preEmphasis;
+- (void)			setPreEmphasis:(BOOL)preEmphasis;
+
 - (BOOL)			copyPermitted;
+- (void)			setCopyPermitted:(BOOL)copyPermitted;
+
 - (NSString *)		ISRC;
-
-// Mutators
-- (void) setDocument:(CompactDiscDocument *)document;
-
-- (void) setRipInProgress:(BOOL)ripInProgress;
-- (void) encodeStarted;
-- (void) encodeCompleted;
-
-- (void) setSelected:(BOOL)selected;
-
-- (void) setTitle:(NSString *)title;
-- (void) setArtist:(NSString *)artist;
-- (void) setYear:(unsigned)year;
-- (void) setGenre:(NSString *)genre;
-- (void) setComposer:(NSString *)composer;
-- (void) setComment:(NSString *)comment;
-
-- (void) setNumber:(unsigned)number;
-- (void) setFirstSector:(unsigned long)firstSector;
-- (void) setLastSector:(unsigned long)lastSector;
-- (void) setChannels:(unsigned)channels;
-- (void) setPreEmphasis:(BOOL)preEmphasis;
-- (void) setCopyPermitted:(BOOL)copyPermitted;
-- (void) setISRC:(NSString *)ISRC;
+- (void)			setISRC:(NSString *)ISRC;
 
 // Metadata access
 - (AudioMetadata *)			metadata;
