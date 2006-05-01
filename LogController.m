@@ -155,8 +155,10 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 	@synchronized(self) {
 		NSDictionary *newEntry = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSDate date], @"unknown", message, nil]
 															 forKeys:[NSArray arrayWithObjects:@"timestamp", @"component", @"message", nil]];
-		
+
+		[self willChangeValueForKey:@"logEntries"];
 		[self insertObject:newEntry inLogEntriesAtIndex:[self countOfLogEntries]];
+		[self didChangeValueForKey:@"logEntries"];
 	}
 }
 
@@ -212,16 +214,12 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 
 - (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)idx
 {
-	[self willChangeValueForKey:@"logEntries"];
 	[_logEntries insertObject:entry atIndex:idx];
-	[self didChangeValueForKey:@"logEntries"];
 }
 
 - (void) removeObjectFromLogEntriesAtIndex:(unsigned)idx
 {
-	[self willChangeValueForKey:@"logEntries"];
 	[_logEntries removeObjectAtIndex:idx];
-	[self didChangeValueForKey:@"logEntries"];
 }
 
 @end
