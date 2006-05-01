@@ -64,64 +64,70 @@
 // Substitute our values for {} keywords in string
 - (NSString *)			replaceKeywordsInString:(NSString *)namingScheme;
 
-// Accessors
 - (unsigned)	trackNumber;
-- (NSString *)	trackTitle;
-- (NSString *)	trackArtist;
-- (NSString	*)	trackComposer;
-- (unsigned)	trackYear;
-- (NSString	*)	trackGenre;
-- (NSString	*)	trackComment;
-
-- (unsigned)	albumTrackCount;
-- (NSString	*)	albumTitle;
-- (NSString	*)	albumArtist;
-- (NSString	*)	albumComposer;
-- (unsigned)	albumYear;
-- (NSString	*)	albumGenre;
-- (NSString	*)	albumComment;
-
-- (BOOL)		compilation;
-- (unsigned)	discNumber;
-- (unsigned)	discTotal;
-
-- (unsigned)	length;
-
-- (NSString *)	MCN;
-- (NSString *)	ISRC;
-
-- (NSImage *)	albumArt;
-
-- (NSString *)	playlist;
-
-// Mutators
 - (void)		setTrackNumber:(unsigned)trackNumber;
+
+- (NSString *)	trackTitle;
 - (void)		setTrackTitle:(NSString *)trackTitle;
+
+- (NSString *)	trackArtist;
 - (void)		setTrackArtist:(NSString *)trackArtist;
+
+- (NSString	*)	trackComposer;
 - (void)		setTrackComposer:(NSString *)trackComposer;
+
+- (unsigned)	trackYear;
 - (void)		setTrackYear:(unsigned)trackYear;
+
+- (NSString	*)	trackGenre;
 - (void)		setTrackGenre:(NSString *)trackGenre;
+
+- (NSString	*)	trackComment;
 - (void)		setTrackComment:(NSString *)trackComment;
 
+- (unsigned)	albumTrackCount;
 - (void)		setAlbumTrackCount:(unsigned)albumTrackCount;
+
+- (NSString	*)	albumTitle;
 - (void)		setAlbumTitle:(NSString *)albumTitle;
+
+- (NSString	*)	albumArtist;
 - (void)		setAlbumArtist:(NSString *)albumArtist;
+
+- (NSString	*)	albumComposer;
 - (void)		setAlbumComposer:(NSString *)albumComposer;
+
+- (unsigned)	albumYear;
 - (void)		setAlbumYear:(unsigned)albumYear;
+
+- (NSString	*)	albumGenre;
 - (void)		setAlbumGenre:(NSString *)albumGenre;
+
+- (NSString	*)	albumComment;
 - (void)		setAlbumComment:(NSString *)albumComment;
 
+- (BOOL)		compilation;
 - (void)		setCompilation:(BOOL)compilation;
+
+- (unsigned)	discNumber;
 - (void)		setDiscNumber:(unsigned)discNumber;
+
+- (unsigned)	discTotal;
 - (void)		setDiscTotal:(unsigned)discTotal;
 
+- (unsigned)	length;
 - (void)		setLength:(unsigned)length;
 
+- (NSString *)	MCN;
 - (void)		setMCN:(NSString *)MCN;
+
+- (NSString *)	ISRC;
 - (void)		setISRC:(NSString *)ISRC;
 
+- (NSImage *)	albumArt;
 - (void)		setAlbumArt:(NSImage *)albumArt;
 
+- (NSString *)	playlist;
 - (void)		setPlaylist:(NSString *)playlist;
 
 @end
