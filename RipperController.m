@@ -19,6 +19,9 @@
  */
 
 #import "RipperController.h"
+#import "BasicRipperTask.h"
+#import "ComparisonRipperTask.h"
+#import "ParanoiaRipperTask.h"
 #import "LogController.h"
 #import "EncoderController.h"
 #import "ApplicationController.h"
@@ -156,7 +159,9 @@ static RipperController *sharedController = nil;
 	}
 	
 	// Start rip
-	task = [[RipperTask alloc] initWithTracks:tracks metadata:metadata];
+	//task = [[BasicRipperTask alloc] initWithTracks:tracks metadata:metadata];
+	task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];
+	//task = [[ParanoiaRipperTask alloc] initWithTracks:tracks metadata:metadata];
 	
 	// Show the window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
