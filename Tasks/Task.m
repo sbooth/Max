@@ -44,6 +44,8 @@
 		_inputFormat		= nil;
 		_outputFormat		= nil;
 		
+		_userInfo			= nil;
+		
 		_exception			= nil;
 		
 		return self;

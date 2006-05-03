@@ -24,11 +24,6 @@
 
 @interface CoreAudioEncoderTask : EncoderTask 
 {
-	NSDictionary	*_formatInfo;
 }
-
-- (id)					initWithTask:(PCMGeneratingTask *)task formatInfo:(NSDictionary *)formatInfo;
-
-- (NSDictionary *)		getFormatInfo;
 
 @end

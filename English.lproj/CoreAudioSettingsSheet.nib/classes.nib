@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {
+            CLASS = CoreAudioSettingsSheet; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_subtypesController" = NSArrayController; }; 
+            SUPERCLASS = EncoderSettingsSheet; 
+        }, 
+        {
+            ACTIONS = {ok = id; }; 
+            CLASS = EncoderSettingsSheet; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_settingsController" = NSObjectController; "_sheet" = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

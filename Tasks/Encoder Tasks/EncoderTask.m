@@ -233,7 +233,7 @@ enum {
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
 	[_connection setRootObject:self];
 	
-	portArray = [NSArray arrayWithObjects:port2, port1, [self userInfo], nil];
+	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
 	[super setStarted];
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_encoderClass withObject:portArray];

@@ -7,8 +7,8 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {CLASS = PrefPaneIconView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
         {
-            ACTIONS = {}; 
             CLASS = PreferencesController; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSWindowController; 

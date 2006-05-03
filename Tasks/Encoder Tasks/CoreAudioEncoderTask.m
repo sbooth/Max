@@ -29,27 +29,18 @@
 
 @implementation CoreAudioEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task formatInfo:(NSDictionary *)formatInfo
+- (id) initWithTask:(PCMGeneratingTask *)task
 {
 	if((self = [super initWithTask:task])) {
-		_formatInfo		= [formatInfo retain];
 		_encoderClass	= [CoreAudioEncoder class];
 		return self;
 	}
 	return nil;
 }
 
-- (void) dealloc
-{
-	[_formatInfo release];
-	[super dealloc];
-}
-
-- (NSDictionary *)		getFormatInfo				{ return _formatInfo; }
-
 - (NSString *) cueSheetFormatName
 {
- 	switch([[_formatInfo valueForKey:@"fileType"] unsignedLongValue]) {
+ 	switch([[[self userInfo] valueForKey:@"fileType"] unsignedLongValue]) {
 		case kAudioFileWAVEType:	return @"WAVE";				break;
 		case kAudioFileAIFFType:	return @"AIFF";				break;
 		case kAudioFileMP3Type:		return @"MP3";				break;
@@ -59,7 +50,7 @@
 
 - (BOOL) formatLegalForCueSheet
 {
- 	switch([[_formatInfo valueForKey:@"fileType"] unsignedLongValue]) {
+ 	switch([[[self userInfo] valueForKey:@"fileType"] unsignedLongValue]) {
 		case kAudioFileWAVEType:	return YES;					break;
 		case kAudioFileAIFFType:	return YES;					break;
 		case kAudioFileMP3Type:		return YES;					break;
@@ -69,7 +60,7 @@
 
 - (NSString *) outputFormat
 {
-	UInt32	formatID	= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
+	UInt32	formatID	= [[[self userInfo] valueForKey:@"formatID"] unsignedLongValue];
 
 	// Special case AAC and Apple Lossless, since they are very common and "MPEG4 Audio" is vague
 	if(kAudioFormatMPEG4AAC == formatID) {
@@ -79,13 +70,13 @@
 		return NSLocalizedStringFromTable(@"Apple Lossless", @"General", @"");
 	}
 	else {
-		return [_formatInfo valueForKey:@"fileTypeName"];
+		return [[self userInfo] valueForKey:@"fileTypeName"];
 	}
 }
 
 - (NSString *) extension
 {
-	id extensions = [_formatInfo valueForKey:@"extensionsForType"];
+	id extensions = [[self userInfo] valueForKey:@"extensionsForType"];
 	return ([extensions isKindOfClass:[NSArray class]] ? [extensions objectAtIndex:0] : extensions);
 }
 
@@ -98,7 +89,7 @@
 	UInt32					size;
 	MP4FileHandle			mp4FileHandle;
 	AudioMetadata			*metadata				= [self metadata];
-	UInt32					formatID				= [[_formatInfo valueForKey:@"formatID"] unsignedLongValue];
+	UInt32					formatID				= [[[self userInfo] valueForKey:@"formatID"] unsignedLongValue];
 	NSString				*bundleVersion			= nil;
 	NSString				*versionString			= nil;
 	unsigned				trackNumber				= 0;
@@ -236,7 +227,7 @@
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_outputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 			}
 			
-			err = AudioFileOpen(&ref, fsRdWrPerm, [[_formatInfo valueForKey:@"fileType"] intValue], &fileID);
+			err = AudioFileOpen(&ref, fsRdWrPerm, [[[self userInfo] valueForKey:@"fileType"] intValue], &fileID);
 			if(noErr != err) {
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileOpen"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];

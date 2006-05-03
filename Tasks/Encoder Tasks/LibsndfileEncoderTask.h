@@ -24,10 +24,7 @@
 
 @interface LibsndfileEncoderTask : EncoderTask 
 {
-	NSDictionary	*_formatInfo;
 }
-
-- (id)		initWithTask:(PCMGeneratingTask *)task formatInfo:(NSDictionary *)formatInfo;
 
 - (int)		getFormat;
 

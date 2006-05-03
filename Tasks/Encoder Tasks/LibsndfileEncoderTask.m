@@ -25,26 +25,19 @@
 
 @implementation LibsndfileEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task formatInfo:(NSDictionary *)formatInfo
+- (id) initWithTask:(PCMGeneratingTask *)task
 {
 	if((self = [super initWithTask:task])) {
-		_formatInfo		= [formatInfo retain];
 		_encoderClass	= [LibsndfileEncoder class];
 		return self;
 	}
 	return nil;
 }
 
-- (void) dealloc
-{
-	[_formatInfo release];
-	[super dealloc];
-}
-
 - (void)			writeTags						{}
-- (int)				getFormat						{ return [[_formatInfo valueForKey:@"sndfileFormat"] intValue]; }
-- (NSString *)		extension						{ return [_formatInfo valueForKey:@"extension"]; }
-- (NSString *)		outputFormat					{ return [_formatInfo valueForKey:@"type"]; }
+- (int)				getFormat						{ return [[[self userInfo] valueForKey:@"majorFormat"] intValue] | [[[self userInfo] valueForKey:@"subtypeFormat"] intValue]; }
+- (NSString *)		extension						{ return [[self userInfo] valueForKey:@"extension"]; }
+- (NSString *)		outputFormat					{ return [[self userInfo] valueForKey:@"name"]; }
 
 - (BOOL) formatLegalForCueSheet
 { 
