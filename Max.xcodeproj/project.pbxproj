@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C0883620A092EA500CAC5D0 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */; };
+		8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */; };
+		8C0883640A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */; };
+		8C0883650A092EA500CAC5D0 /* ConverterTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835B0A092EA500CAC5D0 /* ConverterTaskDefaults.plist */; };
+		8C0883660A092EA500CAC5D0 /* EncoderTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835C0A092EA500CAC5D0 /* EncoderTaskDefaults.plist */; };
+		8C0883670A092EA500CAC5D0 /* FreeDBDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835D0A092EA500CAC5D0 /* FreeDBDefaults.plist */; };
+		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
+		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
+		8C08836A0A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883600A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist */; };
+		8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
@@ -29,10 +39,8 @@
 		8C4D4698093E7C1E00A88927 /* FreeDBPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D4692093E7C1E00A88927 /* FreeDBPreferences.nib */; };
 		8C4D46F4093E813300A88927 /* RipperPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D46EE093E813300A88927 /* RipperPreferences.nib */; };
 		8C4D471D093E842C00A88927 /* OutputPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D4717093E842B00A88927 /* OutputPreferences.nib */; };
-		8C4DDD71097A55C60000245A /* PCMGeneratingTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */; };
 		8C5266BB0970E6FB008F1B55 /* Acknowledgments.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */; };
 		8C53004A0A05CFBC00890518 /* ConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300370A05CFBB00890518 /* ConverterTask.m */; };
-		8C53004B0A05CFBC00890518 /* ConverterTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C5300380A05CFBB00890518 /* ConverterTaskDefaults.plist */; };
 		8C53004D0A05CFBC00890518 /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53003A0A05CFBB00890518 /* CoreAudioConverterTask.m */; };
 		8C53004F0A05CFBC00890518 /* FLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53003C0A05CFBB00890518 /* FLACConverterTask.m */; };
 		8C5300510A05CFBC00890518 /* LibsndfileConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53003E0A05CFBC00890518 /* LibsndfileConverterTask.m */; };
@@ -43,7 +51,6 @@
 		8C53005B0A05CFBC00890518 /* WavPackConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300480A05CFBC00890518 /* WavPackConverterTask.m */; };
 		8C5300730A05CFC700890518 /* CoreAudioEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53005E0A05CFC700890518 /* CoreAudioEncoderTask.m */; };
 		8C5300750A05CFC700890518 /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300600A05CFC700890518 /* EncoderTask.m */; };
-		8C5300760A05CFC700890518 /* EncoderTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C5300610A05CFC700890518 /* EncoderTaskDefaults.plist */; };
 		8C5300780A05CFC700890518 /* FLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300630A05CFC700890518 /* FLACEncoderTask.m */; };
 		8C53007A0A05CFC700890518 /* LibsndfileEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300650A05CFC700890518 /* LibsndfileEncoderTask.m */; };
 		8C53007C0A05CFC700890518 /* MonkeysAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300670A05CFC700890518 /* MonkeysAudioEncoderTask.mm */; };
@@ -85,14 +92,9 @@
 		8C5301C50A05D35800890518 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301BF0A05D35800890518 /* Track.m */; };
 		8C5301D60A05D3BA00890518 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301D20A05D3B900890518 /* AmazonAlbumArtSheet.m */; };
 		8C5301D80A05D3BA00890518 /* GetPlaylistNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301D40A05D3B900890518 /* GetPlaylistNameSheet.m */; };
-		8C5301DC0A05D40A00890518 /* CompactDiscDocumentDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301D90A05D40A00890518 /* CompactDiscDocumentDefaults.plist */; };
 		8C5301DE0A05D40A00890518 /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301DB0A05D40A00890518 /* CompactDiscDocumentToolbar.m */; };
 		8C5301E30A05D44300890518 /* CueSheetDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301E10A05D44300890518 /* CueSheetDocument.m */; };
 		8C5301E50A05D4A200890518 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301E40A05D4A200890518 /* MacPAD.url */; };
-		8C5301EA0A05D4D300890518 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301E90A05D4D300890518 /* TrackDefaults.plist */; };
-		8C5301EC0A05D51000890518 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301EB0A05D51000890518 /* ApplicationControllerDefaults.plist */; };
-		8C5301EE0A05D52500890518 /* FreeDBDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301ED0A05D52500890518 /* FreeDBDefaults.plist */; };
-		8C5301F00A05D54A00890518 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301EF0A05D54A00890518 /* MediaControllerDefaults.plist */; };
 		8C5302080A05D5D800890518 /* AlbumArtToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F20A05D5D800890518 /* AlbumArtToolbarImage.png */; };
 		8C5302090A05D5D800890518 /* ClearLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F30A05D5D800890518 /* ClearLogToolbarImage.png */; };
 		8C53020A0A05D5D800890518 /* EjectDiscToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F40A05D5D800890518 /* EjectDiscToolbarImage.png */; };
@@ -194,7 +196,6 @@
 		8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */; };
 		8C752A8408C507CE001F588B /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C752A8308C507CE001F588B /* Genres.m */; };
 		8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */; };
-		8C76355409E0F8EC00616BE9 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */; };
 		8C781F5109E8DAB4001D85EF /* CueSheetDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C781F4F09E8DAB4001D85EF /* CueSheetDocument.nib */; };
 		8C89C63D0A069E5000359E67 /* AlbumArtPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C89C62D0A069E5000359E67 /* AlbumArtPreferencesController.m */; };
 		8C89C63F0A069E5000359E67 /* FormatsPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C89C62F0A069E5000359E67 /* FormatsPreferencesController.m */; };
@@ -229,7 +230,6 @@
 		8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */; };
 		8CA5C39C09526FA9006FB5B7 /* AudioMetadata.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CA5C39B09526FA9006FB5B7 /* AudioMetadata.mm */; };
 		8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CA6E46C09D065260047C35C /* UndoRedo.strings */; };
-		8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */; };
 		8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
@@ -308,6 +308,16 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
+		8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = AlbumArtDefaults.plist; sourceTree = "<group>"; };
+		8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
+		8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CompactDiscDocumentDefaults.plist; sourceTree = "<group>"; };
+		8C08835B0A092EA500CAC5D0 /* ConverterTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ConverterTaskDefaults.plist; sourceTree = "<group>"; };
+		8C08835C0A092EA500CAC5D0 /* EncoderTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = EncoderTaskDefaults.plist; sourceTree = "<group>"; };
+		8C08835D0A092EA500CAC5D0 /* FreeDBDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = FreeDBDefaults.plist; sourceTree = "<group>"; };
+		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
+		8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
+		8C0883600A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = PCMGeneratingTaskDefaults.plist; sourceTree = "<group>"; };
+		8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -322,7 +332,6 @@
 		8C4D46EF093E813300A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
 		8C4D4718093E842B00A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
 		8C4D489F093E932600A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
-		8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = PCMGeneratingTaskDefaults.plist; sourceTree = "<group>"; };
 		8C51308B0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C51308C0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/General.strings; sourceTree = "<group>"; };
 		8C51308D0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Genres.strings; sourceTree = "<group>"; };
@@ -331,7 +340,6 @@
 		8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
 		8C5300360A05CFBB00890518 /* ConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ConverterTask.h; sourceTree = "<group>"; };
 		8C5300370A05CFBB00890518 /* ConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ConverterTask.m; sourceTree = "<group>"; };
-		8C5300380A05CFBB00890518 /* ConverterTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ConverterTaskDefaults.plist; sourceTree = "<group>"; };
 		8C5300390A05CFBB00890518 /* CoreAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterTask.h; sourceTree = "<group>"; };
 		8C53003A0A05CFBB00890518 /* CoreAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterTask.m; sourceTree = "<group>"; };
 		8C53003B0A05CFBB00890518 /* FLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FLACConverterTask.h; sourceTree = "<group>"; };
@@ -352,7 +360,6 @@
 		8C53005E0A05CFC700890518 /* CoreAudioEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoderTask.m; sourceTree = "<group>"; };
 		8C53005F0A05CFC700890518 /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
 		8C5300600A05CFC700890518 /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
-		8C5300610A05CFC700890518 /* EncoderTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = EncoderTaskDefaults.plist; sourceTree = "<group>"; };
 		8C5300620A05CFC700890518 /* FLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FLACEncoderTask.h; sourceTree = "<group>"; };
 		8C5300630A05CFC700890518 /* FLACEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACEncoderTask.m; sourceTree = "<group>"; };
 		8C5300640A05CFC700890518 /* LibsndfileEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LibsndfileEncoderTask.h; sourceTree = "<group>"; };
@@ -423,16 +430,11 @@
 		8C5301D20A05D3B900890518 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
 		8C5301D30A05D3B900890518 /* GetPlaylistNameSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetPlaylistNameSheet.h; sourceTree = "<group>"; };
 		8C5301D40A05D3B900890518 /* GetPlaylistNameSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GetPlaylistNameSheet.m; sourceTree = "<group>"; };
-		8C5301D90A05D40A00890518 /* CompactDiscDocumentDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CompactDiscDocumentDefaults.plist; sourceTree = "<group>"; };
 		8C5301DA0A05D40A00890518 /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
 		8C5301DB0A05D40A00890518 /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
 		8C5301E00A05D44300890518 /* CueSheetDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CueSheetDocument.h; sourceTree = "<group>"; };
 		8C5301E10A05D44300890518 /* CueSheetDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CueSheetDocument.m; sourceTree = "<group>"; };
 		8C5301E40A05D4A200890518 /* MacPAD.url */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = MacPAD.url; sourceTree = "<group>"; };
-		8C5301E90A05D4D300890518 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
-		8C5301EB0A05D51000890518 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
-		8C5301ED0A05D52500890518 /* FreeDBDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = FreeDBDefaults.plist; sourceTree = "<group>"; };
-		8C5301EF0A05D54A00890518 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
 		8C5301F20A05D5D800890518 /* AlbumArtToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AlbumArtToolbarImage.png; sourceTree = "<group>"; };
 		8C5301F30A05D5D800890518 /* ClearLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClearLogToolbarImage.png; sourceTree = "<group>"; };
 		8C5301F40A05D5D800890518 /* EjectDiscToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EjectDiscToolbarImage.png; sourceTree = "<group>"; };
@@ -592,7 +594,6 @@
 		8C752A8208C507CE001F588B /* Genres.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genres.h; sourceTree = "<group>"; };
 		8C752A8308C507CE001F588B /* Genres.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genres.m; sourceTree = "<group>"; };
 		8C7634F509E0F11D00616BE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
-		8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = AlbumArtDefaults.plist; sourceTree = "<group>"; };
 		8C781DE709E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
 		8C781DE809E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
 		8C781F5009E8DAB4001D85EF /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
@@ -678,7 +679,6 @@
 		8CA6DE2E09D059FC0047C35C /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
 		8CA6DE4709D05C950047C35C /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
 		8CA6E46D09D065260047C35C /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/UndoRedo.strings; sourceTree = "<group>"; };
-		8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
 		8CB34D16099AFF63001532C3 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
 		8CBA9F450999B374007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/CompactDisc.strings; sourceTree = "<group>"; };
@@ -799,6 +799,7 @@
 				8C53FF1E0A05CC4600890518 /* Exceptions */,
 				8C5302700A05DC9A00890518 /* AppleScript */,
 				8C89C62B0A069E5000359E67 /* Preferences */,
+				8C0883570A092EA500CAC5D0 /* Defaults */,
 				8C89CA6D0A06F7B200359E67 /* EncoderSettingsSheets */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				8C53021E0A05D66A00890518 /* Utilities */,
@@ -842,7 +843,6 @@
 				8C4D46EE093E813300A88927 /* RipperPreferences.nib */,
 				8C4D4692093E7C1E00A88927 /* FreeDBPreferences.nib */,
 				8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */,
-				8CAA73080937E61D00521DEF /* ParanoiaDefaults.plist */,
 				8C328106096D0CAC00608C9D /* FreeDBMatches.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				8C32811E096D0CD700608C9D /* CompactDiscDocument.nib */,
@@ -858,9 +858,7 @@
 				8C3280F9096D0C8B00608C9D /* Ripper.nib */,
 				8C328112096D0CC200608C9D /* Encoder.nib */,
 				8C328116096D0CCA00608C9D /* Converter.nib */,
-				8C4DDD70097A55C60000245A /* PCMGeneratingTaskDefaults.plist */,
 				8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */,
-				8C76355309E0F8EC00616BE9 /* AlbumArtDefaults.plist */,
 				8C781F4F09E8DAB4001D85EF /* CueSheetDocument.nib */,
 			);
 			name = Resources;
@@ -896,6 +894,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8C0883570A092EA500CAC5D0 /* Defaults */ = {
+			isa = PBXGroup;
+			children = (
+				8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */,
+				8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */,
+				8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */,
+				8C08835B0A092EA500CAC5D0 /* ConverterTaskDefaults.plist */,
+				8C08835C0A092EA500CAC5D0 /* EncoderTaskDefaults.plist */,
+				8C08835D0A092EA500CAC5D0 /* FreeDBDefaults.plist */,
+				8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */,
+				8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */,
+				8C0883600A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist */,
+				8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */,
+			);
+			name = Defaults;
+			path = Preferences/Defaults;
+			sourceTree = "<group>";
+		};
 		8C32817C096D12A600608C9D /* Strings */ = {
 			isa = PBXGroup;
 			children = (
@@ -915,7 +931,6 @@
 			children = (
 				8C5300360A05CFBB00890518 /* ConverterTask.h */,
 				8C5300370A05CFBB00890518 /* ConverterTask.m */,
-				8C5300380A05CFBB00890518 /* ConverterTaskDefaults.plist */,
 				8C5300390A05CFBB00890518 /* CoreAudioConverterTask.h */,
 				8C53003A0A05CFBB00890518 /* CoreAudioConverterTask.m */,
 				8C53003B0A05CFBB00890518 /* FLACConverterTask.h */,
@@ -944,7 +959,6 @@
 				8C53005E0A05CFC700890518 /* CoreAudioEncoderTask.m */,
 				8C53005F0A05CFC700890518 /* EncoderTask.h */,
 				8C5300600A05CFC700890518 /* EncoderTask.m */,
-				8C5300610A05CFC700890518 /* EncoderTaskDefaults.plist */,
 				8C5300620A05CFC700890518 /* FLACEncoderTask.h */,
 				8C5300630A05CFC700890518 /* FLACEncoderTask.m */,
 				8C5300640A05CFC700890518 /* LibsndfileEncoderTask.h */,
@@ -997,8 +1011,6 @@
 		8C5300B00A05D18E00890518 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8C5301EF0A05D54A00890518 /* MediaControllerDefaults.plist */,
-				8C5301EB0A05D51000890518 /* ApplicationControllerDefaults.plist */,
 				8C5301A00A05D2DB00890518 /* CompactDiscController.h */,
 				8C5301A10A05D2DB00890518 /* CompactDiscController.m */,
 				8C5300B10A05D18E00890518 /* AcknowledgmentsController.h */,
@@ -1024,8 +1036,6 @@
 		8C5301B90A05D35800890518 /* Compact Disc */ = {
 			isa = PBXGroup;
 			children = (
-				8C5301E90A05D4D300890518 /* TrackDefaults.plist */,
-				8C5301D90A05D40A00890518 /* CompactDiscDocumentDefaults.plist */,
 				8C5301DA0A05D40A00890518 /* CompactDiscDocumentToolbar.h */,
 				8C5301DB0A05D40A00890518 /* CompactDiscDocumentToolbar.m */,
 				8C5301D10A05D3B900890518 /* AmazonAlbumArtSheet.h */,
@@ -1222,7 +1232,6 @@
 		8C53FF750A05CD2D00890518 /* FreeDB */ = {
 			isa = PBXGroup;
 			children = (
-				8C5301ED0A05D52500890518 /* FreeDBDefaults.plist */,
 				8C53FF760A05CD2D00890518 /* FreeDB.h */,
 				8C53FF770A05CD2D00890518 /* FreeDB.m */,
 				8C53FF780A05CD2D00890518 /* FreeDBMatchSheet.h */,
@@ -1426,7 +1435,6 @@
 				8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */,
 				8C3280F6096D0C7500608C9D /* UpdateChecker.nib in Resources */,
 				8C328107096D0CAC00608C9D /* FreeDBMatches.nib in Resources */,
-				8CAA73090937E61D00521DEF /* ParanoiaDefaults.plist in Resources */,
 				8C328102096D0C9C00608C9D /* Log.nib in Resources */,
 				8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */,
 				8C4D4698093E7C1E00A88927 /* FreeDBPreferences.nib in Resources */,
@@ -1440,7 +1448,6 @@
 				8C328117096D0CCA00608C9D /* Converter.nib in Resources */,
 				8C328182096D12CA00608C9D /* Exceptions.strings in Resources */,
 				8C5266BB0970E6FB008F1B55 /* Acknowledgments.rtf in Resources */,
-				8C4DDD71097A55C60000245A /* PCMGeneratingTaskDefaults.plist in Resources */,
 				8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */,
 				8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */,
 				8C29D928097F424900E8B766 /* General.strings in Resources */,
@@ -1451,16 +1458,8 @@
 				8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */,
 				8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */,
 				8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */,
-				8C76355409E0F8EC00616BE9 /* AlbumArtDefaults.plist in Resources */,
 				8C781F5109E8DAB4001D85EF /* CueSheetDocument.nib in Resources */,
-				8C53004B0A05CFBC00890518 /* ConverterTaskDefaults.plist in Resources */,
-				8C5300760A05CFC700890518 /* EncoderTaskDefaults.plist in Resources */,
-				8C5301DC0A05D40A00890518 /* CompactDiscDocumentDefaults.plist in Resources */,
 				8C5301E50A05D4A200890518 /* MacPAD.url in Resources */,
-				8C5301EA0A05D4D300890518 /* TrackDefaults.plist in Resources */,
-				8C5301EC0A05D51000890518 /* ApplicationControllerDefaults.plist in Resources */,
-				8C5301EE0A05D52500890518 /* FreeDBDefaults.plist in Resources */,
-				8C5301F00A05D54A00890518 /* MediaControllerDefaults.plist in Resources */,
 				8C5302080A05D5D800890518 /* AlbumArtToolbarImage.png in Resources */,
 				8C5302090A05D5D800890518 /* ClearLogToolbarImage.png in Resources */,
 				8C53020A0A05D5D800890518 /* EjectDiscToolbarImage.png in Resources */,
@@ -1494,6 +1493,16 @@
 				8C89D0810A07617E00359E67 /* MP3SettingsSheet.nib in Resources */,
 				8C89D0820A07619700359E67 /* LAMEToolbarImage.png in Resources */,
 				8C89D0F80A076A7800359E67 /* SpeexSettingsSheet.nib in Resources */,
+				8C0883620A092EA500CAC5D0 /* AlbumArtDefaults.plist in Resources */,
+				8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */,
+				8C0883640A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist in Resources */,
+				8C0883650A092EA500CAC5D0 /* ConverterTaskDefaults.plist in Resources */,
+				8C0883660A092EA500CAC5D0 /* EncoderTaskDefaults.plist in Resources */,
+				8C0883670A092EA500CAC5D0 /* FreeDBDefaults.plist in Resources */,
+				8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */,
+				8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */,
+				8C08836A0A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist in Resources */,
+				8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
