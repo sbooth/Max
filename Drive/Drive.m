@@ -119,7 +119,7 @@
 {
 	TrackDescriptor		*track	= [self trackNumber:number + 1];
 	
-	return (nil == track ? [self leadOut] : [track firstSector] - 1);
+	return (nil == track ? [self leadOut] - 1 : [track firstSector] - 1);
 }
 
 - (unsigned)			firstTrack								{ return _firstTrack; }
