@@ -55,8 +55,8 @@
 	if((self = [super initWithSectors:sectors deviceName:deviceName])) {
 		_drive				= [[Drive alloc] initWithDeviceName:deviceName];
 		
-		_requiredMatches	= [[NSUserDefaults standardUserDefaults] intForKey:@"comparisonRipperRequiredMatches"];
-		_maximumRetries		= [[NSUserDefaults standardUserDefaults] intForKey:@"comparisonRipperMaximumRetries"];
+		_requiredMatches	= [[NSUserDefaults standardUserDefaults] integerForKey:@"comparisonRipperRequiredMatches"];
+		_maximumRetries		= [[NSUserDefaults standardUserDefaults] integerForKey:@"comparisonRipperMaximumRetries"];
 		_useHashes			= [[NSUserDefaults standardUserDefaults] boolForKey:@"comparisonRipperUseHashes"];
 
 		_sectorsRead		= 0;
