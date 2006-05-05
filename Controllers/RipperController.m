@@ -167,7 +167,7 @@ static RipperController *sharedController = nil;
 		case kParanoiaRipper:	task = [[ParanoiaRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
 		default:				task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
 	}
-	
+		
 	// Show the window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 		[[self window] orderFront:self];

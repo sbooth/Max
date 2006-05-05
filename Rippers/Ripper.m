@@ -37,6 +37,9 @@
 		owner			= (RipperTask *)[connection rootProxy];
 		ripper			= [[self alloc] initWithSectors:[owner sectors] deviceName:[owner deviceName]];
 		
+		// Setup ripper logging
+		[ripper setLogActivity:[[NSUserDefaults standardUserDefaults] boolForKey:@"enableRipperLogging"]];
+			
 		[ripper setDelegate:owner];
 		[owner ripperReady:ripper];
 		

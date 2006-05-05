@@ -6,5 +6,7 @@
 	<false/>
 	<key>tmpDirectory</key>
 	<string>/tmp</string>
+	<key>enableRipperLogging</key>
+	<false/>
 </dict>
 </plist>

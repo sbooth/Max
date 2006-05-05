@@ -114,9 +114,6 @@ callback(long inpos, int function, void *userdata)
 		int			paranoiaMode	= PARANOIA_MODE_DISABLE;
 		NSString	*bsdName		= [NSString stringWithFormat:@"%sr%@", _PATH_DEV, deviceName];
 
-		// Setup logging
-		_logActivity = [[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnableLogging"];
-		
 		// Setup cdparanoia
 		_drive		= cdda_identify([bsdName fileSystemRepresentation], 0, NULL);
 		if(NULL == _drive) {
