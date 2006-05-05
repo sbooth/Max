@@ -131,7 +131,7 @@
 	}
 	
 	if(nil != [_settings objectForKey:@"quality"] && (nil == [subtypeInfo objectForKey:@"quality"] || (nil != [subtypeInfo objectForKey:@"quality"] &&  0 == [[subtypeInfo objectForKey:@"quality"] intValue]))) {
-		[_settings setObject:[subtypeInfo objectForKey:@"quality"] forKey:@"quality"];
+		[_settings removeObjectForKey:@"quality"];
 	}
 }
 
