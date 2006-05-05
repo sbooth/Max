@@ -60,7 +60,7 @@
 		_useHashes			= [[NSUserDefaults standardUserDefaults] boolForKey:@"comparisonRipperUseHashes"];
 
 		_sectorsRead		= 0;
-
+		
 		// Determine the size of the track(s) we are ripping
 		_grandTotalSectors = [[_sectors valueForKeyPath:@"@sum.length"] unsignedIntValue];
 		

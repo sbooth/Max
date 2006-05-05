@@ -158,7 +158,7 @@
 - (void) awakeFromNib
 {
 	[_configuredFormatsController setSortDescriptors:[NSArray arrayWithObjects:
-		[[[NSSortDescriptor alloc] initWithKey:@"active" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"active" ascending:NO] autorelease],
 		[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease],
 		[[[NSSortDescriptor alloc] initWithKey:@"nickname" ascending:YES] autorelease],
 		nil]];
