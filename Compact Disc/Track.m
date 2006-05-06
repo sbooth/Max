@@ -92,6 +92,7 @@
 		_preEmphasis		= NO;
 		_copyPermitted		= NO;
 		_ISRC				= nil;
+		_dataTrack			= NO;
 		
 		return self;
 	}
@@ -143,31 +144,31 @@
 
 - (unsigned) minute
 {
-	unsigned long	sector		= [self firstSector];
-	unsigned long	offset		= [self lastSector] - sector + 1;
+	unsigned	sector		= [self firstSector];
+	unsigned	offset		= [self lastSector] - sector + 1;
 	
 	return (unsigned) (offset / (60 * 75));
 }
 
 - (unsigned) second
 {
-	unsigned long	sector		= [self firstSector];
-	unsigned long	offset		= [self lastSector] - sector + 1;
+	unsigned	sector		= [self firstSector];
+	unsigned	offset		= [self lastSector] - sector + 1;
 	
 	return (unsigned) ((offset / 75) % 60);
 }
 
 - (unsigned) frame
 {
-	unsigned long	sector		= [self firstSector];
-	unsigned long	offset		= [self lastSector] - sector + 1;
+	unsigned	sector		= [self firstSector];
+	unsigned	offset		= [self lastSector] - sector + 1;
 	
 	return (unsigned) (offset % 75);
 }
 
 - (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
 - (CompactDiscDocument *)	document			{ return _document; }
-- (NSUndoManager *)			undoManager			{ return [_document undoManager]; }
+- (NSUndoManager *)			undoManager			{ return [[self document] undoManager]; }
 
 - (BOOL)					ripInProgress		{ return _ripInProgress; }
 - (BOOL)					encodeInProgress	{ return (0 != _activeEncoders); }
@@ -181,15 +182,16 @@
 - (NSString *)				composer			{ return _composer; }
 - (NSString *)				comment				{ return _comment; }
 
-- (unsigned long)			size				{ return ((_lastSector - _firstSector) * kCDSectorSizeCDDA); }
+- (unsigned)				size				{ return (([self lastSector] - [self firstSector]) * kCDSectorSizeCDDA); }
 
 - (unsigned)				number				{ return _number; }
-- (unsigned long)			firstSector			{ return _firstSector; }
-- (unsigned long)			lastSector			{ return _lastSector; }
+- (unsigned)				firstSector			{ return _firstSector; }
+- (unsigned)				lastSector			{ return _lastSector; }
 - (unsigned)				channels			{ return _channels; }
 - (BOOL)					preEmphasis			{ return _preEmphasis; }
 - (BOOL)					copyPermitted		{ return _copyPermitted; }
 - (NSString *)				ISRC				{ return _ISRC; }
+- (BOOL)					dataTrack			{ return _dataTrack; }
 
 - (NSColor *) color
 {
@@ -215,12 +217,13 @@
 - (void) setSelected:(BOOL)selected						{ _selected = selected; }
 
 - (void) setNumber:(unsigned)number						{ _number = number; }
-- (void) setFirstSector:(unsigned long)firstSector		{ _firstSector = firstSector; }
-- (void) setLastSector:(unsigned long)lastSector		{ _lastSector = lastSector; }
+- (void) setFirstSector:(unsigned)firstSector			{ _firstSector = firstSector; }
+- (void) setLastSector:(unsigned)lastSector				{ _lastSector = lastSector; }
 - (void) setChannels:(unsigned)channels					{ _channels = channels; }
 - (void) setPreEmphasis:(BOOL)preEmphasis				{ _preEmphasis = preEmphasis; }
 - (void) setCopyPermitted:(BOOL)copyPermitted			{ _copyPermitted = copyPermitted; }
 - (void) setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = [ISRC retain]; }
+- (void) setDataTrack:(BOOL)dataTrack					{ _dataTrack = dataTrack; }
 
 - (void) encodeStarted
 {
@@ -317,6 +320,7 @@
 	[result setObject:[NSNumber numberWithBool:[self preEmphasis]] forKey:@"preEmphasis"];
 	[result setObject:[NSNumber numberWithBool:[self copyPermitted]] forKey:@"copyPermitted"];
 	[result setValue:[self ISRC] forKey:@"ISRC"];
+	[result setObject:[NSNumber numberWithBool:[self dataTrack]] forKey:@"dataTrack"];
 	
 	return [[result retain] autorelease];
 }
@@ -347,6 +351,7 @@
 	_preEmphasis	= [[properties valueForKey:@"preEmphasis"] boolValue];
 	_copyPermitted	= [[properties valueForKey:@"copyPermitted"] boolValue];
 	_ISRC			= [[properties valueForKey:@"ISRC"] retain];
+	_dataTrack		= [[properties valueForKey:@"dataTrack"] boolValue];
 }
 
 - (id) copyWithZone:(NSZone *)zone
@@ -371,6 +376,7 @@
 	[copy setPreEmphasis:[self preEmphasis]];
 	[copy setCopyPermitted:[self copyPermitted]];
 	[copy setISRC:[self ISRC]];
+	[copy setDataTrack:[self dataTrack]];
 
 	return copy;
 }

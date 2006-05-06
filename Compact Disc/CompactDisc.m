@@ -70,6 +70,7 @@
 			[trackInfo setObject:[NSNumber numberWithBool:(NO == [track dataTrack])] forKey:@"containsAudio"];
 			[trackInfo setObject:[NSNumber numberWithBool:[track preEmphasis]] forKey:@"preEmphasis"];
 			[trackInfo setObject:[NSNumber numberWithBool:[track copyPermitted]] forKey:@"allowsDigitalCopy"];
+			[trackInfo setObject:[NSNumber numberWithBool:[track dataTrack]] forKey:@"dataTrack"];
 
 			ISRC = [drive readISRC:i];
 			if(nil != ISRC) {

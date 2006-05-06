@@ -49,6 +49,12 @@
 		enumerator		= [_tracks objectEnumerator];
 		
 		while((track = [enumerator nextObject])) {
+			
+			// Don't try to rip data tracks
+			if([track dataTrack]) {
+				continue;
+			}
+			
 			[track setRipInProgress:YES];
 			[_sectors addObject:[SectorRange rangeWithFirstSector:[track firstSector] lastSector:[track lastSector]]];
 		}

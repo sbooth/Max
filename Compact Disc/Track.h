@@ -44,12 +44,13 @@
 	
 	// Physical track properties
 	unsigned 				_number;
-	unsigned long			_firstSector;
-	unsigned long			_lastSector;
+	unsigned				_firstSector;
+	unsigned				_lastSector;
 	unsigned 				_channels;
 	BOOL					_preEmphasis;
 	BOOL					_copyPermitted;
 	NSString				*_ISRC;
+	BOOL					_dataTrack;
 }
 
 - (CompactDiscDocument *)	document;
@@ -87,7 +88,7 @@
 - (NSString *)		comment;
 - (void)			setComment:(NSString *)comment;
 
-- (unsigned long)	size;
+- (unsigned)		size;
 
 - (unsigned)		minute;
 - (unsigned)		second;
@@ -96,11 +97,11 @@
 - (unsigned)		number;
 - (void)			setNumber:(unsigned)number;
 
-- (unsigned long)	firstSector;
-- (void)			setFirstSector:(unsigned long)firstSector;
+- (unsigned)		firstSector;
+- (void)			setFirstSector:(unsigned)firstSector;
 
-- (unsigned long)	lastSector;
-- (void)			setLastSector:(unsigned long)lastSector;
+- (unsigned)		lastSector;
+- (void)			setLastSector:(unsigned)lastSector;
 
 - (unsigned)		channels;
 - (void)			setChannels:(unsigned)channels;
@@ -113,6 +114,9 @@
 
 - (NSString *)		ISRC;
 - (void)			setISRC:(NSString *)ISRC;
+
+- (BOOL)			dataTrack;
+- (void)			setDataTrack:(BOOL)dataTrack;
 
 // Metadata access
 - (AudioMetadata *)			metadata;
