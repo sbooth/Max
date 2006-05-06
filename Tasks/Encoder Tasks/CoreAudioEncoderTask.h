@@ -22,8 +22,12 @@
 
 #import "EncoderTask.h"
 
+#include <AudioToolbox/AudioFile.h>
+
 @interface CoreAudioEncoderTask : EncoderTask 
 {
 }
+
+- (AudioFileTypeID)		fileType;
 
 @end

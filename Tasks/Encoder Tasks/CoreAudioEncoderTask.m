@@ -38,9 +38,11 @@
 	return nil;
 }
 
+- (AudioFileTypeID)		fileType		{ return [[[self userInfo] valueForKey:@"fileType"] unsignedLongValue]; }
+
 - (NSString *) cueSheetFormatName
 {
- 	switch([[[self userInfo] valueForKey:@"fileType"] unsignedLongValue]) {
+ 	switch([self fileType]) {
 		case kAudioFileWAVEType:	return @"WAVE";				break;
 		case kAudioFileAIFFType:	return @"AIFF";				break;
 		case kAudioFileMP3Type:		return @"MP3";				break;
@@ -50,7 +52,7 @@
 
 - (BOOL) formatLegalForCueSheet
 {
- 	switch([[[self userInfo] valueForKey:@"fileType"] unsignedLongValue]) {
+ 	switch([self fileType]) {
 		case kAudioFileWAVEType:	return YES;					break;
 		case kAudioFileAIFFType:	return YES;					break;
 		case kAudioFileMP3Type:		return YES;					break;

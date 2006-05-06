@@ -26,6 +26,6 @@
 {
 }
 
-- (int)		getFormat;
+- (int)		format;
 
 @end

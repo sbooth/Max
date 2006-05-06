@@ -35,13 +35,13 @@
 }
 
 - (void)			writeTags						{}
-- (int)				getFormat						{ return [[[self userInfo] valueForKey:@"majorFormat"] intValue] | [[[self userInfo] valueForKey:@"subtypeFormat"] intValue]; }
+- (int)				format							{ return [[[self userInfo] valueForKey:@"majorFormat"] intValue] | [[[self userInfo] valueForKey:@"subtypeFormat"] intValue]; }
 - (NSString *)		extension						{ return [[self userInfo] valueForKey:@"extension"]; }
 - (NSString *)		outputFormat					{ return [[self userInfo] valueForKey:@"name"]; }
 
 - (BOOL) formatLegalForCueSheet
 { 
-	switch([self getFormat] & SF_FORMAT_TYPEMASK) {
+	switch([self format] & SF_FORMAT_TYPEMASK) {
 		case SF_FORMAT_WAV:			return YES;					break;
 		case SF_FORMAT_AIFF:		return YES;					break;
 		default:					return NO;					break;
@@ -50,7 +50,7 @@
 
 - (NSString *) cueSheetFormatName
 {
-	switch([self getFormat] & SF_FORMAT_TYPEMASK) {
+	switch([self format] & SF_FORMAT_TYPEMASK) {
 		case SF_FORMAT_WAV:			return @"WAVE";				break;
 		case SF_FORMAT_AIFF:		return @"AIFF";				break;
 		default:					return nil;					break;
