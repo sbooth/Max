@@ -20,14 +20,23 @@
 
 #import <Cocoa/Cocoa.h>
 
+enum {
+	kCurrentDirectoryMenuItemTag		= 1,
+	kChooseDirectoryMenuItemTag			= 2,
+	kDefaultDirectoryMenuItemTag		= 3
+};
+
 @interface OutputPreferencesController : NSWindowController
 {
-    IBOutlet NSTextField	*_customNameTextField;
-    NSString				*_customNameExample;
+    IBOutlet NSTextField		*_customNameTextField;
+    IBOutlet NSPopUpButton		*_outputDirectoryPopUpButton;
+    IBOutlet NSPopUpButton		*_temporaryDirectoryPopUpButton;
+    NSString					*_customNameExample;
 }
 
-- (IBAction)	customNamingButtonAction:(id)sender;
 - (IBAction)	selectOutputDirectory:(id)sender;
 - (IBAction)	selectTemporaryDirectory:(id)sender;
+
+- (IBAction)	customNamingButtonAction:(id)sender;
 
 @end
