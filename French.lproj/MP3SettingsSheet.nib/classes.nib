@@ -1,6 +1,13 @@
 {
     IBClasses = (
         {
+            ACTIONS = {ok = id; }; 
+            CLASS = EncoderSettingsSheet; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_settingsController" = NSObjectController; "_sheet" = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
             ACTIONS = {"" = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
@@ -8,10 +15,10 @@
         }, 
         {
             ACTIONS = {userSelectedPreset = id; }; 
-            CLASS = LAMEPreferencesController; 
+            CLASS = MP3SettingsSheet; 
             LANGUAGE = ObjC; 
             OUTLETS = {"_presetDescription" = NSTextField; }; 
-            SUPERCLASS = NSWindowController; 
+            SUPERCLASS = EncoderSettingsSheet; 
         }
     ); 
     IBVersion = 1; 
