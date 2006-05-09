@@ -1,0 +1,23 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {ok = id; }; 
+            CLASS = EncoderSettingsSheet; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_settingsController" = NSObjectController; "_sheet" = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = OggVorbisSettingsSheet; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = EncoderSettingsSheet; 
+        }
+    ); 
+    IBVersion = 1; 
+}

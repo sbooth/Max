@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {customNamingButtonAction = id; }; 
+            CLASS = AlbumArtPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_customNameTextField" = NSTextField; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,20 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {stopAllTasks = id; stopSelectedTasks = id; }; 
+            CLASS = ConverterController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_taskTable" = NSTableView; "_tasksController" = NSArrayController; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = ConverterWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,27 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {
+                customNamingButtonAction = id; 
+                selectOutputDirectory = id; 
+                selectTemporaryDirectory = id; 
+            }; 
+            CLASS = OutputPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_customNameTextField" = NSTextField; 
+                "_outputDirectoryPopUpButton" = NSPopUpButton; 
+                "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
