@@ -28,6 +28,31 @@
 
 @implementation AmazonAlbumArtSheet
 
++ (void) initialize
+{
+	NSString					*defaultsValuesPath;
+    NSDictionary				*defaultsValuesDictionary;
+    
+	@try {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"AlbumArtDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"AlbumArtDefaults.plist" forKey:@"filename"]];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"AmazonAlbumArtSheet"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+	}
+}
+
 - (id) initWithCompactDiscDocument:(CompactDiscDocument *)doc;
 {
 	if((self = [super init])) {
