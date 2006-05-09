@@ -100,7 +100,7 @@ callback(long inpos, int function, void *userdata)
 	@catch(NSException *exception) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"Ripper"]];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"ParanoiaRipper"]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];

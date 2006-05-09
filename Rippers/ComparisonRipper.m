@@ -50,6 +50,31 @@
 
 @implementation ComparisonRipper
 
++ (void) initialize
+{
+	NSString				*defaultsValuesPath;
+    NSDictionary			*defaultsValuesDictionary;
+    
+	@try {
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ComparisonRipperDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"ComparisonRipperDefaults.plist" forKey:@"filename"]];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"ComparisonRipper"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+	}
+}
+
 - (id) initWithSectors:(NSArray *)sectors deviceName:(NSString *)deviceName
 {
 	if((self = [super initWithSectors:sectors deviceName:deviceName])) {
