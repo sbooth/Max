@@ -62,7 +62,7 @@
 		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
 
 		if(-1 == _fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the CD drive for reading.", @"Exceptions", @"")
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the drive for reading.", @"Exceptions", @"")
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 				
@@ -212,7 +212,7 @@
 								  startSector:discFirstSector + (requiredReadSize - sectorsRemaining)
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD.", @"Exceptions", @"") userInfo:nil];
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 				}
 				sectorsRemaining -= sectorsRead;
 			}
@@ -224,7 +224,7 @@
 								  startSector:discLastSector - sectorsRemaining
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD.", @"Exceptions", @"") userInfo:nil];
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 				}
 				sectorsRemaining -= sectorsRead;
 			}
@@ -241,7 +241,7 @@
 								  startSector:discFirstSector + (boundary - sectorsRemaining)
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD.", @"Exceptions", @"") userInfo:nil];
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 				}
 				sectorsRemaining -= sectorsRead;
 			}
@@ -260,7 +260,7 @@
 								  startSector:discLastSector - sectorsRemaining
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD.", @"Exceptions", @"") userInfo:nil];
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 				}
 				sectorsRemaining -= sectorsRead;
 			}
@@ -414,7 +414,7 @@
 	cd_read.bufferLength	= kCDSectorSizeCDDA * sectorCount;
 	
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDREAD, &cd_read)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD.", @"Exceptions", @"")
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"")
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
@@ -430,7 +430,7 @@
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDREADMCN, &cd_read_mcn)) {
 //		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read the CD's media catalog number (MCN).", @"Exceptions", @"")
 //									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		[self logMessage:NSLocalizedStringFromTable(@"Unable to read the CD's media catalog number (MCN)", @"Exceptions", @"")];
+		[self logMessage:NSLocalizedStringFromTable(@"Unable to read the disc's media catalog number (MCN)", @"Exceptions", @"")];
 		return nil;
 	}
 	
