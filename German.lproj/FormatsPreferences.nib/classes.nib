@@ -7,21 +7,12 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {
-                addCoreAudioFormat = id; 
-                addLibsndfileFormat = id; 
-                removeCoreAudioFormat = id; 
-                removeLibsndfileFormat = id; 
-            }; 
+            ACTIONS = {addOutputFormat = id; editOutputFormat = id; removeOutputFormat = id; }; 
             CLASS = FormatsPreferencesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                "_coreAudioSelectedFormatsController" = NSArrayController; 
-                "_coreAudioSubtypesController" = NSArrayController; 
-                "_coreAudioTypesController" = NSArrayController; 
-                "_libsndfileSelectedFormatsController" = NSArrayController; 
-                "_libsndfileSubtypesController" = NSArrayController; 
-                "_libsndfileTypesController" = NSArrayController; 
+                "_availableFormatsController" = NSArrayController; 
+                "_configuredFormatsController" = NSArrayController; 
             }; 
             SUPERCLASS = NSWindowController; 
         }

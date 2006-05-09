@@ -15,7 +15,11 @@
             }; 
             CLASS = OutputPreferencesController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_customNameTextField" = NSTextField; }; 
+            OUTLETS = {
+                "_customNameTextField" = NSTextField; 
+                "_outputDirectoryPopUpButton" = NSPopUpButton; 
+                "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
+            }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 
