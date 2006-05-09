@@ -1,0 +1,21 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {addOutputFormat = id; editOutputFormat = id; removeOutputFormat = id; }; 
+            CLASS = FormatsPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_availableFormatsController" = NSArrayController; 
+                "_configuredFormatsController" = NSArrayController; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
