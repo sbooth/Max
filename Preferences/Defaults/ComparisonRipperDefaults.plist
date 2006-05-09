@@ -2,13 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>useCustomTmpDirectory</key>
-	<false/>
-	<key>tmpDirectory</key>
-	<string>/tmp</string>
-	<key>selectedRipper</key>
-	<integer>1</integer>
-	<key>enableRipperLogging</key>
+	<key>comparisonRipperRequiredMatches</key>
+	<integer>3</integer>
+	<key>comparisonRipperMaximumRetries</key>
+	<real>20</real>
+	<key>comparisonRipperUseHashes</key>
 	<false/>
 </dict>
 </plist>

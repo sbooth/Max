@@ -51,8 +51,7 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 	@try {
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
 		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults", @"FreeDBDefaults",
-			@"CompactDiscDocumentDefaults", @"ParanoiaDefaults", @"TrackDefaults", 
-//			@"LAMEDefaults", @"OggVorbisDefaults", @"FLACDefaults", @"MonkeysAudioDefaults", @"SpeexDefaults", @"WavPackDefaults", 
+			@"CompactDiscDocumentDefaults", @"ComparisonRipperDefaults", @"ParanoiaDefaults", @"TrackDefaults", 
 			@"AlbumArtDefaults", @"PCMGeneratingTaskDefaults", @"ConverterTaskDefaults", @"EncoderTaskDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
@@ -65,6 +64,7 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 		}
 	    
 		initialValuesDictionary = [defaultsDictionary dictionaryWithValuesForKeys:[defaultsDictionary allKeys]];		
+		[[NSUserDefaults standardUserDefaults] registerDefaults:initialValuesDictionary];
 		[[NSUserDefaultsController sharedUserDefaultsController] setInitialValues:initialValuesDictionary];
 	}
 	

@@ -108,7 +108,7 @@ enum {
 	NSImage		*image		= nil;
 	
 	// Set the menu item image for the output directory
-	path		= [[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"];
+	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath];
 	image		= [[NSWorkspace sharedWorkspace] iconForFile:path];
 	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
 	
@@ -123,7 +123,7 @@ enum {
 	
 	switch([[sender selectedItem] tag]) {
 		case kCurrentDirectoryMenuItemTag:
-			[[NSWorkspace sharedWorkspace] selectFile:[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] inFileViewerRootedAtPath:nil];
+			[[NSWorkspace sharedWorkspace] selectFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:nil];
 			break;
 			
 		case kChooseDirectoryMenuItemTag:
@@ -152,7 +152,7 @@ enum {
 
 			for(i = 0; i < count; ++i) {
 				dirname = [filesToOpen objectAtIndex:i];
-				[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:dirname forKey:@"outputDirectory"];
+				[[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"outputDirectory"];
 				[self updateOutputDirectoryMenuItemImage];
 			}
 
@@ -187,7 +187,7 @@ enum {
 	
 	switch([[sender selectedItem] tag]) {
 		case kDefaultDirectoryMenuItemTag:
-			[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:@"useCustomTmpDirectory"]; 
+			[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:@"useCustomTmpDirectory"];
 			break;
 			
 		case kCurrentDirectoryMenuItemTag:

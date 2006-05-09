@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>amazonDefaultLocale</key>
-	<integer>0</integer>
+	<integer>1</integer>
 	<key>saveAlbumArtToFile</key>
 	<false/>
 	<key>albumArtFileFormat</key>
