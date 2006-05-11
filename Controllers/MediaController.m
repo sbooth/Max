@@ -252,7 +252,7 @@ static MediaController *sharedController = nil;
 	@catch(NSException *exception) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while accessing the CD on device %@.", @"Exceptions", @""), deviceName]];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while accessing the disc on device %@.", @"Exceptions", @""), deviceName]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];

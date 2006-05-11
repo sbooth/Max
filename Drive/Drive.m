@@ -155,8 +155,6 @@
 	speed = 0;
 	
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDGETSPEED, &speed)) {
-//		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get the drive's speed.", @"Exceptions", @"")
-//									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		[self logMessage:NSLocalizedStringFromTable(@"Unable to get the drive's speed", @"Exceptions", @"")];
 		return 0;
 	}
@@ -167,8 +165,6 @@
 - (void)			setSpeed:(uint16_t)speed
 {
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDSETSPEED, &speed)) {
-//		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to set the drive's speed.", @"Exceptions", @"")
-//									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		[self logMessage:NSLocalizedStringFromTable(@"Unable to set the drive's speed", @"Exceptions", @"")];
 	}
 }
@@ -428,8 +424,6 @@
 	bzero(&cd_read_mcn, sizeof(cd_read_mcn));
 	
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDREADMCN, &cd_read_mcn)) {
-//		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read the CD's media catalog number (MCN).", @"Exceptions", @"")
-//									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		[self logMessage:NSLocalizedStringFromTable(@"Unable to read the disc's media catalog number (MCN)", @"Exceptions", @"")];
 		return nil;
 	}
@@ -446,8 +440,6 @@
 	cd_read_isrc.track			= track;
 	
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDREADISRC, &cd_read_isrc)) {
-//		@throw [IOException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read the international standard recording code (ISRC) for track %i.", @"Exceptions", @""), track]
-//									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read the international standard recording code (ISRC) for track %i", @"Exceptions", @""), track]];
 		return nil;
 	}
