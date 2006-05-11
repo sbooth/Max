@@ -40,29 +40,6 @@
 		8C4D46F4093E813300A88927 /* RipperPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D46EE093E813300A88927 /* RipperPreferences.nib */; };
 		8C4D471D093E842C00A88927 /* OutputPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D4717093E842B00A88927 /* OutputPreferences.nib */; };
 		8C5266BB0970E6FB008F1B55 /* Acknowledgments.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */; };
-		8C53004A0A05CFBC00890518 /* ConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300370A05CFBB00890518 /* ConverterTask.m */; };
-		8C53004D0A05CFBC00890518 /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53003A0A05CFBB00890518 /* CoreAudioConverterTask.m */; };
-		8C53004F0A05CFBC00890518 /* FLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53003C0A05CFBB00890518 /* FLACConverterTask.m */; };
-		8C5300510A05CFBC00890518 /* LibsndfileConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53003E0A05CFBC00890518 /* LibsndfileConverterTask.m */; };
-		8C5300530A05CFBC00890518 /* MonkeysAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300400A05CFBC00890518 /* MonkeysAudioConverterTask.m */; };
-		8C5300550A05CFBC00890518 /* OggFLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300420A05CFBC00890518 /* OggFLACConverterTask.m */; };
-		8C5300570A05CFBC00890518 /* OggVorbisConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300440A05CFBC00890518 /* OggVorbisConverterTask.m */; };
-		8C5300590A05CFBC00890518 /* SpeexConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300460A05CFBC00890518 /* SpeexConverterTask.m */; };
-		8C53005B0A05CFBC00890518 /* WavPackConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300480A05CFBC00890518 /* WavPackConverterTask.m */; };
-		8C5300730A05CFC700890518 /* CoreAudioEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53005E0A05CFC700890518 /* CoreAudioEncoderTask.m */; };
-		8C5300750A05CFC700890518 /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300600A05CFC700890518 /* EncoderTask.m */; };
-		8C5300780A05CFC700890518 /* FLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300630A05CFC700890518 /* FLACEncoderTask.m */; };
-		8C53007A0A05CFC700890518 /* LibsndfileEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300650A05CFC700890518 /* LibsndfileEncoderTask.m */; };
-		8C53007C0A05CFC700890518 /* MonkeysAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300670A05CFC700890518 /* MonkeysAudioEncoderTask.mm */; };
-		8C53007E0A05CFC700890518 /* MPEGEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300690A05CFC700890518 /* MPEGEncoderTask.mm */; };
-		8C5300800A05CFC700890518 /* OggFLACEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C53006B0A05CFC700890518 /* OggFLACEncoderTask.mm */; };
-		8C5300820A05CFC700890518 /* OggVorbisEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C53006D0A05CFC700890518 /* OggVorbisEncoderTask.mm */; };
-		8C5300840A05CFC700890518 /* SpeexEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53006F0A05CFC700890518 /* SpeexEncoderTask.m */; };
-		8C5300860A05CFC700890518 /* WavPackEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300710A05CFC700890518 /* WavPackEncoderTask.m */; };
-		8C5300910A05CFD400890518 /* BasicRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300890A05CFD400890518 /* BasicRipperTask.m */; };
-		8C5300930A05CFD400890518 /* ComparisonRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53008B0A05CFD400890518 /* ComparisonRipperTask.m */; };
-		8C5300950A05CFD400890518 /* ParanoiaRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53008D0A05CFD400890518 /* ParanoiaRipperTask.m */; };
-		8C5300970A05CFD400890518 /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53008F0A05CFD400890518 /* RipperTask.m */; };
 		8C53009F0A05CFEA00890518 /* PCMGeneratingTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53009A0A05CFEA00890518 /* PCMGeneratingTask.m */; };
 		8C5300A10A05CFEA00890518 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53009C0A05CFEA00890518 /* Task.m */; };
 		8C5300C20A05D18F00890518 /* AcknowledgmentsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5300B20A05D18E00890518 /* AcknowledgmentsController.m */; };
@@ -87,13 +64,6 @@
 		8C5301950A05D1D400890518 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5300DE0A05D1D400890518 /* Vorbis.framework */; };
 		8C5301960A05D1D400890518 /* WavPack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5300DF0A05D1D400890518 /* WavPack.framework */; };
 		8C5301A30A05D2DB00890518 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301A10A05D2DB00890518 /* CompactDiscController.m */; };
-		8C5301C10A05D35800890518 /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301BB0A05D35800890518 /* CompactDisc.m */; };
-		8C5301C30A05D35800890518 /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301BD0A05D35800890518 /* CompactDiscDocument.m */; };
-		8C5301C50A05D35800890518 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301BF0A05D35800890518 /* Track.m */; };
-		8C5301D60A05D3BA00890518 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301D20A05D3B900890518 /* AmazonAlbumArtSheet.m */; };
-		8C5301D80A05D3BA00890518 /* GetPlaylistNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301D40A05D3B900890518 /* GetPlaylistNameSheet.m */; };
-		8C5301DE0A05D40A00890518 /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301DB0A05D40A00890518 /* CompactDiscDocumentToolbar.m */; };
-		8C5301E30A05D44300890518 /* CueSheetDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301E10A05D44300890518 /* CueSheetDocument.m */; };
 		8C5301E50A05D4A200890518 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301E40A05D4A200890518 /* MacPAD.url */; };
 		8C5302080A05D5D800890518 /* AlbumArtToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F20A05D5D800890518 /* AlbumArtToolbarImage.png */; };
 		8C5302090A05D5D800890518 /* ClearLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F30A05D5D800890518 /* ClearLogToolbarImage.png */; };
@@ -228,6 +198,36 @@
 		8C89D0DC0A0769AD00359E67 /* SpeexSettingsSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C89D0DA0A0769AD00359E67 /* SpeexSettingsSheet.m */; };
 		8C89D0F80A076A7800359E67 /* SpeexSettingsSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C89D0F60A076A7800359E67 /* SpeexSettingsSheet.nib */; };
 		8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */ = {isa = PBXBuildFile; fileRef = 8C8B0CC1092E5DAA00418C45 /* Max Help */; };
+		8C9450FF0A12E3FD00C8DCAE /* ConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450CF0A12E3FC00C8DCAE /* ConverterTask.m */; };
+		8C9451010A12E3FD00C8DCAE /* CoreAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450D10A12E3FC00C8DCAE /* CoreAudioConverterTask.m */; };
+		8C9451030A12E3FD00C8DCAE /* FLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450D30A12E3FC00C8DCAE /* FLACConverterTask.m */; };
+		8C9451050A12E3FD00C8DCAE /* LibsndfileConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450D50A12E3FC00C8DCAE /* LibsndfileConverterTask.m */; };
+		8C9451070A12E3FD00C8DCAE /* MonkeysAudioConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450D70A12E3FC00C8DCAE /* MonkeysAudioConverterTask.m */; };
+		8C9451090A12E3FD00C8DCAE /* OggFLACConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450D90A12E3FC00C8DCAE /* OggFLACConverterTask.m */; };
+		8C94510B0A12E3FD00C8DCAE /* OggVorbisConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450DB0A12E3FC00C8DCAE /* OggVorbisConverterTask.m */; };
+		8C94510D0A12E3FD00C8DCAE /* SpeexConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450DD0A12E3FC00C8DCAE /* SpeexConverterTask.m */; };
+		8C94510F0A12E3FD00C8DCAE /* WavPackConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450DF0A12E3FC00C8DCAE /* WavPackConverterTask.m */; };
+		8C9451110A12E3FD00C8DCAE /* CoreAudioEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E20A12E3FC00C8DCAE /* CoreAudioEncoderTask.m */; };
+		8C9451130A12E3FD00C8DCAE /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E40A12E3FC00C8DCAE /* EncoderTask.m */; };
+		8C9451150A12E3FD00C8DCAE /* FLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E60A12E3FC00C8DCAE /* FLACEncoderTask.m */; };
+		8C9451170A12E3FD00C8DCAE /* LibsndfileEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E80A12E3FC00C8DCAE /* LibsndfileEncoderTask.m */; };
+		8C9451190A12E3FD00C8DCAE /* MonkeysAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450EA0A12E3FC00C8DCAE /* MonkeysAudioEncoderTask.mm */; };
+		8C94511B0A12E3FD00C8DCAE /* MPEGEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450EC0A12E3FC00C8DCAE /* MPEGEncoderTask.mm */; };
+		8C94511D0A12E3FD00C8DCAE /* OggFLACEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450EE0A12E3FC00C8DCAE /* OggFLACEncoderTask.mm */; };
+		8C94511F0A12E3FD00C8DCAE /* OggVorbisEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450F00A12E3FC00C8DCAE /* OggVorbisEncoderTask.mm */; };
+		8C9451210A12E3FD00C8DCAE /* SpeexEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450F20A12E3FC00C8DCAE /* SpeexEncoderTask.m */; };
+		8C9451230A12E3FD00C8DCAE /* WavPackEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450F40A12E3FC00C8DCAE /* WavPackEncoderTask.m */; };
+		8C9451250A12E3FD00C8DCAE /* BasicRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450F70A12E3FC00C8DCAE /* BasicRipperTask.m */; };
+		8C9451270A12E3FD00C8DCAE /* ComparisonRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450F90A12E3FC00C8DCAE /* ComparisonRipperTask.m */; };
+		8C9451290A12E3FD00C8DCAE /* ParanoiaRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450FB0A12E3FC00C8DCAE /* ParanoiaRipperTask.m */; };
+		8C94512B0A12E3FD00C8DCAE /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450FD0A12E3FC00C8DCAE /* RipperTask.m */; };
+		8C9451300A12E45B00C8DCAE /* CueSheetDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94512E0A12E45B00C8DCAE /* CueSheetDocument.m */; };
+		8C9451430A12E4D700C8DCAE /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451370A12E4D700C8DCAE /* AmazonAlbumArtSheet.m */; };
+		8C9451450A12E4D700C8DCAE /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451390A12E4D700C8DCAE /* CompactDisc.m */; };
+		8C9451470A12E4D700C8DCAE /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513B0A12E4D700C8DCAE /* CompactDiscDocument.m */; };
+		8C9451490A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */; };
+		8C94514B0A12E4D700C8DCAE /* GetPlaylistNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513F0A12E4D700C8DCAE /* GetPlaylistNameSheet.m */; };
+		8C94514D0A12E4D700C8DCAE /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451410A12E4D700C8DCAE /* Track.m */; };
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
 		8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */; };
 		8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CA6E46C09D065260047C35C /* UndoRedo.strings */; };
@@ -345,52 +345,6 @@
 		8C51308E0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Log.strings; sourceTree = "<group>"; };
 		8C51308F0984CD1C00F41352 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Acknowledgments.rtf; sourceTree = "<group>"; };
-		8C5300360A05CFBB00890518 /* ConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ConverterTask.h; sourceTree = "<group>"; };
-		8C5300370A05CFBB00890518 /* ConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ConverterTask.m; sourceTree = "<group>"; };
-		8C5300390A05CFBB00890518 /* CoreAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterTask.h; sourceTree = "<group>"; };
-		8C53003A0A05CFBB00890518 /* CoreAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterTask.m; sourceTree = "<group>"; };
-		8C53003B0A05CFBB00890518 /* FLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FLACConverterTask.h; sourceTree = "<group>"; };
-		8C53003C0A05CFBB00890518 /* FLACConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACConverterTask.m; sourceTree = "<group>"; };
-		8C53003D0A05CFBB00890518 /* LibsndfileConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LibsndfileConverterTask.h; sourceTree = "<group>"; };
-		8C53003E0A05CFBC00890518 /* LibsndfileConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = LibsndfileConverterTask.m; sourceTree = "<group>"; };
-		8C53003F0A05CFBC00890518 /* MonkeysAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MonkeysAudioConverterTask.h; sourceTree = "<group>"; };
-		8C5300400A05CFBC00890518 /* MonkeysAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MonkeysAudioConverterTask.m; sourceTree = "<group>"; };
-		8C5300410A05CFBC00890518 /* OggFLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggFLACConverterTask.h; sourceTree = "<group>"; };
-		8C5300420A05CFBC00890518 /* OggFLACConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggFLACConverterTask.m; sourceTree = "<group>"; };
-		8C5300430A05CFBC00890518 /* OggVorbisConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggVorbisConverterTask.h; sourceTree = "<group>"; };
-		8C5300440A05CFBC00890518 /* OggVorbisConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggVorbisConverterTask.m; sourceTree = "<group>"; };
-		8C5300450A05CFBC00890518 /* SpeexConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SpeexConverterTask.h; sourceTree = "<group>"; };
-		8C5300460A05CFBC00890518 /* SpeexConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SpeexConverterTask.m; sourceTree = "<group>"; };
-		8C5300470A05CFBC00890518 /* WavPackConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WavPackConverterTask.h; sourceTree = "<group>"; };
-		8C5300480A05CFBC00890518 /* WavPackConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WavPackConverterTask.m; sourceTree = "<group>"; };
-		8C53005D0A05CFC700890518 /* CoreAudioEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoderTask.h; sourceTree = "<group>"; };
-		8C53005E0A05CFC700890518 /* CoreAudioEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoderTask.m; sourceTree = "<group>"; };
-		8C53005F0A05CFC700890518 /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
-		8C5300600A05CFC700890518 /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
-		8C5300620A05CFC700890518 /* FLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FLACEncoderTask.h; sourceTree = "<group>"; };
-		8C5300630A05CFC700890518 /* FLACEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACEncoderTask.m; sourceTree = "<group>"; };
-		8C5300640A05CFC700890518 /* LibsndfileEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LibsndfileEncoderTask.h; sourceTree = "<group>"; };
-		8C5300650A05CFC700890518 /* LibsndfileEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = LibsndfileEncoderTask.m; sourceTree = "<group>"; };
-		8C5300660A05CFC700890518 /* MonkeysAudioEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MonkeysAudioEncoderTask.h; sourceTree = "<group>"; };
-		8C5300670A05CFC700890518 /* MonkeysAudioEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = MonkeysAudioEncoderTask.mm; sourceTree = "<group>"; };
-		8C5300680A05CFC700890518 /* MPEGEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MPEGEncoderTask.h; sourceTree = "<group>"; };
-		8C5300690A05CFC700890518 /* MPEGEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = MPEGEncoderTask.mm; sourceTree = "<group>"; };
-		8C53006A0A05CFC700890518 /* OggFLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoderTask.h; sourceTree = "<group>"; };
-		8C53006B0A05CFC700890518 /* OggFLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggFLACEncoderTask.mm; sourceTree = "<group>"; };
-		8C53006C0A05CFC700890518 /* OggVorbisEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggVorbisEncoderTask.h; sourceTree = "<group>"; };
-		8C53006D0A05CFC700890518 /* OggVorbisEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggVorbisEncoderTask.mm; sourceTree = "<group>"; };
-		8C53006E0A05CFC700890518 /* SpeexEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SpeexEncoderTask.h; sourceTree = "<group>"; };
-		8C53006F0A05CFC700890518 /* SpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoderTask.m; sourceTree = "<group>"; };
-		8C5300700A05CFC700890518 /* WavPackEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WavPackEncoderTask.h; sourceTree = "<group>"; };
-		8C5300710A05CFC700890518 /* WavPackEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoderTask.m; sourceTree = "<group>"; };
-		8C5300880A05CFD400890518 /* BasicRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BasicRipperTask.h; sourceTree = "<group>"; };
-		8C5300890A05CFD400890518 /* BasicRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = BasicRipperTask.m; sourceTree = "<group>"; };
-		8C53008A0A05CFD400890518 /* ComparisonRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ComparisonRipperTask.h; sourceTree = "<group>"; };
-		8C53008B0A05CFD400890518 /* ComparisonRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ComparisonRipperTask.m; sourceTree = "<group>"; };
-		8C53008C0A05CFD400890518 /* ParanoiaRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ParanoiaRipperTask.h; sourceTree = "<group>"; };
-		8C53008D0A05CFD400890518 /* ParanoiaRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ParanoiaRipperTask.m; sourceTree = "<group>"; };
-		8C53008E0A05CFD400890518 /* RipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RipperTask.h; sourceTree = "<group>"; };
-		8C53008F0A05CFD400890518 /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C5300990A05CFEA00890518 /* PCMGeneratingTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PCMGeneratingTask.h; path = Tasks/PCMGeneratingTask.h; sourceTree = "<group>"; };
 		8C53009A0A05CFEA00890518 /* PCMGeneratingTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = PCMGeneratingTask.m; path = Tasks/PCMGeneratingTask.m; sourceTree = "<group>"; };
 		8C53009B0A05CFEA00890518 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Task.h; path = Tasks/Task.h; sourceTree = "<group>"; };
@@ -427,20 +381,6 @@
 		8C5300DF0A05D1D400890518 /* WavPack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WavPack.framework; path = Frameworks/WavPack.framework; sourceTree = "<group>"; };
 		8C5301A00A05D2DB00890518 /* CompactDiscController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscController.h; sourceTree = "<group>"; };
 		8C5301A10A05D2DB00890518 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
-		8C5301BA0A05D35800890518 /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
-		8C5301BB0A05D35800890518 /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
-		8C5301BC0A05D35800890518 /* CompactDiscDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocument.h; sourceTree = "<group>"; };
-		8C5301BD0A05D35800890518 /* CompactDiscDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocument.m; sourceTree = "<group>"; };
-		8C5301BE0A05D35800890518 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
-		8C5301BF0A05D35800890518 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
-		8C5301D10A05D3B900890518 /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
-		8C5301D20A05D3B900890518 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
-		8C5301D30A05D3B900890518 /* GetPlaylistNameSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetPlaylistNameSheet.h; sourceTree = "<group>"; };
-		8C5301D40A05D3B900890518 /* GetPlaylistNameSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GetPlaylistNameSheet.m; sourceTree = "<group>"; };
-		8C5301DA0A05D40A00890518 /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
-		8C5301DB0A05D40A00890518 /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
-		8C5301E00A05D44300890518 /* CueSheetDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CueSheetDocument.h; sourceTree = "<group>"; };
-		8C5301E10A05D44300890518 /* CueSheetDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CueSheetDocument.m; sourceTree = "<group>"; };
 		8C5301E40A05D4A200890518 /* MacPAD.url */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = MacPAD.url; sourceTree = "<group>"; };
 		8C5301F20A05D5D800890518 /* AlbumArtToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AlbumArtToolbarImage.png; sourceTree = "<group>"; };
 		8C5301F30A05D5D800890518 /* ClearLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClearLogToolbarImage.png; sourceTree = "<group>"; };
@@ -677,6 +617,66 @@
 		8C91B7C0099AF5D80040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8C91B7D0099AF7A00040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
 		8C91B7D8099AF9410040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
+		8C9450CE0A12E3FC00C8DCAE /* ConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ConverterTask.h; sourceTree = "<group>"; };
+		8C9450CF0A12E3FC00C8DCAE /* ConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ConverterTask.m; sourceTree = "<group>"; };
+		8C9450D00A12E3FC00C8DCAE /* CoreAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioConverterTask.h; sourceTree = "<group>"; };
+		8C9450D10A12E3FC00C8DCAE /* CoreAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioConverterTask.m; sourceTree = "<group>"; };
+		8C9450D20A12E3FC00C8DCAE /* FLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FLACConverterTask.h; sourceTree = "<group>"; };
+		8C9450D30A12E3FC00C8DCAE /* FLACConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACConverterTask.m; sourceTree = "<group>"; };
+		8C9450D40A12E3FC00C8DCAE /* LibsndfileConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LibsndfileConverterTask.h; sourceTree = "<group>"; };
+		8C9450D50A12E3FC00C8DCAE /* LibsndfileConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = LibsndfileConverterTask.m; sourceTree = "<group>"; };
+		8C9450D60A12E3FC00C8DCAE /* MonkeysAudioConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MonkeysAudioConverterTask.h; sourceTree = "<group>"; };
+		8C9450D70A12E3FC00C8DCAE /* MonkeysAudioConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MonkeysAudioConverterTask.m; sourceTree = "<group>"; };
+		8C9450D80A12E3FC00C8DCAE /* OggFLACConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggFLACConverterTask.h; sourceTree = "<group>"; };
+		8C9450D90A12E3FC00C8DCAE /* OggFLACConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggFLACConverterTask.m; sourceTree = "<group>"; };
+		8C9450DA0A12E3FC00C8DCAE /* OggVorbisConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggVorbisConverterTask.h; sourceTree = "<group>"; };
+		8C9450DB0A12E3FC00C8DCAE /* OggVorbisConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggVorbisConverterTask.m; sourceTree = "<group>"; };
+		8C9450DC0A12E3FC00C8DCAE /* SpeexConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SpeexConverterTask.h; sourceTree = "<group>"; };
+		8C9450DD0A12E3FC00C8DCAE /* SpeexConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SpeexConverterTask.m; sourceTree = "<group>"; };
+		8C9450DE0A12E3FC00C8DCAE /* WavPackConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WavPackConverterTask.h; sourceTree = "<group>"; };
+		8C9450DF0A12E3FC00C8DCAE /* WavPackConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WavPackConverterTask.m; sourceTree = "<group>"; };
+		8C9450E10A12E3FC00C8DCAE /* CoreAudioEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioEncoderTask.h; sourceTree = "<group>"; };
+		8C9450E20A12E3FC00C8DCAE /* CoreAudioEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioEncoderTask.m; sourceTree = "<group>"; };
+		8C9450E30A12E3FC00C8DCAE /* EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EncoderTask.h; sourceTree = "<group>"; };
+		8C9450E40A12E3FC00C8DCAE /* EncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = EncoderTask.m; sourceTree = "<group>"; };
+		8C9450E50A12E3FC00C8DCAE /* FLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FLACEncoderTask.h; sourceTree = "<group>"; };
+		8C9450E60A12E3FC00C8DCAE /* FLACEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACEncoderTask.m; sourceTree = "<group>"; };
+		8C9450E70A12E3FC00C8DCAE /* LibsndfileEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LibsndfileEncoderTask.h; sourceTree = "<group>"; };
+		8C9450E80A12E3FC00C8DCAE /* LibsndfileEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = LibsndfileEncoderTask.m; sourceTree = "<group>"; };
+		8C9450E90A12E3FC00C8DCAE /* MonkeysAudioEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MonkeysAudioEncoderTask.h; sourceTree = "<group>"; };
+		8C9450EA0A12E3FC00C8DCAE /* MonkeysAudioEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = MonkeysAudioEncoderTask.mm; sourceTree = "<group>"; };
+		8C9450EB0A12E3FC00C8DCAE /* MPEGEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MPEGEncoderTask.h; sourceTree = "<group>"; };
+		8C9450EC0A12E3FC00C8DCAE /* MPEGEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = MPEGEncoderTask.mm; sourceTree = "<group>"; };
+		8C9450ED0A12E3FC00C8DCAE /* OggFLACEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggFLACEncoderTask.h; sourceTree = "<group>"; };
+		8C9450EE0A12E3FC00C8DCAE /* OggFLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggFLACEncoderTask.mm; sourceTree = "<group>"; };
+		8C9450EF0A12E3FC00C8DCAE /* OggVorbisEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggVorbisEncoderTask.h; sourceTree = "<group>"; };
+		8C9450F00A12E3FC00C8DCAE /* OggVorbisEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggVorbisEncoderTask.mm; sourceTree = "<group>"; };
+		8C9450F10A12E3FC00C8DCAE /* SpeexEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SpeexEncoderTask.h; sourceTree = "<group>"; };
+		8C9450F20A12E3FC00C8DCAE /* SpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoderTask.m; sourceTree = "<group>"; };
+		8C9450F30A12E3FC00C8DCAE /* WavPackEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WavPackEncoderTask.h; sourceTree = "<group>"; };
+		8C9450F40A12E3FC00C8DCAE /* WavPackEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoderTask.m; sourceTree = "<group>"; };
+		8C9450F60A12E3FC00C8DCAE /* BasicRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BasicRipperTask.h; sourceTree = "<group>"; };
+		8C9450F70A12E3FC00C8DCAE /* BasicRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = BasicRipperTask.m; sourceTree = "<group>"; };
+		8C9450F80A12E3FC00C8DCAE /* ComparisonRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ComparisonRipperTask.h; sourceTree = "<group>"; };
+		8C9450F90A12E3FC00C8DCAE /* ComparisonRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ComparisonRipperTask.m; sourceTree = "<group>"; };
+		8C9450FA0A12E3FC00C8DCAE /* ParanoiaRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ParanoiaRipperTask.h; sourceTree = "<group>"; };
+		8C9450FB0A12E3FC00C8DCAE /* ParanoiaRipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ParanoiaRipperTask.m; sourceTree = "<group>"; };
+		8C9450FC0A12E3FC00C8DCAE /* RipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RipperTask.h; sourceTree = "<group>"; };
+		8C9450FD0A12E3FC00C8DCAE /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
+		8C94512D0A12E45B00C8DCAE /* CueSheetDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CueSheetDocument.h; sourceTree = "<group>"; };
+		8C94512E0A12E45B00C8DCAE /* CueSheetDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CueSheetDocument.m; sourceTree = "<group>"; };
+		8C9451360A12E4D700C8DCAE /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
+		8C9451370A12E4D700C8DCAE /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
+		8C9451380A12E4D700C8DCAE /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
+		8C9451390A12E4D700C8DCAE /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
+		8C94513A0A12E4D700C8DCAE /* CompactDiscDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocument.h; sourceTree = "<group>"; };
+		8C94513B0A12E4D700C8DCAE /* CompactDiscDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocument.m; sourceTree = "<group>"; };
+		8C94513C0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentToolbar.h; sourceTree = "<group>"; };
+		8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
+		8C94513E0A12E4D700C8DCAE /* GetPlaylistNameSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GetPlaylistNameSheet.h; sourceTree = "<group>"; };
+		8C94513F0A12E4D700C8DCAE /* GetPlaylistNameSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GetPlaylistNameSheet.m; sourceTree = "<group>"; };
+		8C9451400A12E4D700C8DCAE /* Track.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		8C9451410A12E4D700C8DCAE /* Track.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		8CA3FB9B09BF5B1A00BB1BD4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
 		8CA5229E0938E5DD00250BE8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Log.nib; sourceTree = "<group>"; };
 		8CA6DE2E09D059FC0047C35C /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
@@ -830,13 +830,13 @@
 			isa = PBXGroup;
 			children = (
 				8C53022A0A05D6D800890518 /* Drive */,
-				8C5301B90A05D35800890518 /* Compact Disc */,
-				8C5301DF0A05D44300890518 /* Cue Sheet */,
+				8C9451350A12E4D700C8DCAE /* CompactDisc */,
+				8C94512C0A12E45B00C8DCAE /* CueSheet */,
 				8C5300B00A05D18E00890518 /* Controllers */,
 				8C5300980A05CFDA00890518 /* Tasks */,
-				8C5300870A05CFD400890518 /* Ripper Tasks */,
-				8C53005C0A05CFC700890518 /* Encoder Tasks */,
-				8C5300350A05CFBB00890518 /* Converter Tasks */,
+				8C9450F50A12E3FC00C8DCAE /* RipperTasks */,
+				8C9450CD0A12E3FC00C8DCAE /* ConverterTasks */,
+				8C9450E00A12E3FC00C8DCAE /* EncoderTasks */,
 				8C53FF7E0A05CD4100890518 /* Rippers */,
 				8C53FF990A05CD9A00890518 /* Converters */,
 				8C53FEF30A05CB8E00890518 /* Encoders */,
@@ -975,76 +975,6 @@
 			name = Strings;
 			sourceTree = "<group>";
 		};
-		8C5300350A05CFBB00890518 /* Converter Tasks */ = {
-			isa = PBXGroup;
-			children = (
-				8C5300360A05CFBB00890518 /* ConverterTask.h */,
-				8C5300370A05CFBB00890518 /* ConverterTask.m */,
-				8C5300390A05CFBB00890518 /* CoreAudioConverterTask.h */,
-				8C53003A0A05CFBB00890518 /* CoreAudioConverterTask.m */,
-				8C53003B0A05CFBB00890518 /* FLACConverterTask.h */,
-				8C53003C0A05CFBB00890518 /* FLACConverterTask.m */,
-				8C53003D0A05CFBB00890518 /* LibsndfileConverterTask.h */,
-				8C53003E0A05CFBC00890518 /* LibsndfileConverterTask.m */,
-				8C53003F0A05CFBC00890518 /* MonkeysAudioConverterTask.h */,
-				8C5300400A05CFBC00890518 /* MonkeysAudioConverterTask.m */,
-				8C5300410A05CFBC00890518 /* OggFLACConverterTask.h */,
-				8C5300420A05CFBC00890518 /* OggFLACConverterTask.m */,
-				8C5300430A05CFBC00890518 /* OggVorbisConverterTask.h */,
-				8C5300440A05CFBC00890518 /* OggVorbisConverterTask.m */,
-				8C5300450A05CFBC00890518 /* SpeexConverterTask.h */,
-				8C5300460A05CFBC00890518 /* SpeexConverterTask.m */,
-				8C5300470A05CFBC00890518 /* WavPackConverterTask.h */,
-				8C5300480A05CFBC00890518 /* WavPackConverterTask.m */,
-			);
-			name = "Converter Tasks";
-			path = "Tasks/Converter Tasks";
-			sourceTree = "<group>";
-		};
-		8C53005C0A05CFC700890518 /* Encoder Tasks */ = {
-			isa = PBXGroup;
-			children = (
-				8C53005D0A05CFC700890518 /* CoreAudioEncoderTask.h */,
-				8C53005E0A05CFC700890518 /* CoreAudioEncoderTask.m */,
-				8C53005F0A05CFC700890518 /* EncoderTask.h */,
-				8C5300600A05CFC700890518 /* EncoderTask.m */,
-				8C5300620A05CFC700890518 /* FLACEncoderTask.h */,
-				8C5300630A05CFC700890518 /* FLACEncoderTask.m */,
-				8C5300640A05CFC700890518 /* LibsndfileEncoderTask.h */,
-				8C5300650A05CFC700890518 /* LibsndfileEncoderTask.m */,
-				8C5300660A05CFC700890518 /* MonkeysAudioEncoderTask.h */,
-				8C5300670A05CFC700890518 /* MonkeysAudioEncoderTask.mm */,
-				8C5300680A05CFC700890518 /* MPEGEncoderTask.h */,
-				8C5300690A05CFC700890518 /* MPEGEncoderTask.mm */,
-				8C53006A0A05CFC700890518 /* OggFLACEncoderTask.h */,
-				8C53006B0A05CFC700890518 /* OggFLACEncoderTask.mm */,
-				8C53006C0A05CFC700890518 /* OggVorbisEncoderTask.h */,
-				8C53006D0A05CFC700890518 /* OggVorbisEncoderTask.mm */,
-				8C53006E0A05CFC700890518 /* SpeexEncoderTask.h */,
-				8C53006F0A05CFC700890518 /* SpeexEncoderTask.m */,
-				8C5300700A05CFC700890518 /* WavPackEncoderTask.h */,
-				8C5300710A05CFC700890518 /* WavPackEncoderTask.m */,
-			);
-			name = "Encoder Tasks";
-			path = "Tasks/Encoder Tasks";
-			sourceTree = "<group>";
-		};
-		8C5300870A05CFD400890518 /* Ripper Tasks */ = {
-			isa = PBXGroup;
-			children = (
-				8C5300880A05CFD400890518 /* BasicRipperTask.h */,
-				8C5300890A05CFD400890518 /* BasicRipperTask.m */,
-				8C53008A0A05CFD400890518 /* ComparisonRipperTask.h */,
-				8C53008B0A05CFD400890518 /* ComparisonRipperTask.m */,
-				8C53008C0A05CFD400890518 /* ParanoiaRipperTask.h */,
-				8C53008D0A05CFD400890518 /* ParanoiaRipperTask.m */,
-				8C53008E0A05CFD400890518 /* RipperTask.h */,
-				8C53008F0A05CFD400890518 /* RipperTask.m */,
-			);
-			name = "Ripper Tasks";
-			path = "Tasks/Ripper Tasks";
-			sourceTree = "<group>";
-		};
 		8C5300980A05CFDA00890518 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1080,34 +1010,6 @@
 				8C5300C00A05D18F00890518 /* RipperController.m */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		8C5301B90A05D35800890518 /* Compact Disc */ = {
-			isa = PBXGroup;
-			children = (
-				8C5301DA0A05D40A00890518 /* CompactDiscDocumentToolbar.h */,
-				8C5301DB0A05D40A00890518 /* CompactDiscDocumentToolbar.m */,
-				8C5301D10A05D3B900890518 /* AmazonAlbumArtSheet.h */,
-				8C5301D20A05D3B900890518 /* AmazonAlbumArtSheet.m */,
-				8C5301D30A05D3B900890518 /* GetPlaylistNameSheet.h */,
-				8C5301D40A05D3B900890518 /* GetPlaylistNameSheet.m */,
-				8C5301BA0A05D35800890518 /* CompactDisc.h */,
-				8C5301BB0A05D35800890518 /* CompactDisc.m */,
-				8C5301BC0A05D35800890518 /* CompactDiscDocument.h */,
-				8C5301BD0A05D35800890518 /* CompactDiscDocument.m */,
-				8C5301BE0A05D35800890518 /* Track.h */,
-				8C5301BF0A05D35800890518 /* Track.m */,
-			);
-			path = "Compact Disc";
-			sourceTree = "<group>";
-		};
-		8C5301DF0A05D44300890518 /* Cue Sheet */ = {
-			isa = PBXGroup;
-			children = (
-				8C5301E00A05D44300890518 /* CueSheetDocument.h */,
-				8C5301E10A05D44300890518 /* CueSheetDocument.m */,
-			);
-			path = "Cue Sheet";
 			sourceTree = "<group>";
 		};
 		8C5301F10A05D5D800890518 /* Images */ = {
@@ -1399,6 +1301,104 @@
 			path = Preferences/EncoderSettingsSheets;
 			sourceTree = "<group>";
 		};
+		8C9450CD0A12E3FC00C8DCAE /* ConverterTasks */ = {
+			isa = PBXGroup;
+			children = (
+				8C9450CE0A12E3FC00C8DCAE /* ConverterTask.h */,
+				8C9450CF0A12E3FC00C8DCAE /* ConverterTask.m */,
+				8C9450D00A12E3FC00C8DCAE /* CoreAudioConverterTask.h */,
+				8C9450D10A12E3FC00C8DCAE /* CoreAudioConverterTask.m */,
+				8C9450D20A12E3FC00C8DCAE /* FLACConverterTask.h */,
+				8C9450D30A12E3FC00C8DCAE /* FLACConverterTask.m */,
+				8C9450D40A12E3FC00C8DCAE /* LibsndfileConverterTask.h */,
+				8C9450D50A12E3FC00C8DCAE /* LibsndfileConverterTask.m */,
+				8C9450D60A12E3FC00C8DCAE /* MonkeysAudioConverterTask.h */,
+				8C9450D70A12E3FC00C8DCAE /* MonkeysAudioConverterTask.m */,
+				8C9450D80A12E3FC00C8DCAE /* OggFLACConverterTask.h */,
+				8C9450D90A12E3FC00C8DCAE /* OggFLACConverterTask.m */,
+				8C9450DA0A12E3FC00C8DCAE /* OggVorbisConverterTask.h */,
+				8C9450DB0A12E3FC00C8DCAE /* OggVorbisConverterTask.m */,
+				8C9450DC0A12E3FC00C8DCAE /* SpeexConverterTask.h */,
+				8C9450DD0A12E3FC00C8DCAE /* SpeexConverterTask.m */,
+				8C9450DE0A12E3FC00C8DCAE /* WavPackConverterTask.h */,
+				8C9450DF0A12E3FC00C8DCAE /* WavPackConverterTask.m */,
+			);
+			name = ConverterTasks;
+			path = Tasks/ConverterTasks;
+			sourceTree = "<group>";
+		};
+		8C9450E00A12E3FC00C8DCAE /* EncoderTasks */ = {
+			isa = PBXGroup;
+			children = (
+				8C9450E10A12E3FC00C8DCAE /* CoreAudioEncoderTask.h */,
+				8C9450E20A12E3FC00C8DCAE /* CoreAudioEncoderTask.m */,
+				8C9450E30A12E3FC00C8DCAE /* EncoderTask.h */,
+				8C9450E40A12E3FC00C8DCAE /* EncoderTask.m */,
+				8C9450E50A12E3FC00C8DCAE /* FLACEncoderTask.h */,
+				8C9450E60A12E3FC00C8DCAE /* FLACEncoderTask.m */,
+				8C9450E70A12E3FC00C8DCAE /* LibsndfileEncoderTask.h */,
+				8C9450E80A12E3FC00C8DCAE /* LibsndfileEncoderTask.m */,
+				8C9450E90A12E3FC00C8DCAE /* MonkeysAudioEncoderTask.h */,
+				8C9450EA0A12E3FC00C8DCAE /* MonkeysAudioEncoderTask.mm */,
+				8C9450EB0A12E3FC00C8DCAE /* MPEGEncoderTask.h */,
+				8C9450EC0A12E3FC00C8DCAE /* MPEGEncoderTask.mm */,
+				8C9450ED0A12E3FC00C8DCAE /* OggFLACEncoderTask.h */,
+				8C9450EE0A12E3FC00C8DCAE /* OggFLACEncoderTask.mm */,
+				8C9450EF0A12E3FC00C8DCAE /* OggVorbisEncoderTask.h */,
+				8C9450F00A12E3FC00C8DCAE /* OggVorbisEncoderTask.mm */,
+				8C9450F10A12E3FC00C8DCAE /* SpeexEncoderTask.h */,
+				8C9450F20A12E3FC00C8DCAE /* SpeexEncoderTask.m */,
+				8C9450F30A12E3FC00C8DCAE /* WavPackEncoderTask.h */,
+				8C9450F40A12E3FC00C8DCAE /* WavPackEncoderTask.m */,
+			);
+			name = EncoderTasks;
+			path = Tasks/EncoderTasks;
+			sourceTree = "<group>";
+		};
+		8C9450F50A12E3FC00C8DCAE /* RipperTasks */ = {
+			isa = PBXGroup;
+			children = (
+				8C9450F60A12E3FC00C8DCAE /* BasicRipperTask.h */,
+				8C9450F70A12E3FC00C8DCAE /* BasicRipperTask.m */,
+				8C9450F80A12E3FC00C8DCAE /* ComparisonRipperTask.h */,
+				8C9450F90A12E3FC00C8DCAE /* ComparisonRipperTask.m */,
+				8C9450FA0A12E3FC00C8DCAE /* ParanoiaRipperTask.h */,
+				8C9450FB0A12E3FC00C8DCAE /* ParanoiaRipperTask.m */,
+				8C9450FC0A12E3FC00C8DCAE /* RipperTask.h */,
+				8C9450FD0A12E3FC00C8DCAE /* RipperTask.m */,
+			);
+			name = RipperTasks;
+			path = Tasks/RipperTasks;
+			sourceTree = "<group>";
+		};
+		8C94512C0A12E45B00C8DCAE /* CueSheet */ = {
+			isa = PBXGroup;
+			children = (
+				8C94512D0A12E45B00C8DCAE /* CueSheetDocument.h */,
+				8C94512E0A12E45B00C8DCAE /* CueSheetDocument.m */,
+			);
+			path = CueSheet;
+			sourceTree = "<group>";
+		};
+		8C9451350A12E4D700C8DCAE /* CompactDisc */ = {
+			isa = PBXGroup;
+			children = (
+				8C9451360A12E4D700C8DCAE /* AmazonAlbumArtSheet.h */,
+				8C9451370A12E4D700C8DCAE /* AmazonAlbumArtSheet.m */,
+				8C9451380A12E4D700C8DCAE /* CompactDisc.h */,
+				8C9451390A12E4D700C8DCAE /* CompactDisc.m */,
+				8C94513A0A12E4D700C8DCAE /* CompactDiscDocument.h */,
+				8C94513B0A12E4D700C8DCAE /* CompactDiscDocument.m */,
+				8C94513C0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.h */,
+				8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */,
+				8C94513E0A12E4D700C8DCAE /* GetPlaylistNameSheet.h */,
+				8C94513F0A12E4D700C8DCAE /* GetPlaylistNameSheet.m */,
+				8C9451400A12E4D700C8DCAE /* Track.h */,
+				8C9451410A12E4D700C8DCAE /* Track.m */,
+			);
+			path = CompactDisc;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1606,29 +1606,6 @@
 				8C53FFBF0A05CD9A00890518 /* OggVorbisConverter.m in Sources */,
 				8C53FFC10A05CD9A00890518 /* SpeexConverter.m in Sources */,
 				8C53FFC30A05CD9A00890518 /* WavPackConverter.m in Sources */,
-				8C53004A0A05CFBC00890518 /* ConverterTask.m in Sources */,
-				8C53004D0A05CFBC00890518 /* CoreAudioConverterTask.m in Sources */,
-				8C53004F0A05CFBC00890518 /* FLACConverterTask.m in Sources */,
-				8C5300510A05CFBC00890518 /* LibsndfileConverterTask.m in Sources */,
-				8C5300530A05CFBC00890518 /* MonkeysAudioConverterTask.m in Sources */,
-				8C5300550A05CFBC00890518 /* OggFLACConverterTask.m in Sources */,
-				8C5300570A05CFBC00890518 /* OggVorbisConverterTask.m in Sources */,
-				8C5300590A05CFBC00890518 /* SpeexConverterTask.m in Sources */,
-				8C53005B0A05CFBC00890518 /* WavPackConverterTask.m in Sources */,
-				8C5300730A05CFC700890518 /* CoreAudioEncoderTask.m in Sources */,
-				8C5300750A05CFC700890518 /* EncoderTask.m in Sources */,
-				8C5300780A05CFC700890518 /* FLACEncoderTask.m in Sources */,
-				8C53007A0A05CFC700890518 /* LibsndfileEncoderTask.m in Sources */,
-				8C53007C0A05CFC700890518 /* MonkeysAudioEncoderTask.mm in Sources */,
-				8C53007E0A05CFC700890518 /* MPEGEncoderTask.mm in Sources */,
-				8C5300800A05CFC700890518 /* OggFLACEncoderTask.mm in Sources */,
-				8C5300820A05CFC700890518 /* OggVorbisEncoderTask.mm in Sources */,
-				8C5300840A05CFC700890518 /* SpeexEncoderTask.m in Sources */,
-				8C5300860A05CFC700890518 /* WavPackEncoderTask.m in Sources */,
-				8C5300910A05CFD400890518 /* BasicRipperTask.m in Sources */,
-				8C5300930A05CFD400890518 /* ComparisonRipperTask.m in Sources */,
-				8C5300950A05CFD400890518 /* ParanoiaRipperTask.m in Sources */,
-				8C5300970A05CFD400890518 /* RipperTask.m in Sources */,
 				8C53009F0A05CFEA00890518 /* PCMGeneratingTask.m in Sources */,
 				8C5300A10A05CFEA00890518 /* Task.m in Sources */,
 				8C5300C20A05D18F00890518 /* AcknowledgmentsController.m in Sources */,
@@ -1640,13 +1617,6 @@
 				8C5300CE0A05D18F00890518 /* MediaController.m in Sources */,
 				8C5300D00A05D18F00890518 /* RipperController.m in Sources */,
 				8C5301A30A05D2DB00890518 /* CompactDiscController.m in Sources */,
-				8C5301C10A05D35800890518 /* CompactDisc.m in Sources */,
-				8C5301C30A05D35800890518 /* CompactDiscDocument.m in Sources */,
-				8C5301C50A05D35800890518 /* Track.m in Sources */,
-				8C5301D60A05D3BA00890518 /* AmazonAlbumArtSheet.m in Sources */,
-				8C5301D80A05D3BA00890518 /* GetPlaylistNameSheet.m in Sources */,
-				8C5301DE0A05D40A00890518 /* CompactDiscDocumentToolbar.m in Sources */,
-				8C5301E30A05D44300890518 /* CueSheetDocument.m in Sources */,
 				8C5302250A05D66A00890518 /* CoreAudioUtilities.m in Sources */,
 				8C5302260A05D66A00890518 /* sha256-stdenis.c in Sources */,
 				8C5302280A05D66A00890518 /* UtilityFunctions.m in Sources */,
@@ -1674,6 +1644,36 @@
 				8C74F85E0A0B2D2E002260CF /* UpdateChecker.m in Sources */,
 				8C74F8690A0B2D89002260CF /* Genres.m in Sources */,
 				8C74F8930A0B307E002260CF /* ServicesProvider.m in Sources */,
+				8C9450FF0A12E3FD00C8DCAE /* ConverterTask.m in Sources */,
+				8C9451010A12E3FD00C8DCAE /* CoreAudioConverterTask.m in Sources */,
+				8C9451030A12E3FD00C8DCAE /* FLACConverterTask.m in Sources */,
+				8C9451050A12E3FD00C8DCAE /* LibsndfileConverterTask.m in Sources */,
+				8C9451070A12E3FD00C8DCAE /* MonkeysAudioConverterTask.m in Sources */,
+				8C9451090A12E3FD00C8DCAE /* OggFLACConverterTask.m in Sources */,
+				8C94510B0A12E3FD00C8DCAE /* OggVorbisConverterTask.m in Sources */,
+				8C94510D0A12E3FD00C8DCAE /* SpeexConverterTask.m in Sources */,
+				8C94510F0A12E3FD00C8DCAE /* WavPackConverterTask.m in Sources */,
+				8C9451110A12E3FD00C8DCAE /* CoreAudioEncoderTask.m in Sources */,
+				8C9451130A12E3FD00C8DCAE /* EncoderTask.m in Sources */,
+				8C9451150A12E3FD00C8DCAE /* FLACEncoderTask.m in Sources */,
+				8C9451170A12E3FD00C8DCAE /* LibsndfileEncoderTask.m in Sources */,
+				8C9451190A12E3FD00C8DCAE /* MonkeysAudioEncoderTask.mm in Sources */,
+				8C94511B0A12E3FD00C8DCAE /* MPEGEncoderTask.mm in Sources */,
+				8C94511D0A12E3FD00C8DCAE /* OggFLACEncoderTask.mm in Sources */,
+				8C94511F0A12E3FD00C8DCAE /* OggVorbisEncoderTask.mm in Sources */,
+				8C9451210A12E3FD00C8DCAE /* SpeexEncoderTask.m in Sources */,
+				8C9451230A12E3FD00C8DCAE /* WavPackEncoderTask.m in Sources */,
+				8C9451250A12E3FD00C8DCAE /* BasicRipperTask.m in Sources */,
+				8C9451270A12E3FD00C8DCAE /* ComparisonRipperTask.m in Sources */,
+				8C9451290A12E3FD00C8DCAE /* ParanoiaRipperTask.m in Sources */,
+				8C94512B0A12E3FD00C8DCAE /* RipperTask.m in Sources */,
+				8C9451300A12E45B00C8DCAE /* CueSheetDocument.m in Sources */,
+				8C9451430A12E4D700C8DCAE /* AmazonAlbumArtSheet.m in Sources */,
+				8C9451450A12E4D700C8DCAE /* CompactDisc.m in Sources */,
+				8C9451470A12E4D700C8DCAE /* CompactDiscDocument.m in Sources */,
+				8C9451490A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m in Sources */,
+				8C94514B0A12E4D700C8DCAE /* GetPlaylistNameSheet.m in Sources */,
+				8C94514D0A12E4D700C8DCAE /* Track.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
