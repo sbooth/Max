@@ -23,8 +23,8 @@
 
 static LogController	*sharedLog = nil;
 
-static NSString			*SaveLogToolbarItemIdentifier		= @"SaveLog";
-static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
+static NSString			*SaveLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Save";
+static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Clear";
 
 @interface LogController (Private)
 - (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)idx;
@@ -86,11 +86,16 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 	[self setShouldCascadeWindows:NO];
 	[self setWindowFrameAutosaveName:@"Log"];
 	[[self window] setExcludedFromWindowsMenu:YES];
+	
+	// Select the most recent log entry
+	if(0 < [self countOfLogEntries]) {
+		[_logEntriesController setSelectedObjects:[NSArray arrayWithObject:[self objectInLogEntriesAtIndex:[self countOfLogEntries] - 1]]];
+	}
 }
 
 - (void) awakeFromNib
 {
-    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"Max Log Toolbar"] autorelease];
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.Log.ToolbarIdentifier"] autorelease];
     
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
@@ -98,11 +103,13 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
     [toolbar setDelegate:self];
 	
     [[self window] setToolbar:toolbar];
+	
+	[_logEntriesController setSortDescriptors:[NSArray arrayWithObject:[[[NSSortDescriptor alloc] initWithKey:@"timestamp" ascending:NO] autorelease]]];
 }
 
 - (IBAction) clear:(id)sender
 {
-	@synchronized(self) {		
+	@synchronized(self) {
 		[self willChangeValueForKey:@"logEntries"];
 		[_logEntries removeAllObjects];
 		[self didChangeValueForKey:@"logEntries"];
@@ -156,9 +163,10 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"ClearLog";
 		NSDictionary *newEntry = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSDate date], @"unknown", message, nil]
 															 forKeys:[NSArray arrayWithObjects:@"timestamp", @"component", @"message", nil]];
 
-		[self willChangeValueForKey:@"logEntries"];
+		// Modify the array directly instead of using the controller so the entry will be registered even if the user hasn't
+		// displayed the log window
 		[self insertObject:newEntry inLogEntriesAtIndex:[self countOfLogEntries]];
-		[self didChangeValueForKey:@"logEntries"];
+		[_logEntriesController setSelectedObjects:[NSArray arrayWithObject:newEntry]];
 	}
 }
 

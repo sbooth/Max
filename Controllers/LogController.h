@@ -23,6 +23,7 @@
 @interface LogController : NSWindowController 
 {
 	NSMutableArray					*_logEntries;
+	IBOutlet NSArrayController		*_logEntriesController;
 }
 
 + (LogController *)		sharedController;
