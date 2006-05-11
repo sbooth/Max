@@ -5,6 +5,7 @@
             ACTIONS = {clear = id; save = id; }; 
             CLASS = LogController; 
             LANGUAGE = ObjC; 
+            OUTLETS = {"_logEntriesController" = NSArrayController; }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 
