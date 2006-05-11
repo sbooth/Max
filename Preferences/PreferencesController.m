@@ -202,7 +202,7 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"FreeDB", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"FreeDB", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Control the protocol and server used by FreeDB to retrieve CD information", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify the protocol and server used by FreeDB to retrieve disc information", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"FreeDBToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -213,7 +213,7 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Ripper", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Ripper", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used for CD audio extraction", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used for digital audio extraction", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"RipperToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -230,73 +230,6 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-	/*
-    else if([itemIdentifier isEqualToString:LAMEPreferencesItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"MP3", @"Preferences", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"MP3", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the MP3 encoder", @"Preferences", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"LAMEToolbarImage"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
-	} 
-    else if([itemIdentifier isEqualToString:FLACPreferencesItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"FLAC", @"Preferences", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"FLAC", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the FLAC and Ogg FLAC encoders", @"Preferences", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"FLAC"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
-	} 
-    else if([itemIdentifier isEqualToString:OggVorbisPreferencesItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Ogg Vorbis", @"Preferences", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Ogg Vorbis", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the Ogg Vorbis encoder", @"Preferences", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"OggVorbisToolbarImage"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
-	} 
-    else if([itemIdentifier isEqualToString:MonkeysAudioPreferencesItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Monkey's Audio", @"Preferences", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Monkey's Audio", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the Monkey's Audio compressor", @"Preferences", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"MonkeysAudioToolbarImage"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
-	} 
-    else if([itemIdentifier isEqualToString:SpeexPreferencesItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Speex", @"Preferences", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Speex", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the Speex encoder", @"Preferences", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"SpeexToolbarImage"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
-	} 
-    else if([itemIdentifier isEqualToString:WavPackPreferencesItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"WavPack", @"Preferences", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"WavPack", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Adjust the parameters used by the WavPack encoder", @"Preferences", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"WavPackToolbarImage"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
-	} */
 	else {
 		toolbarItem = nil;
     }

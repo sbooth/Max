@@ -280,7 +280,7 @@
 		// Rip the entire sector range the minimum number of times to achieve the required matches
 		
 		// Use maximum speed for the initial extraction
-		[self logMessage:NSLocalizedStringFromTable(@"Setting drive speed to maximum", @"Ripper", @"")];
+		[self logMessage:NSLocalizedStringFromTable(@"Setting drive speed to maximum", @"Log", @"")];
 		[_drive setSpeed:kCDSpeedMax];
 		
 		retries			= 0;
@@ -290,7 +290,7 @@
 		sectorsToRead	= [self requiredMatches] * [range length];
 		phaseStartTime	= [NSDate date];
 
-		[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"Ripper", @"")];
+		[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
 		
 		for(i = 0; i < [self requiredMatches]; ++i) {
 			// Clear the drive's cache
@@ -319,15 +319,14 @@
 				readRange		= [SectorRange rangeWithFirstSector:startSector sectorCount:sectorCount];
 
 				// Extract the audio from the disc
-				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %i - %i", @"Ripper", @""), [readRange firstSector], [readRange lastSector]]];				
+				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];				
 				sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
 				
 				if(sectorCount != sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD", @"Exceptions", @"") userInfo:nil];
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Log", @"") userInfo:nil];
 				}
 				
 				// Place the data in the Rip object
-				[self logMessage:NSLocalizedStringFromTable(@"Calculating sector hashes", @"Ripper", @"")];
 				[rip setBytes:buffer forSectorRange:readRange];
 				
 				// Housekeeping
@@ -370,8 +369,8 @@
 			sectorsToRead	= [sectorStatus countOfZeroes];
 			phaseStartTime	= [NSDate date];
 			
-			[_delegate setPhase:NSLocalizedStringFromTable(@"Verifying", @"Ripper", @"")];
-			[self logMessage:NSLocalizedStringFromTable(@"Verifying rip integrity", @"Ripper", @"")];
+			[_delegate setPhase:NSLocalizedStringFromTable(@"Verifying", @"General", @"")];
+			[self logMessage:NSLocalizedStringFromTable(@"Verifying rip integrity", @"Log", @"")];
 			
 			for(sector = [range firstSector]; sector <= [range lastSector]; ++sector) {
 				
@@ -477,12 +476,12 @@
 				// than the number of sector matches required)
 				if([self requiredMatches] < retries) {
 					[_drive setSpeed:kCDSpeedMin];
-					[self logMessage:NSLocalizedStringFromTable(@"Setting drive speed to minimum", @"Ripper", @"")];
+					[self logMessage:NSLocalizedStringFromTable(@"Setting drive speed to minimum", @"Log", @"")];
 				}
 				
 				// Abort rip if too many read errors have occurred
 				if([self maximumRetries] < retries) {
-					[self logMessage:NSLocalizedStringFromTable(@"Retry limit exceeded", @"Ripper", @"")];
+					[self logMessage:NSLocalizedStringFromTable(@"Retry limit exceeded", @"Log", @"")];
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"The retry limit was exceeded.", @"Exceptions", @"") userInfo:nil];
 				}
 			}
@@ -497,7 +496,7 @@
 			sectorsToRead	= [sectorStatus countOfZeroes];
 			phaseStartTime	= [NSDate date];
 			
-			[_delegate setPhase:NSLocalizedStringFromTable(@"Re-ripping", @"Ripper", @"")];
+			[_delegate setPhase:NSLocalizedStringFromTable(@"Re-ripping", @"General", @"")];
 
 			for(i = 0; i < [range length]; ++i) {
 				
@@ -514,10 +513,10 @@
 				
 				// Log this message here, instead of in the comparison loop, to avoid repetitive messages
 				if(blockEnd == i) {
-					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Hash mismatch for sector %i", @"Exceptions", @""), [range sectorForIndex:i]]];
+					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Mismatch for sector %i", @"Log", @""), [range sectorForIndex:i]]];
 				}
 				else {
-					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Hash mismatches for sectors %i - %i", @"Exceptions", @""), [range sectorForIndex:i], [range sectorForIndex:blockEnd]]];
+					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Mismatches for sectors %i - %i", @"Log", @""), [range sectorForIndex:i], [range sectorForIndex:blockEnd]]];
 				}
 				
 				// Adjust boundaries so drive is up to speed when it reaches the problem area if
@@ -559,19 +558,18 @@
 					
 					// Extract the audio from the disc
 					if(1 == [readRange length]) {
-						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sector %i", @"Ripper", @""), [readRange firstSector]]];
+						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sector %i", @"Log", @""), [readRange firstSector]]];
 					}
 					else {
-						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sectors %i - %i", @"Ripper", @""), [readRange firstSector], [readRange lastSector]]];
+						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];
 					}
 					sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
 					
 					if(sectorCount != sectorsRead) {
-						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD", @"Exceptions", @"") userInfo:nil];
+						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 					}
 					
 					// Place the data in the Rip object
-					[self logMessage:NSLocalizedStringFromTable(@"Calculating sector hashes", @"Ripper", @"")];
 					[rip setBytes:buffer forSectorRange:readRange];
 					
 					// Housekeeping
@@ -617,8 +615,8 @@
 		totalSectors		= [range length];
 		phaseStartTime		= [NSDate date];
 		
-		[_delegate setPhase:NSLocalizedStringFromTable(@"Saving", @"Ripper", @"")];
-		[self logMessage:NSLocalizedStringFromTable(@"Generating output", @"Ripper", @"")];
+		[_delegate setPhase:NSLocalizedStringFromTable(@"Saving", @"General", @"")];
+		[self logMessage:NSLocalizedStringFromTable(@"Generating output", @"Log", @"")];
 		
 		while(0 < sectorsRemaining) {
 			

@@ -254,8 +254,8 @@
 	ssize_t			bytesWritten	= -1;
 	unsigned		i				= 0;
 	unsigned		arrayIndex		= 0;
-	int8_t			sector			[kCDSectorSizeCDDA];
-	unsigned char	hash			[32];
+	int8_t			sector			[ kCDSectorSizeCDDA ];
+	unsigned char	hash			[ 32 ];
 	
 	if(NO == [self containsSectorRange:range]  || nil == [self filename]) {
 		return;

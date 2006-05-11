@@ -183,7 +183,7 @@ callback(long inpos, int function, void *userdata)
 	_startTime = [NSDate date];
 	[_delegate setStartTime:_startTime];
 	[_delegate setStarted];
-	[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"Ripper", @"")];
+	[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
 
 	@try {
 		// Setup output file type (same)
@@ -283,7 +283,7 @@ callback(long inpos, int function, void *userdata)
 		// Read a chunk
 		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
 		if(NULL == buf) {
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"The CD skip tolerance was exceeded.", @"Exceptions", @"") userInfo:nil];
+			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"The skip tolerance was exceeded.", @"Exceptions", @"") userInfo:nil];
 		}
 		
 		// Put the data in an AudioBufferList

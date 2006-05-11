@@ -74,7 +74,7 @@
 	_startTime = [NSDate date];
 	[_delegate setStartTime:_startTime];
 	[_delegate setStarted];
-	[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"Ripper", @"")];
+	[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
 	
 	@try {
 		// Setup output file type (same)
@@ -189,7 +189,7 @@
 			sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
 			
 			if(sectorCount != sectorsRead) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the CD", @"Exceptions", @"") userInfo:nil];
+				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 			}
 			
 			// Convert to big endian byte ordering for the AIFF file
