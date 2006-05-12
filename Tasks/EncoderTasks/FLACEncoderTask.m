@@ -155,7 +155,7 @@
 			year = [metadata albumYear];
 		}
 		if(0 != year) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"YEAR"], [NSString stringWithFormat:@"%u", year]);
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DATE"], [NSString stringWithFormat:@"%u", year]);
 		}
 		
 		// Comment
@@ -168,7 +168,7 @@
 			comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 		}
 		if(nil != comment) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMMENT"], comment);
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DESCRIPTION"], comment);
 		}
 		
 		// Track title

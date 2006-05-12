@@ -83,13 +83,13 @@
 		}
 		
 		// Add the built-in formats to the list
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"FLAC", @"Built-In", [NSNumber numberWithInt:kComponentFLAC], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"Ogg FLAC", @"Built-In", [NSNumber numberWithInt:kComponentOggFLAC], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"Monkey's Audio", @"Built-In", [NSNumber numberWithInt:kComponentMonkeysAudio], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"WavPack", @"Built-In", [NSNumber numberWithInt:kComponentWavPack], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"Ogg Vorbis", @"Built-In", [NSNumber numberWithInt:kComponentOggVorbis], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"MP3", @"Built-In", [NSNumber numberWithInt:kComponentMP3], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"Speex", @"Built-In", [NSNumber numberWithInt:kComponentSpeex], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"FLAC", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentFLAC], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Ogg FLAC", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentOggFLAC], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentMonkeysAudio], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"WavPack", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentWavPack], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentOggVorbis], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"MP3", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentMP3], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Speex", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentSpeex], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
 		
 		// Add CoreAudio formats
 		for(j = 0; j < [coreAudioFormats count]; ++j) {
@@ -97,7 +97,7 @@
 
 			objects = [NSArray arrayWithObjects:
 				[formatDictionary objectForKey:@"fileTypeName"],
-				@"Core Audio",
+				NSLocalizedStringFromTable(@"Core Audio", @"General", @""),
 				[NSNumber numberWithInt:kComponentCoreAudio],
 				[formatDictionary objectForKey:@"fileType"],
 				[formatDictionary objectForKey:@"extensionsForType"],
@@ -122,7 +122,7 @@
 
 			objects = [NSArray arrayWithObjects:
 				[formatDictionary objectForKey:@"name"],
-				@"libsndfile",
+				NSLocalizedStringFromTable(@"libsndfile", @"General", @""),
 				[NSNumber numberWithInt:kComponentLibsndfile],
 				[formatDictionary objectForKey:@"format"],
 				[formatDictionary objectForKey:@"extension"],

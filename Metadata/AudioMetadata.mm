@@ -139,10 +139,10 @@
 							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"GENRE"]]) {
 								[result setAlbumGenre:value];
 							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"YEAR"]]) {
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DATE"]]) {
 								[result setAlbumYear:[value intValue]];
 							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMMENT"]]) {
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DESCRIPTION"]]) {
 								[result setAlbumComment:value];
 							}
 							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TITLE"]]) {
@@ -171,10 +171,10 @@
 							}
 							
 							// Maintain backwards compability for the following tags
-							else if(NSOrderedSame == [key caseInsensitiveCompare:@"DATE"] && 0 == [result albumYear]) {
+							else if(NSOrderedSame == [key caseInsensitiveCompare:@"YEAR"] && 0 == [result albumYear]) {
 								[result setAlbumYear:[value intValue]];
 							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:@"DESCRIPTION"] && nil == [result albumComment]) {
+							else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMMENT"] && nil == [result albumComment]) {
 								[result setAlbumComment:value];
 							}
 							else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"] && 0 == [result albumTrackCount]) {
@@ -454,13 +454,13 @@
 				[result setAlbumGenre:value];
 			}
 
-			tag = [self customizeOggVorbisTag:@"YEAR"];
+			tag = [self customizeOggVorbisTag:@"DATE"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setAlbumYear:[value intValue]];
 			}
 
-			tag = [self customizeOggVorbisTag:@"COMMENT"];
+			tag = [self customizeOggVorbisTag:@"DESCRIPTION"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setAlbumComment:value];
@@ -520,11 +520,19 @@
 				[result setMCN:value];
 			}					
 
-			// Maintain backwards compatibility for DISCSINSET tag
-			if(fieldList.contains("DISCSINSET") && 0 != [result discTotal]) {
+			// Maintain backwards compatibility for the following tags
+			if(fieldList.contains("DISCSINSET") && 0 == [result discTotal]) {
 				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
 				[result setDiscTotal:[value intValue]];
-			}			
+			}
+			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
+				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
+				[result setDiscYear:[value intValue]];
+			}
+			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
+				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
 		}
 		
 		// Length
@@ -573,13 +581,13 @@
 				[result setAlbumGenre:value];
 			}
 			
-			tag = [self customizeOggFLACTag:@"YEAR"];
+			tag = [self customizeOggFLACTag:@"DATE"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setAlbumYear:[value intValue]];
 			}
 			
-			tag = [self customizeOggFLACTag:@"COMMENT"];
+			tag = [self customizeOggFLACTag:@"DESCRIPTION"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setAlbumComment:value];
@@ -639,11 +647,19 @@
 				[result setMCN:value];
 			}					
 			
-			// Maintain backwards compatibility for DISCSINSET tag
-			if(fieldList.contains("DISCSINSET") && 0 != [result discTotal]) {
+			// Maintain backwards compatibility for the following tags
+			if(fieldList.contains("DISCSINSET") && 0 == [result discTotal]) {
 				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
 				[result setDiscTotal:[value intValue]];
-			}			
+			}
+			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
+				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
+				[result setDiscYear:[value intValue]];
+			}
+			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
+				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
 		}
 		
 		// Length
@@ -1063,7 +1079,7 @@
 {
 	NSString *customTag;
 	
-	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"APETag_%@", tag]];
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"WavPackTag_%@", tag]];
 	return (nil == customTag ? tag : customTag);
 }
 
@@ -1363,7 +1379,6 @@
 
 - (NSString *) replaceKeywordsInString:(NSString *)namingScheme
 {
-	
 	NSMutableString		*customPath			= [NSMutableString stringWithCapacity:100];
 	
 	// Get the elements needed for the substitutions

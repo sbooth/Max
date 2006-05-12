@@ -112,14 +112,14 @@
 - (void)				setLastSession:(unsigned)session		{ _lastSession = session; }
 
 - (unsigned)			firstSector								{ return [[self trackNumber:[self firstTrack]] firstSector]; }
-- (unsigned)			lastSector								{ return [self leadOut]; }
+- (unsigned)			lastSector								{ return [self leadOut] - 1; }
 
 - (unsigned)			firstSectorForTrack:(unsigned)number	{ return [[self trackNumber:number] firstSector]; }
 - (unsigned)			lastSectorForTrack:(unsigned)number
 {
 	TrackDescriptor		*track	= [self trackNumber:number + 1];
 	
-	return (nil == track ? [self leadOut] - 1 : [track firstSector] - 1);
+	return (nil == track ? [self lastSector] : [track firstSector] - 1);
 }
 
 - (unsigned)			firstTrack								{ return _firstTrack; }

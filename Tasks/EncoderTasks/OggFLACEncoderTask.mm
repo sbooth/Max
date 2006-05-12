@@ -108,7 +108,7 @@
 		year = [metadata albumYear];
 	}
 	if(0 != year) {
-		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"YEAR"], TagLib::String([[NSString stringWithFormat:@"%u", year] UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"DATE"], TagLib::String([[NSString stringWithFormat:@"%u", year] UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Comment
@@ -121,7 +121,7 @@
 		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 	}
 	if(nil != comment) {
-		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"COMMENT"], TagLib::String([comment UTF8String], TagLib::String::UTF8));
+		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"DESCRIPTION"], TagLib::String([comment UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Track title

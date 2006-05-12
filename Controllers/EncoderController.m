@@ -57,7 +57,7 @@ static EncoderController *sharedController = nil;
 - (void)	addTask:(EncoderTask *)task;
 - (void)	removeTask:(EncoderTask *)task;
 - (void)	spawnThreads;
-- (void)	addFileToiTunesLibrary:(NSString *)filename playlist:(NSString *)playlist;
+- (void)	addFileToiTunesLibrary:(NSString *)filename metadata:(AudioMetadata *)metadata;
 @end
 
 @implementation EncoderController
@@ -129,7 +129,7 @@ static EncoderController *sharedController = nil;
 	long double				freeSpace;
 	unsigned				divisions;
 	
-	if(-1 == statfs([[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] fileSystemRepresentation], &buf)) {
+	if(-1 == statfs([[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] fileSystemRepresentation], &buf)) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
@@ -213,94 +213,6 @@ static EncoderController *sharedController = nil;
 		}
 		
 	}
-	
-	/*
-	NSArray			*libsndfileFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"];
-	NSArray			*coreAudioFormats	= [[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"];
-	
-	// Create encoder tasks for the rip/convert that just completed
-	@try {
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"]) {
-			[self runEncoder:[MPEGEncoderTask class] forTask:task];
-		}
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"]) {
-			[self runEncoder:[FLACEncoderTask class] forTask:task];
-		}
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"]) {
-			[self runEncoder:[OggFLACEncoderTask class] forTask:task];
-		}
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"]) {
-			[self runEncoder:[OggVorbisEncoderTask class] forTask:task];
-		}
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputMonkeysAudio"]) {
-			[self runEncoder:[MonkeysAudioEncoderTask class] forTask:task];
-		}
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"]) {
-			[self runEncoder:[SpeexEncoderTask class] forTask:task];
-		}
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"outputWavPack"]) {
-			[self runEncoder:[WavPackEncoderTask class] forTask:task];
-		}
-		
-		// Core Audio encoders
-		if(nil != coreAudioFormats && 0 < [coreAudioFormats count]) {
-			EncoderTask		*encoderTask;
-			NSEnumerator	*formats		= [coreAudioFormats objectEnumerator];
-			NSDictionary	*formatInfo;
-			
-			while((formatInfo = [formats nextObject])) {
-				
-				encoderTask = [[CoreAudioEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
-				
-				if([task isKindOfClass:[RipperTask class]]) {
-					[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
-				}
-				
-				// Show the encoder window if it is hidden
-				if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
-					[[self window] orderFront:self];
-				}
-				
-				// Add the encoder to our list of encoding tasks
-				[self addTask:[encoderTask autorelease]];
-				[self spawnThreads];
-			}
-		}
-		
-		// libsndfile encoders
-		if(nil != libsndfileFormats && 0 < [libsndfileFormats count]) {
-			NSEnumerator	*formats		= [libsndfileFormats objectEnumerator];
-			NSDictionary	*formatInfo;
-			
-			while((formatInfo = [formats nextObject])) {
-				
-				EncoderTask *encoderTask = [[LibsndfileEncoderTask alloc] initWithTask:task formatInfo:formatInfo];
-				
-				if([task isKindOfClass:[RipperTask class]]) {
-					[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
-				}
-				
-				// Show the encoder window if it is hidden
-				if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
-					[[self window] orderFront:self];
-				}
-				
-				// Add the encoder to our list of encoding tasks
-				[self addTask:[encoderTask autorelease]];
-				[self spawnThreads];
-			}
-		}
-	}
-	
-	@catch(NSException *exception) {
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[task outputFilename] lastPathComponent]]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[alert runModal];
-	}
-	 */
 }
 
 - (void) runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task userInfo:(NSDictionary *)userInfo
@@ -463,10 +375,20 @@ static EncoderController *sharedController = nil;
 	}
 
 	// Add files to iTunes if desired
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && ([task isKindOfClass:[MPEGEncoderTask class]] ||
-		([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [(CoreAudioEncoderTask *)task fileType] || kAudioFileM4AType == [(CoreAudioEncoderTask *)task fileType] || kAudioFileWAVEType == [(CoreAudioEncoderTask *)task fileType])) ||
-		([task isKindOfClass:[LibsndfileEncoderTask class]] && (SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK) || SF_FORMAT_WAV == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK))))) {
-		[self addFileToiTunesLibrary:[task outputFilename] playlist:[[task metadata] playlist]];
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"]) {
+	
+		// File already contains metadata, just use the playlist
+		if([task isKindOfClass:[MPEGEncoderTask class]] || ([task isKindOfClass:[CoreAudioEncoderTask class]] && kAudioFileM4AType == [(CoreAudioEncoderTask *)task fileType])) {
+			AudioMetadata	*metadata = [[[AudioMetadata alloc] init] autorelease];
+			
+			[metadata setPlaylist:[[task metadata] playlist]];
+			[self addFileToiTunesLibrary:[task outputFilename] metadata:metadata];
+		}
+		// Need to set metadata using AppleScript
+		else if(([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [(CoreAudioEncoderTask *)task fileType] || kAudioFileWAVEType == [(CoreAudioEncoderTask *)task fileType])) ||
+				([task isKindOfClass:[LibsndfileEncoderTask class]] && (SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK) || SF_FORMAT_WAV == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK)))) {
+			[self addFileToiTunesLibrary:[task outputFilename] metadata:[task metadata]];
+		}
 	}
 }
 
@@ -510,18 +432,22 @@ static EncoderController *sharedController = nil;
 	}
 }
 
-- (void) addFileToiTunesLibrary:(NSString *)filename playlist:(NSString *)playlist
+- (void) addFileToiTunesLibrary:(NSString *)filename metadata:(AudioMetadata *)metadata
 {
 	NSDictionary				*errors				= [NSDictionary dictionary];
-	NSString					*path;
-	NSAppleScript				*appleScript;
-	NSAppleEventDescriptor		*firstParameter, *secondParameter;
-	NSAppleEventDescriptor		*parameters;
+	NSString					*path				= nil;
+	NSAppleScript				*appleScript		= nil;
+	NSAppleEventDescriptor		*parameters			= nil;
 	ProcessSerialNumber			psn					= { 0, kCurrentProcess };
-	NSAppleEventDescriptor		*target;
-	NSAppleEventDescriptor		*handler;
-	NSAppleEventDescriptor		*event;
-	NSAppleEventDescriptor		*result;
+	NSAppleEventDescriptor		*target				= nil;
+	NSAppleEventDescriptor		*handler			= nil;
+	NSAppleEventDescriptor		*event				= nil;
+	NSAppleEventDescriptor		*result				= nil;
+	NSString					*artist				= nil;
+	NSString					*composer			= nil;
+	NSString					*genre				= nil;
+	unsigned					year				= 0;
+	NSString					*comment			= nil;
 	
 	
 	@try {
@@ -533,15 +459,32 @@ static EncoderController *sharedController = nil;
 
 		appleScript = [[[NSAppleScript alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] error:&errors] autorelease];
 		if(nil == appleScript) {
-			@throw [NSException exceptionWithName:@"AppleScriptError" reason:@"Unable to setup AppleScript." userInfo:nil];
+			@throw [NSException exceptionWithName:@"AppleScriptError" reason:@"Unable to setup AppleScript." userInfo:errors];
 		}
-
-		firstParameter	= [NSAppleEventDescriptor descriptorWithString:filename];
-		secondParameter	= [NSAppleEventDescriptor descriptorWithString:(nil == playlist ? @"" : playlist)];
+		
+		// Metadata fallback
+		artist		= (nil == [metadata trackArtist] ? [metadata albumArtist] : [metadata trackArtist]);
+		composer	= (nil == [metadata trackComposer] ? [metadata albumArtist] : [metadata albumComposer]);
+		genre		= (nil == [metadata trackGenre] ? [metadata albumGenre] : [metadata trackGenre]);
+		year		= (0 == [metadata trackYear] ? [metadata albumYear] : [metadata trackYear]);
+		comment		= (nil == [metadata albumComment] ? [metadata trackComment] : (nil == [metadata trackComment] ? [metadata albumComment] : [NSString stringWithFormat:@"%@\n%@", [metadata trackComment], [metadata albumComment]]));
+		
 		parameters		= [NSAppleEventDescriptor listDescriptor];
 		
-		[parameters insertDescriptor:firstParameter atIndex:1];
-		[parameters insertDescriptor:secondParameter atIndex:2];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:filename]															atIndex:1];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata playlist] ? @"" : [metadata playlist])]			atIndex:2];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata albumTitle] ? @"" : [metadata albumTitle])]		atIndex:3];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == artist ? @"" : artist)]									atIndex:4];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == composer ? @"" : composer)]								atIndex:5];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == genre ? @"" : genre)]										atIndex:6];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:year]																atIndex:7];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == comment ? @"" : comment)]									atIndex:8];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata trackTitle] ? @"" : [metadata trackTitle])]		atIndex:9];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata trackNumber]]											atIndex:10];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata albumTrackCount]]										atIndex:11];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithBoolean:[metadata compilation]]											atIndex:12];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata discNumber]]												atIndex:13];
+		[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata discTotal]]												atIndex:14];
 		
 		target			= [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber bytes:&psn length:sizeof(psn)];
 		handler			= [NSAppleEventDescriptor descriptorWithString:[@"add_file_to_itunes_library" lowercaseString]];
@@ -553,7 +496,7 @@ static EncoderController *sharedController = nil;
 		// Call the event in AppleScript
 		result = [appleScript executeAppleEvent:event error:&errors];
 		if(nil == result) {
-			@throw [NSException exceptionWithName:@"AppleScriptError" reason:[errors objectForKey:NSAppleScriptErrorMessage] userInfo:nil];
+			@throw [NSException exceptionWithName:@"AppleScriptError" reason:[errors objectForKey:NSAppleScriptErrorMessage] userInfo:errors];
 		}
 	}
 	
@@ -564,7 +507,7 @@ static EncoderController *sharedController = nil;
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];
-	}	
+	}
 }
 
 @end

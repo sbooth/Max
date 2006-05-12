@@ -219,7 +219,8 @@ enum {
 		
 		bitmapData			= getBitmapDataForImage([[_task metadata] albumArt], fileType);
 		bitmapBasename		= [[basename stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[_task metadata] replaceKeywordsInString:makeStringSafeForFilename(namingScheme)]];
-		bitmapFilename		= generateUniqueFilename(bitmapBasename, extension);
+		//bitmapFilename		= generateUniqueFilename(bitmapBasename, extension);
+		bitmapFilename		= [bitmapBasename stringByAppendingPathExtension:extension];
 
 		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:bitmapFilename]) {
 			[bitmapData writeToFile:bitmapFilename atomically:NO];		
