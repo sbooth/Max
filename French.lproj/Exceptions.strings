@@ -5,10 +5,10 @@
 "An error occurred during file conversion." = "Une erreur est intervenue pendant la conversion.";
 
 /* No comment provided by engineer. */
-"An error occurred on device %s." = "An error occurred on device %s.";
+"An error occurred on device %s." = "Une erreur est intervenue sur le périphérique %s.";
 
 /* No comment provided by engineer. */
-"An error occurred while accessing the disc on device %@." = "An error occurred while accessing the disc on device %@.";
+"An error occurred while accessing the disc on device %@." = "Une erreur est intervenue en accédant au disque sur le périphérique %@.";
 
 /* No comment provided by engineer. */
 "An error occurred while adding the file \"%@\" to the iTunes library." = "Une erreur est survenue lors de l'ajout du fichier  \"%@\" à la bibliothèque iTunes.";
@@ -62,7 +62,7 @@
 "LAME encoding error." = "Erreur d'encodage LAME.";
 
 /* No comment provided by engineer. */
-"LAME only supports one or two channel input." = "LAME only supports one or two channel input.";
+"LAME only supports one or two channel input." = "LAME supporte seulement un ou deux cannaux d'entrée.";
 
 /* No comment provided by engineer. */
 "LAME was unable to flush the buffers." = "Impossible pour LAME de vider les buffers.";
@@ -80,7 +80,7 @@
 "No tracks selected for encoding." = "Pas de piste sélectionnée pour l'encodage.";
 
 /* No comment provided by engineer. */
-"Speex only supports one or two channel input." = "Speex only supports one or two channel input.";
+"Speex only supports one or two channel input." = "Speex supporte seulement un ou deux cannaux d'entrée.";
 
 /* No comment provided by engineer. */
 "Ogg Vorbis decode error" = "Erreur de décodage Ogg Vorbis";
@@ -101,10 +101,10 @@
 "The FreeDB query index was out of bounds." = "L'interrogation FreeDB était incohérente.";
 
 /* No comment provided by engineer. */
-"The retry limit was exceeded." = "The retry limit was exceeded.";
+"The retry limit was exceeded." = "Limite d'essais atteinte.";
 
 /* No comment provided by engineer. */
-"The skip tolerance was exceeded." = "The skip tolerance was exceeded.";
+"The skip tolerance was exceeded." = "Limite de tolérance atteinte.";
 
 /* No comment provided by engineer. */
 "The Speex mode number %i was not recognized." = "Le numéro de mode %i Speex n'a pas été reconnue.";
@@ -128,7 +128,7 @@
 "Unable to close the cue sheet." = "Fermeture de la feuille de sélection impossible.";
 
 /* No comment provided by engineer. */
-"Unable to close the drive." = "Unable to close the drive.";
+"Unable to close the drive." = "Fermeture du disque impossible.";
 
 /* No comment provided by engineer. */
 "Unable to close the input file." = "Fermeture du fichier d'entrée impossible";
@@ -197,7 +197,7 @@
 "Unable to get information on the input file." = "Lecture des informations du fichier d'entrée impossible.";
 
 /* No comment provided by engineer. */
-"Unable to get the drive's speed" = "Unable to get the drive's speed";
+"Unable to get the drive's speed" = "Obtention de la vitesse de lecture impossible";
 
 /* No comment provided by engineer. */
 "Unable to initialize the LAME encoder." = "Initialisation de l'encodeur LAME impossible.";
@@ -224,7 +224,7 @@
 "Unable to locate the output file." = "Impossible de trouver le fichier de sortie.";
 
 /* No comment provided by engineer. */
-"Unable to open the drive for reading." = "Unable to open the drive for reading.";
+"Unable to open the drive for reading." = "Ouverture du disque en lecture impossible.";
 
 /* No comment provided by engineer. */
 "Unable to open the input file." = "Ouverture du fichier d'entrée impossible.";
@@ -236,31 +236,30 @@
 "Unable to open the output file." = "Ouverture du fichier de sortie impossible.";
 
 /* No comment provided by engineer. */
-"Unable to read from the disc." = "Unable to read from the disc.";
+"Unable to read from the disc." = "Lecture du disque impossible.";
 
 /* No comment provided by engineer. */
 "Unable to read from the input file." = "Lecture du format d'entrée impossible.";
 
 /* No comment provided by engineer. */
-"Unable to read the disc's media catalog number (MCN)" = "Unable to read the disc's media catalog number (MCN)";
+"Unable to read the disc's media catalog number (MCN)" = "Lecture du numéro de catalogue impossible (MCN)";
 
 /* No comment provided by engineer. */
-"Unable to read the disc's table of contents." = "Unable to read the disc's table of contents.";
+"Unable to read the disc's table of contents." = "Lecture de la table des matières du disque impossible.";
 
 /* No comment provided by engineer. */
-"Unable to read the international standard recording code (ISRC) for track %i" = "Unable to read the international standard recording code (ISRC) for track %i";
-
+"Unable to read the international standard recording code (ISRC) for track %i" = "Lecture du code standard international d'enregistrement (ISRC) pour la piste %i impossible";
 /* No comment provided by engineer. */
 "Unable to read the Speex header." = "Lecture de l'en-tête Speex impossible.";
 
 /* No comment provided by engineer. */
-"Unable to seek in the input file." = "Unable to seek in the input file.";
+"Unable to seek in the input file." = "Analyse du fichier d'entrée impossible.";
 
 /* No comment provided by engineer. */
-"Unable to seek in the output file." = "Unable to seek in the output file.";
+"Unable to seek in the output file." = "Analyse du fichier de sortie impossible.";
 
 /* No comment provided by engineer. */
-"Unable to set the drive's speed" = "Unable to set the drive's speed";
+"Unable to set the drive's speed" = "Réglage de la vitesse du lecteur impossible";
 
 /* No comment provided by engineer. */
 "Unable to start the Monkey's Audio compressor." = "Démarrage du compresseur Monkey's Audio impossible.";
