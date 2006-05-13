@@ -20,14 +20,14 @@
 
 #import "CompactDiscDocumentToolbar.h"
 
-static NSString		*EncodeToolbarItemIdentifier				= @"Encode";
-static NSString		*TrackInfoToolbarItemIdentifier				= @"TrackInfo";
-static NSString		*AlbumArtToolbarItemIdentifier				= @"AlbumArt";
-static NSString		*SelectNextTrackToolbarItemIdentifier		= @"SelectNextTrack";
-static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"SelectPreviousTrack";
-static NSString		*QueryFreeDBToolbarItemIdentifier			= @"QueryFreeDB";
-static NSString		*SubmitToFreeDBToolbarItemIdentifier		= @"SubmitToFreeDB";
-static NSString		*EjectDiscToolbarItemIdentifier				= @"EjectDisc";
+static NSString		*EncodeToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.Encode";
+static NSString		*TrackInfoToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.TrackInfo";
+static NSString		*AlbumArtToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.AlbumArt";
+static NSString		*SelectNextTrackToolbarItemIdentifier		= @"org.sbooth.Max.CompactDiscDocument.Toolbar.SelectNextTrack";
+static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.CompactDiscDocument.Toolbar.SelectPreviousTrack";
+static NSString		*QueryFreeDBToolbarItemIdentifier			= @"org.sbooth.Max.CompactDiscDocument.Toolbar.QueryFreeDB";
+static NSString		*SubmitToFreeDBToolbarItemIdentifier		= @"org.sbooth.Max.CompactDiscDocument.Toolbar.SubmitToFreeDB";
+static NSString		*EjectDiscToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.EjectDisc";
 
 enum {
 	kEncodeToolbarItemTag					= 1,
@@ -44,7 +44,7 @@ enum {
 
 - (id) initWithCompactDiscDocument:(CompactDiscDocument *)document
 {
-	if((self = [super initWithIdentifier:@"Max CompactDiscDocumentToolbar"])) {
+	if((self = [super initWithIdentifier:@"org.sbooth.Max.CompactDiscDocument.Toolbar"])) {
 		_document = [document retain];
 		return self;
 	}
@@ -88,7 +88,7 @@ enum {
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Encode", @"CompactDisc", @"")];
 		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Encode the selected tracks", @"CompactDisc", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"EncodeToolbarImage"]];
-		
+
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(encode:)];
 	}

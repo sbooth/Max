@@ -25,13 +25,13 @@
 
 static PreferencesController	*sharedPreferences			= nil;
 
-NSString *GeneralPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.General";
-NSString *FormatsPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Formats";
-NSString *OutputPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Output";
-NSString *TaggingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Tagging";
-NSString *FreeDBPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.FreeDB";
-NSString *RipperPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Ripper";
-NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.AlbumArt";
+NSString *GeneralPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.General";
+NSString *FormatsPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Formats";
+NSString *OutputPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Output";
+NSString *TaggingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Tagging";
+NSString *FreeDBPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.FreeDB";
+NSString *RipperPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Ripper";
+NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.AlbumArt";
 
 @interface PreferencesController (Private)
 - (void) selectPreferencePaneUsingToolbar:(id)sender;
@@ -121,7 +121,7 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 {
     NSToolbar		*toolbar;
 	
-    toolbar = [[[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.Preferences.ToolbarIdentifier"] autorelease];
+    toolbar = [[[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.Preferences.Toolbar"] autorelease];
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
     
