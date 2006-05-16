@@ -33,6 +33,7 @@
 {
 	if((self = [super init])) {
 		unsigned				i;
+		unsigned				session			= 1;
 		unsigned long			discLength		= 150;
 		Drive					*drive			= nil;
 		TrackDescriptor			*track			= nil;
@@ -44,17 +45,23 @@
 		// To avoid keeping an open file descriptor, read the disc's properties from the drive
 		// and store them in our ivars
 		drive = [[[Drive alloc] initWithDeviceName:[self deviceName]] autorelease];
+
+		// Is this is a multisession disc?
+		if([drive lastSession] - [drive firstSession] > 1) {
+			// Use first sector for now
+			session = 1;
+		}
 		
 		// Disc information
-		_firstSector	= [[drive trackNumber:[drive firstTrack]] firstSector];
-		_lastSector		= [drive leadOut];
+		_firstSector	= [drive firstSectorForSession:session];
+		_lastSector		= [drive lastSectorForSession:session];
 
 		_MCN = [[drive readMCN] retain];
 		
 		// Iterate through the tracks and get their information
 		_tracks		= [[NSMutableArray arrayWithCapacity:[drive countOfTracks] + 1] retain];
 		
-		for(i = [drive firstTrack]; i <= [drive lastTrack]; ++i) {
+		for(i = [drive firstTrackForSession:session]; i <= [drive lastTrackForSession:session]; ++i) {
 
 			track = [drive trackNumber:i];
 			
@@ -76,7 +83,7 @@
 			if(nil != ISRC) {
 				[trackInfo setObject:ISRC forKey:@"ISRC"];
 			}
-			
+
 			[_tracks addObject:trackInfo];
 		}
 		
