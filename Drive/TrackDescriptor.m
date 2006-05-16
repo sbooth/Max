@@ -63,7 +63,7 @@
 
 - (NSString *) description
 {
-	return [NSString stringWithFormat:@"session %i, track %i, first sector %i", [self session], [self number], [self firstSector]];
+	return [NSString stringWithFormat:@"{\n\tSession: %u\n\tTrack: %u\n\tFirst Sector: %i\n}", [self session], [self number], [self firstSector]];
 }
 
 @end
