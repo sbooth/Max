@@ -74,7 +74,6 @@
 
 			[trackInfo setObject:[NSNumber numberWithUnsignedInt:[track channels]] forKey:@"channels"];
 
-			[trackInfo setObject:[NSNumber numberWithBool:(NO == [track dataTrack])] forKey:@"containsAudio"];
 			[trackInfo setObject:[NSNumber numberWithBool:[track preEmphasis]] forKey:@"preEmphasis"];
 			[trackInfo setObject:[NSNumber numberWithBool:[track copyPermitted]] forKey:@"allowsDigitalCopy"];
 			[trackInfo setObject:[NSNumber numberWithBool:[track dataTrack]] forKey:@"dataTrack"];
@@ -145,9 +144,9 @@
 
 - (unsigned)		channelsForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"channels"] unsignedIntValue]; }
 
-- (BOOL)			trackContainsAudio:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"containsAudio"] boolValue]; }
 - (BOOL)			trackHasPreEmphasis:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"hasPreEmphasis"] boolValue]; }
 - (BOOL)			trackAllowsDigitalCopy:(unsigned)track	{ return [[[self objectInTracksAtIndex:track] objectForKey:@"allowsDigitalCopy"] boolValue]; }
+- (BOOL)			trackContainsData:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"dataTrack"] boolValue]; }
 
 - (NSString *)		ISRCForTrack:(unsigned)track			{ return [[self objectInTracksAtIndex:track] objectForKey:@"ISRC"]; }
 

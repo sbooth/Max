@@ -51,9 +51,9 @@
 
 - (unsigned)			channelsForTrack:(unsigned)track;
 
-- (BOOL)				trackContainsAudio:(unsigned)track;
 - (BOOL)				trackHasPreEmphasis:(unsigned)track;
 - (BOOL)				trackAllowsDigitalCopy:(unsigned)track;
+- (BOOL)				trackContainsData:(unsigned)track;
 
 - (NSString *)			ISRCForTrack:(unsigned)track;
 
