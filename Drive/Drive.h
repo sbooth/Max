@@ -31,13 +31,11 @@
 	int				_fd;
 	unsigned		_cacheSize;
 	
+	NSMutableArray	*_sessions;
 	NSMutableArray	*_tracks;
 	
-	unsigned		_leadOut;
 	unsigned		_firstSession;
 	unsigned		_lastSession;
-	unsigned		_firstTrack;
-	unsigned		_lastTrack;
 }
 
 // Set up to read the drive corresponding to deviceName
@@ -47,22 +45,22 @@
 - (unsigned)			countOfTracks;
 - (TrackDescriptor *)	trackNumber:(unsigned)number;
 
-- (unsigned)			leadOut;
+// Disc session information
+- (unsigned)			firstSession;
+- (unsigned)			lastSession;
 
-- (unsigned)			firstTrack;
-- (unsigned)			lastTrack;
+- (unsigned)			firstTrackForSession:(unsigned)session;
+- (unsigned)			lastTrackForSession:(unsigned)session;
 
-// Disc sector information
-- (unsigned)			firstSector;
-- (unsigned)			lastSector;
+// Session sector information
+- (unsigned)			firstSectorForSession:(unsigned)session;
+- (unsigned)			lastSectorForSession:(unsigned)session;
+
+- (unsigned)			leadOutForSession:(unsigned)session;
 
 // Track sector information
 - (unsigned)			firstSectorForTrack:(unsigned)number;
 - (unsigned)			lastSectorForTrack:(unsigned)number;
-
-// Disc session information
-- (unsigned)			firstSession;
-- (unsigned)			lastSession;
 
 // Device name
 - (NSString *)			deviceName;

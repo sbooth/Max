@@ -31,14 +31,19 @@
 - (void)				logMessage:(NSString *)message;
 - (TrackDescriptor *)	objectInTracksAtIndex:(unsigned)index;
 
-- (void)				setLeadOut:(unsigned)leadOut;
-- (void)				setFirstTrack:(unsigned)firstTrack;
-- (void)				setLastTrack:(unsigned)lastTrack;
 - (void)				setFirstSession:(unsigned)session;
 - (void)				setLastSession:(unsigned)session;
 
+- (void)				setFirstTrack:(unsigned)track forSession:(unsigned)session;
+- (void)				setLastTrack:(unsigned)track forSession:(unsigned)session;
+- (void)				setLeadOut:(unsigned)leadOut forSession:(unsigned)session;
+
 - (void)				readTOC;
 - (int)					fileDescriptor;
+
+- (unsigned)			sessionContainingSectors:(SectorRange *)sectorRange;
+
+- (NSMutableDictionary *) dictionaryForSession:(unsigned)session;
 @end
 
 @implementation Drive
@@ -51,13 +56,11 @@
 		_fd				= -1;
 		_cacheSize		= 2 * 1024 * 1024;
 		
+		_sessions		= [[NSMutableArray alloc] initWithCapacity:20];
 		_tracks			= [[NSMutableArray alloc] initWithCapacity:20];
 
-		_leadOut		= 0;
 		_firstSession	= 0;
 		_lastSession	= 0;
-		_firstTrack		= 0;
-		_lastTrack		= 0;
 		
 		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
 
@@ -88,45 +91,89 @@
 	_fd = -1;
 	
 	[_deviceName release];
+	[_sessions release];
 	[_tracks release];
 	[super dealloc];
 }
 
-- (unsigned)			cacheSize								{ return _cacheSize; }
-- (unsigned)			cacheSectorSize							{ return (([self cacheSize] / kCDSectorSizeCDDA) + 1); }
-- (void)				setCacheSize:(unsigned)cacheSize		{ _cacheSize = cacheSize; }
+- (unsigned)			cacheSize									{ return _cacheSize; }
+- (unsigned)			cacheSectorSize								{ return (([self cacheSize] / kCDSectorSizeCDDA) + 1); }
+- (void)				setCacheSize:(unsigned)cacheSize			{ _cacheSize = cacheSize; }
 
-- (NSString *)			deviceName								{ return _deviceName; }
-- (int)					fileDescriptor							{ return _fd; }
+- (NSString *)			deviceName									{ return _deviceName; }
+- (int)					fileDescriptor								{ return _fd; }
 
-- (unsigned)			countOfTracks							{ return [_tracks count]; }
-- (TrackDescriptor *)	objectInTracksAtIndex:(unsigned)idx		{ return [_tracks objectAtIndex:idx]; }
+// Disc track information
+- (unsigned)			countOfTracks								{ return [_tracks count]; }
+- (TrackDescriptor *)	objectInTracksAtIndex:(unsigned)idx			{ return [_tracks objectAtIndex:idx]; }
 
-- (unsigned)			leadOut									{ return _leadOut; }
-- (void)				setLeadOut:(unsigned)leadOut			{ _leadOut = leadOut; }
-
-- (unsigned)			firstSession							{ return _firstSession; }
-- (void)				setFirstSession:(unsigned)session		{ _firstSession = session; }
-
-- (unsigned)			lastSession								{ return _lastSession; }
-- (void)				setLastSession:(unsigned)session		{ _lastSession = session; }
-
-- (unsigned)			firstSector								{ return [[self trackNumber:[self firstTrack]] firstSector]; }
-- (unsigned)			lastSector								{ return [self leadOut] - 1; }
-
-- (unsigned)			firstSectorForTrack:(unsigned)number	{ return [[self trackNumber:number] firstSector]; }
-- (unsigned)			lastSectorForTrack:(unsigned)number
+- (NSMutableDictionary *) dictionaryForSession:(unsigned)session
 {
-	TrackDescriptor		*track	= [self trackNumber:number + 1];
+	if([_sessions count] < session) {
+		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:[NSString stringWithFormat:@"Session %u doesn't exist", session] userInfo:nil];
+	}
 	
-	return (nil == track ? [self lastSector] : [track firstSector] - 1);
+	return [_sessions objectAtIndex:session - 1];
 }
 
-- (unsigned)			firstTrack								{ return _firstTrack; }
-- (void)				setFirstTrack:(unsigned)firstTrack		{ _firstTrack = firstTrack; }
+- (unsigned)			sessionContainingSectors:(SectorRange *)sectorRange
+{
+	unsigned		session, track;
+	
+	for(session = [self firstSession]; session <= [self lastSession]; ++session) {
+		for(track = [self firstTrackForSession:session]; track <= [self lastTrackForSession:session]; ++track) {
+			if([sectorRange containsSector:[self firstSectorForTrack:track]] || [sectorRange containsSector:[self lastSectorForTrack:track]]) {
+				return session;
+			}
+		}
+	}
+	
+	return NSNotFound;
+}
 
-- (unsigned)			lastTrack								{ return _lastTrack; }
-- (void)				setLastTrack:(unsigned)lastTrack		{ _lastTrack = lastTrack; }
+// Disc session information
+- (unsigned)			firstSession								{ return _firstSession; }
+- (void)				setFirstSession:(unsigned)session			{ _firstSession = session; }
+
+- (unsigned)			lastSession									{ return _lastSession; }
+- (void)				setLastSession:(unsigned)session			{ _lastSession = session; }
+
+// First and last track and lead out information (session-based)
+- (unsigned)			firstTrackForSession:(unsigned)session		{ return [[[self dictionaryForSession:session] objectForKey:@"firstTrack"] unsignedIntValue]; }
+- (void)				setFirstTrack:(unsigned)track forSession:(unsigned)session
+{
+	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:track] forKey:@"firstTrack"];
+}
+
+- (unsigned)			lastTrackForSession:(unsigned)session		{ return [[[self dictionaryForSession:session] objectForKey:@"lastTrack"] unsignedIntValue]; }
+- (void)				setLastTrack:(unsigned)track forSession:(unsigned)session
+{
+	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:track] forKey:@"lastTrack"];
+}
+
+- (unsigned)			leadOutForSession:(unsigned)session			{ return [[[self dictionaryForSession:session] objectForKey:@"leadOut"] unsignedIntValue]; }
+- (void)				setLeadOut:(unsigned)leadOut forSession:(unsigned)session
+{
+	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:leadOut] forKey:@"leadOut"];
+}
+
+// Track sector information
+- (unsigned)			firstSectorForSession:(unsigned)session		{ return [self firstSectorForTrack:[[[self dictionaryForSession:session] objectForKey:@"firstTrack"] unsignedIntValue]]; }
+- (unsigned)			lastSectorForSession:(unsigned)session		{ return [[[self dictionaryForSession:session] objectForKey:@"leadOut"] unsignedIntValue] - 1; }
+
+- (unsigned)			firstSectorForTrack:(unsigned)number		{ return [[self trackNumber:number] firstSector]; }
+- (unsigned)			lastSectorForTrack:(unsigned)number
+{
+	TrackDescriptor		*thisTrack		= [self trackNumber:number];
+	TrackDescriptor		*nextTrack		= [self trackNumber:number + 1];
+	
+	if(nil == thisTrack) {
+		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:[NSString stringWithFormat:@"Track %u doesn't exist", number] userInfo:nil];
+	}
+	
+	return ([self lastTrackForSession:[thisTrack session]] == number ? [self lastSectorForSession:[thisTrack session]] : [nextTrack firstSector] - 1);
+}
+
 
 - (void)				logMessage:(NSString *)message
 {
@@ -173,16 +220,18 @@
 {
 	int16_t			*buffer											= NULL;
 	unsigned		bufferLen										= 0;
+	unsigned		session;
 	unsigned		requiredReadSize;
-	unsigned		discFirstSector, discLastSector;
+	unsigned		sessionFirstSector, sessionLastSector;
 	unsigned		preSectorsAvailable, postSectorsAvailable;
 	unsigned		sectorsRemaining, sectorsRead, boundary;
 	
 	requiredReadSize		= [self cacheSectorSize];
-	discFirstSector			= [[self trackNumber:[self firstTrack]] firstSector];
-	discLastSector			= [self leadOut] - 1;
-	preSectorsAvailable		= [range firstSector] - discFirstSector;
-	postSectorsAvailable	= discLastSector - [range lastSector];
+	session					= [self sessionContainingSectors:range];
+	sessionFirstSector		= [self firstSectorForSession:session];
+	sessionLastSector		= [self lastSectorForSession:session];
+	preSectorsAvailable		= [range firstSector] - sessionFirstSector;
+	postSectorsAvailable	= sessionLastSector - [range lastSector];
 	
 	@try {
 		// Allocate the buffer
@@ -205,7 +254,7 @@
 			sectorsRemaining = requiredReadSize;
 			while(0 < sectorsRemaining) {
 				sectorsRead = [self readAudio:buffer
-								  startSector:discFirstSector + (requiredReadSize - sectorsRemaining)
+								  startSector:sessionFirstSector + (requiredReadSize - sectorsRemaining)
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
@@ -217,7 +266,7 @@
 			sectorsRemaining = requiredReadSize;
 			while(0 < sectorsRemaining) {
 				sectorsRead = [self readAudio:buffer
-								  startSector:discLastSector - sectorsRemaining
+								  startSector:sessionLastSector - sectorsRemaining
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
@@ -234,7 +283,7 @@
 			
 			while(0 < sectorsRemaining) {
 				sectorsRead = [self readAudio:buffer
-								  startSector:discFirstSector + (boundary - sectorsRemaining)
+								  startSector:sessionFirstSector + (boundary - sectorsRemaining)
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
@@ -247,13 +296,13 @@
 			sectorsRemaining	= requiredReadSize - sectorsRemaining;
 			
 			// This should never happen; we tested for it above
-			if(sectorsRemaining > (discLastSector - boundary)) {
+			if(sectorsRemaining > (sessionLastSector - boundary)) {
 				NSLog(@"fnord!");
 			}
 			
 			while(0 < sectorsRemaining) {
 				sectorsRead = [self readAudio:buffer
-								  startSector:discLastSector - sectorsRemaining
+								  startSector:sessionLastSector - sectorsRemaining
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
 				if(0 == sectorsRead) {
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
@@ -305,8 +354,13 @@
 	[self setFirstSession:toc->sessionFirst];
 	[self setLastSession:toc->sessionLast];
 	
-	for(i = 0; i < numDescriptors; ++i)
-	{
+	// Set up dictionaries that will hold first sector, last sector and lead out information for each session
+	for(i = [self firstSession]; i <= [self lastSession]; ++i) {
+		[_sessions addObject:[NSMutableDictionary dictionary]];
+	}
+	
+	// Iterate through each descriptor and extract the information we need
+	for(i = 0; i < numDescriptors; ++i) {
 		desc = &toc->descriptors[i];
 		
 		// This is a normal audio or data track
@@ -332,26 +386,22 @@
 			
 			[_tracks addObject:[track autorelease]];
 		}
-		else if(0xA0 == desc->point && 1 == desc->adr)
-		{
-			[self setFirstTrack:desc->p.minute];
+		else if(0xA0 == desc->point && 1 == desc->adr) {
+			[self setFirstTrack:desc->p.minute forSession:desc->session];
 			/*printf("Disc type:                 %d (%s)\n", (int)desc->p.second,
 				   (desc->p.second == 0x00) ? "CD-DA, or CD-ROM with first track in Mode 1":
 				   (desc->p.second == 0x10) ? "CD-I disc":
 				   (desc->p.second == 0x20) ? "CD-ROM XA disc with first track in Mode 2":"unknown");*/
 		}
 		// Last track
-		else if(0xA1 == desc->point && 1 == desc->adr)
-		{
-			[self setLastTrack:desc->p.minute];
+		else if(0xA1 == desc->point && 1 == desc->adr) {
+			[self setLastTrack:desc->p.minute forSession:desc->session];
 		}
 		// Lead-out
-		else if(0xA2 == desc->point && 1 == desc->adr)
-		{
-			[self setLeadOut:CDConvertMSFToLBA(desc->p)];
+		else if(0xA2 == desc->point && 1 == desc->adr) {
+			[self setLeadOut:CDConvertMSFToLBA(desc->p) forSession:desc->session];
 		}
-		/*else if(0xB0 == desc->point && 5 == desc->adr)
-		{
+		/*else if(0xB0 == desc->point && 5 == desc->adr) {
 			printf("Next possible track start: %02d:%02d.%02d\n",
 				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);
 			printf("Number of ptrs in Mode 5:  %d\n",
@@ -359,31 +409,30 @@
 			printf("Last possible lead-out:    %02d:%02d.%02d\n",
 				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
 		}
-		else if(0xB1 == desc->point && 5 == desc->adr)
-		{
+		else if(0xB1 == desc->point && 5 == desc->adr) {
 			printf("Skip interval pointers:    %d\n", (int)desc->p.minute);
 			printf("Skip track pointers:       %d\n", (int)desc->p.second);
 		}
-		else if(0xB2 <= desc->point && 0xB2 >= desc->point && 5 == desc->adr)
-		{
+		else if(0xB2 <= desc->point && 0xB2 >= desc->point && 5 == desc->adr) {
 			printf("Skip numbers:              %d, %d, %d, %d, %d, %d, %d\n",
 				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame,
 				   (int)desc->zero, (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
 		}
-		else if(1 == desc->point && 40 >= desc->point && 5 == desc->adr)
-		{
+		else if(1 == desc->point && 40 >= desc->point && 5 == desc->adr) {
 			printf("Skip from %02d:%02d.%02d to %02d:%02d.%02d\n",
 				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame,
 				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);
 		}
-		else if(0xC0 == desc->point && 5 == desc->adr)
-		{
+		else if(0xC0 == desc->point && 5 == desc->adr) {
 			printf("Optimum recording power:   %d\n", (int)desc->address.minute);
 			printf("Application code:          %d\n", (int)desc->address.second);
 			printf("Start of first lead-in:    %02d:%02d.%02d\n",
 				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
 		}*/
 	}
+	
+	NSLog(@"Tracks: %@",_tracks);
+	NSLog(@"Sessions: %@",_sessions);
 }
 
 - (unsigned)		readAudio:(void *)buffer sector:(unsigned)sector
@@ -445,6 +494,11 @@
 	}
 	
 	return [NSString stringWithCString:cd_read_isrc.isrc encoding:NSASCIIStringEncoding];
+}
+
+- (NSString *)		description
+{
+	return [NSString stringWithFormat:@"{\n\tDevice: %@\n\tFirst Session: %u\n\tLast Session: %u\n}", [self deviceName], [self firstSession], [self lastSession]];
 }
 
 @end
