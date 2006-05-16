@@ -430,9 +430,6 @@
 				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
 		}*/
 	}
-	
-	NSLog(@"Tracks: %@",_tracks);
-	NSLog(@"Sessions: %@",_sessions);
 }
 
 - (unsigned)		readAudio:(void *)buffer sector:(unsigned)sector
