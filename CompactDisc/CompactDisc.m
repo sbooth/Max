@@ -22,6 +22,7 @@
 
 #import "MallocException.h"
 #import "Drive.h"
+#import "LogController.h"
 #import "IOException.h"
 #import "FreeDBException.h"
 
@@ -48,7 +49,9 @@
 
 		// Is this is a multisession disc?
 		if([drive lastSession] - [drive firstSession] > 1) {
-			// Use first sector for now
+			[LogController logMessage:NSLocalizedStringFromTable(@"Multisession disc detected", @"Log", @"")];
+
+			// Use first session for now
 			session = 1;
 		}
 		
