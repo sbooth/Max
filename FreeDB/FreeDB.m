@@ -137,7 +137,7 @@
 	cddb_sites(_freeDB);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	if(FALSE == cddb_sites(_freeDB)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSUTF8StringEncoding] userInfo:nil];
 	}
 	
 	site = cddb_first_site(_freeDB);
@@ -145,14 +145,14 @@
 		currentSite = [NSMutableDictionary dictionaryWithCapacity:20];
 		
 		if(CDDB_ERR_OK == cddb_site_get_address(site, &tempString, &i)) {
-			[currentSite setObject:[NSString stringWithCString:tempString encoding:NSASCIIStringEncoding] forKey:@"address"];
+			[currentSite setObject:[NSString stringWithCString:tempString encoding:NSUTF8StringEncoding] forKey:@"address"];
 			[currentSite setObject:[NSNumber numberWithUnsignedInt:i] forKey:@"port"];
 		}
 		
 		[currentSite setObject:[NSNumber numberWithInt:cddb_site_get_protocol(site)] forKey:@"protocol"];
 		
 		if(CDDB_ERR_OK == cddb_site_get_description(site, &tempString)) {
-			[currentSite setObject:[NSString stringWithCString:tempString encoding:NSASCIIStringEncoding] forKey:@"siteDescription"];
+			[currentSite setObject:[NSString stringWithCString:tempString encoding:NSUTF8StringEncoding] forKey:@"siteDescription"];
 		}
 		
 		if(CDDB_ERR_OK == cddb_site_get_location(site, &latitude, &longitude)) {
@@ -199,11 +199,11 @@
 		discid		= cddb_disc_get_discid(freeDBDisc);
 		
 		if(NULL != artist) {
-			[currentMatch setObject:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding] forKey:@"artist"];
+			[currentMatch setObject:[NSString stringWithCString:artist encoding:NSUTF8StringEncoding] forKey:@"artist"];
 		}
 		
 		if(NULL != title) {
-			[currentMatch setObject:[NSString stringWithCString:title encoding:NSASCIIStringEncoding] forKey:@"title"];
+			[currentMatch setObject:[NSString stringWithCString:title encoding:NSUTF8StringEncoding] forKey:@"title"];
 		}
 		
 		if(0 != year) {
@@ -211,7 +211,7 @@
 		}
 		
 		if(NULL != genre) {
-			[currentMatch setObject:[NSString stringWithCString:genre encoding:NSASCIIStringEncoding] forKey:@"genre"];
+			[currentMatch setObject:[NSString stringWithCString:genre encoding:NSUTF8StringEncoding] forKey:@"genre"];
 		}
 		
 		if(CDDB_CAT_INVALID != category) {
@@ -270,11 +270,11 @@
 		ext_data	= cddb_disc_get_ext_data(disc);
 
 		if(NULL != artist) {
-			[_disc setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
+			[_disc setArtist:[NSString stringWithCString:artist encoding:NSUTF8StringEncoding]];
 		}
 
 		if(NULL != artist) {
-			[_disc setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
+			[_disc setTitle:[NSString stringWithCString:title encoding:NSUTF8StringEncoding]];
 		}
 			
 		if(0 != year) {
@@ -282,11 +282,11 @@
 		}
 		
 		if(NULL != genre) {
-			[_disc setGenre:[NSString stringWithCString:genre encoding:NSASCIIStringEncoding]];
+			[_disc setGenre:[NSString stringWithCString:genre encoding:NSUTF8StringEncoding]];
 		}
 		
 		if(NULL != ext_data) {
-			[_disc setComment:[NSString stringWithCString:ext_data encoding:NSASCIIStringEncoding]];
+			[_disc setComment:[NSString stringWithCString:ext_data encoding:NSUTF8StringEncoding]];
 		}
 		
 		
@@ -304,12 +304,12 @@
 			}
 			
 			if(NULL != title) {
-				[[_disc objectInTracksAtIndex:trackNum - 1] setTitle:[NSString stringWithCString:title encoding:NSASCIIStringEncoding]];
+				[[_disc objectInTracksAtIndex:trackNum - 1] setTitle:[NSString stringWithCString:title encoding:NSUTF8StringEncoding]];
 			}
 
-			if(NULL != artist && NO == [[NSString stringWithCString:artist encoding:NSASCIIStringEncoding] isEqualToString:[_disc artist]]) {
+			if(NULL != artist && NO == [[NSString stringWithCString:artist encoding:NSUTF8StringEncoding] isEqualToString:[_disc artist]]) {
 				[_disc setCompilation:YES];
-				[[_disc objectInTracksAtIndex:trackNum - 1] setArtist:[NSString stringWithCString:artist encoding:NSASCIIStringEncoding]];
+				[[_disc objectInTracksAtIndex:trackNum - 1] setArtist:[NSString stringWithCString:artist encoding:NSUTF8StringEncoding]];
 			}
 			
 			track = cddb_disc_get_track_next(disc);
