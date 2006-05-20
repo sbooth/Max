@@ -137,7 +137,7 @@
 	cddb_sites(_freeDB);
 	// For some reason, cddb_sites ALWAYS returns 0 (in my testing anyway)
 	if(FALSE == cddb_sites(_freeDB)) {
-		@throw [FreeDBException exceptionWithReason:[NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSUTF8StringEncoding] userInfo:nil];
+		@throw [FreeDBException exceptionWithReason:[NSString stringWithCString:cddb_error_str(cddb_errno(_freeDB)) encoding:NSASCIIStringEncoding] userInfo:nil];
 	}
 	
 	site = cddb_first_site(_freeDB);
