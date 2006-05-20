@@ -280,7 +280,7 @@ static MediaController *sharedController = nil;
 	DADiskRef	disk		= DADiskCreateFromBSDName(kCFAllocatorDefault, _session, [deviceName fileSystemRepresentation]);
 
 	// If the disc is successfully unmounted, unmountCallback will eject it
-	DADiskUnmount(disk, kDADiskUnmountOptionDefault, unmountCallback, document);
+	DADiskUnmount(disk, kDADiskUnmountOptionWhole, unmountCallback, document);
 	
 	CFRelease(disk);
 }
