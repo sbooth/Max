@@ -153,12 +153,7 @@ static RipperController *sharedController = nil;
 {
 	RipperTask	*task				= nil;
 	int			selectedRipper		= kComparisonRipper;
-	
-	// Verify an output format is selected
-	if(YES == [[ApplicationController sharedController] displayAlertIfNoOutputFormats]) {
-		return;
-	}
-	
+		
 	// Setup the ripper
 	selectedRipper = [[NSUserDefaults standardUserDefaults] integerForKey:@"selectedRipper"];
 	switch(selectedRipper) {
@@ -167,7 +162,10 @@ static RipperController *sharedController = nil;
 		case kParanoiaRipper:	task = [[ParanoiaRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
 		default:				task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
 	}
-		
+	
+	// Set the active encoders in the task's userInfo dictionary
+	[task setUserInfo:[NSDictionary dictionaryWithObject:[[[tracks objectAtIndex:0] document] activeEncoders] forKey:@"activeEncoders"]];
+	
 	// Show the window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 		[[self window] orderFront:self];

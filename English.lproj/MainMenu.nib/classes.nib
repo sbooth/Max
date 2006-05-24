@@ -4,6 +4,7 @@
             ACTIONS = {
                 checkForUpdate = id; 
                 encodeFile = id; 
+                encodeFileCustom = id; 
                 openHomeURL = id; 
                 showAcknowledgments = id; 
                 showComponentVersions = id; 
@@ -15,6 +16,7 @@
             }; 
             CLASS = ApplicationController; 
             LANGUAGE = ObjC; 
+            OUTLETS = {}; 
             SUPERCLASS = NSObject; 
         }, 
         {
@@ -22,6 +24,7 @@
                 "" = id; 
                 ejectDisc = id; 
                 encode = id; 
+                encodeCustom = id; 
                 fetchAlbumArt = id; 
                 queryFreeDB = id; 
                 selectAlbumArt = id; 

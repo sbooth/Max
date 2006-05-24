@@ -283,24 +283,16 @@ outputFormatsSelected()
 	}
 	
 	for(i = 0; i < [outputFormats count]; ++i) {
-		if([[[outputFormats objectAtIndex:i] objectForKey:@"active"] boolValue]) {
+		if([[[outputFormats objectAtIndex:i] objectForKey:@"default"] boolValue]) {
 			return YES;
 		}
 	}
 	
 	return NO;
-	
-	/*
-	BOOL		outputLibsndfile	= (0 != [[[NSUserDefaults standardUserDefaults] objectForKey:@"libsndfileOutputFormats"] count]);
-	BOOL		outputCoreAudio		= (0 != [[[NSUserDefaults standardUserDefaults] objectForKey:@"coreAudioOutputFormats"] count]);
-	BOOL		outputMP3			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputMP3"];
-	BOOL		outputFLAC			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputFLAC"];
-	BOOL		outputOggFLAC		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggFLAC"];
-	BOOL		outputOggVorbis		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputOggVorbis"];
-	BOOL		outputMonkeysAudio	= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputMonkeysAudio"];
-	BOOL		outputSpeex			= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputSpeex"];
-	BOOL		outputWavPack		= [[NSUserDefaults standardUserDefaults] boolForKey:@"outputWavPack"];
-	
-	return (outputLibsndfile || outputCoreAudio || outputMP3 || outputFLAC || outputOggFLAC || outputOggVorbis || outputMonkeysAudio || outputSpeex || outputWavPack);
-	 */
+}
+
+NSArray * 
+getDefaultOutputFormats()
+{
+	return [[[NSUserDefaults standardUserDefaults] objectForKey:@"outputFormats"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"default == 1"]];
 }

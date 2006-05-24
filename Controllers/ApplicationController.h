@@ -45,11 +45,11 @@
 - (IBAction)			checkForUpdate:(id)sender;
 - (IBAction)			openHomeURL:(id)sender;
 
-- (BOOL)				displayAlertIfNoOutputFormats;
-
 - (IBAction)			encodeFile:(id)sender;
+- (IBAction)			encodeFileCustom:(id)sender;
 
 - (void)				encodeFiles:(NSArray *)filenames;
+- (void)				encodeFiles:(NSArray *)filenames withEncoders:(NSArray *)encoders;
 
 - (NSDictionary *)		registrationDictionaryForGrowl;
 

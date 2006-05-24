@@ -111,7 +111,7 @@ static ConverterController *sharedController = nil;
 	[self setWindowFrameAutosaveName:@"Converter"];
 	[[self window] setExcludedFromWindowsMenu:YES];
 
-	[[self window] registerForDraggedTypes:[NSArray arrayWithObjects:NSFilenamesPboardType, nil]];
+	[[self window] registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
 }
 
 - (void) updateFreeSpace:(NSTimer *)theTimer
@@ -155,7 +155,7 @@ static ConverterController *sharedController = nil;
 
 #pragma mark Functionality
 
-- (void) convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata
+- (void) convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders
 {
 	ConverterTask	*converterTask			= nil;
 	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
@@ -163,9 +163,9 @@ static ConverterController *sharedController = nil;
 	NSString		*extension				= [filename pathExtension];
 	
 	// Verify an output format is selected
-	if(YES == [[ApplicationController sharedController] displayAlertIfNoOutputFormats]) {
-		return;
-	}
+//	if(YES == [[ApplicationController sharedController] displayAlertIfNoOutputFormats]) {
+//		return;
+//	}
 	
 	// Determine which type of converter to use and create it
 	if([coreAudioExtensions containsObject:extension]) {
@@ -183,7 +183,7 @@ static ConverterController *sharedController = nil;
 	else if([extension isEqualToString:@"oggflac"]) {
 		converterTask = [[OggFLACConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
-	else if([extension isEqualToString:@"ape"] || [extension isEqualToString:@"apl"] || [extension isEqualToString:@"mac"]) {
+	else if([extension isEqualToString:@"ape"]) {
 		converterTask = [[MonkeysAudioConverterTask alloc] initWithInputFile:filename metadata:metadata];
 	}
 	else if([extension isEqualToString:@"spx"]) {
@@ -197,6 +197,9 @@ static ConverterController *sharedController = nil;
 														   userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
 	}
 	
+	// Set the active encoders in the task's userInfo dictionary
+	[converterTask setUserInfo:[NSDictionary dictionaryWithObject:encoders forKey:@"activeEncoders"]];
+
 	// Show the converter window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 		[[self window] orderFront:self];

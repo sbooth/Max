@@ -42,8 +42,13 @@
 #import "MultiplicationValueTransformer.h"
 #import "BOOLToStringValueTransformer.h"
 #import "UppercaseStringValueTransformer.h"
+#import "SelectEncodersSheet.h"
 
 static ApplicationController *sharedController = nil;
+
+@interface ApplicationController (Private)
+- (void) encodeFileInternal:(BOOL)selectEncoders;
+@end
 
 @implementation ApplicationController
 
@@ -52,8 +57,6 @@ static ApplicationController *sharedController = nil;
 	// Set up the ValueTransformers
 	NSValueTransformer			*transformer;
 	NSArray						*array;
-	NSEnumerator				*enumerator;
-	NSString					*filename;
 	NSString					*defaultsValuesPath;
     NSDictionary				*defaultsValuesDictionary;
     
@@ -77,18 +80,13 @@ static ApplicationController *sharedController = nil;
 	[NSValueTransformer setValueTransformer:transformer forName:@"UppercaseStringValueTransformer"];
 	
 	@try {
-		// Load other defaults so displayAlertIfNoOutputFormats will work correctly
-		array = [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"CompactDiscDocumentDefaults", nil];
-		enumerator = [array objectEnumerator];
-		while((filename = [enumerator nextObject])) {
-			defaultsValuesPath = [[NSBundle mainBundle] pathForResource:filename ofType:@"plist"];
-			if(nil == defaultsValuesPath) {
-				@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-															userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@.plist", filename] forKey:@"filename"]];
-			}
-			defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
-			[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"ApplicationControllerDefaults.plist" forKey:@"filename"]];
 		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}
 	
 	@catch(NSException *exception) {
@@ -232,19 +230,48 @@ static ApplicationController *sharedController = nil;
 
 - (IBAction) encodeFile:(id)sender
 {
-	NSOpenPanel			*panel			= [NSOpenPanel openPanel];
-	
-	if(YES == [self displayAlertIfNoOutputFormats]) {
-		return;
-	}
-	
+	[self encodeFileInternal:NO];	
+}
+
+- (IBAction) encodeFileCustom:(id)sender
+{
+	[self encodeFileInternal:YES];	
+}
+
+- (void) encodeFileInternal:(BOOL)selectEncoders
+{
+	NSOpenPanel				*panel			= [NSOpenPanel openPanel];
+	NSArray					*encoders		= nil;
+	SelectEncodersSheet		*sheet			= nil;
+		
 	[panel setAllowsMultipleSelection:YES];
 	[panel setCanChooseDirectories:YES];
+	
+	if(selectEncoders) {
+		sheet = [[[SelectEncodersSheet alloc] init] autorelease];
+
+		[panel orderFront:self];
+		[sheet showSheet:panel];
 		
+		switch([[NSApplication sharedApplication] runModalForWindow:[sheet sheet]]) {
+			case NSOKButton:
+				encoders = [sheet selectedEncoders];
+				break;
+				
+			case NSCancelButton:
+				[panel orderOut:self];
+				return;
+				break;
+		}
+	}
+	else {
+		encoders = getDefaultOutputFormats();
+	}
+	
 	if(NSOKButton == [panel runModalForTypes:_allowedTypes]) {
 
 		@try {
-			[self encodeFiles:[panel filenames]];
+			[self encodeFiles:[panel filenames] withEncoders:encoders];
 		}
 		
 		@catch(FileFormatNotSupportedException *exception) {
@@ -277,6 +304,11 @@ static ApplicationController *sharedController = nil;
 
 - (void) encodeFiles:(NSArray *)filenames
 {
+	[self encodeFiles:filenames withEncoders:getDefaultOutputFormats()];
+}
+
+- (void) encodeFiles:(NSArray *)filenames withEncoders:(NSArray *)encoders
+{
 	NSFileManager		*manager		= [NSFileManager defaultManager];
 	NSString			*filename;
 	NSArray				*subpaths;
@@ -287,6 +319,30 @@ static ApplicationController *sharedController = nil;
 	NSString			*composedPath;
 	unsigned			i;
 	
+	// Verify at least one output format is selected
+	if(0 == [encoders count]) {
+		int		result;
+		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
+		[alert setAlertStyle: NSWarningAlertStyle];
+		
+		result = [alert runModal];
+		
+		if(NSAlertFirstButtonReturn == result) {
+			// do nothing
+		}
+		else if(NSAlertSecondButtonReturn == result) {
+			[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
+			[[PreferencesController sharedPreferences] showWindow:self];
+		}
+
+		return;
+	}
+
 	for(i = 0; i < [filenames count]; ++i) {
 		filename = [filenames objectAtIndex:i];
 		
@@ -312,7 +368,7 @@ static ApplicationController *sharedController = nil;
 						metadata = [AudioMetadata metadataFromFile:composedPath];
 						
 						@try {
-							[[ConverterController sharedController] convertFile:composedPath metadata:metadata];
+							[[ConverterController sharedController] convertFile:composedPath metadata:metadata withEncoders:encoders];
 						}
 						
 						@catch(FileFormatNotSupportedException *exception) {
@@ -323,7 +379,7 @@ static ApplicationController *sharedController = nil;
 			}
 			else {
 				metadata = [AudioMetadata metadataFromFile:filename];						
-				[[ConverterController sharedController] convertFile:filename metadata:metadata];
+				[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders];
 			}
 		}
 		else {
@@ -430,7 +486,7 @@ static ApplicationController *sharedController = nil;
 	return regDict;
 }
 
-- (BOOL) displayAlertIfNoOutputFormats
+/*- (BOOL) displayAlertIfNoOutputFormats
 {
 	// Verify at least one output format is selected
 	if(NO == outputFormatsSelected()) {
@@ -457,7 +513,7 @@ static ApplicationController *sharedController = nil;
 	}
 	
 	return NO;
-}
+}*/
 
 @end
 

@@ -157,18 +157,13 @@ static EncoderController *sharedController = nil;
 
 - (void) runEncodersForTask:(PCMGeneratingTask *)task
 {
-	NSArray			*outputFormats		= [[NSUserDefaults standardUserDefaults] objectForKey:@"outputFormats"];
+	NSArray			*outputFormats		= [[task userInfo] objectForKey:@"activeEncoders"];
 	NSDictionary	*format				= nil;
 	unsigned		i					= 0;
 	
 	for(i = 0; i < [outputFormats count]; ++i) {
 		format = [outputFormats objectAtIndex:i];
-		
-		// Skip formats not marked as active
-		if(NO == [[format objectForKey:@"active"] boolValue]) {
-			continue;
-		}
-				
+						
 		switch([[format objectForKey:@"component"] intValue]) {
 			
 			case kComponentCoreAudio:

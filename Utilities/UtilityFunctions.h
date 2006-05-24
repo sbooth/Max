@@ -68,6 +68,9 @@ NSData * getBitmapDataForImage(NSImage					*image,
 // Return YES if at least one output format is selected
 BOOL outputFormatsSelected();
 
+// Get an array of the default encoders
+NSArray * getDefaultOutputFormats();
+
 #ifdef __cplusplus
 }
 #endif

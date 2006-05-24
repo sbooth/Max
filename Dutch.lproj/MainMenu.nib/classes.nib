@@ -4,6 +4,7 @@
             ACTIONS = {
                 checkForUpdate = id; 
                 encodeFile = id; 
+                encodeFileCustom = id; 
                 openHomeURL = id; 
                 showAcknowledgments = id; 
                 showComponentVersions = id; 
@@ -22,6 +23,7 @@
                 "" = id; 
                 ejectDisc = id; 
                 encode = id; 
+                encodeCustom = id; 
                 fetchAlbumArt = id; 
                 queryFreeDB = id; 
                 selectAlbumArt = id; 

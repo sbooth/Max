@@ -19,35 +19,25 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "CompactDiscDocument.h"
 
-#import "ConverterTask.h"
-
-@interface ConverterController : NSWindowController
+@interface SelectEncodersSheet : NSObject
 {
-	IBOutlet NSTableView		*_taskTable;
-	IBOutlet NSArrayController	*_tasksController;
+	CompactDiscDocument			*_doc;
 	
-	NSArray						*_tasks;
-	NSTimer						*_timer;
-	NSString					*_freeSpace;
-	BOOL						_freeze;
+    IBOutlet NSWindow			*_sheet;
+    IBOutlet NSArrayController	*_encoderController;
 }
 
-+ (ConverterController *)	sharedController;
+- (id)				initWithCompactDiscDocument:(CompactDiscDocument *)doc;
 
-// Functionality
-- (void)			convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders;
+- (NSWindow *)		sheet;
+- (void)			showSheet;
+- (void)			showSheet:(NSWindow *)window;
 
-- (BOOL)			hasTasks;
-- (unsigned)		countOfTasks;
+- (NSArray *)		selectedEncoders;
 
-// Action methods
-- (IBAction)		stopSelectedTasks:(id)sender;
-- (IBAction)		stopAllTasks:(id)sender;
-
-// Callbacks
-- (void)			converterTaskDidStart:(ConverterTask *)task;
-- (void)			converterTaskDidStop:(ConverterTask *)task;
-- (void)			converterTaskDidComplete:(ConverterTask *)task;
+- (IBAction)		ok:(id)sender;
+- (IBAction)		cancel:(id)sender;
 
 @end

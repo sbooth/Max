@@ -28,9 +28,11 @@
 #import "FreeDBMatchSheet.h"
 #import "Genres.h"
 #import "RipperController.h"
+#import "PreferencesController.h"
 #import "Encoder.h"
 #import "MediaController.h"
 #import "GetPlaylistNameSheet.h"
+#import "SelectEncodersSheet.h"
 
 #import "MallocException.h"
 #import "IOException.h"
@@ -41,20 +43,11 @@
 #import "AmazonAlbumArtSheet.h"
 #import "UtilityFunctions.h"
 
-enum {
-	kEncodeMenuItemTag					= 1,
-	kTrackInfoMenuItemTag				= 2,
-	kQueryFreeDBMenuItemTag				= 3,
-	kEjectDiscMenuItemTag				= 4,
-	kSubmitToFreeDBMenuItemTag			= 5,
-	kSelectNextTrackMenuItemTag			= 6,
-	kSelectPreviousTrackMenuItemTag		= 7
-};
-
 @interface CompactDiscDocument (Private)
 - (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
 - (void)			updateAlbumArtImageRep;
 - (void)			displayExceptionAlert:(NSAlert *)alert;
+- (BOOL)			displayAlertIfNoOutputFormats;
 @end
 
 @implementation CompactDiscDocument
@@ -100,6 +93,8 @@ enum {
 		_freeDBQueryInProgress = NO;
 		_freeDBQuerySuccessful = NO;
 		
+		_activeEncoders		= [getDefaultOutputFormats() retain];
+		
 		_title				= nil;
 		_artist				= nil;
 		_year				= 0;
@@ -140,6 +135,8 @@ enum {
 	
 	[_tracks release];
 	
+	[_activeEncoders release];
+	
 	[super dealloc];
 }
 
@@ -158,6 +155,7 @@ enum {
 	switch([item tag]) {
 		default:								result = [super validateMenuItem:item];			break;
 		case kEncodeMenuItemTag:				result = [self encodeAllowed];					break;
+		case kEncodeCustomMenuItemTag:			result = [self encodeAllowed];					break;
 		case kQueryFreeDBMenuItemTag:			result = [self queryFreeDBAllowed];				break;
 		case kSubmitToFreeDBMenuItemTag:		result = [self submitToFreeDBAllowed];			break;
 		case kEjectDiscMenuItemTag:				result = [self ejectDiscAllowed];				break;
@@ -386,6 +384,9 @@ enum {
 	return NO;
 }
 
+- (NSArray *)		activeEncoders										{ return _activeEncoders; }
+- (void)			setActiveEncoders:(NSArray *)activeEncoders			{ [_activeEncoders release]; _activeEncoders = [activeEncoders retain]; }
+
 #pragma mark Action Methods
 
 - (IBAction) selectAll:(id)sender
@@ -408,6 +409,8 @@ enum {
 
 - (IBAction) encode:(id)sender
 {
+	GetPlaylistNameSheet *sheet = nil;
+
 	@try {
 		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
 		if(NO == [self discInDrive]) {
@@ -420,8 +423,16 @@ enum {
 			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
 		}
 		
+		// Set the encoders to the defaults
+		[self setActiveEncoders:getDefaultOutputFormats()];
+
+		if(YES == [self displayAlertIfNoOutputFormats]) {
+			return;
+		}
+
+		// Display the sheet requesting the playlist name
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"createiTunesAlbumPlaylist"]) {
-			GetPlaylistNameSheet *sheet = [[GetPlaylistNameSheet alloc] initWithCompactDiscDocument:self];
+			sheet = [[GetPlaylistNameSheet alloc] initWithCompactDiscDocument:self];
 			[sheet showSheet];
 		}
 		else {
@@ -436,6 +447,54 @@ enum {
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[self displayExceptionAlert:alert];
+	}
+}
+
+- (IBAction) encodeCustom:(id)sender
+{
+	SelectEncodersSheet *sheet = nil;
+
+	@try {
+		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
+		if(NO == [self discInDrive]) {
+			return;
+		}
+		else if([self emptySelection]) {
+			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @"") userInfo:nil];
+		}
+		else if([self ripInProgress] || [self encodeInProgress]) {
+			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
+		}
+		
+		sheet = [[SelectEncodersSheet alloc] initWithCompactDiscDocument:self];
+		[sheet showSheet];	
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), (nil == [self title] ? [NSString stringWithFormat:@"0x%.8x", [self discID]] : [self title])]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[self displayExceptionAlert:alert];
+	}
+}
+
+- (void) customEncodersSelected
+{
+	GetPlaylistNameSheet *sheet = nil;
+	
+	if(YES == [self displayAlertIfNoOutputFormats]) {
+		return;
+	}
+	
+	// Display the sheet requesting the playlist name
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"createiTunesAlbumPlaylist"]) {
+		sheet = [[GetPlaylistNameSheet alloc] initWithCompactDiscDocument:self];
+		[sheet showSheet];
+	}
+	else {
+		[self encodeToPlaylist:nil];
 	}
 }
 
@@ -715,6 +774,35 @@ enum {
 	}
 
 	return [[result retain] autorelease];
+}
+
+- (BOOL) displayAlertIfNoOutputFormats
+{
+	// Verify at least one output format is selected
+	if(0 == [_activeEncoders count]) {
+		int		result;
+		
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
+		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
+		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
+		[alert setAlertStyle: NSWarningAlertStyle];
+		
+		result = [alert runModal];
+		
+		if(NSAlertFirstButtonReturn == result) {
+			// do nothing
+		}
+		else if(NSAlertSecondButtonReturn == result) {
+			[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
+			[[PreferencesController sharedPreferences] showWindow:self];
+		}
+
+		return YES;
+	}
+	
+	return NO;
 }
 
 #pragma mark Accessors

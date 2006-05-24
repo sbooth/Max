@@ -23,6 +23,17 @@
 #import "CompactDisc.h"
 #import "Track.h"
 
+enum {
+	kEncodeMenuItemTag					= 1,
+	kTrackInfoMenuItemTag				= 2,
+	kQueryFreeDBMenuItemTag				= 3,
+	kEjectDiscMenuItemTag				= 4,
+	kSubmitToFreeDBMenuItemTag			= 5,
+	kSelectNextTrackMenuItemTag			= 6,
+	kSelectPreviousTrackMenuItemTag		= 7,
+	kEncodeCustomMenuItemTag			= 8
+};
+
 @interface CompactDiscDocument : NSDocument 
 {
     IBOutlet NSArrayController		*_trackController;
@@ -35,6 +46,8 @@
 	int								_discID;
 	BOOL							_freeDBQueryInProgress;
 	BOOL							_freeDBQuerySuccessful;
+	
+	NSArray							*_activeEncoders;
 		
 	// Disc information
 	NSString						*_title;
@@ -71,27 +84,40 @@
 - (BOOL)			ripInProgress;
 - (BOOL)			encodeInProgress;
 
+- (NSArray *)		activeEncoders;
+- (void)			setActiveEncoders:(NSArray *)activeEncoders;
+
 // Action methods
-- (IBAction)		selectAll:(id) sender;
-- (IBAction)		selectNone:(id) sender;
-- (IBAction)		encode:(id) sender;
-- (IBAction)		ejectDisc:(id) sender;
-- (IBAction)		queryFreeDB:(id) sender;
-- (IBAction)		submitToFreeDB:(id) sender;
-- (IBAction)		toggleTrackInformation:(id) sender;
-- (IBAction)		toggleAlbumArt:(id) sender;
-- (IBAction)		selectNextTrack:(id) sender;
-- (IBAction)		selectPreviousTrack:(id) sender;
-- (IBAction)		fetchAlbumArt:(id) sender;
-- (IBAction)		selectAlbumArt:(id) sender;
+- (IBAction)		selectAll:(id)sender;
+- (IBAction)		selectNone:(id)sender;
+
+- (IBAction)		encode:(id)sender;
+- (IBAction)		encodeCustom:(id)sender;
+
+- (IBAction)		ejectDisc:(id)sender;
+
+- (IBAction)		queryFreeDB:(id)sender;
+- (IBAction)		submitToFreeDB:(id)sender;
+
+- (IBAction)		toggleTrackInformation:(id)sender;
+- (IBAction)		toggleAlbumArt:(id)sender;
+
+- (IBAction)		selectNextTrack:(id)sender;
+- (IBAction)		selectPreviousTrack:(id)sender;
+
+- (IBAction)		fetchAlbumArt:(id)sender;
+- (IBAction)		selectAlbumArt:(id)sender;
 
 // FreeDB
 - (void)			clearFreeDBData;
 - (void)			updateDiscFromFreeDB:(NSDictionary *) info;
 
 // Miscellaneous
+- (void)			customEncodersSelected;
 - (void)			encodeToPlaylist:(NSString *)playlist;
+
 - (void)			discEjected;
+
 - (NSArray *)		selectedTracks;
 
 - (CompactDisc *)	disc;
