@@ -527,7 +527,7 @@
 			}
 			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
 				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
-				[result setDiscYear:[value intValue]];
+				[result setAlbumYear:[value intValue]];
 			}
 			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
 				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
@@ -654,7 +654,7 @@
 			}
 			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
 				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
-				[result setDiscYear:[value intValue]];
+				[result setAlbumYear:[value intValue]];
 			}
 			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
 				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
