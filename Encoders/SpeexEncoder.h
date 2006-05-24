@@ -40,7 +40,7 @@ enum {
 	int						_quality;
 	int						_bitrate;	
 	int						_complexity;
-	int						_framesPerPacket;
+	int						_framesPerOggPacket;
 
 	BOOL					_resampleInput;
 	BOOL					_denoiseEnabled;

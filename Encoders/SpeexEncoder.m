@@ -151,7 +151,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	_vadEnabled			= [[settings objectForKey:@"enableVAD"] boolValue];
 	_dtxEnabled			= [[settings objectForKey:@"enableDTX"] boolValue];
 	
-	_framesPerPacket	= [[settings objectForKey:@"framesPerPacket"] intValue];
+	_framesPerOggPacket	= [[settings objectForKey:@"framesPerPacket"] intValue];
 	
 	_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 }
@@ -313,7 +313,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		speex_init_header(&header, rate, 1, mode);
 		
-		header.frames_per_packet	= _framesPerPacket;
+		header.frames_per_packet	= _framesPerOggPacket;
 		header.vbr					= _vbrEnabled;
 		header.nb_channels			= [self channelsPerFrame];
 		
@@ -546,7 +546,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			
 			framesEncoded	+= frameSize;
 			
-			if(0 == (frameID + 1) % _framesPerPacket) {
+			if(0 == (frameID + 1) % _framesPerOggPacket) {
 				
 				speex_bits_insert_terminator(&bits);
 				nbBytes = speex_bits_write(&bits, cbits, 2000);
@@ -561,7 +561,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					op.granulepos = totalFrames;
 				}
 				
-				op.packetno		= 2 + frameID / _framesPerPacket;
+				op.packetno		= 2 + frameID / _framesPerOggPacket;
 				ogg_stream_packetin(&os, &op);
 				
 				// Write out pages
@@ -611,8 +611,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		}
 		
 		// Finish up
-		if(0 != (frameID + 1) % _framesPerPacket) {
-			while(0 != (frameID + 1) % _framesPerPacket) {
+		if(0 != (frameID + 1) % _framesPerOggPacket) {
+			while(0 != (frameID + 1) % _framesPerOggPacket) {
 				++frameID;
 				speex_bits_pack(&bits, 15, 5);
 			}
@@ -627,7 +627,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				op.granulepos = totalFrames;
 			}
 			
-			op.packetno = 2 + frameID / _framesPerPacket;
+			op.packetno = 2 + frameID / _framesPerOggPacket;
 			ogg_stream_packetin(&os, &op);
 		}
 		
