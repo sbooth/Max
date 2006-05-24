@@ -765,6 +765,7 @@
 		8CF2B1490A0DD2DA008738E4 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/SpeexSettingsSheet.nib; sourceTree = "<group>"; };
 		8CF2B14A0A0DD2DA008738E4 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/WavPackSettingsSheet.nib; sourceTree = "<group>"; };
 		8CF4D52309455D2300385BE4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FormatsPreferences.nib; sourceTree = "<group>"; };
+		8CF59C660A24AB8000368DF3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8CFF40A50A1D6030008E503C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8CFF40B20A1D6AD9008E503C /* SelectEncodersSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEncodersSheet.h; sourceTree = "<group>"; };
 		8CFF40B30A1D6AD9008E503C /* SelectEncodersSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEncodersSheet.m; sourceTree = "<group>"; };
@@ -2117,6 +2118,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				8CFF40A50A1D6030008E503C /* English */,
+				8CF59C660A24AB8000368DF3 /* French */,
 			);
 			name = SelectEncodersSheet.nib;
 			sourceTree = "<group>";
