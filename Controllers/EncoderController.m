@@ -459,7 +459,7 @@ static EncoderController *sharedController = nil;
 		
 		// Metadata fallback
 		artist		= (nil == [metadata trackArtist] ? [metadata albumArtist] : [metadata trackArtist]);
-		composer	= (nil == [metadata trackComposer] ? [metadata albumArtist] : [metadata albumComposer]);
+		composer	= (nil == [metadata trackComposer] ? [metadata albumComposer] : [metadata trackComposer]);
 		genre		= (nil == [metadata trackGenre] ? [metadata albumGenre] : [metadata trackGenre]);
 		year		= (0 == [metadata trackYear] ? [metadata albumYear] : [metadata trackYear]);
 		comment		= (nil == [metadata albumComment] ? [metadata trackComment] : (nil == [metadata trackComment] ? [metadata albumComment] : [NSString stringWithFormat:@"%@\n%@", [metadata trackComment], [metadata albumComment]]));
