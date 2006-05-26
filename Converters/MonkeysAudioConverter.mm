@@ -111,7 +111,7 @@
 		
 		// MAC feeds us little-endian data, otherwise leave untouched
 		inputASBD				= [self outputDescription];
-		inputASBD.mFormatID		= kAudioFormatLinearPCM;
+		inputASBD.mFormatFlags	= kAudioFormatFlagIsSignedInteger;
 		
 		err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(inputASBD), &inputASBD);
 		if(noErr != err) {
