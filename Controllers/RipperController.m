@@ -287,7 +287,7 @@ static RipperController *sharedController = nil;
 							   notificationName:@"Ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
 	
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"] && NO == [[[task objectInTracksAtIndex:0] document] ripInProgress]) {
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"] && NO == [self documentHasRipperTasks:[[task objectInTracksAtIndex:0] document]]) {
 		[[[task objectInTracksAtIndex:0] document] ejectDisc:self];
 	}
 
