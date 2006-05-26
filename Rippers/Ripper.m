@@ -42,8 +42,6 @@
 			
 		[ripper setDelegate:owner];
 		[owner ripperReady:ripper];
-		
-		[ripper release];
 	}	
 	
 	@catch(NSException *exception) {
@@ -54,9 +52,8 @@
 	}
 	
 	@finally {
-		if(nil != pool) {
-			[pool release];
-		}		
+		[ripper release];
+		[pool release];
 	}
 }
 
