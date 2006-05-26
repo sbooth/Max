@@ -87,8 +87,8 @@
 		apeBlockSize		= decompressor->GetInfo(APE_INFO_BLOCK_ALIGN);
 		
 		[self setSampleRate:decompressor->GetInfo(APE_INFO_SAMPLE_RATE)];
-		[self setBitsPerChannel:decompressor->GetInfo(APE_INFO_CHANNELS)];
-		[self setChannelsPerFrame:decompressor->GetInfo(APE_INFO_BITS_PER_SAMPLE)];
+		[self setBitsPerChannel:decompressor->GetInfo(APE_INFO_BITS_PER_SAMPLE)];
+		[self setChannelsPerFrame:decompressor->GetInfo(APE_INFO_CHANNELS)];
 
 		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
