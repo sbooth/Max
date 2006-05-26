@@ -306,6 +306,7 @@
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
 		8C29D946097F442200E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Genres.strings; sourceTree = "<group>"; };
 		8C29D97C097F469D00E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Log.strings; sourceTree = "<group>"; };
+		8C2B9C5D0A27503D00111D14 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8C2D6FB109D195A200968B18 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8C32817D096D12C400608C9D /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -2077,6 +2078,7 @@
 				8CFF40A50A1D6030008E503C /* English */,
 				8CF59C660A24AB8000368DF3 /* French */,
 				8C0925F20A2600680017CADE /* Dutch */,
+				8C2B9C5D0A27503D00111D14 /* German */,
 			);
 			name = SelectEncodersSheet.nib;
 			sourceTree = "<group>";
