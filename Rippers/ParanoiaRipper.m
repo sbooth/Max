@@ -192,7 +192,7 @@ callback(long inpos, int function, void *userdata)
 		// Interleaved 16-bit PCM audio
 		outputASBD.mSampleRate			= 44100.f;
 		outputASBD.mFormatID			= kAudioFormatLinearPCM;
-		outputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+		outputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
 		outputASBD.mBytesPerPacket		= 4;
 		outputASBD.mFramesPerPacket		= 1;
 		outputASBD.mBytesPerFrame		= 4;

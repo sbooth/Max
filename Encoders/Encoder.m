@@ -87,7 +87,7 @@
 	bzero(&result, sizeof(AudioStreamBasicDescription));
 	
 	result.mFormatID			= kAudioFormatLinearPCM;
-	result.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian;
+	result.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
 	
 	result.mSampleRate			= [self sampleRate];
 	result.mChannelsPerFrame	= [self channelsPerFrame];
