@@ -251,11 +251,11 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 				}
 					
-				// Interleave the audio, converting to big endian byte order for the AIFF file
+				// Interleave the audio (no need for byte swapping)
 				alias8 = buffer8;
 				for(sample = 0; sample < frame->header.blocksize; ++sample) {
 					for(channel = 0; channel < frame->header.channels; ++channel) {
-						*alias8++ = (int8_t)OSSwapHostToBigInt32(buffer[channel][sample]);
+						*alias8++ = (int8_t)buffer[channel][sample];
 					}
 				}
 					
@@ -278,7 +278,7 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 				alias16 = buffer16;
 				for(sample = 0; sample < frame->header.blocksize; ++sample) {
 					for(channel = 0; channel < frame->header.channels; ++channel) {
-						*alias16++ = (int16_t)OSSwapHostToBigInt32(buffer[channel][sample]);
+						*alias16++ = (int16_t)OSSwapHostToBigInt16((int16_t)buffer[channel][sample]);
 					}
 				}
 					

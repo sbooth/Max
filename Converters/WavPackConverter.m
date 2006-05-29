@@ -165,10 +165,10 @@
 				
 				case 8:
 					
-					// Interleave the audio, converting to big endian byte order for the AIFF file
+					// Interleave the audio (no need for byte swapping)
 					alias8 = buffer8;
 					for(sample = 0; sample < samplesRead; ++sample) {
-						*alias8++ = (int8_t)OSSwapHostToBigInt32(buffer[sample]);
+						*alias8++ = (int8_t)buffer[sample];
 					}
 						
 					// Place the interleaved data in the buffer
@@ -182,7 +182,7 @@
 					// Interleave the audio, converting to big endian byte order for the AIFF file
 					alias16 = buffer16;
 					for(sample = 0; sample < samplesRead; ++sample) {
-						*alias16++ = (int16_t)OSSwapHostToBigInt32(buffer[sample]);
+						*alias16++ = (int16_t)OSSwapHostToBigInt16((int16_t)buffer[sample]);
 					}
 						
 					// Place the interleaved data in the buffer
