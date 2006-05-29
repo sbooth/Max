@@ -206,6 +206,7 @@
 				customSettings = [NSMutableDictionary dictionary];
 				[customSettings addEntriesFromDictionary:[LibsndfileSettingsSheet defaultSettings]];
 				[customSettings setObject:[type objectForKey:@"majorFormat"] forKey:@"majorFormat"];
+				[customSettings setObject:[type valueForKey:@"name"] forKey:@"name"];
 				[customSettings setObject:[type objectForKey:@"extension"] forKey:@"extension"];
 				defaultSettings = customSettings;
 				break;
