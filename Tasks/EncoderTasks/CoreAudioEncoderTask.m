@@ -100,6 +100,7 @@
 	unsigned				discTotal				= 0;
 	NSString				*album					= nil;
 	NSString				*artist					= nil;
+	NSString				*composer				= nil;
 	NSString				*title					= nil;
 	unsigned				year					= 0;
 	NSString				*genre					= nil;
@@ -131,6 +132,15 @@
 				MP4SetMetadataArtist(mp4FileHandle, [artist UTF8String]);
 			}
 			
+			// Composer
+			composer = [metadata trackComposer];
+			if(nil == composer) {
+				composer = [metadata albumComposer];
+			}
+			if(nil != composer) {
+				MP4SetMetadataWriter(mp4FileHandle, [composer UTF8String]);
+			}
+
 			// Genre
 			if(1 == [_tracks count]) {
 				genre = [metadata trackGenre];
