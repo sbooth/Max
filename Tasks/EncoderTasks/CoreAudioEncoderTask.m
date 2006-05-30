@@ -269,6 +269,15 @@
 					[info setObject:artist forKey:@kAFInfoDictionary_Artist];
 				}
 				
+				// Composer
+				composer = [metadata trackComposer];
+				if(nil == composer) {
+					composer = [metadata albumComposer];
+				}
+				if(nil != composer) {
+					[info setObject:composer forKey:@kAFInfoDictionary_Composer];
+				}
+
 				// Genre
 				if(1 == [_tracks count]) {
 					genre = [metadata trackGenre];
