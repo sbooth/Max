@@ -92,9 +92,31 @@
 	}
 	
 	[self setSampleRate:asbd.mSampleRate];
-	[self setBitsPerChannel:asbd.mBitsPerChannel];
 	[self setChannelsPerFrame:asbd.mChannelsPerFrame];
 
+	// For compressed formats, mBitsPerChannel is 0
+	// In this case just use the default sample size (currently 16-bit)
+	// For PCM formats this will be set, and ALAC is special-cased below
+	if(0 != asbd.mBitsPerChannel) {
+		[self setBitsPerChannel:asbd.mBitsPerChannel];
+	}
+
+	// Determine ALAC sample size
+	if(kAudioFormatAppleLossless == asbd.mFormatID) {
+		if(kAppleLosslessFormatFlag_16BitSourceData & asbd.mFormatFlags) {
+			[self setBitsPerChannel:16];
+		}
+		else if(kAppleLosslessFormatFlag_20BitSourceData & asbd.mFormatFlags) {
+			[self setBitsPerChannel:20];
+		}
+		else if(kAppleLosslessFormatFlag_24BitSourceData & asbd.mFormatFlags) {
+			[self setBitsPerChannel:24];
+		}
+		else if(kAppleLosslessFormatFlag_32BitSourceData & asbd.mFormatFlags) {
+			[self setBitsPerChannel:32];
+		}
+	}
+	
 	size	= sizeof(_fileType);
 	err		= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &size, &_fileType);
 	if(noErr != err) {
