@@ -176,8 +176,10 @@ static MediaController *sharedController = nil;
 		DASessionScheduleWithRunLoop(_session, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
 		DARegisterDiskAppearedCallback(_session, (CFDictionaryRef)match, diskAppearedCallback, NULL);
 		DARegisterDiskDisappearedCallback(_session, (CFDictionaryRef)match, diskDisappearedCallback, NULL);
+		
+		return self;
 	}
-	return self;
+	return nil;
 }
 
 - (void) dealloc
