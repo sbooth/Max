@@ -96,7 +96,7 @@
 
 	// For compressed formats, mBitsPerChannel is 0
 	// In this case just use the default sample size (currently 16-bit)
-	// For PCM formats this will be set, and ALAC is special-cased below
+	// For PCM formats this will be set, and Apple Lossless is special-cased below
 	if(0 != asbd.mBitsPerChannel) {
 		[self setBitsPerChannel:asbd.mBitsPerChannel];
 	}
