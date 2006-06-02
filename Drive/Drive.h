@@ -77,10 +77,20 @@
 // Clear the drive's cache by filling with sectors outside of range
 - (void)				clearCache:(SectorRange *)range;
 
-// Read a chunk of CD-DA data
+// Read a chunk of CD-DA data (buffer should be 2352 * sectorCount bytes)
 - (unsigned)			readAudio:(void *)buffer sector:(unsigned)sector;
 - (unsigned)			readAudio:(void *)buffer sectorRange:(SectorRange *)range;
 - (unsigned)			readAudio:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+
+// Read error flags (buffer should be 294 * sectorCount bytes)
+- (unsigned)			readErrorFlags:(void *)buffer sector:(unsigned)sector;
+- (unsigned)			readErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
+- (unsigned)			readErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+
+// Read a chunk of CD-DA data, with error flags (buffer should be 2646 * sectorCount bytes)
+- (unsigned)			readAudioAndErrorFlags:(void *)buffer sector:(unsigned)sector;
+- (unsigned)			readAudioAndErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
+- (unsigned)			readAudioAndErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
 
 // Get the CD's media catalog number
 - (NSString *)			readMCN;
