@@ -530,13 +530,13 @@
 	dk_cd_read_t	cd_read;
 	unsigned		sectorSize		= 0;
 	
-	if(sizeof(buffer) < (sectorSize * sectorCount)) {
-		return 0;
-	}
-	
 	if(kCDSectorAreaUser & sectorAreas)					{ sectorSize += kCDSectorSizeCDDA; }
 	if(kCDSectorAreaErrorFlags & sectorAreas)			{ sectorSize += kCDSectorSizeErrorFlags; }
 	if(kCDSectorAreaSubChannelQ & sectorAreas)			{ sectorSize += kCDSectorSizeQSubchannel; }
+	
+	if(sizeof(buffer) < (sectorSize * sectorCount)) {
+		return 0;
+	}
 	
 	bzero(&cd_read, sizeof(cd_read));
 	bzero(buffer, sectorSize * sectorCount);
