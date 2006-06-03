@@ -25,6 +25,11 @@
 
 #include <IOKit/storage/IOCDTypes.h>
 
+enum {
+	kCDSectorSizeQSubchannel		= 16,
+	kCDSectorSizeErrorFlags			= 294
+};
+
 @interface Drive : NSObject
 {
 	NSString		*_deviceName;
@@ -77,20 +82,35 @@
 // Clear the drive's cache by filling with sectors outside of range
 - (void)				clearCache:(SectorRange *)range;
 
-// Read a chunk of CD-DA data (buffer should be 2352 * sectorCount bytes)
+// Read a chunk of CD-DA data (buffer should be kCDSectorSizeCDDA * sectorCount bytes)
 - (unsigned)			readAudio:(void *)buffer sector:(unsigned)sector;
 - (unsigned)			readAudio:(void *)buffer sectorRange:(SectorRange *)range;
 - (unsigned)			readAudio:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
 
-// Read error flags (buffer should be 294 * sectorCount bytes)
+// Read Q sub-channel (buffer should be kCDSectorSizeQSubchannel * sectorCount bytes)
+- (unsigned)			readQSubchannel:(void *)buffer sector:(unsigned)sector;
+- (unsigned)			readQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
+- (unsigned)			readQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+
+// Read error flags (buffer should be kCDSectorSizeErrorFlags * sectorCount bytes)
 - (unsigned)			readErrorFlags:(void *)buffer sector:(unsigned)sector;
 - (unsigned)			readErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
 - (unsigned)			readErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
 
-// Read a chunk of CD-DA data, with error flags (buffer should be 2646 * sectorCount bytes)
+// Read a chunk of CD-DA data, with Q sub-channel (buffer should be (kCDSectorSizeCDDA + kCDSectorSizeQSubchannel) * sectorCount bytes)
+- (unsigned)			readAudioAndQSubchannel:(void *)buffer sector:(unsigned)sector;
+- (unsigned)			readAudioAndQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
+- (unsigned)			readAudioAndQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+
+// Read a chunk of CD-DA data, with error flags (buffer should be (kCDSectorSizeCDDA + kCDSectorSizeErrorFlags) * sectorCount bytes)
 - (unsigned)			readAudioAndErrorFlags:(void *)buffer sector:(unsigned)sector;
 - (unsigned)			readAudioAndErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
 - (unsigned)			readAudioAndErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+
+// Read a chunk of CD-DA data, with error flags and Q sub-channel (buffer should be (kCDSectorSizeCDDA + kCDSectorSizeErrorFlags + kCDSectorSizeQSubchannel) * sectorCount bytes)
+- (unsigned)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sector:(unsigned)sector;
+- (unsigned)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
+- (unsigned)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
 
 // Get the CD's media catalog number
 - (NSString *)			readMCN;
