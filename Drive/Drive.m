@@ -528,27 +528,27 @@
 - (unsigned)		readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
 {
 	dk_cd_read_t	cd_read;
-	unsigned		sectorSize		= 0;
+	unsigned		blockSize		= 0;
 	
-	if(kCDSectorAreaUser & sectorAreas)					{ sectorSize += kCDSectorSizeCDDA; }
-	if(kCDSectorAreaErrorFlags & sectorAreas)			{ sectorSize += kCDSectorSizeErrorFlags; }
-	if(kCDSectorAreaSubChannelQ & sectorAreas)			{ sectorSize += kCDSectorSizeQSubchannel; }
+	if(kCDSectorAreaUser & sectorAreas)					{ blockSize += kCDSectorSizeCDDA; }
+	if(kCDSectorAreaErrorFlags & sectorAreas)			{ blockSize += kCDSectorSizeErrorFlags; }
+	if(kCDSectorAreaSubChannelQ & sectorAreas)			{ blockSize += kCDSectorSizeQSubchannel; }
 	
 	bzero(&cd_read, sizeof(cd_read));
-	bzero(buffer, sectorSize * sectorCount);
+	bzero(buffer, blockSize * sectorCount);
 	
-	cd_read.offset			= sectorSize * startSector;
+	cd_read.offset			= blockSize * startSector;
 	cd_read.sectorArea		= sectorAreas;
 	cd_read.sectorType		= kCDSectorTypeCDDA;
 	cd_read.buffer			= buffer;
-	cd_read.bufferLength	= sectorSize * sectorCount;
+	cd_read.bufferLength	= blockSize * sectorCount;
 	
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDREAD, &cd_read)) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"")
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	
-	return cd_read.bufferLength / sectorSize;
+	return cd_read.bufferLength / blockSize;
 }
 
 - (NSString *)		readMCN
