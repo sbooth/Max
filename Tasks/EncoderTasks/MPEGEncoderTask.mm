@@ -77,6 +77,9 @@
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
 	}
 
+	// Use UTF-8 as the default encoding
+	(TagLib::ID3v2::FrameFactory::instance())->setDefaultTextEncoding(TagLib::String::UTF8);
+	
 	// Album title
 	album = [metadata albumTitle];
 	if(nil != album) {
