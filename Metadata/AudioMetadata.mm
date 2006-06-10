@@ -1525,6 +1525,34 @@
 	}
 }
 
+- (BOOL) isEmpty
+{
+	return (
+			0		== [self trackNumber] &&
+			nil		== [self trackTitle] &&
+			nil		== [self trackArtist] &&
+			nil		== [self trackComposer] &&
+			0		== [self trackYear] &&
+			nil		== [self trackGenre] &&
+			nil		== [self trackComment] &&
+			0		== [self albumTrackCount] &&
+			nil		== [self albumTitle] &&
+			nil		== [self albumArtist] &&
+			nil		== [self albumComposer] &&
+			0		== [self albumYear] &&
+			nil		== [self albumGenre] &&
+			nil		== [self albumComment] &&
+			NO		== [self compilation] &&
+			0		== [self discNumber] &&
+			0		== [self discTotal] &&
+			0		== [self length] &&
+			nil		== [self MCN] &&
+			nil		== [self ISRC] &&
+			nil		== [self albumArt] &&
+			nil		== [self playlist]
+			);
+}
+
 #pragma mark Accessors
 
 - (unsigned)	trackNumber					{ return _trackNumber; }

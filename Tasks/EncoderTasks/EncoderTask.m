@@ -186,6 +186,9 @@ enum {
 	if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"]) {
 		basename = [[(ConverterTask *)_task inputFilename] stringByDeletingPathExtension];
 	}
+	else if([_task isKindOfClass:[ConverterTask class]] && [[_task metadata] isEmpty]) {
+		basename = [NSString stringWithFormat:@"%@/%@", [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath], [[[(ConverterTask *)_task inputFilename] lastPathComponent] stringByDeletingPathExtension]];
+	}
 	else {
 		// Set up the additional key/value pairs to be substituted
 		[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];

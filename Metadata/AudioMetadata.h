@@ -64,6 +64,8 @@
 // Substitute our values for {} keywords in string
 - (NSString *)			replaceKeywordsInString:(NSString *)namingScheme;
 
+- (BOOL)		isEmpty;
+
 - (unsigned)	trackNumber;
 - (void)		setTrackNumber:(unsigned)trackNumber;
 
