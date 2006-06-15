@@ -53,6 +53,7 @@
 	unsigned									trackTotal				= 0;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
+	NSString									*composer				= nil;
 	NSString									*title					= nil;
 	unsigned									year					= 0;
 	NSString									*genre					= nil;
@@ -95,6 +96,21 @@
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
 	}
 	
+	// Composer
+	composer = [metadata trackComposer];
+	if(nil == composer) {
+		composer = [metadata albumComposer];
+	}
+	if(nil != composer) {
+		frame = new TagLib::ID3v2::TextIdentificationFrame("TCOM", TagLib::String::Latin1);
+		if(nil == frame) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		frame->setText(TagLib::String([composer UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+
 	// Genre
 	genre = [metadata trackGenre];
 	if(nil == genre) {
