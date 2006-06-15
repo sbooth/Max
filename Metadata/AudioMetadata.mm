@@ -1548,8 +1548,7 @@
 			0		== [self length] &&
 			nil		== [self MCN] &&
 			nil		== [self ISRC] &&
-			nil		== [self albumArt] &&
-			nil		== [self playlist]
+			nil		== [self albumArt]
 			);
 }
 
