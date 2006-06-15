@@ -56,7 +56,6 @@ static ApplicationController *sharedController = nil;
 {
 	// Set up the ValueTransformers
 	NSValueTransformer			*transformer;
-	NSArray						*array;
 	NSString					*defaultsValuesPath;
     NSDictionary				*defaultsValuesDictionary;
     
