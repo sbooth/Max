@@ -198,7 +198,7 @@
 	NSData		*data;
 	NSColor		*result		= nil;
 	
-	if(nil != [self artist] || 0 != [self year] || nil != [self genre]) {
+	if(nil != [self artist] || 0 != [self year] || nil != [self genre] || nil != [self composer]) {
 		data = [[NSUserDefaults standardUserDefaults] dataForKey:@"customTrackColor"];
 		if(nil != data) {
 			result = (NSColor *)[NSUnarchiver unarchiveObjectWithData:data];
