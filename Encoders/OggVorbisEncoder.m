@@ -80,6 +80,10 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 	unsigned					wideSample;
 	unsigned					sample, channel;
 	
+	int8_t						byteOne, byteTwo, byteThree;
+	int32_t						constructedSample;
+	float						normalizedSample;
+
 	BOOL						eos									= NO;
 
 	AudioBufferList				bufferList;
@@ -126,10 +130,8 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-		
-		[self setSampleRate:asbd.mSampleRate];
-		[self setBitsPerChannel:asbd.mBitsPerChannel];
-		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+
+		[self setInputASBD:asbd];
 		
 		size	= sizeof(totalFrames);
 		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
@@ -149,6 +151,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		switch([self bitsPerChannel]) {
 			
 			case 8:				
+			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
 				break;
@@ -158,7 +161,6 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
 				break;
 				
-			case 24:
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
@@ -275,10 +277,33 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 					break;
 					
 				case 24:
-					buffer32 = bufferList.mBuffers[0].mData;
+					buffer8 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
-							buffer[channel][wideSample] = ((int32_t)OSSwapBigToHostInt32(buffer32[sample])) / 8388608.f;
+							byteOne				= buffer8[sample];
+							byteTwo				= buffer8[++sample];
+							byteThree			= buffer8[++sample];
+							
+							// For simplicity's sake, rather than working with 24-bit numbers just promote them to 32 bits
+							constructedSample	= ((byteOne << 24) & 0xFF000000) | ((byteTwo << 16) & 0xFF0000) | ((byteThree << 8) & 0xFF00) | (byteThree & 0xFF);
+							constructedSample	= OSSwapBigToHostInt32(constructedSample);
+							normalizedSample	= constructedSample / 2147483648.f;
+							
+							// For some reason I keep gettings clicks when attempting to process the number in 24 bits
+							/*
+							constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);							
+							constructedSample	= OSSwapBigToHostInt32(constructedSample);
+							
+							if(8388608 < constructedSample) {
+								constructedSample = ~constructedSample;
+								constructedSample &= 0x7FFFFF;
+								constructedSample *= -1;
+							}
+
+							normalizedSample	= constructedSample / 8388608.f;
+							 */
+							
+							buffer[channel][wideSample] = normalizedSample;
 						}
 					}
 					break;

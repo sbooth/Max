@@ -124,7 +124,7 @@
 	}		
 
 	// Set output format
-	asbd = [self outputDescription];
+	asbd = [self outputASBD];
 	err = ExtAudioFileSetProperty(_in, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
 	if(noErr != err) {
 		@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty"]
@@ -199,6 +199,7 @@
 		switch([self bitsPerChannel]) {
 			
 			case 8:
+			case 24:
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
 				break;
@@ -208,7 +209,6 @@
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
 				break;
 				
-			case 24:
 			case 32:
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
@@ -230,7 +230,7 @@
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
-		asbd = [self outputDescription];
+		asbd = [self outputASBD];
 		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &asbd, 0, &audioFile);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]

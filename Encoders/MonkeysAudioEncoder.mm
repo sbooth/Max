@@ -123,9 +123,7 @@
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		[self setSampleRate:asbd.mSampleRate];
-		[self setBitsPerChannel:asbd.mBitsPerChannel];
-		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+		[self setInputASBD:asbd];
 		
 		size	= sizeof(totalFrames);
 		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
@@ -145,6 +143,7 @@
 		switch([self bitsPerChannel]) {
 			
 			case 8:				
+			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
 				break;
@@ -154,7 +153,6 @@
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
 				break;
 				
-			case 24:
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
@@ -288,12 +286,12 @@
 	switch([self bitsPerChannel]) {
 		
 		case 8:
-			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
+/*			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
 			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 					buffer8[sample] = buffer8[sample];
 				}
-			}
+			}*/
 			break;
 			
 		case 16:
@@ -304,8 +302,16 @@
 				}
 			}
 			break;
-			
+
 		case 24:
+/*			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
+			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+					buffer8[sample] = buffer8[sample];
+				}
+			}*/
+			break;
+
 		case 32:
 			buffer32 = (uint32_t *)chunk->mBuffers[0].mData;
 			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {

@@ -206,7 +206,12 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	int16_t						*buffer16									= NULL;
 	int32_t						*buffer32									= NULL;
 	float						*floatBuffer								= NULL;
-	unsigned					sample;
+
+	int8_t						byteOne, byteTwo, byteThree;
+	int32_t						constructedSample;
+	float						normalizedSample;
+
+	unsigned					sample, wideSample;
    
 	
 	// Parse the encoder settings
@@ -240,9 +245,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		[self setSampleRate:asbd.mSampleRate];
-		[self setBitsPerChannel:asbd.mBitsPerChannel];
-		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+		[self setInputASBD:asbd];
 
 		if(1 != [self channelsPerFrame] && 2 != [self channelsPerFrame]) {
 			@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
@@ -271,7 +274,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					break;
 			}
 
-			asbd				= [self inputDescription];
+			asbd				= [self inputASBD];
 			asbd.mSampleRate	= (float)rate;
 			
 			err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
@@ -407,7 +410,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		bufferLen									= 2 * frameSize;
 		switch([self bitsPerChannel]) {
 			
-			case 8:				
+			case 8:
+			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
 				break;
@@ -417,7 +421,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
 				break;
 				
-			case 24:
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
@@ -484,9 +487,19 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 					}
 						
-					buffer32 = bufferList.mBuffers[0].mData;
-					for(sample = 0; sample < frameCount; ++sample) {
-						floatBuffer[sample] = (float)(OSSwapBigToHostInt32(buffer32[sample]) / 8388608.f);
+					buffer8 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount && sample < bufferList.mBuffers[0].mDataByteSize; ++wideSample, ++sample) {
+
+						byteOne				= buffer8[sample];
+						byteTwo				= buffer8[++sample];
+						byteThree			= buffer8[++sample];
+						
+						// For simplicity's sake, rather than working with 24-bit numbers just promote them to 32 bits
+						constructedSample	= ((byteOne << 24) & 0xFF000000) | ((byteTwo << 16) & 0xFF0000) | ((byteThree << 8) & 0xFF00) | (byteThree & 0xFF);
+						constructedSample	= OSSwapBigToHostInt32(constructedSample);
+						normalizedSample	= constructedSample / 2147483648.f;
+						
+						floatBuffer[wideSample] = normalizedSample;
 					}
 					break;
 

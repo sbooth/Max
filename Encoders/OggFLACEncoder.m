@@ -122,9 +122,7 @@
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		[self setSampleRate:asbd.mSampleRate];
-		[self setBitsPerChannel:asbd.mBitsPerChannel];
-		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+		[self setInputASBD:asbd];
 		
 		size	= sizeof(totalFrames);
 		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
@@ -144,6 +142,7 @@
 		switch([self bitsPerChannel]) {
 			
 			case 8:				
+			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
 				break;
@@ -153,7 +152,6 @@
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
 				break;
 				
-			case 24:
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
@@ -318,10 +316,16 @@
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount
 {
 	FLAC__bool		flacResult;
+	
 	int32_t			**buffer				= NULL;
+	
 	int8_t			*buffer8				= NULL;
 	int16_t			*buffer16				= NULL;
 	int32_t			*buffer32				= NULL;
+	
+	int8_t			byteOne, byteTwo, byteThree;
+	int32_t			constructedSample;
+	
 	unsigned		wideSample;
 	unsigned		sample, channel;
 	
@@ -369,6 +373,19 @@
 				break;
 				
 			case 24:
+				buffer8 = chunk->mBuffers[0].mData;
+				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {						
+						byteOne				= buffer8[sample];
+						byteTwo				= buffer8[++sample];
+						byteThree			= buffer8[++sample];
+						constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);
+						
+						buffer[channel][wideSample] = (int32_t)OSSwapBigToHostInt32(constructedSample);
+					}
+				}
+				break;
+
 			case 32:
 				buffer32 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {

@@ -121,21 +121,32 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 {
 	NSDate							*startTime							= [NSDate date];
 	OSStatus						err;
+
 	AudioBufferList					bufferList;
 	ssize_t							bufferLen							= 0;
+	
 	int8_t							*buffer8							= NULL;
 	int16_t							*buffer16							= NULL;
 	int32_t							*buffer32							= NULL;
 	int32_t							*wpBuf								= NULL;
+	
 	SInt64							totalFrames, framesToRead;
 	UInt32							size, frameCount;
+	
 	FSRef							ref;
 	ExtAudioFileRef					extAudioFileRef;
+	
 	AudioStreamBasicDescription		asbd;
 	int								fd, cfd;
-    WavpackContext					*wpc								= NULL;
+    
+	WavpackContext					*wpc								= NULL;
 	WavpackConfig					config;
+	
 	unsigned long					iterations							= 0;
+
+	int8_t							byteOne, byteTwo, byteThree;
+	int32_t							constructedSample;
+
 	unsigned						wideSample, sample, channel;
 	
 
@@ -170,9 +181,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		[self setSampleRate:asbd.mSampleRate];
-		[self setBitsPerChannel:asbd.mBitsPerChannel];
-		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
+		[self setInputASBD:asbd];
 		
 		size	= sizeof(totalFrames);
 		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
@@ -192,6 +201,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		switch([self bitsPerChannel]) {
 			
 			case 8:				
+			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
 				break;
@@ -201,7 +211,6 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
 				break;
 				
-			case 24:
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
@@ -309,6 +318,19 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 					break;
 					
 				case 24:
+					buffer8 = bufferList.mBuffers[0].mData;
+					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+							byteOne				= buffer8[sample];
+							byteTwo				= buffer8[++sample];
+							byteThree			= buffer8[++sample];							
+							constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);
+							
+							wpBuf[(bufferList.mBuffers[0].mNumberChannels * wideSample) + channel] = (int32_t)OSSwapBigToHostInt32(constructedSample);
+						}
+					}
+					break;
+					
 				case 32:
 					buffer32 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {

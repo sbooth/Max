@@ -92,7 +92,7 @@
 	[super dealloc];
 }
 
-- (AudioStreamBasicDescription) outputDescription
+- (AudioStreamBasicDescription) outputASBD
 {
 	AudioStreamBasicDescription		result;
 	

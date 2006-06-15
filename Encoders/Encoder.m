@@ -62,12 +62,14 @@
 		
 		_inputFilename		= [inputFilename retain];
 
-		// Default is CD-DA format
-		_sampleRate			= 44100.f;
-		_channelsPerFrame	= 2;
-		_bitsPerChannel		= 16;
+		// Default is 2-channel CD-DA format
+		_inputASBD.mSampleRate			= 44100.f;
+		_inputASBD.mChannelsPerFrame	= 2;
+		_inputASBD.mBitsPerChannel		= 16;
 		
-		_framesPerPacket	= 1;
+		_inputASBD.mFramesPerPacket		= 1;
+		_inputASBD.mBytesPerPacket		= 4;
+		_inputASBD.mBytesPerFrame		= 4;
 
 		return self;
 	}
@@ -80,37 +82,15 @@
 	[super dealloc];
 }
 
-- (AudioStreamBasicDescription) inputDescription
-{
-	AudioStreamBasicDescription		result;
-	
-	bzero(&result, sizeof(AudioStreamBasicDescription));
-	
-	result.mFormatID			= kAudioFormatLinearPCM;
-	result.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-	
-	result.mSampleRate			= [self sampleRate];
-	result.mChannelsPerFrame	= [self channelsPerFrame];
-	result.mBitsPerChannel		= [self bitsPerChannel];
-	
-	result.mBytesPerPacket		= [self bytesPerPacket];
-	result.mFramesPerPacket		= [self framesPerPacket];
-	result.mBytesPerFrame		= [self bytesPerFrame];
-	
-	return result;
-}
+- (AudioStreamBasicDescription)		inputASBD												{ return _inputASBD; }
+- (void)							setInputASBD:(AudioStreamBasicDescription)inputASBD		{ _inputASBD = inputASBD; }
 
-- (Float64)				sampleRate										{ return _sampleRate; }
-- (UInt32)				bitsPerChannel									{ return _bitsPerChannel; }
-- (UInt32)				channelsPerFrame								{ return _channelsPerFrame; }
-- (UInt32)				framesPerPacket									{ return _framesPerPacket; }
-- (UInt32)				bytesPerPacket									{ return [self channelsPerFrame] * ([self bitsPerChannel] / 8); }
-- (UInt32)				bytesPerFrame									{ return [self framesPerPacket] * [self bytesPerPacket]; }
-
-- (void)				setSampleRate:(Float64)sampleRate				{ _sampleRate = sampleRate; }
-- (void)				setBitsPerChannel:(UInt32)bitsPerChannel		{ _bitsPerChannel = bitsPerChannel; }
-- (void)				setChannelsPerFrame:(UInt32)channelsPerFrame	{ _channelsPerFrame = channelsPerFrame; }
-- (void)				setFramesPerPacket:(UInt32)framesPerPacket		{ _framesPerPacket = framesPerPacket; }
+- (Float64)				sampleRate										{ return _inputASBD.mSampleRate; }
+- (UInt32)				bitsPerChannel									{ return _inputASBD.mBitsPerChannel; }
+- (UInt32)				channelsPerFrame								{ return _inputASBD.mChannelsPerFrame; }
+- (UInt32)				framesPerPacket									{ return _inputASBD.mFramesPerPacket; }
+- (UInt32)				bytesPerPacket									{ return _inputASBD.mBytesPerPacket; }
+- (UInt32)				bytesPerFrame									{ return _inputASBD.mBytesPerFrame; }
 
 - (id <TaskMethods>)	delegate										{ return _delegate; }
 - (void)				setDelegate:(id <TaskMethods>)delegate			{ _delegate = delegate; }

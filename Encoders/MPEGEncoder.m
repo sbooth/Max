@@ -183,11 +183,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-				
-		[self setSampleRate:asbd.mSampleRate];
-		[self setBitsPerChannel:asbd.mBitsPerChannel];
-		[self setChannelsPerFrame:asbd.mChannelsPerFrame];
 		
+		[self setInputASBD:asbd];
+
 		if(1 != [self channelsPerFrame] && 2 != [self channelsPerFrame]) {
 			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
 		}
@@ -210,6 +208,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		switch([self bitsPerChannel]) {
 			
 			case 8:				
+			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
 				break;
@@ -219,7 +218,6 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
 				break;
 				
-			case 24:
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
@@ -366,6 +364,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	int16_t			*buffer16				= NULL;
 	int32_t			*buffer32				= NULL;
 
+	int8_t			byteOne, byteTwo, byteThree;
+	int32_t			constructedSample;
+	
 	int				lameResult;
 	long			bytesWritten;
 
@@ -411,7 +412,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						// Rescale values to short
-						channelBuffers16[channel][wideSample] = (short)((buffer8[sample] / 128.f) * 32768.f);
+						channelBuffers16[channel][wideSample] = (short)(((buffer8[sample] << 8) & 0xFF00) | (buffer8[sample] & 0xFF));
 					}
 				}
 
@@ -451,11 +452,19 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 					}
 				}
-					
-				buffer32 = chunk->mBuffers[0].mData;
+
+				// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
+				buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-						channelBuffers32[channel][wideSample] = (long)((OSSwapBigToHostInt32((double)buffer32[sample]) / 8388608.f) * 2147483648.f);
+						// Reconstruct the original sample
+						byteOne				= buffer8[sample];
+						byteTwo				= buffer8[++sample];
+						byteThree			= buffer8[++sample];
+						constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);
+						
+						// Convert to 32-bit sample size
+						channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(((constructedSample << 8) & 0xFFFFFF00) | (constructedSample & 0xFF));
 					}
 				}
 					

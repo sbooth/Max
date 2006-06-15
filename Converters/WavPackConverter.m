@@ -48,7 +48,7 @@
 	UInt32							samplesRead			= 0;
 	UInt32							samplesToRead		= 0;
 	UInt32							totalSamples		= 0;
-	UInt32							bytesPerFrame;
+	int32_t							audioSample;
 	OSStatus						err;
 	FSRef							ref;
 	AudioFileID						audioFile;
@@ -84,7 +84,6 @@
 		// Get input file information
 		totalSamples		= WavpackGetNumSamples(wpc);
 		samplesToRead		= totalSamples;
-		bytesPerFrame		= [self channelsPerFrame] * ([self bitsPerChannel] / 8);
 
 		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
@@ -92,7 +91,7 @@
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 		}
-		asbd = [self outputDescription];
+		asbd = [self outputASBD];
 		err = AudioFileInitialize(&ref, kAudioFileAIFFType, &asbd, 0, &audioFile);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
@@ -121,7 +120,7 @@
 		// Allocate the buffer that will hold the interleaved audio data
 		switch([self bitsPerChannel]) {
 			
-			case 8:				
+			case 8:	
 				buffer8 = calloc(bufferLen, sizeof(int8_t));
 				if(NULL == buffer8) {
 					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
@@ -138,6 +137,13 @@
 				break;
 				
 			case 24:
+				buffer8 = calloc(3 * bufferLen, sizeof(int8_t));
+				if(NULL == buffer8) {
+					@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
+				break;
+
 			case 32:
 				buffer32 = calloc(bufferLen, sizeof(int32_t));
 				if(NULL == buffer32) {
@@ -154,7 +160,8 @@
 		for(;;) {
 			
 			// Decode the data
-			samplesRead = WavpackUnpackSamples(wpc, buffer, bufferLen / bytesPerFrame);
+			// Wavpack uses "complete" samples which equates to a frame in Core Audio
+			samplesRead = WavpackUnpackSamples(wpc, buffer, bufferLen / [self channelsPerFrame]);
 
 			// EOF?
 			if(0 == samplesRead) {
@@ -165,44 +172,56 @@
 				
 				case 8:
 					
-					// Interleave the audio (no need for byte swapping)
+					// No need for byte swapping
 					alias8 = buffer8;
-					for(sample = 0; sample < samplesRead; ++sample) {
+					for(sample = 0; sample < samplesRead * [self channelsPerFrame]; ++sample) {
 						*alias8++ = (int8_t)buffer[sample];
 					}
 						
-					// Place the interleaved data in the buffer
 					bufferList.mBuffers[0].mData				= buffer8;
-					bufferList.mBuffers[0].mDataByteSize		= samplesRead * sizeof(int8_t);
+					bufferList.mBuffers[0].mDataByteSize		= samplesRead * [self channelsPerFrame] * sizeof(int8_t);
 					
 					break;
 					
 				case 16:
 					
-					// Interleave the audio, converting to big endian byte order for the AIFF file
+					// Convert to big endian byte order for the AIFF file
 					alias16 = buffer16;
-					for(sample = 0; sample < samplesRead; ++sample) {
+					for(sample = 0; sample < samplesRead * [self channelsPerFrame]; ++sample) {
 						*alias16++ = (int16_t)OSSwapHostToBigInt16((int16_t)buffer[sample]);
 					}
 						
-					// Place the interleaved data in the buffer
 					bufferList.mBuffers[0].mData				= buffer16;
-					bufferList.mBuffers[0].mDataByteSize		= samplesRead * sizeof(int16_t);
+					bufferList.mBuffers[0].mDataByteSize		= samplesRead * [self channelsPerFrame] * sizeof(int16_t);
 					
 					break;
 					
 				case 24:
+					
+					// Convert to big endian byte order for the AIFF file
+					alias8 = buffer8;
+					for(sample = 0; sample < samplesRead * [self channelsPerFrame]; ++sample) {
+						audioSample	= OSSwapHostToBigInt32(buffer[sample]);
+						*alias8++	= (int8_t)(audioSample >> 16);
+						*alias8++	= (int8_t)(audioSample >> 8);
+						*alias8++	= (int8_t)audioSample;
+					}
+						
+					bufferList.mBuffers[0].mData				= buffer8;
+					bufferList.mBuffers[0].mDataByteSize		= samplesRead * [self channelsPerFrame] * 3 * sizeof(int8_t);
+					
+					break;
+					
 				case 32:
 					
-					// Interleave the audio, converting to big endian byte order for the AIFF file
+					// Convert to big endian byte order for the AIFF file
 					alias32 = buffer32;
-					for(sample = 0; sample < samplesRead; ++sample) {
+					for(sample = 0; sample < samplesRead * [self channelsPerFrame]; ++sample) {
 						*alias32++ = OSSwapHostToBigInt32(buffer[sample]);
 					}
 						
-					// Place the interleaved data in the buffer
 					bufferList.mBuffers[0].mData				= buffer32;
-					bufferList.mBuffers[0].mDataByteSize		= samplesRead * sizeof(int32_t);
+					bufferList.mBuffers[0].mDataByteSize		= samplesRead * [self channelsPerFrame] * sizeof(int32_t);
 					
 					break;
 					

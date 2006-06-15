@@ -37,7 +37,7 @@
 
 - (id)								initWithInputFile:(NSString *)inputFilename;
 
-- (AudioStreamBasicDescription)		outputDescription;
+- (AudioStreamBasicDescription)		outputASBD;
 
 - (Float64)							sampleRate;
 - (UInt32)							bitsPerChannel;
