@@ -162,11 +162,6 @@ static ConverterController *sharedController = nil;
 	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
 	NSString		*extension				= [filename pathExtension];
 	
-	// Verify an output format is selected
-//	if(YES == [[ApplicationController sharedController] displayAlertIfNoOutputFormats]) {
-//		return;
-//	}
-	
 	// Determine which type of converter to use and create it
 	if([coreAudioExtensions containsObject:extension]) {
 		converterTask = [[CoreAudioConverterTask alloc] initWithInputFile:filename metadata:metadata];		
