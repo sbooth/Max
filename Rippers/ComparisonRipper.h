@@ -31,6 +31,7 @@
 	unsigned				_requiredMatches;
 	unsigned				_maximumRetries;
 	BOOL					_useHashes;
+	BOOL					_useC2;
 	
 	unsigned				_grandTotalSectors;
 	unsigned				_sectorsRead;
@@ -47,5 +48,8 @@
 
 - (BOOL)					useHashes;
 - (void)					setUseHashes:(BOOL)useHashes;
+
+- (BOOL)					useC2;
+- (void)					setUseC2:(BOOL)useC2;
 
 @end

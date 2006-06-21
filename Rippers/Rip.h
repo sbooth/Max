@@ -20,11 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SectorRange.h"
+#import "BitArray.h"
 
 @interface Rip : NSObject
 {
 	NSString			*_filename;			// The file containing the ripped CD-DA data
 	SectorRange			*_sectorRange;		// The range of sectors contained in the file
+	BitArray			*_errors;			// C2 error flags for the ripped sectors
 	BOOL				_calculateHashes;	// Whether to calculate the SHA-256 for each sector
 	unsigned char		**_hashes;			// The SHA-256 for each sector in the file
 }
@@ -69,5 +71,11 @@
 
 - (void)				setBytes:(const void *)data forSector:(unsigned)sector;
 - (void)				setBytes:(const void *)data forSectorRange:(SectorRange *)range;
+
+// Error flag manipulation
+- (BOOL)				sectorHasError:(unsigned)sector;
+
+- (void)				setErrorFlag:(BOOL)errorFlag forSector:(unsigned)sector;
+- (void)				setErrorFlags:(const void *)errorFlags forSectorRange:(SectorRange *)range;
 
 @end

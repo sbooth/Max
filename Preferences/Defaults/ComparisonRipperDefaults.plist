@@ -8,5 +8,7 @@
 	<real>20</real>
 	<key>comparisonRipperUseHashes</key>
 	<false/>
+	<key>comparisonRipperUseC2</key>
+	<true/>
 </dict>
 </plist>

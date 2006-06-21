@@ -67,6 +67,10 @@
 		
 		_filename		= nil;
 		
+		_errors			= [[BitArray alloc] init];
+		[_errors setBitCount:[self length]];
+
+		
 		return self;
 	}
 	
@@ -85,6 +89,8 @@
 	}
 	
 	free(_hashes);
+	
+	[_errors release];
 	
 	[super dealloc];
 }
@@ -295,8 +301,6 @@
 			
 			// Extract the sector's bytes
 			memcpy(sector, buffer + (kCDSectorSizeCDDA * i), kCDSectorSizeCDDA);
-//			NSRange byteRange = NSMakeRange(kCDSectorSizeCDDA * i, kCDSectorSizeCDDA);
-//			[data getBytes:sector range:byteRange];
 			
 			// Compute the SHA-256 for the sector
 			sha_memory(sector, kCDSectorSizeCDDA, hash);
@@ -316,6 +320,46 @@
 	@finally {
 		if(-1 != fd) {
 			close(fd);
+		}
+	}
+}
+
+#pragma mark -
+
+- (BOOL)				sectorHasError:(unsigned)sector
+{
+	return [_errors valueAtIndex:(sector - [self firstSector])];
+}
+
+- (void)				setErrorFlag:(BOOL)errorFlag forSector:(unsigned)sector
+{
+	[_errors setValue:errorFlag forIndex:(sector - [self firstSector])];
+}
+
+- (void)				setErrorFlags:(const void *)errorFlags forSectorRange:(SectorRange *)range
+{
+	const uint32_t	*flags;
+	unsigned		lastArrayIndex;
+	unsigned		lastBitIndex;
+	unsigned		i, j;
+	
+	flags			= (const uint32_t *)errorFlags;
+	lastArrayIndex	= [range length] / (8 * sizeof(uint32_t));
+	lastBitIndex	= [range length] % (8 * sizeof(uint32_t));
+	
+	for(i = 0; i < lastArrayIndex; ++i) {
+		if(flags[i]) {
+			for(j = 0; j < 8; ++j) {
+				if(flags[i] & (1 << j)) {
+					[_errors setValue:YES forIndex:([range firstSector] + ((8 * sizeof(uint32_t) * i) + j) - [self firstSector])];
+				}
+			}
+		}
+	}
+	
+	for(i = 0; i < lastBitIndex; ++i) {
+		if(flags[lastArrayIndex] & (1 << i)) {
+			[_errors setValue:YES forIndex:([range firstSector] + ((8 * sizeof(uint32_t) * lastArrayIndex) + i) - [self firstSector])];
 		}
 	}
 }

@@ -83,6 +83,7 @@
 		_requiredMatches	= [[NSUserDefaults standardUserDefaults] integerForKey:@"comparisonRipperRequiredMatches"];
 		_maximumRetries		= [[NSUserDefaults standardUserDefaults] integerForKey:@"comparisonRipperMaximumRetries"];
 		_useHashes			= [[NSUserDefaults standardUserDefaults] boolForKey:@"comparisonRipperUseHashes"];
+		_useC2				= [[NSUserDefaults standardUserDefaults] boolForKey:@"comparisonRipperUseC2"];
 
 		_sectorsRead		= 0;
 		
@@ -112,6 +113,9 @@
 - (BOOL)				useHashes									{ return _useHashes; }
 - (void)				setUseHashes:(BOOL)useHashes				{ _useHashes = useHashes; }
 
+- (BOOL)				useC2										{ return _useC2; }
+- (void)				setUseC2:(BOOL)useC2						{ _useC2 = useC2; }
+
 - (void)				logMessage:(NSString *)message
 {
 	if([self logActivity]) {
@@ -139,7 +143,7 @@
 		// Setup output file type (same)
 		bzero(&outputASBD, sizeof(AudioStreamBasicDescription));
 		
-		// Interleaved 16-bit PCM audio
+		// Interleaved 16-bit PCM audio is what CD-DA gives us
 		outputASBD.mSampleRate			= 44100.f;
 		outputASBD.mFormatID			= kAudioFormatLinearPCM;
 		outputASBD.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
@@ -217,9 +221,15 @@
 - (void) ripSectorRange:(SectorRange *)range toFile:(ExtAudioFileRef)file
 {
 //	NSAutoreleasePool	*pool				= [[NSAutoreleasePool alloc] init];
-	int16_t				*buffer				= NULL;
+
+	int8_t				*buffer				= NULL;
+	int8_t				*audioBuffer		= NULL;
+	int8_t				*c2Buffer			= NULL;
+	int8_t				*sectorAlias		= NULL;
+	
 	int8_t				sectorBuffer		[ kCDSectorSizeCDDA ];
 	unsigned			bufferLen			= 0;
+	
 	unsigned			sectorsRead			= 0;
 	unsigned			sectorCount			= 0;
 	unsigned			startSector			= 0;
@@ -240,7 +250,7 @@
 	Rip					*comparator			= nil;
 	NSDate				*phaseStartTime		= nil;
 	BOOL				gotMatch;
-	unsigned			i;
+	unsigned			i, j, k;
 	unsigned			sector;
 	unsigned			sectorIndex;
 	unsigned			masterIndex;
@@ -262,14 +272,23 @@
 		// Allocate the array that will hold the individual rips
 		rips = [[[NSMutableArray alloc] initWithCapacity:[self requiredMatches]] autorelease];
 		
-		// Allocate a buffer to hold the ripped data
+		// Allocate buffers to hold the ripped data
 		bufferLen	= [range length] <  1024 ? [range length] : 1024;
-		buffer		= calloc(bufferLen, kCDSectorSizeCDDA);
-		if(NULL == buffer) {
+		buffer		= calloc(bufferLen, kCDSectorSizeCDDA + kCDSectorSizeErrorFlags);
+		audioBuffer	= calloc(bufferLen, kCDSectorSizeCDDA);
+		if(NULL == buffer || NULL == audioBuffer) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 
+		if([self useC2]) {
+			c2Buffer	= calloc(bufferLen, kCDSectorSizeErrorFlags);
+			if(NULL == c2Buffer) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+		}
+		
 		// Allocate the bit array
 		sectorStatus = [[[BitArray alloc] init] autorelease];
 		[sectorStatus setBitCount:[range length]];
@@ -320,14 +339,45 @@
 
 				// Extract the audio from the disc
 				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];				
-				sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
+				sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
+				//sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
 				
 				if(sectorCount != sectorsRead) {
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Log", @"") userInfo:nil];
 				}
 				
+				// Copy audio and (optionally) C2 data to their respective buffers
+				for(j = 0; j < sectorsRead; ++j) {
+					sectorAlias = buffer + (j * (kCDSectorSizeCDDA + kCDSectorSizeErrorFlags));
+					memcpy(audioBuffer + (j * kCDSectorSizeCDDA), sectorAlias, kCDSectorSizeCDDA);
+
+					if([self useC2]) {
+						memcpy(c2Buffer + (j * kCDSectorSizeErrorFlags), sectorAlias + kCDSectorSizeCDDA, kCDSectorSizeErrorFlags);
+					}
+					
+					//				memcpy(q + (j * kCDSectorSizeQSubchannel), sectorAlias + kCDSectorSizeCDDA + kCDSectorSizeErrorFlags, kCDSectorSizeQSubchannel);
+				}
+
+				// Check for C2 errors
+				if([self useC2]) {
+					for(j = 0; j < kCDSectorSizeErrorFlags * sectorsRead; ++j) {
+						if(c2Buffer[j]) {
+							for(k = 0; k < 8; ++k) {
+								if((1 << k) & c2Buffer[j]) {
+									[self logMessage:[NSString stringWithFormat:@"C2 error for sector %u", [readRange firstSector] + (8 * j) + k]];
+								}
+							}					
+						}
+					}
+				}
+
 				// Place the data in the Rip object
-				[rip setBytes:buffer forSectorRange:readRange];
+				[rip setBytes:audioBuffer forSectorRange:readRange];
+
+				// Store C2 errors
+				if([self useC2]) {
+					[rip setErrorFlags:c2Buffer forSectorRange:readRange];
+				}
 				
 				// Housekeeping
 				sectorsRemaining	-= [readRange length];
@@ -408,6 +458,11 @@
 						
 						// Skip this rip if it doesn't contain the sector of interest
 						if(NO == [comparator containsSector:sector]) {
+							continue;
+						}
+						
+						// Skip this rip if a C2 error was detected for the sector of interest
+						if([self useC2] && [comparator sectorHasError:sector]) {
 							continue;
 						}
 						
@@ -563,14 +618,45 @@
 					else {
 						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];
 					}
-					sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
+					sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
+//					sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
 					
 					if(sectorCount != sectorsRead) {
 						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 					}
 					
+					// Copy audio and (optionally) C2 data to their respective buffers
+					for(j = 0; j < sectorsRead; ++j) {
+						sectorAlias = buffer + (j * (kCDSectorSizeCDDA + kCDSectorSizeErrorFlags));
+						memcpy(audioBuffer + (j * kCDSectorSizeCDDA), sectorAlias, kCDSectorSizeCDDA);
+						
+						if([self useC2]) {
+							memcpy(c2Buffer + (j * kCDSectorSizeErrorFlags), sectorAlias + kCDSectorSizeCDDA, kCDSectorSizeErrorFlags);
+						}
+						
+						//				memcpy(q + (j * kCDSectorSizeQSubchannel), sectorAlias + kCDSectorSizeCDDA + kCDSectorSizeErrorFlags, kCDSectorSizeQSubchannel);
+					}
+					
+					// Check for C2 errors
+					if([self useC2]) {
+						for(j = 0; j < kCDSectorSizeErrorFlags * sectorsRead; ++j) {
+							if(c2Buffer[j]) {
+								for(k = 0; k < 8; ++k) {
+									if((1 << k) & c2Buffer[j]) {
+										[self logMessage:[NSString stringWithFormat:@"C2 error for sector %u", [readRange firstSector] + (8 * j) + k]];
+									}
+								}					
+							}
+						}
+					}
+					
 					// Place the data in the Rip object
-					[rip setBytes:buffer forSectorRange:readRange];
+					[rip setBytes:audioBuffer forSectorRange:readRange];
+					
+					// Store C2 errors
+					if([self useC2]) {
+						[rip setErrorFlags:c2Buffer forSectorRange:readRange];
+					}
 					
 					// Housekeeping
 					sectorsRemaining -= [readRange length];
