@@ -23,17 +23,6 @@
 
 @implementation BitArray
 
-- (id) init
-{
-	if((self = [super init])) {
-		_bitCount	= 0;
-		_length		= 0;
-		_bits		= NULL;
-		return self;
-	}
-	return nil;
-}
-
 - (void) dealloc
 {
 	free(_bits);
