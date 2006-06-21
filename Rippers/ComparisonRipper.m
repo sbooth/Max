@@ -340,7 +340,6 @@
 				// Extract the audio from the disc
 				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];				
 				sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
-				//sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
 				
 				if(sectorCount != sectorsRead) {
 					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Log", @"") userInfo:nil];
@@ -355,7 +354,7 @@
 						memcpy(c2Buffer + (j * kCDSectorSizeErrorFlags), sectorAlias + kCDSectorSizeCDDA, kCDSectorSizeErrorFlags);
 					}
 					
-					//				memcpy(q + (j * kCDSectorSizeQSubchannel), sectorAlias + kCDSectorSizeCDDA + kCDSectorSizeErrorFlags, kCDSectorSizeQSubchannel);
+					//memcpy(q + (j * kCDSectorSizeQSubchannel), sectorAlias + kCDSectorSizeCDDA + kCDSectorSizeErrorFlags, kCDSectorSizeQSubchannel);
 				}
 
 				// Check for C2 errors
@@ -619,7 +618,6 @@
 						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];
 					}
 					sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
-//					sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];
 					
 					if(sectorCount != sectorsRead) {
 						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
@@ -634,7 +632,7 @@
 							memcpy(c2Buffer + (j * kCDSectorSizeErrorFlags), sectorAlias + kCDSectorSizeCDDA, kCDSectorSizeErrorFlags);
 						}
 						
-						//				memcpy(q + (j * kCDSectorSizeQSubchannel), sectorAlias + kCDSectorSizeCDDA + kCDSectorSizeErrorFlags, kCDSectorSizeQSubchannel);
+						//memcpy(q + (j * kCDSectorSizeQSubchannel), sectorAlias + kCDSectorSizeCDDA + kCDSectorSizeErrorFlags, kCDSectorSizeQSubchannel);
 					}
 					
 					// Check for C2 errors
@@ -762,6 +760,8 @@
 		NSException			*exception;
 
 		free(buffer);
+		free(audioBuffer);
+		free(c2Buffer);
 		
 		// Delete temporary files
 		for(i = 0; i < [rips count]; ++i) {
