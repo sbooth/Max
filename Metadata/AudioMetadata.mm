@@ -274,8 +274,14 @@
 		
 		if(NULL != id3v2tag) {
 			
+			// Extract composer if present
+			TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TCOM"];
+			if(NO == frameList.isEmpty()) {
+				[result setAlbumComposer:[NSString stringWithUTF8String:frameList.front()->toString().toCString(true)]];
+			}
+			
 			// Extract total tracks if present
-			TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TRCK"];
+			frameList = id3v2tag->frameListMap()["TRCK"];
 			if(NO == frameList.isEmpty()) {
 				// Split the tracks at '/'
 				trackString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
@@ -362,6 +368,12 @@
 			[result setAlbumYear:[[NSString stringWithUTF8String:s] intValue]];
 		}
 		
+		// Composer
+		MP4GetMetadataWriter(mp4FileHandle, &s);
+		if(NULL != s) {
+			[result setAlbumComposer:[NSString stringWithUTF8String:s]];
+		}
+
 		// Comment
 		MP4GetMetadataComment(mp4FileHandle, &s);
 		if(NULL != s) {
