@@ -443,6 +443,11 @@
 						continue;
 					}
 					
+					// Skip this rip if a C2 error was detected for the sector of interest
+					if([self useC2] && [master sectorHasError:sector]) {
+						continue;
+					}
+
 					// Determine whether to compare based on SHA-256 hash or the sector's data
 					if([self useHashes]) {
 						masterHash = [master hashForSector:sector];
