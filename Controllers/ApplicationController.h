@@ -28,7 +28,6 @@
 
 @interface ApplicationController : NSObject <GrowlApplicationBridgeDelegate>
 {
-	NSArray		*_allowedTypes;
 }
 
 + (ApplicationController *)		sharedController;
@@ -46,7 +45,6 @@
 - (IBAction)			openHomeURL:(id)sender;
 
 - (IBAction)			encodeFile:(id)sender;
-- (IBAction)			encodeFileCustom:(id)sender;
 
 - (void)				encodeFiles:(NSArray *)filenames;
 - (void)				encodeFiles:(NSArray *)filenames withEncoders:(NSArray *)encoders;

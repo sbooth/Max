@@ -20,34 +20,35 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "ConverterTask.h"
+#import "FileArrayController.h"
 
-@interface ConverterController : NSWindowController
+enum {
+	kCurrentDirectoryMenuItemTag		= 1,
+	kChooseDirectoryMenuItemTag			= 2
+};
+
+@interface ConvertFilesController : NSWindowController
 {
-	IBOutlet NSTableView		*_taskTable;
-	IBOutlet NSArrayController	*_tasksController;
+	IBOutlet NSArrayController		*_encodersController;
+	IBOutlet FileArrayController	*_filesController;
+	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
 	
-	NSArray						*_tasks;
-	NSTimer						*_timer;
-	NSString					*_freeSpace;
-	BOOL						_freeze;
+	NSString						*_outputDirectory;
+	NSMutableArray					*_files;
 }
 
-+ (ConverterController *)	sharedController;
++ (ConvertFilesController *)		sharedController;
 
-// Functionality
-- (void)			convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders toDirectory:(NSString *)outputDirectory;
+- (IBAction)						ok:(id)sender;
+- (IBAction)						cancel:(id)sender;
 
-- (BOOL)			hasTasks;
-- (unsigned)		countOfTasks;
+- (IBAction)						addFiles:(id)sender;
+- (IBAction)						removeFiles:(id)sender;
 
-// Action methods
-- (IBAction)		stopSelectedTasks:(id)sender;
-- (IBAction)		stopAllTasks:(id)sender;
+- (IBAction)						selectOutputDirectory:(id)sender;
+- (IBAction)						resetOutputDirectoryToDefault:(id)sender;
 
-// Callbacks
-- (void)			converterTaskDidStart:(ConverterTask *)task;
-- (void)			converterTaskDidStop:(ConverterTask *)task;
-- (void)			converterTaskDidComplete:(ConverterTask *)task;
+- (BOOL)							addFile:(NSString *)filename;
+- (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;
 
 @end

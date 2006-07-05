@@ -163,8 +163,8 @@ static RipperController *sharedController = nil;
 		default:				task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
 	}
 	
-	// Set the active encoders in the task's userInfo dictionary
-	[task setUserInfo:[NSDictionary dictionaryWithObject:[[[tracks objectAtIndex:0] document] activeEncoders] forKey:@"activeEncoders"]];
+	// Set the active encoders and output directory in the task's userInfo dictionary
+	[task setUserInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[[[tracks objectAtIndex:0] document] activeEncoders], [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath], nil] forKeys:[NSArray arrayWithObjects:@"encoders", @"outputDirectory", nil]]];
 	
 	// Show the window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {

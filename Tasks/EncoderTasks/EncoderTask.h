@@ -29,6 +29,7 @@
 @interface EncoderTask : Task
 {
 	NSConnection			*_connection;
+	NSString				*_outputDirectory;
 	NSString				*_outputFilename;
 	Class					_encoderClass;
 	id <EncoderMethods>		_encoder;
@@ -50,6 +51,9 @@
 
 - (void)			run;
 - (void)			stop;
+
+- (NSString *)		outputDirectory;
+- (void)			setOutputDirectory:(NSString *)outputDirectory;
 
 - (NSString *)		extension;
 

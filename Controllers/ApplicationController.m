@@ -22,6 +22,7 @@
 
 #import "ServicesProvider.h"
 #import "PreferencesController.h"
+#import "ConvertFilesController.h"
 #import "AcknowledgmentsController.h"
 #import "ComponentVersionsController.h"
 #import "MediaController.h"
@@ -45,10 +46,6 @@
 #import "SelectEncodersSheet.h"
 
 static ApplicationController *sharedController = nil;
-
-@interface ApplicationController (Private)
-- (void) encodeFileInternal:(BOOL)selectEncoders;
-@end
 
 @implementation ApplicationController
 
@@ -125,28 +122,6 @@ static ApplicationController *sharedController = nil;
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
-- (id) init
-{
-	if((self = [super init])) {		
-
-		// Allowable file types
-		_allowedTypes = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
-		[(NSMutableArray *)_allowedTypes addObjectsFromArray:getLibsndfileExtensions()];
-		[(NSMutableArray *)_allowedTypes addObjectsFromArray:getBuiltinExtensions()];
-
-		[_allowedTypes retain];
-		
-		return self;
-	}
-	return nil;
-}
-
-- (void) dealloc
-{
-	[_allowedTypes release];
-	[super dealloc];
-}
-
 - (void) awakeFromNib
 {
 	[GrowlApplicationBridge setGrowlDelegate:self];
@@ -219,7 +194,7 @@ static ApplicationController *sharedController = nil;
 	if(nil != document) {
 		return YES;
 	}
-	else if([_allowedTypes containsObject:[filename pathExtension]]) {
+	else if([getAudioExtensions() containsObject:[filename pathExtension]]) {
 		[self encodeFiles:[NSArray arrayWithObject:filename]];
 		return YES;
 	}		
@@ -229,76 +204,8 @@ static ApplicationController *sharedController = nil;
 
 - (IBAction) encodeFile:(id)sender
 {
-	[self encodeFileInternal:NO];	
-}
-
-- (IBAction) encodeFileCustom:(id)sender
-{
-	[self encodeFileInternal:YES];	
-}
-
-- (void) encodeFileInternal:(BOOL)selectEncoders
-{
-	NSOpenPanel				*panel			= [NSOpenPanel openPanel];
-	NSArray					*encoders		= nil;
-	SelectEncodersSheet		*sheet			= nil;
-		
-	[panel setAllowsMultipleSelection:YES];
-	[panel setCanChooseDirectories:YES];
-	
-	if(selectEncoders) {
-		sheet = [[[SelectEncodersSheet alloc] init] autorelease];
-
-		[panel orderFront:self];
-		[sheet showSheet:panel];
-		
-		switch([[NSApplication sharedApplication] runModalForWindow:[sheet sheet]]) {
-			case NSOKButton:
-				encoders = [sheet selectedEncoders];
-				break;
-				
-			case NSCancelButton:
-				[panel orderOut:self];
-				return;
-				break;
-		}
-	}
-	else {
-		encoders = getDefaultOutputFormats();
-	}
-	
-	if(NSOKButton == [panel runModalForTypes:_allowedTypes]) {
-
-		@try {
-			[self encodeFiles:[panel filenames] withEncoders:encoders];
-		}
-		
-		@catch(FileFormatNotSupportedException *exception) {
-			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
-			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
-			[alert setInformativeText:[exception reason]];
-			[alert setAlertStyle:NSWarningAlertStyle];		
-			[alert runModal];
-		}
-		
-		@catch(NSException *exception) {
-			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-			if(nil != [exception userInfo] && nil != [[exception userInfo] objectForKey:@"filename"]) {
-				[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
-				[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the file \"%@\" for conversion.", @"Exceptions", @""), [[exception userInfo] objectForKey:@"filename"]]];
-			}
-			else {
-				[alert setMessageText:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
-				[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"An error occurred during file conversion.", @"Exceptions", @"")];
-			}
-			[alert setInformativeText:[exception reason]];
-			[alert setAlertStyle:NSWarningAlertStyle];		
-			[alert runModal];
-		}
-	}
+	[[ConvertFilesController sharedController] showWindow:self];
+//	[[ConvertFilesController sharedController] addFiles:self];
 }
 
 - (void) encodeFiles:(NSArray *)filenames
@@ -358,7 +265,7 @@ static ApplicationController *sharedController = nil;
 						continue;
 					}
 					// Ignore files that don't have our extensions
-					else if(NO == [_allowedTypes containsObject:[subpath pathExtension]]) {
+					else if(NO == [getAudioExtensions() containsObject:[subpath pathExtension]]) {
 						continue;
 					}
 					
@@ -367,7 +274,7 @@ static ApplicationController *sharedController = nil;
 						metadata = [AudioMetadata metadataFromFile:composedPath];
 						
 						@try {
-							[[ConverterController sharedController] convertFile:composedPath metadata:metadata withEncoders:encoders];
+							[[ConverterController sharedController] convertFile:composedPath metadata:metadata withEncoders:encoders toDirectory:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath]];
 						}
 						
 						@catch(FileFormatNotSupportedException *exception) {
@@ -378,7 +285,7 @@ static ApplicationController *sharedController = nil;
 			}
 			else {
 				metadata = [AudioMetadata metadataFromFile:filename];						
-				[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders];
+				[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders toDirectory:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath]];
 			}
 		}
 		else {
@@ -444,6 +351,17 @@ static ApplicationController *sharedController = nil;
 - (IBAction) openHomeURL:(id)sender
 {
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://sbooth.org/Max/"]];
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	BOOL	result		= YES;
+	
+	if(@selector(encodeFile:) == [item action]) {
+		result = ! [[[ConvertFilesController sharedController] window] isVisible];
+	}
+	
+	return result;
 }
 
 - (NSDictionary *) registrationDictionaryForGrowl

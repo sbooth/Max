@@ -20,34 +20,18 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "ConverterTask.h"
-
-@interface ConverterController : NSWindowController
+@interface FileArrayController : NSArrayController
 {
-	IBOutlet NSTableView		*_taskTable;
-	IBOutlet NSArrayController	*_tasksController;
-	
-	NSArray						*_tasks;
-	NSTimer						*_timer;
-	NSString					*_freeSpace;
-	BOOL						_freeze;
+	IBOutlet NSTableView		*_tableView;
 }
 
-+ (ConverterController *)	sharedController;
+- (NSDictionary *)			findFile:(NSString *)filename;
+- (BOOL)					containsFile:(NSString *)filename;
 
-// Functionality
-- (void)			convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders toDirectory:(NSString *)outputDirectory;
+- (void)					selectFile:(NSString *)filename;
 
-- (BOOL)			hasTasks;
-- (unsigned)		countOfTasks;
-
-// Action methods
-- (IBAction)		stopSelectedTasks:(id)sender;
-- (IBAction)		stopAllTasks:(id)sender;
-
-// Callbacks
-- (void)			converterTaskDidStart:(ConverterTask *)task;
-- (void)			converterTaskDidStop:(ConverterTask *)task;
-- (void)			converterTaskDidComplete:(ConverterTask *)task;
+- (BOOL)					tableView:(NSTableView *)tv writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pboard;
+- (NSDragOperation)			tableView:(NSTableView *)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op;
+- (BOOL)					tableView:(NSTableView *)tv acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op;
 
 @end

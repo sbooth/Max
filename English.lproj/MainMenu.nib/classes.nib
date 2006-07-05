@@ -4,7 +4,6 @@
             ACTIONS = {
                 checkForUpdate = id; 
                 encodeFile = id; 
-                encodeFileCustom = id; 
                 openHomeURL = id; 
                 showAcknowledgments = id; 
                 showComponentVersions = id; 
@@ -16,7 +15,6 @@
             }; 
             CLASS = ApplicationController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {}; 
             SUPERCLASS = NSObject; 
         }, 
         {

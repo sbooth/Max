@@ -157,7 +157,7 @@ static EncoderController *sharedController = nil;
 
 - (void) runEncodersForTask:(PCMGeneratingTask *)task
 {
-	NSArray			*outputFormats		= [[task userInfo] objectForKey:@"activeEncoders"];
+	NSArray			*outputFormats		= [[task userInfo] objectForKey:@"encoders"];
 	NSDictionary	*format				= nil;
 	unsigned		i					= 0;
 	
@@ -218,6 +218,9 @@ static EncoderController *sharedController = nil;
 	if([task isKindOfClass:[RipperTask class]]) {
 		[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
 	}
+	
+	// Set output directory
+	[encoderTask setOutputDirectory:[[task userInfo] objectForKey:@"outputDirectory"]];
 	
 	// Pass the encoding configuration parameters
 	[encoderTask setUserInfo:userInfo];

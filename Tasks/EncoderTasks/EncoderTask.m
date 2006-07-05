@@ -123,6 +123,9 @@ enum {
 - (BOOL)			formatLegalForCueSheet				{ return NO; }
 - (NSString *)		cueSheetFormatName					{ return nil; }
 
+- (NSString *)		outputDirectory						{ return _outputDirectory; }
+- (void)			setOutputDirectory:(NSString *)outputDirectory { [_outputDirectory release]; _outputDirectory = [outputDirectory retain]; }
+
 //- (void)			insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
 //- (void)			removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
 - (void) setTracks:(NSArray *)tracks
@@ -192,7 +195,7 @@ enum {
 	else {
 		// Set up the additional key/value pairs to be substituted
 		[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];
-		basename = [[_task metadata] outputBasenameWithSubstitutions:substitutions];
+		basename = [[_task metadata] outputBasenameForDirectory:[self outputDirectory] withSubstitutions:substitutions];
 		
 		// Create the directory hierarchy if required
 		createDirectoryStructure(basename);

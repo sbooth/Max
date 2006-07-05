@@ -50,6 +50,9 @@ NSArray * getBuiltinExtensions();
 // Get an array of file types supported by libsndfile
 NSArray * getLibsndfileExtensions();
 
+// Get an array of permissible file types
+NSArray * getAudioExtensions();
+
 // Get a timestamp in the ID3v2 format
 NSString * getID3v2Timestamp();
 

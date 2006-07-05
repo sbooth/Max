@@ -20,6 +20,7 @@
 
 #import "UtilityFunctions.h"
 
+#import "CoreAudioUtilities.h"
 #import "FreeDBException.h"
 #import "MallocException.h"
 #import "IOException.h"
@@ -36,10 +37,11 @@
 
 #include <sndfile/sndfile.h>
 
-static NSDateFormatter		*sDateFormatter		= nil;
-static NSString				*sDataDirectory		= nil;
-static NSArray				*sAudioExtensions	= nil;
-static NSArray				*sBuiltinExtensions	= nil;
+static NSDateFormatter		*sDateFormatter			= nil;
+static NSString				*sDataDirectory			= nil;
+static NSArray				*sAudioExtensions		= nil;
+static NSArray				*sLibsndfileExtensions	= nil;
+static NSArray				*sBuiltinExtensions		= nil;
 
 NSString *
 getApplicationDataDirectory()
@@ -175,12 +177,12 @@ getLibsndfileExtensions()
 	SF_INFO					info;
 	int						i, majorCount = 0;
 
-	@synchronized(sAudioExtensions) {
-		if(nil == sAudioExtensions) {
+	@synchronized(sLibsndfileExtensions) {
+		if(nil == sLibsndfileExtensions) {
 
 			sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
 
-			sAudioExtensions = [NSMutableArray arrayWithCapacity:majorCount];
+			sLibsndfileExtensions = [NSMutableArray arrayWithCapacity:majorCount];
 			
 			// Generic defaults
 			info.channels		= 1 ;
@@ -190,9 +192,24 @@ getLibsndfileExtensions()
 			for(i = 0; i < majorCount; ++i) {	
 				formatInfo.format = i;
 				sf_command(NULL, SFC_GET_FORMAT_MAJOR, &formatInfo, sizeof(formatInfo));
-				[(NSMutableArray *)sAudioExtensions addObject:[NSString stringWithCString:formatInfo.extension encoding:NSASCIIStringEncoding]];
+				[(NSMutableArray *)sLibsndfileExtensions addObject:[NSString stringWithCString:formatInfo.extension encoding:NSASCIIStringEncoding]];
 			}
 			
+			[sLibsndfileExtensions retain];
+		}
+	}
+	
+	return sLibsndfileExtensions;
+}
+
+NSArray *
+getAudioExtensions()
+{
+	@synchronized(sAudioExtensions) {
+		if(nil == sAudioExtensions) {
+			sAudioExtensions = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
+			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:getLibsndfileExtensions()];
+			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:getBuiltinExtensions()];
 			[sAudioExtensions retain];
 		}
 	}
