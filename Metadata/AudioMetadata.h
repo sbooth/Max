@@ -56,10 +56,10 @@
 + (AudioMetadata *)		metadataFromFile:(NSString *)filename;
 
 // Create output file's basename
-- (NSString *)			outputBasename;
+- (NSString *)			outputBasenameForDirectory:(NSString *)outputDirectory;
 
 // Create output file's basename
-- (NSString *)			outputBasenameWithSubstitutions:(NSDictionary *)substitutions;
+- (NSString *)			outputBasenameForDirectory:(NSString *)outputDirectory withSubstitutions:(NSDictionary *)substitutions;
 
 // Substitute our values for {} keywords in string
 - (NSString *)			replaceKeywordsInString:(NSString *)namingScheme;

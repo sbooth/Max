@@ -1161,17 +1161,12 @@
 }
 
 // Create output file's basename
-- (NSString *) outputBasename						{ return [self outputBasenameWithSubstitutions:nil]; }
+- (NSString *) outputBasenameForDirectory:(NSString *)outputDirectory			{ return [self outputBasenameForDirectory:outputDirectory withSubstitutions:nil]; }
 
-- (NSString *) outputBasenameWithSubstitutions:(NSDictionary *)substitutions
+- (NSString *) outputBasenameForDirectory:(NSString *)outputDirectory withSubstitutions:(NSDictionary *)substitutions
 {
 	NSString		*basename;
-	NSString		*outputDirectory;
-	
-	
-	// Create output directory (should exist but could have been deleted/moved)
-	outputDirectory = [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath];
-	
+		
 	// Use custom naming scheme
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomNaming"]) {
 		
