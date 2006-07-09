@@ -98,8 +98,8 @@ static ConvertFilesController *sharedController = nil;
 - (IBAction) ok:(id)sender
 {
 	AudioMetadata		*metadata		= nil;
-	NSArray				*filenames;
-	NSString			*filename;
+	NSArray				*filenames		= nil;
+	NSString			*filename		= nil;
 	unsigned			i;
 	
 	// Verify at least one output format is selected
@@ -303,6 +303,8 @@ static ConvertFilesController *sharedController = nil;
 
 - (BOOL) addOneFile:(NSString *)filename atIndex:(unsigned)index
 {
+	NSImage		*icon		= nil;
+
 	// Don't re-add files
 	if([_filesController containsFile:filename]) {
 		return YES;
@@ -312,11 +314,15 @@ static ConvertFilesController *sharedController = nil;
 		return NO;
 	}
 	
+	// Get the icon for the file
+	icon = [[NSWorkspace sharedWorkspace] iconForFile:filename];
+	[icon setSize:NSMakeSize(16, 16)];
+
 	if(NSNotFound == index) {
-		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", nil]]];
+		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", nil]]];
 	}
 	else {
-		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", nil]] atArrangedObjectIndex:index];			
+		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", nil]] atArrangedObjectIndex:index];			
 	}
 	
 	return YES;
