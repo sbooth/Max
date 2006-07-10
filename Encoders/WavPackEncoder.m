@@ -44,19 +44,6 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 
 @implementation WavPackEncoder
 
-- (id) initWithPCMFilename:(NSString *)inputFilename
-{	
-	if((self = [super initWithPCMFilename:inputFilename])) {
-		
-		_flags			= 0;
-		_noiseShaping	= 0.f;
-		_bitrate		= 0.f;
-		
-		return self;
-	}
-	return nil;
-}
-
 - (void) parseSettings
 {
 	NSDictionary	*settings	= [[self delegate] userInfo];
@@ -101,7 +88,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 				break;
 				
 			case WAVPACK_HYBRID_MODE_BITRATE:
-				_bitrate = [[settings objectForKey:@"bitsPerSample"] floatValue];
+				_bitrate = [[settings objectForKey:@"bitrate"] floatValue];
 				_flags |= CONFIG_BITRATE_KBPS;
 				break;
 				
