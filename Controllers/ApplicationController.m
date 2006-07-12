@@ -144,6 +144,8 @@ static ApplicationController *sharedController = nil;
 
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+	NSArray		*openWindows	= nil;
+	
 	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
 	[MediaController sharedController];
 		
@@ -155,12 +157,34 @@ static ApplicationController *sharedController = nil;
 	// Register services
 	[[NSApplication sharedApplication] setServicesProvider:[[ServicesProvider alloc] init]];
 	
+	// Show windows that were left open from last time
+	openWindows = [[NSUserDefaults standardUserDefaults] stringArrayForKey:@"openWindows"];
+	if(nil != openWindows) {
+		if([openWindows containsObject:@"Ripper"]) {
+			[[[RipperController sharedController] window] orderFront:self];
+		}
+		if([openWindows containsObject:@"Converter"]) {
+			[[[ConverterController sharedController] window] orderFront:self];
+		}
+		if([openWindows containsObject:@"Encoder"]) {
+			[[[EncoderController sharedController] window] orderFront:self];
+		}		
+		if([openWindows containsObject:@"Log"]) {
+			[[[LogController sharedController] window] orderFront:self];
+		}
+		if([openWindows containsObject:@"ConvertFiles"]) {
+			[[[ConvertFilesController sharedController] window] orderFront:self];
+		}
+	}
+	
 	// Log startup
 	[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"Max successfully launched", @"Log", @"")];
 }
 
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *) sender
 {
+	NSMutableArray	*openWindows	= nil;
+	
 	if([[RipperController sharedController] hasTasks] || [[ConverterController sharedController] hasTasks] || [[EncoderController sharedController] hasTasks]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
@@ -180,6 +204,25 @@ static ApplicationController *sharedController = nil;
 		}
 	}
 	
+	// Save open windows
+	openWindows = [NSMutableArray array];
+	if([[[RipperController sharedController] window] isVisible]) {
+		[openWindows addObject:@"Ripper"];
+	}
+	if([[[ConverterController sharedController] window] isVisible]) {
+		[openWindows addObject:@"Converter"];
+	}
+	if([[[EncoderController sharedController] window] isVisible]) {
+		[openWindows addObject:@"Encoder"];
+	}
+	if([[[LogController sharedController] window] isVisible]) {
+		[openWindows addObject:@"Log"];
+	}
+	if([[[ConvertFilesController sharedController] window] isVisible]) {
+		[openWindows addObject:@"ConvertFiles"];
+	}
+	[[NSUserDefaults standardUserDefaults] setObject:openWindows forKey:@"openWindows"];
+
 	return NSTerminateNow;
 }
 
