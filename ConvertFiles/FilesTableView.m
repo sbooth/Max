@@ -27,4 +27,21 @@
 	return (isLocal ? NSDragOperationMove : NSDragOperationCopy);
 }
 
+- (void) keyDown:(NSEvent *)event
+{
+	unichar			key		= [[event charactersIgnoringModifiers] characterAtIndex:0];    
+	unsigned int	flags	= ( [event modifierFlags] & 0x00FF );
+    
+	if(NSDeleteCharacter == key && 0 == flags) {
+		if(-1 == [self selectedRow]) {
+			NSBeep(); }
+		else {
+			[_filesController removeObjectsAtArrangedObjectIndexes:[self selectedRowIndexes]];
+		}
+	}
+	else {
+		[super keyDown:event]; // let somebody else handle the event 
+	}
+}
+
 @end

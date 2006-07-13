@@ -20,8 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "FileArrayController.h"
+
 @interface FilesTableView : NSTableView 
 {
+	IBOutlet FileArrayController	*_filesController;
 }
 
 @end

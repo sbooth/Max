@@ -24,7 +24,12 @@
             OUTLETS = {"_tableView" = FilesTableView; }; 
             SUPERCLASS = NSArrayController; 
         }, 
-        {CLASS = FilesTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            CLASS = FilesTableView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_filesController" = FileArrayController; }; 
+            SUPERCLASS = NSTableView; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
     ); 
     IBVersion = 1; 
