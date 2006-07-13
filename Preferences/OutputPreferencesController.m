@@ -108,11 +108,10 @@ enum {
 	
 	// Set the menu item image for the output directory
 	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath];
-	image		= [[NSWorkspace sharedWorkspace] iconForFile:path];
+	image		= getIconForFile(path, NSMakeSize(16, 16));
 	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
 	
 	[menuItem setTitle:[path lastPathComponent]];
-	[image setSize:NSMakeSize(16, 16)];
 	[menuItem setImage:image];
 }
 
@@ -172,11 +171,10 @@ enum {
 	
 	// Set the menu item image for the output directory
 	path		= [[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"];
-	image		= [[NSWorkspace sharedWorkspace] iconForFile:path];
+	image		= getIconForFile(path, NSMakeSize(16, 16));
 	menuItem	= [_temporaryDirectoryPopUpButton itemAtIndex:[_temporaryDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
 	
 	[menuItem setTitle:[path lastPathComponent]];
-	[image setSize:NSMakeSize(16, 16)];
 	[menuItem setImage:image];
 }
 
