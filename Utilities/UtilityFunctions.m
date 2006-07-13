@@ -313,3 +313,40 @@ getDefaultOutputFormats()
 {
 	return [[[NSUserDefaults standardUserDefaults] objectForKey:@"outputFormats"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"default == 1"]];
 }
+
+NSImage *
+getIconForFile(NSString *filename, NSSize iconSize)
+{
+	// Thanks to Matt Neuberg <matt@tidbits.com> for this
+	NSImage			*icon			= nil;
+	NSImage			*newIcon		= nil;
+	NSEnumerator	*enumerator		= nil;
+	NSImageRep		*imageRep		= nil;
+	BOOL			hasSize			= NO;
+	
+
+	// Grab the file's icon
+	icon = [[NSWorkspace sharedWorkspace] iconForFile:filename];
+	[icon setSize:iconSize];
+	
+	// Check the image reps for one matching the desired size
+	enumerator = [[icon representations] objectEnumerator];
+	while((imageRep = [enumerator nextObject])) {
+		if(NSEqualSizes([imageRep size], iconSize)) {
+			hasSize = YES;
+			break;
+		}
+	}
+	
+	// If no matching image rep was found, scale the icon
+	if(NO == hasSize) {
+		newIcon = [[[NSImage alloc] initWithSize:iconSize] autorelease];
+		[newIcon lockFocus];
+		[[NSGraphicsContext currentContext] setImageInterpolation:NSImageInterpolationHigh];
+		[icon drawInRect:NSMakeRect(0, 0, iconSize.width, iconSize.height) fromRect:NSMakeRect(0, 0, [icon size].width, [icon size].height) operation:NSCompositeCopy fraction:1.0];
+		[newIcon unlockFocus];
+		icon = newIcon;
+	}
+	
+	return [[icon retain] autorelease];
+}

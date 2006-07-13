@@ -74,6 +74,10 @@ BOOL outputFormatsSelected();
 // Get an array of the default encoders
 NSArray * getDefaultOutputFormats();
 
+// Get an image representing the file's icon, scaled to size 
+NSImage * getIconForFile(NSString	*filename,
+						 NSSize		iconSize);
+
 #ifdef __cplusplus
 }
 #endif
