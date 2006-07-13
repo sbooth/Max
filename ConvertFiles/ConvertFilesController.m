@@ -30,6 +30,7 @@ static ConvertFilesController *sharedController = nil;
 - (void)	updateOutputDirectoryMenuItemImage;
 - (void)	selectOutputDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (BOOL)	addOneFile:(NSString *)filename atIndex:(unsigned)index;
+- (void)	clearFileList;
 @end
 
 @implementation ConvertFilesController
@@ -101,7 +102,7 @@ static ConvertFilesController *sharedController = nil;
 	NSArray				*filenames		= nil;
 	NSString			*filename		= nil;
 	unsigned			i;
-	
+
 	// Verify at least one output format is selected
 	if(0 == [[_encodersController arrangedObjects] count]) {
 		int		result;
@@ -131,10 +132,22 @@ static ConvertFilesController *sharedController = nil;
 		filename	= [[filenames objectAtIndex:i] objectForKey:@"filename"];
 		metadata	= [AudioMetadata metadataFromFile:filename];
 		
-		[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:[_encodersController selectedObjects] toDirectory:_outputDirectory];
+		@try {
+			[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:[_encodersController selectedObjects] toDirectory:_outputDirectory];				
+		}
+		
+		@catch(NSException *exception) {
+			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while converting the file \"%@\".", @"Exceptions", @""), [filename lastPathComponent]]];
+			[alert setInformativeText:[exception reason]];
+			[alert setAlertStyle:NSWarningAlertStyle];		
+			[alert runModal];
+		}			
 	}
-	
+
 	[[self window] performClose:self];
+	[self clearFileList];
 }
 
 - (IBAction) cancel:(id)sender
@@ -315,8 +328,7 @@ static ConvertFilesController *sharedController = nil;
 	}
 	
 	// Get the icon for the file
-	icon = [[NSWorkspace sharedWorkspace] iconForFile:filename];
-	[icon setSize:NSMakeSize(16, 16)];
+	icon = getIconForFile(filename, NSMakeSize(16, 16));
 
 	if(NSNotFound == index) {
 		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", nil]]];
@@ -338,12 +350,16 @@ static ConvertFilesController *sharedController = nil;
 	
 	// Set the menu item image for the output directory
 	path		= [_outputDirectory stringByExpandingTildeInPath];
-	image		= [[NSWorkspace sharedWorkspace] iconForFile:path];
+	image		= getIconForFile(path, NSMakeSize(16, 16));
 	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
 	
 	[menuItem setTitle:[path lastPathComponent]];
-	[image setSize:NSMakeSize(16, 16)];
 	[menuItem setImage:image];
+}
+
+- (void) clearFileList
+{
+	[_filesController removeObjects:[_filesController arrangedObjects]];
 }
 
 @end
