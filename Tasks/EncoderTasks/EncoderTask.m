@@ -21,6 +21,7 @@
 #import "EncoderTask.h"
 #import "EncoderMethods.h"
 #import "EncoderController.h"
+#import "LogController.h"
 #import "ConverterTask.h"
 #import "MallocException.h"
 #import "IOException.h"
@@ -190,12 +191,12 @@ enum {
 		basename = [[(ConverterTask *)_task inputFilename] stringByDeletingPathExtension];
 	}
 	else if([_task isKindOfClass:[ConverterTask class]] && [[_task metadata] isEmpty]) {
-		basename = [NSString stringWithFormat:@"%@/%@", [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath], [[[(ConverterTask *)_task inputFilename] lastPathComponent] stringByDeletingPathExtension]];
+		basename = [NSString stringWithFormat:@"%@/%@", [[self outputDirectory] stringByExpandingTildeInPath], [[[(ConverterTask *)_task inputFilename] lastPathComponent] stringByDeletingPathExtension]];
 	}
 	else {
 		// Set up the additional key/value pairs to be substituted
 		[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];
-		basename = [[_task metadata] outputBasenameForDirectory:[self outputDirectory] withSubstitutions:substitutions];
+		basename = [[_task metadata] outputBasenameForDirectory:[[self outputDirectory] stringByExpandingTildeInPath] withSubstitutions:substitutions];
 		
 		// Create the directory hierarchy if required
 		createDirectoryStructure(basename);
@@ -233,6 +234,11 @@ enum {
 		}
 	}
 	
+	// Check if output file exists
+/*	if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self extension]]]) {
+		[[LogController sharedController] logMessage:@"Output file exists"];
+	}*/
+			
 	// Generate a unique filename and touch the file
 	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];
 	[self touchOutputFile];
