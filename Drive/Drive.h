@@ -34,7 +34,9 @@ enum {
 {
 	NSString		*_deviceName;
 	int				_fd;
+	
 	unsigned		_cacheSize;
+	int				_offset;
 	
 	NSMutableArray	*_sessions;
 	NSMutableArray	*_tracks;
@@ -74,6 +76,10 @@ enum {
 - (unsigned)			cacheSize;
 - (unsigned)			cacheSectorSize;
 - (void)				setCacheSize:(unsigned)cacheSize;
+
+// Drive offset information
+- (int)					offset;
+- (void)				setOffset:(int)offset;
 
 // Drive speed
 - (uint16_t)			speed;

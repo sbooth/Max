@@ -60,9 +60,6 @@
 		
 		_sessions		= [[NSMutableArray alloc] initWithCapacity:20];
 		_tracks			= [[NSMutableArray alloc] initWithCapacity:20];
-
-		_firstSession	= 0;
-		_lastSession	= 0;
 		
 		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
 
@@ -101,6 +98,9 @@
 - (unsigned)			cacheSize									{ return _cacheSize; }
 - (unsigned)			cacheSectorSize								{ return (([self cacheSize] / kCDSectorSizeCDDA) + 1); }
 - (void)				setCacheSize:(unsigned)cacheSize			{ _cacheSize = cacheSize; }
+
+- (int)					offset										{ return _offset; }
+- (void)				setOffset:(int)offset						{ _offset = offset; }
 
 - (NSString *)			deviceName									{ return _deviceName; }
 - (int)					fileDescriptor								{ return _fd; }
@@ -340,8 +340,6 @@
 	bzero(buffer, sizeof(buffer));
 	
 	cd_read_toc.format			= kCDTOCFormatTOC;
-	cd_read_toc.formatAsTime	= 1;
-	cd_read_toc.address.track	= 0;
 	cd_read_toc.buffer			= buffer;
 	cd_read_toc.bufferLength	= sizeof(buffer);
 		
