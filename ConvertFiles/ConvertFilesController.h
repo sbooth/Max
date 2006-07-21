@@ -34,6 +34,10 @@ enum {
 	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
 	
 	NSString						*_outputDirectory;
+
+	BOOL							_convertInPlace;
+	BOOL							_deleteSourceFiles;
+	
 	NSMutableArray					*_files;
 }
 
@@ -50,5 +54,11 @@ enum {
 
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;
+
+- (BOOL)							convertInPlace;
+- (void)							setConvertInPlace:(BOOL)convertInPlace;
+
+- (BOOL)							deleteSourceFiles;
+- (void)							setDeleteSourceFiles:(BOOL)deleteSourceFiles;
 
 @end

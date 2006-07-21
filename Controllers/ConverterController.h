@@ -36,7 +36,7 @@
 + (ConverterController *)	sharedController;
 
 // Functionality
-- (void)			convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders toDirectory:(NSString *)outputDirectory;
+- (void)			convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders toDirectory:(NSString *)outputDirectory userInfo:(NSDictionary *)userInfo;
 
 - (BOOL)			hasTasks;
 - (unsigned)		countOfTasks;

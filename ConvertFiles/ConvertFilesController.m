@@ -58,7 +58,13 @@ static ConvertFilesController *sharedController = nil;
 - (id) init
 {
 	if((self = [super initWithWindowNibName:@"ConvertFiles"])) {
+		
 		_outputDirectory = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] retain];
+
+		// Pull in defaults
+		[self setConvertInPlace:[[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"]];
+		[self setDeleteSourceFiles:[[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]];
+
 		return self;
 	}
 	return nil;
@@ -98,9 +104,12 @@ static ConvertFilesController *sharedController = nil;
 
 - (IBAction) ok:(id)sender
 {
-	AudioMetadata		*metadata		= nil;
-	NSArray				*filenames		= nil;
-	NSString			*filename		= nil;
+	AudioMetadata		*metadata			= nil;
+	NSArray				*filenames			= nil;
+	NSString			*filename			= nil;
+	NSString			*outputDirectory	= nil;
+	NSDictionary		*userInfo			= nil;
+	
 	unsigned			i;
 
 	// Verify at least one output format is selected
@@ -127,13 +136,19 @@ static ConvertFilesController *sharedController = nil;
 		return;
 	}
 
+	// Conversion parameters
+	outputDirectory		= ([self convertInPlace] ? nil : _outputDirectory);
+	userInfo			= ([self deleteSourceFiles] ? [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"deleteSourceFiles"] : nil);
+	
+	// Iterate through file list and convert each one
 	filenames = [_filesController arrangedObjects];
 	for(i = 0; i < [filenames count]; ++i) {
+
 		filename	= [[filenames objectAtIndex:i] objectForKey:@"filename"];
 		metadata	= [AudioMetadata metadataFromFile:filename];
 		
 		@try {
-			[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:[_encodersController selectedObjects] toDirectory:_outputDirectory];				
+			[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:[_encodersController selectedObjects] toDirectory:outputDirectory userInfo:userInfo];
 		}
 		
 		@catch(NSException *exception) {
@@ -146,14 +161,15 @@ static ConvertFilesController *sharedController = nil;
 		}			
 	}
 
-	[[self window] performClose:self];
+	// Get ready for next time
+//	[[self window] performClose:self];
 	[self clearFileList];
 }
 
 - (IBAction) cancel:(id)sender
 {
 	[[self window] performClose:self];
-	[_filesController removeObjects:[_filesController arrangedObjects]];
+	//[_filesController removeObjects:[_filesController arrangedObjects]];
 }
 
 - (IBAction) addFiles:(id)sender
@@ -341,6 +357,12 @@ static ConvertFilesController *sharedController = nil;
 }
 
 #pragma mark Miscellaneous
+
+- (BOOL)							convertInPlace									{ return _convertInPlace; }
+- (void)							setConvertInPlace:(BOOL)convertInPlace			{ _convertInPlace = convertInPlace; }
+
+- (BOOL)							deleteSourceFiles								{ return _deleteSourceFiles; }
+- (void)							setDeleteSourceFiles:(BOOL)deleteSourceFiles	{ _deleteSourceFiles = deleteSourceFiles; }
 
 - (void) updateOutputDirectoryMenuItemImage
 {

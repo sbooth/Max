@@ -155,12 +155,13 @@ static ConverterController *sharedController = nil;
 
 #pragma mark Functionality
 
-- (void) convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders toDirectory:(NSString *)outputDirectory
+- (void) convertFile:(NSString *)filename metadata:(AudioMetadata *)metadata withEncoders:(NSArray *)encoders toDirectory:(NSString *)outputDirectory userInfo:(NSDictionary *)userInfo
 {
-	ConverterTask	*converterTask			= nil;
-	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
-	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
-	NSString		*extension				= [filename pathExtension];
+	ConverterTask			*converterTask			= nil;
+	NSArray					*coreAudioExtensions	= getCoreAudioExtensions();
+	NSArray					*libsndfileExtensions	= getLibsndfileExtensions();
+	NSString				*extension				= [filename pathExtension];
+	NSMutableDictionary		*mutableUserInfo		= [userInfo mutableCopy];
 	
 	// Determine which type of converter to use and create it
 	if([coreAudioExtensions containsObject:extension]) {
@@ -193,7 +194,13 @@ static ConverterController *sharedController = nil;
 	}
 	
 	// Set the active encoders and output directory in the task's userInfo dictionary
-	[converterTask setUserInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:encoders, outputDirectory, nil] forKeys:[NSArray arrayWithObjects:@"encoders", @"outputDirectory", nil]]];
+	[mutableUserInfo setObject:encoders forKey:@"encoders"];
+	
+	if(nil != outputDirectory) {
+		[mutableUserInfo setObject:outputDirectory forKey:@"outputDirectory"];
+	}
+	
+	[converterTask setUserInfo:mutableUserInfo];
 
 	// Show the converter window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {

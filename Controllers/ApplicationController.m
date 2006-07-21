@@ -266,6 +266,8 @@ static ApplicationController *sharedController = nil;
 	NSEnumerator		*enumerator;
 	NSString			*subpath;
 	NSString			*composedPath;
+	NSString			*outputDirectory;
+	NSDictionary		*userInfo;
 	unsigned			i;
 	
 	// Verify at least one output format is selected
@@ -292,6 +294,10 @@ static ApplicationController *sharedController = nil;
 		return;
 	}
 
+	// Conversion parameters
+	outputDirectory		= ([[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"] ? nil : [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath]);
+	userInfo			= ([[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"] ? [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"deleteSourceFiles"] : nil);
+
 	for(i = 0; i < [filenames count]; ++i) {
 		filename = [filenames objectAtIndex:i];
 		
@@ -317,7 +323,7 @@ static ApplicationController *sharedController = nil;
 						metadata = [AudioMetadata metadataFromFile:composedPath];
 						
 						@try {
-							[[ConverterController sharedController] convertFile:composedPath metadata:metadata withEncoders:encoders toDirectory:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath]];
+							[[ConverterController sharedController] convertFile:composedPath metadata:metadata withEncoders:encoders toDirectory:outputDirectory userInfo:userInfo];
 						}
 						
 						@catch(FileFormatNotSupportedException *exception) {
@@ -328,7 +334,7 @@ static ApplicationController *sharedController = nil;
 			}
 			else {
 				metadata = [AudioMetadata metadataFromFile:filename];						
-				[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders toDirectory:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath]];
+				[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders toDirectory:outputDirectory userInfo:userInfo];
 			}
 		}
 		else {

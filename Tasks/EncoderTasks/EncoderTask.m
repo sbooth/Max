@@ -187,7 +187,7 @@ enum {
 	NSArray					*portArray			= nil;
 	
 	// Determine whether to convert in place
-	if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"]) {
+	if([_task isKindOfClass:[ConverterTask class]] && nil == [self outputDirectory]) {
 		basename = [[(ConverterTask *)_task inputFilename] stringByDeletingPathExtension];
 	}
 	else if([_task isKindOfClass:[ConverterTask class]] && [[_task metadata] isEmpty]) {
@@ -314,7 +314,7 @@ enum {
 		_connection = nil;
 		
 		// Delete input file if requested
-		if([_task isKindOfClass:[ConverterTask class]] && [[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]) {
+		if([_task isKindOfClass:[ConverterTask class]] && [[[self userInfo] objectForKey:@"deleteSourceFiles"] boolValue]) {
 			if(-1 == unlink([[(ConverterTask *)_task inputFilename] fileSystemRepresentation])) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -454,12 +454,14 @@ enum {
 			}
 
 			// ISRC
-			temp	= [NSString stringWithFormat:@"    ISRC %@\n", [currentTrack ISRC]];
-			buf		= [temp UTF8String];
-			bytesWritten = write(fd, buf, strlen(buf));
-			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			if(nil != [currentTrack ISRC]) {
+				temp	= [NSString stringWithFormat:@"    ISRC %@\n", [currentTrack ISRC]];
+				buf		= [temp UTF8String];
+				bytesWritten = write(fd, buf, strlen(buf));
+				if(-1 == bytesWritten) {
+					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				}
 			}
 
 			// TITLE
