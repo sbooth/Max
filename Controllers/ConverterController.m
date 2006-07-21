@@ -161,7 +161,7 @@ static ConverterController *sharedController = nil;
 	NSArray					*coreAudioExtensions	= getCoreAudioExtensions();
 	NSArray					*libsndfileExtensions	= getLibsndfileExtensions();
 	NSString				*extension				= [filename pathExtension];
-	NSMutableDictionary		*mutableUserInfo		= [userInfo mutableCopy];
+	NSMutableDictionary		*mutableUserInfo		= [NSMutableDictionary dictionary];
 	
 	// Determine which type of converter to use and create it
 	if([coreAudioExtensions containsObject:extension]) {
@@ -192,6 +192,11 @@ static ConverterController *sharedController = nil;
 		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @"") 
 														   userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
 	}
+
+	// Add parameters from userInfo, if present
+	if(nil != userInfo) {
+		[mutableUserInfo addEntriesFromDictionary:userInfo];
+	}
 	
 	// Set the active encoders and output directory in the task's userInfo dictionary
 	[mutableUserInfo setObject:encoders forKey:@"encoders"];
@@ -199,7 +204,7 @@ static ConverterController *sharedController = nil;
 	if(nil != outputDirectory) {
 		[mutableUserInfo setObject:outputDirectory forKey:@"outputDirectory"];
 	}
-	
+
 	[converterTask setUserInfo:mutableUserInfo];
 
 	// Show the converter window if it is hidden
