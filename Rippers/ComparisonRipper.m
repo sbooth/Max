@@ -104,10 +104,13 @@
 
 - (NSString *)			deviceName									{ return [_drive deviceName]; }
 
-- (unsigned)			requiredMatches								{ return _requiredMatches; }
-- (unsigned)			maximumRetries								{ return _maximumRetries; }
+- (int)					driveOffset									{ return _driveOffset; }
+- (void)				setDriveOffset:(int)driveOffset				{ _driveOffset = driveOffset; }
 
+- (unsigned)			requiredMatches								{ return _requiredMatches; }
 - (void)				setRequiredMatches:(unsigned)matches		{ _requiredMatches = matches; }
+
+- (unsigned)			maximumRetries								{ return _maximumRetries; }
 - (void)				setMaximumRetries:(unsigned)retries			{ _maximumRetries = retries; }
 
 - (BOOL)				useHashes									{ return _useHashes; }

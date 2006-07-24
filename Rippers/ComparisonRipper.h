@@ -26,8 +26,9 @@
 @interface ComparisonRipper : Ripper
 {
 	Drive					*_drive;
-	unsigned				_driveCacheSize;
-	
+
+	int						_driveOffset;
+
 	unsigned				_requiredMatches;
 	unsigned				_maximumRetries;
 	BOOL					_useHashes;
@@ -39,6 +40,9 @@
 }
 
 - (id)						initWithSectors:(NSArray *)sectors deviceName:(NSString *)deviceName;
+
+- (int)						driveOffset;
+- (void)					setDriveOffset:(int)driveOffset;
 
 - (unsigned)				requiredMatches;
 - (void)					setRequiredMatches:(unsigned)matches;
