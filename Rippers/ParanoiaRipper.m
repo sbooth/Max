@@ -19,7 +19,6 @@
  */
 
 #import "ParanoiaRipper.h"
-#import "ParanoiaRipperTask.h"
 #import "Track.h"
 #import "SectorRange.h"
 #import "LogController.h"
