@@ -19,7 +19,6 @@
  */
 
 #import "BasicRipper.h"
-#import "BasicRipperTask.h"
 #import "SectorRange.h"
 #import "LogController.h"
 #import "MallocException.h"
