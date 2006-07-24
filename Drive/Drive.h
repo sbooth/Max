@@ -36,7 +36,6 @@ enum {
 	int				_fd;
 	
 	unsigned		_cacheSize;
-	int				_offset;
 	
 	NSMutableArray	*_sessions;
 	NSMutableArray	*_tracks;
@@ -65,6 +64,9 @@ enum {
 
 - (unsigned)			leadOutForSession:(unsigned)session;
 
+- (unsigned)			sessionContainingSector:(unsigned)sector;
+- (unsigned)			sessionContainingSectorRange:(SectorRange *)sectorRange;
+
 // Track sector information
 - (unsigned)			firstSectorForTrack:(unsigned)number;
 - (unsigned)			lastSectorForTrack:(unsigned)number;
@@ -76,10 +78,6 @@ enum {
 - (unsigned)			cacheSize;
 - (unsigned)			cacheSectorSize;
 - (void)				setCacheSize:(unsigned)cacheSize;
-
-// Drive offset information
-- (int)					offset;
-- (void)				setOffset:(int)offset;
 
 // Drive speed
 - (uint16_t)			speed;

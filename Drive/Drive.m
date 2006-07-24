@@ -43,8 +43,6 @@
 
 - (unsigned)			readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
 
-- (unsigned)			sessionContainingSectors:(SectorRange *)sectorRange;
-
 - (NSMutableDictionary *) dictionaryForSession:(unsigned)session;
 @end
 
@@ -99,9 +97,6 @@
 - (unsigned)			cacheSectorSize								{ return (([self cacheSize] / kCDSectorSizeCDDA) + 1); }
 - (void)				setCacheSize:(unsigned)cacheSize			{ _cacheSize = cacheSize; }
 
-- (int)					offset										{ return _offset; }
-- (void)				setOffset:(int)offset						{ _offset = offset; }
-
 - (NSString *)			deviceName									{ return _deviceName; }
 - (int)					fileDescriptor								{ return _fd; }
 
@@ -118,16 +113,28 @@
 	return [_sessions objectAtIndex:session - 1];
 }
 
-- (unsigned)			sessionContainingSectors:(SectorRange *)sectorRange
+- (unsigned)			sessionContainingSector:(unsigned)sector
 {
-	unsigned		session, track;
+	return [self sessionContainingSectorRange:[SectorRange rangeWithSector:sector]];
+}
+
+- (unsigned)			sessionContainingSectorRange:(SectorRange *)sectorRange
+{
+	unsigned		session;
+	unsigned		sessionFirstSector;
+	unsigned		sessionLastSector;
+	SectorRange		*sessionSectorRange;
 	
 	for(session = [self firstSession]; session <= [self lastSession]; ++session) {
-		for(track = [self firstTrackForSession:session]; track <= [self lastTrackForSession:session]; ++track) {
-			if([sectorRange containsSector:[self firstSectorForTrack:track]] || [sectorRange containsSector:[self lastSectorForTrack:track]]) {
-				return session;
-			}
-		}
+
+		sessionFirstSector		= [self firstSectorForTrack:[self firstTrackForSession:session]];
+		sessionLastSector		= [self lastSectorForTrack:[self lastTrackForSession:session]];
+		
+		sessionSectorRange		= [SectorRange rangeWithFirstSector:sessionFirstSector lastSector:sessionLastSector];
+		
+		if([sessionSectorRange containsSectorRange:sectorRange]) {
+			return session;
+		}		
 	}
 	
 	return NSNotFound;
@@ -229,7 +236,7 @@
 	unsigned		sectorsRemaining, sectorsRead, boundary;
 	
 	requiredReadSize		= [self cacheSectorSize];
-	session					= [self sessionContainingSectors:range];
+	session					= [self sessionContainingSectorRange:range];
 	sessionFirstSector		= [self firstSectorForSession:session];
 	sessionLastSector		= [self lastSectorForSession:session];
 	preSectorsAvailable		= [range firstSector] - sessionFirstSector;
