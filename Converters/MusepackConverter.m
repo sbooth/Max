@@ -46,7 +46,7 @@
 	mpc_reader_file					reader_file;
 	mpc_decoder						decoder;
 	mpc_streaminfo					info;
-	int								samplesRead			= 0;
+	mpc_uint32_t					framesRead;
 	long							samplesToRead		= 0;
 	long							totalSamples		= 0;
 	OSStatus						err;
@@ -55,11 +55,13 @@
 	ExtAudioFileRef					extAudioFileRef;
 	AudioBufferList					bufferList;
 	UInt32							frameCount;
-	mpc_uint32_t					bytesRead;
 	MPC_SAMPLE_FORMAT				*buffer				= NULL;
+	int16_t							*buffer16			= NULL;
+	int16_t							*alias16			= NULL;
+	unsigned						sample				= 0;
+	unsigned						bytesRead			= 0;
 	unsigned long					iterations			= 0;
 	AudioStreamBasicDescription		asbd;
-	AudioStreamBasicDescription		inputASBD;
 	
 	// Tell our owner we are starting
 	[_delegate setStartTime:startTime];	
@@ -82,7 +84,7 @@
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"The file does not appear to be a valid Musepack file.", @"Exceptions", @"") userInfo:nil];
 		}
 
-		totalSamples		= info.frames;
+		totalSamples		= info.pcm_samples;
 		samplesToRead		= totalSamples;
 		
 		[self setSampleRate:info.sample_freq];
@@ -115,24 +117,20 @@
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-		
-		// MPC feeds us little-endian data, otherwise leave untouched
-		inputASBD				= [self outputASBD];
-		inputASBD.mFormatFlags	= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-		
-		err = ExtAudioFileSetProperty(extAudioFileRef, kExtAudioFileProperty_ClientDataFormat, sizeof(inputASBD), &inputASBD);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
+				
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
 		
-		// Allocate the buffer used for decompression
+		// Allocate the buffers used for decompression
 		buffer = (MPC_SAMPLE_FORMAT *)calloc(MPC_DECODER_BUFFER_LENGTH, sizeof(MPC_SAMPLE_FORMAT));
 		if(NULL == buffer) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+
+		buffer16 = (int16_t *)calloc(MPC_DECODER_BUFFER_LENGTH, sizeof(int16_t));
+		if(NULL == buffer16) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
@@ -140,21 +138,29 @@
 		for(;;) {
 			
 			// Decode the data
-			bytesRead = mpc_decoder_decode(&decoder, buffer, 0, 0);
-			if((mpc_uint32_t)-1 == bytesRead) {
+			framesRead = mpc_decoder_decode(&decoder, buffer, 0, 0);
+			if((mpc_uint32_t)-1 == framesRead) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Musepack decoding error.", @"Exceptions", @"") userInfo:nil];
 			}
 			
 			// EOF?
-			if(0 == bytesRead) {
+			if(0 == framesRead) {
 				break;
 			}
 			
-			bufferList.mBuffers[0].mData				= buffer;
+			bytesRead									= framesRead * [self channelsPerFrame] * ([self bitsPerChannel] / 8);
+			
+			// Process data
+			alias16										= buffer16;
+			for(sample = 0; sample < framesRead * [self channelsPerFrame]; ++sample) {
+				*alias16++ = (int16_t)OSSwapHostToBigInt16(buffer[sample] * (1 << 15));
+			}
+
+			bufferList.mBuffers[0].mData				= buffer16;
 			bufferList.mBuffers[0].mDataByteSize		= bytesRead;
-			
+
 			frameCount									= bytesRead / ([self channelsPerFrame] * ([self bitsPerChannel] / 8));
-			
+
 			// Write the data
 			err = ExtAudioFileWrite(extAudioFileRef, frameCount, &bufferList);
 			if(noErr != err) {
@@ -163,7 +169,7 @@
 			}
 			
 			// Update status
-			samplesToRead -= samplesRead;
+			samplesToRead -= frameCount;
 			
 			// Distributed Object calls are expensive, so only perform them every few iterations
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
@@ -223,6 +229,7 @@
 		
 		// Clean up
 		free(buffer);
+		free(buffer16);
 	}
 	
 	[_delegate setEndTime:[NSDate date]];
