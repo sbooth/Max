@@ -30,6 +30,9 @@
 #import "MissingResourceException.h"
 #import "UtilityFunctions.h"
 
+#include <sys/stat.h>		// stat
+#include <unistd.h>			// mkstemp, unlink
+
 @interface EncoderTask (Private)
 - (void) touchOutputFile;
 @end
@@ -127,6 +130,9 @@ enum {
 - (NSString *)		outputDirectory						{ return _outputDirectory; }
 - (void)			setOutputDirectory:(NSString *)outputDirectory { [_outputDirectory release]; _outputDirectory = [outputDirectory retain]; }
 
+- (BOOL)			overwriteExistingFiles				{ return _overwriteExistingFiles; }
+- (void)			setOverwriteExistingFiles:(BOOL)overwriteExistingFiles { _overwriteExistingFiles = overwriteExistingFiles; }
+
 //- (void)			insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
 //- (void)			removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
 - (void) setTracks:(NSArray *)tracks
@@ -181,7 +187,7 @@ enum {
 - (void) run
 {
 	NSString				*basename;
-	NSMutableDictionary		*substitutions		= [NSMutableDictionary dictionaryWithCapacity:1];
+	NSMutableDictionary		*substitutions		= [NSMutableDictionary dictionary];
 	NSPort					*port1				= [NSPort port];
 	NSPort					*port2				= [NSPort port];
 	NSArray					*portArray			= nil;
@@ -235,9 +241,17 @@ enum {
 	}
 	
 	// Check if output file exists
-/*	if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self extension]]]) {
-		[[LogController sharedController] logMessage:@"Output file exists"];
-	}*/
+	if([self overwriteExistingFiles] && [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self extension]]]) {
+		NSString		*filename		= [NSString stringWithFormat:@"%@.%@", basename, [self extension]];
+		struct stat		sourceStat;
+		
+		// Delete output file if it exists
+		if(0 == stat([filename fileSystemRepresentation], &sourceStat) && -1 == unlink([filename fileSystemRepresentation])) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}	
+		
+	}
 			
 	// Generate a unique filename and touch the file
 	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];

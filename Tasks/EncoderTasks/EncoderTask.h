@@ -31,6 +31,7 @@
 	NSConnection			*_connection;
 	NSString				*_outputDirectory;
 	NSString				*_outputFilename;
+	BOOL					_overwriteExistingFiles;
 	Class					_encoderClass;
 	id <EncoderMethods>		_encoder;
 	NSArray					*_tracks;
@@ -54,6 +55,9 @@
 
 - (NSString *)		outputDirectory;
 - (void)			setOutputDirectory:(NSString *)outputDirectory;
+
+- (BOOL)			overwriteExistingFiles;
+- (void)			setOverwriteExistingFiles:(BOOL)overwriteExistingFiles;
 
 - (NSString *)		extension;
 

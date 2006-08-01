@@ -62,7 +62,6 @@ static ConvertFilesController *sharedController = nil;
 		_outputDirectory = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] retain];
 
 		// Pull in defaults
-		[self setConvertInPlace:[[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"]];
 		[self setDeleteSourceFiles:[[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]];
 
 		return self;
@@ -106,9 +105,9 @@ static ConvertFilesController *sharedController = nil;
 {
 	AudioMetadata		*metadata			= nil;
 	NSArray				*filenames			= nil;
-	NSString			*filename			= nil;
 	NSString			*outputDirectory	= nil;
-	NSDictionary		*userInfo			= nil;
+	NSString			*filename			= nil;
+	NSMutableDictionary	*userInfo			= nil;
 	
 	unsigned			i;
 
@@ -138,7 +137,9 @@ static ConvertFilesController *sharedController = nil;
 
 	// Conversion parameters
 	outputDirectory		= ([self convertInPlace] ? nil : _outputDirectory);
-	userInfo			= ([self deleteSourceFiles] ? [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"deleteSourceFiles"] : nil);
+	userInfo			= [NSMutableDictionary dictionary];
+	[userInfo setObject:[NSNumber numberWithBool:[self overwriteExistingFiles]] forKey:@"overwriteExistingFiles"];
+	[userInfo setObject:[NSNumber numberWithBool:[self deleteSourceFiles]] forKey:@"deleteSourceFiles"];
 	
 	// Iterate through file list and convert each one
 	filenames = [_filesController arrangedObjects];
@@ -209,6 +210,7 @@ static ConvertFilesController *sharedController = nil;
 	switch([[sender selectedItem] tag]) {
 		case kCurrentDirectoryMenuItemTag:
 			[[NSWorkspace sharedWorkspace] selectFile:_outputDirectory inFileViewerRootedAtPath:nil];
+			[self setConvertInPlace:NO];
 			break;
 			
 		case kChooseDirectoryMenuItemTag:
@@ -219,6 +221,10 @@ static ConvertFilesController *sharedController = nil;
 			[panel setCanChooseFiles:NO];
 			
 			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectOutputDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
+			break;
+			
+		case kSameAsSourceFileMenuItemTag:
+			[self setConvertInPlace:YES];
 			break;
 	}
 }
@@ -358,11 +364,14 @@ static ConvertFilesController *sharedController = nil;
 
 #pragma mark Miscellaneous
 
-- (BOOL)							convertInPlace									{ return _convertInPlace; }
-- (void)							setConvertInPlace:(BOOL)convertInPlace			{ _convertInPlace = convertInPlace; }
+- (BOOL)					convertInPlace									{ return _convertInPlace; }
+- (void)					setConvertInPlace:(BOOL)convertInPlace			{ _convertInPlace = convertInPlace; }
 
-- (BOOL)							deleteSourceFiles								{ return _deleteSourceFiles; }
-- (void)							setDeleteSourceFiles:(BOOL)deleteSourceFiles	{ _deleteSourceFiles = deleteSourceFiles; }
+- (BOOL)					overwriteExistingFiles							{ return _overwriteExistingFiles; }
+- (void)					setOverwriteExistingFiles:(BOOL)overwriteExistingFiles { _overwriteExistingFiles = overwriteExistingFiles; }
+
+- (BOOL)					deleteSourceFiles								{ return _deleteSourceFiles; }
+- (void)					setDeleteSourceFiles:(BOOL)deleteSourceFiles	{ _deleteSourceFiles = deleteSourceFiles; }
 
 - (void) updateOutputDirectoryMenuItemImage
 {

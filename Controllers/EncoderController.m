@@ -221,6 +221,8 @@ static EncoderController *sharedController = nil;
 	
 	// Set output directory
 	[encoderTask setOutputDirectory:[[task userInfo] objectForKey:@"outputDirectory"]];
+
+	[encoderTask setOverwriteExistingFiles:[[[task userInfo] objectForKey:@"overwriteExistingFiles"] boolValue]];
 	
 	// Pass the encoding configuration parameters
 	[encoderTask setUserInfo:userInfo];

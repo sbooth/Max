@@ -24,7 +24,11 @@
 
 enum {
 	kCurrentDirectoryMenuItemTag		= 1,
-	kChooseDirectoryMenuItemTag			= 2
+	kChooseDirectoryMenuItemTag			= 2,
+	kSameAsSourceFileMenuItemTag		= 3,
+	
+	kDontOverwriteExistingFiles			= 0,
+	kOverwriteExistingFiles				= 1
 };
 
 @interface ConvertFilesController : NSWindowController
@@ -36,6 +40,7 @@ enum {
 	NSString						*_outputDirectory;
 
 	BOOL							_convertInPlace;
+	BOOL							_overwriteExistingFiles;
 	BOOL							_deleteSourceFiles;
 	
 	NSMutableArray					*_files;
@@ -57,6 +62,9 @@ enum {
 
 - (BOOL)							convertInPlace;
 - (void)							setConvertInPlace:(BOOL)convertInPlace;
+
+- (BOOL)							overwriteExistingFiles;
+- (void)							setOverwriteExistingFiles:(BOOL)overwriteExistingFiles;
 
 - (BOOL)							deleteSourceFiles;
 - (void)							setDeleteSourceFiles:(BOOL)deleteSourceFiles;
