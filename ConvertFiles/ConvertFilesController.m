@@ -257,14 +257,14 @@ static ConvertFilesController *sharedController = nil;
 	}
 }
 
-- (IBAction) resetOutputDirectoryToDefault:(id)sender
+/*- (IBAction) resetOutputDirectoryToDefault:(id)sender
 {
 	[_outputDirectory release];
 	_outputDirectory = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] retain];	
 	
 	[self updateOutputDirectoryMenuItemImage];
 	[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
-}
+}*/
 
 #pragma mark File Management
 

@@ -55,7 +55,6 @@ enum {
 - (IBAction)						removeFiles:(id)sender;
 
 - (IBAction)						selectOutputDirectory:(id)sender;
-- (IBAction)						resetOutputDirectoryToDefault:(id)sender;
 
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;

@@ -261,99 +261,18 @@ static ApplicationController *sharedController = nil;
 - (IBAction) encodeFile:(id)sender
 {
 	[[ConvertFilesController sharedController] showWindow:self];
-//	[[ConvertFilesController sharedController] addFiles:self];
 }
 
 - (void) encodeFiles:(NSArray *)filenames
 {
-	[self encodeFiles:filenames withEncoders:getDefaultOutputFormats()];
-}
-
-- (void) encodeFiles:(NSArray *)filenames withEncoders:(NSArray *)encoders
-{
-	NSFileManager		*manager		= [NSFileManager defaultManager];
-	NSString			*filename;
-	NSArray				*subpaths;
-	BOOL				isDir;
-	AudioMetadata		*metadata;
-	NSEnumerator		*enumerator;
-	NSString			*subpath;
-	NSString			*composedPath;
-	NSString			*outputDirectory;
-	NSDictionary		*userInfo;
-	unsigned			i;
+	NSEnumerator	*enumerator		= [filenames objectEnumerator];
+	NSString		*filename		= nil;
 	
-	// Verify at least one output format is selected
-	if(0 == [encoders count]) {
-		int		result;
-		
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
-		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
-		[alert setAlertStyle: NSWarningAlertStyle];
-		
-		result = [alert runModal];
-		
-		if(NSAlertFirstButtonReturn == result) {
-			// do nothing
-		}
-		else if(NSAlertSecondButtonReturn == result) {
-			[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
-			[[PreferencesController sharedPreferences] showWindow:self];
-		}
+	[[ConvertFilesController sharedController] showWindow:self];
 
-		return;
-	}
-
-	// Conversion parameters
-	outputDirectory		= ([[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"] ? nil : [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath]);
-	userInfo			= ([[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"] ? [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"deleteSourceFiles"] : nil);
-
-	for(i = 0; i < [filenames count]; ++i) {
-		filename = [filenames objectAtIndex:i];
-		
-		if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
-			if(isDir) {
-				subpaths	= [manager subpathsAtPath:filename];
-				enumerator	= [subpaths objectEnumerator];
-				
-				while((subpath = [enumerator nextObject])) {
-					composedPath = [NSString stringWithFormat:@"%@/%@", filename, subpath];
-					
-					// Ignore dotfiles
-					if([[subpath lastPathComponent] hasPrefix:@"."]) {
-						continue;
-					}
-					// Ignore files that don't have our extensions
-					else if(NO == [getAudioExtensions() containsObject:[subpath pathExtension]]) {
-						continue;
-					}
-					
-					// Ignore directories
-					if([manager fileExistsAtPath:composedPath isDirectory:&isDir] && NO == isDir) {
-						metadata = [AudioMetadata metadataFromFile:composedPath];
-						
-						@try {
-							[[ConverterController sharedController] convertFile:composedPath metadata:metadata withEncoders:encoders toDirectory:outputDirectory userInfo:userInfo];
-						}
-						
-						@catch(FileFormatNotSupportedException *exception) {
-							// Just let it go since we are traversing a folder
-						}
-					}
-				}
-			}
-			else {
-				metadata = [AudioMetadata metadataFromFile:filename];						
-				[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders toDirectory:outputDirectory userInfo:userInfo];
-			}
-		}
-		else {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"The file was not found.", @"Exceptions", @"") userInfo:[NSDictionary dictionaryWithObject:filename forKey:@"filename"]];
-		}
-	}					
+	while((filename = [enumerator nextObject])) {
+		[[ConvertFilesController sharedController] addFile:filename];
+	}				
 }
 
 - (IBAction) showComponentVersions:(id)sender
