@@ -22,6 +22,7 @@
 #import "BasicRipperTask.h"
 #import "ComparisonRipperTask.h"
 #import "ParanoiaRipperTask.h"
+//#import "SecureRipperTask.h"
 #import "LogController.h"
 #import "EncoderController.h"
 #import "ApplicationController.h"
@@ -160,6 +161,7 @@ static RipperController *sharedController = nil;
 		case kBasicRipper:		task = [[BasicRipperTask alloc] initWithTracks:tracks metadata:metadata];		break;
 		case kComparisonRipper:	task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
 		case kParanoiaRipper:	task = [[ParanoiaRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
+//		case kSecureRipper:		task = [[SecureRipperTask alloc] initWithTracks:tracks metadata:metadata];		break;
 		default:				task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
 	}
 	

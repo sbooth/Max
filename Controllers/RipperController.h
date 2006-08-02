@@ -27,6 +27,7 @@ enum {
 	kBasicRipper			= 0,
 	kComparisonRipper		= 1,
 	kParanoiaRipper			= 2
+//	kSecureRipper			= 3
 };
 
 @interface RipperController : NSWindowController

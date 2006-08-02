@@ -28,6 +28,7 @@
 #import "SpeexConverterTask.h"
 #import "WavPackConverterTask.h"
 #import "ShortenConverterTask.h"
+#import "MusepackConverterTask.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioUtilities.h"
 #import "LogController.h"
@@ -191,6 +192,9 @@ static ConverterController *sharedController = nil;
 	}
 	else if([extension isEqualToString:@"shn"]) {
 		converterTask = [[ShortenConverterTask alloc] initWithInputFile:filename metadata:metadata];		
+	}
+	else if([extension isEqualToString:@"mpc"]) {
+		converterTask = [[MusepackConverterTask alloc] initWithInputFile:filename metadata:metadata];		
 	}
 	else {
 		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @"") 

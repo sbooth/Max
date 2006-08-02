@@ -36,6 +36,7 @@
 		8C32811F096D0CD700608C9D /* CompactDiscDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C32811E096D0CD700608C9D /* CompactDiscDocument.nib */; };
 		8C328123096D0CDF00608C9D /* Acknowledgments.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C328122096D0CDF00608C9D /* Acknowledgments.nib */; };
 		8C328182096D12CA00608C9D /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C328181096D12CA00608C9D /* Exceptions.strings */; };
+		8C3531460A7BEF16002BE5D7 /* ShortenConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3531440A7BEF16002BE5D7 /* ShortenConverterTask.m */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4650093E776500A88927 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D464F093E776500A88927 /* Preferences.nib */; };
@@ -108,7 +109,6 @@
 		8C5302520A05D7A400890518 /* TagLib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5300DD0A05D1D400890518 /* TagLib.framework */; };
 		8C5302530A05D7A400890518 /* Vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5300DE0A05D1D400890518 /* Vorbis.framework */; };
 		8C5302540A05D7A400890518 /* WavPack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5300DF0A05D1D400890518 /* WavPack.framework */; };
-		8C5302790A05DC9A00890518 /* Add to iTunes Library.scpt in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5302720A05DC9A00890518 /* Add to iTunes Library.scpt */; };
 		8C53027E0A05DC9A00890518 /* Max.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302770A05DC9A00890518 /* Max.sdef */; };
 		8C5302820A05DCC000890518 /* Add to iTunes Library.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302720A05DC9A00890518 /* Add to iTunes Library.scpt */; };
 		8C5302860A05DD8800890518 /* CDInfo.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302840A05DD8800890518 /* CDInfo.icns */; };
@@ -167,10 +167,8 @@
 		8C53FFC10A05CD9A00890518 /* SpeexConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FFAC0A05CD9A00890518 /* SpeexConverter.m */; };
 		8C53FFC30A05CD9A00890518 /* WavPackConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FFAE0A05CD9A00890518 /* WavPackConverter.m */; };
 		8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */; };
-		8C74F8490A0B2C7C002260CF /* AudioMetadata.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C74F8470A0B2C7C002260CF /* AudioMetadata.h */; };
 		8C74F84A0A0B2C7C002260CF /* AudioMetadata.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8480A0B2C7C002260CF /* AudioMetadata.mm */; };
 		8C74F85E0A0B2D2E002260CF /* UpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F85C0A0B2D2E002260CF /* UpdateChecker.m */; };
-		8C74F8680A0B2D89002260CF /* Genres.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C74F8660A0B2D89002260CF /* Genres.h */; };
 		8C74F8690A0B2D89002260CF /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8670A0B2D89002260CF /* Genres.m */; };
 		8C74F8930A0B307E002260CF /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8910A0B307E002260CF /* ServicesProvider.m */; };
 		8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */; };
@@ -239,6 +237,10 @@
 		8CA7E8A30A52914C000F7D72 /* ConvertFiles.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA7E8A10A52914C000F7D72 /* ConvertFiles.nib */; };
 		8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
+		8CBD75500A7F1803006B3790 /* mpcdec.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBD75460A7F1803006B3790 /* mpcdec.framework */; };
+		8CBD75510A7F182B006B3790 /* mpcdec.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBD75460A7F1803006B3790 /* mpcdec.framework */; };
+		8CBD755D0A7F1893006B3790 /* MusepackConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBD755B0A7F1893006B3790 /* MusepackConverterTask.m */; };
+		8CBD75730A7F18D1006B3790 /* MusepackConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBD75710A7F18D1006B3790 /* MusepackConverter.m */; };
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
 		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
 		8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CDBA03A09DF925800126090 /* GetPlaylistName.nib */; };
@@ -261,6 +263,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8CBD75500A7F1803006B3790 /* mpcdec.framework in Copy Frameworks */,
 				8C5302460A05D7A400890518 /* cddb.framework in Copy Frameworks */,
 				8C5302470A05D7A400890518 /* cdparanoia.framework in Copy Frameworks */,
 				8C5302480A05D7A400890518 /* cuetools.framework in Copy Frameworks */,
@@ -276,9 +279,6 @@
 				8C5302520A05D7A400890518 /* TagLib.framework in Copy Frameworks */,
 				8C5302530A05D7A400890518 /* Vorbis.framework in Copy Frameworks */,
 				8C5302540A05D7A400890518 /* WavPack.framework in Copy Frameworks */,
-				8C5302790A05DC9A00890518 /* Add to iTunes Library.scpt in Copy Frameworks */,
-				8C74F8490A0B2C7C002260CF /* AudioMetadata.h in Copy Frameworks */,
-				8C74F8680A0B2D89002260CF /* Genres.h in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +319,10 @@
 		8C2B9C5D0A27503D00111D14 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8C2D6FB109D195A200968B18 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8C32817D096D12C400608C9D /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Exceptions.strings; sourceTree = "<group>"; };
+		8C3531430A7BEF16002BE5D7 /* ShortenConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortenConverterTask.h; sourceTree = "<group>"; };
+		8C3531440A7BEF16002BE5D7 /* ShortenConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShortenConverterTask.m; sourceTree = "<group>"; };
+		8C35315D0A7BEF9C002BE5D7 /* ShortenConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShortenConverter.h; sourceTree = "<group>"; };
+		8C35315E0A7BEF9C002BE5D7 /* ShortenConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShortenConverter.m; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		8C440DBB092E8B3000A053AA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FreeDBMatches.nib; sourceTree = "<group>"; };
 		8C4D452F093E6CB200A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
@@ -726,6 +730,11 @@
 		8CBA9F980999BB98007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Preferences.nib; sourceTree = "<group>"; };
 		8CBA9FA20999BC3B007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Log.nib; sourceTree = "<group>"; };
 		8CBAB14809D7AA6B00F97BDC /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8CBD75460A7F1803006B3790 /* mpcdec.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mpcdec.framework; path = Frameworks/mpcdec.framework; sourceTree = "<group>"; };
+		8CBD755A0A7F1893006B3790 /* MusepackConverterTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusepackConverterTask.h; sourceTree = "<group>"; };
+		8CBD755B0A7F1893006B3790 /* MusepackConverterTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusepackConverterTask.m; sourceTree = "<group>"; };
+		8CBD75700A7F18D1006B3790 /* MusepackConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusepackConverter.h; sourceTree = "<group>"; };
+		8CBD75710A7F18D1006B3790 /* MusepackConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusepackConverter.m; sourceTree = "<group>"; };
 		8CBF384009CFA0FE00E89546 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8CC111C308CA4538008BB9B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CompactDiscDocument.nib; sourceTree = "<group>"; };
 		8CD7F7D1098B0B19002C4D9F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -764,6 +773,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8CBD75510A7F182B006B3790 /* mpcdec.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */,
 				8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */,
@@ -910,6 +920,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8CBD75460A7F1803006B3790 /* mpcdec.framework */,
 				8C5302400A05D78300890518 /* LAME.framework */,
 				8C5302370A05D75500890518 /* Growl.framework */,
 				8C5300D30A05D1D300890518 /* cddb.framework */,
@@ -1247,6 +1258,10 @@
 				8C53FFAC0A05CD9A00890518 /* SpeexConverter.m */,
 				8C53FFAD0A05CD9A00890518 /* WavPackConverter.h */,
 				8C53FFAE0A05CD9A00890518 /* WavPackConverter.m */,
+				8C35315D0A7BEF9C002BE5D7 /* ShortenConverter.h */,
+				8C35315E0A7BEF9C002BE5D7 /* ShortenConverter.m */,
+				8CBD75700A7F18D1006B3790 /* MusepackConverter.h */,
+				8CBD75710A7F18D1006B3790 /* MusepackConverter.m */,
 			);
 			path = Converters;
 			sourceTree = "<group>";
@@ -1330,6 +1345,10 @@
 				8C9450DD0A12E3FC00C8DCAE /* SpeexConverterTask.m */,
 				8C9450DE0A12E3FC00C8DCAE /* WavPackConverterTask.h */,
 				8C9450DF0A12E3FC00C8DCAE /* WavPackConverterTask.m */,
+				8C3531430A7BEF16002BE5D7 /* ShortenConverterTask.h */,
+				8C3531440A7BEF16002BE5D7 /* ShortenConverterTask.m */,
+				8CBD755A0A7F1893006B3790 /* MusepackConverterTask.h */,
+				8CBD755B0A7F1893006B3790 /* MusepackConverterTask.m */,
 			);
 			name = ConverterTasks;
 			path = Tasks/ConverterTasks;
@@ -1673,6 +1692,9 @@
 				8C2862760A5BDAB7005ECEE0 /* ConvertFilesController.m in Sources */,
 				8C2862780A5BDAB7005ECEE0 /* FileArrayController.m in Sources */,
 				8C28627A0A5BDAB7005ECEE0 /* FilesTableView.m in Sources */,
+				8C3531460A7BEF16002BE5D7 /* ShortenConverterTask.m in Sources */,
+				8CBD755D0A7F1893006B3790 /* MusepackConverterTask.m in Sources */,
+				8CBD75730A7F18D1006B3790 /* MusepackConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
