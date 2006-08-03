@@ -43,7 +43,6 @@
 #import "MultiplicationValueTransformer.h"
 #import "BOOLToStringValueTransformer.h"
 #import "UppercaseStringValueTransformer.h"
-#import "IntegerToBOOLValueTransformer.h"
 #import "SelectEncodersSheet.h"
 
 static ApplicationController *sharedController = nil;
@@ -75,19 +74,7 @@ static ApplicationController *sharedController = nil;
 
 	transformer = [[[UppercaseStringValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"UppercaseStringValueTransformer"];
-	
-	transformer = [[[IntegerToBOOLValueTransformer alloc] initWithValue:0] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"NumberIsZeroValueTransformer"];
-
-	transformer = [[[IntegerToBOOLValueTransformer alloc] initWithValue:1] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"NumberIsOneValueTransformer"];
-	
-	transformer = [[[IntegerToBOOLValueTransformer alloc] initWithValue:2] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"NumberIsTwoValueTransformer"];
-	
-	transformer = [[[IntegerToBOOLValueTransformer alloc] initWithValue:3] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"NumberIsThreeValueTransformer"];
-		
+			
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
 		if(nil == defaultsValuesPath) {
