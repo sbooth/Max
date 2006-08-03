@@ -394,7 +394,7 @@
 	[result setTrackComment:[self comment]];
 	[result setISRC:[self ISRC]];
 	
-	[result setAlbumTrackCount:[[self document] countOfTracks]];
+	[result setTrackTotal:[[self document] countOfTracks]];
 	[result setAlbumTitle:[[self document] title]];
 	[result setAlbumArtist:[[self document] artist]];
 	[result setAlbumYear:[[self document] year]];

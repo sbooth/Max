@@ -23,6 +23,7 @@
 @interface AudioMetadata : NSObject
 {
 	unsigned				_trackNumber;
+	unsigned				_trackTotal;
 	NSString				*_trackTitle;
 	NSString				*_trackArtist;
 	NSString				*_trackComposer;
@@ -30,7 +31,6 @@
 	NSString				*_trackGenre;
 	NSString				*_trackComment;
 
-	unsigned				_albumTrackCount;
 	NSString				*_albumTitle;
 	NSString				*_albumArtist;
 	NSString				*_albumComposer;
@@ -70,7 +70,7 @@
 - (void)		setTrackNumber:(unsigned)trackNumber;
 
 - (unsigned)	trackTotal;
-- (void)		trackTotal:(unsigned)trackTotal;
+- (void)		setTrackTotal:(unsigned)trackTotal;
 
 - (NSString *)	trackTitle;
 - (void)		setTrackTitle:(NSString *)trackTitle;

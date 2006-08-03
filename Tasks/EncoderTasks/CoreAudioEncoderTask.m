@@ -182,7 +182,7 @@
 			
 			// Track number
 			trackNumber = [metadata trackNumber];
-			trackTotal = [metadata albumTrackCount];
+			trackTotal = [metadata trackTotal];
 			if(0 != trackNumber && 0 != trackTotal) {
 				MP4SetMetadataTrack(mp4FileHandle, trackNumber, trackTotal);
 			}

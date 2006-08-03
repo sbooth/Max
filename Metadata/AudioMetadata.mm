@@ -152,7 +152,7 @@
 								[result setTrackNumber:[value intValue]];
 							}
 							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKTOTAL"]]) {
-								[result setAlbumTrackCount:[value intValue]];
+								[result setTrackTotal:[value intValue]];
 							}
 							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPILATION"]]) {
 								[result setCompilation:[value intValue]];
@@ -177,8 +177,8 @@
 							else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMMENT"] && nil == [result albumComment]) {
 								[result setAlbumComment:value];
 							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"] && 0 == [result albumTrackCount]) {
-								[result setAlbumTrackCount:[value intValue]];
+							else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"] && 0 == [result trackTotal]) {
+								[result setTrackTotal:[value intValue]];
 							}
 							else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCSINSET"] && 0 == [result discTotal]) {
 								[result setDiscTotal:[value intValue]];
@@ -292,7 +292,7 @@
 					totalTracks		= [trackString substringFromIndex:range.location + 1];
 					
 					[result setTrackNumber:[trackNum intValue]];
-					[result setAlbumTrackCount:[totalTracks intValue]];
+					[result setTrackTotal:[totalTracks intValue]];
 				}
 				else {
 					[result setTrackNumber:[trackString intValue]];
@@ -392,7 +392,7 @@
 			[result setTrackNumber:trackNumber];
 		}
 		if(0 != totalTracks) {
-			[result setAlbumTrackCount:totalTracks];
+			[result setTrackTotal:totalTracks];
 		}
 		
 		// Disc number
@@ -499,7 +499,7 @@
 			tag = [self customizeOggVorbisTag:@"TRACKTOTAL"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumTrackCount:[value intValue]];
+				[result setTrackTotal:[value intValue]];
 			}
 			
 			tag = [self customizeOggVorbisTag:@"DISCNUMBER"];
@@ -626,7 +626,7 @@
 			tag = [self customizeOggFLACTag:@"TRACKTOTAL"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumTrackCount:[value intValue]];
+				[result setTrackTotal:[value intValue]];
 			}
 			
 			tag = [self customizeOggFLACTag:@"DISCNUMBER"];
@@ -771,7 +771,7 @@
 		tagName = [self customizeAPETag:@"TRACKTOTAL"];
 		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setAlbumTrackCount:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+			[result setTrackTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
 		}
 		free(tagName);
 		
@@ -963,7 +963,7 @@
 												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setAlbumTrackCount:[[NSString stringWithUTF8String:tagValue] intValue]];
+			[result setTrackTotal:[[NSString stringWithUTF8String:tagValue] intValue]];
 			free(tagValue);
 		}
 
@@ -1096,45 +1096,6 @@
 }
 
 #pragma mark Class
-
-- (id) init
-{
-	if((self = [super init])) {
-		
-		_trackNumber		= 0;
-		_trackTitle			= nil;
-		_trackArtist		= nil;
-		_trackComposer		= nil;
-		_trackYear			= 0;
-		_trackGenre			= nil;
-		_trackComment		= nil;
-		
-		_albumTrackCount	= 0;
-		_albumTitle			= nil;
-		_albumArtist		= nil;
-		_albumComposer		= nil;
-		_albumYear			= 0;
-		_albumGenre			= nil;
-		_albumComment		= nil;
-		
-		_compilation		= NO;
-		_discNumber			= 0;
-		_discTotal			= 0;
-		
-		_length				= 0;
-		
-		_albumArt			= nil;
-		
-		_playlist			= nil;
-		
-		_MCN				= nil;
-		_ISRC				= nil;
-		
-		return self;
-	}
-	
-	return nil;
-}
 
 - (void) dealloc
 {
@@ -1536,13 +1497,13 @@
 {
 	return (
 			0		== [self trackNumber] &&
+			0		== [self trackTotal] &&
 			nil		== [self trackTitle] &&
 			nil		== [self trackArtist] &&
 			nil		== [self trackComposer] &&
 			0		== [self trackYear] &&
 			nil		== [self trackGenre] &&
 			nil		== [self trackComment] &&
-			0		== [self albumTrackCount] &&
 			nil		== [self albumTitle] &&
 			nil		== [self albumArtist] &&
 			nil		== [self albumComposer] &&
@@ -1562,7 +1523,7 @@
 #pragma mark Accessors
 
 - (unsigned)	trackNumber					{ return _trackNumber; }
-- (unsigned)	trackTotal					{ return _albumTrackCount; }
+- (unsigned)	trackTotal					{ return _trackTotal; }
 - (NSString *)	trackTitle					{ return _trackTitle; }
 - (NSString *)	trackArtist					{ return _trackArtist; }
 - (NSString	*)	trackComposer				{ return _trackComposer; }
@@ -1570,7 +1531,7 @@
 - (NSString	*)	trackGenre					{ return _trackGenre; }
 - (NSString	*)	trackComment				{ return _trackComment; }
 
-- (unsigned)	albumTrackCount				{ return _albumTrackCount; }
+- (unsigned)	albumTrackCount				{ return [self trackTotal]; }
 - (NSString	*)	albumTitle					{ return _albumTitle; }
 - (NSString	*)	albumArtist					{ return _albumArtist; }
 - (NSString	*)	albumComposer				{ return _albumComposer; }
@@ -1594,7 +1555,7 @@
 #pragma mark Mutators
 
 - (void)		setTrackNumber:(unsigned)trackNumber			{ _trackNumber = trackNumber; }
-- (void)		setTrackTotal:(unsigned)trackTotal				{ _albumTrackCount = trackTotal; }
+- (void)		setTrackTotal:(unsigned)trackTotal				{ _trackTotal = trackTotal; }
 - (void)		setTrackTitle:(NSString *)trackTitle			{ [_trackTitle release]; _trackTitle = [trackTitle retain]; }
 - (void)		setTrackArtist:(NSString *)trackArtist			{ [_trackArtist release]; _trackArtist = [trackArtist retain]; }
 - (void)		setTrackComposer:(NSString *)trackComposer		{ [_trackComposer release]; _trackComposer = [trackComposer retain]; }
@@ -1602,7 +1563,7 @@
 - (void)		setTrackGenre:(NSString *)trackGenre			{ [_trackGenre release]; _trackGenre = [trackGenre retain]; }
 - (void)		setTrackComment:(NSString *)trackComment		{ [_trackComment release]; _trackComment = [trackComment retain]; }
 
-- (void)		setAlbumTrackCount:(unsigned)albumTrackCount	{ _albumTrackCount = albumTrackCount; }
+- (void)		setAlbumTrackCount:(unsigned)albumTrackCount	{ _trackTotal = albumTrackCount; }
 - (void)		setAlbumTitle:(NSString *)albumTitle			{ [_albumTitle release]; _albumTitle = [albumTitle retain]; }
 - (void)		setAlbumArtist:(NSString *)albumArtist			{ [_albumArtist release]; _albumArtist = [albumArtist retain]; }
 - (void)		setAlbumComposer:(NSString *)albumComposer		{ [_albumComposer release]; _albumComposer = [albumComposer retain]; }

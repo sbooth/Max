@@ -137,7 +137,7 @@
 	}
 	
 	// Track total
-	trackTotal = [metadata albumTrackCount];
+	trackTotal = [metadata trackTotal];
 	if(0 != trackTotal) {
 		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"TRACKTOTAL"], TagLib::String([[NSString stringWithFormat:@"%u", trackTotal] UTF8String], TagLib::String::UTF8));
 	}

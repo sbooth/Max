@@ -172,7 +172,7 @@
 	
 	// Track number
 	trackNumber		= [metadata trackNumber];
-	trackTotal		= [metadata albumTrackCount];
+	trackTotal		= [metadata trackTotal];
 	if(0 != trackTotal) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
 		if(nil == frame) {

@@ -52,7 +52,7 @@
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	unsigned									trackNumber				= 0;
-	unsigned									totalTracks				= 0;
+	unsigned									trackTotal				= 0;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*composer				= nil;
@@ -184,9 +184,9 @@
 		}
 
 		// Total tracks
-		totalTracks = [metadata albumTrackCount];
-		if(0 != totalTracks) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKTOTAL"], [NSString stringWithFormat:@"%u", totalTracks]);
+		trackTotal = [metadata trackTotal];
+		if(0 != trackTotal) {
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKTOTAL"], [NSString stringWithFormat:@"%u", trackTotal]);
 		}
 
 		// Compilation

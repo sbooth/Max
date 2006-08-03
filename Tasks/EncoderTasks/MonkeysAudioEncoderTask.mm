@@ -163,7 +163,7 @@
 		}
 		
 		// Track total
-		trackTotal = [metadata albumTrackCount];
+		trackTotal = [metadata trackTotal];
 		if(0 != trackTotal) {
 			tagName = [AudioMetadata customizeAPETag:@"TRACKTOTAL"];
 			f->SetFieldString(tagName, [[NSString stringWithFormat:@"%u", trackTotal] UTF8String], TRUE);

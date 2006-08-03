@@ -136,7 +136,7 @@
 	}
 	
 	// Track total
-	trackTotal = [metadata albumTrackCount];
+	trackTotal = [metadata trackTotal];
 	if(0 != trackTotal) {
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TRACKTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", trackTotal] UTF8String], strlen([[NSString stringWithFormat:@"%u", trackTotal] UTF8String]));
 	}
