@@ -17,9 +17,6 @@
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
 		8C08836A0A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883600A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist */; };
 		8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */; };
-		8C2862760A5BDAB7005ECEE0 /* ConvertFilesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2862700A5BDAB7005ECEE0 /* ConvertFilesController.m */; };
-		8C2862780A5BDAB7005ECEE0 /* FileArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2862720A5BDAB7005ECEE0 /* FileArrayController.m */; };
-		8C28627A0A5BDAB7005ECEE0 /* FilesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2862740A5BDAB7005ECEE0 /* FilesTableView.m */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
@@ -231,12 +228,15 @@
 		8C94514D0A12E4D700C8DCAE /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451410A12E4D700C8DCAE /* Track.m */; };
 		8C99CAD30A8249D800A8CBE4 /* ShortenConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C35315E0A7BEF9C002BE5D7 /* ShortenConverter.m */; };
 		8C99D27D0A82A7AF00A8CBE4 /* FileConversionDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C99D27C0A82A7AF00A8CBE4 /* FileConversionDefaults.plist */; };
+		8C99DD5D0A82B97C00A8CBE4 /* FileArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */; };
+		8C99DD5F0A82B97C00A8CBE4 /* FileConversionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */; };
+		8C99DD610A82B97C00A8CBE4 /* FilesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */; };
+		8C99E27B0A82BA3A00A8CBE4 /* FileConversion.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C99E2750A82BA3A00A8CBE4 /* FileConversion.nib */; };
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
 		8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */; };
 		8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CA6E46C09D065260047C35C /* UndoRedo.strings */; };
 		8CA73F2E0A0FE45C00B12829 /* Cuesheet.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CA73F2D0A0FE45C00B12829 /* Cuesheet.icns */; };
 		8CA73F4B0A0FE6F300B12829 /* ComparisonRipperDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */; };
-		8CA7E8A30A52914C000F7D72 /* ConvertFiles.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA7E8A10A52914C000F7D72 /* ConvertFiles.nib */; };
 		8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
 		8CBD75500A7F1803006B3790 /* mpcdec.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBD75460A7F1803006B3790 /* mpcdec.framework */; };
@@ -307,12 +307,6 @@
 		8C0883600A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = PCMGeneratingTaskDefaults.plist; sourceTree = "<group>"; };
 		8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
 		8C0925F20A2600680017CADE /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
-		8C28626F0A5BDAB7005ECEE0 /* ConvertFilesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ConvertFilesController.h; path = ConvertFiles/ConvertFilesController.h; sourceTree = "<group>"; };
-		8C2862700A5BDAB7005ECEE0 /* ConvertFilesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ConvertFilesController.m; path = ConvertFiles/ConvertFilesController.m; sourceTree = "<group>"; };
-		8C2862710A5BDAB7005ECEE0 /* FileArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FileArrayController.h; path = ConvertFiles/FileArrayController.h; sourceTree = "<group>"; };
-		8C2862720A5BDAB7005ECEE0 /* FileArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = FileArrayController.m; path = ConvertFiles/FileArrayController.m; sourceTree = "<group>"; };
-		8C2862730A5BDAB7005ECEE0 /* FilesTableView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FilesTableView.h; path = ConvertFiles/FilesTableView.h; sourceTree = "<group>"; };
-		8C2862740A5BDAB7005ECEE0 /* FilesTableView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = FilesTableView.m; path = ConvertFiles/FilesTableView.m; sourceTree = "<group>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -671,6 +665,13 @@
 		8C9451400A12E4D700C8DCAE /* Track.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		8C9451410A12E4D700C8DCAE /* Track.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		8C99D27C0A82A7AF00A8CBE4 /* FileConversionDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = FileConversionDefaults.plist; sourceTree = "<group>"; };
+		8C99DD560A82B97C00A8CBE4 /* FileArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileArrayController.h; sourceTree = "<group>"; };
+		8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileArrayController.m; sourceTree = "<group>"; };
+		8C99DD580A82B97C00A8CBE4 /* FileConversionController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileConversionController.h; sourceTree = "<group>"; };
+		8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileConversionController.m; sourceTree = "<group>"; };
+		8C99DD5A0A82B97C00A8CBE4 /* FilesTableView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FilesTableView.h; sourceTree = "<group>"; };
+		8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FilesTableView.m; sourceTree = "<group>"; };
+		8C99E2760A82BA3A00A8CBE4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FileConversion.nib; sourceTree = "<group>"; };
 		8CA3FB9B09BF5B1A00BB1BD4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
 		8CA5229E0938E5DD00250BE8 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Log.nib; sourceTree = "<group>"; };
 		8CA6DE2E09D059FC0047C35C /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
@@ -714,7 +715,6 @@
 		8CA73EA90A0FD3AC00B12829 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LibsndfileSettingsSheet.nib; sourceTree = "<group>"; };
 		8CA73F2D0A0FE45C00B12829 /* Cuesheet.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Cuesheet.icns; sourceTree = "<group>"; };
 		8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ComparisonRipperDefaults.plist; sourceTree = "<group>"; };
-		8CA7E8A20A52914C000F7D72 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ConvertFiles.nib; sourceTree = "<group>"; };
 		8CB34D16099AFF63001532C3 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
 		8CBA9F450999B374007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/CompactDisc.strings; sourceTree = "<group>"; };
@@ -838,7 +838,7 @@
 				8C9451350A12E4D700C8DCAE /* CompactDisc */,
 				8C94512C0A12E45B00C8DCAE /* CueSheet */,
 				8C5300B00A05D18E00890518 /* Controllers */,
-				8C2862630A5BDA08005ECEE0 /* ConvertFiles */,
+				8C99DD550A82B97C00A8CBE4 /* FileConversion */,
 				8C5300980A05CFDA00890518 /* Tasks */,
 				8C9450F50A12E3FC00C8DCAE /* RipperTasks */,
 				8C9450CD0A12E3FC00C8DCAE /* ConverterTasks */,
@@ -880,6 +880,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C99E2750A82BA3A00A8CBE4 /* FileConversion.nib */,
 				8C89D0F60A076A7800359E67 /* SpeexSettingsSheet.nib */,
 				8C89D07F0A07617E00359E67 /* MP3SettingsSheet.nib */,
 				8C89D02B0A075C0100359E67 /* OggVorbisSettingsSheet.nib */,
@@ -915,7 +916,6 @@
 				8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */,
 				8C781F4F09E8DAB4001D85EF /* CueSheetDocument.nib */,
 				8CFF40A40A1D6030008E503C /* SelectEncodersSheet.nib */,
-				8CA7E8A10A52914C000F7D72 /* ConvertFiles.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -969,19 +969,6 @@
 			);
 			name = Defaults;
 			path = Preferences/Defaults;
-			sourceTree = "<group>";
-		};
-		8C2862630A5BDA08005ECEE0 /* ConvertFiles */ = {
-			isa = PBXGroup;
-			children = (
-				8C28626F0A5BDAB7005ECEE0 /* ConvertFilesController.h */,
-				8C2862700A5BDAB7005ECEE0 /* ConvertFilesController.m */,
-				8C2862710A5BDAB7005ECEE0 /* FileArrayController.h */,
-				8C2862720A5BDAB7005ECEE0 /* FileArrayController.m */,
-				8C2862730A5BDAB7005ECEE0 /* FilesTableView.h */,
-				8C2862740A5BDAB7005ECEE0 /* FilesTableView.m */,
-			);
-			name = ConvertFiles;
 			sourceTree = "<group>";
 		};
 		8C32817C096D12A600608C9D /* Strings */ = {
@@ -1432,6 +1419,19 @@
 			path = CompactDisc;
 			sourceTree = "<group>";
 		};
+		8C99DD550A82B97C00A8CBE4 /* FileConversion */ = {
+			isa = PBXGroup;
+			children = (
+				8C99DD560A82B97C00A8CBE4 /* FileArrayController.h */,
+				8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */,
+				8C99DD580A82B97C00A8CBE4 /* FileConversionController.h */,
+				8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */,
+				8C99DD5A0A82B97C00A8CBE4 /* FilesTableView.h */,
+				8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */,
+			);
+			path = FileConversion;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1563,8 +1563,8 @@
 				8CA73F2E0A0FE45C00B12829 /* Cuesheet.icns in Resources */,
 				8CA73F4B0A0FE6F300B12829 /* ComparisonRipperDefaults.plist in Resources */,
 				8CFF40A60A1D6030008E503C /* SelectEncodersSheet.nib in Resources */,
-				8CA7E8A30A52914C000F7D72 /* ConvertFiles.nib in Resources */,
 				8C99D27D0A82A7AF00A8CBE4 /* FileConversionDefaults.plist in Resources */,
+				8C99E27B0A82BA3A00A8CBE4 /* FileConversion.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1694,13 +1694,13 @@
 				8C94514B0A12E4D700C8DCAE /* GetPlaylistNameSheet.m in Sources */,
 				8C94514D0A12E4D700C8DCAE /* Track.m in Sources */,
 				8CFF40B80A1D6AE2008E503C /* SelectEncodersSheet.m in Sources */,
-				8C2862760A5BDAB7005ECEE0 /* ConvertFilesController.m in Sources */,
-				8C2862780A5BDAB7005ECEE0 /* FileArrayController.m in Sources */,
-				8C28627A0A5BDAB7005ECEE0 /* FilesTableView.m in Sources */,
 				8C3531460A7BEF16002BE5D7 /* ShortenConverterTask.m in Sources */,
 				8CBD755D0A7F1893006B3790 /* MusepackConverterTask.m in Sources */,
 				8CBD75730A7F18D1006B3790 /* MusepackConverter.m in Sources */,
 				8C99CAD30A8249D800A8CBE4 /* ShortenConverter.m in Sources */,
+				8C99DD5D0A82B97C00A8CBE4 /* FileArrayController.m in Sources */,
+				8C99DD5F0A82B97C00A8CBE4 /* FileConversionController.m in Sources */,
+				8C99DD610A82B97C00A8CBE4 /* FilesTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2086,6 +2086,14 @@
 			name = "Max Help";
 			sourceTree = "<group>";
 		};
+		8C99E2750A82BA3A00A8CBE4 /* FileConversion.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C99E2760A82BA3A00A8CBE4 /* English */,
+			);
+			name = FileConversion.nib;
+			sourceTree = "<group>";
+		};
 		8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2106,14 +2114,6 @@
 				8CA73E850A0FD2DC00B12829 /* Dutch */,
 			);
 			name = UndoRedo.strings;
-			sourceTree = "<group>";
-		};
-		8CA7E8A10A52914C000F7D72 /* ConvertFiles.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8CA7E8A20A52914C000F7D72 /* English */,
-			);
-			name = ConvertFiles.nib;
 			sourceTree = "<group>";
 		};
 		8CD7F5E0098B0A30002C4D9F /* Credits.rtf */ = {

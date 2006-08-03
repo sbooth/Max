@@ -22,7 +22,7 @@
 
 #import "ServicesProvider.h"
 #import "PreferencesController.h"
-#import "ConvertFilesController.h"
+#import "FileConversionController.h"
 #import "AcknowledgmentsController.h"
 #import "ComponentVersionsController.h"
 #import "MediaController.h"
@@ -172,8 +172,8 @@ static ApplicationController *sharedController = nil;
 		if([openWindows containsObject:@"Log"]) {
 			[[[LogController sharedController] window] orderFront:self];
 		}
-		if([openWindows containsObject:@"ConvertFiles"]) {
-			[[[ConvertFilesController sharedController] window] orderFront:self];
+		if([openWindows containsObject:@"FileConversion"]) {
+			[[[FileConversionController sharedController] window] orderFront:self];
 		}
 	}
 	
@@ -218,8 +218,8 @@ static ApplicationController *sharedController = nil;
 	if([[[LogController sharedController] window] isVisible]) {
 		[openWindows addObject:@"Log"];
 	}
-	if([[[ConvertFilesController sharedController] window] isVisible]) {
-		[openWindows addObject:@"ConvertFiles"];
+	if([[[FileConversionController sharedController] window] isVisible]) {
+		[openWindows addObject:@"FileConversion"];
 	}
 	[[NSUserDefaults standardUserDefaults] setObject:openWindows forKey:@"openWindows"];
 
@@ -247,7 +247,7 @@ static ApplicationController *sharedController = nil;
 
 - (IBAction) encodeFile:(id)sender
 {
-	[[ConvertFilesController sharedController] showWindow:self];
+	[[FileConversionController sharedController] showWindow:self];
 }
 
 - (void) encodeFiles:(NSArray *)filenames
@@ -255,10 +255,10 @@ static ApplicationController *sharedController = nil;
 	NSEnumerator	*enumerator		= [filenames objectEnumerator];
 	NSString		*filename		= nil;
 	
-	[[ConvertFilesController sharedController] showWindow:self];
+	[[FileConversionController sharedController] showWindow:self];
 
 	while((filename = [enumerator nextObject])) {
-		[[ConvertFilesController sharedController] addFile:filename];
+		[[FileConversionController sharedController] addFile:filename];
 	}				
 }
 
@@ -326,7 +326,7 @@ static ApplicationController *sharedController = nil;
 	BOOL	result		= YES;
 	
 	if(@selector(encodeFile:) == [item action]) {
-		result = ! [[[ConvertFilesController sharedController] window] isVisible];
+		result = ! [[[FileConversionController sharedController] window] isVisible];
 	}
 	
 	return result;
