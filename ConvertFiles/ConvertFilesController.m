@@ -21,6 +21,7 @@
 #import "ConvertFilesController.h"
 #import "ConverterController.h"
 #import "PreferencesController.h"
+#import "Genres.h"
 #import "UtilityFunctions.h"
 #import "IOException.h"
 
@@ -146,7 +147,7 @@ static ConvertFilesController *sharedController = nil;
 	for(i = 0; i < [filenames count]; ++i) {
 
 		filename	= [[filenames objectAtIndex:i] objectForKey:@"filename"];
-		metadata	= [AudioMetadata metadataFromFile:filename];
+		metadata	= [[filenames objectAtIndex:i] objectForKey:@"metadata"];
 		
 		@try {
 			[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:[_encodersController selectedObjects] toDirectory:outputDirectory userInfo:userInfo];
@@ -338,7 +339,8 @@ static ConvertFilesController *sharedController = nil;
 
 - (BOOL) addOneFile:(NSString *)filename atIndex:(unsigned)index
 {
-	NSImage		*icon		= nil;
+	NSImage				*icon			= nil;
+	AudioMetadata		*metadata		= nil;
 
 	// Don't re-add files
 	if([_filesController containsFile:filename]) {
@@ -349,20 +351,25 @@ static ConvertFilesController *sharedController = nil;
 		return NO;
 	}
 	
+	// Get file's metadata
+	metadata = [AudioMetadata metadataFromFile:filename];
+	
 	// Get the icon for the file
 	icon = getIconForFile(filename, NSMakeSize(16, 16));
 
 	if(NSNotFound == index) {
-		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", nil]]];
+		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]]];
 	}
 	else {
-		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", nil]] atArrangedObjectIndex:index];			
+		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]] atArrangedObjectIndex:index];			
 	}
 	
 	return YES;
 }
 
 #pragma mark Miscellaneous
+
+- (NSArray *)				genres											{ return [Genres sharedGenres]; }
 
 - (BOOL)					convertInPlace									{ return _convertInPlace; }
 - (void)					setConvertInPlace:(BOOL)convertInPlace			{ _convertInPlace = convertInPlace; }

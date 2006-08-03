@@ -69,6 +69,9 @@
 - (unsigned)	trackNumber;
 - (void)		setTrackNumber:(unsigned)trackNumber;
 
+- (unsigned)	trackTotal;
+- (void)		trackTotal:(unsigned)trackTotal;
+
 - (NSString *)	trackTitle;
 - (void)		setTrackTitle:(NSString *)trackTitle;
 
@@ -86,9 +89,6 @@
 
 - (NSString	*)	trackComment;
 - (void)		setTrackComment:(NSString *)trackComment;
-
-- (unsigned)	albumTrackCount;
-- (void)		setAlbumTrackCount:(unsigned)albumTrackCount;
 
 - (NSString	*)	albumTitle;
 - (void)		setAlbumTitle:(NSString *)albumTitle;
@@ -131,5 +131,9 @@
 
 - (NSString *)	playlist;
 - (void)		setPlaylist:(NSString *)playlist;
+
+// Legacy support
+- (unsigned)	albumTrackCount;
+- (void)		setAlbumTrackCount:(unsigned)albumTrackCount;
 
 @end

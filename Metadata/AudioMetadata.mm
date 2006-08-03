@@ -1562,6 +1562,7 @@
 #pragma mark Accessors
 
 - (unsigned)	trackNumber					{ return _trackNumber; }
+- (unsigned)	trackTotal					{ return _albumTrackCount; }
 - (NSString *)	trackTitle					{ return _trackTitle; }
 - (NSString *)	trackArtist					{ return _trackArtist; }
 - (NSString	*)	trackComposer				{ return _trackComposer; }
@@ -1593,6 +1594,7 @@
 #pragma mark Mutators
 
 - (void)		setTrackNumber:(unsigned)trackNumber			{ _trackNumber = trackNumber; }
+- (void)		setTrackTotal:(unsigned)trackTotal				{ _albumTrackCount = trackTotal; }
 - (void)		setTrackTitle:(NSString *)trackTitle			{ [_trackTitle release]; _trackTitle = [trackTitle retain]; }
 - (void)		setTrackArtist:(NSString *)trackArtist			{ [_trackArtist release]; _trackArtist = [trackArtist retain]; }
 - (void)		setTrackComposer:(NSString *)trackComposer		{ [_trackComposer release]; _trackComposer = [trackComposer retain]; }

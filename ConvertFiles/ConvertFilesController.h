@@ -48,6 +48,8 @@ enum {
 
 + (ConvertFilesController *)		sharedController;
 
+- (NSArray *)						genres;
+
 - (IBAction)						ok:(id)sender;
 - (IBAction)						cancel:(id)sender;
 

@@ -1,12 +1,12 @@
 {
     IBClasses = (
+        {CLASS = CompilationButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
         {
             ACTIONS = {
                 addFiles = id; 
                 cancel = id; 
                 ok = id; 
                 removeFiles = id; 
-                resetOutputDirectoryToDefault = id; 
                 selectOutputDirectory = id; 
             }; 
             CLASS = ConvertFilesController; 
