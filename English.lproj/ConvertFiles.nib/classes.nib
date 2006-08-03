@@ -8,16 +8,19 @@
                 insertFileNamingFormatSpecifier = id; 
                 ok = id; 
                 removeFiles = id; 
+                saveFileNamingFormat = id; 
                 selectOutputDirectory = id; 
+                selectTemporaryDirectory = id; 
             }; 
             CLASS = ConvertFilesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 "_encodersController" = NSArrayController; 
-                "_fileNamingTextField" = NSTextField; 
+                "_fileNamingComboBox" = NSComboBox; 
                 "_filesController" = NSArrayController; 
                 "_formatSpecifierPopUpButton" = NSPopUpButton; 
                 "_outputDirectoryPopUpButton" = NSPopUpButton; 
+                "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
             }; 
             SUPERCLASS = NSWindowController; 
         }, 

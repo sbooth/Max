@@ -24,6 +24,7 @@
 #import "Genres.h"
 #import "UtilityFunctions.h"
 #import "IOException.h"
+#import "MissingResourceException.h"
 
 enum {
 	kAlbumTitleMenuItem				= 1,
@@ -50,9 +51,37 @@ static ConvertFilesController *sharedController = nil;
 - (void)	selectOutputDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (BOOL)	addOneFile:(NSString *)filename atIndex:(unsigned)index;
 - (void)	clearFileList;
+- (void)	selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)	updateTemporaryDirectoryMenuItemImage;
 @end
 
 @implementation ConvertFilesController
+
++ (void) initialize
+{
+	NSString				*defaultsValuesPath;
+    NSDictionary			*defaultsValuesDictionary;
+	
+	@try {
+		// Set up defaults
+		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"FileConversionDefaults" ofType:@"plist"];
+		if(nil == defaultsValuesPath) {
+			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
+														userInfo:[NSDictionary dictionaryWithObject:@"FileConversionDefaults.plist" forKey:@"filename"]];
+		}
+		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
+		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];		
+	}
+	
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"ConvertFilesController"]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+	}
+}
 
 + (ConvertFilesController *) sharedController
 {
@@ -77,12 +106,6 @@ static ConvertFilesController *sharedController = nil;
 - (id) init
 {
 	if((self = [super initWithWindowNibName:@"ConvertFiles"])) {
-		
-		_outputDirectory = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] retain];
-
-		// Pull in defaults
-		[self setDeleteSourceFiles:[[NSUserDefaults standardUserDefaults] boolForKey:@"deleteAfterConversion"]];
-
 		return self;
 	}
 	return nil;
@@ -97,16 +120,30 @@ static ConvertFilesController *sharedController = nil;
 
 - (void) awakeFromNib
 {
-	// Set the menu item image
+	NSArray		*patterns	= nil;
+	
+	// Pull in defaults
+	_outputDirectory	= [[[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath] retain];
+
+	// Set the menu item images
 	[self updateOutputDirectoryMenuItemImage];
+	[self updateTemporaryDirectoryMenuItemImage];
 	
-	// Select the correct item
+	// Select the correct items
 	[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
-	
+	[_temporaryDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
 	[_encodersController setSelectedObjects:getDefaultOutputFormats()];
 	
 	// Deselect all items in the File Format Specifier NSPopUpButton
+	[[_formatSpecifierPopUpButton selectedItem] setState:NSOffState];
 	[_formatSpecifierPopUpButton selectItemAtIndex:-1];
+	[_formatSpecifierPopUpButton synchronizeTitleAndSelectedItem];
+
+	// Set the value to the most recently-saved pattern
+	patterns = [[NSUserDefaults standardUserDefaults] stringArrayForKey:@"conversionFileNamingPatterns"];
+	if(0 < [patterns count]) {
+		[_fileNamingComboBox setStringValue:[patterns objectAtIndex:0]];
+	}	
 }
 
 - (void) windowDidLoad
@@ -126,12 +163,12 @@ static ConvertFilesController *sharedController = nil;
 
 - (IBAction) ok:(id)sender
 {
-	AudioMetadata		*metadata			= nil;
-	NSArray				*filenames			= nil;
-	NSString			*outputDirectory	= nil;
-	NSString			*filename			= nil;
-	NSMutableDictionary	*userInfo			= nil;
-	
+	AudioMetadata		*metadata				= nil;
+	NSArray				*filenames				= nil;
+	NSString			*outputDirectory		= nil;
+	NSString			*filename				= nil;
+	NSMutableDictionary	*userInfo				= nil;
+	int					deleteSourceFilesTag	= 0;
 	unsigned			i;
 
 	// Verify at least one output format is selected
@@ -161,8 +198,16 @@ static ConvertFilesController *sharedController = nil;
 	// Conversion parameters
 	outputDirectory		= ([self convertInPlace] ? nil : _outputDirectory);
 	userInfo			= [NSMutableDictionary dictionary];
-	[userInfo setObject:[NSNumber numberWithBool:[self overwriteExistingFiles]] forKey:@"overwriteExistingFiles"];
-	[userInfo setObject:[NSNumber numberWithBool:[self deleteSourceFiles]] forKey:@"deleteSourceFiles"];
+	
+	[userInfo setObject:[NSNumber numberWithBool:[[NSUserDefaults standardUserDefaults] boolForKey:@"conversionOverwriteExistingFiles"]] forKey:@"overwriteExistingFiles"];
+	
+	deleteSourceFilesTag = [[NSUserDefaults standardUserDefaults] boolForKey:@"conversionDeleteSourceFiles"];
+	if(kOverwriteExistingFiles == deleteSourceFilesTag) {
+		[userInfo setObject:[NSNumber numberWithBool:YES] forKey:@"deleteSourceFiles"];
+	}
+	else {
+		[userInfo setObject:[NSNumber numberWithBool:NO] forKey:@"deleteSourceFiles"];
+	}
 	
 	// Iterate through file list and convert each one
 	filenames = [_filesController arrangedObjects];
@@ -301,18 +346,115 @@ static ConvertFilesController *sharedController = nil;
 		case kFileFormatMenuItemTag:		string = @"{fileFormat}";		break;
 		case kDiscNumberMenuItemTag:		string = @"{discNumber}";		break;
 		case kDiscTotalMenuItemTag:			string = @"{discTotal}";		break;
+		default:							string = @"";					break;
 	}
 	
-	fieldEditor = [_fileNamingTextField currentEditor];
+	fieldEditor = [_fileNamingComboBox currentEditor];
 	if(nil == fieldEditor) {
-		[_fileNamingTextField setStringValue:string];
+		[_fileNamingComboBox setStringValue:string];
 	}
 	else {
-		if([_fileNamingTextField textShouldBeginEditing:fieldEditor]) {
+		if([_fileNamingComboBox textShouldBeginEditing:fieldEditor]) {
 			[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
-			[_fileNamingTextField textShouldEndEditing:fieldEditor];
+			[_fileNamingComboBox textShouldEndEditing:fieldEditor];
 		}
 	}
+}
+
+- (IBAction) saveFileNamingFormat:(id)sender
+{
+	NSString		*pattern	= [_fileNamingComboBox stringValue];
+	NSMutableArray	*patterns	= nil;
+	
+	patterns = [[[[NSUserDefaults standardUserDefaults] arrayForKey:@"conversionFileNamingPatterns"] mutableCopy] autorelease];
+	if(nil == patterns) {
+		patterns = [NSMutableArray array];
+	}
+	
+	if([patterns containsObject:pattern]) {
+		[patterns removeObject:pattern];
+	}	
+
+	[patterns insertObject:pattern atIndex:0];
+
+	while(10 < [patterns count]) {
+		[patterns removeLastObject];
+	}
+	
+	[[NSUserDefaults standardUserDefaults] setObject:patterns forKey:@"conversionFileNamingPatterns"];	
+}
+
+- (IBAction) selectTemporaryDirectory:(id)sender
+{
+	NSOpenPanel *panel = nil;
+	
+	switch([[sender selectedItem] tag]) {
+		case kDefaultTempDirectoryMenuItemTag:
+			[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:@"conversionUseCustomTemporaryDirectory"];
+			break;
+			
+		case kCurrentTempDirectoryMenuItemTag:
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"]) {
+				[[NSWorkspace sharedWorkspace] selectFile:[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionTemporaryDirectory"] inFileViewerRootedAtPath:nil];
+			}
+			else {
+				[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:@"conversionUseCustomTemporaryDirectory"]; 
+			}
+			break;
+			
+		case kChooseTempDirectoryMenuItemTag:
+			panel = [NSOpenPanel openPanel];
+			
+			[panel setAllowsMultipleSelection:NO];
+			[panel setCanChooseDirectories:YES];
+			[panel setCanChooseFiles:NO];
+			
+			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectTemporaryDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
+			break;
+	}
+}
+
+- (void) selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	NSArray		*filesToOpen;
+	NSString	*dirname;
+	int			count, i;
+	
+	switch(returnCode) {
+		
+		case NSOKButton:
+			filesToOpen		= [sheet filenames];
+			count			= [filesToOpen count];
+			
+			for(i = 0; i < count; ++i) {
+				dirname = [filesToOpen objectAtIndex:i];
+				[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:@"conversionUseCustomTemporaryDirectory"]; 
+				[[NSUserDefaults standardUserDefaults] setValue:dirname forKey:@"conversionTemporaryDirectory"];
+				[self updateTemporaryDirectoryMenuItemImage];
+			}
+				
+				[_temporaryDirectoryPopUpButton selectItemWithTag:kCurrentTempDirectoryMenuItemTag];	
+			break;
+			
+		case NSCancelButton:
+			[_temporaryDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
+			break;
+	}	
+}
+
+- (void) updateTemporaryDirectoryMenuItemImage
+{
+	NSMenuItem	*menuItem	= nil;
+	NSString	*path		= nil;
+	NSImage		*image		= nil;
+	
+	// Set the menu item image for the output directory
+	path		= [[NSUserDefaults standardUserDefaults] stringForKey:@"conversionTemporaryDirectory"];
+	image		= getIconForFile(path, NSMakeSize(16, 16));
+	menuItem	= [_temporaryDirectoryPopUpButton itemAtIndex:[_temporaryDirectoryPopUpButton indexOfItemWithTag:kCurrentTempDirectoryMenuItemTag]];	
+	
+	[menuItem setTitle:[path lastPathComponent]];
+	[menuItem setImage:image];
 }
 
 #pragma mark File Management
@@ -424,12 +566,6 @@ static ConvertFilesController *sharedController = nil;
 
 - (BOOL)					convertInPlace									{ return _convertInPlace; }
 - (void)					setConvertInPlace:(BOOL)convertInPlace			{ _convertInPlace = convertInPlace; }
-
-- (BOOL)					overwriteExistingFiles							{ return _overwriteExistingFiles; }
-- (void)					setOverwriteExistingFiles:(BOOL)overwriteExistingFiles { _overwriteExistingFiles = overwriteExistingFiles; }
-
-- (BOOL)					deleteSourceFiles								{ return _deleteSourceFiles; }
-- (void)					setDeleteSourceFiles:(BOOL)deleteSourceFiles	{ _deleteSourceFiles = deleteSourceFiles; }
 
 - (void) updateOutputDirectoryMenuItemImage
 {

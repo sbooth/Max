@@ -27,6 +27,10 @@ enum {
 	kChooseDirectoryMenuItemTag			= 2,
 	kSameAsSourceFileMenuItemTag		= 3,
 	
+	kCurrentTempDirectoryMenuItemTag	= 1,
+	kChooseTempDirectoryMenuItemTag		= 2,
+	kDefaultTempDirectoryMenuItemTag	= 3,
+	
 	kDontOverwriteExistingFiles			= 0,
 	kOverwriteExistingFiles				= 1
 };
@@ -36,15 +40,14 @@ enum {
 	IBOutlet NSArrayController		*_encodersController;
 	IBOutlet FileArrayController	*_filesController;
 	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
-	IBOutlet NSTextField			*_fileNamingTextField;
+	IBOutlet NSPopUpButton			*_temporaryDirectoryPopUpButton;
+	IBOutlet NSComboBox				*_fileNamingComboBox;
 	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
 	
 	NSString						*_outputDirectory;
 
 	NSString						*_fileNamingFormat;
 	BOOL							_convertInPlace;
-	BOOL							_overwriteExistingFiles;
-	BOOL							_deleteSourceFiles;
 	
 	NSMutableArray					*_files;
 }
@@ -63,6 +66,10 @@ enum {
 
 - (IBAction)						insertFileNamingFormatSpecifier:(id)sender;
 
+- (IBAction)						saveFileNamingFormat:(id)sender;
+
+- (IBAction)						selectTemporaryDirectory:(id)sender;
+
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;
 
@@ -71,11 +78,5 @@ enum {
 
 - (BOOL)							convertInPlace;
 - (void)							setConvertInPlace:(BOOL)convertInPlace;
-
-- (BOOL)							overwriteExistingFiles;
-- (void)							setOverwriteExistingFiles:(BOOL)overwriteExistingFiles;
-
-- (BOOL)							deleteSourceFiles;
-- (void)							setDeleteSourceFiles:(BOOL)deleteSourceFiles;
 
 @end

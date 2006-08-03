@@ -8,13 +8,14 @@
 	<dict>
 		<key>103</key>
 		<string>430 328 420 455 0 0 1280 832 </string>
+		<key>263</key>
+		<string>427 356 425 376 0 0 1280 832 </string>
 	</dict>
 	<key>IBFramework Version</key>
 	<string>446.1</string>
 	<key>IBOpenObjects</key>
 	<array>
 		<integer>5</integer>
-		<integer>103</integer>
 	</array>
 	<key>IBSystem Version</key>
 	<string>8J135</string>
