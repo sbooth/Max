@@ -42,6 +42,7 @@
 	NSDate							*startTime			= [NSDate date];
 	int								in_fd				= -1;
 	ssize_t							totalBytes;
+	ssize_t							bytesToRead;
 	int								samplesRead			= 0;
 	long							samplesToRead		= 0;
 	long							totalSamples		= 0;
@@ -121,21 +122,12 @@
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
 		
-		// Allocate the buffer used for decompression
-		buffer = (char *)calloc(512 * apeBlockSize, sizeof(char));
-		if(NULL == buffer) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
 		
 		
 		
 		
 		
-		
-		
-		
-		
+#if 0
 		
 		{
 			/***********************/
@@ -573,6 +565,7 @@
 			
 			++iterations;
 		}
+#endif
 	}
 	
 	@catch(StopException *exception) {
@@ -611,9 +604,7 @@
 		}		
 		
 		// Clean up
-		delete decompressor;
 		free(buffer);
-		free(chars);
 	}
 	
 	[_delegate setEndTime:[NSDate date]];

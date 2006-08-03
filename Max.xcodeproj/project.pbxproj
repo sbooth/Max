@@ -229,6 +229,7 @@
 		8C9451490A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */; };
 		8C94514B0A12E4D700C8DCAE /* GetPlaylistNameSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513F0A12E4D700C8DCAE /* GetPlaylistNameSheet.m */; };
 		8C94514D0A12E4D700C8DCAE /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451410A12E4D700C8DCAE /* Track.m */; };
+		8C99CAD30A8249D800A8CBE4 /* ShortenConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C35315E0A7BEF9C002BE5D7 /* ShortenConverter.m */; };
 		8C9AD5FA0943C33300B2183E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CE9B39708CF7937007FCDB3 /* IOKit.framework */; };
 		8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */; };
 		8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CA6E46C09D065260047C35C /* UndoRedo.strings */; };
@@ -1695,6 +1696,7 @@
 				8C3531460A7BEF16002BE5D7 /* ShortenConverterTask.m in Sources */,
 				8CBD755D0A7F1893006B3790 /* MusepackConverterTask.m in Sources */,
 				8CBD75730A7F18D1006B3790 /* MusepackConverter.m in Sources */,
+				8C99CAD30A8249D800A8CBE4 /* ShortenConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
