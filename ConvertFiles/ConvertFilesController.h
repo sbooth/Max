@@ -36,9 +36,12 @@ enum {
 	IBOutlet NSArrayController		*_encodersController;
 	IBOutlet FileArrayController	*_filesController;
 	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
+	IBOutlet NSTextField			*_fileNamingTextField;
+	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
 	
 	NSString						*_outputDirectory;
 
+	NSString						*_fileNamingFormat;
 	BOOL							_convertInPlace;
 	BOOL							_overwriteExistingFiles;
 	BOOL							_deleteSourceFiles;
@@ -58,8 +61,13 @@ enum {
 
 - (IBAction)						selectOutputDirectory:(id)sender;
 
+- (IBAction)						insertFileNamingFormatSpecifier:(id)sender;
+
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;
+
+- (NSString *)						fileNamingFormat;
+- (void)							setFileNamingFormat:(NSString *)fileNamingFormat;
 
 - (BOOL)							convertInPlace;
 - (void)							setConvertInPlace:(BOOL)convertInPlace;

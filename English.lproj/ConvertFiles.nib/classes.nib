@@ -5,6 +5,7 @@
             ACTIONS = {
                 addFiles = id; 
                 cancel = id; 
+                insertFileNamingFormatSpecifier = id; 
                 ok = id; 
                 removeFiles = id; 
                 selectOutputDirectory = id; 
@@ -13,7 +14,9 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 "_encodersController" = NSArrayController; 
+                "_fileNamingTextField" = NSTextField; 
                 "_filesController" = NSArrayController; 
+                "_formatSpecifierPopUpButton" = NSPopUpButton; 
                 "_outputDirectoryPopUpButton" = NSPopUpButton; 
             }; 
             SUPERCLASS = NSWindowController; 

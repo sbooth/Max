@@ -25,6 +25,24 @@
 #import "UtilityFunctions.h"
 #import "IOException.h"
 
+enum {
+	kAlbumTitleMenuItem				= 1,
+	kAlbumArtistMenuItem			= 2,
+	kAlbumYearMenuItem				= 3,
+	kAlbumGenreMenuItem				= 4,
+	kAlbumComposerMenuItem			= 5,
+	kTrackTitleMenuItem				= 6,
+	kTrackArtistMenuItem			= 7,
+	kTrackYearMenuItem				= 8,
+	kTrackGenreMenuItem				= 9,
+	kTrackComposerMenuItem			= 10,
+	kTrackNumberMenuItemTag			= 11,
+	kTrackTotalMenuItemTag			= 12,
+	kFileFormatMenuItemTag			= 13,
+	kDiscNumberMenuItemTag			= 14,
+	kDiscTotalMenuItemTag			= 15
+};
+
 static ConvertFilesController *sharedController = nil;
 
 @interface ConvertFilesController (Private)
@@ -73,6 +91,7 @@ static ConvertFilesController *sharedController = nil;
 - (void) dealloc
 {
 	[_outputDirectory release];
+	[_fileNamingFormat release];
 	[super dealloc];
 }
 
@@ -85,6 +104,9 @@ static ConvertFilesController *sharedController = nil;
 	[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
 	
 	[_encodersController setSelectedObjects:getDefaultOutputFormats()];
+	
+	// Deselect all items in the File Format Specifier NSPopUpButton
+	[_formatSpecifierPopUpButton selectItemAtIndex:-1];
 }
 
 - (void) windowDidLoad
@@ -258,14 +280,40 @@ static ConvertFilesController *sharedController = nil;
 	}
 }
 
-/*- (IBAction) resetOutputDirectoryToDefault:(id)sender
+- (IBAction) insertFileNamingFormatSpecifier:(id)sender
 {
-	[_outputDirectory release];
-	_outputDirectory = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] retain];	
+	NSString		*string;
+	NSText			*fieldEditor;
 	
-	[self updateOutputDirectoryMenuItemImage];
-	[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
-}*/
+	switch([[sender selectedItem] tag]) {
+		case kAlbumTitleMenuItem:			string = @"{albumTitle}";		break;
+		case kAlbumArtistMenuItem:			string = @"{albumArtist}";		break;
+		case kAlbumYearMenuItem:			string = @"{albumYear}";		break;
+		case kAlbumGenreMenuItem:			string = @"{albumGenre}";		break;
+		case kAlbumComposerMenuItem:		string = @"{albumComposer}";	break;
+		case kTrackTitleMenuItem:			string = @"{trackTitle}";		break;
+		case kTrackArtistMenuItem:			string = @"{trackArtist}";		break;
+		case kTrackYearMenuItem:			string = @"{trackYear}";		break;
+		case kTrackGenreMenuItem:			string = @"{trackGenre}";		break;
+		case kTrackComposerMenuItem:		string = @"{trackComposer}";	break;
+		case kTrackNumberMenuItemTag:		string = @"{trackNumber}";		break;
+		case kTrackTotalMenuItemTag:		string = @"{trackTotal}";		break;
+		case kFileFormatMenuItemTag:		string = @"{fileFormat}";		break;
+		case kDiscNumberMenuItemTag:		string = @"{discNumber}";		break;
+		case kDiscTotalMenuItemTag:			string = @"{discTotal}";		break;
+	}
+	
+	fieldEditor = [_fileNamingTextField currentEditor];
+	if(nil == fieldEditor) {
+		[_fileNamingTextField setStringValue:string];
+	}
+	else {
+		if([_fileNamingTextField textShouldBeginEditing:fieldEditor]) {
+			[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
+			[_fileNamingTextField textShouldEndEditing:fieldEditor];
+		}
+	}
+}
 
 #pragma mark File Management
 
@@ -370,6 +418,9 @@ static ConvertFilesController *sharedController = nil;
 #pragma mark Miscellaneous
 
 - (NSArray *)				genres											{ return [Genres sharedGenres]; }
+
+- (NSString *)				fileNamingFormat								{ return _fileNamingFormat; }
+- (void)					setFileNamingFormat:(NSString *)fileNamingFormat { [_fileNamingFormat release]; _fileNamingFormat = [fileNamingFormat retain]; }
 
 - (BOOL)					convertInPlace									{ return _convertInPlace; }
 - (void)					setConvertInPlace:(BOOL)convertInPlace			{ _convertInPlace = convertInPlace; }
