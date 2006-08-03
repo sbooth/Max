@@ -1,0 +1,42 @@
+{
+    IBClasses = (
+        {CLASS = CompilationButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {
+            ACTIONS = {
+                addFiles = id; 
+                cancel = id; 
+                insertFileNamingFormatSpecifier = id; 
+                ok = id; 
+                removeFiles = id; 
+                saveFileNamingFormat = id; 
+                selectOutputDirectory = id; 
+                selectTemporaryDirectory = id; 
+            }; 
+            CLASS = ConvertFilesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_encodersController" = NSArrayController; 
+                "_fileNamingComboBox" = NSComboBox; 
+                "_filesController" = NSArrayController; 
+                "_formatSpecifierPopUpButton" = NSPopUpButton; 
+                "_outputDirectoryPopUpButton" = NSPopUpButton; 
+                "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            CLASS = FileArrayController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_tableView" = FilesTableView; }; 
+            SUPERCLASS = NSArrayController; 
+        }, 
+        {
+            CLASS = FilesTableView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_filesController" = FileArrayController; }; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
