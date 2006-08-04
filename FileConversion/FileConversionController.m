@@ -113,7 +113,6 @@ static FileConversionController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_outputDirectory release];
 	[_fileNamingFormat release];
 	[super dealloc];
 }
@@ -122,9 +121,6 @@ static FileConversionController *sharedController = nil;
 {
 	NSArray		*patterns	= nil;
 	
-	// Pull in defaults
-	_outputDirectory	= [[[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath] retain];
-
 	// Set the menu item images
 	[self updateOutputDirectoryMenuItemImage];
 	[self updateTemporaryDirectoryMenuItemImage];
@@ -143,7 +139,13 @@ static FileConversionController *sharedController = nil;
 	patterns = [[NSUserDefaults standardUserDefaults] stringArrayForKey:@"conversionFileNamingPatterns"];
 	if(0 < [patterns count]) {
 		[_fileNamingComboBox setStringValue:[patterns objectAtIndex:0]];
-	}	
+	}
+	
+	[_filesController setSortDescriptors:[NSArray arrayWithObjects:
+		[[[NSSortDescriptor alloc] initWithKey:@"filename" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"albumArtist" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"trackTitle" ascending:YES] autorelease],
+		nil]];	
 }
 
 - (void) windowDidLoad
@@ -196,7 +198,7 @@ static FileConversionController *sharedController = nil;
 	}
 
 	// Conversion parameters
-	outputDirectory		= ([self convertInPlace] ? nil : _outputDirectory);
+	outputDirectory		= ([self convertInPlace] ? nil : [[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath]);
 	userInfo			= [NSMutableDictionary dictionary];
 	
 	[userInfo setObject:[NSNumber numberWithBool:[[NSUserDefaults standardUserDefaults] boolForKey:@"conversionOverwriteExistingFiles"]] forKey:@"overwriteExistingFiles"];
@@ -277,7 +279,7 @@ static FileConversionController *sharedController = nil;
 	
 	switch([[sender selectedItem] tag]) {
 		case kCurrentDirectoryMenuItemTag:
-			[[NSWorkspace sharedWorkspace] selectFile:_outputDirectory inFileViewerRootedAtPath:nil];
+			[[NSWorkspace sharedWorkspace] selectFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:nil];
 			[self setConvertInPlace:NO];
 			break;
 			
@@ -311,8 +313,7 @@ static FileConversionController *sharedController = nil;
 			
 			for(i = 0; i < count; ++i) {
 				dirname = [filesToOpen objectAtIndex:i];
-				[_outputDirectory release];
-				_outputDirectory = [[dirname stringByAbbreviatingWithTildeInPath] retain];
+				[[NSUserDefaults standardUserDefaults] setObject:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"conversionOutputDirectory"];
 				[self updateOutputDirectoryMenuItemImage];
 			}
 				
@@ -574,7 +575,7 @@ static FileConversionController *sharedController = nil;
 	NSImage		*image		= nil;
 	
 	// Set the menu item image for the output directory
-	path		= [_outputDirectory stringByExpandingTildeInPath];
+	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath];
 	image		= getIconForFile(path, NSMakeSize(16, 16));
 	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
 	

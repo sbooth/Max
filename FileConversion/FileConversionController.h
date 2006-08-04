@@ -44,8 +44,6 @@ enum {
 	IBOutlet NSComboBox				*_fileNamingComboBox;
 	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
 	
-	NSString						*_outputDirectory;
-
 	NSString						*_fileNamingFormat;
 	BOOL							_convertInPlace;
 	
