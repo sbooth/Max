@@ -275,7 +275,7 @@
 
 - (void) compressChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 {
-	uint8_t			*buffer8				= NULL;
+//	uint8_t			*buffer8				= NULL;
 	uint16_t		*buffer16				= NULL;
 	uint32_t		*buffer32				= NULL;
 	unsigned		wideSample;
