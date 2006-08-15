@@ -20,12 +20,18 @@
 
 #import "CoreAudioEncoderTask.h"
 #import "CoreAudioEncoder.h"
+#import "LogController.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioException.h"
 #import "IOException.h"
 
 #include <AudioToolbox/AudioFile.h>
 #include <mp4v2/mp4.h>
+
+#include <paths.h>			// _PATH_TMP
+#include <unistd.h>			// mkstemp, unlink
+
+#define TEMPFILE_PATTERN	"MaxXXXXXXXX"
 
 @implementation CoreAudioEncoderTask
 
@@ -109,7 +115,11 @@
 	BOOL					compilation				= NO;
 	NSImage					*albumArt				= nil;
 	NSData					*data					= nil;
-
+	char					*path					= NULL;
+	const char				*tmpDir;
+	ssize_t					tmpDirLen;
+	ssize_t					patternLen				= strlen(TEMPFILE_PATTERN);
+	
 	
 	// Use mp4v2 for Apple lossless/AAC files
 	if(kAudioFormatMPEG4AAC == formatID || kAudioFormatAppleLossless == formatID) {
@@ -225,6 +235,36 @@
 			MP4SetMetadataTool(mp4FileHandle, [versionString UTF8String]);
 			
 			MP4Close(mp4FileHandle);
+			
+			// Optimize the atoms so the MP4 files will play on shared iTunes libraries
+			// mp4v2 creates a temp file in ., so use a custom file and manually rename it
+			
+//			if(nil != [[self userInfo] objectForKey:@"temporaryDirectory"]) {
+//				tmpDir = [[[[self userInfo] objectForKey:@"temporaryDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
+//			}
+//			else {
+				tmpDir = _PATH_TMP;
+//			}
+			
+			validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);
+			
+			tmpDirLen	= strlen(tmpDir);
+			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+			if(NULL == path) {
+//				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+//												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			memcpy(path, tmpDir, tmpDirLen);
+			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+			path[tmpDirLen + patternLen] = '\0';
+			
+			path = mktemp(path);
+
+			if(NO == MP4Optimize([_outputFilename fileSystemRepresentation], NULL, 0)) {
+				[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [_outputFilename lastPathComponent]]];
+			}
+
+			rename(path, [_outputFilename fileSystemRepresentation]);
 			
 			return;
 		}		

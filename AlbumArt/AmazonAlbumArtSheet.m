@@ -53,7 +53,7 @@
 	}
 }
 
-- (id) initWithCompactDiscDocument:(CompactDiscDocument *)doc;
+- (id) initWithSource:(id <AlbumArtMethods>)source;
 {
 	if((self = [super init])) {
 		if(NO == [NSBundle loadNibNamed:@"AmazonAlbumArtSheet" owner:self])  {
@@ -61,11 +61,11 @@
 														userInfo:[NSDictionary dictionaryWithObject:@"AmazonAlbumArtSheet.nib" forKey:@"filename"]];
 		}
 		
-		_doc		= [doc retain];
+		_source		= source;
 		_images		= [[NSMutableArray arrayWithCapacity:10] retain];
 
-		[_artistTextField setStringValue:[_doc artist]];
-		[_titleTextField setStringValue:[_doc title]];
+		[_artistTextField setStringValue:[_source artist]];
+		[_titleTextField setStringValue:[_source title]];
 		
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"searchInProgress"];
 		
@@ -76,7 +76,6 @@
 
 - (void) dealloc
 {
-	[_doc release];
 	[_images release];
 	[super dealloc];
 }
@@ -88,7 +87,7 @@
 
 - (void) showAlbumArtMatches
 {
-    [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_doc windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
+    [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[_source windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 	[self search:self];
 }
 
@@ -183,8 +182,10 @@
 	
 	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[_images objectAtIndex:[_table selectedRow]] valueForKey:@"URL"]]];
 	if(nil != image) {
-		[_doc setAlbumArt:[image autorelease]];
-		[_doc setAlbumArtDownloadDate:[NSDate date]];
+		[_source setAlbumArt:[image autorelease]];
+		if([_source respondsToSelector:@selector(setAlbumArtDownloadDate:)]) {
+			[_source setAlbumArtDownloadDate:[NSDate date]];
+		}
 	}
     [[NSApplication sharedApplication] endSheet:_sheet];
 }

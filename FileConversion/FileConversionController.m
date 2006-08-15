@@ -19,40 +19,26 @@
  */
 
 #import "FileConversionController.h"
+#import "FileConversionSettingsSheet.h"
 #import "ConverterController.h"
 #import "PreferencesController.h"
 #import "Genres.h"
+#import "AmazonAlbumArtSheet.h"
 #import "UtilityFunctions.h"
 #import "IOException.h"
 #import "MissingResourceException.h"
 
-enum {
-	kAlbumTitleMenuItem				= 1,
-	kAlbumArtistMenuItem			= 2,
-	kAlbumYearMenuItem				= 3,
-	kAlbumGenreMenuItem				= 4,
-	kAlbumComposerMenuItem			= 5,
-	kTrackTitleMenuItem				= 6,
-	kTrackArtistMenuItem			= 7,
-	kTrackYearMenuItem				= 8,
-	kTrackGenreMenuItem				= 9,
-	kTrackComposerMenuItem			= 10,
-	kTrackNumberMenuItemTag			= 11,
-	kTrackTotalMenuItemTag			= 12,
-	kFileFormatMenuItemTag			= 13,
-	kDiscNumberMenuItemTag			= 14,
-	kDiscTotalMenuItemTag			= 15
-};
-
-static FileConversionController *sharedController = nil;
+static FileConversionController		*sharedController						= nil;
+static NSString						*ToggleMetadataToolbarItemIdentifier	= @"org.sbooth.Max.FileConversion.ToggleMetadata";
+static NSString						*ShowSettingsToolbarItemIdentifier		= @"org.sbooth.Max.FileConversion.ShowSettings";
+static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileConversion.ShowAlbumArt";
 
 @interface FileConversionController (Private)
-- (void)	updateOutputDirectoryMenuItemImage;
-- (void)	selectOutputDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)	addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (BOOL)	addOneFile:(NSString *)filename atIndex:(unsigned)index;
 - (void)	clearFileList;
-- (void)	selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (void)	updateTemporaryDirectoryMenuItemImage;
+- (void)	selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)	showSettingsSheet:(id)sender;
 @end
 
 @implementation FileConversionController
@@ -119,33 +105,35 @@ static FileConversionController *sharedController = nil;
 
 - (void) awakeFromNib
 {
-	NSArray		*patterns	= nil;
+	NSToolbar	*toolbar	= nil;
 	
-	// Set the menu item images
-	[self updateOutputDirectoryMenuItemImage];
-	[self updateTemporaryDirectoryMenuItemImage];
-	
-	// Select the correct items
-	[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
-	[_temporaryDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
-	[_encodersController setSelectedObjects:getDefaultOutputFormats()];
-	
-	// Deselect all items in the File Format Specifier NSPopUpButton
-	[[_formatSpecifierPopUpButton selectedItem] setState:NSOffState];
-	[_formatSpecifierPopUpButton selectItemAtIndex:-1];
-	[_formatSpecifierPopUpButton synchronizeTitleAndSelectedItem];
-
-	// Set the value to the most recently-saved pattern
-	patterns = [[NSUserDefaults standardUserDefaults] stringArrayForKey:@"conversionFileNamingPatterns"];
-	if(0 < [patterns count]) {
-		[_fileNamingComboBox setStringValue:[patterns objectAtIndex:0]];
-	}
-	
+	// Set the sort descriptors
 	[_filesController setSortDescriptors:[NSArray arrayWithObjects:
-		[[[NSSortDescriptor alloc] initWithKey:@"filename" ascending:YES] autorelease],
-		[[[NSSortDescriptor alloc] initWithKey:@"albumArtist" ascending:YES] autorelease],
-		[[[NSSortDescriptor alloc] initWithKey:@"trackTitle" ascending:YES] autorelease],
-		nil]];	
+		[[[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"metadata.trackTitle" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"metadata.albumArtist" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"metadata.albumTitle" ascending:YES] autorelease],
+		nil]];
+
+	[_encodersController setSortDescriptors:[NSArray arrayWithObjects:
+		[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"nickname" ascending:YES] autorelease],
+		nil]];
+		
+/*	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	if(NSOKButton == [panel runModalForTypes:[NSArray arrayWithObject:@"app"]]) {
+		NSLog(@"%@", [panel filenames]);
+	}*/
+
+	// Setup the toolbar
+    toolbar = [[[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.FileConversion.ToolbarIdentifier"] autorelease];
+    
+    [toolbar setAllowsUserCustomization:YES];
+    [toolbar setAutosavesConfiguration:YES];
+    
+    [toolbar setDelegate:self];
+	
+    [[self window] setToolbar:toolbar];
 }
 
 - (void) windowDidLoad
@@ -165,16 +153,20 @@ static FileConversionController *sharedController = nil;
 
 - (IBAction) ok:(id)sender
 {
-	AudioMetadata		*metadata				= nil;
-	NSArray				*filenames				= nil;
-	NSString			*outputDirectory		= nil;
-	NSString			*filename				= nil;
-	NSMutableDictionary	*userInfo				= nil;
-	int					deleteSourceFilesTag	= 0;
-	unsigned			i;
+	AudioMetadata			*metadata				= nil;
+	NSArray					*encoders				= nil;
+	NSArray					*filenames				= nil;
+	NSString				*outputDirectory		= nil;
+	NSString				*filename				= nil;
+	NSMutableDictionary		*userInfo				= nil;
+	NSMutableDictionary		*postProcessingOptions	= nil;
+	int						deleteSourceFilesTag	= 0;
+	unsigned				i;
 
+	encoders = [[_encodersController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"conversionSelected == 1"]];
+	
 	// Verify at least one output format is selected
-	if(0 == [[_encodersController arrangedObjects] count]) {
+	if(0 == [encoders count]) {
 		int		result;
 		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
@@ -197,9 +189,15 @@ static FileConversionController *sharedController = nil;
 		return;
 	}
 
+	userInfo			= [NSMutableDictionary dictionary];
+
+	// Temporary files location
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"]) {
+		[userInfo setObject:[[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionTemporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
+	}
+	
 	// Conversion parameters
 	outputDirectory		= ([self convertInPlace] ? nil : [[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath]);
-	userInfo			= [NSMutableDictionary dictionary];
 	
 	[userInfo setObject:[NSNumber numberWithBool:[[NSUserDefaults standardUserDefaults] boolForKey:@"conversionOverwriteExistingFiles"]] forKey:@"overwriteExistingFiles"];
 	
@@ -211,6 +209,42 @@ static FileConversionController *sharedController = nil;
 		[userInfo setObject:[NSNumber numberWithBool:NO] forKey:@"deleteSourceFiles"];
 	}
 	
+	// Setup custom output file naming
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomNaming"]) {
+		NSMutableDictionary		*fileNamingFormat = [NSMutableDictionary dictionary];
+		
+		[fileNamingFormat setObject:[self fileNamingFormat] forKey:@"fileNamingFormat"];
+		[fileNamingFormat setObject:[NSNumber numberWithBool:[[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseTwoDigitTrackNumbers"]] forKey:@"useTwoDigitTrackNumbers"];
+		[fileNamingFormat setObject:[NSNumber numberWithBool:[[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseFallback"]] forKey:@"useFallback"];
+		
+		[userInfo setObject:fileNamingFormat forKey:@"fileNamingFormat"];
+	}
+	
+	// Post-processing options
+	postProcessingOptions = [NSMutableDictionary dictionary];
+	
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionAddOutputFilesToiTunes"]) {
+		[postProcessingOptions setObject:[NSNumber numberWithBool:[[NSUserDefaults standardUserDefaults] boolForKey:@"conversionAddOutputFilesToiTunes"]] forKey:@"addOutputFilesToiTunes"];
+	}
+	
+	NSArray			*selectedApplications;
+	NSMutableArray	*postProcessingApplications;
+	
+	selectedApplications			= [[[NSUserDefaults standardUserDefaults] arrayForKey:@"conversionPostProcessingApplications"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];
+	postProcessingApplications		= [NSMutableArray arrayWithCapacity:[selectedApplications count]];
+	
+	for(i = 0; i < [selectedApplications count]; ++i) {
+		[postProcessingApplications addObject:[[selectedApplications objectAtIndex:i] objectForKey:@"path"]];
+	}
+	
+	if(0 != [postProcessingApplications count]) {
+		[postProcessingOptions setObject:postProcessingApplications forKey:@"postProcessingApplications"];
+	}
+	
+	if(0 != [postProcessingOptions count]) {
+		[userInfo setObject:postProcessingOptions forKey:@"postProcessingOptions"];
+	}
+	
 	// Iterate through file list and convert each one
 	filenames = [_filesController arrangedObjects];
 	for(i = 0; i < [filenames count]; ++i) {
@@ -219,7 +253,7 @@ static FileConversionController *sharedController = nil;
 		metadata	= [[filenames objectAtIndex:i] objectForKey:@"metadata"];
 		
 		@try {
-			[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:[_encodersController selectedObjects] toDirectory:outputDirectory userInfo:userInfo];
+			[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders toDirectory:outputDirectory userInfo:userInfo];
 		}
 		
 		@catch(NSException *exception) {
@@ -250,10 +284,10 @@ static FileConversionController *sharedController = nil;
 	[panel setAllowsMultipleSelection:YES];
 	[panel setCanChooseDirectories:YES];
 	
-	[panel beginSheetForDirectory:nil file:nil types:getAudioExtensions() modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];	
+	[panel beginSheetForDirectory:nil file:nil types:getAudioExtensions() modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(addFilesPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];	
 }
 
-- (void) openPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
+- (void) addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
 	NSArray			*filenames;
 	unsigned		i;
@@ -273,189 +307,16 @@ static FileConversionController *sharedController = nil;
 	[_filesController removeObjects:[_filesController selectedObjects]];	
 }
 
-- (IBAction) selectOutputDirectory:(id)sender
+- (void) openFormatsPreferences
 {
-	NSOpenPanel *panel = nil;
-	
-	switch([[sender selectedItem] tag]) {
-		case kCurrentDirectoryMenuItemTag:
-			[[NSWorkspace sharedWorkspace] selectFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:nil];
-			[self setConvertInPlace:NO];
-			break;
-			
-		case kChooseDirectoryMenuItemTag:
-			panel = [NSOpenPanel openPanel];
-			
-			[panel setAllowsMultipleSelection:NO];
-			[panel setCanChooseDirectories:YES];
-			[panel setCanChooseFiles:NO];
-			
-			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectOutputDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
-			break;
-			
-		case kSameAsSourceFileMenuItemTag:
-			[self setConvertInPlace:YES];
-			break;
-	}
+	[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
+	[[PreferencesController sharedPreferences] showWindow:self];
 }
 
-- (void) selectOutputDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+- (void) showSettingsSheet:(id)sender
 {
-	NSArray		*filesToOpen;
-	NSString	*dirname;
-	int			count, i;
-	
-	switch(returnCode) {
-		
-		case NSOKButton:
-			filesToOpen		= [sheet filenames];
-			count			= [filesToOpen count];
-			
-			for(i = 0; i < count; ++i) {
-				dirname = [filesToOpen objectAtIndex:i];
-				[[NSUserDefaults standardUserDefaults] setObject:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"conversionOutputDirectory"];
-				[self updateOutputDirectoryMenuItemImage];
-			}
-				
-				[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];	
-			break;
-			
-		case NSCancelButton:
-			[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];	
-			break;
-	}
-}
-
-- (IBAction) insertFileNamingFormatSpecifier:(id)sender
-{
-	NSString		*string;
-	NSText			*fieldEditor;
-	
-	switch([[sender selectedItem] tag]) {
-		case kAlbumTitleMenuItem:			string = @"{albumTitle}";		break;
-		case kAlbumArtistMenuItem:			string = @"{albumArtist}";		break;
-		case kAlbumYearMenuItem:			string = @"{albumYear}";		break;
-		case kAlbumGenreMenuItem:			string = @"{albumGenre}";		break;
-		case kAlbumComposerMenuItem:		string = @"{albumComposer}";	break;
-		case kTrackTitleMenuItem:			string = @"{trackTitle}";		break;
-		case kTrackArtistMenuItem:			string = @"{trackArtist}";		break;
-		case kTrackYearMenuItem:			string = @"{trackYear}";		break;
-		case kTrackGenreMenuItem:			string = @"{trackGenre}";		break;
-		case kTrackComposerMenuItem:		string = @"{trackComposer}";	break;
-		case kTrackNumberMenuItemTag:		string = @"{trackNumber}";		break;
-		case kTrackTotalMenuItemTag:		string = @"{trackTotal}";		break;
-		case kFileFormatMenuItemTag:		string = @"{fileFormat}";		break;
-		case kDiscNumberMenuItemTag:		string = @"{discNumber}";		break;
-		case kDiscTotalMenuItemTag:			string = @"{discTotal}";		break;
-		default:							string = @"";					break;
-	}
-	
-	fieldEditor = [_fileNamingComboBox currentEditor];
-	if(nil == fieldEditor) {
-		[_fileNamingComboBox setStringValue:string];
-	}
-	else {
-		if([_fileNamingComboBox textShouldBeginEditing:fieldEditor]) {
-			[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
-			[_fileNamingComboBox textShouldEndEditing:fieldEditor];
-		}
-	}
-}
-
-- (IBAction) saveFileNamingFormat:(id)sender
-{
-	NSString		*pattern	= [_fileNamingComboBox stringValue];
-	NSMutableArray	*patterns	= nil;
-	
-	patterns = [[[[NSUserDefaults standardUserDefaults] arrayForKey:@"conversionFileNamingPatterns"] mutableCopy] autorelease];
-	if(nil == patterns) {
-		patterns = [NSMutableArray array];
-	}
-	
-	if([patterns containsObject:pattern]) {
-		[patterns removeObject:pattern];
-	}	
-
-	[patterns insertObject:pattern atIndex:0];
-
-	while(10 < [patterns count]) {
-		[patterns removeLastObject];
-	}
-	
-	[[NSUserDefaults standardUserDefaults] setObject:patterns forKey:@"conversionFileNamingPatterns"];	
-}
-
-- (IBAction) selectTemporaryDirectory:(id)sender
-{
-	NSOpenPanel *panel = nil;
-	
-	switch([[sender selectedItem] tag]) {
-		case kDefaultTempDirectoryMenuItemTag:
-			[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:@"conversionUseCustomTemporaryDirectory"];
-			break;
-			
-		case kCurrentTempDirectoryMenuItemTag:
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"]) {
-				[[NSWorkspace sharedWorkspace] selectFile:[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionTemporaryDirectory"] inFileViewerRootedAtPath:nil];
-			}
-			else {
-				[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:@"conversionUseCustomTemporaryDirectory"]; 
-			}
-			break;
-			
-		case kChooseTempDirectoryMenuItemTag:
-			panel = [NSOpenPanel openPanel];
-			
-			[panel setAllowsMultipleSelection:NO];
-			[panel setCanChooseDirectories:YES];
-			[panel setCanChooseFiles:NO];
-			
-			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectTemporaryDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
-			break;
-	}
-}
-
-- (void) selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	NSArray		*filesToOpen;
-	NSString	*dirname;
-	int			count, i;
-	
-	switch(returnCode) {
-		
-		case NSOKButton:
-			filesToOpen		= [sheet filenames];
-			count			= [filesToOpen count];
-			
-			for(i = 0; i < count; ++i) {
-				dirname = [filesToOpen objectAtIndex:i];
-				[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:@"conversionUseCustomTemporaryDirectory"]; 
-				[[NSUserDefaults standardUserDefaults] setValue:dirname forKey:@"conversionTemporaryDirectory"];
-				[self updateTemporaryDirectoryMenuItemImage];
-			}
-				
-				[_temporaryDirectoryPopUpButton selectItemWithTag:kCurrentTempDirectoryMenuItemTag];	
-			break;
-			
-		case NSCancelButton:
-			[_temporaryDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
-			break;
-	}	
-}
-
-- (void) updateTemporaryDirectoryMenuItemImage
-{
-	NSMenuItem	*menuItem	= nil;
-	NSString	*path		= nil;
-	NSImage		*image		= nil;
-	
-	// Set the menu item image for the output directory
-	path		= [[NSUserDefaults standardUserDefaults] stringForKey:@"conversionTemporaryDirectory"];
-	image		= getIconForFile(path, NSMakeSize(16, 16));
-	menuItem	= [_temporaryDirectoryPopUpButton itemAtIndex:[_temporaryDirectoryPopUpButton indexOfItemWithTag:kCurrentTempDirectoryMenuItemTag]];	
-	
-	[menuItem setTitle:[path lastPathComponent]];
-	[menuItem setImage:image];
+	FileConversionSettingsSheet *sheet = [[FileConversionSettingsSheet alloc] init];
+	[sheet showSheet];
 }
 
 #pragma mark File Management
@@ -562,30 +423,134 @@ static FileConversionController *sharedController = nil;
 
 - (NSArray *)				genres											{ return [Genres sharedGenres]; }
 
-- (NSString *)				fileNamingFormat								{ return _fileNamingFormat; }
-- (void)					setFileNamingFormat:(NSString *)fileNamingFormat { [_fileNamingFormat release]; _fileNamingFormat = [fileNamingFormat retain]; }
-
 - (BOOL)					convertInPlace									{ return _convertInPlace; }
 - (void)					setConvertInPlace:(BOOL)convertInPlace			{ _convertInPlace = convertInPlace; }
 
-- (void) updateOutputDirectoryMenuItemImage
-{
-	NSMenuItem	*menuItem	= nil;
-	NSString	*path		= nil;
-	NSImage		*image		= nil;
-	
-	// Set the menu item image for the output directory
-	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath];
-	image		= getIconForFile(path, NSMakeSize(16, 16));
-	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
-	
-	[menuItem setTitle:[path lastPathComponent]];
-	[menuItem setImage:image];
-}
+- (NSString *)				fileNamingFormat								{ return _fileNamingFormat; }
+- (void)					setFileNamingFormat:(NSString *)fileNamingFormat { [_fileNamingFormat release]; _fileNamingFormat = fileNamingFormat; }
 
 - (void) clearFileList
 {
 	[_filesController removeObjects:[_filesController arrangedObjects]];
+}
+
+#pragma mark Album Art
+
+- (NSString *) artist
+{
+	return [[_filesController selection] valueForKeyPath:@"metadata.albumArtist"];
+}
+
+- (NSString *) title
+{
+	return [[_filesController selection] valueForKeyPath:@"metadata.albumTitle"];
+}
+
+- (void) setAlbumArt:(NSImage *)albumArt
+{
+	NSArray		*filenames		= [_filesController selectedObjects];
+	unsigned	i;
+	
+	for(i = 0; i < [filenames count]; ++i) {					
+		[[[filenames objectAtIndex:i] objectForKey:@"metadata"] setAlbumArt:albumArt];
+	}
+}
+
+- (NSWindow *) windowForSheet { return [self window]; }
+
+- (IBAction) downloadAlbumArt:(id) sender
+{	
+	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
+	[art showAlbumArtMatches];
+}
+
+- (IBAction) selectAlbumArt:(id) sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	
+	[panel setAllowsMultipleSelection:NO];
+	[panel setCanChooseDirectories:NO];
+	[panel setCanChooseFiles:YES];
+	
+	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectAlbumArtPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+}
+
+- (void) selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if(NSOKButton == returnCode) {
+		NSArray		*filesToOpen	= [sheet filenames];
+		unsigned	count			= [filesToOpen count];
+		unsigned	i;
+		NSImage		*image			= nil;
+		
+		for(i = 0; i < count; ++i) {
+			image = [[[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]] autorelease];
+			if(nil != image) {
+				[[_filesController selection] setValue:image forKeyPath:@"metadata.albumArt"];
+			}
+		}
+	}	
+}
+
+#pragma mark NSToolbar Delegate Methods
+
+- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag 
+{
+    NSToolbarItem *toolbarItem = nil;
+    
+    if([itemIdentifier isEqualToString:ToggleMetadataToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Metadata", @"FileConversion", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Metadata", @"FileConversion", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the metadata associated with the selected files", @"FileConversion", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"TrackInfoToolbarImage"]];
+		
+		[toolbarItem setTarget:_metadataDrawer];
+		[toolbarItem setAction:@selector(toggle:)];
+	}
+	else if([itemIdentifier isEqualToString:ShowSettingsToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Settings", @"FileConversion", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Settings", @"FileConversion", @"")];		
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"View or change the file conversion options", @"FileConversion", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"SettingsToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(showSettingsSheet:)];
+	}
+    else if([itemIdentifier isEqualToString:AlbumArtToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the artwork associated with the selected files", @"FileConversion", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"AlbumArtToolbarImage"]];
+		
+		[toolbarItem setTarget:_artDrawer];
+		[toolbarItem setAction:@selector(toggle:)];
+	}
+	else {
+		toolbarItem = nil;
+    }
+	
+    return toolbarItem;
+}
+
+- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
+{
+    return [NSArray arrayWithObjects: ToggleMetadataToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
+		NSToolbarSpaceItemIdentifier, ShowSettingsToolbarItemIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
+}
+
+- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
+{
+    return [NSArray arrayWithObjects: ToggleMetadataToolbarItemIdentifier, AlbumArtToolbarItemIdentifier, ShowSettingsToolbarItemIdentifier,
+		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
+		NSToolbarCustomizeToolbarItemIdentifier,
+		nil];
 }
 
 @end

@@ -20,37 +20,28 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDiscDocument.h"
-
-enum {
-	kAmazonLocaleUSMenuItemTag			= 1,
-	kAmazonLocaleFRMenuItemTag			= 2,
-	kAmazonLocaleCAMenuItemTag			= 3,
-	kAmazonLocaleDEMenuItemTag			= 4,
-	kAmazonLocaleUKMenuItemTag			= 5,
-	kAmazonLocaleJAMenuItemTag			= 6
-};
-
-@interface AmazonAlbumArtSheet : NSObject
+@interface FileConversionSettingsSheet : NSObject
 {
-    IBOutlet NSWindow			*_sheet;
-    IBOutlet NSTableView		*_table;
-    IBOutlet NSTextField		*_artistTextField;
-    IBOutlet NSTextField		*_titleTextField;
-    IBOutlet NSPopUpButton		*_localePopUpButton;
+	IBOutlet NSWindow				*_sheet;
 	
-	NSMutableArray				*_images;
-	CompactDiscDocument			*_doc;
-	NSNumber					*_searchInProgress;
+	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
+	IBOutlet NSPopUpButton			*_temporaryDirectoryPopUpButton;
+	IBOutlet NSComboBox				*_fileNamingComboBox;
+	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
+	
+	IBOutlet NSArrayController 		*_postProcessingActionsController;
 }
 
-- (id)				initWithCompactDiscDocument:(CompactDiscDocument *)doc;
+- (void)				showSheet;
 
-- (void)			showAlbumArtMatches;
+- (IBAction)			ok:(id)sender;
 
-- (IBAction)		search:(id)sender;
-- (IBAction)		cancel:(id)sender;
-- (IBAction)		useSelected:(id)sender;
-- (IBAction)		visitAmazon:(id)sender;
+- (IBAction)			selectOutputDirectory:(id)sender;
+- (IBAction)			selectTemporaryDirectory:(id)sender;
+
+- (IBAction)			insertFileNamingFormatSpecifier:(id)sender;
+- (IBAction)			saveFileNamingFormat:(id)sender;
+
+- (IBAction)			addPostProcessingApplication:(id)sender;
 
 @end

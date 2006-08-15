@@ -90,8 +90,8 @@
 	if(nil == _outputFilename) {
 		@try {
 
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-				tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
+			if(nil != [[self userInfo] objectForKey:@"temporaryDirectory"]) {
+				tmpDir = [[[[self userInfo] objectForKey:@"temporaryDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
 			}
 			else {
 				tmpDir = _PATH_TMP;

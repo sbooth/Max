@@ -35,6 +35,11 @@
 		8C328182096D12CA00608C9D /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C328181096D12CA00608C9D /* Exceptions.strings */; };
 		8C3531460A7BEF16002BE5D7 /* ShortenConverterTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C3531440A7BEF16002BE5D7 /* ShortenConverterTask.m */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
+		8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */; };
+		8C4505120A8EEC52001BF1A1 /* AlbumArtMethods.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */; };
+		8C450C950A9043C0001BF1A1 /* FileConversionSettingsSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */; };
+		8C450CF00A9047FC001BF1A1 /* FileConversionSettingsSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C450CE60A9047FB001BF1A1 /* FileConversionSettingsSheet.nib */; };
+		8C450E750A918C50001BF1A1 /* SettingsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4650093E776500A88927 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D464F093E776500A88927 /* Preferences.nib */; };
 		8C4D4698093E7C1E00A88927 /* FreeDBPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D4692093E7C1E00A88927 /* FreeDBPreferences.nib */; };
@@ -220,7 +225,6 @@
 		8C9451290A12E3FD00C8DCAE /* ParanoiaRipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450FB0A12E3FC00C8DCAE /* ParanoiaRipperTask.m */; };
 		8C94512B0A12E3FD00C8DCAE /* RipperTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450FD0A12E3FC00C8DCAE /* RipperTask.m */; };
 		8C9451300A12E45B00C8DCAE /* CueSheetDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94512E0A12E45B00C8DCAE /* CueSheetDocument.m */; };
-		8C9451430A12E4D700C8DCAE /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451370A12E4D700C8DCAE /* AmazonAlbumArtSheet.m */; };
 		8C9451450A12E4D700C8DCAE /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451390A12E4D700C8DCAE /* CompactDisc.m */; };
 		8C9451470A12E4D700C8DCAE /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513B0A12E4D700C8DCAE /* CompactDiscDocument.m */; };
 		8C9451490A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */; };
@@ -281,6 +285,7 @@
 				8C5302520A05D7A400890518 /* TagLib.framework in Copy Frameworks */,
 				8C5302530A05D7A400890518 /* Vorbis.framework in Copy Frameworks */,
 				8C5302540A05D7A400890518 /* WavPack.framework in Copy Frameworks */,
+				8C4505120A8EEC52001BF1A1 /* AlbumArtMethods.h in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,6 +326,13 @@
 		8C35315E0A7BEF9C002BE5D7 /* ShortenConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShortenConverter.m; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		8C440DBB092E8B3000A053AA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FreeDBMatches.nib; sourceTree = "<group>"; };
+		8C4505090A8EEC13001BF1A1 /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AmazonAlbumArtSheet.h; path = AlbumArt/AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
+		8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = AmazonAlbumArtSheet.m; path = AlbumArt/AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
+		8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlbumArtMethods.h; path = AlbumArt/AlbumArtMethods.h; sourceTree = "<group>"; };
+		8C450C920A9043BF001BF1A1 /* FileConversionSettingsSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileConversionSettingsSheet.h; sourceTree = "<group>"; };
+		8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileConversionSettingsSheet.m; sourceTree = "<group>"; };
+		8C450CE70A9047FB001BF1A1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FileConversionSettingsSheet.nib; sourceTree = "<group>"; };
+		8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SettingsToolbarImage.png; sourceTree = "<group>"; };
 		8C4D452F093E6CB200A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
 		8C4D4693093E7C1E00A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FreeDBPreferences.nib; sourceTree = "<group>"; };
 		8C4D46EF093E813300A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
@@ -652,8 +664,6 @@
 		8C9450FD0A12E3FC00C8DCAE /* RipperTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RipperTask.m; sourceTree = "<group>"; };
 		8C94512D0A12E45B00C8DCAE /* CueSheetDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CueSheetDocument.h; sourceTree = "<group>"; };
 		8C94512E0A12E45B00C8DCAE /* CueSheetDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CueSheetDocument.m; sourceTree = "<group>"; };
-		8C9451360A12E4D700C8DCAE /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
-		8C9451370A12E4D700C8DCAE /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
 		8C9451380A12E4D700C8DCAE /* CompactDisc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDisc.h; sourceTree = "<group>"; };
 		8C9451390A12E4D700C8DCAE /* CompactDisc.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDisc.m; sourceTree = "<group>"; };
 		8C94513A0A12E4D700C8DCAE /* CompactDiscDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocument.h; sourceTree = "<group>"; };
@@ -837,8 +847,9 @@
 				8C53022A0A05D6D800890518 /* Drive */,
 				8C9451350A12E4D700C8DCAE /* CompactDisc */,
 				8C94512C0A12E45B00C8DCAE /* CueSheet */,
-				8C5300B00A05D18E00890518 /* Controllers */,
 				8C99DD550A82B97C00A8CBE4 /* FileConversion */,
+				8C4505080A8EEBFE001BF1A1 /* AlbumArt */,
+				8C5300B00A05D18E00890518 /* Controllers */,
 				8C5300980A05CFDA00890518 /* Tasks */,
 				8C9450F50A12E3FC00C8DCAE /* RipperTasks */,
 				8C9450CD0A12E3FC00C8DCAE /* ConverterTasks */,
@@ -880,6 +891,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8C450CE60A9047FB001BF1A1 /* FileConversionSettingsSheet.nib */,
 				8C99E2750A82BA3A00A8CBE4 /* FileConversion.nib */,
 				8C89D0F60A076A7800359E67 /* SpeexSettingsSheet.nib */,
 				8C89D07F0A07617E00359E67 /* MP3SettingsSheet.nib */,
@@ -985,6 +997,16 @@
 			name = Strings;
 			sourceTree = "<group>";
 		};
+		8C4505080A8EEBFE001BF1A1 /* AlbumArt */ = {
+			isa = PBXGroup;
+			children = (
+				8C4505090A8EEC13001BF1A1 /* AmazonAlbumArtSheet.h */,
+				8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */,
+				8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */,
+			);
+			name = AlbumArt;
+			sourceTree = "<group>";
+		};
 		8C5300980A05CFDA00890518 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1025,6 +1047,7 @@
 		8C5301F10A05D5D800890518 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */,
 				8CF2B1370A0DC15F008738E4 /* LAME.png */,
 				8CF2B1300A0DC0E5008738E4 /* MonkeysAudio.png */,
 				8C5303790A05E8C600890518 /* Remove_Pressed.png */,
@@ -1401,8 +1424,6 @@
 		8C9451350A12E4D700C8DCAE /* CompactDisc */ = {
 			isa = PBXGroup;
 			children = (
-				8C9451360A12E4D700C8DCAE /* AmazonAlbumArtSheet.h */,
-				8C9451370A12E4D700C8DCAE /* AmazonAlbumArtSheet.m */,
 				8C9451380A12E4D700C8DCAE /* CompactDisc.h */,
 				8C9451390A12E4D700C8DCAE /* CompactDisc.m */,
 				8C94513A0A12E4D700C8DCAE /* CompactDiscDocument.h */,
@@ -1428,6 +1449,8 @@
 				8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */,
 				8C99DD5A0A82B97C00A8CBE4 /* FilesTableView.h */,
 				8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */,
+				8C450C920A9043BF001BF1A1 /* FileConversionSettingsSheet.h */,
+				8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */,
 			);
 			path = FileConversion;
 			sourceTree = "<group>";
@@ -1565,6 +1588,8 @@
 				8CFF40A60A1D6030008E503C /* SelectEncodersSheet.nib in Resources */,
 				8C99D27D0A82A7AF00A8CBE4 /* FileConversionDefaults.plist in Resources */,
 				8C99E27B0A82BA3A00A8CBE4 /* FileConversion.nib in Resources */,
+				8C450CF00A9047FC001BF1A1 /* FileConversionSettingsSheet.nib in Resources */,
+				8C450E750A918C50001BF1A1 /* SettingsToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1687,7 +1712,6 @@
 				8C9451290A12E3FD00C8DCAE /* ParanoiaRipperTask.m in Sources */,
 				8C94512B0A12E3FD00C8DCAE /* RipperTask.m in Sources */,
 				8C9451300A12E45B00C8DCAE /* CueSheetDocument.m in Sources */,
-				8C9451430A12E4D700C8DCAE /* AmazonAlbumArtSheet.m in Sources */,
 				8C9451450A12E4D700C8DCAE /* CompactDisc.m in Sources */,
 				8C9451470A12E4D700C8DCAE /* CompactDiscDocument.m in Sources */,
 				8C9451490A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m in Sources */,
@@ -1701,6 +1725,8 @@
 				8C99DD5D0A82B97C00A8CBE4 /* FileArrayController.m in Sources */,
 				8C99DD5F0A82B97C00A8CBE4 /* FileConversionController.m in Sources */,
 				8C99DD610A82B97C00A8CBE4 /* FilesTableView.m in Sources */,
+				8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */,
+				8C450C950A9043C0001BF1A1 /* FileConversionSettingsSheet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1903,6 +1929,14 @@
 				8C643A7309D7392400F6C1F6 /* Dutch */,
 			);
 			name = Exceptions.strings;
+			sourceTree = "<group>";
+		};
+		8C450CE60A9047FB001BF1A1 /* FileConversionSettingsSheet.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C450CE70A9047FB001BF1A1 /* English */,
+			);
+			name = FileConversionSettingsSheet.nib;
 			sourceTree = "<group>";
 		};
 		8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */ = {

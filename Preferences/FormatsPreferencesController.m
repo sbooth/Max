@@ -158,7 +158,6 @@
 - (void) awakeFromNib
 {
 	[_configuredFormatsController setSortDescriptors:[NSArray arrayWithObjects:
-		[[[NSSortDescriptor alloc] initWithKey:@"default" ascending:NO] autorelease],
 		[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease],
 		[[[NSSortDescriptor alloc] initWithKey:@"nickname" ascending:YES] autorelease],
 		nil]];
@@ -184,7 +183,9 @@
 	for(i = 0; i < [types count]; ++i) {
 		type = [types objectAtIndex:i];
 		
-		[result setObject:[NSNumber numberWithBool:YES] forKey:@"default"];
+		[result setObject:[NSNumber numberWithBool:YES] forKey:@"conversionSelected"];
+		[result setObject:[NSNumber numberWithBool:YES] forKey:@"rippingSelected"];
+
 		[result setObject:[type valueForKey:@"name"] forKey:@"name"];
 		[result setObject:[type valueForKey:@"source"] forKey:@"source"];
 		[result setObject:[type valueForKey:@"component"] forKey:@"component"];

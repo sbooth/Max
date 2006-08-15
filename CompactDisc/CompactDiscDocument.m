@@ -144,6 +144,9 @@
 {
 	[_trackTable setAutosaveName:[NSString stringWithFormat: @"Tracks for 0x%.8x", [self discID]]];
 	[_trackTable setAutosaveTableColumns:YES];
+	[_trackController setSortDescriptors:[NSArray arrayWithObjects:
+		[[[NSSortDescriptor alloc] initWithKey:@"number" ascending:YES] autorelease],
+		nil]];	
 }
 
 #pragma mark NSDocument overrides
@@ -666,7 +669,7 @@
 
 - (IBAction) fetchAlbumArt:(id) sender
 {	
-	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithCompactDiscDocument:self] autorelease];
+	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
 	[art showAlbumArtMatches];
 }
 
@@ -685,8 +688,8 @@
 {
     if(NSOKButton == returnCode) {
 		NSArray		*filesToOpen	= [sheet filenames];
-		int			count			= [filesToOpen count];
-		int			i;
+		unsigned	count			= [filesToOpen count];
+		unsigned	i;
 		NSImage		*image			= nil;
 		
 		for(i = 0; i < count; ++i) {

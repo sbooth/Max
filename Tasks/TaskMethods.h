@@ -33,12 +33,15 @@
 
 - (BOOL)			started;
 - (void)			setStarted;
+- (void)			setStarted:(BOOL)started;
 
 - (BOOL)			completed;
 - (void)			setCompleted;
+- (void)			setCompleted:(BOOL)completed;
 
 - (BOOL)			stopped;
 - (void)			setStopped;
+- (void)			setStopped:(BOOL)stopped;
 
 - (double)			percentComplete;
 - (void)			setPercentComplete:(double)percentComplete;

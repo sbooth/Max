@@ -32,6 +32,8 @@
 	NSString				*_outputDirectory;
 	NSString				*_outputFilename;
 	BOOL					_overwriteExistingFiles;
+	NSDictionary			*_fileNamingFormat;
+	NSDictionary			*_postProcessingOptions;
 	Class					_encoderClass;
 	id <EncoderMethods>		_encoder;
 	NSArray					*_tracks;
@@ -58,6 +60,12 @@
 
 - (BOOL)			overwriteExistingFiles;
 - (void)			setOverwriteExistingFiles:(BOOL)overwriteExistingFiles;
+
+- (NSDictionary *)	postProcessingOptions;
+- (void)			setPostProcessingOptions:(NSDictionary *)postProcessingOptions;
+
+- (NSDictionary *)	fileNamingFormat;
+- (void)			setFileNamingFormat:(NSDictionary *)fileNamingFormat;
 
 - (NSString *)		extension;
 

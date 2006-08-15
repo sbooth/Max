@@ -213,17 +213,22 @@ static EncoderController *sharedController = nil;
 - (void) runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task userInfo:(NSDictionary *)userInfo
 {
 	// Create the encoder (relies on each subclass having the same method signature)
-	EncoderTask *encoderTask = [[encoderClass alloc] initWithTask:task];
+	EncoderTask		*encoderTask		= [[encoderClass alloc] initWithTask:task];
 	
 	if([task isKindOfClass:[RipperTask class]]) {
 		[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
 	}
 	
-	// Set output directory
+	// Set output directory and output options
 	[encoderTask setOutputDirectory:[[task userInfo] objectForKey:@"outputDirectory"]];
-
 	[encoderTask setOverwriteExistingFiles:[[[task userInfo] objectForKey:@"overwriteExistingFiles"] boolValue]];
 	
+	// Pass file naming format and options
+	[encoderTask setFileNamingFormat:[[task userInfo] objectForKey:@"fileNamingFormat"]];
+
+	// Pass post-processing options
+	[encoderTask setPostProcessingOptions:[[task userInfo] objectForKey:@"postProcessingOptions"]];
+
 	// Pass the encoding configuration parameters
 	[encoderTask setUserInfo:userInfo];
 	
@@ -374,6 +379,17 @@ static EncoderController *sharedController = nil;
 		[[doc windowForSheet] performClose:self];
 	}
 
+	// Run post-processing tasks
+	if(nil != [task postProcessingOptions]) {
+//		if([[[task postProcessingOptions] objectForKey:@"openOutputFilesWithTag"] boolValue]) {
+//			[[NSWorkspace sharedWorkspace] openFile:[task outputFilename] withApplication:@"Tag" andDeactivate:NO];
+//		}
+		
+		if([[[task postProcessingOptions] objectForKey:@"addOutputFilesToiTunes"] boolValue]) {
+			NSLog(@"add to iTunes");
+		}
+	}
+	
 	// Add files to iTunes if desired
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"]) {
 	

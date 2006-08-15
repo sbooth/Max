@@ -22,6 +22,7 @@
 
 #import "CompactDisc.h"
 #import "Track.h"
+#import "AlbumArtMethods.h"
 
 enum {
 	kEncodeMenuItemTag					= 1,
@@ -34,7 +35,7 @@ enum {
 	kEncodeCustomMenuItemTag			= 8
 };
 
-@interface CompactDiscDocument : NSDocument 
+@interface CompactDiscDocument : NSDocument <AlbumArtMethods>
 {
     IBOutlet NSArrayController		*_trackController;
     IBOutlet NSDrawer				*_trackDrawer;

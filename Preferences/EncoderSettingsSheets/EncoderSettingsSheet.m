@@ -22,6 +22,10 @@
 #import "PreferencesController.h"
 #import "MissingResourceException.h"
 
+@interface EncoderSettingsSheet (Private)
+- (void)	didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+@end
+
 @implementation EncoderSettingsSheet
 
 + (NSDictionary *) defaultSettings { return [NSDictionary dictionary]; }

@@ -1,0 +1,33 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                addPostProcessingApplication = id; 
+                insertFileNamingFormatSpecifier = id; 
+                ok = id; 
+                saveFileNamingFormat = id; 
+                selectOutputDirectory = id; 
+                selectTemporaryDirectory = id; 
+                showSheet = id; 
+            }; 
+            CLASS = FileConversionSettingsSheet; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_fileNamingComboBox" = NSComboBox; 
+                "_formatSpecifierPopUpButton" = NSPopUpButton; 
+                "_outputDirectoryPopUpButton" = NSPopUpButton; 
+                "_postProcessingActionsController" = NSArrayController; 
+                "_sheet" = NSWindow; 
+                "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

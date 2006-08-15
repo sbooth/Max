@@ -21,6 +21,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "FileArrayController.h"
+#import "AlbumArtMethods.h"
 
 enum {
 	kCurrentDirectoryMenuItemTag		= 1,
@@ -35,17 +36,15 @@ enum {
 	kOverwriteExistingFiles				= 1
 };
 
-@interface FileConversionController : NSWindowController
+@interface FileConversionController : NSWindowController <AlbumArtMethods>
 {
 	IBOutlet NSArrayController		*_encodersController;
 	IBOutlet FileArrayController	*_filesController;
-	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
-	IBOutlet NSPopUpButton			*_temporaryDirectoryPopUpButton;
-	IBOutlet NSComboBox				*_fileNamingComboBox;
-	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
+	IBOutlet NSDrawer				*_metadataDrawer;
+	IBOutlet NSDrawer				*_artDrawer;
 	
-	NSString						*_fileNamingFormat;
 	BOOL							_convertInPlace;
+	NSString						*_fileNamingFormat;
 	
 	NSMutableArray					*_files;
 }
@@ -60,21 +59,18 @@ enum {
 - (IBAction)						addFiles:(id)sender;
 - (IBAction)						removeFiles:(id)sender;
 
-- (IBAction)						selectOutputDirectory:(id)sender;
+- (IBAction)						downloadAlbumArt:(id)sender;
+- (IBAction)						selectAlbumArt:(id)sender;
 
-- (IBAction)						insertFileNamingFormatSpecifier:(id)sender;
-
-- (IBAction)						saveFileNamingFormat:(id)sender;
-
-- (IBAction)						selectTemporaryDirectory:(id)sender;
+- (void)							openFormatsPreferences;
 
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;
 
-- (NSString *)						fileNamingFormat;
-- (void)							setFileNamingFormat:(NSString *)fileNamingFormat;
-
 - (BOOL)							convertInPlace;
 - (void)							setConvertInPlace:(BOOL)convertInPlace;
+
+- (NSString *)						fileNamingFormat;
+- (void)							setFileNamingFormat:(NSString *)fileNamingFormat;
 
 @end

@@ -74,13 +74,16 @@
 - (void)			setEndTime:(NSDate *)endTime				{ [_endTime release]; _endTime = [endTime retain]; }
 
 - (BOOL)			started										{ return _started; }
-- (void)			setStarted									{ [self setPercentComplete:0.0]; _started = YES; }
+- (void)			setStarted									{ [self setPercentComplete:0.0]; [self setStarted:YES]; }
+- (void)			setStarted:(BOOL)started					{ _started = started; }
 
 - (BOOL)			completed									{ return _completed; }
-- (void)			setCompleted								{  [self setPercentComplete:100.0]; _completed = YES; }
+- (void)			setCompleted								{ [self setPercentComplete:100.0]; [self setCompleted:YES]; }
+- (void)			setCompleted:(BOOL)completed				{ _completed = completed; }
 
 - (BOOL)			stopped										{ return _stopped; }
-- (void)			setStopped									{ _stopped  = YES; }
+- (void)			setStopped									{ [self setStopped:YES]; }
+- (void)			setStopped:(BOOL)stopped					{ _stopped  = stopped; }
 
 - (double)			percentComplete								{ return _percentComplete; }
 - (void)			setPercentComplete:(double)percentComplete	{ _percentComplete = percentComplete; }
