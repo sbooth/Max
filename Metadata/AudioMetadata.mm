@@ -1121,230 +1121,6 @@
 	[super dealloc];
 }
 
-// Create output file's basename
-- (NSString *) outputBasenameForDirectory:(NSString *)outputDirectory			{ return [self outputBasenameForDirectory:outputDirectory withSubstitutions:nil]; }
-
-- (NSString *) outputBasenameForDirectory:(NSString *)outputDirectory withSubstitutions:(NSDictionary *)substitutions
-{
-	NSString		*basename;
-		
-	// Use custom naming scheme
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomNaming"]) {
-		
-		NSMutableString		*customPath			= [NSMutableString stringWithCapacity:100];
-		NSString			*customNamingScheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"customNamingScheme"];
-		
-		// Get the elements needed to build the pathname
-		unsigned			discNumber			= [self discNumber];
-		unsigned			discTotal			= [self discTotal];
-		NSString			*discArtist			= [self albumArtist];
-		NSString			*discTitle			= [self albumTitle];
-		NSString			*discGenre			= [self albumGenre];
-		unsigned			discYear			= [self albumYear];
-		NSString			*discComposer		= [self albumComposer];
-		NSString			*discComment		= [self albumComment];
-		unsigned			trackNumber			= [self trackNumber];
-		NSString			*trackArtist		= [self trackArtist];
-		NSString			*trackTitle			= [self trackTitle];
-		NSString			*trackGenre			= [self trackGenre];
-		unsigned			trackYear			= [self trackYear];
-		NSString			*trackComposer		= [self trackComposer];
-		NSString			*trackComment		= [self trackComment];
-		
-		// Fallback to disc if specified in preferences
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"customNamingUseFallback"]) {
-			if(nil == trackArtist) {
-				trackArtist = discArtist;
-			}
-			if(nil == trackGenre) {
-				trackGenre = discGenre;
-			}
-			if(nil == trackYear) {
-				trackYear = discYear;
-			}
-			if(nil == trackComposer) {
-				trackComposer = discComposer;
-			}
-			if(nil == trackComment) {
-				trackComment = discComment;
-			}
-		}
-		
-		if(nil == customNamingScheme) {
-			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:@"The custom naming string appears to be invalid." userInfo:nil];
-		}
-		else {
-			[customPath setString:customNamingScheme];
-		}
-		
-		if(0 == discNumber) {
-			[customPath replaceOccurrencesOfString:@"{discNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discNumber}" withString:[NSString stringWithFormat:@"%u", discNumber] options:nil range:NSMakeRange(0, [customPath length])];					
-		}
-		if(0 == discTotal) {
-			[customPath replaceOccurrencesOfString:@"{discTotal}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discTotal}" withString:[NSString stringWithFormat:@"%u", discTotal] options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == discArtist) {
-			[customPath replaceOccurrencesOfString:@"{discArtist}" withString:NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"") options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discArtist}" withString:makeStringSafeForFilename(discArtist) options:nil range:NSMakeRange(0, [customPath length])];					
-		}
-		if(nil == discTitle) {
-			[customPath replaceOccurrencesOfString:@"{discTitle}" withString:@"Unknown Disc" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discTitle}" withString:makeStringSafeForFilename(discTitle) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == discGenre) {
-			[customPath replaceOccurrencesOfString:@"{discGenre}" withString:@"Unknown Genre" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discGenre}" withString:makeStringSafeForFilename(discGenre) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(0 == discYear) {
-			[customPath replaceOccurrencesOfString:@"{discYear}" withString:@"Unknown Year" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discYear}" withString:[NSString stringWithFormat:@"%u", discYear] options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == discComposer) {
-			[customPath replaceOccurrencesOfString:@"{discComposer}" withString:@"Unknown Composer" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discComposer}" withString:makeStringSafeForFilename(discComposer) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == discComment) {
-			[customPath replaceOccurrencesOfString:@"{discComment}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{discComment}" withString:makeStringSafeForFilename(discComment) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(0 == trackNumber) {
-			[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"customNamingUseTwoDigitTrackNumbers"]) {
-				[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[NSString stringWithFormat:@"%02u", trackNumber] options:nil range:NSMakeRange(0, [customPath length])];
-			}
-			else {
-				[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[NSString stringWithFormat:@"%u", trackNumber] options:nil range:NSMakeRange(0, [customPath length])];
-			}
-		}
-		if(nil == trackArtist) {
-			[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"") options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:makeStringSafeForFilename(trackArtist) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == trackTitle) {
-			[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"") options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:makeStringSafeForFilename(trackTitle) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == trackGenre) {
-			[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:@"Unknown Genre" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:makeStringSafeForFilename(trackGenre) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(0 == trackYear) {
-			[customPath replaceOccurrencesOfString:@"{trackYear}" withString:@"Unknown Year" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{trackYear}" withString:[NSString stringWithFormat:@"%u", trackYear] options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == trackComposer) {
-			[customPath replaceOccurrencesOfString:@"{trackComposer}" withString:@"Unknown Composer" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{trackComposer}" withString:makeStringSafeForFilename(trackComposer) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		if(nil == trackComment) {
-			[customPath replaceOccurrencesOfString:@"{trackComment}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		else {
-			[customPath replaceOccurrencesOfString:@"{trackComment}" withString:makeStringSafeForFilename(trackComment) options:nil range:NSMakeRange(0, [customPath length])];
-		}
-		
-		// Perform additional substitutions as necessary
-		if(nil != substitutions) {
-			NSEnumerator	*enumerator			= [substitutions keyEnumerator];
-			id				key;
-			
-			while((key = [enumerator nextObject])) {
-				[customPath replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", key] withString:makeStringSafeForFilename([substitutions valueForKey:key]) options:nil range:NSMakeRange(0, [customPath length])];
-			}
-		}
-		
-		basename = [NSString stringWithFormat:@"%@/%@", outputDirectory, customPath];
-	}
-	// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
-	else if([self compilation]) {
-		NSString			*path;
-		
-		NSString			*discTitle			= [self albumTitle];
-		NSString			*trackTitle			= [self trackTitle];
-		
-		if(nil == discTitle) {
-			discTitle = NSLocalizedStringFromTable(@"Unknown Album", @"CompactDisc", @"");
-		}
-		if(nil == trackTitle) {
-			trackTitle = NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");
-		}
-		
-		path = [NSString stringWithFormat:@"%@/Compilations/%@", outputDirectory, makeStringSafeForFilename(discTitle)]; 
-		
-		if(0 == [self discNumber]) {
-			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [self trackNumber], makeStringSafeForFilename(trackTitle)];
-		}
-		else {
-			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [self discNumber], [self trackNumber], makeStringSafeForFilename(trackTitle)];
-		}
-	}
-	// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
-	else {
-		NSString			*path;
-		
-		NSString			*discArtist			= [self albumArtist];
-		NSString			*trackArtist		= [self trackArtist];
-		NSString			*artist;
-		NSString			*discTitle			= [self albumTitle];
-		NSString			*trackTitle			= [self trackTitle];
-		
-		artist = trackArtist;
-		if(nil == artist) {
-			artist = discArtist;
-			if(nil == artist) {
-				artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
-			}
-		}
-		if(nil == discTitle) {
-			discTitle = NSLocalizedStringFromTable(@"Unknown Album", @"CompactDisc", @"");
-		}
-		if(nil == trackTitle) {
-			trackTitle = NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");
-		}
-		
-		path = [NSString stringWithFormat:@"%@/%@/%@", outputDirectory, makeStringSafeForFilename(artist), makeStringSafeForFilename(discTitle)]; 
-		
-		if(0 == [self discNumber]) {
-			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [self trackNumber], makeStringSafeForFilename(trackTitle)];
-		}
-		else {
-			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [self discNumber], [self trackNumber], makeStringSafeForFilename(trackTitle)];
-		}
-	}
-	
-	return [[basename retain] autorelease];
-}
-
 - (NSString *) replaceKeywordsInString:(NSString *)namingScheme
 {
 	NSMutableString		*customPath			= [NSMutableString stringWithCapacity:100];
@@ -1352,13 +1128,14 @@
 	// Get the elements needed for the substitutions
 	unsigned			discNumber			= [self discNumber];
 	unsigned			discTotal			= [self discTotal];
-	NSString			*discArtist			= [self albumArtist];
-	NSString			*discTitle			= [self albumTitle];
-	NSString			*discGenre			= [self albumGenre];
-	unsigned			discYear			= [self albumYear];
-	NSString			*discComposer		= [self albumComposer];
-	NSString			*discComment		= [self albumComment];
+	NSString			*albumArtist		= [self albumArtist];
+	NSString			*albumTitle			= [self albumTitle];
+	NSString			*albumGenre			= [self albumGenre];
+	unsigned			albumYear			= [self albumYear];
+	NSString			*albumComposer		= [self albumComposer];
+	NSString			*albumComment		= [self albumComment];
 	unsigned			trackNumber			= [self trackNumber];
+	unsigned			trackTotal			= [self trackTotal];
 	NSString			*trackArtist		= [self trackArtist];
 	NSString			*trackTitle			= [self trackTitle];
 	NSString			*trackGenre			= [self trackGenre];
@@ -1385,47 +1162,53 @@
 	else {
 		[customPath replaceOccurrencesOfString:@"{discTotal}" withString:[NSString stringWithFormat:@"%u", discTotal] options:nil range:NSMakeRange(0, [customPath length])];
 	}
-	if(nil == discArtist) {
-		[customPath replaceOccurrencesOfString:@"{discArtist}" withString:NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"") options:nil range:NSMakeRange(0, [customPath length])];
+	if(nil == albumArtist) {
+		[customPath replaceOccurrencesOfString:@"{albumArtist}" withString:NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"") options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	else {
-		[customPath replaceOccurrencesOfString:@"{discArtist}" withString:makeStringSafeForFilename(discArtist) options:nil range:NSMakeRange(0, [customPath length])];					
+		[customPath replaceOccurrencesOfString:@"{albumArtist}" withString:makeStringSafeForFilename(albumArtist) options:nil range:NSMakeRange(0, [customPath length])];					
 	}
-	if(nil == discTitle) {
-		[customPath replaceOccurrencesOfString:@"{discTitle}" withString:@"Unknown Disc" options:nil range:NSMakeRange(0, [customPath length])];
-	}
-	else {
-		[customPath replaceOccurrencesOfString:@"{discTitle}" withString:makeStringSafeForFilename(discTitle) options:nil range:NSMakeRange(0, [customPath length])];
-	}
-	if(nil == discGenre) {
-		[customPath replaceOccurrencesOfString:@"{discGenre}" withString:@"Unknown Genre" options:nil range:NSMakeRange(0, [customPath length])];
+	if(nil == albumTitle) {
+		[customPath replaceOccurrencesOfString:@"{albumTitle}" withString:@"Unknown Disc" options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	else {
-		[customPath replaceOccurrencesOfString:@"{discGenre}" withString:makeStringSafeForFilename(discGenre) options:nil range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumTitle}" withString:makeStringSafeForFilename(albumTitle) options:nil range:NSMakeRange(0, [customPath length])];
 	}
-	if(0 == discYear) {
-		[customPath replaceOccurrencesOfString:@"{discYear}" withString:@"Unknown Year" options:nil range:NSMakeRange(0, [customPath length])];
-	}
-	else {
-		[customPath replaceOccurrencesOfString:@"{discYear}" withString:[NSString stringWithFormat:@"%u", discYear] options:nil range:NSMakeRange(0, [customPath length])];
-	}
-	if(nil == discComposer) {
-		[customPath replaceOccurrencesOfString:@"{discComposer}" withString:@"Unknown Composer" options:nil range:NSMakeRange(0, [customPath length])];
+	if(nil == albumGenre) {
+		[customPath replaceOccurrencesOfString:@"{albumGenre}" withString:@"Unknown Genre" options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	else {
-		[customPath replaceOccurrencesOfString:@"{discComposer}" withString:makeStringSafeForFilename(discComposer) options:nil range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumGenre}" withString:makeStringSafeForFilename(albumGenre) options:nil range:NSMakeRange(0, [customPath length])];
 	}
-	if(nil == discComment) {
-		[customPath replaceOccurrencesOfString:@"{discComment}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+	if(0 == albumYear) {
+		[customPath replaceOccurrencesOfString:@"{albumYear}" withString:@"Unknown Year" options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	else {
-		[customPath replaceOccurrencesOfString:@"{discComment}" withString:makeStringSafeForFilename(discComment) options:nil range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumYear}" withString:[NSString stringWithFormat:@"%u", albumYear] options:nil range:NSMakeRange(0, [customPath length])];
+	}
+	if(nil == albumComposer) {
+		[customPath replaceOccurrencesOfString:@"{albumComposer}" withString:@"Unknown Composer" options:nil range:NSMakeRange(0, [customPath length])];
+	}
+	else {
+		[customPath replaceOccurrencesOfString:@"{albumComposer}" withString:makeStringSafeForFilename(albumComposer) options:nil range:NSMakeRange(0, [customPath length])];
+	}
+	if(nil == albumComment) {
+		[customPath replaceOccurrencesOfString:@"{albumComment}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+	}
+	else {
+		[customPath replaceOccurrencesOfString:@"{albumComment}" withString:makeStringSafeForFilename(albumComment) options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	if(0 == trackNumber) {
 		[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	else {
 		[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[NSString stringWithFormat:@"%u", trackNumber] options:nil range:NSMakeRange(0, [customPath length])];
+	}
+	if(0 == trackTotal) {
+		[customPath replaceOccurrencesOfString:@"{trackTotal}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+	}
+	else {
+		[customPath replaceOccurrencesOfString:@"{trackTotal}" withString:[NSString stringWithFormat:@"%u", trackTotal] options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	if(nil == trackArtist) {
 		[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"") options:nil range:NSMakeRange(0, [customPath length])];

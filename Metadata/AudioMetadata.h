@@ -55,12 +55,6 @@
 // Attempt to parse metadata from filename
 + (AudioMetadata *)		metadataFromFile:(NSString *)filename;
 
-// Create output file's basename
-- (NSString *)			outputBasenameForDirectory:(NSString *)outputDirectory;
-
-// Create output file's basename
-- (NSString *)			outputBasenameForDirectory:(NSString *)outputDirectory withSubstitutions:(NSDictionary *)substitutions;
-
 // Substitute our values for {} keywords in string
 - (NSString *)			replaceKeywordsInString:(NSString *)namingScheme;
 
