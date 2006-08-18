@@ -20,6 +20,10 @@
 
 #import "FilesTableView.h"
 
+@interface FilesTableView (Private)
+- (void) openWithPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+@end
+
 @implementation FilesTableView
 
 - (unsigned) draggingSourceOperationMaskForLocal:(BOOL)isLocal
@@ -30,17 +34,74 @@
 - (void) keyDown:(NSEvent *)event
 {
 	unichar			key		= [[event charactersIgnoringModifiers] characterAtIndex:0];    
-	unsigned int	flags	= ( [event modifierFlags] & 0x00FF );
+	unsigned int	flags	= [event modifierFlags] & 0x00FF;
     
 	if(NSDeleteCharacter == key && 0 == flags) {
 		if(-1 == [self selectedRow]) {
-			NSBeep(); }
+			NSBeep();
+		}
 		else {
 			[_filesController removeObjectsAtArrangedObjectIndexes:[self selectedRowIndexes]];
 		}
 	}
 	else {
 		[super keyDown:event]; // let somebody else handle the event 
+	}
+}
+
+// TODO: provide prettier dragging images for files (larger icons ??)
+/*
+- (NSImage *) dragImageForRowsWithIndexes:(NSIndexSet *)dragRows tableColumns:(NSArray *)tableColumns event:(NSEvent*)dragEvent offset:(NSPointPointer)dragImageOffset
+{
+	return [super dragImageForRowsWithIndexes:dragRows tableColumns:tableColumns event:dragEvent offset:dragImageOffset];
+}
+*/
+
+- (NSMenu *) menuForEvent:(NSEvent *)event
+{
+	NSPoint		location		= [event locationInWindow];
+	NSPoint		localLocation	= [self convertPoint:location fromView:nil];
+	int			row				= [self rowAtPoint:localLocation];
+	
+	if(-1 != row) {
+		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+		return [self menu];
+	}
+	
+	return nil;
+}
+
+- (IBAction) openWithFinder:(id)sender
+{
+	NSString *path = [[_filesController selection] valueForKey:@"filename"];
+	[[NSWorkspace sharedWorkspace] openFile:path];
+}
+
+- (IBAction) revealInFinder:(id)sender
+{
+	NSString *path = [[_filesController selection] valueForKey:@"filename"];
+	[[NSWorkspace sharedWorkspace] selectFile:path inFileViewerRootedAtPath:nil];
+}
+
+- (IBAction) openWith:(id)sender
+{
+	NSOpenPanel		*panel		= [NSOpenPanel openPanel];
+	
+	[panel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"app"] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openWithPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];	
+}
+
+- (void) openWithPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{	
+	if(NSOKButton == returnCode) {
+		NSString			*path				= [[_filesController selection] valueForKey:@"filename"];
+		NSArray				*applications		= [panel filenames];
+		NSString			*applicationPath	= nil;
+		unsigned			i;
+		
+		for(i = 0; i < [applications count]; ++i) {
+			applicationPath = [applications objectAtIndex:i];
+			[[NSWorkspace sharedWorkspace] openFile:path withApplication:applicationPath];
+		}
 	}
 }
 

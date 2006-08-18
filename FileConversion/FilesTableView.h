@@ -27,4 +27,8 @@
 	IBOutlet FileArrayController	*_filesController;
 }
 
+- (IBAction)	openWithFinder:(id)sender;
+- (IBAction)	revealInFinder:(id)sender;
+- (IBAction)	openWith:(id)sender;
+
 @end
