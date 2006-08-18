@@ -105,7 +105,7 @@ createDirectoryStructure(NSString *path)
 NSString * 
 makeStringSafeForFilename(NSString *string)
 {
-	NSCharacterSet		*characterSet		= [NSCharacterSet characterSetWithCharactersInString:@"/:"];
+	NSCharacterSet		*characterSet		= [NSCharacterSet characterSetWithCharactersInString:@"/:?*"];
 	NSMutableString		*result				= [NSMutableString stringWithCapacity:[string length]];
 	NSRange				range;
 	
@@ -326,7 +326,7 @@ getIconForFile(NSString *filename, NSSize iconSize)
 	
 
 	// Grab the file's icon
-	icon = [[NSWorkspace sharedWorkspace] iconForFile:filename];
+	icon = (nil != filename ? [[NSWorkspace sharedWorkspace] iconForFile:filename] : [[NSWorkspace sharedWorkspace] iconForFileType:@""]);
 	[icon setSize:iconSize];
 	
 	// Check the image reps for one matching the desired size
