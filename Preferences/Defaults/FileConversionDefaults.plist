@@ -2,17 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>conversionOutputDirectory</key>
-	<string>~/Music/</string>
-	<key>conversionUseCustomTemporaryDirectory</key>
-	<false/>
-	<key>conversionTemporaryDirectory</key>
-	<string>/tmp</string>
-	<key>conversionUseCustomNaming</key>
-	<false/>
-	<key>conversionOverwriteExistingFiles</key>
-	<false/>
-	<key>conversionOverwriteExistingFiles</key>
-	<integer>0</integer>
+	<key>conversionSettings</key>
+	<dict>
+		<key>addToiTunes</key>
+		<false/>
+		<key>addToiTunesPlaylist</key>
+		<false/>
+		<key>deleteSourceFiles</key>
+		<false/>
+		<key>outputDirectory</key>
+		<string>~/Music</string>
+		<key>overwriteExistingFiles</key>
+		<integer>0</integer>
+		<key>postProcessingApplications</key>
+		<array/>
+		<key>temporaryDirectory</key>
+		<string>/tmp</string>
+		<key>useCustomNaming</key>
+		<false/>
+		<key>useCustomTemporaryDirectory</key>
+		<false/>
+		<key>useNamingFallback</key>
+		<false/>
+		<key>useTwoDigitTrackNumbers</key>
+		<false/>
+	</dict>
 </dict>
 </plist>

@@ -29,8 +29,13 @@
 	IBOutlet NSComboBox				*_fileNamingComboBox;
 	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
 	
+	IBOutlet NSObjectController 	*_settingsController;
 	IBOutlet NSArrayController 		*_postProcessingActionsController;
+	
+	NSMutableDictionary				*_settings;
 }
+
+- (id)					initWithSettings:(NSMutableDictionary *)settings;
 
 - (void)				showSheet;
 

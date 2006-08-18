@@ -51,9 +51,11 @@ enum {
 
 @implementation FileConversionSettingsSheet
 
-- (id) init
+- (id) initWithSettings:(NSMutableDictionary *)settings
 {
 	if((self = [super init])) {
+
+		_settings = [settings retain];
 
 		if(NO == [NSBundle loadNibNamed:@"FileConversionSettingsSheet" owner:self])  {
 			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
@@ -64,6 +66,12 @@ enum {
 	}
 	
 	return nil;
+}
+
+- (void) dealloc
+{
+	[_settings release];
+	[super dealloc];
 }
 
 - (void) awakeFromNib
@@ -80,8 +88,10 @@ enum {
 	[self updateTemporaryDirectoryMenuItemImage];
 	
 	// Select the correct items
+	[_outputDirectoryPopUpButton selectItemAtIndex:-1];
 	[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
-	[_temporaryDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
+	[_temporaryDirectoryPopUpButton selectItemAtIndex:-1];
+	[_temporaryDirectoryPopUpButton selectItemWithTag:([[_settings objectForKey:@"useCustomTemporaryDirectory"] boolValue] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
 	
 	// Deselect all items in the File Format Specifier NSPopUpButton
 	[[_formatSpecifierPopUpButton selectedItem] setState:NSOffState];
@@ -89,17 +99,17 @@ enum {
 	[_formatSpecifierPopUpButton synchronizeTitleAndSelectedItem];
 	
 	// Set the value to the most recently-saved pattern
-	patterns = [[NSUserDefaults standardUserDefaults] stringArrayForKey:@"conversionFileNamingPatterns"];
+	patterns = [_settings objectForKey:@"fileNamingPatterns"];
 	if(0 < [patterns count]) {
 		[_fileNamingComboBox setStringValue:[patterns objectAtIndex:0]];
 	}
 	
 	// Set up the list of applications for post processing
-	applications = [[NSUserDefaults standardUserDefaults] arrayForKey:@"conversionPostProcessingApplications"];
+	applications = [_settings objectForKey:@"postProcessingApplications"];
 	for(i = 0; i < [applications count]; ++i) {
 		application			= [applications objectAtIndex:i];
 		applicationPath		= [application objectForKey:@"path"];
-		applicationEntry	= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[application objectForKey:@"selected"], applicationPath, [[applicationPath lastPathComponent] stringByDeletingPathExtension], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil] forKeys:[NSArray arrayWithObjects:@"selected", @"path", @"displayName", @"icon", nil]];
+		applicationEntry	= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil] forKeys:[NSArray arrayWithObjects:@"path", @"displayName", @"icon", nil]];
 
 		[_postProcessingActionsController addObject:applicationEntry];
 	}
@@ -128,11 +138,11 @@ enum {
 	applicationArray	= [NSMutableArray arrayWithCapacity:[applications count]];
 	for(i = 0; i < [applications count]; ++i) {
 		currentApplication	= [applications objectAtIndex:i];
-		application			= [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[currentApplication objectForKey:@"selected"], [currentApplication objectForKey:@"path"], nil] forKeys:[NSArray arrayWithObjects:@"selected", @"path", nil]];
+		application			= [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[currentApplication objectForKey:@"path"], nil] forKeys:[NSArray arrayWithObjects:@"path", nil]];
 
 		[applicationArray addObject:application];
 	}
-	[[NSUserDefaults standardUserDefaults] setValue:applicationArray forKey:@"conversionPostProcessingApplications"];
+	[_settings setValue:applicationArray forKey:@"postProcessingApplications"];
 	
 	// We're finished
     [[NSApplication sharedApplication] endSheet:_sheet];
@@ -154,8 +164,8 @@ enum {
 	
 	switch([[sender selectedItem] tag]) {
 		case kCurrentDirectoryMenuItemTag:
-			[[NSWorkspace sharedWorkspace] selectFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:nil];
-			[[FileConversionController sharedController] setConvertInPlace:NO];
+			[[NSWorkspace sharedWorkspace] selectFile:[[_settings objectForKey:@"outputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:nil];
+			[_settings setValue:[NSNumber numberWithBool:NO] forKey:@"convertInPlace"];
 			break;
 			
 		case kChooseDirectoryMenuItemTag:
@@ -175,7 +185,7 @@ enum {
 					
 					for(i = 0; i < count; ++i) {
 						dirname = [filesToOpen objectAtIndex:i];
-						[[NSUserDefaults standardUserDefaults] setObject:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"conversionOutputDirectory"];
+						[_settings setValue:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"outputDirectory"];
 						[self updateOutputDirectoryMenuItemImage];
 					}
 						
@@ -190,7 +200,7 @@ enum {
 			break;
 			
 		case kSameAsSourceFileMenuItemTag:
-			[[FileConversionController sharedController] setConvertInPlace:YES];
+			[_settings setValue:[NSNumber numberWithBool:YES] forKey:@"convertInPlace"];
 			break;
 	}
 }
@@ -235,7 +245,7 @@ enum {
 	NSString		*pattern	= [_fileNamingComboBox stringValue];
 	NSMutableArray	*patterns	= nil;
 	
-	patterns = [[[[NSUserDefaults standardUserDefaults] arrayForKey:@"conversionFileNamingPatterns"] mutableCopy] autorelease];
+	patterns = [[[_settings objectForKey:@"fileNamingPatterns"] mutableCopy] autorelease];
 	if(nil == patterns) {
 		patterns = [NSMutableArray array];
 	}
@@ -251,25 +261,29 @@ enum {
 		[patterns removeLastObject];
 	}
 	
-	[[NSUserDefaults standardUserDefaults] setObject:patterns forKey:@"conversionFileNamingPatterns"];	
-	[[FileConversionController sharedController] setFileNamingFormat:pattern];
+	[_settings setValue:pattern forKey:@"fileNamingPattern"];	
+	[_settings setValue:patterns forKey:@"fileNamingPatterns"];	
 }	
 
 - (IBAction) selectTemporaryDirectory:(id)sender
 {
-	NSOpenPanel *panel = nil;
+	NSOpenPanel		*panel			= nil;
+	int				returnCode		= 0;
+	NSArray			*filesToOpen;
+	NSString		*dirname;
+	int				count, i;
 	
 	switch([[sender selectedItem] tag]) {
 		case kDefaultTempDirectoryMenuItemTag:
-			[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:NO] forKey:@"conversionUseCustomTemporaryDirectory"];
+			[_settings setValue:[NSNumber numberWithBool:NO] forKey:@"useCustomTemporaryDirectory"];
 			break;
 			
 		case kCurrentTempDirectoryMenuItemTag:
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"]) {
-				[[NSWorkspace sharedWorkspace] selectFile:[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionTemporaryDirectory"] inFileViewerRootedAtPath:nil];
+			if([[_settings objectForKey:@"useCustomTemporaryDirectory"] boolValue]) {
+				[[NSWorkspace sharedWorkspace] selectFile:[_settings objectForKey:@"temporaryDirectory"] inFileViewerRootedAtPath:nil];
 			}
 			else {
-				[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:@"conversionUseCustomTemporaryDirectory"]; 
+				[_settings setValue:[NSNumber numberWithBool:YES] forKey:@"useCustomTemporaryDirectory"]; 
 			}
 			break;
 			
@@ -280,37 +294,30 @@ enum {
 			[panel setCanChooseDirectories:YES];
 			[panel setCanChooseFiles:NO];
 			
-			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[FileConversionController sharedController] window] modalDelegate:self didEndSelector:@selector(selectTemporaryDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
+			returnCode = [panel runModalForTypes:nil];
+	
+			switch(returnCode) {
+				
+				case NSOKButton:
+					filesToOpen		= [panel filenames];
+					count			= [filesToOpen count];
+					
+					for(i = 0; i < count; ++i) {
+						dirname = [filesToOpen objectAtIndex:i];
+						[_settings setValue:[NSNumber numberWithBool:YES] forKey:@"useCustomTemporaryDirectory"]; 
+						[_settings setValue:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"temporaryDirectory"];
+						[self updateTemporaryDirectoryMenuItemImage];
+					}
+						
+						[_temporaryDirectoryPopUpButton selectItemWithTag:kCurrentTempDirectoryMenuItemTag];	
+					break;
+					
+				case NSCancelButton:
+					[_temporaryDirectoryPopUpButton selectItemWithTag:([[_settings objectForKey:@"useCustomTemporaryDirectory"] boolValue] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
+					break;
+			}	
 			break;
 	}
-}
-
-- (void) selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	NSArray		*filesToOpen;
-	NSString	*dirname;
-	int			count, i;
-	
-	switch(returnCode) {
-		
-		case NSOKButton:
-			filesToOpen		= [sheet filenames];
-			count			= [filesToOpen count];
-			
-			for(i = 0; i < count; ++i) {
-				dirname = [filesToOpen objectAtIndex:i];
-				[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:@"conversionUseCustomTemporaryDirectory"]; 
-				[[NSUserDefaults standardUserDefaults] setValue:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"conversionTemporaryDirectory"];
-				[self updateTemporaryDirectoryMenuItemImage];
-			}
-				
-				[_temporaryDirectoryPopUpButton selectItemWithTag:kCurrentTempDirectoryMenuItemTag];	
-			break;
-			
-		case NSCancelButton:
-			[_temporaryDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"conversionUseCustomTemporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
-			break;
-	}	
 }
 
 - (void) updateOutputDirectoryMenuItemImage
@@ -320,12 +327,18 @@ enum {
 	NSImage		*image		= nil;
 	
 	// Set the menu item image for the output directory
-	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"conversionOutputDirectory"] stringByExpandingTildeInPath];
+	path		= [[_settings objectForKey:@"outputDirectory"] stringByExpandingTildeInPath];
 	image		= getIconForFile(path, NSMakeSize(16, 16));
 	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
 	
-	[menuItem setTitle:[path lastPathComponent]];
-	[menuItem setImage:image];
+	if(nil != path) {
+		[menuItem setTitle:[path lastPathComponent]];
+		[menuItem setImage:image];
+	}
+	else {
+		[menuItem setTitle:@"Not Specified"];
+		[menuItem setImage:nil];
+	}
 }
 
 - (void) updateTemporaryDirectoryMenuItemImage
@@ -335,17 +348,25 @@ enum {
 	NSImage		*image		= nil;
 	
 	// Set the menu item image for the output directory
-	path		= [[NSUserDefaults standardUserDefaults] stringForKey:@"conversionTemporaryDirectory"];
+	path		= [_settings objectForKey:@"temporaryDirectory"];
 	image		= getIconForFile(path, NSMakeSize(16, 16));
-	menuItem	= [_temporaryDirectoryPopUpButton itemAtIndex:[_temporaryDirectoryPopUpButton indexOfItemWithTag:kCurrentTempDirectoryMenuItemTag]];	
+	menuItem	= [_temporaryDirectoryPopUpButton itemAtIndex:[_temporaryDirectoryPopUpButton indexOfItemWithTag:kCurrentTempDirectoryMenuItemTag]];
 	
-	[menuItem setTitle:[path lastPathComponent]];
-	[menuItem setImage:image];
+	if(nil != path) {
+		[menuItem setTitle:[path lastPathComponent]];
+		[menuItem setImage:image];
+	}
+	else {
+		[menuItem setTitle:@"Not Specified"];
+		[menuItem setImage:nil];
+	}
 }
 
 - (IBAction) addPostProcessingApplication:(id)sender
 {
 	NSOpenPanel		*panel		= [NSOpenPanel openPanel];
+	
+	[panel setAllowsMultipleSelection:YES];
 	
 	if(NSOKButton == [panel runModalForTypes:[NSArray arrayWithObject:@"app"]]) {
 		NSArray				*applications		= [panel filenames];
@@ -355,8 +376,12 @@ enum {
 		
 		for(i = 0; i < [applications count]; ++i) {
 			applicationPath = [applications objectAtIndex:i];
-			application		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithBool:YES], applicationPath, [[applicationPath lastPathComponent] stringByDeletingPathExtension], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil] forKeys:[NSArray arrayWithObjects:@"selected", @"path", @"displayName", @"icon", nil]];
-			[_postProcessingActionsController addObject:application];
+			application		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil] forKeys:[NSArray arrayWithObjects:@"path", @"displayName", @"icon", nil]];
+
+			// Don't add existing items
+			if(0 == [[[_postProcessingActionsController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path == %@", applicationPath]] count]) {
+				[_postProcessingActionsController addObject:application];
+			}			
 		}
 	}
 }

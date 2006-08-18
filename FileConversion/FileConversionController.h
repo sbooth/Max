@@ -43,18 +43,15 @@ enum {
 	IBOutlet NSDrawer				*_metadataDrawer;
 	IBOutlet NSDrawer				*_artDrawer;
 	
-	BOOL							_convertInPlace;
-	NSString						*_fileNamingFormat;
-	
 	NSMutableArray					*_files;
+	NSMutableDictionary				*_settings;
 }
 
 + (FileConversionController *)		sharedController;
 
 - (NSArray *)						genres;
 
-- (IBAction)						ok:(id)sender;
-- (IBAction)						cancel:(id)sender;
+- (IBAction)						convert:(id)sender;
 
 - (IBAction)						addFiles:(id)sender;
 - (IBAction)						removeFiles:(id)sender;
@@ -62,15 +59,11 @@ enum {
 - (IBAction)						downloadAlbumArt:(id)sender;
 - (IBAction)						selectAlbumArt:(id)sender;
 
+- (IBAction)						editSettings:(id)sender;
+
 - (void)							openFormatsPreferences;
 
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;
-
-- (BOOL)							convertInPlace;
-- (void)							setConvertInPlace:(BOOL)convertInPlace;
-
-- (NSString *)						fileNamingFormat;
-- (void)							setFileNamingFormat:(NSString *)fileNamingFormat;
 
 @end
