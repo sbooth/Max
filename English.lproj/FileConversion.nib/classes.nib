@@ -4,9 +4,8 @@
         {
             ACTIONS = {
                 addFiles = id; 
-                cancel = id; 
+                convert = id; 
                 downloadAlbumArt = id; 
-                ok = id; 
                 removeFiles = id; 
                 selectAlbumArt = id; 
             }; 
@@ -27,6 +26,7 @@
             SUPERCLASS = NSArrayController; 
         }, 
         {
+            ACTIONS = {openWith = id; openWithFinder = id; revealInFinder = id; }; 
             CLASS = FilesTableView; 
             LANGUAGE = ObjC; 
             OUTLETS = {"_filesController" = FileArrayController; }; 

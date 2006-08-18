@@ -17,6 +17,7 @@
                 "_formatSpecifierPopUpButton" = NSPopUpButton; 
                 "_outputDirectoryPopUpButton" = NSPopUpButton; 
                 "_postProcessingActionsController" = NSArrayController; 
+                "_settingsController" = NSObjectController; 
                 "_sheet" = NSWindow; 
                 "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
             }; 
