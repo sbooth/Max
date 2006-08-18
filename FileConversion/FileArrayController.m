@@ -41,6 +41,8 @@
 
 - (NSDictionary *) findFile:(NSString *)filename
 {
+	// TODO: Should I use filteredArrayUsingPredicate: here?
+	
 	NSEnumerator			*enumerator;
 	NSDictionary			*current;
 	
