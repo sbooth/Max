@@ -32,6 +32,7 @@
 #include <TagLib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
 #include <TagLib/xiphcomment.h>				// TagLib::Ogg::XiphComment
 #include <TagLib/tbytevector.h>				// TagLib::ByteVector
+#include <TagLib/mpcfile.h>					// TagLib::MPC::File
 
 #include <mp4v2/mp4.h>						// MP4FileHandle
 
@@ -50,6 +51,7 @@
 + (AudioMetadata *)		metadataFromOggFLACFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMonkeysAudioFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromWavPackFile:(NSString *)filename;
++ (AudioMetadata *)		metadataFromMusepackFile:(NSString *)filename;
 @end
 
 @interface AudioMetadata (TagMappings)
@@ -89,6 +91,9 @@
 	}
 	else if([extension isEqualToString:@"wv"]) {
 		return [self metadataFromWavPackFile:filename];
+	}
+	else if([extension isEqualToString:@"mpc"]) {
+		return [self metadataFromMusepackFile:filename];
 	}
 	else {
 		return [[[AudioMetadata alloc] init] autorelease];
@@ -1040,6 +1045,77 @@
 	
 	@finally {
 		WavpackCloseFile(wpc);
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromMusepackFile:(NSString *)filename
+{
+	AudioMetadata							*result;
+	TagLib::MPC::File						f						([filename fileSystemRepresentation], false);
+	TagLib::String							s;
+	TagLib::ID3v1::Tag						*id3v1Tag;
+	TagLib::APE::Tag						*apeTag;
+	
+	result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		// Album title
+		s = f.tag()->album();
+		if(false == s.isNull()) {
+			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Artist
+		s = f.tag()->artist();
+		if(false == s.isNull()) {
+			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Genre
+		s = f.tag()->genre();
+		if(false == s.isNull()) {
+			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Year
+		if(0 != f.tag()->year()) {
+			[result setAlbumYear:f.tag()->year()];
+		}
+		
+		// Comment
+		s = f.tag()->comment();
+		if(false == s.isNull()) {
+			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Track title
+		s = f.tag()->title();
+		if(false == s.isNull()) {
+			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Track number
+		if(0 != f.tag()->track()) {
+			[result setTrackNumber:f.tag()->track()];
+		}
+		
+		// Length
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
+			[result setLength:f.audioProperties()->length()];
+		}
+		
+		id3v1Tag = f.ID3v1Tag();
+		if(NULL != id3v1Tag) {
+			
+		}
+		
+		apeTag = f.APETag();
+		if(NULL != apeTag) {
+			
+		}
 	}
 	
 	return [result autorelease];
