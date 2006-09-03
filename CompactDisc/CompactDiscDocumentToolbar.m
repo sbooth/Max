@@ -21,6 +21,7 @@
 #import "CompactDiscDocumentToolbar.h"
 
 static NSString		*EncodeToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.Encode";
+static NSString		*SettingsToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.Settings";
 static NSString		*TrackInfoToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.TrackInfo";
 static NSString		*AlbumArtToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.AlbumArt";
 static NSString		*SelectNextTrackToolbarItemIdentifier		= @"org.sbooth.Max.CompactDiscDocument.Toolbar.SelectNextTrack";
@@ -37,7 +38,8 @@ enum {
 	kEjectDiscToolbarItemTag				= 5,
 	kSelectNextTrackToolbarItemTag			= 6,
 	kSelectPreviousTrackToolbarItemTag		= 7,
-	kAlbumArtToolbarItemTag					= 8	
+	kAlbumArtToolbarItemTag					= 8,
+	kSettingsToolbarItemTag					= 9
 };
 
 @implementation CompactDiscDocumentToolbar
@@ -53,7 +55,8 @@ enum {
 
 - (void) dealloc
 {
-	[_document release];
+	[_document release];	_document = nil;
+	
 	[super dealloc];
 }
 
@@ -176,6 +179,18 @@ enum {
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(ejectDisc:)];
 	}
+    else if([itemIdentifier isEqualToString:SettingsToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setTag:kSettingsToolbarItemTag];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Settings", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Settings", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Eject the disc", @"CompactDisc", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"SettingsToolbarImage"]];
+		
+		[toolbarItem setTarget:_document];
+		[toolbarItem setAction:@selector(ejectDisc:)];
+	}
 	else {
 		toolbarItem = nil;
     }
@@ -185,7 +200,7 @@ enum {
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
-    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
+    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, SettingsToolbarItemIdentifier, 
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		QueryFreeDBToolbarItemIdentifier,
 		NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
@@ -194,7 +209,7 @@ enum {
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
 {
-    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
+    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, SettingsToolbarItemIdentifier,
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		SelectPreviousTrackToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
 		QueryFreeDBToolbarItemIdentifier, SubmitToFreeDBToolbarItemIdentifier,

@@ -124,12 +124,12 @@
 
 - (void) dealloc
 {
-	[_deviceName release];
-	[_tracks release];
-	[_MCN release];
+	[_deviceName release];		_deviceName = nil;
+	[_tracks release];			_tracks = nil;
+	[_MCN release];				_MCN = nil;
 		
 	if(NULL != _freeDBDisc) {
-		cddb_disc_destroy(_freeDBDisc);
+		cddb_disc_destroy(_freeDBDisc);		_freeDBDisc = NULL;
 	}
 	
 	[super dealloc];

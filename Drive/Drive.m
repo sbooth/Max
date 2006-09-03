@@ -87,9 +87,10 @@
 	
 	_fd = -1;
 	
-	[_deviceName release];
-	[_sessions release];
-	[_tracks release];
+	[_deviceName release];		_deviceName = nil;
+	[_sessions release];		_sessions = nil;
+	[_tracks release];			_tracks = nil;
+	
 	[super dealloc];
 }
 

@@ -120,22 +120,22 @@
 
 - (void) dealloc
 {	
-	[_disc release];
+	[_disc release];					_disc = nil;
 
-	[_title release];
-	[_artist release];
-	[_genre release];
-	[_composer release];
-	[_comment release];
+	[_title release];					_title = nil;
+	[_artist release];					_artist = nil;
+	[_genre release];					_genre = nil;
+	[_composer release];				_composer = nil;
+	[_comment release];					_comment = nil;
 
-	[_albumArt release];
-	[_albumArtDownloadDate release];
+	[_albumArt release];				_albumArt = nil;
+	[_albumArtDownloadDate release];	_albumArtDownloadDate = nil;
 
-	[_MCN release];
+	[_MCN release];						_MCN = nil;
 	
-	[_tracks release];
+	[_tracks release];					_tracks = nil;
 	
-	[_activeEncoders release];
+	[_activeEncoders release];			_activeEncoders = nil;
 	
 	[super dealloc];
 }
@@ -258,16 +258,16 @@
 				}
 			}
 			
-			[_title release];
-			[_artist release];
-			[_genre release];
-			[_composer release];
-			[_comment release];
+			[_title release];						_title = nil;
+			[_artist release];						_artist = nil;
+			[_genre release];						_genre = nil;
+			[_composer release];					_composer = nil;
+			[_comment release];						_comment = nil;
 			
-			[_albumArt release];
-			[_albumArtDownloadDate release];
+			[_albumArt release];					_albumArt = nil;
+			[_albumArtDownloadDate release];		_albumArtDownloadDate = nil;
 			
-			[_MCN release];
+			[_MCN release];							_MCN = nil;
 			
 			_discID			= [[dictionary valueForKey:@"discID"] intValue];
 

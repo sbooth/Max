@@ -73,8 +73,9 @@
 
 - (void) dealloc
 {
-	[_sectors release];
-	[_deviceName release];
+	[_sectors release];			_sectors = nil;
+	[_deviceName release];		_deviceName = nil;
+	
 	[super dealloc];
 }
 

@@ -1175,24 +1175,24 @@
 
 - (void) dealloc
 {
-	[_trackTitle release];
-	[_trackArtist release];
-	[_trackComposer release];
-	[_trackGenre release];
-	[_trackComment release];
+	[_trackTitle release];			_trackTitle = nil;
+	[_trackArtist release];			_trackArtist = nil;
+	[_trackComposer release];		_trackComposer = nil;
+	[_trackGenre release];			_trackGenre = nil;
+	[_trackComment release];		_trackComment = nil;
 	
-	[_albumTitle release];
-	[_albumArtist release];
-	[_albumComposer release];
-	[_albumGenre release];
-	[_albumComment release];
+	[_albumTitle release];			_albumTitle = nil;
+	[_albumArtist release];			_albumArtist = nil;
+	[_albumComposer release];		_albumComposer = nil;
+	[_albumGenre release];			_albumGenre = nil;
+	[_albumComment release];		_albumComment = nil;
 	
-	[_albumArt release];
+	[_albumArt release];			_albumArt = nil;
 	
-	[_playlist release];
+	[_playlist release];			_playlist = nil;
 	
-	[_MCN release];
-	[_ISRC release];
+	[_MCN release];					_MCN = nil;
+	[_ISRC release];				_ISRC = nil;
 	
 	[super dealloc];
 }

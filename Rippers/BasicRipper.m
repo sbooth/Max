@@ -55,7 +55,8 @@
 
 - (void) dealloc
 {
-	[_drive release];
+	[_drive release];	_drive = nil;
+	
 	[super dealloc];
 }
 

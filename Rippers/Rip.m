@@ -88,9 +88,9 @@
 		free(_hashes[i]);
 	}
 	
-	free(_hashes);
+	free(_hashes);					_hashes = NULL;
 	
-	[_errors release];
+	[_errors release];				_errors = nil;
 	
 	[super dealloc];
 }

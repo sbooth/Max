@@ -76,7 +76,8 @@
 
 - (void) dealloc
 {
-	[_images release];
+	[_images release];	_images = nil;
+	
 	[super dealloc];
 }
 

@@ -119,8 +119,9 @@
 
 - (void) dealloc
 {
-	cddb_destroy(_freeDB);
-	[_disc release];
+	cddb_destroy(_freeDB);	_freeDB = NULL;
+	[_disc release];		_disc = nil;
+	
 	[super dealloc];
 }
 

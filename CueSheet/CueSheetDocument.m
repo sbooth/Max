@@ -48,16 +48,16 @@
 
 - (void) dealloc
 {
-	[_MCN release];
+	[_MCN release];				_MCN = nil;
 
-	[_title release];
-	[_performer release];
-	[_songwriter release];
-	[_composer release];
-	[_arranger release];
-	[_UPC release];
+	[_title release];			_title = nil;
+	[_performer release];		_performer = nil;
+	[_songwriter release];		_songwriter = nil;
+	[_composer release];		_composer = nil;
+	[_arranger release];		_arranger = nil;
+	[_UPC release];				_UPC = nil;
 	
-	[_tracks release];
+	[_tracks release];			_tracks = nil;
 	
 	[super dealloc];
 }
