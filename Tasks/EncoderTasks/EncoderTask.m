@@ -105,13 +105,13 @@ enum {
 			}
 		}
 
-		[_tracks release];
+		[_tracks release];		_tracks = nil;
 	}
 	
-	[_connection release];
-	[(NSObject *)_encoder release];
-	[_outputFilename release];
-	[_task release];
+	[_connection release];				_connection = nil;
+	[(NSObject *)_encoder release];		_encoder = nil;
+	[_outputFilename release];			_outputFilename = nil;
+	[_task release];					_task = nil;
 	
 	[super dealloc];
 }
@@ -148,10 +148,7 @@ enum {
 	NSEnumerator	*enumerator;
 	Track			*track;
 
-	if(nil != _tracks) {
-		[_tracks release];
-	}
-	
+	[_tracks release];
 	_tracks			= [tracks retain];
 	enumerator		= [_tracks objectEnumerator];
 	

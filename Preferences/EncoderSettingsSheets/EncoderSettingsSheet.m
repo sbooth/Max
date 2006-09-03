@@ -53,9 +53,10 @@
 
 - (void) dealloc
 {
-	[_settings release];
-	[_userInfo release];
-	[_searchKey release];
+	[_settings release];	_settings = nil;
+	[_userInfo release];	_userInfo = nil;
+	[_searchKey release];	_searchKey = nil;
+	
 	[super dealloc];
 }
 
