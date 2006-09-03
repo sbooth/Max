@@ -59,7 +59,8 @@
 
 - (void) dealloc
 {
-	[_fileType release];
+	[_fileType release];	_fileType = nil;
+	
 	[super dealloc];
 }
 
