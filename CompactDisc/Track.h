@@ -24,7 +24,7 @@
 
 @class CompactDiscDocument;
 
-@interface Track : NSObject
+@interface Track : NSObject <NSCopying>
 {
 	CompactDiscDocument		*_document;
 

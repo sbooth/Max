@@ -101,14 +101,14 @@
 
 - (void) dealloc
 {
-	[_document release];
+	[_document release];		_document = nil;
 	
-	[_title release];
-	[_artist release];
-	[_genre release];
-	[_composer release];
+	[_title release];			_title = nil;
+	[_artist release];			_artist = nil;
+	[_genre release];			_genre = nil;
+	[_composer release];		_composer = nil;
 
-	[_ISRC release];
+	[_ISRC release];			_ISRC = nil;
 
 	[super dealloc];
 }
@@ -327,13 +327,13 @@
 
 - (void) setPropertiesFromDictionary:(NSDictionary *)properties
 {	
-	[_title release];
-	[_artist release];
-	[_genre release];
-	[_composer release];
-	[_comment release];
+	[_title release];		_title = nil;
+	[_artist release];		_artist = nil;
+	[_genre release];		_genre = nil;
+	[_composer release];	_composer = nil;
+	[_comment release];		_comment = nil;
 	
-	[_ISRC release];
+	[_ISRC release];		_ISRC = nil;
 
 //	_selected		= [[properties valueForKey:@"selected"] boolValue];
 
