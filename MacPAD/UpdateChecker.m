@@ -67,7 +67,8 @@ static UpdateChecker *sharedController = nil;
 
 - (void) dealloc
 {
-	[_socket release];
+	[_socket release];	_socket = nil;
+	
 	[super dealloc];
 }
 

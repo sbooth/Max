@@ -151,7 +151,8 @@
 
 - (void) dealloc
 {
-	[_availableFormats release];
+	[_availableFormats release];	_availableFormats = nil;
+	
 	[super dealloc];
 }
 

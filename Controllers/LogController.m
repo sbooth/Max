@@ -71,7 +71,8 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Clear";
 
 - (void) dealloc
 {
-	[_logEntries release];
+	[_logEntries release];		_logEntries = nil;
+	
 	[super dealloc];
 }
 

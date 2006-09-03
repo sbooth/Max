@@ -56,7 +56,8 @@
 
 - (void) dealloc
 {
-	[_doc release];
+	[_doc release];		_doc = nil;
+	
 	[super dealloc];
 }
 

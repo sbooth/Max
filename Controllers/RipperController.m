@@ -89,8 +89,8 @@ static RipperController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_timer invalidate];
-	[_tasks release];
+	[_timer invalidate];	_timer = nil;
+	[_tasks release];		_tasks = nil;
 
 	[super dealloc];
 }

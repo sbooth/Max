@@ -105,7 +105,8 @@
 
 - (void) dealloc
 {
-	[_availableSubtypes release];
+	[_availableSubtypes release];	_availableSubtypes = nil;
+	
 	[super dealloc];
 }
 

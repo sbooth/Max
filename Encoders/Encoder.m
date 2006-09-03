@@ -78,7 +78,8 @@
 
 - (void) dealloc
 {
-	[_inputFilename release];
+	[_inputFilename release];	_inputFilename = nil;
+	
 	[super dealloc];
 }
 
