@@ -68,12 +68,9 @@
 
 - (void) dealloc
 {
-	if(nil != _connection) {
-		[_connection release];
-	}
-	
-	[_sectors release];	
-	[_tracks release];	
+	[_connection release];	_connection = nil;
+	[_sectors release];		_sectors = nil;	
+	[_tracks release];		_tracks = nil;	
 	
 	[super dealloc];
 }
