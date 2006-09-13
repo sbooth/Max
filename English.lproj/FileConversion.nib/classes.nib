@@ -26,7 +26,13 @@
             SUPERCLASS = NSArrayController; 
         }, 
         {
-            ACTIONS = {openWith = id; openWithFinder = id; revealInFinder = id; }; 
+            ACTIONS = {
+                editWithTag = id; 
+                openWith = id; 
+                openWithFinder = id; 
+                playWithCog = id; 
+                revealInFinder = id; 
+            }; 
             CLASS = FilesTableView; 
             LANGUAGE = ObjC; 
             OUTLETS = {"_filesController" = FileArrayController; }; 

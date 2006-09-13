@@ -8,7 +8,6 @@
                 showAcknowledgments = id; 
                 showComponentVersions = id; 
                 showPreferences = id; 
-                toggleConverterWindow = id; 
                 toggleEncoderWindow = id; 
                 toggleLogWindow = id; 
                 toggleRipperWindow = id; 
@@ -20,9 +19,9 @@
         {
             ACTIONS = {
                 "" = id; 
+                editSettings = id; 
                 ejectDisc = id; 
                 encode = id; 
-                encodeCustom = id; 
                 fetchAlbumArt = id; 
                 queryFreeDB = id; 
                 selectAlbumArt = id; 
