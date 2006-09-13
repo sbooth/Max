@@ -20,7 +20,6 @@
 
 #import <Cocoa/Cocoa.h>
 #include <CoreAudio/CoreAudioTypes.h>
-#include <AudioToolbox/AudioConverter.h>
 
 #import "ReaderMethods.h"
 #import "CircularBuffer.h"
@@ -53,7 +52,7 @@
 // The buffer which holds the PCM data
 - (CircularBuffer *)				pcmBuffer;
 
-// Attempt to read frameCount frames of audio
+// Attempt to read frameCount frames of audio, returning the actual number read
 - (UInt32)							readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
 
 // ========================================
