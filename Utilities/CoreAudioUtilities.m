@@ -292,7 +292,7 @@ getCoreAudioFileTypeInfo(OSType filetype)
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 	}
 	if(extensions) {
-		[result setObject:(1 == [extensions count] ? [extensions objectAtIndex:0] : extensions) forKey:@"extensionsForType"];
+		[result setObject:extensions forKey:@"extensionsForType"];
 	}
 	
 	[result setObject:getCoreAudioFileDataFormats(filetype) forKey:@"dataFormats"];
@@ -404,7 +404,7 @@ getCoreAudioReadableTypes()
 				}
 				numFileFormats		= size / sizeof(UInt32);
 				result				= [NSMutableArray arrayWithCapacity:numFileFormats];
-				err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_WritableTypes, 0, NULL, &size, fileFormats);
+				err					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_ReadableTypes, 0, NULL, &size, fileFormats);
 				if(noErr != err) {
 					@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileGetGlobalInfo"]
 														  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
