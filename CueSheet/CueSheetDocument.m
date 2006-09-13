@@ -29,16 +29,6 @@
 {
 	if((self = [super init])) {
 
-		_MCN			= nil;
-		_mode			= 0;
-
-		_title			= nil;
-		_performer		= nil;
-		_songwriter		= nil;
-		_composer		= nil;
-		_arranger		= nil;
-		_UPC			= nil;
-
 		_tracks		= [[NSMutableArray alloc] init];
 		
 		return self;
@@ -186,13 +176,13 @@
 #pragma mark Accessors
 
 - (int)				mode								{ return _mode; }
-- (NSString *)		MCN									{ return _MCN; }
-- (NSString *)		title								{ return _title; }
-- (NSString *)		performer							{ return _performer; }
-- (NSString *)		songwriter							{ return _songwriter; }
-- (NSString *)		composer							{ return _composer; }
-- (NSString *)		arranger							{ return _arranger; }
-- (NSString *)		UPC									{ return _UPC; }
+- (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
+- (NSString *)		title								{ return [[_title retain] autorelease]; }
+- (NSString *)		performer							{ return [[_performer retain] autorelease]; }
+- (NSString *)		songwriter							{ return [[_songwriter retain] autorelease]; }
+- (NSString *)		composer							{ return [[_composer retain] autorelease]; }
+- (NSString *)		arranger							{ return [[_arranger retain] autorelease]; }
+- (NSString *)		UPC									{ return [[_UPC retain] autorelease]; }
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
 - (id)				objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
