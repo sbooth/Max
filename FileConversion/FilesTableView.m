@@ -83,6 +83,18 @@
 	[[NSWorkspace sharedWorkspace] selectFile:path inFileViewerRootedAtPath:nil];
 }
 
+- (IBAction) playWithCog:(id)sender
+{
+	NSString *path = [[_filesController selection] valueForKey:@"filename"];
+	[[NSWorkspace sharedWorkspace] openFile:path withApplication:@"Cog"];
+}
+
+- (IBAction) editWithTag:(id)sender
+{
+	NSString *path = [[_filesController selection] valueForKey:@"filename"];
+	[[NSWorkspace sharedWorkspace] openFile:path withApplication:@"Tag"];
+}
+
 - (IBAction) openWith:(id)sender
 {
 	NSOpenPanel		*panel		= [NSOpenPanel openPanel];

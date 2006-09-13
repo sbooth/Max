@@ -23,19 +23,6 @@
 #import "FileArrayController.h"
 #import "AlbumArtMethods.h"
 
-enum {
-	kCurrentDirectoryMenuItemTag		= 1,
-	kChooseDirectoryMenuItemTag			= 2,
-	kSameAsSourceFileMenuItemTag		= 3,
-	
-	kCurrentTempDirectoryMenuItemTag	= 1,
-	kChooseTempDirectoryMenuItemTag		= 2,
-	kDefaultTempDirectoryMenuItemTag	= 3,
-	
-	kDontOverwriteExistingFiles			= 0,
-	kOverwriteExistingFiles				= 1
-};
-
 @interface FileConversionController : NSWindowController <AlbumArtMethods>
 {
 	IBOutlet NSArrayController		*_encodersController;

@@ -20,7 +20,7 @@
 
 #import "FileConversionController.h"
 #import "FileConversionSettingsSheet.h"
-#import "ConverterController.h"
+#import "EncoderController.h"
 #import "PreferencesController.h"
 #import "Genres.h"
 #import "AmazonAlbumArtSheet.h"
@@ -39,7 +39,7 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 - (BOOL)	addOneFile:(NSString *)filename atIndex:(unsigned)index;
 - (void)	clearFileList;
 - (void)	selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (void)	showSettingsSheet:(id)sender;
+- (void)	didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
 @implementation FileConversionController
@@ -103,7 +103,8 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 - (void) dealloc
 {
-	[_settings release];
+	[_settings release];	_settings = nil;
+
 	[super dealloc];
 }
 
@@ -155,11 +156,11 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	AudioMetadata			*metadata				= nil;
 	NSArray					*encoders				= nil;
 	NSArray					*filenames				= nil;
-	NSString				*outputDirectory		= nil;
 	NSString				*filename				= nil;
-	NSMutableDictionary		*userInfo				= nil;
+	NSMutableDictionary		*settings				= nil;
 	NSMutableDictionary		*postProcessingOptions	= nil;
-	int						deleteSourceFilesTag	= 0;
+	NSArray					*applications;
+	NSMutableArray			*postProcessingApplications;
 	unsigned				i;
 
 	encoders = [[_encodersController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"conversionSelected == 1"]];
@@ -188,53 +189,43 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		return;
 	}
 
-	userInfo			= [NSMutableDictionary dictionary];
+	settings			= [NSMutableDictionary dictionary];
 
-	// Temporary files location
-	if([[_settings objectForKey:@"useCustomTemporaryDirectory"] boolValue]) {
-		[userInfo setObject:[[_settings objectForKey:@"temporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
-	}
+	// Encoders
+	[settings setValue:encoders forKey:@"encoders"];
+
+	// File locations
+	[settings setValue:[[_settings objectForKey:@"temporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
+	[settings setValue:[[_settings objectForKey:@"outputDirectory"] stringByExpandingTildeInPath] forKey:@"outputDirectory"];
 	
 	// Conversion parameters
-	outputDirectory		= ([[_settings objectForKey:@"convertInPlace"] boolValue] ? nil : [[_settings objectForKey:@"outputDirectory"] stringByExpandingTildeInPath]);
+	[settings setValue:[_settings objectForKey:@"deleteSourceFiles"] forKey:@"deleteSourceFiles"];
+	[settings setValue:[_settings objectForKey:@"overwriteExistingFiles"] forKey:@"overwriteExistingFiles"];
 	
-	[userInfo setObject:[NSNumber numberWithBool:[[_settings objectForKey:@"overwriteExistingFiles"] boolValue]] forKey:@"overwriteExistingFiles"];
-	
-	deleteSourceFilesTag = [[_settings objectForKey:@"deleteSourceFiles"] intValue];
-	if(kOverwriteExistingFiles == deleteSourceFilesTag) {
-		[userInfo setObject:[NSNumber numberWithBool:YES] forKey:@"deleteSourceFiles"];
-	}
-	else {
-		[userInfo setObject:[NSNumber numberWithBool:NO] forKey:@"deleteSourceFiles"];
-	}
-	
-	// Setup custom output file naming
+	// Custom output file naming
 	if([[_settings objectForKey:@"useCustomNaming"] boolValue]) {
 		NSMutableDictionary		*fileNamingFormat = [NSMutableDictionary dictionary];
 		
-		[fileNamingFormat setObject:[_settings objectForKey:@"fileNamingFormat"] forKey:@"fileNamingFormat"];
-		[fileNamingFormat setObject:[NSNumber numberWithBool:[[_settings objectForKey:@"useTwoDigitTrackNumbers"] boolValue]] forKey:@"useTwoDigitTrackNumbers"];
-		[fileNamingFormat setObject:[NSNumber numberWithBool:[[_settings objectForKey:@"useNamingFallback"] boolValue]] forKey:@"useNamingFallback"];
+		[fileNamingFormat setValue:[_settings objectForKey:@"fileNamingFormat"] forKey:@"formatString"];
+		[fileNamingFormat setValue:[_settings objectForKey:@"useTwoDigitTrackNumbers"] forKey:@"useTwoDigitTrackNumbers"];
+		[fileNamingFormat setValue:[_settings objectForKey:@"useNamingFallback"] forKey:@"useNamingFallback"];
 		
-		[userInfo setObject:fileNamingFormat forKey:@"fileNamingFormat"];
+		[settings setValue:fileNamingFormat forKey:@"fileNamingFormat"];
 	}
 	
 	// Post-processing options
 	postProcessingOptions = [NSMutableDictionary dictionary];
 	
+	[postProcessingOptions setValue:[_settings objectForKey:@"addToiTunes"] forKey:@"addToiTunes"];
 	if([[_settings objectForKey:@"addToiTunes"] boolValue]) {
-		[postProcessingOptions setObject:[NSNumber numberWithBool:[[_settings objectForKey:@"addToiTunes"] boolValue]] forKey:@"addToiTunes"];
 
-		[postProcessingOptions setObject:[NSNumber numberWithBool:[[_settings objectForKey:@"addToiTunesPlaylist"] boolValue]] forKey:@"addToiTunesPlaylist"];
+		[postProcessingOptions setValue:[_settings objectForKey:@"addToiTunesPlaylist"] forKey:@"addToiTunesPlaylist"];
 
 		if([[_settings objectForKey:@"addToiTunesPlaylist"] boolValue]) {
-			[postProcessingOptions setObject:[_settings objectForKey:@"iTunesPlaylistName"] forKey:@"iTunesPlaylistName"];
+			[postProcessingOptions setValue:[_settings objectForKey:@"iTunesPlaylistName"] forKey:@"iTunesPlaylistName"];
 		}		
 	}
-	
-	NSArray			*applications;
-	NSMutableArray	*postProcessingApplications;
-	
+		
 	applications					= [_settings objectForKey:@"postProcessingApplications"];
 	postProcessingApplications		= [NSMutableArray arrayWithCapacity:[applications count]];
 	
@@ -243,11 +234,11 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	}
 	
 	if(0 != [postProcessingApplications count]) {
-		[postProcessingOptions setObject:postProcessingApplications forKey:@"postProcessingApplications"];
+		[postProcessingOptions setValue:postProcessingApplications forKey:@"postProcessingApplications"];
 	}
 	
 	if(0 != [postProcessingOptions count]) {
-		[userInfo setObject:postProcessingOptions forKey:@"postProcessingOptions"];
+		[settings setValue:postProcessingOptions forKey:@"postProcessingOptions"];
 	}
 	
 	// Iterate through file list and convert each one
@@ -258,7 +249,7 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		metadata	= [[filenames objectAtIndex:i] objectForKey:@"metadata"];
 		
 		@try {
-			[[ConverterController sharedController] convertFile:filename metadata:metadata withEncoders:encoders toDirectory:outputDirectory userInfo:userInfo];
+			[[EncoderController sharedController] encodeFile:filename metadata:metadata settings:settings];
 		}
 		
 		@catch(NSException *exception) {
@@ -314,13 +305,14 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 - (IBAction) editSettings:(id)sender
 {
-	[self showSettingsSheet:sender];
+	FileConversionSettingsSheet *sheet = [[FileConversionSettingsSheet alloc] initWithSettings:_settings];
+    [[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(didEndSettingsSheet:returnCode:contextInfo:) contextInfo:nil];
 }
 
-- (void) showSettingsSheet:(id)sender
+- (void) didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	FileConversionSettingsSheet *sheet = [[FileConversionSettingsSheet alloc] initWithSettings:_settings];
-	[sheet showSheet];
+	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"conversionSettings"];
+    [sheet orderOut:self];
 }
 
 #pragma mark File Management
@@ -514,7 +506,7 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		[toolbarItem setImage: [NSImage imageNamed:@"SettingsToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(showSettingsSheet:)];
+		[toolbarItem setAction:@selector(editSettings:)];
 	}
     else if([itemIdentifier isEqualToString:AlbumArtToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
@@ -547,14 +539,6 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
-}
-
-#pragma mark NSWindow Delegate Methods
-
-- (void) windowDidEndSheet:(NSNotification *)notification
-{
-	// Save settings to defaults when options sheet is dismissed
-	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"conversionSettings"];
 }
 
 @end

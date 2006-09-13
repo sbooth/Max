@@ -20,6 +20,12 @@
 
 #import <Cocoa/Cocoa.h>
 
+enum {
+	kDontOverwriteExistingFiles			= 0,
+	kOverwriteExistingFiles				= 1,
+	kPromptForExistingFiles				= 2
+};
+
 @interface FileConversionSettingsSheet : NSObject
 {
 	IBOutlet NSWindow				*_sheet;
@@ -37,7 +43,7 @@
 
 - (id)					initWithSettings:(NSMutableDictionary *)settings;
 
-- (void)				showSheet;
+- (NSWindow *)			sheet;
 
 - (IBAction)			ok:(id)sender;
 

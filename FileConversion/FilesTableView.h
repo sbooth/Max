@@ -29,6 +29,10 @@
 
 - (IBAction)	openWithFinder:(id)sender;
 - (IBAction)	revealInFinder:(id)sender;
+
+- (IBAction)	playWithCog:(id)sender;
+- (IBAction)	editWithTag:(id)sender;
+
 - (IBAction)	openWith:(id)sender;
 
 @end

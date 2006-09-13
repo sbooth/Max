@@ -19,26 +19,33 @@
  */
 
 #import "FileConversionSettingsSheet.h"
-#import "FileConversionController.h"
 #import "MissingResourceException.h"
 #import "UtilityFunctions.h"
 
 enum {
-	kAlbumTitleMenuItem				= 1,
-	kAlbumArtistMenuItem			= 2,
-	kAlbumYearMenuItem				= 3,
-	kAlbumGenreMenuItem				= 4,
-	kAlbumComposerMenuItem			= 5,
-	kTrackTitleMenuItem				= 6,
-	kTrackArtistMenuItem			= 7,
-	kTrackYearMenuItem				= 8,
-	kTrackGenreMenuItem				= 9,
-	kTrackComposerMenuItem			= 10,
-	kTrackNumberMenuItemTag			= 11,
-	kTrackTotalMenuItemTag			= 12,
-	kFileFormatMenuItemTag			= 13,
-	kDiscNumberMenuItemTag			= 14,
-	kDiscTotalMenuItemTag			= 15
+	kCurrentDirectoryMenuItemTag		= 1,
+	kChooseDirectoryMenuItemTag			= 2,
+	kSameAsSourceFileMenuItemTag		= 3,
+	
+	kCurrentTempDirectoryMenuItemTag	= 1,
+	kChooseTempDirectoryMenuItemTag		= 2,
+	kDefaultTempDirectoryMenuItemTag	= 3,
+		
+	kAlbumTitleMenuItem					= 1,
+	kAlbumArtistMenuItem				= 2,
+	kAlbumYearMenuItem					= 3,
+	kAlbumGenreMenuItem					= 4,
+	kAlbumComposerMenuItem				= 5,
+	kTrackTitleMenuItem					= 6,
+	kTrackArtistMenuItem				= 7,
+	kTrackYearMenuItem					= 8,
+	kTrackGenreMenuItem					= 9,
+	kTrackComposerMenuItem				= 10,
+	kTrackNumberMenuItemTag				= 11,
+	kTrackTotalMenuItemTag				= 12,
+	kFileFormatMenuItemTag				= 13,
+	kDiscNumberMenuItemTag				= 14,
+	kDiscTotalMenuItemTag				= 15
 };
 
 @interface FileConversionSettingsSheet (Private)
@@ -70,7 +77,8 @@ enum {
 
 - (void) dealloc
 {
-	[_settings release];
+	[_settings release];	_settings = nil;
+	
 	[super dealloc];
 }
 
@@ -88,10 +96,8 @@ enum {
 	[self updateTemporaryDirectoryMenuItemImage];
 	
 	// Select the correct items
-	[_outputDirectoryPopUpButton selectItemAtIndex:-1];
-	[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
-	[_temporaryDirectoryPopUpButton selectItemAtIndex:-1];
-	[_temporaryDirectoryPopUpButton selectItemWithTag:([[_settings objectForKey:@"useCustomTemporaryDirectory"] boolValue] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
+	[_outputDirectoryPopUpButton selectItemWithTag:(nil != [_settings objectForKey:@"outputDirectory"] ? kCurrentDirectoryMenuItemTag : kSameAsSourceFileMenuItemTag)];	
+	[_temporaryDirectoryPopUpButton selectItemWithTag:(nil != [_settings objectForKey:@"temporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
 	
 	// Deselect all items in the File Format Specifier NSPopUpButton
 	[[_formatSpecifierPopUpButton selectedItem] setState:NSOffState];
@@ -99,10 +105,10 @@ enum {
 	[_formatSpecifierPopUpButton synchronizeTitleAndSelectedItem];
 	
 	// Set the value to the most recently-saved pattern
-	patterns = [_settings objectForKey:@"fileNamingPatterns"];
+/*	patterns = [_settings objectForKey:@"fileNamingPatterns"];
 	if(0 < [patterns count]) {
 		[_fileNamingComboBox setStringValue:[patterns objectAtIndex:0]];
-	}
+	}*/
 	
 	// Set up the list of applications for post processing
 	applications = [_settings objectForKey:@"postProcessingApplications"];
@@ -120,10 +126,7 @@ enum {
 		nil]];
 }
 
-- (void) showSheet
-{
-    [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[[FileConversionController sharedController] window] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
-}
+- (NSWindow *)	sheet			{ return [[_sheet retain] autorelease]; }
 
 - (IBAction) ok:(id)sender
 {
@@ -145,13 +148,7 @@ enum {
 	[_settings setValue:applicationArray forKey:@"postProcessingApplications"];
 	
 	// We're finished
-    [[NSApplication sharedApplication] endSheet:_sheet];
-}
-
-- (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    [sheet orderOut:self];
-	[self autorelease];
+    [[NSApplication sharedApplication] endSheet:[self sheet]];
 }
 
 - (IBAction) selectOutputDirectory:(id)sender
@@ -165,7 +162,6 @@ enum {
 	switch([[sender selectedItem] tag]) {
 		case kCurrentDirectoryMenuItemTag:
 			[[NSWorkspace sharedWorkspace] selectFile:[[_settings objectForKey:@"outputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:nil];
-			[_settings setValue:[NSNumber numberWithBool:NO] forKey:@"convertInPlace"];
 			break;
 			
 		case kChooseDirectoryMenuItemTag:
@@ -193,14 +189,16 @@ enum {
 					break;
 					
 				case NSCancelButton:
-					[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];	
+					[self updateOutputDirectoryMenuItemImage];
+					[_outputDirectoryPopUpButton selectItemWithTag:(nil != [_settings objectForKey:@"outputDirectory"] ? kCurrentDirectoryMenuItemTag : kSameAsSourceFileMenuItemTag)];	
 					break;
 			}
 				
 			break;
 			
 		case kSameAsSourceFileMenuItemTag:
-			[_settings setValue:[NSNumber numberWithBool:YES] forKey:@"convertInPlace"];
+			[_settings setValue:nil forKey:@"outputDirectory"];
+			[self updateOutputDirectoryMenuItemImage];
 			break;
 	}
 }
@@ -261,7 +259,6 @@ enum {
 		[patterns removeLastObject];
 	}
 	
-	[_settings setValue:pattern forKey:@"fileNamingPattern"];	
 	[_settings setValue:patterns forKey:@"fileNamingPatterns"];	
 }	
 
@@ -275,16 +272,12 @@ enum {
 	
 	switch([[sender selectedItem] tag]) {
 		case kDefaultTempDirectoryMenuItemTag:
-			[_settings setValue:[NSNumber numberWithBool:NO] forKey:@"useCustomTemporaryDirectory"];
+			[_settings setValue:nil forKey:@"temporaryDirectory"];
+			[self updateTemporaryDirectoryMenuItemImage];
 			break;
 			
 		case kCurrentTempDirectoryMenuItemTag:
-			if([[_settings objectForKey:@"useCustomTemporaryDirectory"] boolValue]) {
-				[[NSWorkspace sharedWorkspace] selectFile:[_settings objectForKey:@"temporaryDirectory"] inFileViewerRootedAtPath:nil];
-			}
-			else {
-				[_settings setValue:[NSNumber numberWithBool:YES] forKey:@"useCustomTemporaryDirectory"]; 
-			}
+			[[NSWorkspace sharedWorkspace] selectFile:[_settings objectForKey:@"temporaryDirectory"] inFileViewerRootedAtPath:nil];
 			break;
 			
 		case kChooseTempDirectoryMenuItemTag:
@@ -304,7 +297,6 @@ enum {
 					
 					for(i = 0; i < count; ++i) {
 						dirname = [filesToOpen objectAtIndex:i];
-						[_settings setValue:[NSNumber numberWithBool:YES] forKey:@"useCustomTemporaryDirectory"]; 
 						[_settings setValue:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"temporaryDirectory"];
 						[self updateTemporaryDirectoryMenuItemImage];
 					}
@@ -313,7 +305,7 @@ enum {
 					break;
 					
 				case NSCancelButton:
-					[_temporaryDirectoryPopUpButton selectItemWithTag:([[_settings objectForKey:@"useCustomTemporaryDirectory"] boolValue] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
+					[_temporaryDirectoryPopUpButton selectItemWithTag:(nil != [_settings objectForKey:@"temporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];
 					break;
 			}	
 			break;
@@ -336,7 +328,7 @@ enum {
 		[menuItem setImage:image];
 	}
 	else {
-		[menuItem setTitle:@"Not Specified"];
+		[menuItem setTitle:NSLocalizedStringFromTable(@"Not Specified", @"FileConversion", @"")];
 		[menuItem setImage:nil];
 	}
 }
@@ -357,7 +349,7 @@ enum {
 		[menuItem setImage:image];
 	}
 	else {
-		[menuItem setTitle:@"Not Specified"];
+		[menuItem setTitle:NSLocalizedStringFromTable(@"Not Specified", @"FileConversion", @"")];
 		[menuItem setImage:nil];
 	}
 }
