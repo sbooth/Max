@@ -527,7 +527,7 @@
 
 			[metadata setPlaylist:playlist];
 			
-			[[RipperController sharedController] ripTracks:selectedTracks metadata:metadata];
+			[[RipperController sharedController] ripTracks:selectedTracks metadata:metadata settings:nil];
 		}
 		// Create one file per track
 		else {			
@@ -810,21 +810,21 @@
 
 #pragma mark Accessors
 
-- (CompactDisc *)	disc								{ return _disc; }
+- (CompactDisc *)	disc								{ return [[_disc retain] autorelease]; }
 - (BOOL)			discInDrive							{ return _discInDrive; }
 - (int)				discID								{ return ([self discInDrive] ? [_disc discID] : _discID); }
 - (BOOL)			freeDBQueryInProgress				{ return _freeDBQueryInProgress; }
 - (BOOL)			freeDBQuerySuccessful				{ return _freeDBQuerySuccessful; }
 
-- (NSString *)		title								{ return _title; }
-- (NSString *)		artist								{ return _artist; }
+- (NSString *)		title								{ return [[_title retain] autorelease]; }
+- (NSString *)		artist								{ return [[_artist retain] autorelease]; }
 - (unsigned)		year								{ return _year; }
-- (NSString *)		genre								{ return _genre; }
-- (NSString *)		composer							{ return _composer; }
-- (NSString *)		comment								{ return _comment; }
+- (NSString *)		genre								{ return [[_genre retain] autorelease]; }
+- (NSString *)		composer							{ return [[_composer retain] autorelease]; }
+- (NSString *)		comment								{ return [[_comment retain] autorelease]; }
 
-- (NSImage *)		albumArt							{ return _albumArt; }
-- (NSDate *)		albumArtDownloadDate				{ return _albumArtDownloadDate; }
+- (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
+- (NSDate *)		albumArtDownloadDate				{ return [[_albumArtDownloadDate retain] autorelease]; }
 - (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
 - (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
 
@@ -832,7 +832,7 @@
 - (unsigned)		discTotal							{ return _discTotal; }
 - (BOOL)			compilation							{ return _compilation; }
 
-- (NSString *)		MCN									{ return _MCN; }
+- (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
 - (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }

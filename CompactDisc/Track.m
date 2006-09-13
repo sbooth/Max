@@ -67,38 +67,6 @@
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
 
-- (id) init
-{
-	if((self = [super init])) {
-
-		_document			= nil;
-		
-		_ripInProgress		= NO;
-		_activeEncoders		= 0;
-		
-		_selected			= NO;
-		
-		_title				= nil;
-		_artist				= nil;
-		_year				= 0;
-		_genre				= nil;
-		_composer			= nil;
-		_comment			= nil;
-		
-		_number				= 0;
-		_firstSector		= 0;
-		_lastSector			= 0;
-		_channels			= 0;
-		_preEmphasis		= NO;
-		_copyPermitted		= NO;
-		_ISRC				= nil;
-		_dataTrack			= NO;
-		
-		return self;
-	}
-	return nil;
-}
-
 - (void) dealloc
 {
 	[_document release];		_document = nil;
@@ -167,7 +135,7 @@
 }
 
 - (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
-- (CompactDiscDocument *)	document			{ return _document; }
+- (CompactDiscDocument *)	document			{ return [[_document retain] autorelease]; }
 - (NSUndoManager *)			undoManager			{ return [[self document] undoManager]; }
 
 - (BOOL)					ripInProgress		{ return _ripInProgress; }
@@ -175,12 +143,12 @@
 
 - (BOOL)					selected			{ return _selected; }
 
-- (NSString *)				title				{ return _title; }
-- (NSString *)				artist				{ return _artist; }
+- (NSString *)				title				{ return [[_title retain] autorelease]; }
+- (NSString *)				artist				{ return [[_artist retain] autorelease]; }
 - (unsigned)				year				{ return _year; }
-- (NSString *)				genre				{ return _genre; }
-- (NSString *)				composer			{ return _composer; }
-- (NSString *)				comment				{ return _comment; }
+- (NSString *)				genre				{ return [[_genre retain] autorelease]; }
+- (NSString *)				composer			{ return [[_composer retain] autorelease]; }
+- (NSString *)				comment				{ return [[_comment retain] autorelease]; }
 
 - (unsigned)				size				{ return (([self lastSector] - [self firstSector]) * kCDSectorSizeCDDA); }
 
@@ -190,7 +158,7 @@
 - (unsigned)				channels			{ return _channels; }
 - (BOOL)					preEmphasis			{ return _preEmphasis; }
 - (BOOL)					copyPermitted		{ return _copyPermitted; }
-- (NSString *)				ISRC				{ return _ISRC; }
+- (NSString *)				ISRC				{ return [[_ISRC retain] autorelease]; }
 - (BOOL)					dataTrack			{ return _dataTrack; }
 
 - (NSColor *) color

@@ -135,9 +135,9 @@
 	[super dealloc];
 }
 
-- (NSString *)		deviceName								{ return _deviceName; }
+- (NSString *)		deviceName								{ return [[_deviceName retain] autorelease]; }
 
-- (NSString *)		MCN										{ return _MCN; }
+- (NSString *)		MCN										{ return [[_MCN retain] autorelease]; }
 
 - (unsigned)		firstSector								{ return _firstSector; }
 - (unsigned)		lastSector								{ return _lastSector; }
