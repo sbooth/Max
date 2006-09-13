@@ -38,9 +38,6 @@
 		_settings		= [[NSMutableDictionary alloc] init];
 		[_settings addEntriesFromDictionary:settings];
 		
-		_searchKey	= nil;
-		_userInfo	= nil;
-
 		if(NO == [NSBundle loadNibNamed:nibName owner:self])  {
 			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@.nib", nibName] forKey:@"filename"]];
@@ -54,19 +51,18 @@
 - (void) dealloc
 {
 	[_settings release];	_settings = nil;
-	[_userInfo release];	_userInfo = nil;
 	[_searchKey release];	_searchKey = nil;
 	
 	[super dealloc];
 }
 
-- (NSDictionary *)	searchKey									{ return _searchKey; }
+- (NSDictionary *)	searchKey									{ return [[_searchKey retain] autorelease]; }
 - (void)			setSearchKey:(NSDictionary *)searchKey		{ [_searchKey release]; _searchKey = [searchKey retain]; }
 
-- (NSDictionary *)	userInfo									{ return _userInfo; }
-- (void)			setUserInfo:(NSDictionary *)userInfo		{ [_userInfo release]; _userInfo = [userInfo retain]; }
+- (NSDictionary *)	settings									{ return [[_settings retain] autorelease]; }
+- (void)			setSettings:(NSDictionary *)settings		{ [_settings release]; _settings = [settings retain]; }
 
-- (void) editSettings
+- (IBAction) editSettings:(id)sender;
 {
     [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }
@@ -75,17 +71,17 @@
 {
 	NSMutableArray			*formats		= nil;
 	NSMutableDictionary		*newFormat		= nil;
-	unsigned				idx				= NSNotFound;
+	unsigned				index			= NSNotFound;
 
 	// Swap out the userInfo object in this format's dictionary with the modified one
 	formats		= [[[NSUserDefaults standardUserDefaults] arrayForKey:@"outputFormats"] mutableCopy];
-	idx			= [formats indexOfObject:[self searchKey]];
+	index		= [formats indexOfObject:[self searchKey]];
 	
-	if(NSNotFound != idx) {
+	if(NSNotFound != index) {
 		newFormat	= [[self searchKey] mutableCopy];
 		
-		[newFormat setObject:_settings forKey:@"userInfo"];
-		[formats replaceObjectAtIndex:idx withObject:newFormat];
+		[newFormat setObject:_settings forKey:@"settings"];
+		[formats replaceObjectAtIndex:index withObject:newFormat];
 		
 		// Save changes
 		[[NSUserDefaults standardUserDefaults] setObject:formats forKey:@"outputFormats"];

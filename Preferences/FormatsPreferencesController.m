@@ -184,9 +184,6 @@
 	for(i = 0; i < [types count]; ++i) {
 		type = [types objectAtIndex:i];
 		
-		[result setObject:[NSNumber numberWithBool:YES] forKey:@"conversionSelected"];
-		[result setObject:[NSNumber numberWithBool:YES] forKey:@"rippingSelected"];
-
 		[result setObject:[type valueForKey:@"name"] forKey:@"name"];
 		[result setObject:[type valueForKey:@"source"] forKey:@"source"];
 		[result setObject:[type valueForKey:@"component"] forKey:@"component"];
@@ -199,7 +196,7 @@
 				customSettings = [NSMutableDictionary dictionary];
 				[customSettings addEntriesFromDictionary:[CoreAudioSettingsSheet defaultSettings]];
 				[customSettings setObject:[type objectForKey:@"fileType"] forKey:@"fileType"];
-				[customSettings setObject:[type objectForKey:@"name"] forKey:@"fileTypeName"];
+//				[customSettings setObject:[type objectForKey:@"name"] forKey:@"fileTypeName"];
 				[customSettings setObject:[type objectForKey:@"extensionsForType"] forKey:@"extensionsForType"];
 				defaultSettings = customSettings;
 				break;
@@ -208,7 +205,7 @@
 				customSettings = [NSMutableDictionary dictionary];
 				[customSettings addEntriesFromDictionary:[LibsndfileSettingsSheet defaultSettings]];
 				[customSettings setObject:[type objectForKey:@"majorFormat"] forKey:@"majorFormat"];
-				[customSettings setObject:[type valueForKey:@"name"] forKey:@"name"];
+//				[customSettings setObject:[type valueForKey:@"name"] forKey:@"name"];
 				[customSettings setObject:[type objectForKey:@"extension"] forKey:@"extension"];
 				defaultSettings = customSettings;
 				break;
@@ -227,8 +224,9 @@
 			default:						defaultSettings = [NSDictionary dictionary];						break;
 		}
 		
-		[result setObject:defaultSettings forKey:@"userInfo"];
+		[result setObject:defaultSettings forKey:@"settings"];
 		
+		// Only allow unique settings
 		if(NO == [[_configuredFormatsController arrangedObjects] containsObject:result]) {
 			[_configuredFormatsController addObject:result];
 			[_configuredFormatsController setSelectedObjects:[NSArray arrayWithObject:result]];
@@ -246,20 +244,17 @@
 
 - (IBAction)		editOutputFormat:(id)sender
 {
-	unsigned				idx						= 0;
 	NSMutableDictionary		*format					= nil;
 	NSMutableDictionary		*settings				= nil;
 	EncoderSettingsSheet	*settingsSheet			= nil;
 	Class					settingsSheetClass		= nil;
-	
-	idx			= [_configuredFormatsController selectionIndex];
-
-	if(NSNotFound == idx) {
+		
+	if(0 == [[_configuredFormatsController selectedObjects] count]) {
 		return;
 	}
 	
-	format		= [[_configuredFormatsController arrangedObjects] objectAtIndex:idx];	
-	settings	= [format objectForKey:@"userInfo"];
+	format		= [[_configuredFormatsController selectedObjects] objectAtIndex:0];	
+	settings	= [format objectForKey:@"settings"];
 	
 	switch([[format objectForKey:@"component"] intValue]) {
 
@@ -282,8 +277,8 @@
 
 	settingsSheet = [[[settingsSheetClass alloc] initWithSettings:settings] autorelease];
 	[settingsSheet setSearchKey:format];
-	[settingsSheet setUserInfo:format];
-	[settingsSheet editSettings];
+//	[settingsSheet setUserInfo:format];
+	[settingsSheet editSettings:self];
 }		
 
 - (unsigned)		countOfAvailableFormats							{ return [_availableFormats count]; }

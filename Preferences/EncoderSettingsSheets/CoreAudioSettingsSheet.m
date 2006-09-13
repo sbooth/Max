@@ -24,17 +24,14 @@
 
 @implementation CoreAudioSettingsSheet
 
-+ (NSDictionary *) defaultSettings
-{
-	return [NSDictionary dictionary];
-}
++ (NSDictionary *)	defaultSettings		{ return [NSDictionary dictionary]; }
 
 - (id) initWithSettings:(NSDictionary *)settings;
 {
 	NSArray					*coreAudioFormats;
 	unsigned				i;
-	NSString				*formatDesc, *subtypeDesc;
 	OSType					fileType;
+	UInt32					formatID, subtypeFormatID;
 	NSDictionary			*format, *subtype;
 	NSDictionary			*objectToSelect			= nil;
 
@@ -43,8 +40,8 @@
 
 		coreAudioFormats	= getCoreAudioWritableTypes();
 		fileType			= [[settings objectForKey:@"fileType"] unsignedLongValue];
-		formatDesc			= [settings objectForKey:@"description"];
-		
+		formatID			= [[settings objectForKey:@"formatID"] unsignedLongValue];
+
 		// Iterate through each CoreAudio file type and find the one matching ours
 		for(i = 0; i < [coreAudioFormats count]; ++i) {
 
@@ -57,13 +54,14 @@
 				[self didChangeValueForKey:@"availableSubtypes"];
 			}
 		}
-		
-		if(nil != formatDesc) {
+
+		// formatID will be zero if this is the first time this settings sheet has been displayed
+		if(0 != formatID) {
 			// Iterate through the data format list and select the one specified in the settings
 			for(i = 0; i < [_availableSubtypes count]; ++i) {
-				subtype		= [_availableSubtypes objectAtIndex:i];
-				subtypeDesc	= [subtype objectForKey:@"description"];
-				if([formatDesc isEqual:subtypeDesc]) {
+				subtype				= [_availableSubtypes objectAtIndex:i];
+				subtypeFormatID		= [[subtype objectForKey:@"formatID"] unsignedLongValue];
+				if(formatID == subtypeFormatID) {
 					objectToSelect = subtype;
 				}
 			}
@@ -103,7 +101,7 @@
 	// The following keys will (should?!) be present in every CoreAudio dataFormat description
 	[_settings setObject:[subtypeInfo objectForKey:@"formatID"] forKey:@"formatID"];
 	[_settings setObject:[subtypeInfo objectForKey:@"formatFlags"] forKey:@"formatFlags"];
-	[_settings setObject:[subtypeInfo objectForKey:@"description"] forKey:@"description"];
+//	[_settings setObject:[subtypeInfo objectForKey:@"description"] forKey:@"description"];
 	
 	// For later, make these customizable
 	[_settings setObject:[subtypeInfo objectForKey:@"bitsPerChannel"] forKey:@"bitsPerChannel"];

@@ -27,7 +27,7 @@
 
 	NSMutableDictionary				*_settings;
 	NSDictionary					*_searchKey;
-	NSDictionary					*_userInfo;
+//	NSDictionary					*_userInfo;
 }
 
 + (NSDictionary *)		defaultSettings;
@@ -37,10 +37,10 @@
 - (NSDictionary *)		searchKey;
 - (void)				setSearchKey:(NSDictionary *)searchKey;
 
-- (NSDictionary *)		userInfo;
-- (void)				setUserInfo:(NSDictionary *)userInfo;
+- (NSDictionary *)		settings;
+- (void)				setSettings:(NSDictionary *)settings;
 
-- (void)				editSettings;
+- (IBAction)			editSettings:(id)sender;
 
 - (IBAction)			ok:(id)sender;
 
