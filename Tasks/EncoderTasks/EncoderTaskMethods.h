@@ -19,25 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "TaskMethods.h"
 
-#import "Task.h"
-#import "AudioMetadata.h"
+@protocol EncoderTaskMethods <TaskMethods>
 
-@interface PCMGeneratingTask : Task
-{
-	NSString				*_outputFilename;
-	AudioMetadata			*_metadata;
-}
-
-- (id)						initWithMetadata:(AudioMetadata *)metadata;
-
-- (void)					run;
-- (void)					stop;
-
-- (NSString *)				outputFilename;
-- (void)					touchOutputFile;
-- (void)					removeOutputFile;
-
-- (AudioMetadata *)			metadata;
+- (NSDictionary *)	encoderSettings;
+- (void)			setEncoderSettings:(NSDictionary *)encoderSettings;
 
 @end

@@ -24,6 +24,8 @@
 
 @interface Task : NSObject <TaskMethods>
 {
+	TaskInfo			*_taskInfo;
+	
 	NSDate				*_startTime;
 	NSDate				*_endTime;
 	
@@ -31,20 +33,27 @@
 	BOOL				_completed;
 	BOOL				_stopped;
 	
-	double				_percentComplete;
+	float				_percentComplete;
 	
 	NSString			*_phase;
 	
 	BOOL				_shouldStop;
 	
-	NSString			*_timeRemaining;
-	
-	NSString			*_inputFormat;
-	NSString			*_outputFormat;
-	
-	NSDictionary		*_userInfo;
-	
+	unsigned			_secondsRemaining;
+		
 	NSException			*_exception;
+	
+	NSString			*_outputFilename;
+	BOOL				_shouldDeleteOutputFile;
 }
+
+- (void)			run;
+- (void)			stop;
+
+- (NSString *)		outputFilename;
+- (void)			setOutputFilename:(NSString *)outputFilename;
+
+- (BOOL)			shouldDeleteOutputFile;
+- (void)			setShouldDeleteOutputFile:(BOOL)shouldDeleteOutputFile;
 
 @end

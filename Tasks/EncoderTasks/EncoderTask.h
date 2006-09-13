@@ -20,69 +20,28 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Encoder.h"
-#import "Track.h"
 #import "Task.h"
-#import "AudioMetadata.h"
-#import "PCMGeneratingTask.h"
+#import "EncoderTaskMethods.h"
+#import "EncoderMethods.h"
 
-@interface EncoderTask : Task
+@interface EncoderTask : Task <EncoderTaskMethods>
 {
 	NSConnection			*_connection;
-	NSString				*_outputDirectory;
-	NSString				*_outputFilename;
-	BOOL					_overwriteExistingFiles;
-	NSDictionary			*_fileNamingFormat;
-	NSDictionary			*_postProcessingOptions;
 	Class					_encoderClass;
 	id <EncoderMethods>		_encoder;
-	NSArray					*_tracks;
-	PCMGeneratingTask		*_task;
-	BOOL					_writeSettingsToComment;
+	NSDictionary			*_encoderSettings;
 }
 
-- (id)				initWithTask:(PCMGeneratingTask *)task;
+- (NSString *)		outputFormatName;
+- (NSString *)		fileExtension;
 
-- (unsigned)		countOfTracks;
-- (Track *)			objectInTracksAtIndex:(unsigned)index;
-
-//- (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)index;
-//- (void) removeObjectFromTracksAtIndex:(unsigned)index;
-
-- (void)			setTracks:(NSArray *)tracks;
-//- (NSArray *)		tracks;
-
-- (void)			run;
-- (void)			stop;
-
-- (NSString *)		outputDirectory;
-- (void)			setOutputDirectory:(NSString *)outputDirectory;
-
-- (BOOL)			overwriteExistingFiles;
-- (void)			setOverwriteExistingFiles:(BOOL)overwriteExistingFiles;
-
-- (NSDictionary *)	postProcessingOptions;
-- (void)			setPostProcessingOptions:(NSDictionary *)postProcessingOptions;
-
-- (NSDictionary *)	fileNamingFormat;
-- (void)			setFileNamingFormat:(NSDictionary *)fileNamingFormat;
-
-- (NSString *)		extension;
-
-- (NSString *)		inputFilename;
-- (NSString *)		outputFilename;
-
-- (NSString *)		outputFormat;
-
-- (void)			removeOutputFile;
-
-- (AudioMetadata *) metadata;
+- (void)			encoderReady:(id)anObject;
 
 - (void)			writeTags;
 
-- (NSString *)		settings;
+@end
 
-- (void)			encoderReady:(id)anObject;
+@interface EncoderTask (CueSheetAdditions)
 
 - (BOOL)			formatLegalForCueSheet;
 - (NSString *)		cueSheetFormatName;

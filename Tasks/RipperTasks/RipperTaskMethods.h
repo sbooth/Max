@@ -19,14 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "TaskMethods.h"
 
-#import "ConverterTask.h"
+@protocol RipperTaskMethods <TaskMethods>
 
-@interface LibsndfileConverterTask : ConverterTask 
-{
-	NSString *_fileFormat;
-}
-
-- (id)			initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
+- (NSString *)		phase;
+- (void)			setPhase:(NSString *)phase;
 
 @end

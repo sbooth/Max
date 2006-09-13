@@ -26,6 +26,7 @@
 #import "IOException.h"
 
 #include <AudioToolbox/AudioFile.h>
+#include <AudioToolbox/AudioFormat.h>
 #include <mp4v2/mp4.h>
 
 #include <paths.h>			// _PATH_TMP
@@ -33,18 +34,23 @@
 
 #define TEMPFILE_PATTERN	"MaxXXXXXXXX"
 
+@interface CoreAudioEncoderTask (Private)
+
+- (AudioFileTypeID)		fileType;
+- (UInt32)				formatID;
+
+@end
+
 @implementation CoreAudioEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
+	if((self = [super init])) {
 		_encoderClass	= [CoreAudioEncoder class];
 		return self;
 	}
 	return nil;
 }
-
-- (AudioFileTypeID)		fileType		{ return [[[self userInfo] valueForKey:@"fileType"] unsignedLongValue]; }
 
 - (NSString *) cueSheetFormatName
 {
@@ -66,26 +72,43 @@
 	}
 }
 
-- (NSString *) outputFormat
+- (NSString *) outputFormatName
 {
-	UInt32	formatID	= [[[self userInfo] valueForKey:@"formatID"] unsignedLongValue];
+	OSStatus						result;
+	UInt32							specifierSize;
+	UInt32							dataSize;
+	AudioFileTypeID					fileType;
+	AudioStreamBasicDescription		asbd;
+	NSString						*fileFormat;
+	NSString						*audioFormat;
+	
+	// Determine the name of the file (container) type
+	fileType				= [self fileType];
+	specifierSize			= sizeof(fileType);
+	dataSize				= sizeof(fileFormat);
+	result					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, specifierSize, &fileType, &dataSize, &fileFormat);
+	
+	NSAssert1(noErr == result, @"AudioFileGetGlobalInfo failed: %@", UTCreateStringForOSType(result));
 
-	// Special case AAC and Apple Lossless, since they are very common and "MPEG4 Audio" is vague
-	if(kAudioFormatMPEG4AAC == formatID) {
-		return NSLocalizedStringFromTable(@"AAC", @"General", @"");
-	}
-	else if(kAudioFormatAppleLossless == formatID) {
-		return NSLocalizedStringFromTable(@"Apple Lossless", @"General", @"");
-	}
-	else {
-		return [[self userInfo] valueForKey:@"fileTypeName"];
-	}
+	// Determine the name of the format
+	bzero(&asbd, sizeof(AudioStreamBasicDescription));
+	
+	asbd.mFormatID			= [self formatID];
+	asbd.mFormatFlags		= [[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue];
+	
+	specifierSize			= sizeof(audioFormat);
+	result					= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &specifierSize, &audioFormat);
+	
+	NSAssert1(noErr == result, @"AudioFormatGetProperty failed: %@", UTCreateStringForOSType(result));
+	
+	return [NSString stringWithFormat:@"%@ (%@)", [fileFormat autorelease], [audioFormat autorelease]];;
 }
 
-- (NSString *) extension
+- (NSString *) fileExtension
 {
-	id extensions = [[self userInfo] valueForKey:@"extensionsForType"];
-	return ([extensions isKindOfClass:[NSArray class]] ? [extensions objectAtIndex:0] : extensions);
+	NSArray		*extensions		= [[self encoderSettings] objectForKey:@"extensionsForType"];
+	
+	return [extensions objectAtIndex:[[[self encoderSettings] objectForKey:@"extensionIndex"] unsignedIntValue]];
 }
 
 - (void) writeTags
@@ -96,8 +119,8 @@
 	NSMutableDictionary		*info;
 	UInt32					size;
 	MP4FileHandle			mp4FileHandle;
-	AudioMetadata			*metadata				= [self metadata];
-	UInt32					formatID				= [[[self userInfo] valueForKey:@"formatID"] unsignedLongValue];
+	AudioMetadata			*metadata				= [[self taskInfo] metadata];
+	UInt32					formatID				= [self formatID];
 	NSString				*bundleVersion			= nil;
 	NSString				*versionString			= nil;
 	unsigned				trackNumber				= 0;
@@ -152,7 +175,7 @@
 			}
 
 			// Genre
-			if(1 == [_tracks count]) {
+			if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count]) {
 				genre = [metadata trackGenre];
 			}
 			if(nil == genre) {
@@ -177,7 +200,7 @@
 			if(nil != trackComment) {
 				comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 			}
-			if(_writeSettingsToComment) {
+			if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
 				comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 			}
 			if(nil != comment) {
@@ -239,12 +262,7 @@
 			// Optimize the atoms so the MP4 files will play on shared iTunes libraries
 			// mp4v2 creates a temp file in ., so use a custom file and manually rename it
 			
-//			if(nil != [[self userInfo] objectForKey:@"temporaryDirectory"]) {
-//				tmpDir = [[[[self userInfo] objectForKey:@"temporaryDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
-//			}
-//			else {
-				tmpDir = _PATH_TMP;
-//			}
+			tmpDir = [[[[self taskInfo] settings] objectForKey:@"temporaryDirectory"] fileSystemRepresentation];
 			
 			validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);
 			
@@ -260,11 +278,11 @@
 			
 			path = mktemp(path);
 
-			if(NO == MP4Optimize([_outputFilename fileSystemRepresentation], NULL, 0)) {
+			if(NO == MP4Optimize([[self outputFilename] fileSystemRepresentation], NULL, 0)) {
 				[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [_outputFilename lastPathComponent]]];
 			}
 
-			rename(path, [_outputFilename fileSystemRepresentation]);
+			rename(path, [[self outputFilename] fileSystemRepresentation]);
 			
 			return;
 		}		
@@ -273,13 +291,13 @@
 	else {
 
 		@try {
-			err = FSPathMakeRef((const UInt8 *)[_outputFilename fileSystemRepresentation], &ref, NULL);
+			err = FSPathMakeRef((const UInt8 *)[[self outputFilename] fileSystemRepresentation], &ref, NULL);
 			if(noErr != err) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_outputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 			}
 			
-			err = AudioFileOpen(&ref, fsRdWrPerm, [[[self userInfo] valueForKey:@"fileType"] intValue], &fileID);
+			err = AudioFileOpen(&ref, fsRdWrPerm, [self fileType], &fileID);
 			if(noErr != err) {
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileOpen"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -319,7 +337,7 @@
 				}
 
 				// Genre
-				if(1 == [_tracks count]) {
+				if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count]) {
 					genre = [metadata trackGenre];
 				}
 				if(nil == genre) {
@@ -344,7 +362,7 @@
 				if(nil != trackComment) {
 					comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 				}
-				if(_writeSettingsToComment) {
+				if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
 					comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 				}
 				if(nil != comment) {
@@ -387,3 +405,11 @@
 }
 
 @end
+
+@implementation CoreAudioEncoderTask (Private)
+
+- (AudioFileTypeID)		fileType		{ return [[[self encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }
+- (UInt32)				formatID		{ return [[[self encoderSettings] objectForKey:@"formatID"] unsignedLongValue]; }
+
+@end
+

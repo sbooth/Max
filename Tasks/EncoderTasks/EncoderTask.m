@@ -19,16 +19,18 @@
  */
 
 #import "EncoderTask.h"
+
 #import "EncoderMethods.h"
 #import "EncoderController.h"
 #import "LogController.h"
-#import "ConverterTask.h"
+
+#import "UtilityFunctions.h"
+
 #import "MallocException.h"
 #import "IOException.h"
 #import "StopException.h"
 #import "FileFormatNotSupportedException.h"
 #import "MissingResourceException.h"
-#import "UtilityFunctions.h"
 
 #include <sys/stat.h>		// stat
 #include <unistd.h>			// mkstemp, unlink
@@ -75,13 +77,12 @@ enum {
 	}
 }
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+/*- (id) initWithTask:(PCMGeneratingTask *)task
 {
 	if((self = [super init])) {
 		_connection					= nil;
 		_encoder					= nil;
 		_task						= [task retain];
-		_outputFilename				= nil;
 		_tracks						= nil;
 		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 	
@@ -89,105 +90,38 @@ enum {
 	}
 	
 	return nil;
-}
+}*/
 
 - (void) dealloc
 {
-	NSEnumerator	*enumerator;
+/*	NSEnumerator	*enumerator;
 	Track			*track;
 
-	if(nil != _tracks) {
-		enumerator = [_tracks objectEnumerator];
+	if(nil != [[self taskInfo] inputTracks]) {
+		enumerator = [[[self taskInfo] inputTracks] objectEnumerator];
 	
 		while((track = [enumerator nextObject])) {
 			if(NO == [track ripInProgress] && NO == [track encodeInProgress]) {
 				[track setSelected:NO];
 			}
 		}
-
-		[_tracks release];		_tracks = nil;
-	}
+	}*/
 	
 	[_connection release];				_connection = nil;
 	[(NSObject *)_encoder release];		_encoder = nil;
 	[_outputFilename release];			_outputFilename = nil;
-	[_task release];					_task = nil;
 	
 	[super dealloc];
 }
 
-- (NSString *)		outputFilename						{ return _outputFilename; }
-- (NSString *)		inputFilename						{ return [_task outputFilename]; }
-- (NSString *)		outputFormat						{ return nil; }
-- (unsigned)		countOfTracks						{ return [_tracks count]; }
-- (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
-- (NSString *)		extension							{ return nil; }
-- (AudioMetadata *) metadata							{ return [_task metadata]; }
 - (void)			writeTags							{}
-- (NSString *)		description							{ return (nil == [_task metadata] ? @"fnord" : [[_task metadata] description]); }
-- (NSString *)		settings							{ return (nil == _encoder ? @"fnord" : [_encoder settings]); }
-- (BOOL)			formatLegalForCueSheet				{ return NO; }
-- (NSString *)		cueSheetFormatName					{ return nil; }
+- (NSString *)		description							{ return [[[self taskInfo] metadata] description]; }
+//- (NSString *)		settings							{ return (nil == _encoder ? nil : [_encoder settings]); }
+- (NSString *)		outputFormatName					{ return nil; }
+- (NSString *)		fileExtension						{ return nil; }
 
-- (NSString *)		outputDirectory						{ return _outputDirectory; }
-- (void)			setOutputDirectory:(NSString *)outputDirectory { [_outputDirectory release]; _outputDirectory = [outputDirectory retain]; }
-
-- (BOOL)			overwriteExistingFiles				{ return _overwriteExistingFiles; }
-- (void)			setOverwriteExistingFiles:(BOOL)overwriteExistingFiles { _overwriteExistingFiles = overwriteExistingFiles; }
-
-- (NSDictionary *)	fileNamingFormat					{ return _fileNamingFormat; }
-- (void)			setFileNamingFormat:(NSDictionary *)fileNamingFormat { [_fileNamingFormat release]; _fileNamingFormat = [fileNamingFormat retain]; }
-
-- (NSDictionary *)	postProcessingOptions				{ return _postProcessingOptions; }
-- (void)			setPostProcessingOptions:(NSDictionary *)postProcessingOptions { [_postProcessingOptions release]; _postProcessingOptions = [postProcessingOptions retain]; }
-
-//- (void)			insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
-//- (void)			removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
-- (void) setTracks:(NSArray *)tracks
-{
-	NSEnumerator	*enumerator;
-	Track			*track;
-
-	[_tracks release];
-	_tracks			= [tracks retain];
-	enumerator		= [_tracks objectEnumerator];
-	
-	while((track = [enumerator nextObject])) {
-		[track encodeStarted];
-	}
-}
-
-- (void) removeOutputFile
-{
-	if(nil != _outputFilename && -1 == unlink([_outputFilename fileSystemRepresentation])) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}	
-}
-
-- (void) touchOutputFile
-{
-	int fd = -1;
-	
-	if(nil != _outputFilename) {
-		@try {
-			// Create the file (don't overwrite)
-			fd = open([_outputFilename fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-			if(-1 == fd) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-		}
-		
-		@finally {
-			// And close it
-			if(-1 != fd && -1 == close(fd)) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-		}
-	}	
-}
+- (NSDictionary *)	encoderSettings						{ return [[_encoderSettings retain] autorelease]; }
+- (void)			setEncoderSettings:(NSDictionary *)encoderSettings 	{ [_encoderSettings release]; _encoderSettings = [encoderSettings retain]; }
 
 - (void) run
 {
@@ -197,17 +131,24 @@ enum {
 	NSPort					*port2				= [NSPort port];
 	NSArray					*portArray			= nil;
 	
-	// Determine whether to convert in place
-	if([_task isKindOfClass:[ConverterTask class]] && nil == [self outputDirectory]) {
-		basename = [[(ConverterTask *)_task inputFilename] stringByDeletingPathExtension];
+	// Encode in place?
+	if(nil == [[self taskInfo] inputTracks] && nil == [[[self taskInfo] settings] objectForKey:@"outputDirectory"]) {
+		basename = [[[[self taskInfo] inputFilenames] objectAtIndex:0] stringByDeletingPathExtension];
 	}
-	// Use the filename if no metadata was found
-	else if([_task isKindOfClass:[ConverterTask class]] && [[_task metadata] isEmpty]) {
-		basename = [NSString stringWithFormat:@"%@/%@", [[self outputDirectory] stringByExpandingTildeInPath], [[[(ConverterTask *)_task inputFilename] lastPathComponent] stringByDeletingPathExtension]];
+	// Use the input filename if we're not encoding in place and no metadata was found
+	else if(nil == [[self taskInfo] inputTracks] && [[[self taskInfo] metadata] isEmpty]) {
+		basename = [NSString stringWithFormat:@"%@/%@",
+			[[[[self taskInfo] settings] objectForKey:@"outputDirectory"] stringByExpandingTildeInPath],
+			[[[[[self taskInfo] inputFilenames] objectAtIndex:0] lastPathComponent] stringByDeletingPathExtension] ];
+
+		// Create the directory hierarchy if required
+		createDirectoryStructure(basename);
 	}
 	// Use the standard file naming format
-	else if(nil == [self fileNamingFormat]) {
-		basename = [NSString stringWithFormat:@"%@/%@", [[self outputDirectory] stringByExpandingTildeInPath], [self generateStandardBasenameUsingMetadata:[_task metadata]]];
+	else if(nil == [[[self taskInfo] settings] objectForKey:@"fileNamingFormat"]) {
+		basename = [NSString stringWithFormat:@"%@/%@",
+			[[[[self taskInfo] settings] objectForKey:@"outputDirectory"] stringByExpandingTildeInPath],
+			[self generateStandardBasenameUsingMetadata:[[self taskInfo] metadata]] ];
 
 		// Create the directory hierarchy if required
 		createDirectoryStructure(basename);
@@ -215,15 +156,17 @@ enum {
 	// Use a custom file naming format
 	else {
 		// Set up the additional key/value pairs to be substituted
-		[substitutions setObject:[self outputFormat] forKey:@"fileFormat"];
-		basename = [NSString stringWithFormat:@"%@/%@", [[self outputDirectory] stringByExpandingTildeInPath], [self generateCustomBasenameUsingMetadata:[_task metadata] withSubstitutions:substitutions]];
+		[substitutions setObject:[self outputFormatName] forKey:@"fileFormat"];
+		basename = [NSString stringWithFormat:@"%@/%@",
+			[[[[self taskInfo] settings] objectForKey:@"outputDirectory"] stringByExpandingTildeInPath],
+			[self generateCustomBasenameUsingMetadata:[[self taskInfo] metadata] withSubstitutions:substitutions] ];
 		
 		// Create the directory hierarchy if required
 		createDirectoryStructure(basename);
 	}
 	
 	// Save album art if desired
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveAlbumArtToFile"] && nil != [[_task metadata] albumArt]) {
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveAlbumArtToFile"] && nil != [[[self taskInfo] metadata] albumArt]) {
 		NSBitmapImageFileType	fileType;
 		NSString				*extension, *namingScheme;
 		NSData					*bitmapData;
@@ -244,8 +187,8 @@ enum {
 			namingScheme = @"cover";
 		}
 		
-		bitmapData			= getBitmapDataForImage([[_task metadata] albumArt], fileType);
-		bitmapBasename		= [[basename stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[_task metadata] replaceKeywordsInString:makeStringSafeForFilename(namingScheme)]];
+		bitmapData			= getBitmapDataForImage([[[self taskInfo] metadata] albumArt], fileType);
+		bitmapBasename		= [[basename stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[[self taskInfo] metadata] replaceKeywordsInString:makeStringSafeForFilename(namingScheme)]];
 		//bitmapFilename		= generateUniqueFilename(bitmapBasename, extension);
 		bitmapFilename		= [bitmapBasename stringByAppendingPathExtension:extension];
 
@@ -255,20 +198,16 @@ enum {
 	}
 	
 	// Check if output file exists
-	if([self overwriteExistingFiles] && [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self extension]]]) {
-		NSString		*filename		= [NSString stringWithFormat:@"%@.%@", basename, [self extension]];
-		struct stat		sourceStat;
-		
-		// Delete output file if it exists
-		if(0 == stat([filename fileSystemRepresentation], &sourceStat) && -1 == unlink([filename fileSystemRepresentation])) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}	
-		
+	if([[[self taskInfo] settings] objectForKey:@"overwriteExistingFiles"] && [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]]]) {
+		NSString		*filename		= [NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]];
+		BOOL			result			= [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
+		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
 	}
-			
-	// Generate a unique filename and touch the file
-	_outputFilename = [generateUniqueFilename(basename, [self extension]) retain];
+
+	// TODO: Prompt whether to overwite
+
+	// Otherwise, generate a unique filename and touch the output file
+	[self setOutputFilename:generateUniqueFilename(basename, [self fileExtension])];
 	[self touchOutputFile];
 	
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
@@ -276,7 +215,7 @@ enum {
 	
 	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
-	[super setStarted];
+	[super setStarted:YES];
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_encoderClass withObject:portArray];
 }
 
@@ -287,40 +226,38 @@ enum {
 	[anObject encodeToFile:[self outputFilename]];
 }
 
-- (void) setStarted
+- (void) setStarted:(BOOL)started
 {
-	[super setStarted];
+	[super setStarted:YES];
 	[[EncoderController sharedController] encoderTaskDidStart:self]; 
 }
 
-- (void) setStopped 
+- (void) setStopped:(BOOL)stopped
 {
-	NSEnumerator	*enumerator;
-	Track			*track;
-
-	[super setStopped]; 
+	[super setStopped:YES]; 
 	
 	[_connection invalidate];
 	[_connection release];
 	_connection = nil;
 
-	if(nil != _tracks) {
-		enumerator = [_tracks objectEnumerator];			
-		while((track = [enumerator nextObject])) {
-			[track encodeCompleted];
+	// Mark tracks as complete
+	if(nil != [[self taskInfo] inputTracks]) {
+		NSArray			*tracks		= [[self taskInfo] inputTracks];
+		unsigned		i;
+		
+		for(i = 0; i < [tracks count]; ++i) {
+			[[tracks objectAtIndex:i] encodeCompleted];
 		}
 	}
 	
 	[[EncoderController sharedController] encoderTaskDidStop:self]; 
 }
 
-- (void) setCompleted 
+- (void) setCompleted:(BOOL)completed
 {
-	NSEnumerator	*enumerator;
-	Track			*track;
-	
+	// Tag file, if we have metadata
 	@try {
-		if(nil != [_task metadata]) {
+		if(nil != [[self taskInfo] metadata]) {
 			[self writeTags];
 		}
 	}
@@ -335,22 +272,26 @@ enum {
 	}
 	
 	@try {
-		[super setCompleted];
+		[super setCompleted:YES];
 		
 		[_connection invalidate];
 		[_connection release];
 		_connection = nil;
 		
 		// Delete input file if requested
-		if([_task isKindOfClass:[ConverterTask class]] && [[[self userInfo] objectForKey:@"deleteSourceFiles"] boolValue]) {
-			if(-1 == unlink([[(ConverterTask *)_task inputFilename] fileSystemRepresentation])) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the input file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}	
+		if(nil == [[self taskInfo] inputTracks] && [[[[self taskInfo] settings] objectForKey:@"deleteSourceFiles"] boolValue]) {
+			NSArray			*filenames		= [[self taskInfo] inputFilenames];
+			unsigned		i;
+			BOOL			result;
+			
+			for(i = 0; i < [filenames count]; ++i) {
+				result = [[NSFileManager defaultManager] removeFileAtPath:[filenames objectAtIndex:i] handler:nil];
+				NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the input file.", @"Exceptions", @""));
+			}
 		}
 
 		// Generate cue sheet
-		if(nil != _tracks && [[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"generateCueSheet"]) {
+		if(nil != [[self taskInfo] inputTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"generateCueSheet"]) {
 			if([self formatLegalForCueSheet]) {
 				[self generateCueSheet];
 			}
@@ -360,10 +301,13 @@ enum {
 			}*/
 		}
 
-		if(nil != _tracks) {
-			enumerator = [_tracks objectEnumerator];			
-			while((track = [enumerator nextObject])) {
-				[track encodeCompleted];
+		// Mark tracks as complete
+		if(nil != [[self taskInfo] inputTracks]) {
+			NSArray			*tracks		= [[self taskInfo] inputTracks];
+			unsigned		i;
+			
+			for(i = 0; i < [tracks count]; ++i) {
+				[[tracks objectAtIndex:i] encodeCompleted];
 			}
 		}
 			
@@ -383,10 +327,10 @@ enum {
 - (void) stop
 {
 	if([self started] && NO == [self stopped]) {
-		[self setShouldStop];
+		[self setShouldStop:YES];
 	}
 	else {
-		[self setStopped];
+		[self setStopped:YES];
 	}
 }
 
@@ -404,6 +348,13 @@ enum {
 	[alert runModal];
 }
 
+@end
+
+@implementation EncoderTask (CueSheetAdditions)
+
+- (BOOL)			formatLegalForCueSheet				{ return NO; }
+- (NSString *)		cueSheetFormatName					{ return nil; }
+
 - (void) generateCueSheet
 {
 	NSString		*cueSheetFilename		= nil;
@@ -418,7 +369,7 @@ enum {
 	unsigned		s						= 0;
 	unsigned		f						= 0;
 	
-	if(nil == _tracks) {
+	if(nil == [[self taskInfo] inputTracks]) {
 		return;
 	}
 	
@@ -443,7 +394,7 @@ enum {
 		}
 		
 		// TITLE
-		temp	= [NSString stringWithFormat:@"TITLE \"%@\"\n", [[[_tracks objectAtIndex:0] document] title]];
+		temp	= [NSString stringWithFormat:@"TITLE \"%@\"\n", [[[[[self taskInfo] inputTracks] objectAtIndex:0] document] title]];
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
@@ -452,7 +403,7 @@ enum {
 		}
 
 		// PERFORMER
-		temp	= [NSString stringWithFormat:@"PERFORMER \"%@\"\n", [[[_tracks objectAtIndex:0] document] artist]];
+		temp	= [NSString stringWithFormat:@"PERFORMER \"%@\"\n", [[[[[self taskInfo] inputTracks] objectAtIndex:0] document] artist]];
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
@@ -461,7 +412,7 @@ enum {
 		}
 
 		// FILE
-		temp	= [NSString stringWithFormat:@"FILE \"%@\" %@\n", [_outputFilename lastPathComponent], [self cueSheetFormatName]];
+		temp	= [NSString stringWithFormat:@"FILE \"%@\" %@\n", [[self outputFilename] lastPathComponent], [self cueSheetFormatName]];
 		buf		= [temp fileSystemRepresentation];
 		bytesWritten = write(fd, buf, strlen(buf));
 		if(-1 == bytesWritten) {
@@ -469,8 +420,8 @@ enum {
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		for(i = 0; i < [_tracks count]; ++i) {
-			currentTrack = [_tracks objectAtIndex:i];
+		for(i = 0; i < [[[self taskInfo] inputTracks] count]; ++i) {
+			currentTrack = [[[self taskInfo] inputTracks] objectAtIndex:i];
 
 			// TRACK xx
 			temp	= [NSString stringWithFormat:@"  TRACK %.02u AUDIO\n", [currentTrack number]];
@@ -521,13 +472,13 @@ enum {
 			
 			// Update times
 			f += [currentTrack frame];
-			while(75 < f) {
+			while(75 <= f) {
 				f /= 75;
 				++s;
 			}
 			
 			s += [currentTrack second];
-			while(60 < s) {
+			while(60 <= s) {
 				s /= 60;
 				++m;
 			}
@@ -546,11 +497,25 @@ enum {
 	}
 }
 
+@end
+
+@implementation EncoderTask (Private)
+
+- (void) touchOutputFile
+{
+	NSNumber		*permissions	= [NSNumber numberWithUnsignedLong:S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH];
+	NSDictionary	*attributes		= [NSDictionary dictionaryWithObject:permissions forKey:NSFilePosixPermissions];	
+	BOOL			result			= [[NSFileManager defaultManager] createFileAtPath:[self outputFilename] contents:nil attributes:attributes];
+	NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));	
+//		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
+//									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+}
+
 - (NSString *) generateCustomBasenameUsingMetadata:(AudioMetadata *)metadata withSubstitutions:(NSDictionary *)substitutions
 {
 	NSString			*basename			= nil;
 	NSMutableString		*customPath			= [NSMutableString stringWithCapacity:100];
-	NSString			*customNamingScheme = [[self fileNamingFormat] objectForKey:@"fileNamingFormat"];
+	NSString			*customNamingScheme = [[[[self taskInfo] settings] objectForKey:@"fileNamingFormat"] objectForKey:@"formatString"];
 	
 	// Get the elements needed to build the pathname
 	unsigned			discNumber			= [metadata discNumber];
@@ -570,7 +535,7 @@ enum {
 	NSString			*trackComment		= [metadata trackComment];
 	
 	// Fallback to disc if specified in preferences
-	if([[[self fileNamingFormat] objectForKey:@"useFallback"] boolValue]) {
+	if([[[[[self taskInfo] settings] objectForKey:@"fileNamingFormat"] objectForKey:@"useNamingFallback"] boolValue]) {
 		if(nil == trackArtist) {
 			trackArtist = albumArtist;
 		}
@@ -647,7 +612,7 @@ enum {
 		[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
 	}
 	else {
-		if([[[self fileNamingFormat] objectForKey:@"useTwoDigitTrackNumbers"] boolValue]) {
+		if([[[[[self taskInfo] settings] objectForKey:@"fileNamingFormat"] objectForKey:@"useTwoDigitTrackNumbers"] boolValue]) {
 			[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[NSString stringWithFormat:@"%02u", trackNumber] options:nil range:NSMakeRange(0, [customPath length])];
 		}
 		else {
@@ -708,7 +673,7 @@ enum {
 
 - (NSString *) generateStandardBasenameUsingMetadata:(AudioMetadata *)metadata
 {
-	NSString	*basename	= nil;;
+	NSString	*basename	= nil;
 	
 	// Use standard iTunes-style naming for compilations: "Compilations/Album/DiscNumber-TrackNumber TrackTitle.mp3"
 	if([metadata compilation]) {

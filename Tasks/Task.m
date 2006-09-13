@@ -20,99 +20,95 @@
 
 #import "Task.h"
 
+@interface Task (Private)
+- (void)		deleteOutputFile;
+@end
+
 @implementation Task
 
-- (id) init
++ (void) initialize
 {
-	if((self = [super init])) {
-		
-		_startTime			= nil;
-		_endTime			= nil;
-		
-		_started			= NO;
-		_completed			= NO;
-		_stopped			= NO;
-		
-		_shouldStop			= NO;
-		
-		_percentComplete	= 0.0;
-		
-		_phase				= nil;
-
-		_timeRemaining		= nil;
-		
-		_inputFormat		= nil;
-		_outputFormat		= nil;
-		
-		_userInfo			= nil;
-		
-		_exception			= nil;
-		
-		return self;
-	}
-	return nil;
+	[self exposeBinding:@"startTime"];
+	[self exposeBinding:@"endTime"];
+	[self exposeBinding:@"percentComplete"];
+	[self exposeBinding:@"secondsRemaining"];
 }
 
 - (void) dealloc
 {
-	[_startTime release];
-	[_endTime release];
-	[_phase release];
-	[_timeRemaining release];
-	[_inputFormat release];
-	[_outputFormat release];
-	[_userInfo release];
-	[_exception release];
+	if([self shouldDeleteOutputFile]) {
+		[self deleteOutputFile];
+	}
+
+	[_taskInfo release];		_taskInfo = nil;
+	[_startTime release];		_startTime = nil;
+	[_endTime release];			_endTime = nil;
+	[_phase release];			_phase = nil;
+	[_exception release];		_exception = nil;
+	[_outputFilename release];	_outputFilename = nil;
 	
 	[super dealloc];
 }
 
-- (NSDate *)		startTime									{ return _startTime; }
+#pragma mark TaskMethods method implementations
+
+- (TaskInfo *)		taskInfo									{ return [[_taskInfo retain] autorelease]; }
+- (void)			setTaskInfo:(TaskInfo *)taskInfo			{ [_taskInfo release]; _taskInfo = [taskInfo retain]; }
+
+- (NSDate *)		startTime									{ return [[_startTime retain] autorelease]; }
 - (void)			setStartTime:(NSDate *)startTime			{ [_startTime release]; _startTime = [startTime retain]; }
 
-- (NSDate *)		endTime										{ return _endTime; }
+- (NSDate *)		endTime										{ return [[_endTime retain] autorelease]; }
 - (void)			setEndTime:(NSDate *)endTime				{ [_endTime release]; _endTime = [endTime retain]; }
 
 - (BOOL)			started										{ return _started; }
-- (void)			setStarted									{ [self setPercentComplete:0.0]; [self setStarted:YES]; }
 - (void)			setStarted:(BOOL)started					{ _started = started; }
 
 - (BOOL)			completed									{ return _completed; }
-- (void)			setCompleted								{ [self setPercentComplete:100.0]; [self setCompleted:YES]; }
 - (void)			setCompleted:(BOOL)completed				{ _completed = completed; }
 
 - (BOOL)			stopped										{ return _stopped; }
-- (void)			setStopped									{ [self setStopped:YES]; }
-- (void)			setStopped:(BOOL)stopped					{ _stopped  = stopped; }
+- (void)			setStopped:(BOOL)stopped					{ _stopped = stopped; }
 
-- (double)			percentComplete								{ return _percentComplete; }
-- (void)			setPercentComplete:(double)percentComplete	{ _percentComplete = percentComplete; }
-
-- (NSString *)		phase										{ return _phase; }
-- (void)			setPhase:(NSString *)phase					{ [_phase release]; _phase = [phase retain]; }
+- (float)			percentComplete								{ return _percentComplete; }
+- (void)			setPercentComplete:(float)percentComplete	{ _percentComplete = percentComplete; }
 
 - (BOOL)			shouldStop									{ return _shouldStop; }
-- (void)			setShouldStop								{ _shouldStop = YES; }
+- (void)			setShouldStop:(BOOL)shouldStop				{ _shouldStop = shouldStop; }
 
-- (NSString *)		timeRemaining								{ return _timeRemaining; }
-- (void)			setTimeRemaining:(NSString *)timeRemaining	{ [_timeRemaining release]; _timeRemaining = [timeRemaining retain]; }
+- (unsigned)		secondsRemaining							{ return _secondsRemaining; }
+- (void)			setSecondsRemaining:(unsigned)secondsRemaining { _secondsRemaining = secondsRemaining; }
 
-- (NSString *)		inputFormat									{ return _inputFormat; }
-- (void)			setInputFormat:(NSString *)inputFormat		{ [_inputFormat release]; _inputFormat = [inputFormat retain]; }
-
-- (NSString *)		outputFormat								{ return _outputFormat; }
-- (void)			setOutputFormat:(NSString *)outputFormat	{ [_outputFormat release]; _outputFormat = [outputFormat retain]; }
-
-- (NSDictionary *)	userInfo									{ return _userInfo; }
-- (void)			setUserInfo:(NSDictionary *)userInfo		{ [_userInfo release]; _userInfo = [userInfo retain]; }
-
-- (NSException *)	exception									{ return _exception; }
+- (NSException *)	exception									{ return [[_exception retain] autorelease]; }
 - (void)			setException:(NSException *)exception		{ [_exception release]; _exception = [exception retain]; }
 
-- (void)			updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining
+- (void)			updateProgress:(float)percentComplete secondsRemaining:(unsigned)secondsRemaining
 {
 	[self setPercentComplete:percentComplete];
-	[self setTimeRemaining:timeRemaining];
+	[self setSecondsRemaining:secondsRemaining];
+}
+
+#pragma mark Task methods
+
+- (void)			run											{}
+- (void)			stop										{}
+
+- (NSString *)		outputFilename								{ return [[_outputFilename retain] autorelease];}
+- (void)			setOutputFilename:(NSString *)outputFilename { [_outputFilename release]; _outputFilename = [outputFilename retain]; }
+
+- (BOOL)			shouldDeleteOutputFile						{ return _shouldDeleteOutputFile; }
+- (void)			setShouldDeleteOutputFile:(BOOL)shouldDeleteOutputFile { _shouldDeleteOutputFile = shouldDeleteOutputFile; }
+
+@end
+
+@implementation Task (Private)
+
+- (void) deleteOutputFile
+{
+	if([[NSFileManager defaultManager] fileExistsAtPath:[self outputFilename]]) {
+		BOOL			result			= [[NSFileManager defaultManager] removeFileAtPath:[self outputFilename] handler:nil];
+		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
+	}
 }
 
 @end

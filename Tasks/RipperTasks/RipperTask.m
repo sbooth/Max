@@ -30,22 +30,20 @@
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
 
-- (id) initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
+- (id) initWithTracks:(NSArray *)tracks
 {
 	NSEnumerator		*enumerator;
 	Track				*track;
 	
-	if(0 == [tracks count]) {
-		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"Empty array passed to RipperTask::initWithTracks." userInfo:nil];
-	}
+	NSParameterAssert(0 != [tracks count]);
 	
-	if((self = [super initWithMetadata:metadata])) {
+	if((self = [super init])) {
 		
 		_connection		= nil;
 		
 		_tracks			= [tracks retain];
 		_deviceName		= [[[[_tracks objectAtIndex:0] document] disc] deviceName];
-		_sectors		= [NSMutableArray arrayWithCapacity:[tracks count]];
+		_sectors		= [[NSMutableArray alloc] initWithCapacity:[tracks count]];
 		enumerator		= [_tracks objectEnumerator];
 		
 		while((track = [enumerator nextObject])) {
@@ -58,8 +56,6 @@
 			[track setRipInProgress:YES];
 			[_sectors addObject:[SectorRange rangeWithFirstSector:[track firstSector] lastSector:[track lastSector]]];
 		}
-		
-		[_sectors retain];
 		
 		return self;
 	}
@@ -75,10 +71,13 @@
 	[super dealloc];
 }
 
-- (NSArray *)			sectors								{ return _sectors; }
-- (NSString *)			deviceName							{ return _deviceName; }
-- (unsigned)			countOfTracks						{ return [_tracks count]; }
-- (Track *)				objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
+- (NSArray *)			sectors									{ return [[_sectors retain] autorelease]; }
+- (NSString *)			deviceName								{ return [[_deviceName retain] autorelease]; }
+- (unsigned)			countOfTracks							{ return [_tracks count]; }
+- (Track *)				objectInTracksAtIndex:(unsigned)index	{ return [_tracks objectAtIndex:index]; }
+
+- (NSString *)		phase										{ return [[_phase retain] autorelease]; }
+- (void)			setPhase:(NSString *)phase					{ [_phase release]; _phase = [phase retain]; }
 
 - (void) run
 {

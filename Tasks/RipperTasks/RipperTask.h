@@ -20,10 +20,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "PCMGeneratingTask.h"
+#import "Task.h"
+#import "RipperTaskMethods.h"
 #import "Track.h"
 
-@interface RipperTask : PCMGeneratingTask
+@interface RipperTask : Task <RipperTaskMethods>
 {
 	NSConnection			*_connection;
 	Class					_ripperClass;
@@ -32,7 +33,7 @@
 	NSString				*_deviceName;
 }
 
-- (id)				initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
+- (id)				initWithTracks:(NSArray *)tracks;
 
 - (NSArray *)		sectors;
 - (NSString *)		deviceName;

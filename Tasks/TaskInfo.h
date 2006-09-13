@@ -19,13 +19,29 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "AudioMetadata.h"
 
-#import "ConverterTask.h"
-
-@interface SpeexConverterTask : ConverterTask 
+@interface TaskInfo : NSObject <NSCopying>
 {
+	NSDictionary		*_settings;				// Settings applicable to the entire task
+	AudioMetadata		*_metadata;				// Metadata for the task
+	
+	NSArray				*_inputFilenames;		// Input filename(s) for the task
+	NSArray				*_inputTracks;			// For rips, the Track(s) that were ripped
 }
 
-- (id)			initWithInputFile:(NSString *)inputFilename metadata:(AudioMetadata *)metadata;
++ (TaskInfo *)				taskInfoWithSettings:(NSDictionary *)settings metadata:(AudioMetadata *)metadata;
+
+- (NSDictionary *)			settings;
+- (void)					setSettings:(NSDictionary *)settings;
+
+- (AudioMetadata *)			metadata;
+- (void)					setMetadata:(AudioMetadata *)metadata;
+
+- (NSArray *)				inputFilenames;
+- (void)					setInputFilenames:(NSArray *)inputFilenames;
+
+- (NSArray *)				inputTracks;
+- (void)					setInputTracks:(NSArray *)inputTracks;
 
 @end

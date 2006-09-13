@@ -19,11 +19,16 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "TaskInfo.h"
 
 // The number of iterations a task will run between calls to its delegate
 #define MAX_DO_POLL_FREQUENCY 300
 
+// The protocol exposed to Encoders/Rippers running in separate threads
 @protocol TaskMethods
+
+- (TaskInfo *)		taskInfo;
+- (void)			setTaskInfo:(TaskInfo *)taskInfo;
 
 - (NSDate *)		startTime;
 - (void)			setStartTime:(NSDate *)startTime;
@@ -32,39 +37,30 @@
 - (void)			setEndTime:(NSDate *)endTime;
 
 - (BOOL)			started;
-- (void)			setStarted;
 - (void)			setStarted:(BOOL)started;
 
 - (BOOL)			completed;
-- (void)			setCompleted;
 - (void)			setCompleted:(BOOL)completed;
 
 - (BOOL)			stopped;
-- (void)			setStopped;
 - (void)			setStopped:(BOOL)stopped;
 
-- (double)			percentComplete;
-- (void)			setPercentComplete:(double)percentComplete;
-
-- (NSString *)		phase;
-- (void)			setPhase:(NSString *)phase;
+- (float)			percentComplete;
+- (void)			setPercentComplete:(float)percentComplete;
 
 - (BOOL)			shouldStop;
-- (void)			setShouldStop;
+- (void)			setShouldStop:(BOOL)shouldStop;
 
-- (NSString *)		timeRemaining;
-- (void)			setTimeRemaining:(NSString *)timeRemaining;
+- (unsigned)		secondsRemaining;
+- (void)			setSecondsRemaining:(unsigned)secondsRemaining;
 
-- (void)			updateProgress:(double)percentComplete timeRemaining:(NSString *)timeRemaining;
+- (void)			updateProgress:(float)percentComplete secondsRemaining:(unsigned)secondsRemaining;
 
-- (NSString *)		inputFormat;
-- (void)			setInputFormat:(NSString *)inputFormat;
+//- (NSString *)		inputFormat;
+//- (void)			setInputFormat:(NSString *)inputFormat;
 
-- (NSString *)		outputFormat;
-- (void)			setOutputFormat:(NSString *)outputFormat;
-
-- (NSDictionary *)	userInfo;
-- (void)			setUserInfo:(NSDictionary *)userInfo;
+//- (NSString *)		outputFormat;
+//- (void)			setOutputFormat:(NSString *)outputFormat;
 
 - (NSException *)	exception;
 - (void)			setException:(NSException *)exception;
