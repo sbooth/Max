@@ -1329,26 +1329,27 @@
 - (NSString *) description
 {
 	if([self compilation]) {
-		NSString	*artist		= [self trackArtist];
+		NSString	*artist		= (nil != [self trackArtist] ? [self trackArtist] : [self albumArtist]);
 		NSString	*title		= [self trackTitle];
 		
-		if(nil == artist) {
-			artist = [self albumArtist];
-			if(nil == artist) {
-				artist = NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"");
-			}
+		if(nil != artist && nil != title) {
+			return [NSString stringWithFormat:@"%@ - %@", artist, title];			
 		}
-		if(nil == title) {
-			title = NSLocalizedStringFromTable(@"Unknown Title", @"CompactDisc", @"");
+		else if(nil != artist) {
+			return [[artist retain] autorelease];
 		}
-		
-		return [NSString stringWithFormat:@"%@ - %@", artist, title];			
+		else if(nil != title) {
+			return [[title retain] autorelease];
+		}
+		else {
+			return nil;
+		}
 	}
 	else if(nil != [self trackTitle]) {
-		return [NSString stringWithFormat:@"%@", [self trackTitle]];
+		return [self trackTitle];
 	}
 	else {
-		return NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"");
+		return nil;
 	}
 }
 
@@ -1383,20 +1384,20 @@
 
 - (unsigned)	trackNumber					{ return _trackNumber; }
 - (unsigned)	trackTotal					{ return _trackTotal; }
-- (NSString *)	trackTitle					{ return _trackTitle; }
-- (NSString *)	trackArtist					{ return _trackArtist; }
-- (NSString	*)	trackComposer				{ return _trackComposer; }
+- (NSString *)	trackTitle					{ return [[_trackTitle retain] autorelease]; }
+- (NSString *)	trackArtist					{ return [[_trackArtist retain] autorelease]; }
+- (NSString	*)	trackComposer				{ return [[_trackComposer retain] autorelease]; }
 - (unsigned)	trackYear					{ return _trackYear; }
-- (NSString	*)	trackGenre					{ return _trackGenre; }
-- (NSString	*)	trackComment				{ return _trackComment; }
+- (NSString	*)	trackGenre					{ return [[_trackGenre retain] autorelease]; }
+- (NSString	*)	trackComment				{ return [[_trackComment retain] autorelease]; }
 
 - (unsigned)	albumTrackCount				{ return [self trackTotal]; }
-- (NSString	*)	albumTitle					{ return _albumTitle; }
-- (NSString	*)	albumArtist					{ return _albumArtist; }
-- (NSString	*)	albumComposer				{ return _albumComposer; }
+- (NSString	*)	albumTitle					{ return [[_albumTitle retain] autorelease]; }
+- (NSString	*)	albumArtist					{ return [[_albumArtist retain] autorelease]; }
+- (NSString	*)	albumComposer				{ return [[_albumComposer retain] autorelease]; }
 - (unsigned)	albumYear					{ return _albumYear; }
-- (NSString	*)	albumGenre					{ return _albumGenre; }
-- (NSString	*)	albumComment				{ return _albumComment; }
+- (NSString	*)	albumGenre					{ return [[_albumGenre retain] autorelease]; }
+- (NSString	*)	albumComment				{ return [[_albumComment retain] autorelease]; }
 
 - (BOOL)		compilation					{ return _compilation; }
 - (unsigned)	discNumber					{ return _discNumber; }
@@ -1404,12 +1405,12 @@
 
 - (unsigned)	length						{ return _length; }
 
-- (NSString *)	MCN							{ return _MCN; }
-- (NSString *)	ISRC						{ return _ISRC; }
+- (NSString *)	MCN							{ return [[_MCN retain] autorelease]; }
+- (NSString *)	ISRC						{ return [[_ISRC retain] autorelease]; }
 
-- (NSImage *)	albumArt					{ return _albumArt; }
+- (NSImage *)	albumArt					{ return [[_albumArt retain] autorelease]; }
 
-- (NSString *)	playlist					{ return _playlist; }
+- (NSString *)	playlist					{ return [[_playlist retain] autorelease]; }
 
 #pragma mark Mutators
 
