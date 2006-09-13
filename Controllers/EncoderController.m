@@ -20,7 +20,6 @@
 
 #import "EncoderController.h"
 #import "RipperTask.h"
-#import "PCMGeneratingTask.h"
 #import "MPEGEncoderTask.h"
 #import "FLACEncoderTask.h"
 #import "OggFLACEncoderTask.h"
@@ -32,7 +31,6 @@
 #import "WavPackEncoderTask.h"
 #import "LogController.h"
 #import "RipperController.h"
-#import "ConverterController.h"
 #import "IOException.h"
 #import "MissingResourceException.h"
 
@@ -47,13 +45,8 @@
 
 static EncoderController *sharedController = nil;
 
-@interface ConverterController (Private)
-- (void)	spawnThreads;
-@end
-
 @interface EncoderController (Private)
-- (void)	updateFreeSpace:(NSTimer *)theTimer;
-- (void)	runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task userInfo:(NSDictionary *)userInfo;
+- (void)	runEncoder:(Class)encoderClass taskInfo:(TaskInfo *)taskInfo encoderSettings:(NSDictionary *)encoderSettings;
 - (void)	addTask:(EncoderTask *)task;
 - (void)	removeTask:(EncoderTask *)task;
 - (void)	spawnThreads;
@@ -92,9 +85,7 @@ static EncoderController *sharedController = nil;
 {
 	if((self = [super initWithWindowNibName:@"Encoder"])) {
 		
-		_timer		= [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(updateFreeSpace:) userInfo:nil repeats:YES];
-		_tasks		= [[NSMutableArray arrayWithCapacity:50] retain];
-		_freeze		= NO;
+		_tasks		= [[NSMutableArray alloc] init];
 
 		return self;
 	}
@@ -104,7 +95,6 @@ static EncoderController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_timer invalidate];	_timer = nil;
 	[_tasks release];		_tasks = nil;
 
 	[super dealloc];
@@ -122,84 +112,49 @@ static EncoderController *sharedController = nil;
 	[[self window] setExcludedFromWindowsMenu:YES];
 }
 
-- (void) updateFreeSpace:(NSTimer *)theTimer
-{
-	struct statfs			buf;
-	unsigned long long		bytesFree;
-	long double				freeSpace;
-	unsigned				divisions;
-	
-	if(-1 == statfs([[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] fileSystemRepresentation], &buf)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-	
-	bytesFree	= (unsigned long long) buf.f_bsize * (unsigned long long) buf.f_bfree;
-	freeSpace	= (long double) bytesFree;
-	divisions	= 0;
-	
-	while(1024 < freeSpace) {
-		freeSpace /= 1024;
-		++divisions;
-	}
-	
-	switch(divisions) {
-		case 0:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f B", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 1:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f KB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 2:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f MB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 3:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f GB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 4:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f TB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 5:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f PB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-	}
-}
-
 #pragma mark Functionality
 
-- (void) runEncodersForTask:(PCMGeneratingTask *)task
+- (void) encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings
 {
-	NSArray			*outputFormats		= [[task userInfo] objectForKey:@"encoders"];
+	TaskInfo		*taskInfo			= [TaskInfo taskInfoWithSettings:settings metadata:metadata];
+	NSArray			*outputFormats		= [settings objectForKey:@"encoders"];
 	NSDictionary	*format				= nil;
 	unsigned		i					= 0;
 	
+	[taskInfo setInputFilenames:[NSArray arrayWithObject:filename]];
+	
 	for(i = 0; i < [outputFormats count]; ++i) {
 		format = [outputFormats objectAtIndex:i];
-						
+		
 		switch([[format objectForKey:@"component"] intValue]) {
 			
-			case kComponentCoreAudio:
-				[self runEncoder:[CoreAudioEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
-				break;
-
-			case kComponentLibsndfile:
-				[self runEncoder:[LibsndfileEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
-				break;
-			
 			case kComponentFLAC:
-				[self runEncoder:[FLACEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
+//				[self runEncoder:[FLACEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			case kComponentOggFLAC:
-				[self runEncoder:[OggFLACEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
 				break;
 				
 			case kComponentWavPack:
-				[self runEncoder:[WavPackEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
 				break;
 				
 			case kComponentMonkeysAudio:
-				[self runEncoder:[MonkeysAudioEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
 				break;
 				
 			case kComponentOggVorbis:
-				[self runEncoder:[OggVorbisEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
 				break;
 				
 			case kComponentMP3:
-				[self runEncoder:[MPEGEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
 				break;
 				
 			case kComponentSpeex:
-				[self runEncoder:[SpeexEncoderTask class] forTask:task userInfo:[format objectForKey:@"userInfo"]];
+				break;
+				
+			case kComponentCoreAudio:
+				[self runEncoder:[CoreAudioEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
+				break;
+				
+			case kComponentLibsndfile:
 				break;
 				
 			default:
@@ -207,30 +162,21 @@ static EncoderController *sharedController = nil;
 				break;
 		}
 		
-	}
+	}	
 }
 
-- (void) runEncoder:(Class)encoderClass forTask:(PCMGeneratingTask *)task userInfo:(NSDictionary *)userInfo
+- (void) runEncoder:(Class)encoderClass taskInfo:(TaskInfo *)taskInfo encoderSettings:(NSDictionary *)encoderSettings
 {
-	// Create the encoder (relies on each subclass having the same method signature)
-	EncoderTask		*encoderTask		= [[encoderClass alloc] initWithTask:task];
+	EncoderTask				*encoderTask			= nil;
 	
-	if([task isKindOfClass:[RipperTask class]]) {
-		[encoderTask setTracks:[(RipperTask *)task valueForKey:@"tracks"]];
-	}
+	// Create the task
+	encoderTask		= [[encoderClass alloc] init];
 	
-	// Set output directory and output options
-	[encoderTask setOutputDirectory:[[task userInfo] objectForKey:@"outputDirectory"]];
-	[encoderTask setOverwriteExistingFiles:[[[task userInfo] objectForKey:@"overwriteExistingFiles"] boolValue]];
+	// Set the task info
+	[encoderTask setTaskInfo:taskInfo];
 	
-	// Pass file naming format and options
-	[encoderTask setFileNamingFormat:[[task userInfo] objectForKey:@"fileNamingFormat"]];
-
-	// Pass post-processing options
-	[encoderTask setPostProcessingOptions:[[task userInfo] objectForKey:@"postProcessingOptions"]];
-
 	// Pass the encoding configuration parameters
-	[encoderTask setUserInfo:userInfo];
+	[encoderTask setEncoderSettings:encoderSettings];
 	
 	// Show the encoder window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
@@ -249,7 +195,7 @@ static EncoderController *sharedController = nil;
 	
 	enumerator = [[_tasksController arrangedObjects] objectEnumerator];
 	while((current = [enumerator nextObject])) {
-		if([document isEqual:[[current objectInTracksAtIndex:0] document]]) {
+		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]]) {
 			return YES;
 		}
 	}
@@ -265,7 +211,7 @@ static EncoderController *sharedController = nil;
 	_freeze = YES;
 	enumerator = [[_tasksController arrangedObjects] reverseObjectEnumerator];
 	while((current = [enumerator nextObject])) {
-		if([document isEqual:[[current objectInTracksAtIndex:0] document]]) {
+		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]]) {
 			[current stop];
 		}
 	}
@@ -305,8 +251,8 @@ static EncoderController *sharedController = nil;
 - (void) encoderTaskDidStart:(EncoderTask *)task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task outputFormat];
-	NSString	*settings		= [task settings];
+	NSString	*type			= [task outputFormatName];
+	NSString	*settings		= [task encoderSettings];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode started for %@ [%@]", @"Log", @""), trackName, type]];
 	if(nil != settings) {
@@ -320,7 +266,7 @@ static EncoderController *sharedController = nil;
 - (void) encoderTaskDidStop:(EncoderTask *)task
 {
 	NSString	*trackName		= [task description];
-	NSString	*type			= [task outputFormat];
+	NSString	*type			= [task outputFormatName];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode stopped for %@ [%@]", @"Log", @""), trackName, type]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode stopped", @"Log", @"") 
@@ -338,7 +284,7 @@ static EncoderController *sharedController = nil;
 	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
 	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
 	NSString		*trackName		= [task description];
-	NSString		*type			= [task outputFormat];
+	NSString		*type			= [task outputFormatName];
 	BOOL			justNotified	= NO;
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
@@ -349,15 +295,15 @@ static EncoderController *sharedController = nil;
 	[self removeTask:task];
 	[self spawnThreads];
 	
-	if(0 != [task countOfTracks] && NO == [[[task objectInTracksAtIndex:0] document] ripInProgress] && NO == [[[task objectInTracksAtIndex:0] document] encodeInProgress]) {
+	if(0 != [[[task taskInfo] inputTracks] count] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] ripInProgress] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] encodeInProgress]) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"")
-									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[task metadata] albumTitle]]
+									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[[task taskInfo] metadata] albumTitle]]
 							   notificationName:@"Disc encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 		justNotified = YES;
 	}
 
 	// No more tasks in any queues
-	if(NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks] && NO == [[ConverterController sharedController] hasTasks]) {
+	if(NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks]) {
 
 		// Bounce dock icon if we're not the active application
 		if(NO == [[NSApplication sharedApplication] isActive]) {
@@ -373,21 +319,24 @@ static EncoderController *sharedController = nil;
 	}
 
 	
-	if(0 != [task countOfTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && NO == [[[task objectInTracksAtIndex:0] document] ripInProgress] && NO == [[[task objectInTracksAtIndex:0] document] encodeInProgress]) {
-		CompactDiscDocument *doc = [[task objectInTracksAtIndex:0] document];
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"closeWindowAfterEncoding"] && 0 != [[[task taskInfo] inputTracks] count] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] ripInProgress] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] encodeInProgress]) {
+		CompactDiscDocument		*doc	= [[[[task taskInfo] inputTracks] objectAtIndex:0] document];
 		[doc saveDocument:self];
 		[[doc windowForSheet] performClose:self];
 	}
 
 	// Run post-processing tasks
-	if(nil != [task postProcessingOptions]) {
-//		if([[[task postProcessingOptions] objectForKey:@"openOutputFilesWithTag"] boolValue]) {
-//			[[NSWorkspace sharedWorkspace] openFile:[task outputFilename] withApplication:@"Tag" andDeactivate:NO];
-//		}
+	if(nil != [[[task taskInfo] settings] objectForKey:@"postProcessingOptions"]) {
+		NSArray		*applications	= [[[[task taskInfo] settings] objectForKey:@"postProcessingOptions"] objectForKey:@"postProcessingApplications"];
+		unsigned	i;
 		
-		if([[[task postProcessingOptions] objectForKey:@"addOutputFilesToiTunes"] boolValue]) {
-			NSLog(@"add to iTunes");
+		for(i = 0; i < [applications count]; ++i) {
+			[[NSWorkspace sharedWorkspace] openFile:[task outputFilename] withApplication:[applications objectAtIndex:i] andDeactivate:NO];
 		}
+		
+//		if([[[task postProcessingOptions] objectForKey:@"addOutputFilesToiTunes"] boolValue]) {
+//			NSLog(@"add to iTunes");
+//		}
 	}
 	
 	// Add files to iTunes if desired
@@ -397,13 +346,13 @@ static EncoderController *sharedController = nil;
 		if([task isKindOfClass:[MPEGEncoderTask class]] || ([task isKindOfClass:[CoreAudioEncoderTask class]] && kAudioFileM4AType == [(CoreAudioEncoderTask *)task fileType])) {
 			AudioMetadata	*metadata = [[[AudioMetadata alloc] init] autorelease];
 			
-			[metadata setPlaylist:[[task metadata] playlist]];
+			[metadata setPlaylist:[[[task taskInfo] metadata] playlist]];
 			[self addFileToiTunesLibrary:[task outputFilename] metadata:metadata];
 		}
 		// Need to set metadata using AppleScript
 		else if(([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [(CoreAudioEncoderTask *)task fileType] || kAudioFileWAVEType == [(CoreAudioEncoderTask *)task fileType])) ||
 				([task isKindOfClass:[LibsndfileEncoderTask class]] && (SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK) || SF_FORMAT_WAV == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK)))) {
-			[self addFileToiTunesLibrary:[task outputFilename] metadata:[task metadata]];
+			[self addFileToiTunesLibrary:[task outputFilename] metadata:[[task taskInfo] metadata]];
 		}
 	}
 }
@@ -441,11 +390,7 @@ static EncoderController *sharedController = nil;
 		if(NO == [[_tasks objectAtIndex:i] started]) {
 			[[_tasks objectAtIndex:i] run];
 		}	
-	}
-	
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"balanceConverters"]) {
-		[[ConverterController sharedController] spawnThreads];
-	}
+	}	
 }
 
 - (void) addFileToiTunesLibrary:(NSString *)filename metadata:(AudioMetadata *)metadata

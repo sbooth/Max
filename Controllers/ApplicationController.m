@@ -27,7 +27,6 @@
 #import "ComponentVersionsController.h"
 #import "MediaController.h"
 #import "RipperController.h"
-#import "ConverterController.h"
 #import "EncoderController.h"
 #import "LogController.h"
 #import "CoreAudioUtilities.h"
@@ -127,20 +126,12 @@ static ApplicationController *sharedController = nil;
 	[GrowlApplicationBridge setGrowlDelegate:self];
 }
 
-- (BOOL) applicationShouldOpenUntitledFile:(NSApplication *)sender
-{
-	return NO;
-}
+- (BOOL)		applicationShouldOpenUntitledFile:(NSApplication *)sender	{ return NO; }
 
-- (IBAction) showPreferences:(id)sender
-{
-	[[PreferencesController sharedPreferences] showWindow:self];
-}
+- (IBAction)	showPreferences:(id)sender									{ [[PreferencesController sharedPreferences] showWindow:sender]; }
+- (IBAction)	showAcknowledgments:(id)sender								{ [[AcknowledgmentsController sharedController] showWindow:sender]; }
+- (IBAction)	showComponentVersions:(id)sender							{ [[ComponentVersionsController sharedController] showWindow:sender]; }
 
-- (IBAction) showAcknowledgments:(id)sender
-{
-	[[AcknowledgmentsController sharedController] showWindow:self];
-}
 
 - (void) applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -163,9 +154,6 @@ static ApplicationController *sharedController = nil;
 		if([openWindows containsObject:@"Ripper"]) {
 			[[[RipperController sharedController] window] orderFront:self];
 		}
-		if([openWindows containsObject:@"Converter"]) {
-			[[[ConverterController sharedController] window] orderFront:self];
-		}
 		if([openWindows containsObject:@"Encoder"]) {
 			[[[EncoderController sharedController] window] orderFront:self];
 		}		
@@ -185,7 +173,7 @@ static ApplicationController *sharedController = nil;
 {
 	NSMutableArray	*openWindows	= nil;
 	
-	if([[RipperController sharedController] hasTasks] || [[ConverterController sharedController] hasTasks] || [[EncoderController sharedController] hasTasks]) {
+	if([[RipperController sharedController] hasTasks] || [[EncoderController sharedController] hasTasks]) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
@@ -199,7 +187,6 @@ static ApplicationController *sharedController = nil;
 		// Remove all tasks
 		else {
 			[[RipperController sharedController] stopAllTasks:self];
-			[[ConverterController sharedController] stopAllTasks:self];
 			[[EncoderController sharedController] stopAllTasks:self];
 		}
 	}
@@ -208,9 +195,6 @@ static ApplicationController *sharedController = nil;
 	openWindows = [NSMutableArray array];
 	if([[[RipperController sharedController] window] isVisible]) {
 		[openWindows addObject:@"Ripper"];
-	}
-	if([[[ConverterController sharedController] window] isVisible]) {
-		[openWindows addObject:@"Converter"];
 	}
 	if([[[EncoderController sharedController] window] isVisible]) {
 		[openWindows addObject:@"Encoder"];
@@ -262,11 +246,6 @@ static ApplicationController *sharedController = nil;
 	}				
 }
 
-- (IBAction) showComponentVersions:(id)sender
-{
-	[[ComponentVersionsController sharedController] showWindow:self];
-}
-
 - (IBAction) toggleRipperWindow:(id)sender
 {
 	NSWindow *ripperWindow = [[RipperController sharedController] window];
@@ -275,17 +254,6 @@ static ApplicationController *sharedController = nil;
 	}
 	else {
 		[ripperWindow makeKeyAndOrderFront:self];
-	}
-}
-
-- (IBAction) toggleConverterWindow:(id)sender
-{
-	NSWindow *converterWindow = [[ConverterController sharedController] window];
-	if([converterWindow isVisible]) {
-		[converterWindow performClose:self];
-	}
-	else {
-		[converterWindow makeKeyAndOrderFront:self];
 	}
 }
 
@@ -370,35 +338,6 @@ static ApplicationController *sharedController = nil;
 		nil];
 	return regDict;
 }
-
-/*- (BOOL) displayAlertIfNoOutputFormats
-{
-	// Verify at least one output format is selected
-	if(NO == outputFormatsSelected()) {
-		int		result;
-		
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
-		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
-		[alert setAlertStyle: NSWarningAlertStyle];
-		
-		result = [alert runModal];
-		
-		if(NSAlertFirstButtonReturn == result) {
-			// do nothing
-		}
-		else if(NSAlertSecondButtonReturn == result) {
-			[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
-			[[PreferencesController sharedPreferences] showWindow:self];
-		}
-		
-		return YES;
-	}
-	
-	return NO;
-}*/
 
 @end
 

@@ -20,10 +20,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "PCMGeneratingTask.h"
+#import "CompactDiscDocument.h"
 #import "EncoderTask.h"
 
-// List of the converter/encoder components available in Max
+// List of the encoder components available in Max
 enum {
 	kComponentCoreAudio			= 0,
 	kComponentLibsndfile		= 1,
@@ -43,15 +43,14 @@ enum {
 	IBOutlet NSArrayController	*_tasksController;
 	
 	NSArray						*_tasks;
-	NSTimer						*_timer;
-	NSString					*_freeSpace;
 	BOOL						_freeze;
 }
 
 + (EncoderController *)	sharedController;
 
 // Functionality
-- (void)			runEncodersForTask:(PCMGeneratingTask *)task;
+- (void)			encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings;
+//- (void)			encodeFile:(NSString *)filename taskInfo:(TaskInfo *)taskInfo;
 
 - (BOOL)			documentHasEncoderTasks:(CompactDiscDocument *)document;
 - (void)			stopEncoderTasksForDocument:(CompactDiscDocument *)document;

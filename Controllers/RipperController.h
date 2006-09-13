@@ -36,16 +36,13 @@ enum {
 	IBOutlet NSArrayController	*_tasksController;
 	
 	NSArray						*_tasks;
-	NSTimer						*_timer;
-	NSString					*_freeSpace;
 	BOOL						_freeze;
 }
 
 + (RipperController *)	sharedController;
 
 // Functionality
-- (void)			ripTrack:(Track *)track;
-- (void)			ripTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
+- (void)			ripTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings;
 
 - (BOOL)			documentHasRipperTasks:(CompactDiscDocument *)document;
 - (void)			stopRipperTasksForDocument:(CompactDiscDocument *)document;

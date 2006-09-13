@@ -77,9 +77,7 @@ static RipperController *sharedController = nil;
 {
 	if((self = [super initWithWindowNibName:@"Ripper"])) {
 		
-		_timer		= [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(updateFreeSpace:) userInfo:nil repeats:YES];
-		_tasks		= [[NSMutableArray arrayWithCapacity:50] retain];
-		_freeze		= NO;
+		_tasks		= [[NSMutableArray alloc] init];
 		
 		return self;
 	}
@@ -89,7 +87,6 @@ static RipperController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_timer invalidate];	_timer = nil;
 	[_tasks release];		_tasks = nil;
 
 	[super dealloc];
@@ -107,66 +104,28 @@ static RipperController *sharedController = nil;
 	[[self window] setExcludedFromWindowsMenu:YES];
 }
 
-- (void) updateFreeSpace:(NSTimer *)theTimer
-{
-	const char				*tmpDir;
-	struct statfs			buf;
-	unsigned long long		bytesFree;
-	long double				freeSpace;
-	unsigned				divisions;
-	
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-		tmpDir = [[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] fileSystemRepresentation];
-	}
-	else {
-		tmpDir = _PATH_TMP;
-	}
-	
-	if(-1 == statfs(tmpDir, &buf)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to get file system statistics.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-	
-	bytesFree	= (unsigned long long) buf.f_bsize * (unsigned long long) buf.f_bfree;
-	freeSpace	= (long double) bytesFree;
-	divisions	= 0;
-	
-	while(1024 < freeSpace) {
-		freeSpace /= 1024;
-		++divisions;
-	}
-	
-	switch(divisions) {
-		case 0:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f B", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 1:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f KB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 2:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f MB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 3:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f GB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 4:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f TB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-		case 5:	[self setValue:[NSString stringWithFormat:NSLocalizedStringFromTable(@"%.2f PB", @"General", @""), freeSpace] forKey:@"freeSpace"];	break;
-	}
-}
-
 #pragma mark Functionality
 
-- (void)		ripTrack:(Track *)track					{ [self ripTracks:[NSArray arrayWithObject:track] metadata:[track metadata]]; }
-
-- (void) ripTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
+- (void) ripTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings
 {
-	RipperTask	*task				= nil;
-	int			selectedRipper		= kComparisonRipper;
+	RipperTask				*ripperTask				= nil;
+	TaskInfo				*taskInfo				= nil;	
+	int						selectedRipper			= kComparisonRipper;
 		
-	// Setup the ripper
-	selectedRipper = [[NSUserDefaults standardUserDefaults] integerForKey:@"selectedRipper"];
+	// Create the task
+	selectedRipper	= [[NSUserDefaults standardUserDefaults] integerForKey:@"selectedRipper"];
 	switch(selectedRipper) {
-		case kBasicRipper:		task = [[BasicRipperTask alloc] initWithTracks:tracks metadata:metadata];		break;
-		case kComparisonRipper:	task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
-		case kParanoiaRipper:	task = [[ParanoiaRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
-//		case kSecureRipper:		task = [[SecureRipperTask alloc] initWithTracks:tracks metadata:metadata];		break;
-		default:				task = [[ComparisonRipperTask alloc] initWithTracks:tracks metadata:metadata];	break;
+		case kBasicRipper:		ripperTask = [[BasicRipperTask alloc] initWithTracks:tracks];		break;
+		case kComparisonRipper:	ripperTask = [[ComparisonRipperTask alloc] initWithTracks:tracks];	break;
+		case kParanoiaRipper:	ripperTask = [[ParanoiaRipperTask alloc] initWithTracks:tracks];	break;
+//		case kSecureRipper:		ripperTask = [[SecureRipperTask alloc] initWithTracks:tracks];		break;
+		default:				ripperTask = [[ComparisonRipperTask alloc] initWithTracks:tracks];	break;
 	}
 	
-	// Set the active encoders and output directory in the task's userInfo dictionary
-	[task setUserInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[[[tracks objectAtIndex:0] document] activeEncoders], [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath], nil] forKeys:[NSArray arrayWithObjects:@"encoders", @"outputDirectory", nil]]];
+	// Create the task info
+	taskInfo		= [TaskInfo taskInfoWithSettings:settings metadata:metadata];
+	[taskInfo setInputTracks:tracks];
+	[ripperTask setTaskInfo:taskInfo];
 	
 	// Show the window if it is hidden
 	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
@@ -174,7 +133,7 @@ static RipperController *sharedController = nil;
 	}
 	
 	// Add the ripper to our list of ripping tasks
-	[self addTask:[task autorelease]];
+	[self addTask:[ripperTask autorelease]];
 	[self spawnThreads];
 }
 
@@ -278,7 +237,7 @@ static RipperController *sharedController = nil;
 
 	if(NO == [[[task objectInTracksAtIndex:0] document] ripInProgress]) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc ripping completed", @"Log", @"")
-									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All ripping tasks completed for %@", @"Log", @""), [[task metadata] albumTitle]]
+									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All ripping tasks completed for %@", @"Log", @""), [[[task taskInfo] metadata] albumTitle]]
 							   notificationName:@"Disc ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 		justNotified = YES;
 	}
@@ -293,7 +252,8 @@ static RipperController *sharedController = nil;
 		[[[task objectInTracksAtIndex:0] document] ejectDisc:self];
 	}
 
-	[[EncoderController sharedController] runEncodersForTask:task];
+//	[[EncoderController sharedController] runEncodersForTask:task];
+//	[[EncoderController sharedController] encodeFile: taskInfo:[task taskInfo]];
 }
 
 #pragma mark Task Management

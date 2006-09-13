@@ -37,7 +37,6 @@
 - (IBAction)			showComponentVersions:(id)sender;
 
 - (IBAction)			toggleRipperWindow:(id)sender;
-- (IBAction)			toggleConverterWindow:(id)sender;
 - (IBAction)			toggleEncoderWindow:(id)sender;
 - (IBAction)			toggleLogWindow:(id)sender;
 
