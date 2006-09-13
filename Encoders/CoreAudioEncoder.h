@@ -19,15 +19,10 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
-#include <CoreAudio/CoreAudioTypes.h>
-#include <AudioToolbox/AudioFile.h>
-
 #import "Encoder.h"
 
 @interface CoreAudioEncoder : Encoder
 {
-	AudioStreamBasicDescription		_outputASBD;
 }
 
 @end

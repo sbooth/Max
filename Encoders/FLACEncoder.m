@@ -41,9 +41,9 @@
 
 @implementation FLACEncoder
 
-- (id) initWithPCMFilename:(NSString *)inputFilename
+- (id) initWithFilename:(NSString *)filename
 {	
-	if((self = [super initWithPCMFilename:inputFilename])) {
+	if((self = [super initWithFilename:filename])) {
 		
 		_flac					= NULL;
 		_padding				= 4096;
@@ -75,7 +75,7 @@
 	_padding				= [[settings objectForKey:@"padding"] unsignedIntValue];
 }
 
-- (oneway void) encodeToFile:(NSString *) filename
+- (oneway void) encodeToFile:(NSString *)filename
 {
 	NSDate							*startTime					= [NSDate date];
 	unsigned long					iterations					= 0;

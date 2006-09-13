@@ -19,8 +19,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
-#import "TaskMethods.h"
+#import "EncoderTaskMethods.h"
 
 @protocol EncoderMethods
 
@@ -28,7 +27,7 @@
 
 - (NSString *)				settings;
 
-- (id <TaskMethods>)		delegate;
-- (void)					setDelegate:(id <TaskMethods>)delegate;
+- (id <EncoderTaskMethods>)	delegate;
+- (void)					setDelegate:(id <EncoderTaskMethods>)delegate;
 
 @end

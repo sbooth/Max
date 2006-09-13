@@ -20,28 +20,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <CoreAudio/CoreAudioTypes.h>
-
 #import "EncoderMethods.h"
-#import "TaskMethods.h"
+#import "EncoderTaskMethods.h"
+#import "AudioSource.h"
 
+// An encoder is responsible for taking audio input from an AudioSource and turning it into a different format
 @interface Encoder : NSObject <EncoderMethods>
 {
-	id <TaskMethods>				_delegate;
-	NSString						*_inputFilename;
-	AudioStreamBasicDescription		_inputASBD;
+	id <EncoderTaskMethods>			_delegate;
+	AudioSource						*_source;
 }
 
-- (id)								initWithPCMFilename:(NSString *)inputFilename;
+- (id)						initWithFilename:(NSString *)filename;
 
-- (AudioStreamBasicDescription)		inputASBD;
-- (void)							setInputASBD:(AudioStreamBasicDescription)inputASBD;
-
-- (Float64)							sampleRate;
-- (UInt32)							bitsPerChannel;
-- (UInt32)							channelsPerFrame;
-- (UInt32)							framesPerPacket;
-- (UInt32)							bytesPerPacket;
-- (UInt32)							bytesPerFrame;
+- (AudioSource *)			source;
 
 @end

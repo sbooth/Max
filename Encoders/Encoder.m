@@ -20,6 +20,7 @@
 
 #import "Encoder.h"
 #import "EncoderTask.h"
+#import "FileReader.h"
 
 @implementation Encoder
 
@@ -34,7 +35,7 @@
 		pool			= [[NSAutoreleasePool alloc] init];
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (EncoderTask *)[connection rootProxy];
-		encoder			= [[self alloc] initWithPCMFilename:[owner inputFilename]];
+		encoder			= [[self alloc] initWithFilename:[[[owner taskInfo] inputFilenames] objectAtIndex:0]];
 		
 		[encoder setDelegate:owner];
 		[owner encoderReady:encoder];
@@ -43,33 +44,37 @@
 	}	
 	
 	@catch(NSException *exception) {
-		if(nil != owner) {
-			[owner setException:exception];
-			[owner setStopped];
-		}
+		[owner setException:exception];
+		[owner setStopped:YES];
 	}
 	
 	@finally {
-		if(nil != pool) {
-			[pool release];
-		}		
+		[pool release];
 	}
 }
 
-- (id) initWithPCMFilename:(NSString *)inputFilename
+- (id) initWithFilename:(NSString *)filename
 {
 	if((self = [super init])) {
-		
-		_inputFilename		= [inputFilename retain];
 
-		// Default is 2-channel CD-DA format
-		_inputASBD.mSampleRate			= 44100.f;
-		_inputASBD.mChannelsPerFrame	= 2;
-		_inputASBD.mBitsPerChannel		= 16;
+//		AudioStreamBasicDescription		asbd;
 		
-		_inputASBD.mFramesPerPacket		= 1;
-		_inputASBD.mBytesPerPacket		= 4;
-		_inputASBD.mBytesPerFrame		= 4;
+		// Setup the audio source
+		_source = [[AudioSource audioSourceForReader:[FileReader fileReaderForFilename:filename]] retain];
+
+		// Default input is 2-channel CD-DA format in native endian format
+/*		asbd.mFormatID				= kAudioFormatLinearPCM;
+		asbd.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+		
+		asbd.mSampleRate			= 44100.f;
+		asbd.mChannelsPerFrame		= 2;
+		asbd.mBitsPerChannel		= 16;
+		
+		asbd.mFramesPerPacket		= 1;
+		asbd.mBytesPerPacket		= 4;
+		asbd.mBytesPerFrame			= 4;
+		
+		[[self source] setOutputFormat:asbd];*/
 
 		return self;
 	}
@@ -78,26 +83,18 @@
 
 - (void) dealloc
 {
-	[_inputFilename release];	_inputFilename = nil;
+	[_source release];	_source = nil;
 	
 	[super dealloc];
 }
 
-- (AudioStreamBasicDescription)		inputASBD												{ return _inputASBD; }
-- (void)							setInputASBD:(AudioStreamBasicDescription)inputASBD		{ _inputASBD = inputASBD; }
+- (AudioSource *)		source											{ return [[_source retain] autorelease]; }
 
-- (Float64)				sampleRate										{ return _inputASBD.mSampleRate; }
-- (UInt32)				bitsPerChannel									{ return _inputASBD.mBitsPerChannel; }
-- (UInt32)				channelsPerFrame								{ return _inputASBD.mChannelsPerFrame; }
-- (UInt32)				framesPerPacket									{ return _inputASBD.mFramesPerPacket; }
-- (UInt32)				bytesPerPacket									{ return _inputASBD.mBytesPerPacket; }
-- (UInt32)				bytesPerFrame									{ return _inputASBD.mBytesPerFrame; }
-
-- (id <TaskMethods>)	delegate										{ return _delegate; }
-- (void)				setDelegate:(id <TaskMethods>)delegate			{ _delegate = delegate; }
+- (id <EncoderTaskMethods>)	delegate									{ return _delegate; }
+- (void)				setDelegate:(id <EncoderTaskMethods>)delegate	{ _delegate = delegate; }
 
 - (oneway void)			encodeToFile:(NSString *)filename				{}
 
-- (NSString *)			settings										{ return @"Encoder settings unknown"; }
+- (NSString *)			settings										{ return nil; }
 
 @end
