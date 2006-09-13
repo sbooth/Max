@@ -22,24 +22,6 @@
 
 @implementation TrackDescriptor
 
-- (id) init
-{
-	if((self = [super init])) {
-		
-		_session			= 0;
-		_number				= 0;
-		_firstSector		= 0;
-		_channels			= 0;
-		_preEmphasis		= NO;
-		_copyPermitted		= NO;
-		_dataTrack			= NO;
-		
-		return self;
-	}
-	
-	return nil;
-}
-
 - (unsigned)			session									{ return _session; }
 - (void)				setSession:(unsigned)session			{ _session = session; }
 

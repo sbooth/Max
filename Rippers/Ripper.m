@@ -82,13 +82,12 @@
 - (BOOL)				logActivity									{ return _logActivity; }
 - (void)				setLogActivity:(BOOL)logActivity			{ _logActivity = logActivity; }
 
-- (NSString *)			deviceName									{ return _deviceName; }
+- (NSString *)			deviceName									{ return [[_deviceName retain] autorelease]; }
 
 - (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
 - (id <TaskMethods>)	delegate									{ return _delegate; }
 
 - (oneway void) ripToFile:(NSString *)filename
-{
-}
+{}
 
 @end

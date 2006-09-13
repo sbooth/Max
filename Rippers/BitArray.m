@@ -25,7 +25,7 @@
 
 - (void) dealloc
 {
-	free(_bits);
+	free(_bits);			_bits = NULL;
 	[super dealloc];
 }
 

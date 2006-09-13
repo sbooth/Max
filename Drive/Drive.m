@@ -50,6 +50,8 @@
 
 - (id) initWithDeviceName:(NSString *)deviceName
 {
+	NSParameterAssert(nil != deviceName);
+	
 	if((self = [super init])) {
 		
 		_deviceName		= [deviceName retain];
@@ -98,7 +100,7 @@
 - (unsigned)			cacheSectorSize								{ return (([self cacheSize] / kCDSectorSizeCDDA) + 1); }
 - (void)				setCacheSize:(unsigned)cacheSize			{ _cacheSize = cacheSize; }
 
-- (NSString *)			deviceName									{ return _deviceName; }
+- (NSString *)			deviceName									{ return [[_deviceName retain] autorelease]; }
 - (int)					fileDescriptor								{ return _fd; }
 
 // Disc track information
@@ -107,9 +109,7 @@
 
 - (NSMutableDictionary *) dictionaryForSession:(unsigned)session
 {
-	if([_sessions count] < session) {
-		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:[NSString stringWithFormat:@"Session %u doesn't exist", session] userInfo:nil];
-	}
+	NSParameterAssert([_sessions count] < session);
 	
 	return [_sessions objectAtIndex:session - 1];
 }
