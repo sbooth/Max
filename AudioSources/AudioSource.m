@@ -23,6 +23,7 @@
 #import "CoreAudioUtilities.h"
 #import "OggVorbisAudioSource.h"
 #import "FLACAudioSource.h"
+#import "OggFLACAudioSource.h"
 #import "CoreAudioAudioSource.h"
 
 #include <AudioToolbox/AudioFormat.h>
@@ -46,6 +47,7 @@
 		result = [[FLACAudioSource alloc] init];
 	}
 	else if([extension isEqualToString:@"oggflac"]) {
+		result = [[OggFLACAudioSource alloc] init];
 	}
 	else if([extension isEqualToString:@"ape"]) {
 	}

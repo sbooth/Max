@@ -58,8 +58,10 @@
 {
 	uint8_t		*newbuf;
 	
-	// We can only grow
+	// We can only grow in size, not shrink
 	NSParameterAssert(size > [self size]);
+
+	[self normalizeBuffer];
 	
 	// Allocate a new buffer of the requested size
 	newbuf		= (uint8_t *)calloc(size, sizeof(uint8_t));
