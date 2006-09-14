@@ -29,19 +29,23 @@
 //   - The audio stream is converted to PCM and placed in _pcmBuffer
 @interface AudioSource : NSObject
 {
-	id <ReaderMethods>				_reader;		// Access to the raw audio stream
+//	id <ReaderMethods>				_reader;		// Access to the raw audio stream
+	NSString						*_filename;		// The filename of the source
 
 	AudioStreamBasicDescription		_pcmFormat;		// The type of PCM data provided by this source
 	CircularBuffer					*_pcmBuffer;	// The buffer which holds the PCM audio data
 }
 
 // Create an AudioSource of the correct type for the given reader
-+ (id)								audioSourceForReader:(id <ReaderMethods>)reader;
+//+ (id)								audioSourceForReader:(id <ReaderMethods>)reader;
++ (id)								audioSourceForFilename:(NSString *)filename;
 
 
 // The source of the raw audio stream
-- (id <ReaderMethods>)				reader;
-- (void)							setReader:(id <ReaderMethods>)reader;
+//- (id <ReaderMethods>)				reader;
+//- (void)							setReader:(id <ReaderMethods>)reader;
+- (NSString *)						filename;
+- (void)							setFilename:(NSString *)filename;
 
 // The type of PCM data provided by the source
 - (AudioStreamBasicDescription)		pcmFormat;
@@ -61,12 +65,9 @@
 // The format of audio data provided by the source
 - (NSString *)		sourceFormatDescription;
 
-// Input audio frame information (or -1 if unknown)
+// Input audio frame information
 - (SInt64)			totalFrames;
 - (SInt64)			currentFrame;
-
-// Not all audio sources are seekable
-- (BOOL)			isSeekable;
 - (SInt64)			seekToFrame:(SInt64)frame;
 
 // Finalize reader setup prior to reading

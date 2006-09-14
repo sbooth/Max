@@ -21,50 +21,51 @@
 #import "AudioSource.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioUtilities.h"
-#import "FileReader.h"
 #import "OggVorbisAudioSource.h"
+#import "FLACAudioSource.h"
+#import "CoreAudioAudioSource.h"
 
 #include <AudioToolbox/AudioFormat.h>
 
 @implementation AudioSource
 
-+ (id) audioSourceForReader:(id <ReaderMethods>)reader
++ (id) audioSourceForFilename:(NSString *)filename
 {
 	AudioSource			*result			= nil;
 		
 	// Create the source based on the file's extension
-	if([(NSObject *)reader isKindOfClass:[FileReader class]]) {
-		NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
-		NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
-		NSString		*extension				= [[(FileReader *)reader filename] pathExtension];
+	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
+	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
+	NSString		*extension				= [filename pathExtension];
 
-		// Determine which type of converter to use and create it
-		if([extension isEqualToString:@"ogg"]) {
-			result = [[OggVorbisAudioSource alloc] init];
-		}
-/*		else if([extension isEqualToString:@"flac"]) {
-		}
-		else if([extension isEqualToString:@"oggflac"]) {
-		}
-		else if([extension isEqualToString:@"ape"]) {
-		}
-		else if([extension isEqualToString:@"spx"]) {
-		}
-		else if([extension isEqualToString:@"wv"]) {
-		}
-		else if([extension isEqualToString:@"shn"]) {
-		}
-		else if([extension isEqualToString:@"mpc"]) {
-		}
-		else if([coreAudioExtensions containsObject:extension]) {
-		}
-		else if([libsndfileExtensions containsObject:extension]) {
-		}*/
+	// Determine which type of converter to use and create it
+	if([extension isEqualToString:@"ogg"]) {
+		result = [[OggVorbisAudioSource alloc] init];
+	}
+	else if([extension isEqualToString:@"flac"]) {
+		result = [[FLACAudioSource alloc] init];
+	}
+	else if([extension isEqualToString:@"oggflac"]) {
+	}
+	else if([extension isEqualToString:@"ape"]) {
+	}
+	else if([extension isEqualToString:@"spx"]) {
+	}
+	else if([extension isEqualToString:@"wv"]) {
+	}
+	else if([extension isEqualToString:@"shn"]) {
+	}
+	else if([extension isEqualToString:@"mpc"]) {
+	}
+	else if([coreAudioExtensions containsObject:extension]) {
+		result = [[CoreAudioAudioSource alloc] init];
+	}
+	else if([libsndfileExtensions containsObject:extension]) {
 	}
 	
 	NSAssert(nil != result, NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @""));
 	
-	[result setReader:reader];
+	[result setFilename:filename];
 	
 	return [result autorelease];
 }
@@ -80,18 +81,18 @@
 
 - (void) dealloc
 {
-	[_pcmBuffer release];				_pcmBuffer = nil;
-	[(NSObject *)_reader release];		_reader = nil;
+	[_pcmBuffer release];		_pcmBuffer = nil;
+	[_filename release];		_filename = nil;
 	
 	[super dealloc];
 }
 
-- (id <ReaderMethods>)				reader				{ return [[(NSObject *)_reader retain] autorelease]; }
+- (NSString *)						filename			{ return [[_filename retain] autorelease]; }
 
-- (void)							setReader:(id <ReaderMethods>)reader
+- (void)							setFilename:(NSString *)filename
 {
-	[(NSObject *)_reader release];
-	_reader = [(NSObject *)reader retain];
+	[_filename release];
+	_filename = [filename retain];
 	
 	[self finalizeSetup];
 }
@@ -150,8 +151,6 @@
 
 - (SInt64)			totalFrames							{ return -1; }
 - (SInt64)			currentFrame						{ return -1; }
-
-- (BOOL)			isSeekable							{ return [[self reader] isSeekable]; }
 - (SInt64)			seekToFrame:(SInt64)frame			{ return -1; }
 
 // Subclass implementation is responsible for completely filling in _pcmFormat

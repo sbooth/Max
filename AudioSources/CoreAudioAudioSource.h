@@ -19,18 +19,14 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "ReaderMethods.h"
+#import "AudioSource.h"
 
-@interface FileReader : NSObject <ReaderMethods>
+#include <AudioToolbox/ExtendedAudioFile.h>
+
+@interface CoreAudioAudioSource : AudioSource
 {
-	int			_fd;
-	NSString	*_filename;
+	ExtAudioFileRef					_extAudioFile;
+	AudioStreamBasicDescription		_sourceFormat;
 }
-
-+ (id)				fileReaderForFilename:(NSString *)filename;
-
-- (id)				initWithFilename:(NSString *)filename;
-
-- (NSString *)		filename;
 
 @end
