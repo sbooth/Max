@@ -54,6 +54,30 @@
 - (void)			reset							{ _readPtr = _writePtr = _buffer; }
 - (unsigned)		size							{ return _bufsize; }
 
+- (void)			resize:(unsigned)size
+{
+	uint8_t		*newbuf;
+	
+	// We can only grow
+	NSParameterAssert(size > [self size]);
+	
+	// Allocate a new buffer of the requested size
+	newbuf		= (uint8_t *)calloc(size, sizeof(uint8_t));
+	NSAssert1(NULL != newbuf, @"Unable to allocate memory: %s", strerror(errno));
+	
+	// Copy the current data into the new buffer
+	memcpy(newbuf, _buffer, [self size]);
+	
+	// Adjust the read and write pointers
+	_readPtr	= newbuf + (_readPtr - _buffer);
+	_writePtr	= newbuf + (_writePtr - _buffer);
+
+	// Free the old buffer and activate new one
+	free(_buffer);
+	_buffer		= newbuf;
+	_bufsize	= size;
+}
+
 - (unsigned)		bytesAvailable
 {	
 	return (_writePtr >= _readPtr ? _writePtr - _readPtr : [self size] - (_readPtr - _writePtr));
