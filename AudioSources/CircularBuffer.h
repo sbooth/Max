@@ -37,10 +37,7 @@
 - (unsigned)		size;
 
 - (unsigned)		bytesAvailable;
-- (unsigned)		contiguousBytesAvailable;
-
 - (unsigned)		freeSpaceAvailable;
-- (unsigned)		contiguousFreeSpaceAvailable;
 
 - (unsigned)		putData:(const void *)data byteCount:(unsigned)byteCount;
 - (unsigned)		getData:(void *)buffer byteCount:(unsigned)byteCount;
