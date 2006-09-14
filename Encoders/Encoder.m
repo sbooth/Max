@@ -20,7 +20,6 @@
 
 #import "Encoder.h"
 #import "EncoderTask.h"
-#import "FileReader.h"
 
 @implementation Encoder
 
@@ -57,24 +56,8 @@
 {
 	if((self = [super init])) {
 
-//		AudioStreamBasicDescription		asbd;
-		
-		// Setup the audio source
-		_source = [[AudioSource audioSourceForReader:[FileReader fileReaderForFilename:filename]] retain];
-
-		// Default input is 2-channel CD-DA format in native endian format
-/*		asbd.mFormatID				= kAudioFormatLinearPCM;
-		asbd.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
-		
-		asbd.mSampleRate			= 44100.f;
-		asbd.mChannelsPerFrame		= 2;
-		asbd.mBitsPerChannel		= 16;
-		
-		asbd.mFramesPerPacket		= 1;
-		asbd.mBytesPerPacket		= 4;
-		asbd.mBytesPerFrame			= 4;
-		
-		[[self source] setOutputFormat:asbd];*/
+		_source = [[AudioSource audioSourceForFilename:filename] retain];
+		NSAssert(nil != _source, @"Unable to create the AudioSource");
 
 		return self;
 	}
