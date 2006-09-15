@@ -61,6 +61,18 @@ void addVorbisComment(FLAC__StreamMetadata		*block,
 					  NSString					*key,
 					  NSString					*value);
 
+// Determine the type of audio contained in an ogg stream
+enum OggStreamType {
+	kOggStreamTypeInvalid,
+	kOggStreamTypeUnknown,
+	kOggStreamTypeVorbis,
+	kOggStreamTypeFLAC,
+	kOggStreamTypeSpeex	
+};
+typedef enum OggStreamType OggStreamType;
+
+OggStreamType oggStreamType(NSString *filename);
+
 // Convert an NSImage to PNG data
 NSData * getPNGDataForImage(NSImage *image);
 
