@@ -81,7 +81,21 @@
 		return [self metadataFromMP4File:filename];
 	}
 	else if([extension isEqualToString:@"ogg"]) {
-		return [self metadataFromOggVorbisFile:filename];
+		
+		// Determine the content type of the ogg stream
+		AudioMetadata	*result		= nil;
+		OggStreamType	type		= oggStreamType(filename);
+		NSAssert(kOggStreamTypeInvalid != type, @"The file does not appear to be an Ogg file.");
+		NSAssert(kOggStreamTypeUnknown != type, @"The Ogg file's data format was not recognized.");
+		
+		switch(type) {
+			case kOggStreamTypeVorbis:		result = [self metadataFromOggVorbisFile:filename];			break;
+			case kOggStreamTypeFLAC:		result = [self metadataFromOggFLACFile:filename];			break;
+			case kOggStreamTypeSpeex:		result = [[[AudioMetadata alloc] init] autorelease];		break;
+			default:						result = [[[AudioMetadata alloc] init] autorelease];		break;
+		}
+
+		return result;
 	}
 	else if([extension isEqualToString:@"oggflac"]) {
 		return [self metadataFromOggFLACFile:filename];
