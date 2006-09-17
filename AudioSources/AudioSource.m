@@ -79,9 +79,9 @@
 	else if([extension isEqualToString:@"mpc"]) {
 		result = [[MusepackAudioSource alloc] init];
 	}
-/*	else if([coreAudioExtensions containsObject:extension]) {
+	else if([coreAudioExtensions containsObject:extension]) {
 		result = [[CoreAudioAudioSource alloc] init];
-	}*/
+	}
 	else if([libsndfileExtensions containsObject:extension]) {
 		result = [[LibsndfileAudioSource alloc] init];
 	}
