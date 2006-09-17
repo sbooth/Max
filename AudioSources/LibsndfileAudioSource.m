@@ -65,6 +65,7 @@
 	_sf								= sf_open([[self filename] fileSystemRepresentation], SFM_READ, &info);
 	NSAssert1(NULL != _sf, @"Unable to open the input file (%s)", sf_strerror(NULL));
 	
+	_totalFrames					= info.frames;
 	[self setFormat:info.format];
 		
 	// Setup input format descriptor
@@ -143,7 +144,7 @@
 					
 				case 16:
 					
-					// Convert to big endian byte order for the AIFF file
+					// Convert to big endian byte order 
 					alias16 = [buffer exposeBufferForWriting];
 					for(sample = 0; sample < frameCount * [self pcmFormat].mChannelsPerFrame; ++sample) {
 						*alias16++ = (int16_t)OSSwapHostToBigInt16((int16_t)(doubleBuffer[sample] * (1 << 15)));
@@ -155,10 +156,10 @@
 					
 				case 24:
 					
-					// Convert to big endian byte order for the AIFF file
+					// Convert to big endian byte order 
 					alias8 = [buffer exposeBufferForWriting];
 					for(sample = 0; sample < frameCount * [self pcmFormat].mChannelsPerFrame; ++sample) {
-						audioSample	= OSSwapHostToBigInt32((doubleBuffer[sample] * (1 << 31)));
+						audioSample	= OSSwapHostToBigInt32((doubleBuffer[sample] * (1 << 23)));
 						*alias8++	= (int8_t)(audioSample >> 16);
 						*alias8++	= (int8_t)(audioSample >> 8);
 						*alias8++	= (int8_t)audioSample;
@@ -170,7 +171,7 @@
 					
 				case 32:
 					
-					// Convert to big endian byte order for the AIFF file
+					// Convert to big endian byte order 
 					alias32 = [buffer exposeBufferForWriting];
 					for(sample = 0; sample < frameCount * [self pcmFormat].mChannelsPerFrame; ++sample) {
 						*alias32++ = OSSwapHostToBigInt32((doubleBuffer[sample] * (1 << 31)));
@@ -189,7 +190,10 @@
 		// Format is integer
 		else {
 			int				intBuffer			[SF_INPUT_BUFFER_LEN];
+			unsigned		shift;
 			
+			// libsndfile: "Whenever integer data is moved from one sized container to another sized container, the most significant bit in the source container will become the most significant bit in the destination container."
+			shift			= sizeof(int) - ([self pcmFormat].mBitsPerChannel / 8);
 			frameCount		= sf_readf_int(_sf, intBuffer, SF_INPUT_BUFFER_LEN / [self pcmFormat].mChannelsPerFrame);
 			
 			switch([self pcmFormat].mBitsPerChannel) {
@@ -199,7 +203,7 @@
 					// No need for byte swapping
 					alias8 = [buffer exposeBufferForWriting];
 					for(sample = 0; sample < frameCount * [self pcmFormat].mChannelsPerFrame; ++sample) {
-						*alias8++ = (int8_t)intBuffer[sample];
+						*alias8++ = (int8_t)(intBuffer[sample] >> shift);
 					}
 						
 					[buffer wroteBytes:frameCount * [self pcmFormat].mChannelsPerFrame * sizeof(int8_t)];
@@ -208,10 +212,10 @@
 					
 				case 16:
 					
-					// Convert to big endian byte order for the AIFF file
+					// Convert to big endian byte order
 					alias16 = [buffer exposeBufferForWriting];
 					for(sample = 0; sample < frameCount * [self pcmFormat].mChannelsPerFrame; ++sample) {
-						*alias16++ = (int16_t)OSSwapHostToBigInt16((int16_t)intBuffer[sample]);
+						*alias16++ = (int16_t)OSSwapHostToBigInt16((int16_t)(intBuffer[sample] >> shift));
 					}
 						
 					[buffer wroteBytes:frameCount * [self pcmFormat].mChannelsPerFrame * sizeof(int16_t)];
@@ -220,10 +224,10 @@
 					
 				case 24:
 					
-					// Convert to big endian byte order for the AIFF file
+					// Convert to big endian byte order
 					alias8 = [buffer exposeBufferForWriting];
 					for(sample = 0; sample < frameCount * [self pcmFormat].mChannelsPerFrame; ++sample) {
-						audioSample	= OSSwapHostToBigInt32(intBuffer[sample]);
+						audioSample	= OSSwapHostToBigInt32(intBuffer[sample] >> shift);
 						*alias8++	= (int8_t)(audioSample >> 16);
 						*alias8++	= (int8_t)(audioSample >> 8);
 						*alias8++	= (int8_t)audioSample;
@@ -235,10 +239,10 @@
 					
 				case 32:
 					
-					// Convert to big endian byte order for the AIFF file
+					// Convert to big endian byte order
 					alias32 = [buffer exposeBufferForWriting];
 					for(sample = 0; sample < frameCount * [self pcmFormat].mChannelsPerFrame; ++sample) {
-						*alias32++ = OSSwapHostToBigInt32(intBuffer[sample]);
+						*alias32++ = OSSwapHostToBigInt32(intBuffer[sample] >> shift);
 					}
 						
 					[buffer wroteBytes:frameCount * [self pcmFormat].mChannelsPerFrame * sizeof(int32_t)];
