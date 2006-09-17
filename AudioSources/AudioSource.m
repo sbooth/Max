@@ -27,8 +27,8 @@
 #import "MonkeysAudioAudioSource.h"
 #import "MusepackAudioSource.h"
 #import "OggFLACAudioSource.h"
+#import "OggSpeexAudioSource.h"
 #import "OggVorbisAudioSource.h"
-#import "SpeexAudioSource.h"
 #import "WavPackAudioSource.h"
 
 #include <AudioToolbox/AudioFormat.h>
@@ -55,7 +55,7 @@
 		switch(type) {
 			case kOggStreamTypeVorbis:		result = [[OggVorbisAudioSource alloc] init];		break;
 			case kOggStreamTypeFLAC:		result = [[OggFLACAudioSource alloc] init];			break;
-			case kOggStreamTypeSpeex:		result = [[SpeexAudioSource alloc] init];			break;
+			case kOggStreamTypeSpeex:		result = [[OggSpeexAudioSource alloc] init];		break;
 			default:																			break;
 		}
 	}
@@ -69,7 +69,7 @@
 		result = [[MonkeysAudioAudioSource alloc] init];
 	}
 	else if([extension isEqualToString:@"spx"]) {
-		result = [[SpeexAudioSource alloc] init];
+		result = [[OggSpeexAudioSource alloc] init];
 	}
 	else if([extension isEqualToString:@"wv"]) {
 		result = [[WavPackAudioSource alloc] init];
