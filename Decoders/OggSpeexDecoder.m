@@ -69,9 +69,6 @@
 	int						result;
 	ssize_t					bytesRead;
 	char					*data					= NULL;
-	int						frameSize;
-	int						framesPerPacket			= 2;
-	int						extraHeaders;
 	
 	
 	// Open the input file
@@ -125,6 +122,9 @@
 
 	// Initialize the speex bit-packing data structure
 	speex_bits_init(&_bits);
+	
+	// Initialize the stereo mode
+//	_stereo		= SPEEX_STEREO_STATE_INIT;
 
 	speex_decoder_ctl(_st, SPEEX_SET_SAMPLING_RATE, &header->rate);
 		
@@ -196,7 +196,7 @@
 					for(i = 0; i < [self framesPerPacket]; ++i) {
 
 						result		= speex_decode_int(_st, &_bits, output);
-						NSAssert(-2 != ret, NSLocalizedStringFromTable(@"Decoding error: possible corrupted stream.", @"Exceptions", @""));
+						NSAssert(-2 != result, NSLocalizedStringFromTable(@"Decoding error: possible corrupted stream.", @"Exceptions", @""));
 						NSAssert(0 < speex_bits_remaining(&_bits), NSLocalizedStringFromTable(@"Decoding overflow: possible corrupted stream.", @"Exceptions", @""));
 						
 						// -1 indicates EOS
@@ -207,7 +207,7 @@
 						
 						// Process stereo channel, if present
 						if(2 == [self pcmFormat].mChannelsPerFrame) {
-							speex_decode_stereo_int(output, frameSize, &stereo);
+							speex_decode_stereo_int(output, frameSize, &_stereo);
 						}
 
 						// Convert to big endian and place in buffer

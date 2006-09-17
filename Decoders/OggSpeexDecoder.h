@@ -23,6 +23,7 @@
 
 #include <Ogg/ogg.h>
 #include <Speex/speex_bits.h>
+#include <Speex/speex_stereo.h>
 
 @interface OggSpeexDecoder : Decoder
 {
@@ -34,6 +35,7 @@
 	
 	void					*_st;
 	SpeexBits				_bits;
+	SpeexStereoState		_stereo;
 	
 	unsigned				_packetCount;
 	
