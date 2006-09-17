@@ -37,13 +37,10 @@
 }
 
 // Create an AudioSource of the correct type for the given reader
-//+ (id)								audioSourceForReader:(id <ReaderMethods>)reader;
 + (id)								audioSourceForFilename:(NSString *)filename;
 
 
 // The source of the raw audio stream
-//- (id <ReaderMethods>)				reader;
-//- (void)							setReader:(id <ReaderMethods>)reader;
 - (NSString *)						filename;
 - (void)							setFilename:(NSString *)filename;
 

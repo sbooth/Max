@@ -21,16 +21,21 @@
 #import "AudioSource.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioUtilities.h"
-#import "OggVorbisAudioSource.h"
-#import "FLACAudioSource.h"
-#import "OggFLACAudioSource.h"
 #import "CoreAudioAudioSource.h"
+#import "FLACAudioSource.h"
+#import "LibsndfileAudioSource.h"
+#import "MonkeysAudioAudioSource.h"
+#import "MusepackAudioSource.h"
+#import "OggFLACAudioSource.h"
+#import "OggVorbisAudioSource.h"
+#import "SpeexAudioSource.h"
+#import "WavPackAudioSource.h"
 
 #include <AudioToolbox/AudioFormat.h>
 
 @implementation AudioSource
 
-+ (id) audioSourceForFilename:(NSString *)filename
++ (id)								audioSourceForFilename:(NSString *)filename
 {
 	AudioSource			*result			= nil;
 		
@@ -41,7 +46,18 @@
 
 	// Determine which type of converter to use and create it
 	if([extension isEqualToString:@"ogg"]) {
-		result = [[OggVorbisAudioSource alloc] init];
+
+		// Determine the content type of the ogg stream
+		OggStreamType	type	= oggStreamType(filename);
+		NSAssert(kOggStreamTypeInvalid != type, @"The file does not appear to be an Ogg file.");
+		NSAssert(kOggStreamTypeUnknown != type, @"The Ogg file's data format was not recognized.");
+		
+		switch(type) {
+			case kOggStreamTypeVorbis:		result = [[OggVorbisAudioSource alloc] init];		break;
+			case kOggStreamTypeFLAC:		result = [[OggFLACAudioSource alloc] init];			break;
+			case kOggStreamTypeSpeex:		result = [[SpeexAudioSource alloc] init];			break;
+			default:																			break;
+		}
 	}
 	else if([extension isEqualToString:@"flac"]) {
 		result = [[FLACAudioSource alloc] init];
@@ -50,19 +66,24 @@
 		result = [[OggFLACAudioSource alloc] init];
 	}
 	else if([extension isEqualToString:@"ape"]) {
+		result = [[MonkeysAudioAudioSource alloc] init];
 	}
 	else if([extension isEqualToString:@"spx"]) {
+		result = [[SpeexAudioSource alloc] init];
 	}
 	else if([extension isEqualToString:@"wv"]) {
+		result = [[WavPackAudioSource alloc] init];
 	}
-	else if([extension isEqualToString:@"shn"]) {
-	}
+/*	else if([extension isEqualToString:@"shn"]) {
+	}*/
 	else if([extension isEqualToString:@"mpc"]) {
+		result = [[MusepackAudioSource alloc] init];
 	}
-	else if([coreAudioExtensions containsObject:extension]) {
+/*	else if([coreAudioExtensions containsObject:extension]) {
 		result = [[CoreAudioAudioSource alloc] init];
-	}
+	}*/
 	else if([libsndfileExtensions containsObject:extension]) {
+		result = [[LibsndfileAudioSource alloc] init];
 	}
 	
 	NSAssert(nil != result, NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @""));
@@ -72,7 +93,7 @@
 	return [result autorelease];
 }
 
-- (id) init
+- (id)								init
 {
 	if((self = [super init])) {
 		_pcmBuffer		= [[CircularBuffer alloc] init];
@@ -81,7 +102,7 @@
 	return nil;
 }
 
-- (void) dealloc
+- (void)							dealloc
 {
 	[_pcmBuffer release];		_pcmBuffer = nil;
 	[_filename release];		_filename = nil;
@@ -95,8 +116,7 @@
 {
 	[_filename release];
 	_filename = [filename retain];
-	
-	[self finalizeSetup];
+	[[self pcmBuffer] reset];
 }
 
 - (AudioStreamBasicDescription)		pcmFormat			{ return _pcmFormat; }
@@ -124,7 +144,7 @@
 	NSParameterAssert(NULL != bufferList);
 	NSParameterAssert(0 < bufferList->mNumberBuffers);
 	NSParameterAssert(0 < frameCount);
-
+	
 	UInt32		byteCount		= frameCount * [self pcmFormat].mBytesPerPacket;
 	UInt32		bytesRead		= 0;
 
