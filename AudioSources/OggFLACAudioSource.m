@@ -70,7 +70,7 @@ writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, con
 			
 		case 16:
 			
-			// Interleave the audio, converting to big endian byte order for the AIFF file
+			// Interleave the audio, converting to big endian byte order 
 			alias16 = [[source pcmBuffer] exposeBufferForWriting];
 			for(sample = 0; sample < frame->header.blocksize; ++sample) {
 				for(channel = 0; channel < frame->header.channels; ++channel) {
@@ -101,7 +101,7 @@ writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, con
 			
 		case 32:
 			
-			// Interleave the audio, converting to big endian byte order for the AIFF file
+			// Interleave the audio, converting to big endian byte order 
 			alias32 = [[source pcmBuffer] exposeBufferForWriting];
 			for(sample = 0; sample < frame->header.blocksize; ++sample) {
 				for(channel = 0; channel < frame->header.channels; ++channel) {

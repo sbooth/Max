@@ -97,7 +97,7 @@
 				
 			case 16:
 				
-				// Convert to big endian byte order for the AIFF file
+				// Convert to big endian byte order 
 				alias16 = [buffer exposeBufferForWriting];
 				for(sample = 0; sample < samplesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					*alias16++ = (int16_t)OSSwapHostToBigInt16((int16_t)inputBuffer[sample]);
@@ -109,7 +109,7 @@
 				
 			case 24:
 				
-				// Convert to big endian byte order for the AIFF file
+				// Convert to big endian byte order 
 				alias8 = [buffer exposeBufferForWriting];
 				for(sample = 0; sample < samplesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					audioSample	= OSSwapHostToBigInt32(inputBuffer[sample]);
@@ -124,7 +124,7 @@
 				
 			case 32:
 				
-				// Convert to big endian byte order for the AIFF file
+				// Convert to big endian byte order 
 				alias32 = [buffer exposeBufferForWriting];
 				for(sample = 0; sample < samplesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					*alias32++ = OSSwapHostToBigInt32(inputBuffer[sample]);
