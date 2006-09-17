@@ -43,15 +43,8 @@
 	return SELF_DECOMPRESSOR->GetInfo(APE_DECOMPRESS_TOTAL_BLOCKS);
 }
 
-- (SInt64)			currentFrame
-{
-	return -1;
-}
-
-- (SInt64)			seekToFrame:(SInt64)frame
-{
-	return -1;
-}
+- (SInt64)			currentFrame					{ return -1; }
+- (SInt64)			seekToFrame:(SInt64)frame		{ return -1; }
 
 - (void)			finalizeSetup
 {
@@ -95,6 +88,7 @@
 	
 	result		= SELF_DECOMPRESSOR->GetData((char *)[buffer exposeBufferForWriting], [buffer freeSpaceAvailable] / blockSize, &samplesRead);
 	NSAssert(ERROR_SUCCESS == result, @"Monkey's Audio invalid checksum.");
+
 	[buffer wroteBytes:samplesRead * blockSize];
 }
 
