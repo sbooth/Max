@@ -19,11 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 #include <mpcdec/mpcdec.h>
 
-@interface MusepackAudioSource : AudioSource
+@interface MusepackDecoder : Decoder
 {
 	FILE							*_file;
 	mpc_reader_file					_reader_file;

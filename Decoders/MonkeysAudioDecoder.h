@@ -19,9 +19,9 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
-@interface MonkeysAudioAudioSource : AudioSource
+@interface MonkeysAudioDecoder : Decoder
 {
 	void		*_decompressor;			// Use a void * to avoid any C++ here
 }

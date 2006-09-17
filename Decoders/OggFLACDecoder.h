@@ -19,11 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 #include <OggFLAC/file_decoder.h>
 
-@interface OggFLACAudioSource : AudioSource
+@interface OggFLACDecoder : Decoder
 {
 	OggFLAC__FileDecoder		*_flac;
 	FLAC__uint64				_totalSamples;

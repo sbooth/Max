@@ -18,16 +18,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "LibsndfileAudioSource.h"
+#import "LibsndfileDecoder.h"
 
 #define SF_INPUT_BUFFER_LEN		1024
 
-@interface LibsndfileAudioSource (Private)
+@interface LibsndfileDecoder (Private)
 - (void)	setFormat:(int)format;
 - (void)	setTotalFrames:(sf_count_t)totalFrames;
 @end
 
-@implementation LibsndfileAudioSource
+@implementation LibsndfileDecoder
 
 - (void)			dealloc
 {
@@ -259,7 +259,7 @@
 
 @end
 
-@implementation LibsndfileAudioSource (Private)
+@implementation LibsndfileDecoder (Private)
 
 - (void)				setFormat:(int)format						{ _format = format; }
 - (void)				setTotalFrames:(sf_count_t)totalFrames		{ _totalFrames = totalFrames; }

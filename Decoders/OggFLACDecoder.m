@@ -18,9 +18,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "OggFLACAudioSource.h"
+#import "OggFLACDecoder.h"
 
-@interface OggFLACAudioSource (Private)
+@interface OggFLACDecoder (Private)
 
 - (void)	setTotalSamples:(FLAC__uint64)totalSamples;
 
@@ -33,7 +33,7 @@
 static FLAC__StreamDecoderWriteStatus 
 writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
 {
-	OggFLACAudioSource	*source					= (OggFLACAudioSource *)client_data;
+	OggFLACDecoder	*source					= (OggFLACDecoder *)client_data;
 	
 	unsigned			spaceRequired			= 0;
 	
@@ -125,7 +125,7 @@ writeCallback(const OggFLAC__FileDecoder *decoder, const FLAC__Frame *frame, con
 static void
 metadataCallback(const OggFLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
-	OggFLACAudioSource		*source		= (OggFLACAudioSource *)client_data;
+	OggFLACDecoder		*source		= (OggFLACDecoder *)client_data;
 	//	const FLAC__StreamMetadata_CueSheet		*cueSheet			= NULL;
 	//	FLAC__StreamMetadata_CueSheet_Track		*currentTrack		= NULL;
 	//	FLAC__StreamMetadata_CueSheet_Index		*currentIndex		= NULL;
@@ -160,12 +160,12 @@ metadataCallback(const OggFLAC__FileDecoder *decoder, const FLAC__StreamMetadata
 static void
 errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
-	//	OggFLACAudioSource		*source		= (OggFLACAudioSource *)client_data;
+	//	OggFLACDecoder		*source		= (OggFLACDecoder *)client_data;
 	
 	//	@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__StreamDecoderErrorStatusString[status] encoding:NSASCIIStringEncoding] userInfo:nil];
 }
 
-@implementation OggFLACAudioSource
+@implementation OggFLACDecoder
 
 - (void)			dealloc
 {
@@ -278,7 +278,7 @@ errorCallback(const OggFLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatu
 
 @end
 
-@implementation OggFLACAudioSource (Private)
+@implementation OggFLACDecoder (Private)
 
 - (void)	setTotalSamples:(FLAC__uint64)totalSamples 		{ _totalSamples = totalSamples; }
 

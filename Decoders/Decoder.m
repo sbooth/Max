@@ -18,26 +18,26 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "AudioSource.h"
+#import "Decoder.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioUtilities.h"
-#import "CoreAudioAudioSource.h"
-#import "FLACAudioSource.h"
-#import "LibsndfileAudioSource.h"
-#import "MonkeysAudioAudioSource.h"
-#import "MusepackAudioSource.h"
-#import "OggFLACAudioSource.h"
-#import "OggSpeexAudioSource.h"
-#import "OggVorbisAudioSource.h"
-#import "WavPackAudioSource.h"
+#import "CoreAudioDecoder.h"
+#import "FLACDecoder.h"
+#import "LibsndfileDecoder.h"
+#import "MonkeysAudioDecoder.h"
+#import "MusepackDecoder.h"
+#import "OggFLACDecoder.h"
+#import "OggSpeexDecoder.h"
+#import "OggVorbisDecoder.h"
+#import "WavPackDecoder.h"
 
 #include <AudioToolbox/AudioFormat.h>
 
-@implementation AudioSource
+@implementation Decoder
 
-+ (id)								audioSourceForFilename:(NSString *)filename
++ (id)								decoderForFilename:(NSString *)filename
 {
-	AudioSource			*result			= nil;
+	Decoder			*result			= nil;
 		
 	// Create the source based on the file's extension
 	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
@@ -53,37 +53,37 @@
 		NSAssert(kOggStreamTypeUnknown != type, @"The Ogg file's data format was not recognized.");
 		
 		switch(type) {
-			case kOggStreamTypeVorbis:		result = [[OggVorbisAudioSource alloc] init];		break;
-			case kOggStreamTypeFLAC:		result = [[OggFLACAudioSource alloc] init];			break;
-			case kOggStreamTypeSpeex:		result = [[OggSpeexAudioSource alloc] init];		break;
-			default:																			break;
+			case kOggStreamTypeVorbis:		result = [[OggVorbisDecoder alloc] init];		break;
+			case kOggStreamTypeFLAC:		result = [[OggFLACDecoder alloc] init];			break;
+			case kOggStreamTypeSpeex:		result = [[OggSpeexDecoder alloc] init];		break;
+			default:																		break;
 		}
 	}
 	else if([extension isEqualToString:@"flac"]) {
-		result = [[FLACAudioSource alloc] init];
+		result = [[FLACDecoder alloc] init];
 	}
 	else if([extension isEqualToString:@"oggflac"]) {
-		result = [[OggFLACAudioSource alloc] init];
+		result = [[OggFLACDecoder alloc] init];
 	}
 	else if([extension isEqualToString:@"ape"]) {
-		result = [[MonkeysAudioAudioSource alloc] init];
+		result = [[MonkeysAudioDecoder alloc] init];
 	}
 	else if([extension isEqualToString:@"spx"]) {
-		result = [[OggSpeexAudioSource alloc] init];
+		result = [[OggSpeexDecoder alloc] init];
 	}
 	else if([extension isEqualToString:@"wv"]) {
-		result = [[WavPackAudioSource alloc] init];
+		result = [[WavPackDecoder alloc] init];
 	}
 /*	else if([extension isEqualToString:@"shn"]) {
 	}*/
 	else if([extension isEqualToString:@"mpc"]) {
-		result = [[MusepackAudioSource alloc] init];
+		result = [[MusepackDecoder alloc] init];
 	}
 	else if([coreAudioExtensions containsObject:extension]) {
-		result = [[CoreAudioAudioSource alloc] init];
+		result = [[CoreAudioDecoder alloc] init];
 	}
 	else if([libsndfileExtensions containsObject:extension]) {
-		result = [[LibsndfileAudioSource alloc] init];
+		result = [[LibsndfileDecoder alloc] init];
 	}
 	
 	NSAssert(nil != result, NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @""));

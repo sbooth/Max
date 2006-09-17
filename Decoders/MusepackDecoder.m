@@ -18,10 +18,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "MusepackAudioSource.h"
+#import "MusepackDecoder.h"
 #import "IOException.h"
 
-@implementation MusepackAudioSource
+@implementation MusepackDecoder
 
 - (void)			dealloc
 {

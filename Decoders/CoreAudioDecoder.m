@@ -18,12 +18,12 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "CoreAudioAudioSource.h"
+#import "CoreAudioDecoder.h"
 #import "IOException.h"
 
 #include <AudioToolbox/AudioFormat.h>
 
-@implementation CoreAudioAudioSource
+@implementation CoreAudioDecoder
 
 - (void)			dealloc
 {

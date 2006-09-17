@@ -19,11 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-@interface CoreAudioAudioSource : AudioSource
+@interface CoreAudioDecoder : Decoder
 {
 	ExtAudioFileRef					_extAudioFile;
 	AudioStreamBasicDescription		_sourceFormat;

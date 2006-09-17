@@ -19,11 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 #include <FLAC/file_decoder.h>
 
-@interface FLACAudioSource : AudioSource
+@interface FLACDecoder : Decoder
 {
 	FLAC__FileDecoder			*_flac;
 	FLAC__uint64				_totalSamples;

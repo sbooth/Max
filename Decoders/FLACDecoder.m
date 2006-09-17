@@ -18,9 +18,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "FLACAudioSource.h"
+#import "FLACDecoder.h"
 
-@interface FLACAudioSource (Private)
+@interface FLACDecoder (Private)
 
 - (void)	setTotalSamples:(FLAC__uint64)totalSamples;
 
@@ -33,7 +33,7 @@
 static FLAC__StreamDecoderWriteStatus 
 writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
 {
-	FLACAudioSource		*source					= (FLACAudioSource *)client_data;
+	FLACDecoder		*source					= (FLACDecoder *)client_data;
 
 	unsigned			spaceRequired			= 0;
 	
@@ -125,7 +125,7 @@ writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const 
 static void
 metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
-	FLACAudioSource		*source		= (FLACAudioSource *)client_data;
+	FLACDecoder		*source		= (FLACDecoder *)client_data;
 	//	const FLAC__StreamMetadata_CueSheet		*cueSheet			= NULL;
 	//	FLAC__StreamMetadata_CueSheet_Track		*currentTrack		= NULL;
 	//	FLAC__StreamMetadata_CueSheet_Index		*currentIndex		= NULL;
@@ -160,12 +160,12 @@ metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *m
 static void
 errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
-//	FLACAudioSource		*source		= (FLACAudioSource *)client_data;
+//	FLACDecoder		*source		= (FLACDecoder *)client_data;
 	
 //	@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__StreamDecoderErrorStatusString[status] encoding:NSASCIIStringEncoding] userInfo:nil];
 }
 
-@implementation FLACAudioSource
+@implementation FLACDecoder
 
 - (void)			dealloc
 {
@@ -286,7 +286,7 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 
 @end
 
-@implementation FLACAudioSource (Private)
+@implementation FLACDecoder (Private)
 
 - (void)	setTotalSamples:(FLAC__uint64)totalSamples 		{ _totalSamples = totalSamples; }
 

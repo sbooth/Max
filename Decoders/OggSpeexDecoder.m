@@ -18,20 +18,20 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "OggSpeexAudioSource.h"
+#import "OggSpeexDecoder.h"
 
 #include <Speex/speex.h>
 #include <Speex/speex_header.h>
 #include <Speex/speex_stereo.h>
 #include <Speex/speex_callbacks.h>
 
-@interface OggSpeexAudioSource (Private)
+@interface OggSpeexDecoder (Private)
 - (void)		incrementPacketCount;
 - (void)		setFramesPerPacket:(unsigned)framesPerPacket;
 - (void)		setExtraHeaderCount:(unsigned)extraHeaderCount;
 @end
 
-@implementation OggSpeexAudioSource
+@implementation OggSpeexDecoder
 
 - (void)			dealloc
 {
@@ -258,7 +258,7 @@
 
 @end
 
-@implementation OggSpeexAudioSource (Private)
+@implementation OggSpeexDecoder (Private)
 
 - (void)		incrementPacketCount								{ _packetCount++; }
 

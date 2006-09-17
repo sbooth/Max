@@ -18,12 +18,12 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "WavPackAudioSource.h"
+#import "WavPackDecoder.h"
 #import "IOException.h"
 
 #define WP_INPUT_BUFFER_LEN		1024
 
-@implementation WavPackAudioSource
+@implementation WavPackDecoder
 
 - (void)			dealloc
 {

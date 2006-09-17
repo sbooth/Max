@@ -19,11 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 #include <WavPack/wputils.h>
 
-@interface WavPackAudioSource : AudioSource
+@interface WavPackDecoder : Decoder
 {
     WavpackContext					*_wpc;
 }

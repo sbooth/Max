@@ -19,11 +19,11 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 #include <sndfile/sndfile.h>
 
-@interface LibsndfileAudioSource : AudioSource
+@interface LibsndfileDecoder : Decoder
 {
 	SNDFILE					*_sf;
 	int						_format;

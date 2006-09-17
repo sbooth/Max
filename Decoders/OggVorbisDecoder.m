@@ -18,10 +18,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "OggVorbisAudioSource.h"
+#import "OggVorbisDecoder.h"
 #import "IOException.h"
 
-@implementation OggVorbisAudioSource
+@implementation OggVorbisDecoder
 
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"Ogg (Vorbis, %u channels, %u Hz)", [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 

@@ -19,12 +19,12 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 //#include <vorbis/vorbisfile.h>
 #include <Vorbis/vorbisfile.h>
 
-@interface OggVorbisAudioSource : AudioSource
+@interface OggVorbisDecoder : Decoder
 {
 	ov_callbacks		_callbacks;
 	OggVorbis_File		_vf;

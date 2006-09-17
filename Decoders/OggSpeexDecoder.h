@@ -19,12 +19,12 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AudioSource.h"
+#import "Decoder.h"
 
 #include <Ogg/ogg.h>
 #include <Speex/speex_bits.h>
 
-@interface OggSpeexAudioSource : AudioSource
+@interface OggSpeexDecoder : Decoder
 {
 	int						_fd;
 	

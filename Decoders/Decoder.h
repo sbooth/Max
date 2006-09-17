@@ -21,23 +21,21 @@
 #import <Cocoa/Cocoa.h>
 #include <CoreAudio/CoreAudioTypes.h>
 
-#import "ReaderMethods.h"
 #import "CircularBuffer.h"
 
-// An AudioSource reads audio data in some format and provides it as PCM:
+// A decoder reads audio data in some format and provides it as PCM:
 //   - The raw audio stream is provided by _reader
 //   - The audio stream is converted to PCM and placed in _pcmBuffer
-@interface AudioSource : NSObject
+@interface Decoder : NSObject
 {
-//	id <ReaderMethods>				_reader;		// Access to the raw audio stream
 	NSString						*_filename;		// The filename of the source
 
 	AudioStreamBasicDescription		_pcmFormat;		// The type of PCM data provided by this source
 	CircularBuffer					*_pcmBuffer;	// The buffer which holds the PCM audio data
 }
 
-// Create an AudioSource of the correct type for the given reader
-+ (id)								audioSourceForFilename:(NSString *)filename;
+// Create an Decoder of the correct type for the given reader
++ (id)								decoderForFilename:(NSString *)filename;
 
 
 // The source of the raw audio stream

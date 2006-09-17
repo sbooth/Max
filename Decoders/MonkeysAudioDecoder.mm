@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "MonkeysAudioAudioSource.h"
+#import "MonkeysAudioDecoder.h"
 
 #include <MAC/All.h>
 #include <MAC/MACLib.h>
@@ -27,7 +27,7 @@
 
 #define SELF_DECOMPRESSOR	(reinterpret_cast<IAPEDecompress *>(_decompressor))
 
-@implementation MonkeysAudioAudioSource
+@implementation MonkeysAudioDecoder
 
 - (void)			dealloc
 {
