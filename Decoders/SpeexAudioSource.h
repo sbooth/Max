@@ -19,34 +19,31 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "AudioSource.h"
 
-// A simple implementation of a circular (AKA ring) buffer
-@interface CircularBuffer : NSObject
+#include <Ogg/ogg.h>
+#include <Speex/speex_bits.h>
+
+@interface OggSpeexAudioSource : AudioSource
 {
-	uint8_t			*_buffer;
-	unsigned		_bufsize;
-
-	uint8_t			*_readPtr;
-	uint8_t			*_writePtr;
+	int						_fd;
+	
+	ogg_sync_state			_oy;
+	ogg_page				_og;
+	ogg_stream_state		_os;
+	
+	void					*_st;
+	SpeexBits				_bits;
+	
+	unsigned				_packetCount;
+	
+	unsigned				_framesPerPacket;
+	unsigned				_extraHeaderCount;
 }
 
-- (id)				initWithSize:(unsigned)size;
+- (unsigned)		packetCount;
 
-- (void)			reset;
-
-- (unsigned)		size;
-- (void)			resize:(unsigned)size;
-
-- (unsigned)		bytesAvailable;
-- (unsigned)		freeSpaceAvailable;
-
-- (unsigned)		putData:(const void *)data byteCount:(unsigned)byteCount;
-- (unsigned)		getData:(void *)buffer byteCount:(unsigned)byteCount;
-
-- (const void *)	exposeBufferForReading;
-- (void)			readBytes:(unsigned)byteCount;
-
-- (void *)			exposeBufferForWriting;
-- (void)			wroteBytes:(unsigned)byteCount;
+- (unsigned)		framesPerPacket;
+- (unsigned)		extraHeaderCount;
 
 @end

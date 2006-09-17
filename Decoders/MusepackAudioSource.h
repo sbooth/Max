@@ -19,34 +19,16 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "AudioSource.h"
 
-// A simple implementation of a circular (AKA ring) buffer
-@interface CircularBuffer : NSObject
+#include <mpcdec/mpcdec.h>
+
+@interface MusepackAudioSource : AudioSource
 {
-	uint8_t			*_buffer;
-	unsigned		_bufsize;
-
-	uint8_t			*_readPtr;
-	uint8_t			*_writePtr;
+	FILE							*_file;
+	mpc_reader_file					_reader_file;
+	mpc_decoder						_decoder;
+	mpc_streaminfo					_streaminfo;
 }
-
-- (id)				initWithSize:(unsigned)size;
-
-- (void)			reset;
-
-- (unsigned)		size;
-- (void)			resize:(unsigned)size;
-
-- (unsigned)		bytesAvailable;
-- (unsigned)		freeSpaceAvailable;
-
-- (unsigned)		putData:(const void *)data byteCount:(unsigned)byteCount;
-- (unsigned)		getData:(void *)buffer byteCount:(unsigned)byteCount;
-
-- (const void *)	exposeBufferForReading;
-- (void)			readBytes:(unsigned)byteCount;
-
-- (void *)			exposeBufferForWriting;
-- (void)			wroteBytes:(unsigned)byteCount;
 
 @end

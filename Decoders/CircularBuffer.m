@@ -22,31 +22,12 @@
 
 @interface CircularBuffer (Private)
 - (void)			normalizeBuffer;
+- (unsigned)		contiguousBytesAvailable;
+- (unsigned)		contiguousFreeSpaceAvailable;
 @end
 
 @implementation CircularBuffer
 
-/*
- 0000000000111111111122222222223333333333
- 0123456789012345678901234567890123456789
- R
- W
-
- 0000000000111111111122222222223333333333
- 0123456789012345678901234567890123456789
-            R
-            W
- 
- 0000000000111111111122222222223333333333
- 0123456789012345678901234567890123456789
-    R
-              W
- 
- 0000000000111111111122222222223333333333
- 0123456789012345678901234567890123456789
-    W
-          R
- */
 - (id)				init
 {
 	return [self initWithSize:10 * 1024];
@@ -73,26 +54,38 @@
 - (void)			reset							{ _readPtr = _writePtr = _buffer; }
 - (unsigned)		size							{ return _bufsize; }
 
+- (void)			resize:(unsigned)size
+{
+	uint8_t		*newbuf;
+	
+	// We can only grow in size, not shrink
+	NSParameterAssert(size > [self size]);
+
+	[self normalizeBuffer];
+	
+	// Allocate a new buffer of the requested size
+	newbuf		= (uint8_t *)calloc(size, sizeof(uint8_t));
+	NSAssert1(NULL != newbuf, @"Unable to allocate memory: %s", strerror(errno));
+	
+	// Copy the current data into the new buffer
+	memcpy(newbuf, _buffer, [self size]);
+	
+	// Adjust the read and write pointers
+	_readPtr	= newbuf + (_readPtr - _buffer);
+	_writePtr	= newbuf + (_writePtr - _buffer);
+
+	// Free the old buffer and activate new one
+	free(_buffer);
+	_buffer		= newbuf;
+	_bufsize	= size;
+}
+
 - (unsigned)		bytesAvailable
 {	
 	return (_writePtr >= _readPtr ? _writePtr - _readPtr : [self size] - (_readPtr - _writePtr));
 }
 
-- (unsigned)		contiguousBytesAvailable
-{
-	uint8_t			*limit		= _buffer + _bufsize;
-
-	return (_writePtr >= _readPtr ? _writePtr - _readPtr : limit - _readPtr);
-}
-
 - (unsigned)		freeSpaceAvailable				{ return _bufsize - [self bytesAvailable]; }
-
-- (unsigned)		contiguousFreeSpaceAvailable
-{
-	uint8_t			*limit		= _buffer + _bufsize;
-	
-	return (_writePtr >= _readPtr ? limit - _writePtr : _readPtr - _writePtr);
-}
 
 - (unsigned)		putData:(const void *)data byteCount:(unsigned)byteCount
 {
@@ -181,6 +174,20 @@
 @end
 
 @implementation CircularBuffer (Private)
+
+- (unsigned)		contiguousBytesAvailable
+{
+	uint8_t			*limit		= _buffer + _bufsize;
+	
+	return (_writePtr >= _readPtr ? _writePtr - _readPtr : limit - _readPtr);
+}
+
+- (unsigned)		contiguousFreeSpaceAvailable
+{
+	uint8_t			*limit		= _buffer + _bufsize;
+	
+	return (_writePtr >= _readPtr ? limit - _writePtr : _readPtr - _writePtr);
+}
 
 - (void)			normalizeBuffer
 {
