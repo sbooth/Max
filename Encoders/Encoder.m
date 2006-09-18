@@ -56,8 +56,8 @@
 {
 	if((self = [super init])) {
 
-		_source = [[Decoder decoderForFilename:filename] retain];
-		NSAssert(nil != _source, @"Unable to create the Decoder");
+		_decoder = [[Decoder decoderForFilename:filename] retain];
+		NSAssert1(nil != _decoder, @"Unable to create a Decoder for %@.", filename);
 
 		return self;
 	}
@@ -66,12 +66,12 @@
 
 - (void) dealloc
 {
-	[_source release];	_source = nil;
+	[_decoder release];			_decoder = nil;
 	
 	[super dealloc];
 }
 
-- (Decoder *)		source											{ return [[_source retain] autorelease]; }
+- (Decoder *)			decoder											{ return [[_decoder retain] autorelease]; }
 
 - (id <EncoderTaskMethods>)	delegate									{ return _delegate; }
 - (void)				setDelegate:(id <EncoderTaskMethods>)delegate	{ _delegate = delegate; }

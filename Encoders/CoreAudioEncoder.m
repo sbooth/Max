@@ -65,7 +65,7 @@
 	[[self delegate] setStarted:YES];
 	
 	// Setup the audio source
-	[[self source] finalizeSetup];
+	[[self decoder] finalizeSetup];
 	
 	// Parse the encoder settings
 	settings				= [[self delegate] encoderSettings];
@@ -78,8 +78,8 @@
 	//asbd.mSampleRate		= [[settings objectForKey:@"sampleRate"] doubleValue];
 	asbd.mBitsPerChannel	= [[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
 
-	asbd.mSampleRate		= [[self source] pcmFormat].mSampleRate;			
-	asbd.mChannelsPerFrame	= [[self source] pcmFormat].mChannelsPerFrame;
+	asbd.mSampleRate		= [[self decoder] pcmFormat].mSampleRate;			
+	asbd.mChannelsPerFrame	= [[self decoder] pcmFormat].mChannelsPerFrame;
 	
 	@try {
 		
@@ -110,7 +110,7 @@
 												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		asbd = [[self source] pcmFormat];
+		asbd = [[self decoder] pcmFormat];
 		err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
 		if(noErr != err) {
 			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty"]
@@ -178,19 +178,19 @@
 		bufferList.mBuffers[0].mData	= calloc(bufferLen, sizeof(uint8_t));
 		NSAssert1(NULL != bufferList.mBuffers[0].mData, @"Unable to allocate memory: %s", strerror(errno));
 
-		framesToRead	= [[self source] totalFrames];
+		framesToRead	= [[self decoder] totalFrames];
 		totalFrames		= framesToRead;
 		
 		// Iteratively get the data and save it to the file
 		for(;;) {
 
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self source] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self source] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self source] readAudio:&bufferList frameCount:frameCount];
+			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
 
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
