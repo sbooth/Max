@@ -50,7 +50,7 @@ enum {
 	BOOL					_dtxEnabled;
 	BOOL					_vadEnabled;
 	
-	BOOL					_writeSettingsToComment;
+	BOOL					_saveSettingsInComment;
 }
 
 @end

@@ -209,7 +209,7 @@
 	[[self delegate] setCompleted:YES];	
 }
 
-- (NSString *) settings
+- (NSString *) settingsString
 {
 	return [NSString stringWithFormat:@"MAC settings: compression level:%i", _compressionLevel];
 }

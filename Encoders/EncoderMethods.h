@@ -25,7 +25,7 @@
 
 - (oneway void)				encodeToFile:(NSString *)filename;
 
-- (NSString *)				settings;
+- (NSString *)				settingsString;
 
 - (id <EncoderTaskMethods>)	delegate;
 - (void)					setDelegate:(id <EncoderTaskMethods>)delegate;

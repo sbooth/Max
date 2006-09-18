@@ -294,7 +294,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 	[[self delegate] setCompleted:YES];	
 }
 
-- (NSString *) settings
+- (NSString *) settingsString
 {
 	return [NSString stringWithFormat:@"WavPack settings: %@%@%@%@%@", 
 		(_flags & CONFIG_HIGH_FLAG ? @"high " : @""),

@@ -78,6 +78,6 @@
 
 - (oneway void)			encodeToFile:(NSString *)filename				{}
 
-- (NSString *)			settings										{ return nil; }
+- (NSString *)			settingsString									{ return nil; }
 
 @end

@@ -372,15 +372,15 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 	[[self delegate] setCompleted:YES];
 }
 
-- (NSString *) settings
+- (NSString *) settingsString
 {
 	switch(_mode) {
 		case VORBIS_MODE_QUALITY:
-			return [NSString stringWithFormat:@"Ogg Vorbis settings: VBR(q=%f)", _quality * 10.f];
+			return [NSString stringWithFormat:@"Vorbis settings: VBR(q=%f)", _quality * 10.f];
 			break;
 			
 		case VORBIS_MODE_BITRATE:
-			return [NSString stringWithFormat:@"Ogg Vorbis settings: %@(%l kbps)", (_cbr ? @"CBR" : @"VBR"), _bitrate / 1000];
+			return [NSString stringWithFormat:@"Vorbis settings: %@(%l kbps)", (_cbr ? @"CBR" : @"VBR"), _bitrate / 1000];
 			break;
 			
 		default:

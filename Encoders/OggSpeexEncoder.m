@@ -309,8 +309,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		comment_init(&comments, &comments_length, [[NSString stringWithFormat:@"Encoded with Max %@", bundleVersion] UTF8String]);
 		
-		if(_writeSettingsToComment) {
-			comment_add(&comments, &comments_length, NULL, [[self settings] UTF8String]);
+		if(_saveSettingsInComment) {
+			comment_add(&comments, &comments_length, NULL, [[self encoderSettingsString] UTF8String]);
 		}
 		
 		op.packet		= (unsigned char *)comments;
@@ -637,15 +637,15 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	[[self delegate] setCompleted:YES];	
 }
 
-- (NSString *) settings
+- (NSString *) settingsString
 {
 	switch(_target) {
 		case SPEEX_TARGET_QUALITY:
-			return [NSString stringWithFormat:@"libSpeex settings: quality=%i complexity=%i%@%@%@%@", _quality, _complexity, (_vbrEnabled ? @" VBR" : @" "), (_abrEnabled ? @" ABR" : @" "), (_vadEnabled ? @" VAD" : @" "), (_dtxEnabled ? @" DTX" : @" ")];
+			return [NSString stringWithFormat:@"Speex settings: quality=%i complexity=%i%@%@%@%@", _quality, _complexity, (_vbrEnabled ? @" VBR" : @" "), (_abrEnabled ? @" ABR" : @" "), (_vadEnabled ? @" VAD" : @" "), (_dtxEnabled ? @" DTX" : @" ")];
 			break;
 
 		case SPEEX_TARGET_BITRATE:
-			return [NSString stringWithFormat:@"libSpeex settings: bitrate=%i kpbs complexity=%i%@%@%@%@", _bitrate / 1000, _complexity, (_vbrEnabled ? @" VBR" : @" "), (_abrEnabled ? @" ABR" : @" "), (_vadEnabled ? @" VAD" : @" "), (_dtxEnabled ? @" DTX" : @" ")];
+			return [NSString stringWithFormat:@"Speex settings: bitrate=%i kpbs complexity=%i%@%@%@%@", _bitrate / 1000, _complexity, (_vbrEnabled ? @" VBR" : @" "), (_abrEnabled ? @" ABR" : @" "), (_vadEnabled ? @" VAD" : @" "), (_dtxEnabled ? @" DTX" : @" ")];
 			break;
 			
 		default:
@@ -684,7 +684,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	
 	_framesPerOggPacket	= [[settings objectForKey:@"framesPerPacket"] intValue];
 	
-	_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
+	_saveSettingsInComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 }
 
 @end

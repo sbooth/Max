@@ -24,7 +24,7 @@
 #import "EncoderTaskMethods.h"
 #import "Decoder.h"
 
-// An encoder is responsible for taking audio input from a Decoder and turning it into a different format
+// An Encoder is responsible for taking audio input from a Decoder and turning it into a different format
 @interface Encoder : NSObject <EncoderMethods>
 {
 	id <EncoderTaskMethods>			_delegate;

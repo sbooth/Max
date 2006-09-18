@@ -261,7 +261,7 @@
 	[[self delegate] setCompleted:YES];	
 }
 
-- (NSString *) settings
+- (NSString *) settingsString
 {
 	NSDictionary	*settings;
 	NSString		*bitrateString;
@@ -285,10 +285,10 @@
 	qualityString = (-1 == quality ? @"" : [NSString stringWithFormat:@"quality=%u", quality]);
 
 	if(-1 == bitrate && -1 == quality) {
-		return nil;
+		return [NSString stringWithFormat:@"Core Audio '%@' codec", UTCreateStringForOSType([self formatID])];
 	}
 	else {
-		return [NSString stringWithFormat:@"Core Audio settings ('%@' codec): %@ %@", UTCreateStringForOSType([[settings valueForKey:@"formatID"] unsignedLongValue]), bitrateString, qualityString];
+		return [NSString stringWithFormat:@"Core Audio '%@' codec settings: %@ %@", UTCreateStringForOSType([self formatID]), bitrateString, qualityString];
 	}
 }
 
