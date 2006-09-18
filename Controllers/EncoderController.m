@@ -263,7 +263,7 @@ static EncoderController *sharedController = nil;
 {
 	NSString	*trackName		= [task description];
 	NSString	*type			= [task outputFormatName];
-	NSString	*settings		= [task encoderSettings];
+	NSString	*settings		= [task encoderSettingsString];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode started for %@ [%@]", @"Log", @""), trackName, type]];
 	if(nil != settings) {

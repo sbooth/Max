@@ -227,7 +227,7 @@
 		addVorbisComment(block, @"ENCODER", versionString);
 
 		// Encoder settings
-		addVorbisComment(block, @"ENCODING", [self encoderSettings]);
+		addVorbisComment(block, @"ENCODING", [self encoderSettingsString]);
 		
 		// Write the new metadata to the file
 		if(NO == FLAC__metadata_chain_write(chain, YES, NO)) {
