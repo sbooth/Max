@@ -16,8 +16,6 @@
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
 		8C08836A0A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883600A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist */; };
 		8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */; };
-		8C2000500AB9245F00DB00CE /* FLACAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C20004E0AB9245F00DB00CE /* FLACAudioSource.m */; };
-		8C20FEF70AB9128000DB00CE /* CoreAudioAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C20FEF50AB9128000DB00CE /* CoreAudioAudioSource.m */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
@@ -212,13 +210,21 @@
 		8CD26F4B0AB536120037F33A /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEF50A05CB8E00890518 /* CoreAudioEncoder.m */; };
 		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
 		8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CDBA03A09DF925800126090 /* GetPlaylistName.nib */; };
-		8CDCB84B0AB7E3EB00BAB45C /* AudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDCB8420AB7E3EB00BAB45C /* AudioSource.m */; };
-		8CDCB84D0AB7E3EB00BAB45C /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDCB8440AB7E3EB00BAB45C /* CircularBuffer.m */; };
-		8CDCB8510AB7E3EB00BAB45C /* OggVorbisAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CDCB8480AB7E3EB00BAB45C /* OggVorbisAudioSource.m */; };
 		8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA8CF00942939800207809 /* DiskArbitration.framework */; };
 		8CEDBFFF094B8ECE0023DD01 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */; };
 		8CF2B1310A0DC0E5008738E4 /* MonkeysAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2B1300A0DC0E5008738E4 /* MonkeysAudio.png */; };
 		8CF2B1380A0DC15F008738E4 /* LAME.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2B1370A0DC15F008738E4 /* LAME.png */; };
+		8CFA4B470ABDE11900C5AE9F /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */; };
+		8CFA4B490ABDE11900C5AE9F /* CoreAudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B310ABDE11800C5AE9F /* CoreAudioDecoder.m */; };
+		8CFA4B4B0ABDE11900C5AE9F /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B330ABDE11800C5AE9F /* Decoder.m */; };
+		8CFA4B4F0ABDE11900C5AE9F /* FLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */; };
+		8CFA4B510ABDE11900C5AE9F /* LibsndfileDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B390ABDE11800C5AE9F /* LibsndfileDecoder.m */; };
+		8CFA4B530ABDE11900C5AE9F /* MonkeysAudioDecoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3B0ABDE11800C5AE9F /* MonkeysAudioDecoder.mm */; };
+		8CFA4B550ABDE11900C5AE9F /* MusepackDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3D0ABDE11800C5AE9F /* MusepackDecoder.m */; };
+		8CFA4B570ABDE11900C5AE9F /* OggFLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3F0ABDE11800C5AE9F /* OggFLACDecoder.m */; };
+		8CFA4B590ABDE11900C5AE9F /* OggSpeexDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B410ABDE11800C5AE9F /* OggSpeexDecoder.m */; };
+		8CFA4B5B0ABDE11900C5AE9F /* OggVorbisDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */; };
+		8CFA4B5D0ABDE11900C5AE9F /* WavPackDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */; };
 		8CFF40A60A1D6030008E503C /* SelectEncodersSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CFF40A40A1D6030008E503C /* SelectEncodersSheet.nib */; };
 		8CFF40B80A1D6AE2008E503C /* SelectEncodersSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFF40B30A1D6AD9008E503C /* SelectEncodersSheet.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -277,10 +283,6 @@
 		8C0883600A092EA500CAC5D0 /* PCMGeneratingTaskDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = PCMGeneratingTaskDefaults.plist; sourceTree = "<group>"; };
 		8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
 		8C0925F20A2600680017CADE /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
-		8C20004D0AB9245F00DB00CE /* FLACAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FLACAudioSource.h; path = AudioSources/FLACAudioSource.h; sourceTree = "<group>"; };
-		8C20004E0AB9245F00DB00CE /* FLACAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FLACAudioSource.m; path = AudioSources/FLACAudioSource.m; sourceTree = "<group>"; };
-		8C20FEF40AB9128000DB00CE /* CoreAudioAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoreAudioAudioSource.h; path = AudioSources/CoreAudioAudioSource.h; sourceTree = "<group>"; };
-		8C20FEF50AB9128000DB00CE /* CoreAudioAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoreAudioAudioSource.m; path = AudioSources/CoreAudioAudioSource.m; sourceTree = "<group>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -676,13 +678,6 @@
 		8CD26E160AB520A20037F33A /* RipperTaskMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperTaskMethods.h; sourceTree = "<group>"; };
 		8CD7F7D1098B0B19002C4D9F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8CDBA03B09DF925800126090 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
-		8CDCB8410AB7E3EB00BAB45C /* AudioSource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AudioSource.h; path = AudioSources/AudioSource.h; sourceTree = "<group>"; };
-		8CDCB8420AB7E3EB00BAB45C /* AudioSource.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = AudioSource.m; path = AudioSources/AudioSource.m; sourceTree = "<group>"; };
-		8CDCB8430AB7E3EB00BAB45C /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CircularBuffer.h; path = AudioSources/CircularBuffer.h; sourceTree = "<group>"; };
-		8CDCB8440AB7E3EB00BAB45C /* CircularBuffer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = CircularBuffer.m; path = AudioSources/CircularBuffer.m; sourceTree = "<group>"; };
-		8CDCB8470AB7E3EB00BAB45C /* OggVorbisAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggVorbisAudioSource.h; path = AudioSources/OggVorbisAudioSource.h; sourceTree = "<group>"; };
-		8CDCB8480AB7E3EB00BAB45C /* OggVorbisAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = OggVorbisAudioSource.m; path = AudioSources/OggVorbisAudioSource.m; sourceTree = "<group>"; };
-		8CDCB8490AB7E3EB00BAB45C /* ReaderMethods.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ReaderMethods.h; path = AudioSources/ReaderMethods.h; sourceTree = "<group>"; };
 		8CDE897B09D3B61600FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8CDE897C09D3B67F00FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
 		8CDE899609D3B9F600FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
@@ -704,6 +699,28 @@
 		8CF2B14A0A0DD2DA008738E4 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/WavPackSettingsSheet.nib; sourceTree = "<group>"; };
 		8CF4D52309455D2300385BE4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FormatsPreferences.nib; sourceTree = "<group>"; };
 		8CF59C660A24AB8000368DF3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
+		8CFA4B2E0ABDE11800C5AE9F /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CircularBuffer.h; path = Decoders/CircularBuffer.h; sourceTree = "<group>"; };
+		8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = CircularBuffer.m; path = Decoders/CircularBuffer.m; sourceTree = "<group>"; };
+		8CFA4B300ABDE11800C5AE9F /* CoreAudioDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CoreAudioDecoder.h; path = Decoders/CoreAudioDecoder.h; sourceTree = "<group>"; };
+		8CFA4B310ABDE11800C5AE9F /* CoreAudioDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = CoreAudioDecoder.m; path = Decoders/CoreAudioDecoder.m; sourceTree = "<group>"; };
+		8CFA4B320ABDE11800C5AE9F /* Decoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Decoder.h; path = Decoders/Decoder.h; sourceTree = "<group>"; };
+		8CFA4B330ABDE11800C5AE9F /* Decoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = Decoder.m; path = Decoders/Decoder.m; sourceTree = "<group>"; };
+		8CFA4B360ABDE11800C5AE9F /* FLACDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FLACDecoder.h; path = Decoders/FLACDecoder.h; sourceTree = "<group>"; };
+		8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = FLACDecoder.m; path = Decoders/FLACDecoder.m; sourceTree = "<group>"; };
+		8CFA4B380ABDE11800C5AE9F /* LibsndfileDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = LibsndfileDecoder.h; path = Decoders/LibsndfileDecoder.h; sourceTree = "<group>"; };
+		8CFA4B390ABDE11800C5AE9F /* LibsndfileDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = LibsndfileDecoder.m; path = Decoders/LibsndfileDecoder.m; sourceTree = "<group>"; };
+		8CFA4B3A0ABDE11800C5AE9F /* MonkeysAudioDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MonkeysAudioDecoder.h; path = Decoders/MonkeysAudioDecoder.h; sourceTree = "<group>"; };
+		8CFA4B3B0ABDE11800C5AE9F /* MonkeysAudioDecoder.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; name = MonkeysAudioDecoder.mm; path = Decoders/MonkeysAudioDecoder.mm; sourceTree = "<group>"; };
+		8CFA4B3C0ABDE11800C5AE9F /* MusepackDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MusepackDecoder.h; path = Decoders/MusepackDecoder.h; sourceTree = "<group>"; };
+		8CFA4B3D0ABDE11800C5AE9F /* MusepackDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = MusepackDecoder.m; path = Decoders/MusepackDecoder.m; sourceTree = "<group>"; };
+		8CFA4B3E0ABDE11800C5AE9F /* OggFLACDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggFLACDecoder.h; path = Decoders/OggFLACDecoder.h; sourceTree = "<group>"; };
+		8CFA4B3F0ABDE11800C5AE9F /* OggFLACDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = OggFLACDecoder.m; path = Decoders/OggFLACDecoder.m; sourceTree = "<group>"; };
+		8CFA4B400ABDE11800C5AE9F /* OggSpeexDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggSpeexDecoder.h; path = Decoders/OggSpeexDecoder.h; sourceTree = "<group>"; };
+		8CFA4B410ABDE11800C5AE9F /* OggSpeexDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = OggSpeexDecoder.m; path = Decoders/OggSpeexDecoder.m; sourceTree = "<group>"; };
+		8CFA4B420ABDE11800C5AE9F /* OggVorbisDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OggVorbisDecoder.h; path = Decoders/OggVorbisDecoder.h; sourceTree = "<group>"; };
+		8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = OggVorbisDecoder.m; path = Decoders/OggVorbisDecoder.m; sourceTree = "<group>"; };
+		8CFA4B440ABDE11800C5AE9F /* WavPackDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = WavPackDecoder.h; path = Decoders/WavPackDecoder.h; sourceTree = "<group>"; };
+		8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = WavPackDecoder.m; path = Decoders/WavPackDecoder.m; sourceTree = "<group>"; };
 		8CFF40A50A1D6030008E503C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8CFF40B20A1D6AD9008E503C /* SelectEncodersSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEncodersSheet.h; sourceTree = "<group>"; };
 		8CFF40B30A1D6AD9008E503C /* SelectEncodersSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEncodersSheet.m; sourceTree = "<group>"; };
@@ -780,11 +797,11 @@
 				8C99DD550A82B97C00A8CBE4 /* FileConversion */,
 				8C4505080A8EEBFE001BF1A1 /* AlbumArt */,
 				8C5300B00A05D18E00890518 /* Controllers */,
-				8CD2603B0AB0CFB20037F33A /* AudioSources */,
 				8C5300980A05CFDA00890518 /* Tasks */,
 				8C9450F50A12E3FC00C8DCAE /* RipperTasks */,
 				8C9450E00A12E3FC00C8DCAE /* EncoderTasks */,
 				8C53FF7E0A05CD4100890518 /* Rippers */,
+				8CFA4B290ABDDB2700C5AE9F /* Decoders */,
 				8C53FEF30A05CB8E00890518 /* Encoders */,
 				8C74F8460A0B2C7C002260CF /* Metadata */,
 				8C89C62B0A069E5000359E67 /* Preferences */,
@@ -1325,22 +1342,33 @@
 			path = FileConversion;
 			sourceTree = "<group>";
 		};
-		8CD2603B0AB0CFB20037F33A /* AudioSources */ = {
+		8CFA4B290ABDDB2700C5AE9F /* Decoders */ = {
 			isa = PBXGroup;
 			children = (
-				8CDCB8410AB7E3EB00BAB45C /* AudioSource.h */,
-				8CDCB8420AB7E3EB00BAB45C /* AudioSource.m */,
-				8CDCB8430AB7E3EB00BAB45C /* CircularBuffer.h */,
-				8CDCB8440AB7E3EB00BAB45C /* CircularBuffer.m */,
-				8CDCB8470AB7E3EB00BAB45C /* OggVorbisAudioSource.h */,
-				8CDCB8480AB7E3EB00BAB45C /* OggVorbisAudioSource.m */,
-				8CDCB8490AB7E3EB00BAB45C /* ReaderMethods.h */,
-				8C20FEF40AB9128000DB00CE /* CoreAudioAudioSource.h */,
-				8C20FEF50AB9128000DB00CE /* CoreAudioAudioSource.m */,
-				8C20004D0AB9245F00DB00CE /* FLACAudioSource.h */,
-				8C20004E0AB9245F00DB00CE /* FLACAudioSource.m */,
+				8CFA4B2E0ABDE11800C5AE9F /* CircularBuffer.h */,
+				8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */,
+				8CFA4B300ABDE11800C5AE9F /* CoreAudioDecoder.h */,
+				8CFA4B310ABDE11800C5AE9F /* CoreAudioDecoder.m */,
+				8CFA4B320ABDE11800C5AE9F /* Decoder.h */,
+				8CFA4B330ABDE11800C5AE9F /* Decoder.m */,
+				8CFA4B360ABDE11800C5AE9F /* FLACDecoder.h */,
+				8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */,
+				8CFA4B380ABDE11800C5AE9F /* LibsndfileDecoder.h */,
+				8CFA4B390ABDE11800C5AE9F /* LibsndfileDecoder.m */,
+				8CFA4B3A0ABDE11800C5AE9F /* MonkeysAudioDecoder.h */,
+				8CFA4B3B0ABDE11800C5AE9F /* MonkeysAudioDecoder.mm */,
+				8CFA4B3C0ABDE11800C5AE9F /* MusepackDecoder.h */,
+				8CFA4B3D0ABDE11800C5AE9F /* MusepackDecoder.m */,
+				8CFA4B3E0ABDE11800C5AE9F /* OggFLACDecoder.h */,
+				8CFA4B3F0ABDE11800C5AE9F /* OggFLACDecoder.m */,
+				8CFA4B400ABDE11800C5AE9F /* OggSpeexDecoder.h */,
+				8CFA4B410ABDE11800C5AE9F /* OggSpeexDecoder.m */,
+				8CFA4B420ABDE11800C5AE9F /* OggVorbisDecoder.h */,
+				8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */,
+				8CFA4B440ABDE11800C5AE9F /* WavPackDecoder.h */,
+				8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */,
 			);
-			name = AudioSources;
+			name = Decoders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1574,11 +1602,17 @@
 				8CD26CA50AB50B580037F33A /* EncoderTask.m in Sources */,
 				8CD26EFC0AB531F50037F33A /* CoreAudioEncoderTask.m in Sources */,
 				8CD26F4B0AB536120037F33A /* CoreAudioEncoder.m in Sources */,
-				8CDCB84B0AB7E3EB00BAB45C /* AudioSource.m in Sources */,
-				8CDCB84D0AB7E3EB00BAB45C /* CircularBuffer.m in Sources */,
-				8CDCB8510AB7E3EB00BAB45C /* OggVorbisAudioSource.m in Sources */,
-				8C20FEF70AB9128000DB00CE /* CoreAudioAudioSource.m in Sources */,
-				8C2000500AB9245F00DB00CE /* FLACAudioSource.m in Sources */,
+				8CFA4B470ABDE11900C5AE9F /* CircularBuffer.m in Sources */,
+				8CFA4B490ABDE11900C5AE9F /* CoreAudioDecoder.m in Sources */,
+				8CFA4B4B0ABDE11900C5AE9F /* Decoder.m in Sources */,
+				8CFA4B4F0ABDE11900C5AE9F /* FLACDecoder.m in Sources */,
+				8CFA4B510ABDE11900C5AE9F /* LibsndfileDecoder.m in Sources */,
+				8CFA4B530ABDE11900C5AE9F /* MonkeysAudioDecoder.mm in Sources */,
+				8CFA4B550ABDE11900C5AE9F /* MusepackDecoder.m in Sources */,
+				8CFA4B570ABDE11900C5AE9F /* OggFLACDecoder.m in Sources */,
+				8CFA4B590ABDE11900C5AE9F /* OggSpeexDecoder.m in Sources */,
+				8CFA4B5B0ABDE11900C5AE9F /* OggVorbisDecoder.m in Sources */,
+				8CFA4B5D0ABDE11900C5AE9F /* WavPackDecoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
