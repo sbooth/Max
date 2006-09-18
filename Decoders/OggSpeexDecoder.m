@@ -69,6 +69,7 @@
 	int						result;
 	ssize_t					bytesRead;
 	char					*data					= NULL;
+	SpeexStereoState		stereo					= SPEEX_STEREO_STATE_INIT;
 	
 	
 	// Open the input file
@@ -111,7 +112,7 @@
 	NSAssert1(SPEEX_NB_MODES > header->mode, NSLocalizedStringFromTable(@"The Speex mode number %i was not recognized.", @"Exceptions", @""), header->mode);
 	
 	mode		= speex_lib_get_mode(header->mode);
-	NSAssert1(1 > header->speex_version_id, NSLocalizedStringFromTable(@"Unable to decode Speex bitstream version %i.", @"Exceptions", @""), header->speex_version_id);
+	NSAssert1(1 >= header->speex_version_id, NSLocalizedStringFromTable(@"Unable to decode Speex bitstream version %i.", @"Exceptions", @""), header->speex_version_id);
 	NSAssert(mode->bitstream_version == header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with a different version of Speex.", @"Exceptions", @""));
 //	NSAssert(mode->bitstream_version > header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with a newer version of Speex.", @"Exceptions", @""));
 //	NSAssert(mode->bitstream_version < header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with an older version of Speex.", @"Exceptions", @""));
@@ -124,7 +125,8 @@
 	speex_bits_init(&_bits);
 	
 	// Initialize the stereo mode
-//	_stereo		= SPEEX_STEREO_STATE_INIT;
+	//	_stereo		= SPEEX_STEREO_STATE_INIT;
+	memcpy(&_stereo, &stereo, sizeof(SpeexStereoState));
 
 	speex_decoder_ctl(_st, SPEEX_SET_SAMPLING_RATE, &header->rate);
 		
@@ -159,15 +161,12 @@
 	packetsDesired	= [buffer freeSpaceAvailable] / (frameSize * [self framesPerPacket] * [self pcmFormat].mChannelsPerFrame * sizeof(spx_int16_t));
 	
 	// Attempt to process the desired number of packets
-	while(0 < packetsDesired) {
+	while(0 < packetsDesired && NO == ogg_stream_eos(&_os)) {
 		ogg_packet			op;
 		int					result;
-		BOOL				eos			= NO;
 		
 		// Process any packets in the current page
-		for(;;) {
-
-			memset(&op, 0, sizeof(op));
+		while(0 < packetsDesired && NO == ogg_stream_eos(&_os)) {
 
 			// Grab a packet from the streaming layer
 			result		= ogg_stream_packetout(&_os, &op);
@@ -184,10 +183,10 @@
 				// Ignore the following:
 				//  - Speex comments in packet #2
 				//  - Extra headers (optionally) in packets 3+
-				if(1 != [self packetCount] && 1 + [self extraHeaderCount] < [self packetCount]) {
+				if(1 != [self packetCount] && 1 + [self extraHeaderCount] <= [self packetCount]) {
 					unsigned		i, j;
 					spx_int16_t		output [2000];
-					spx_int16_t		*alias;
+					int16_t			*alias;
 					
 					// Copy the Ogg packet to the Speex bitstream
 					speex_bits_read_from(&_bits, (char*)op.packet, op.bytes);
@@ -201,7 +200,6 @@
 						
 						// -1 indicates EOS
 						if(-1 == result) {
-							eos = YES;
 							break;
 						}
 						
@@ -216,24 +214,20 @@
 							*alias++ = OSSwapHostToBigInt16(output[j]);
 						}
 
-						[buffer wroteBytes:frameSize * [self pcmFormat].mChannelsPerFrame * sizeof(spx_int16_t)];
+						[buffer wroteBytes:frameSize * [self pcmFormat].mChannelsPerFrame * sizeof(int16_t)];
 
 						// Packet processing finished
-						[self incrementPacketCount];
 						--packetsDesired;
-						
-						// If this was the last packet in the stream, we're finished
-						if(op.e_o_s) {
-							eos = YES;
-							break;
-						}						
 					}
 				}
 			}
+			
+			// Finished with this packet
+			[self incrementPacketCount];
 		}
 		
 		// Grab a new Ogg page for processing, if necessary
-		if(NO == eos && 0 < packetsDesired) {
+		if(NO == ogg_stream_eos(&_os) && 0 < packetsDesired) {
 			while(1 != ogg_sync_pageout(&_oy, &_og)) {
 				char			*data		= NULL;
 				ssize_t			bytesRead;
@@ -252,6 +246,10 @@
 					break;
 				}
 			}
+			
+			// Get the resultant Ogg page
+			result		= ogg_stream_pagein(&_os, &_og);
+			NSAssert(0 == result, @"Error reading Ogg page.");
 		}
 	}
 }
