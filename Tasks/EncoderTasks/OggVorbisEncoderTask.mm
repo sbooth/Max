@@ -31,9 +31,9 @@
 
 @implementation OggVorbisEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
+	if((self = [super init])) {
 		_encoderClass = [OggVorbisEncoder class];
 		return self;
 	}
@@ -42,7 +42,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [self metadata];
+	AudioMetadata								*metadata				= [[self taskInfo] metadata];
 	unsigned									trackNumber				= 0;
 	unsigned									trackTotal				= 0;
 	unsigned									discNumber				= 0;
@@ -59,7 +59,7 @@
 	NSString									*isrc					= nil;
 	NSString									*mcn					= nil;
 	NSString									*bundleVersion, *versionString;
-	TagLib::Ogg::Vorbis::File					f						([_outputFilename fileSystemRepresentation], false);
+	TagLib::Ogg::Vorbis::File					f						([[self outputFilename] fileSystemRepresentation], false);
 
 	
 	if(NO == f.isValid()) {
@@ -114,7 +114,7 @@
 	if(nil != trackComment) {
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 	}
-	if(_writeSettingsToComment) {
+	if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
 		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 	}
 	if(nil != comment) {
@@ -180,7 +180,7 @@
 	f.save();
 }
 
-- (NSString *)		extension						{ return @"ogg"; }
-- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""); }
+- (NSString *)		fileExtension					{ return @"ogg"; }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Ogg (Vorbis)", @"General", @""); }
 
 @end

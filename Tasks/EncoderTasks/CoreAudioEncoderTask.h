@@ -27,4 +27,7 @@
 {
 }
 
+- (AudioFileTypeID)		fileType;
+- (UInt32)				formatID;
+
 @end

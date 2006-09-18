@@ -30,9 +30,9 @@
 
 @implementation WavPackEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
+	if((self = [super init])) {
 		_encoderClass = [WavPackEncoder class];
 		return self;
 	}
@@ -41,7 +41,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [self metadata];
+	AudioMetadata								*metadata				= [[self taskInfo] metadata];
 	unsigned									trackNumber				= 0;
 	unsigned									trackTotal				= 0;
 	unsigned									discNumber				= 0;
@@ -62,7 +62,7 @@
 	char										error [80];
 	
 	
-	wpc = WavpackOpenFileInput([_outputFilename fileSystemRepresentation], error, OPEN_EDIT_TAGS, 0);
+	wpc = WavpackOpenFileInput([[self outputFilename] fileSystemRepresentation], error, OPEN_EDIT_TAGS, 0);
 	if(NULL == wpc) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @"") 
 									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
@@ -116,7 +116,7 @@
 	if(nil != trackComment) {
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 	}
-	if(_writeSettingsToComment) {
+	if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
 		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 	}
 	if(nil != comment) {
@@ -190,7 +190,7 @@
 	}
 }
 
-- (NSString *)		extension						{ return @"wv"; }
-- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"WavPack", @"General", @""); }
+- (NSString *)		fileExtension					{ return @"wv"; }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"WavPack", @"General", @""); }
 
 @end

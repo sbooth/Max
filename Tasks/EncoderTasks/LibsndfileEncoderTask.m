@@ -25,9 +25,9 @@
 
 @implementation LibsndfileEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
+	if((self = [super init])) {
 		_encoderClass	= [LibsndfileEncoder class];
 		return self;
 	}
@@ -36,8 +36,12 @@
 
 - (void)			writeTags						{}
 - (int)				format							{ return [[[self userInfo] valueForKey:@"majorFormat"] intValue] | [[[self userInfo] valueForKey:@"subtypeFormat"] intValue]; }
-- (NSString *)		extension						{ return [[self userInfo] valueForKey:@"extension"]; }
-- (NSString *)		outputFormat					{ return [[self userInfo] valueForKey:@"name"]; }
+- (NSString *)		fileExtension					{ return [[self userInfo] valueForKey:@"extension"]; }
+- (NSString *)		outputFormatName				{ return [[self userInfo] valueForKey:@"name"]; }
+
+@end
+
+@implementation LibsndfileEncoderTask (CueSheetAdditions)
 
 - (BOOL) formatLegalForCueSheet
 { 

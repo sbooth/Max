@@ -22,7 +22,7 @@
 
 #import "EncoderTask.h"
 
-@interface SpeexEncoderTask : EncoderTask 
+@interface OggSpeexEncoderTask : EncoderTask 
 {
 }
 

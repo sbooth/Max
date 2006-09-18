@@ -33,9 +33,9 @@
 
 @implementation MonkeysAudioEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
+	if((self = [super init])) {
 		_encoderClass = [MonkeysAudioEncoder class];
 		return self;
 	}
@@ -44,7 +44,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [self metadata];
+	AudioMetadata								*metadata				= [[self taskInfo] metadata];
 	unsigned									trackNumber				= 0;
 	unsigned									trackTotal				= 0;
 	unsigned									discNumber				= 0;
@@ -68,7 +68,7 @@
 	
 
 	@try {
-		chars = GetUTF16FromANSI([_outputFilename fileSystemRepresentation]);
+		chars = GetUTF16FromANSI([[self outputFilename] fileSystemRepresentation]);
 		if(NULL == chars) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -137,7 +137,7 @@
 		if(nil != trackComment) {
 			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 		}
-		if(_writeSettingsToComment) {
+		if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
 			comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 		}
 		if(nil != comment) {
@@ -233,7 +233,7 @@
 	}
 }
 
-- (NSString *)		extension						{ return @"ape"; }
-- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @""); }
+- (NSString *)		fileExtension					{ return @"ape"; }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @""); }
 
 @end

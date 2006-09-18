@@ -34,13 +34,6 @@
 
 #define TEMPFILE_PATTERN	"MaxXXXXXXXX"
 
-@interface CoreAudioEncoderTask (Private)
-
-- (AudioFileTypeID)		fileType;
-- (UInt32)				formatID;
-
-@end
-
 @implementation CoreAudioEncoderTask
 
 - (id) init
@@ -50,65 +43,6 @@
 		return self;
 	}
 	return nil;
-}
-
-- (NSString *) cueSheetFormatName
-{
- 	switch([self fileType]) {
-		case kAudioFileWAVEType:	return @"WAVE";				break;
-		case kAudioFileAIFFType:	return @"AIFF";				break;
-		case kAudioFileMP3Type:		return @"MP3";				break;
-		default:					return nil;					break;
-	}
-}
-
-- (BOOL) formatLegalForCueSheet
-{
- 	switch([self fileType]) {
-		case kAudioFileWAVEType:	return YES;					break;
-		case kAudioFileAIFFType:	return YES;					break;
-		case kAudioFileMP3Type:		return YES;					break;
-		default:					return NO;					break;
-	}
-}
-
-- (NSString *) outputFormatName
-{
-	OSStatus						result;
-	UInt32							specifierSize;
-	UInt32							dataSize;
-	AudioFileTypeID					fileType;
-	AudioStreamBasicDescription		asbd;
-	NSString						*fileFormat;
-	NSString						*audioFormat;
-	
-	// Determine the name of the file (container) type
-	fileType				= [self fileType];
-	specifierSize			= sizeof(fileType);
-	dataSize				= sizeof(fileFormat);
-	result					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, specifierSize, &fileType, &dataSize, &fileFormat);
-	
-	NSAssert1(noErr == result, @"AudioFileGetGlobalInfo failed: %@", UTCreateStringForOSType(result));
-
-	// Determine the name of the format
-	bzero(&asbd, sizeof(AudioStreamBasicDescription));
-	
-	asbd.mFormatID			= [self formatID];
-	asbd.mFormatFlags		= [[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue];
-	
-	specifierSize			= sizeof(audioFormat);
-	result					= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &specifierSize, &audioFormat);
-	
-	NSAssert1(noErr == result, @"AudioFormatGetProperty failed: %@", UTCreateStringForOSType(result));
-	
-	return [NSString stringWithFormat:@"%@ (%@)", [fileFormat autorelease], [audioFormat autorelease]];;
-}
-
-- (NSString *) fileExtension
-{
-	NSArray		*extensions		= [[self encoderSettings] objectForKey:@"extensionsForType"];
-	
-	return [extensions objectAtIndex:[[[self encoderSettings] objectForKey:@"extensionIndex"] unsignedIntValue]];
 }
 
 - (void) writeTags
@@ -146,7 +80,7 @@
 	
 	// Use mp4v2 for Apple lossless/AAC files
 	if(kAudioFormatMPEG4AAC == formatID || kAudioFormatAppleLossless == formatID) {
-		mp4FileHandle = MP4Modify([_outputFilename fileSystemRepresentation], 0, 0);
+		mp4FileHandle = MP4Modify([[self outputFilename] fileSystemRepresentation], 0, 0);
 		
 		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
 			
@@ -279,7 +213,7 @@
 			path = mktemp(path);
 
 			if(NO == MP4Optimize([[self outputFilename] fileSystemRepresentation], NULL, 0)) {
-				[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [_outputFilename lastPathComponent]]];
+				[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[self outputFilename] lastPathComponent]]];
 			}
 
 			rename(path, [[self outputFilename] fileSystemRepresentation]);
@@ -294,7 +228,7 @@
 			err = FSPathMakeRef((const UInt8 *)[[self outputFilename] fileSystemRepresentation], &ref, NULL);
 			if(noErr != err) {
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_outputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[self outputFilename], [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
 			}
 			
 			err = AudioFileOpen(&ref, fsRdWrPerm, [self fileType], &fileID);
@@ -404,12 +338,70 @@
 	}	
 }
 
-@end
+- (NSString *) fileExtension
+{
+	NSArray		*extensions		= [[self encoderSettings] objectForKey:@"extensionsForType"];
+	
+	return [extensions objectAtIndex:[[[self encoderSettings] objectForKey:@"extensionIndex"] unsignedIntValue]];
+}
 
-@implementation CoreAudioEncoderTask (Private)
+- (NSString *) outputFormatName
+{
+	OSStatus						result;
+	UInt32							specifierSize;
+	UInt32							dataSize;
+	AudioFileTypeID					fileType;
+	AudioStreamBasicDescription		asbd;
+	NSString						*fileFormat;
+	NSString						*audioFormat;
+	
+	// Determine the name of the file (container) type
+	fileType				= [self fileType];
+	specifierSize			= sizeof(fileType);
+	dataSize				= sizeof(fileFormat);
+	result					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, specifierSize, &fileType, &dataSize, &fileFormat);
+	
+	NSAssert1(noErr == result, @"AudioFileGetGlobalInfo failed: %@", UTCreateStringForOSType(result));
+	
+	// Determine the name of the format
+	bzero(&asbd, sizeof(AudioStreamBasicDescription));
+	
+	asbd.mFormatID			= [self formatID];
+	asbd.mFormatFlags		= [[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue];
+	
+	specifierSize			= sizeof(audioFormat);
+	result					= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &specifierSize, &audioFormat);
+	
+	NSAssert1(noErr == result, @"AudioFormatGetProperty failed: %@", UTCreateStringForOSType(result));
+	
+	return [NSString stringWithFormat:@"%@ (%@)", [fileFormat autorelease], [audioFormat autorelease]];;
+}
 
 - (AudioFileTypeID)		fileType		{ return [[[self encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }
 - (UInt32)				formatID		{ return [[[self encoderSettings] objectForKey:@"formatID"] unsignedLongValue]; }
 
 @end
 
+@implementation CoreAudioEncoderTask (CueSheetAdditions)
+
+- (NSString *) cueSheetFormatName
+{
+ 	switch([self fileType]) {
+		case kAudioFileWAVEType:	return @"WAVE";				break;
+		case kAudioFileAIFFType:	return @"AIFF";				break;
+		case kAudioFileMP3Type:		return @"MP3";				break;
+		default:					return nil;					break;
+	}
+}
+
+- (BOOL) formatLegalForCueSheet
+{
+ 	switch([self fileType]) {
+		case kAudioFileWAVEType:	return YES;					break;
+		case kAudioFileAIFFType:	return YES;					break;
+		case kAudioFileMP3Type:		return YES;					break;
+		default:					return NO;					break;
+	}
+}
+
+@end

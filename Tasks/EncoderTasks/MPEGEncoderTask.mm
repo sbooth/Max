@@ -37,9 +37,9 @@
 
 @implementation MPEGEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
+	if((self = [super init])) {
 		_encoderClass = [MPEGEncoder class];
 		return self;
 	}
@@ -48,7 +48,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [self metadata];
+	AudioMetadata								*metadata				= [[self taskInfo] metadata];
 	unsigned									trackNumber				= 0;
 	unsigned									trackTotal				= 0;
 	NSString									*album					= nil;
@@ -67,7 +67,7 @@
 	TagLib::ID3v2::AttachedPictureFrame			*pictureFrame			= NULL;
 	NSImage										*albumArt				= nil;
 	NSData										*data					= nil;
-	TagLib::MPEG::File							f						([_outputFilename fileSystemRepresentation], false);
+	TagLib::MPEG::File							f						([[self outputFilename] fileSystemRepresentation], false);
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	NSString									*timestamp				= nil;
@@ -157,7 +157,7 @@
 	if(nil != trackComment) {
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 	}
-	if(_writeSettingsToComment) {
+	if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
 		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
 	}
 	if(nil != comment) {
@@ -233,11 +233,11 @@
 	
 	// Track length
 	length = [metadata length];
-	if(nil != _tracks) {		
+	if(nil != [[self taskInfo] inputTracks]) {		
 		// Sum up length of all tracks
-		unsigned minutes	= [[_tracks valueForKeyPath:@"@sum.minute"] unsignedIntValue];
-		unsigned seconds	= [[_tracks valueForKeyPath:@"@sum.second"] unsignedIntValue];
-		unsigned frames		= [[_tracks valueForKeyPath:@"@sum.frame"] unsignedIntValue];
+		unsigned minutes	= [[[[self taskInfo] inputTracks] valueForKeyPath:@"@sum.minute"] unsignedIntValue];
+		unsigned seconds	= [[[[self taskInfo] inputTracks] valueForKeyPath:@"@sum.second"] unsignedIntValue];
+		unsigned frames		= [[[[self taskInfo] inputTracks] valueForKeyPath:@"@sum.frame"] unsignedIntValue];
 		unsigned ms			= ((60 * minutes) + seconds + (unsigned)(frames / 75.0)) * 1000;
 
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TLEN", TagLib::String::Latin1);
@@ -306,8 +306,13 @@
 	f.save();
 }
 
-- (NSString *)		extension						{ return @"mp3"; }
-- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"MP3", @"General", @""); }
+- (NSString *)		fileExtension					{ return @"mp3"; }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"MP3", @"General", @""); }
+
+@end
+
+@implementation MPEGEncoderTask (CueSheetExtensions)
+
 - (BOOL)			formatLegalForCueSheet			{ return YES; }
 - (NSString *)		cueSheetFormatName				{ return @"MP3"; }
 

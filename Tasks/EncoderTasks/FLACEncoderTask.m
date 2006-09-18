@@ -20,10 +20,12 @@
 
 #import "FLACEncoderTask.h"
 #import "FLACEncoder.h"
+#import "Track.h"
+#import "UtilityFunctions.h"
+
 #import "IOException.h"
 #import "MallocException.h"
 #import "FLACException.h"
-#import "UtilityFunctions.h"
 
 #include <FLAC/metadata.h>
 #include <FLAC/format.h>
@@ -34,9 +36,9 @@
 
 @implementation FLACEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
+	if((self = [super init])) {
 		_encoderClass = [FLACEncoder class];
 		return self;
 	}
@@ -45,7 +47,7 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [self metadata];
+	AudioMetadata								*metadata				= [[self taskInfo] metadata];
 	FLAC__Metadata_Chain						*chain					= NULL;
 	FLAC__Metadata_Iterator						*iterator				= NULL;
 	FLAC__StreamMetadata						*block					= NULL;
@@ -74,7 +76,7 @@
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename fileSystemRepresentation])) {
+		if(NO == FLAC__metadata_chain_read(chain, [[self outputFilename] fileSystemRepresentation])) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
 		}
 		
@@ -164,7 +166,7 @@
 		if(nil != trackComment) {
 			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 		}
-		if(_writeSettingsToComment) {
+		if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
 			comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
 		}
 		if(nil != comment) {
@@ -225,7 +227,7 @@
 		addVorbisComment(block, @"ENCODER", versionString);
 
 		// Encoder settings
-		addVorbisComment(block, @"ENCODING", [self settings]);
+		addVorbisComment(block, @"ENCODING", [self encoderSettings]);
 		
 		// Write the new metadata to the file
 		if(NO == FLAC__metadata_chain_write(chain, YES, NO)) {
@@ -239,9 +241,14 @@
 	}
 }
 
+- (NSString *)		fileExtension					{ return @"flac"; }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"FLAC", @"General", @""); }
+
+@end
+
+@implementation FLACEncoderTask (CueSheetAdditions)
+
 - (BOOL)			formatLegalForCueSheet			{ return YES; }
-- (NSString *)		extension						{ return @"flac"; }
-- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"FLAC", @"General", @""); }
 
 - (void) generateCueSheet
 {
@@ -258,17 +265,17 @@
 	unsigned									f						= 0;
 	
 	
-	if(nil == _tracks) {
+	if(nil == [[self taskInfo] inputTracks]) {
 		return;
 	}
-
+	
 	@try  {
 		chain = FLAC__metadata_chain_new();
 		if(NULL == chain) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		if(NO == FLAC__metadata_chain_read(chain, [_outputFilename fileSystemRepresentation])) {
+		if(NO == FLAC__metadata_chain_read(chain, [[self outputFilename] fileSystemRepresentation])) {
 			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
 		}
 		
@@ -311,7 +318,7 @@
 		}
 		
 		// MCN
-		mcn = [[[_tracks objectAtIndex:0] document] MCN];
+		mcn = [[[[[self taskInfo] inputTracks] objectAtIndex:0] document] MCN];
 		if(nil != mcn) {
 			strncpy(block->data.cue_sheet.media_catalog_number, [mcn UTF8String], sizeof(block->data.cue_sheet.media_catalog_number));
 		}
@@ -320,8 +327,8 @@
 		block->data.cue_sheet.is_cd		= YES;
 		
 		// Iterate through tracks
-		for(i = 0; i < [_tracks count]; ++i) {
-			currentTrack	= [_tracks objectAtIndex:i];
+		for(i = 0; i < [[[self taskInfo] inputTracks] count]; ++i) {
+			currentTrack	= [[[self taskInfo] inputTracks] objectAtIndex:i];
 			track			= FLAC__metadata_object_cuesheet_track_new();
 			if(NULL == track) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
@@ -353,7 +360,7 @@
 			}
 			
 			m += [currentTrack minute];
-
+			
 			if(NO == FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO)) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 			}
@@ -373,7 +380,7 @@
 		track->type			= 1;
 		track->num_indices	= 0;
 		track->indices		= NULL;
-
+		
 		if(NO == FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO)) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
 		}			

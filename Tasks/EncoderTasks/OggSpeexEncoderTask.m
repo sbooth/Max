@@ -18,21 +18,21 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "SpeexEncoderTask.h"
-#import "SpeexEncoder.h"
+#import "OggSpeexEncoderTask.h"
+#import "OggSpeexEncoder.h"
 
-@implementation SpeexEncoderTask
+@implementation OggSpeexEncoderTask
 
-- (id) initWithTask:(PCMGeneratingTask *)task
+- (id) init
 {
-	if((self = [super initWithTask:task])) {
-		_encoderClass = [SpeexEncoder class];
+	if((self = [super init])) {
+		_encoderClass = [OggSpeexEncoder class];
 		return self;
 	}
 	return nil;
 }
 
-- (NSString *)		extension						{ return @"spx"; }
-- (NSString *)		outputFormat					{ return NSLocalizedStringFromTable(@"Speex", @"General", @""); }
+- (NSString *)		fileExtension					{ return @"spx"; }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Ogg (Speex)", @"General", @""); }
 
 @end
