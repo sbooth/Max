@@ -28,6 +28,17 @@
 extern "C" {
 #endif
 
+// Types of audio contained in an Ogg stream that Max knows about
+enum OggStreamType {
+	kOggStreamTypeInvalid,
+	kOggStreamTypeUnknown,
+	kOggStreamTypeVorbis,
+	kOggStreamTypeFLAC,
+	kOggStreamTypeSpeex	
+};
+typedef enum OggStreamType OggStreamType;
+
+	
 // Get data directory (~/Application Support/Max/)
 NSString * getApplicationDataDirectory();
 
@@ -62,15 +73,6 @@ void addVorbisComment(FLAC__StreamMetadata		*block,
 					  NSString					*value);
 
 // Determine the type of audio contained in an ogg stream
-enum OggStreamType {
-	kOggStreamTypeInvalid,
-	kOggStreamTypeUnknown,
-	kOggStreamTypeVorbis,
-	kOggStreamTypeFLAC,
-	kOggStreamTypeSpeex	
-};
-typedef enum OggStreamType OggStreamType;
-
 OggStreamType oggStreamType(NSString *filename);
 
 // Convert an NSImage to PNG data
