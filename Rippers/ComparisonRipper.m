@@ -721,7 +721,7 @@
 			// Grab the master rip's data
 			[masterRip getBytes:buffer forSectorRange:readRange];
 			
-			// Convert to big endian byte ordering for the AIFF file
+			// Convert to big endian byte ordering 
 			swab(buffer, buffer, [readRange byteSize]);
 			
 			// Put the data in an AudioBufferList

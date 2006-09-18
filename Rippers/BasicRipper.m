@@ -192,7 +192,7 @@
 				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
 			}
 			
-			// Convert to big endian byte ordering for the AIFF file
+			// Convert to big endian byte ordering 
 			swab(buffer, buffer, [readRange byteSize]);
 			
 			// Put the data in an AudioBufferList
