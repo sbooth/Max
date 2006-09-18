@@ -64,7 +64,7 @@
 	[[self delegate] setStartTime:startTime];
 	[[self delegate] setStarted:YES];
 	
-	// Setup the audio source
+	// Setup the decoder
 	[[self decoder] finalizeSetup];
 	
 	// Parse the encoder settings
@@ -178,8 +178,8 @@
 		bufferList.mBuffers[0].mData	= calloc(bufferLen, sizeof(uint8_t));
 		NSAssert1(NULL != bufferList.mBuffers[0].mData, @"Unable to allocate memory: %s", strerror(errno));
 
-		framesToRead	= [[self decoder] totalFrames];
-		totalFrames		= framesToRead;
+		totalFrames						= [[self decoder] totalFrames];
+		framesToRead					= totalFrames;
 		
 		// Iteratively get the data and save it to the file
 		for(;;) {
@@ -219,7 +219,6 @@
 				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
-//				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}

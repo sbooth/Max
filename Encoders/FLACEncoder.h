@@ -19,10 +19,9 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "Encoder.h"
 
 #include <FLAC/file_encoder.h>
-
-#import "Encoder.h"
 
 @interface FLACEncoder : Encoder
 {
