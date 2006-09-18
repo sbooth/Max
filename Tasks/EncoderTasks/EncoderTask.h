@@ -35,9 +35,7 @@
 - (NSString *)		outputFormatName;
 - (NSString *)		fileExtension;
 
-- (void)			encoderReady:(id)anObject;
-
-- (void)			writeTags;
+- (NSString *)		encoderSettingsString;
 
 @end
 

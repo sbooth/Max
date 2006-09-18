@@ -134,8 +134,8 @@
 			if(nil != trackComment) {
 				comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 			}
-			if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
-				comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
+			if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+				comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
 			}
 			if(nil != comment) {
 				MP4SetMetadataComment(mp4FileHandle, [comment UTF8String]);
@@ -202,10 +202,7 @@
 			
 			tmpDirLen	= strlen(tmpDir);
 			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-			if(NULL == path) {
-//				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-//												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(NULL != path, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 			memcpy(path, tmpDir, tmpDirLen);
 			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 			path[tmpDirLen + patternLen] = '\0';
@@ -296,8 +293,8 @@
 				if(nil != trackComment) {
 					comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 				}
-				if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
-					comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
+				if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+					comment = (nil == comment ? [self encoderSettingsString] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self encoderSettingsString]]]);
 				}
 				if(nil != comment) {
 					[info setObject:comment forKey:@kAFInfoDictionary_Comments];

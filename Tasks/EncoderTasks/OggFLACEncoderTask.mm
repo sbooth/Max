@@ -117,8 +117,8 @@
 	if(nil != trackComment) {
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 	}
-	if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
-		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
+	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
 	}
 	if(nil != comment) {
 		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"DESCRIPTION"], TagLib::String([comment UTF8String], TagLib::String::UTF8));
@@ -178,7 +178,7 @@
 	f.tag()->addField("ENCODER", TagLib::String([versionString UTF8String], TagLib::String::UTF8));
 	
 	// Encoder settings
-	f.tag()->addField("ENCODING", TagLib::String([[self settings] UTF8String], TagLib::String::UTF8));
+	f.tag()->addField("ENCODING", TagLib::String([[self encoderSettingsString] UTF8String], TagLib::String::UTF8));
 	
 	f.save();
 }

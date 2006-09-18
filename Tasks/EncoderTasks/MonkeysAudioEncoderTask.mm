@@ -137,8 +137,8 @@
 		if(nil != trackComment) {
 			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 		}
-		if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
-			comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
+		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+			comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
 		}
 		if(nil != comment) {
 			tagName = [AudioMetadata customizeAPETag:@"COMMENT"];
@@ -216,7 +216,7 @@
 		f->SetFieldString(APE_TAG_FIELD_TOOL_VERSION, [bundleVersion UTF8String], TRUE);
 
 		// Encoder settings
-		f->SetFieldString(L"ENCODING", [[self settings] UTF8String], TRUE);
+		f->SetFieldString(L"ENCODING", [[self encoderSettingsString] UTF8String], TRUE);
 		
 		result = f->Save();
 		if(ERROR_SUCCESS != result) {

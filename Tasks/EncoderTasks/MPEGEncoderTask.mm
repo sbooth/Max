@@ -157,8 +157,8 @@
 	if(nil != trackComment) {
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 	}
-	if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
-		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
+	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
 	}
 	if(nil != comment) {
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));

@@ -166,8 +166,8 @@
 		if(nil != trackComment) {
 			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 		}
-		if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
-			comment = (nil == comment ? [self settings] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self settings]]]);
+		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+			comment = (nil == comment ? [self encoderSettingsString] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self encoderSettingsString]]]);
 		}
 		if(nil != comment) {
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DESCRIPTION"], comment);

@@ -36,9 +36,14 @@
 #include <unistd.h>			// mkstemp, unlink
 
 @interface EncoderTask (Private)
-- (void)		touchOutputFile;
-- (NSString *)	generateStandardBasenameUsingMetadata:(AudioMetadata *)metadata;
-- (NSString *)	generateCustomBasenameUsingMetadata:(AudioMetadata *)metadata withSubstitutions:(NSDictionary *)substitutions;
+- (void)			encoderReady:(id)anObject;
+
+- (void)			writeTags;
+
+- (void)			touchOutputFile;
+
+- (NSString *)		generateStandardBasenameUsingMetadata:(AudioMetadata *)metadata;
+- (NSString *)		generateCustomBasenameUsingMetadata:(AudioMetadata *)metadata withSubstitutions:(NSDictionary *)substitutions;
 @end
 
 enum {
@@ -99,7 +104,6 @@ enum {
 	[super dealloc];
 }
 
-- (void)			writeTags							{}
 - (NSString *)		description
 {
 	NSString		*result		= nil;
@@ -108,16 +112,17 @@ enum {
 	if(nil == result) {
 		result = [[[[[self taskInfo] inputFilenames] objectAtIndex:0] lastPathComponent] stringByDeletingPathExtension];
 	}
-
+	
 	return result;
 }
 
-//- (NSString *)		settings							{ return (nil == _encoder ? nil : [_encoder settings]); }
 - (NSString *)		outputFormatName					{ return nil; }
 - (NSString *)		fileExtension						{ return nil; }
 
 - (NSDictionary *)	encoderSettings						{ return [[_encoderSettings retain] autorelease]; }
 - (void)			setEncoderSettings:(NSDictionary *)encoderSettings 	{ [_encoderSettings release]; _encoderSettings = [encoderSettings retain]; }
+
+- (NSString *)		encoderSettingsString				{ return [_encoder settingsString]; }
 
 - (void) run
 {
@@ -215,13 +220,6 @@ enum {
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_encoderClass withObject:portArray];
 }
 
-- (void) encoderReady:(id)anObject
-{
-	_encoder = [(NSObject*) anObject retain];
-    [anObject setProtocolForProxy:@protocol(EncoderMethods)];
-	[anObject encodeToFile:[self outputFilename]];
-}
-
 - (void) setStarted:(BOOL)started
 {
 	[super setStarted:YES];
@@ -253,7 +251,7 @@ enum {
 {
 	// Tag file, if we have metadata
 	@try {
-		if(nil != [[self taskInfo] metadata]) {
+		if(nil != [[self taskInfo] metadata] && NO == [[[self taskInfo] metadata] empty]) {
 			[self writeTags];
 		}
 	}
@@ -496,6 +494,15 @@ enum {
 @end
 
 @implementation EncoderTask (Private)
+
+- (void) encoderReady:(id)anObject
+{
+	_encoder = [(NSObject*) anObject retain];
+    [anObject setProtocolForProxy:@protocol(EncoderMethods)];
+	[anObject encodeToFile:[self outputFilename]];
+}
+
+- (void)			writeTags							{}
 
 - (void) touchOutputFile
 {

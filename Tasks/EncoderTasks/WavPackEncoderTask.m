@@ -116,8 +116,8 @@
 	if(nil != trackComment) {
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 	}
-	if([[[[self taskInfo] settings] objectForKey:@"writeSettingsToComment"] boolValue]) {
-		comment = (nil == comment ? [self settings] : [NSString stringWithFormat:@"%@\n%@", comment, [self settings]]);
+	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
 	}
 	if(nil != comment) {
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"COMMENT"] cStringUsingEncoding:NSASCIIStringEncoding], [comment UTF8String], strlen([comment UTF8String]));
@@ -177,7 +177,7 @@
 	WavpackAppendTagItem(wpc, "TOOL VERSION", [bundleVersion UTF8String], strlen([bundleVersion UTF8String]));
 	
 	// Encoder settings
-	WavpackAppendTagItem(wpc, "ENCODING", [[self settings] UTF8String], strlen([[self settings] UTF8String]));	
+	WavpackAppendTagItem(wpc, "ENCODING", [[self encoderSettingsString] UTF8String], strlen([[self encoderSettingsString] UTF8String]));	
 
 	if(0 == WavpackWriteTag(wpc)) {
 		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
