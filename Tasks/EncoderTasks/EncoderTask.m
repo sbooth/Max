@@ -77,21 +77,6 @@ enum {
 	}
 }
 
-/*- (id) initWithTask:(PCMGeneratingTask *)task
-{
-	if((self = [super init])) {
-		_connection					= nil;
-		_encoder					= nil;
-		_task						= [task retain];
-		_tracks						= nil;
-		_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
-	
-		return self;
-	}
-	
-	return nil;
-}*/
-
 - (void) dealloc
 {
 /*	NSEnumerator	*enumerator;
@@ -115,7 +100,18 @@ enum {
 }
 
 - (void)			writeTags							{}
-- (NSString *)		description							{ return [[[self taskInfo] metadata] description]; }
+- (NSString *)		description
+{
+	NSString		*result		= nil;
+	
+	result =  [[[self taskInfo] metadata] description];
+	if(nil == result) {
+		result = [[[[[self taskInfo] inputFilenames] objectAtIndex:0] lastPathComponent] stringByDeletingPathExtension];
+	}
+
+	return result;
+}
+
 //- (NSString *)		settings							{ return (nil == _encoder ? nil : [_encoder settings]); }
 - (NSString *)		outputFormatName					{ return nil; }
 - (NSString *)		fileExtension						{ return nil; }
@@ -197,8 +193,8 @@ enum {
 		}
 	}
 	
-	// Check if output file exists
-	if([[[self taskInfo] settings] objectForKey:@"overwriteExistingFiles"] && [[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]]]) {
+	// Check if output file exists and delete if requested
+	if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]]] && [[[[self taskInfo] settings] objectForKey:@"overwriteExistingFiles"] boolValue]) {
 		NSString		*filename		= [NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]];
 		BOOL			result			= [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
 		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
@@ -507,8 +503,6 @@ enum {
 	NSDictionary	*attributes		= [NSDictionary dictionaryWithObject:permissions forKey:NSFilePosixPermissions];	
 	BOOL			result			= [[NSFileManager defaultManager] createFileAtPath:[self outputFilename] contents:nil attributes:attributes];
 	NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));	
-//		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-//									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 }
 
 - (NSString *) generateCustomBasenameUsingMetadata:(AudioMetadata *)metadata withSubstitutions:(NSDictionary *)substitutions
