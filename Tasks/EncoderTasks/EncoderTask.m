@@ -251,7 +251,7 @@ enum {
 {
 	// Tag file, if we have metadata
 	@try {
-		if(nil != [[self taskInfo] metadata] && NO == [[[self taskInfo] metadata] empty]) {
+		if(nil != [[self taskInfo] metadata] && NO == [[[self taskInfo] metadata] isEmpty]) {
 			[self writeTags];
 		}
 	}
