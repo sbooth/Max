@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "SpeexEncoder.h"
+#import "OggSpeexEncoder.h"
 
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>
@@ -121,40 +121,11 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 #undef readint
 #undef writeint
 
-@interface SpeexEncoder (Private)
+@interface OggSpeexEncoder (Private)
 - (void)	parseSettings;
 @end
 
-@implementation SpeexEncoder
-
-- (void) parseSettings
-{
-	NSDictionary *settings	= [[self delegate] userInfo];
-	
-	_mode				= [[settings objectForKey:@"mode"] intValue];
-	
-	_resampleInput		= [[settings objectForKey:@"resampleInput"] boolValue];
-	
-	_denoiseEnabled		= [[settings objectForKey:@"denoiseInput"] boolValue];
-	_agcEnabled			= [[settings objectForKey:@"applyAGC"] boolValue];
-	
-	_target				= [[settings objectForKey:@"target"] intValue];
-	
-	_vbrEnabled			= [[settings objectForKey:@"enableVBR"] boolValue];
-	_abrEnabled			= [[settings objectForKey:@"enableABR"] boolValue];
-	
-	_quality			= [[settings objectForKey:@"quality"] intValue];
-	_bitrate			= sSpeexBitrates[[[settings objectForKey:@"bitrate"] intValue]] * 1000;
-	
-	_complexity			= [[settings objectForKey:@"complexity"] intValue];
-	
-	_vadEnabled			= [[settings objectForKey:@"enableVAD"] boolValue];
-	_dtxEnabled			= [[settings objectForKey:@"enableDTX"] boolValue];
-	
-	_framesPerOggPacket	= [[settings objectForKey:@"framesPerPacket"] intValue];
-	
-	_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
-}
+@implementation OggSpeexEncoder
 
 - (oneway void) encodeToFile:(NSString *) filename
 {
@@ -722,6 +693,39 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			return nil;
 			break;
 	}
+}
+
+@end
+
+@implementation OggSpeexEncoder (Private)
+
+- (void) parseSettings
+{
+	NSDictionary *settings	= [[self taskInfo] encoderSettings];
+	
+	_mode				= [[settings objectForKey:@"mode"] intValue];
+	
+	_resampleInput		= [[settings objectForKey:@"resampleInput"] boolValue];
+	
+	_denoiseEnabled		= [[settings objectForKey:@"denoiseInput"] boolValue];
+	_agcEnabled			= [[settings objectForKey:@"applyAGC"] boolValue];
+	
+	_target				= [[settings objectForKey:@"target"] intValue];
+	
+	_vbrEnabled			= [[settings objectForKey:@"enableVBR"] boolValue];
+	_abrEnabled			= [[settings objectForKey:@"enableABR"] boolValue];
+	
+	_quality			= [[settings objectForKey:@"quality"] intValue];
+	_bitrate			= sSpeexBitrates[[[settings objectForKey:@"bitrate"] intValue]] * 1000;
+	
+	_complexity			= [[settings objectForKey:@"complexity"] intValue];
+	
+	_vadEnabled			= [[settings objectForKey:@"enableVAD"] boolValue];
+	_dtxEnabled			= [[settings objectForKey:@"enableDTX"] boolValue];
+	
+	_framesPerOggPacket	= [[settings objectForKey:@"framesPerPacket"] intValue];
+	
+	_writeSettingsToComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
 }
 
 @end

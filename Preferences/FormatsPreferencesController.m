@@ -29,7 +29,7 @@
 #import "WavPackSettingsSheet.h"
 #import "OggVorbisSettingsSheet.h"
 #import "MP3SettingsSheet.h"
-#import "SpeexSettingsSheet.h"
+#import "OggSpeexSettingsSheet.h"
 
 #import "CoreAudioUtilities.h"
 
@@ -88,8 +88,8 @@
 		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentMonkeysAudio], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
 		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"WavPack", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentWavPack], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
 		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentOggVorbis], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"MP3", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentMP3], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
-		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Speex", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentSpeex], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"MP3", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentMPEG], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
+		[_availableFormats addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:NSLocalizedStringFromTable(@"Speex", @"General", @""), NSLocalizedStringFromTable(@"Built-In", @"General", @""), [NSNumber numberWithInt:kComponentOggSpeex], nil] forKeys:[NSArray arrayWithObjects:@"name", @"source", @"component", nil]]];
 		
 		// Add CoreAudio formats
 		for(j = 0; j < [coreAudioFormats count]; ++j) {
@@ -218,8 +218,8 @@
 				
 			// Lossy encoders
 			case kComponentOggVorbis:		defaultSettings = [OggVorbisSettingsSheet defaultSettings];			break;
-			case kComponentMP3:				defaultSettings = [MP3SettingsSheet defaultSettings];				break;
-			case kComponentSpeex:			defaultSettings = [SpeexSettingsSheet defaultSettings];				break;
+			case kComponentMPEG:			defaultSettings = [MP3SettingsSheet defaultSettings];				break;
+			case kComponentOggSpeex:		defaultSettings = [OggSpeexSettingsSheet defaultSettings];				break;
 
 			default:						defaultSettings = [NSDictionary dictionary];						break;
 		}
@@ -267,8 +267,8 @@
 		case kComponentWavPack:			settingsSheetClass = [WavPackSettingsSheet class];			break;
 
 		case kComponentOggVorbis:		settingsSheetClass = [OggVorbisSettingsSheet class];		break;
-		case kComponentMP3:				settingsSheetClass = [MP3SettingsSheet class];				break;
-		case kComponentSpeex:			settingsSheetClass = [SpeexSettingsSheet class];			break;
+		case kComponentMPEG:			settingsSheetClass = [MP3SettingsSheet class];				break;
+		case kComponentOggSpeex:		settingsSheetClass = [OggSpeexSettingsSheet class];			break;
 			
 		default:
 			NSLog(@"Unknown component %@", [format objectForKey:@"component"]);

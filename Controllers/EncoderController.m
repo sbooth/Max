@@ -133,25 +133,31 @@ static EncoderController *sharedController = nil;
 		switch([[format objectForKey:@"component"] intValue]) {
 			
 			case kComponentFLAC:
-//				[self runEncoder:[FLACEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
+				[self runEncoder:[FLACEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			case kComponentOggFLAC:
+				[self runEncoder:[OggFLACEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			case kComponentWavPack:
+				[self runEncoder:[WavPackEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			case kComponentMonkeysAudio:
+				[self runEncoder:[MonkeysAudioEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			case kComponentOggVorbis:
+				[self runEncoder:[OggVorbisEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
-			case kComponentMP3:
+			case kComponentMPEG:
+				[self runEncoder:[MPEGEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
-			case kComponentSpeex:
+			case kComponentOggSpeex:
+				[self runEncoder:[OggSpeexEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			case kComponentCoreAudio:
@@ -159,6 +165,7 @@ static EncoderController *sharedController = nil;
 				break;
 				
 			case kComponentLibsndfile:
+				[self runEncoder:[LibsndfileEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			default:

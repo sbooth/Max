@@ -21,7 +21,7 @@
 #import <Cocoa/Cocoa.h>
 #import "EncoderSettingsSheet.h"
 
-@interface SpeexSettingsSheet : EncoderSettingsSheet
+@interface OggSpeexSettingsSheet : EncoderSettingsSheet
 {
 }
 

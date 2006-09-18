@@ -18,10 +18,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "SpeexSettingsSheet.h"
-#import "SpeexEncoder.h"
+#import "OggSpeexSettingsSheet.h"
+#import "OggSpeexEncoder.h"
 
-@implementation SpeexSettingsSheet
+@implementation OggSpeexSettingsSheet
 
 + (NSDictionary *) defaultSettings
 {
@@ -66,7 +66,7 @@
 
 - (id) initWithSettings:(NSDictionary *)settings;
 {
-	if((self = [super initWithNibName:@"SpeexSettingsSheet" settings:settings])) {
+	if((self = [super initWithNibName:@"OggSpeexSettingsSheet" settings:settings])) {
 		return self;
 	}
 	return nil;

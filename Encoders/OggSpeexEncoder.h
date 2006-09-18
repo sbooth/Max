@@ -32,7 +32,7 @@ enum {
 	SPEEX_TARGET_BITRATE					= 1
 };
 
-@interface SpeexEncoder : Encoder
+@interface OggSpeexEncoder : Encoder
 {
 	// Settings flags
 	int						_mode;

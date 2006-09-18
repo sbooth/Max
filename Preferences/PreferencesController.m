@@ -52,7 +52,7 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
 		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults", @"FreeDBDefaults",
 			@"CompactDiscDocumentDefaults", @"ComparisonRipperDefaults", @"ParanoiaDefaults", @"TrackDefaults", 
-			@"AlbumArtDefaults", @"PCMGeneratingTaskDefaults", @"ConverterTaskDefaults", @"EncoderTaskDefaults", nil];
+			@"AlbumArtDefaults", @"EncoderTaskDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
