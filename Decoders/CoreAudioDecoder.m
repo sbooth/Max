@@ -79,8 +79,8 @@
 {
 	OSStatus	result;
 	
-	result			= ExtAudioSeek(_extAudioFile, frame);
-	NSAssert1(noErr == result, @"ExtAudioSeek failed: %@", UTCreateStringForOSType(result));
+	result			= ExtAudioFileSeek(_extAudioFile, frame);
+	NSAssert1(noErr == result, @"ExtAudioFileSeek failed: %@", UTCreateStringForOSType(result));
 	
 	[[self pcmBuffer] reset];
 	
