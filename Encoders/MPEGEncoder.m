@@ -53,13 +53,12 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 @implementation MPEGEncoder
 
-- (id) initWithPCMFilename:(NSString *)inputFilename
+- (id) init
 {
-	if((self = [super initWithPCMFilename:inputFilename])) {
+	if((self = [super init])) {
 		
 		@try {
 			// LAME setup
-			_gfp	= NULL;
 			_gfp	= lame_init();
 			if(NULL == _gfp) {
 				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
@@ -84,9 +83,217 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	return nil;
 }
 
+- (void) dealloc
+{
+	lame_close(_gfp);	
+	
+	[super dealloc];
+}
+
+- (oneway void) encodeToFile:(NSString *) filename
+{
+	NSDate							*startTime						= [NSDate date];
+	FILE							*file							= NULL;
+	int								lameResult;
+	AudioBufferList					bufferList;
+	ssize_t							bufferLen						= 0;
+	SInt64							totalFrames, framesToRead;
+	UInt32							frameCount;
+	unsigned long					iterations						= 0;
+
+	// Tell our owner we are starting
+	[[self delegate] setStartTime:startTime];	
+	[[self delegate] setStarted:YES];
+	
+	// Setup the decoder
+	[[self decoder] finalizeSetup];
+	
+	// Parse the encoder settings
+	[self parseSettings];
+	
+	@try {
+
+		if(1 != [[self decoder] pcmFormat].mChannelsPerFrame && 2 != [[self decoder] pcmFormat].mChannelsPerFrame) {
+			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
+		}
+
+		totalFrames			= [[self decoder] totalFrames];
+		framesToRead		= totalFrames;
+		
+		// Set up the AudioBufferList
+		bufferList.mNumberBuffers					= 1;
+		bufferList.mBuffers[0].mData				= NULL;
+		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		
+		// Allocate the buffer that will hold the interleaved audio data
+		bufferLen									= 1024;
+		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+			
+			case 8:				
+			case 24:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
+				break;
+				
+			case 16:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
+				break;
+				
+			case 32:
+				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
+				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
+				break;
+				
+			default:
+				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
+				break;				
+		}
+		
+		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+		
+		// Initialize the LAME encoder
+		lame_set_num_channels(_gfp, [[self decoder] pcmFormat].mChannelsPerFrame);
+		lame_set_in_samplerate(_gfp, [[self decoder] pcmFormat].mSampleRate);
+		
+		lameResult = lame_init_params(_gfp);
+		if(-1 == lameResult) {
+			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @"") userInfo:nil];
+		}
+
+		// Open the output file
+		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+		if(-1 == _out) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		// Iteratively get the PCM data and encode it
+		for(;;) {
+			
+			// Set up the buffer parameters
+			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			
+			// Read a chunk of PCM input
+			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			
+			// We're finished if no frames were returned
+			if(0 == frameCount) {
+				break;
+			}
+			
+			// Encode the PCM data
+			[self encodeChunk:&bufferList frameCount:frameCount];
+			
+			// Update status
+			framesToRead -= frameCount;
+			
+			// Distributed Object calls are expensive, so only perform them every few iterations
+			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
+				
+				// Check if we should stop, and if so throw an exception
+				if([[self delegate] shouldStop]) {
+					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
+				}
+				
+				// Update UI
+				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
+				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
+				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
+				
+				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
+			}
+			
+			++iterations;
+		}
+		
+		// Flush the last MP3 frames (maybe)
+		[self finishEncode];
+		
+		// Close the output file
+		if(-1 == close(_out)) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		_out = -1;
+		
+		// Write the Xing VBR tag
+		file = fopen([filename fileSystemRepresentation], "r+");
+		if(NULL == file) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		lame_mp3_tags_fid(_gfp, file);
+	}
+
+	@catch(StopException *exception) {
+		[[self delegate] setStopped:YES];
+	}
+	
+	@catch(NSException *exception) {
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
+	}
+	
+	@finally {
+		NSException *exception;
+				
+		// Close the output file if not already closed
+		if(-1 != _out && -1 == close(_out)) {
+			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
+												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}
+
+		// And close the other output file
+		if(NULL != file && EOF == fclose(file)) {
+			exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
+												 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSLog(@"%@", exception);
+		}		
+
+		free(bufferList.mBuffers[0].mData);
+	}
+
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
+}
+
+- (NSString *) settings
+{
+	NSString *bitrateString;
+	NSString *qualityString;
+		
+	switch(lame_get_VBR(_gfp)) {
+		case vbr_mt:
+		case vbr_rh:
+		case vbr_mtrh:
+//			appendix = "ca. ";
+			bitrateString = [NSString stringWithFormat:@"VBR(q=%i)", lame_get_VBR_q(_gfp)];
+			break;
+		case vbr_abr:
+			bitrateString = [NSString stringWithFormat:@"average %d kbps", lame_get_VBR_mean_bitrate_kbps(_gfp)];
+			break;
+		default:
+			bitrateString = [NSString stringWithFormat:@"%3d kbps", lame_get_brate(_gfp)];
+			break;
+	}
+	
+//			0.1 * (int) (10. * lame_get_compression_ratio(_gfp) + 0.5),
+
+	qualityString = [NSString stringWithFormat:@"qval=%i", lame_get_quality(_gfp)];
+	
+	return [NSString stringWithFormat:@"LAME settings: %@ %@", bitrateString, qualityString];
+}
+
+@end
+
+@implementation MPEGEncoder (Private)
 - (void) parseSettings
 {
-	NSDictionary	*settings	= [[self delegate] userInfo];
+	NSDictionary	*settings	= [[self delegate] encoderSettings];
 	int				bitrate;	
 	
 	
@@ -130,227 +337,6 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	//lame_set_findReplayGain(_gfp, 1);			
 }
 
-- (void) dealloc
-{
-	lame_close(_gfp);	
-	
-	[super dealloc];
-}
-
-- (oneway void) encodeToFile:(NSString *) filename
-{
-	NSDate							*startTime						= [NSDate date];
-	FILE							*file							= NULL;
-	int								lameResult;
-	AudioBufferList					bufferList;
-	ssize_t							bufferLen						= 0;
-	OSStatus						err;
-	FSRef							ref;
-	ExtAudioFileRef					extAudioFileRef					= NULL;
-	AudioStreamBasicDescription		asbd;
-	SInt64							totalFrames, framesToRead;
-	UInt32							size, frameCount;
-	unsigned long					iterations						= 0;
-
-
-	// Parse the encoder settings
-	[self parseSettings];
-
-	// Tell our owner we are starting
-	[_delegate setStartTime:startTime];	
-	[_delegate setStarted];
-	
-	@try {
-		bufferList.mBuffers[0].mData = NULL;
-		
-		// Open the input file
-		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		
-		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileOpen"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Get input file information
-		size	= sizeof(asbd);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		[self setInputASBD:asbd];
-
-		if(1 != [self channelsPerFrame] && 2 != [self channelsPerFrame]) {
-			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
-		}
-
-		size	= sizeof(totalFrames);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		framesToRead = totalFrames;
-		
-		// Set up the AudioBufferList
-		bufferList.mNumberBuffers					= 1;
-		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
-		
-		// Allocate the buffer that will hold the interleaved audio data
-		bufferLen									= 1024;
-		switch([self bitsPerChannel]) {
-			
-			case 8:				
-			case 24:
-				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
-				break;
-				
-			case 16:
-				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
-				break;
-				
-			case 32:
-				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
-				break;
-				
-			default:
-				@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
-				break;				
-		}
-		
-		if(NULL == bufferList.mBuffers[0].mData) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Initialize the LAME encoder
-		lame_set_num_channels(_gfp, [self channelsPerFrame]);
-		lame_set_in_samplerate(_gfp, [self sampleRate]);
-		
-		lameResult = lame_init_params(_gfp);
-		if(-1 == lameResult) {
-			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @"") userInfo:nil];
-		}
-
-		// Open the output file
-		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == _out) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Iteratively get the PCM data and encode it
-		for(;;) {
-			
-			// Read a chunk of PCM input
-			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
-			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
-			if(err != noErr) {
-				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
-			// We're finished if no frames were returned
-			if(0 == frameCount) {
-				break;
-			}
-			
-			// Encode the PCM data
-			[self encodeChunk:&bufferList frameCount:frameCount];
-			
-			// Update status
-			framesToRead -= frameCount;
-			
-			// Distributed Object calls are expensive, so only perform them every few iterations
-			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
-				
-				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
-					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-				}
-				
-				// Update UI
-				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
-				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
-				
-				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
-			}
-			
-			++iterations;
-		}
-		
-		// Flush the last MP3 frames (maybe)
-		[self finishEncode];
-		
-		// Close the output file
-		if(-1 == close(_out)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		_out = -1;
-		
-		// Write the Xing VBR tag
-		file = fopen([filename fileSystemRepresentation], "r+");
-		if(NULL == file) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		lame_mp3_tags_fid(_gfp, file);
-	}
-
-	@catch(StopException *exception) {
-		[_delegate setStopped];
-	}
-	
-	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
-	}
-	
-	@finally {
-		NSException *exception;
-		
-		// Close the input file
-		err = ExtAudioFileDispose(extAudioFileRef);
-		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}
-		
-		// Close the output file if not already closed
-		if(-1 != _out && -1 == close(_out)) {
-			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}
-
-		// And close the other output file
-		if(NULL != file && EOF == fclose(file)) {
-			exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
-												 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}		
-
-		free(bufferList.mBuffers[0].mData);
-	}
-
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
-}
-
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 {
 	unsigned char	*buffer					= NULL;
@@ -363,13 +349,13 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	int8_t			*buffer8				= NULL;
 	int16_t			*buffer16				= NULL;
 	int32_t			*buffer32				= NULL;
-
+	
 	int8_t			byteOne, byteTwo, byteThree;
 	int32_t			constructedSample;
 	
 	int				lameResult;
 	long			bytesWritten;
-
+	
 	unsigned		wideSample;
 	unsigned		sample, channel;
 	
@@ -381,7 +367,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
-				
+		
 		// Allocate channel buffers for sample de-interleaving
 		channelBuffers = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(void *));
 		if(NULL == channelBuffers) {
@@ -395,11 +381,11 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		}
 		
 		// Split PCM data into channels and convert to appropriate sample size for LAME
-		switch([self bitsPerChannel]) {
+		switch([[self decoder] pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 				channelBuffers16 = (short **)channelBuffers;
-
+				
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 					channelBuffers16[channel] = calloc(frameCount, sizeof(short));
 					if(NULL == channelBuffers16[channel]) {
@@ -407,17 +393,17 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 					}
 				}
-				
-				buffer8 = chunk->mBuffers[0].mData;
+					
+					buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						// Rescale values to short
 						channelBuffers16[channel][wideSample] = (short)(((buffer8[sample] << 8) & 0xFF00) | (buffer8[sample] & 0xFF));
 					}
 				}
-
-				lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
-
+					
+					lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+				
 				break;
 				
 			case 16:
@@ -430,16 +416,16 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 					}
 				}
-
-				buffer16 = chunk->mBuffers[0].mData;
+					
+					buffer16 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						channelBuffers16[channel][wideSample] = (short)OSSwapBigToHostInt16(buffer16[sample]);
 					}
 				}
 					
-				lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
-
+					lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+				
 				break;
 				
 			case 24:
@@ -452,9 +438,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 					}
 				}
-
-				// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
-				buffer8 = chunk->mBuffers[0].mData;
+					
+					// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
+					buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						// Reconstruct the original sample
@@ -468,10 +454,10 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 					}
 				}
 					
-				lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
+					lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
 				
 				break;
-
+				
 			case 32:
 				channelBuffers32 = (long **)channelBuffers;
 				
@@ -482,16 +468,16 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 					}
 				}
-
-				buffer32 = chunk->mBuffers[0].mData;
+					
+					buffer32 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(buffer32[sample]);
 					}
 				}
+					
+					lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
 				
-				lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
-
 				break;
 				
 			default:
@@ -527,7 +513,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	
 	int				lameResult;
 	ssize_t			bytesWritten;
-		
+	
 	@try {
 		buf = NULL;
 		
@@ -536,7 +522,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		buf			= (unsigned char *) calloc(bufSize, sizeof(unsigned char));
 		if(NULL == buf) {
 			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
 		// Flush the mp3 buffer
@@ -552,37 +538,10 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 	}
-		
+	
 	@finally {
 		free(buf);
 	}
-}
-
-- (NSString *) settings
-{
-	NSString *bitrateString;
-	NSString *qualityString;
-		
-	switch(lame_get_VBR(_gfp)) {
-		case vbr_mt:
-		case vbr_rh:
-		case vbr_mtrh:
-//			appendix = "ca. ";
-			bitrateString = [NSString stringWithFormat:@"VBR(q=%i)", lame_get_VBR_q(_gfp)];
-			break;
-		case vbr_abr:
-			bitrateString = [NSString stringWithFormat:@"average %d kbps", lame_get_VBR_mean_bitrate_kbps(_gfp)];
-			break;
-		default:
-			bitrateString = [NSString stringWithFormat:@"%3d kbps", lame_get_brate(_gfp)];
-			break;
-	}
-	
-//			0.1 * (int) (10. * lame_get_compression_ratio(_gfp) + 0.5),
-
-	qualityString = [NSString stringWithFormat:@"qval=%i", lame_get_quality(_gfp)];
-	
-	return [NSString stringWithFormat:@"LAME settings: %@ %@", bitrateString, qualityString];
 }
 
 @end

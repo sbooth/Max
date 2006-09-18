@@ -41,9 +41,9 @@
 
 @implementation FLACEncoder
 
-- (id) initWithFilename:(NSString *)filename
+- (id) init
 {	
-	if((self = [super initWithFilename:filename])) {
+	if((self = [super init])) {
 		
 		_padding				= 4096;
 		_exhaustiveModelSearch	= NO;
@@ -60,20 +60,6 @@
 	return nil;
 }
 
-- (void) parseSettings
-{
-	NSDictionary *settings	= [[self delegate] encoderSettings];
-	
-	_exhaustiveModelSearch	= [[settings objectForKey:@"exhaustiveModelSearch"] boolValue];
-	_enableMidSide			= [[settings objectForKey:@"enableMidSide"] boolValue];
-	_enableLooseMidSide		= [[settings objectForKey:@"looseEnableMidSide"] boolValue];
-	_QLPCoeffPrecision		= [[settings objectForKey:@"QLPCoeffPrecision"] intValue];
-	_minPartitionOrder		= [[settings objectForKey:@"minPartitionOrder"] intValue];
-	_maxPartitionOrder		= [[settings objectForKey:@"maxPartitionOrder"] intValue];
-	_maxLPCOrder			= [[settings objectForKey:@"maxLPCOrder"] intValue];
-	_padding				= [[settings objectForKey:@"padding"] unsignedIntValue];
-}
-
 - (oneway void) encodeToFile:(NSString *)filename
 {
 	NSDate							*startTime					= [NSDate date];
@@ -86,8 +72,8 @@
 	UInt32							frameCount;
 	
 	// Tell our owner we are starting
-	[_delegate setStartTime:startTime];	
-	[_delegate setStarted:YES];
+	[[self delegate] setStartTime:startTime];	
+	[[self delegate] setStarted:YES];
 
 	// Setup the decoder
 	[[self decoder] finalizeSetup];
@@ -221,7 +207,7 @@
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if([[self delegate] shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -242,12 +228,12 @@
 	
 	
 	@catch(StopException *exception) {
-		[_delegate setStopped:YES];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped:YES];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@finally {
@@ -258,8 +244,32 @@
 		free(bufferList.mBuffers[0].mData);
 	}
 	
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted:YES];
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];
+}
+
+- (NSString *) settings
+{
+	return [NSString stringWithFormat:@"FLAC settings: exhaustiveModelSearch:%i midSideStereo:%i looseMidSideStereo:%i QLPCoeffPrecision:%i, minResidualPartitionOrder:%i, maxResidualPartitionOrder:%i, maxLPCOrder:%i", 
+		_exhaustiveModelSearch, _enableMidSide, _enableLooseMidSide, _QLPCoeffPrecision, _minPartitionOrder, _maxPartitionOrder, _maxLPCOrder];
+}
+
+@end
+
+@implementation FLACEncoder (Private)
+
+- (void) parseSettings
+{
+	NSDictionary *settings	= [[self delegate] encoderSettings];
+	
+	_exhaustiveModelSearch	= [[settings objectForKey:@"exhaustiveModelSearch"] boolValue];
+	_enableMidSide			= [[settings objectForKey:@"enableMidSide"] boolValue];
+	_enableLooseMidSide		= [[settings objectForKey:@"looseEnableMidSide"] boolValue];
+	_QLPCoeffPrecision		= [[settings objectForKey:@"QLPCoeffPrecision"] intValue];
+	_minPartitionOrder		= [[settings objectForKey:@"minPartitionOrder"] intValue];
+	_maxPartitionOrder		= [[settings objectForKey:@"maxPartitionOrder"] intValue];
+	_maxLPCOrder			= [[settings objectForKey:@"maxLPCOrder"] intValue];
+	_padding				= [[settings objectForKey:@"padding"] unsignedIntValue];
 }
 
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount
@@ -364,11 +374,5 @@
 		free(buffer);
 	}
 }	
-
-- (NSString *) settings
-{
-	return [NSString stringWithFormat:@"FLAC settings: exhaustiveModelSearch:%i midSideStereo:%i looseMidSideStereo:%i QLPCoeffPrecision:%i, minResidualPartitionOrder:%i, maxResidualPartitionOrder:%i, maxLPCOrder:%i", 
-		_exhaustiveModelSearch, _enableMidSide, _enableLooseMidSide, _QLPCoeffPrecision, _minPartitionOrder, _maxPartitionOrder, _maxLPCOrder];
-}
 
 @end

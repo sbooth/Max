@@ -166,12 +166,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 
 	AudioBufferList				bufferList;
 	ssize_t						bufferLen									= 0;
-	OSStatus					err;
-	FSRef						ref;
-	ExtAudioFileRef				extAudioFileRef								= NULL;
-	AudioStreamBasicDescription asbd;
 	SInt64						totalFileFrames, framesToRead;
-	UInt32						size, frameCount;
+	UInt32						frameCount;
 
 	int8_t						*buffer8									= NULL;
 	int16_t						*buffer16									= NULL;
@@ -185,54 +181,27 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	unsigned					sample, wideSample;
    
 	
+	// Tell our owner we are starting
+	[[self delegate] setStartTime:startTime];	
+	[[self delegate] setStarted:YES];
+	
+	// Setup the decoder
+	[[self decoder] finalizeSetup];
+	
 	// Parse the encoder settings
 	[self parseSettings];
-
-	// Tell our owner we are starting
-	[_delegate setStartTime:startTime];	
-	[_delegate setStarted];
-
+	
 	@try {
-		bufferList.mBuffers[0].mData = NULL;
-		
-		// Open the input file
-		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		
-		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileOpen"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Get input file information
-		size	= sizeof(asbd);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		[self setInputASBD:asbd];
 
-		if(1 != [self channelsPerFrame] && 2 != [self channelsPerFrame]) {
+		if(1 != [[self decoder] pcmFormat].mChannelsPerFrame && 2 != [[self decoder] pcmFormat].mChannelsPerFrame) {
 			@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		size	= sizeof(totalFileFrames);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFileFrames);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		framesToRead = totalFileFrames;
+		totalFrames			= [[self decoder] totalFrames];
+		framesToRead		= totalFrames;
 		
 		// Resample input if requested
-		if(_resampleInput) {
+/*		if(_resampleInput) {
 			
 			// Determine the desired sample rate
 			switch(_mode) {
@@ -253,7 +222,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty"]
 													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
-		}
+		}*/
 		
 		// Open the output file
 		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -263,7 +232,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		}
 		
 		// Check if we should stop, and if so throw an exception
-		if([_delegate shouldStop]) {
+		if([[self delegate] shouldStop]) {
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
@@ -289,7 +258,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		header.frames_per_packet	= _framesPerOggPacket;
 		header.vbr					= _vbrEnabled;
-		header.nb_channels			= [self channelsPerFrame];
+		header.nb_channels			= [[self decoder] pcmFormat].mChannelsPerFrame;
 		
 		// Setup the encoder
 		speexState = speex_encoder_init(mode);
@@ -375,11 +344,12 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
-		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		bufferList.mBuffers[0].mData				= NULL;
+		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 2 * frameSize;
-		switch([self bitsPerChannel]) {
+		switch([[self decoder] pcmFormat].mBitsPerChannel) {
 			
 			case 8:
 			case 24:
@@ -402,10 +372,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				break;				
 		}
 		
-		if(NULL == bufferList.mBuffers[0].mData) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		speex_bits_init(&bits);
 		
@@ -415,21 +382,22 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		// Iteratively get the PCM data and encode it, one frame at a time
 		while(NO == eos || totalFrames > framesEncoded) {
 			
-			// Read a single frame of PCM input
-			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
-			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
-			if(err != noErr) {
-				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			// Set up the buffer parameters
+			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
 			
+			// Read a chunk of PCM input
+			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+
+			// We're finished if no frames were returned
 			if(0 == frameCount) {
 				eos = YES;
 			}
 			
 			// Fill Speex buffer, converting to host endian byte order
 			// Speex only supports 16-bit or floating point samples, so renormalize accordingly
-			switch([self bitsPerChannel]) {
+			switch([[self decoder] pcmFormat].mBitsPerChannel) {
 				
 				case 8:
 					floatBuffer = calloc(frameCount, sizeof(float));
@@ -495,12 +463,12 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			totalFrames += frameCount;			
 			++frameID;
 			
-			switch([self bitsPerChannel]) {
+			switch([[self decoder] pcmFormat].mBitsPerChannel) {
 
 				case 8:
 				case 24:
 				case 32:
-					if(2 == [self channelsPerFrame]) {
+					if(2 == [[self decoder] pcmFormat].mChannelsPerFrame) {
 						speex_encode_stereo(floatBuffer, frameSize, &bits);
 					}
 
@@ -515,7 +483,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					break;
 							
 				case 16:
-					if(2 == [self channelsPerFrame]) {
+					if(2 == [[self decoder] pcmFormat].mChannelsPerFrame) {
 						speex_encode_stereo_int(bufferList.mBuffers[0].mData, frameSize, &bits);
 					}
 					
@@ -578,7 +546,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if([[self delegate] shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -586,9 +554,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				double percentComplete = ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 				unsigned int secondsRemaining = interval / ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) - interval;
-				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
-				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
 			
 			++iterations;
@@ -638,25 +605,17 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	}
 
 	@catch(StopException *exception) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@finally {
 		NSException *exception;
-		
-		// Close the input file
-		err = ExtAudioFileDispose(extAudioFileRef);
-		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}
-		
+				
 		// Close the output file
 		if(-1 == close(fd)) {
 			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
@@ -674,8 +633,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		ogg_stream_clear(&os);
 	}
 
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (NSString *) settings

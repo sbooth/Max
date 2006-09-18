@@ -180,9 +180,9 @@ callback(long inpos, int function, void *userdata)
 	
 	// Tell our owner we are starting
 	_startTime = [NSDate date];
-	[_delegate setStartTime:_startTime];
-	[_delegate setStarted];
-	[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
+	[[self delegate] setStartTime:_startTime];
+	[[self delegate] setStarted:YES];
+	[[self delegate] setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
 
 	@try {
 		// Setup output file type (same)
@@ -224,12 +224,12 @@ callback(long inpos, int function, void *userdata)
 	}
 
 	@catch(StopException *exception) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@finally {
@@ -252,8 +252,8 @@ callback(long inpos, int function, void *userdata)
 		}
 	}
 	
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (void) ripSectorRange:(SectorRange *)range toFile:(ExtAudioFileRef)file
@@ -272,7 +272,7 @@ callback(long inpos, int function, void *userdata)
 	// Go to the range's first sector in preparation for reading
 	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
 	if(-1 == where) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 		@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to access the disc.", @"Exceptions", @"") userInfo:nil];
 	}
 
@@ -307,7 +307,7 @@ callback(long inpos, int function, void *userdata)
 		if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 			
 			// Check if we should stop, and if so throw an exception
-			if([_delegate shouldStop]) {
+			if([[self delegate] shouldStop]) {
 				@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 			}
 			
@@ -317,7 +317,7 @@ callback(long inpos, int function, void *userdata)
 			unsigned int secondsRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
 			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 			
-			[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+			[[self delegate] updateProgress:percentComplete timeRemaining:timeRemaining];
 		}
 		
 		++iterations;

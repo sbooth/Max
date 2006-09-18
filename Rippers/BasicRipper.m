@@ -72,9 +72,9 @@
 	
 	// Tell our owner we are starting
 	_startTime = [NSDate date];
-	[_delegate setStartTime:_startTime];
-	[_delegate setStarted];
-	[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
+	[[self delegate] setStartTime:_startTime];
+	[[self delegate] setStarted:YES];
+	[[self delegate] setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
 	
 	@try {
 		// Setup output file type (same)
@@ -116,12 +116,12 @@
 	}
 	
 	@catch(StopException *exception) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@finally {
@@ -144,8 +144,8 @@
 		}
 	}
 	
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (void) ripSectorRange:(SectorRange *)range toFile:(ExtAudioFileRef)file
@@ -220,7 +220,7 @@
 			if(0 == iterations % 2/*MAX_DO_POLL_FREQUENCY*/) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if([[self delegate] shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -230,7 +230,7 @@
 				unsigned int secondsRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
 				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
-				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+				[[self delegate] updateProgress:percentComplete timeRemaining:timeRemaining];
 			}
 			
 			++iterations;				

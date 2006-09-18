@@ -45,16 +45,6 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 
 @implementation OggVorbisEncoder
 
-- (void) parseSettings
-{
-	NSDictionary *settings	= [[self delegate] userInfo];
-	
-	_mode		= [[settings objectForKey:@"mode"] intValue];
-	_quality	= [[settings objectForKey:@"quality"] floatValue];
-	_bitrate	= sVorbisBitrates[[[settings objectForKey:@"bitrate"] intValue]] * 1000;
-	_cbr		= [[settings objectForKey:@"useConstantBitrate"] boolValue];
-}
-
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate						*startTime							= [NSDate date];	
@@ -88,67 +78,36 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 
 	AudioBufferList				bufferList;
 	ssize_t						bufferLen							= 0;
-	OSStatus					err;
-	FSRef						ref;
-	ExtAudioFileRef				extAudioFileRef						= NULL;
-	AudioStreamBasicDescription asbd;
 	SInt64						totalFrames, framesToRead;
-	UInt32						size, frameCount;
+	UInt32						frameCount;
 	
 	int							bytesWritten;
 	
 	unsigned long				iterations							= 0;
 	
 
+	// Tell our owner we are starting
+	[[self delegate] setStartTime:startTime];	
+	[[self delegate] setStarted:YES];
+	
+	// Setup the decoder
+	[[self decoder] finalizeSetup];
+	
 	// Parse the encoder settings
 	[self parseSettings];
-
-	// Tell our owner we are starting
-	[_delegate setStartTime:startTime];	
-	[_delegate setStarted];
 	
 	@try {
-		bufferList.mBuffers[0].mData = NULL;
-		
-		// Open the input file
-		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		
-		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileOpen"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Get input file information
-		size	= sizeof(asbd);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-
-		[self setInputASBD:asbd];
-		
-		size	= sizeof(totalFrames);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		framesToRead = totalFrames;
+		totalFrames			= [[self decoder] totalFrames];
+		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
-		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		bufferList.mBuffers[0].mData				= NULL;
+		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([self bitsPerChannel]) {
+		switch([[self decoder] pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -171,10 +130,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				break;				
 		}
 		
-		if(NULL == bufferList.mBuffers[0].mData) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Open the output file
 		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -184,7 +140,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		}
 		
 		// Check if we should stop, and if so throw an exception
-		if([_delegate shouldStop]) {
+		if([[self delegate] shouldStop]) {
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 		}
 		
@@ -193,12 +149,12 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		
 		// Use quality-based VBR
 		if(VORBIS_MODE_QUALITY == _mode) {
-			if(vorbis_encode_init_vbr(&vi, [self channelsPerFrame], [self sampleRate], _quality)) {
+			if(vorbis_encode_init_vbr(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, _quality)) {
 				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @"") userInfo:nil];
 			}
 		}
 		else if(VORBIS_MODE_BITRATE == _mode) {
-			if(vorbis_encode_init(&vi, [self channelsPerFrame], [self sampleRate], (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
+			if(vorbis_encode_init(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
 				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @"") userInfo:nil];
 			}
 		}
@@ -244,19 +200,19 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		// Iteratively get the PCM data and encode it
 		while(NO == eos) {
 			
+			// Set up the buffer parameters
+			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			
 			// Read a chunk of PCM input
-			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
-			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
-			if(err != noErr) {
-				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-						
+			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			
 			// Expose the buffer to submit data
 			buffer = vorbis_analysis_buffer(&vd, frameCount);
 			
 			// Split PCM data into channels and convert to 32-bit float samples for Vorbis
-			switch([self bitsPerChannel]) {
+			switch([[self decoder] pcmFormat].mBitsPerChannel) {
 				
 				case 8:
 					buffer8 = bufferList.mBuffers[0].mData;
@@ -332,7 +288,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if([[self delegate] shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -340,9 +296,8 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
-				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
-				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
 			
 			++iterations;
@@ -385,24 +340,16 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 	}
 
 	@catch(StopException *exception) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@finally {
 		NSException *exception;
-				
-		// Close the input file
-		err = ExtAudioFileDispose(extAudioFileRef);
-		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}
 		
 		// Close the output file
 		if(-1 == close(_out)) {
@@ -419,11 +366,10 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		vorbis_info_clear(&vi);
 
 		free(bufferList.mBuffers[0].mData);
-		
 	}
 	
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];
 }
 
 - (NSString *) settings
@@ -441,6 +387,20 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			return nil;
 			break;
 	}
+}
+
+@end
+
+@implementation OggVorbisEncoder (Private)
+
+- (void) parseSettings
+{
+	NSDictionary *settings	= [[self delegate] encoderSettings];
+	
+	_mode		= [[settings objectForKey:@"mode"] intValue];
+	_quality	= [[settings objectForKey:@"quality"] floatValue];
+	_bitrate	= sVorbisBitrates[[[settings objectForKey:@"bitrate"] intValue]] * 1000;
+	_cbr		= [[settings objectForKey:@"useConstantBitrate"] boolValue];
 }
 
 @end

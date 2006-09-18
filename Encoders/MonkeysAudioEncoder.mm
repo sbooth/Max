@@ -46,33 +46,16 @@
 
 @implementation MonkeysAudioEncoder
 
-- (id) initWithPCMFilename:(NSString *)inputFilename
+- (id) init
 {	
-	if((self = [super initWithPCMFilename:inputFilename])) {
+	if((self = [super init])) {
 
-		_compressor			= NULL;
 		_compressionLevel	= COMPRESSION_LEVEL_NORMAL;
 				
 		return self;	
 	}
 	
 	return nil;
-}
-
-- (void) parseSettings
-{
-	NSDictionary	*settings	= [[self delegate] userInfo];
-	int				level		= 0;
-	
-	level = [[settings objectForKey:@"compressionLevel"] intValue];
-	switch(level) {
-		case MAC_COMPRESSION_LEVEL_FAST:		_compressionLevel = COMPRESSION_LEVEL_FAST;				break;
-		case MAC_COMPRESSION_LEVEL_NORMAL:		_compressionLevel = COMPRESSION_LEVEL_NORMAL;			break;
-		case MAC_COMPRESSION_LEVEL_HIGH:		_compressionLevel = COMPRESSION_LEVEL_HIGH;				break;
-		case MAC_COMPRESSION_LEVEL_EXTRA_HIGH:	_compressionLevel = COMPRESSION_LEVEL_EXTRA_HIGH;		break;
-		case MAC_COMPRESSION_LEVEL_INSANE:		_compressionLevel = COMPRESSION_LEVEL_INSANE;			break;
-		default:								_compressionLevel = COMPRESSION_LEVEL_NORMAL;			break;
-	}
 }
 
 - (oneway void) encodeToFile:(NSString *)filename
@@ -84,64 +67,31 @@
 	WAVEFORMATEX					formatDesc;
 	str_utf16						*chars						= NULL;
 	int								result;
-	OSStatus						err;
-	FSRef							ref;
-	ExtAudioFileRef					extAudioFileRef				= NULL;
-	AudioStreamBasicDescription		asbd;
 	SInt64							totalFrames, framesToRead;
-	UInt32							size, frameCount;
+	UInt32							frameCount;
 	
-
+	// Tell our owner we are starting
+	[[self delegate] setStartTime:startTime];	
+	[[self delegate] setStarted:YES];
+	
+	// Setup the decoder
+	[[self decoder] finalizeSetup];
+	
 	// Parse the encoder settings
 	[self parseSettings];
-
-	// Tell our owner we are starting
-	[_delegate setStartTime:startTime];	
-	[_delegate setStarted];
 	
 	@try {
-		bufferList.mBuffers[0].mData = NULL;
-		
-		// Open the input file
-		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		
-		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileOpen"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Get input file information
-		size	= sizeof(asbd);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		[self setInputASBD:asbd];
-		
-		size	= sizeof(totalFrames);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		framesToRead = totalFrames;
+		totalFrames			= [[self decoder] totalFrames];
+		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
-		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		bufferList.mBuffers[0].mData				= NULL;
+		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([self bitsPerChannel]) {
-			
+		switch([[self decoder] pcmFormat].mBitsPerChannel) {			
 			case 8:				
 			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
@@ -163,10 +113,7 @@
 				break;				
 		}
 		
-		if(NULL == bufferList.mBuffers[0].mData) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Create the MAC compressor
 		_compressor = CreateIAPECompress();
@@ -181,14 +128,14 @@
 											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 		}
 		
-		result = FillWaveFormatEx(&formatDesc, (int)[self sampleRate], [self bitsPerChannel], [self channelsPerFrame]);
+		result = FillWaveFormatEx(&formatDesc, (int)[[self decoder] pcmFormat].mSampleRate, [[self decoder] pcmFormat].mBitsPerChannel, [[self decoder] pcmFormat].mChannelsPerFrame);
 		if(ERROR_SUCCESS != result) {
 			@throw [NSException exceptionWithName:@"MACException" reason:NSLocalizedStringFromTable(@"Unable to initialize the Monkey's Audio compressor.", @"Exceptions", @"")
 										 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSNumber numberWithInt:result]] forKeys:[NSArray arrayWithObject:@"errorCode"]]];
 		}
 		
 		// Start the compressor
-		result = _compressor->Start(chars, &formatDesc, totalFrames * [self bytesPerFrame], _compressionLevel, NULL, 0);
+		result = _compressor->Start(chars, &formatDesc, totalFrames * [[self decoder] pcmFormat].mBytesPerFrame, _compressionLevel, NULL, 0);
 		if(ERROR_SUCCESS != result) {
 			@throw [NSException exceptionWithName:@"MACException" reason:NSLocalizedStringFromTable(@"Unable to start the Monkey's Audio compressor.", @"Exceptions", @"")
 										 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSNumber numberWithInt:result]] forKeys:[NSArray arrayWithObject:@"errorCode"]]];
@@ -197,13 +144,13 @@
 		// Iteratively get the PCM data and encode it
 		for(;;) {
 			
+			// Set up the buffer parameters
+			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			
 			// Read a chunk of PCM input
-			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
-			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
-			if(err != noErr) {
-				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -220,7 +167,7 @@
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if([[self delegate] shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -228,9 +175,8 @@
 				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 				unsigned int secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
-				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
-				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
 			
 			++iterations;
@@ -242,40 +188,55 @@
 	
 	
 	@catch(StopException *exception) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@finally {
-		NSException *exception;
-		
 		if(NULL != _compressor) {
 			delete _compressor;
 		}
-		
-		// Close the input file
-		err = ExtAudioFileDispose(extAudioFileRef);
-		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}
-		
+				
 		free(bufferList.mBuffers[0].mData);
 		free(chars);
 	}
 	
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
+}
+
+- (NSString *) settings
+{
+	return [NSString stringWithFormat:@"MAC settings: compression level:%i", _compressionLevel];
+}
+
+@end
+
+@implementation MonkeysAudioEncoder (Private)
+
+- (void) parseSettings
+{
+	NSDictionary	*settings	= [[self delegate] encoderSettings];
+	int				level		= 0;
+	
+	level = [[settings objectForKey:@"compressionLevel"] intValue];
+	switch(level) {
+		case MAC_COMPRESSION_LEVEL_FAST:		_compressionLevel = COMPRESSION_LEVEL_FAST;				break;
+		case MAC_COMPRESSION_LEVEL_NORMAL:		_compressionLevel = COMPRESSION_LEVEL_NORMAL;			break;
+		case MAC_COMPRESSION_LEVEL_HIGH:		_compressionLevel = COMPRESSION_LEVEL_HIGH;				break;
+		case MAC_COMPRESSION_LEVEL_EXTRA_HIGH:	_compressionLevel = COMPRESSION_LEVEL_EXTRA_HIGH;		break;
+		case MAC_COMPRESSION_LEVEL_INSANE:		_compressionLevel = COMPRESSION_LEVEL_INSANE;			break;
+		default:								_compressionLevel = COMPRESSION_LEVEL_NORMAL;			break;
+	}
 }
 
 - (void) compressChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 {
-//	uint8_t			*buffer8				= NULL;
+	//	uint8_t			*buffer8				= NULL;
 	uint16_t		*buffer16				= NULL;
 	uint32_t		*buffer32				= NULL;
 	unsigned		wideSample;
@@ -283,10 +244,10 @@
 	int				result;
 	
 	// Convert MAC buffer to little endian byte order
-	switch([self bitsPerChannel]) {
+	switch([[self decoder] pcmFormat].mBitsPerChannel) {
 		
 		case 8:
-/*			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
+			/*			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
 			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 					buffer8[sample] = buffer8[sample];
@@ -301,17 +262,17 @@
 					buffer16[sample] = OSSwapInt16(buffer16[sample]);
 				}
 			}
-			break;
-
+				break;
+			
 		case 24:
-/*			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
+			/*			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
 			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 					buffer8[sample] = buffer8[sample];
 				}
 			}*/
 			break;
-
+			
 		case 32:
 			buffer32 = (uint32_t *)chunk->mBuffers[0].mData;
 			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
@@ -319,7 +280,7 @@
 					buffer32[sample] = OSSwapInt32(buffer32[sample]);
 				}
 			}
-			break;
+				break;
 			
 		default:
 			@throw [NSException exceptionWithName:@"IllegalInputException" reason:@"Sample size not supported" userInfo:nil]; 
@@ -327,16 +288,11 @@
 	}
 	
 	// Compress the chunk
-	result = _compressor->AddData((unsigned char *)chunk->mBuffers[0].mData, frameCount * [self bytesPerFrame]);
+	result = _compressor->AddData((unsigned char *)chunk->mBuffers[0].mData, frameCount * [[self decoder] pcmFormat].mBytesPerFrame);
 	if(ERROR_SUCCESS != result) {
 		@throw [NSException exceptionWithName:@"MACException" reason:NSLocalizedStringFromTable(@"Monkey's Audio compressor error.", @"Exceptions", @"")
 									 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSNumber numberWithInt:result]] forKeys:[NSArray arrayWithObject:@"errorCode"]]];
 	}
 }	
-
-- (NSString *) settings
-{
-	return [NSString stringWithFormat:@"MAC settings: compression level:%i", _compressionLevel];
-}
 
 @end

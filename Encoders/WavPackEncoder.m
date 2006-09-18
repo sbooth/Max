@@ -44,70 +44,9 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 
 @implementation WavPackEncoder
 
-- (void) parseSettings
-{
-	NSDictionary	*settings	= [[self delegate] userInfo];
-	
-	// Set encoding properties
-	switch([[settings objectForKey:@"stereoMode"] intValue]) {
-		case WAVPACK_STEREO_MODE_STEREO:			
-			_flags |= CONFIG_JOINT_OVERRIDE;
-			_flags &= ~CONFIG_JOINT_STEREO;
-			break;
-		case WAVPACK_STEREO_MODE_JOINT_STEREO:
-			_flags |= (CONFIG_JOINT_OVERRIDE | CONFIG_JOINT_STEREO);
-			break;
-		case WAVPACK_STEREO_MODE_DEFAULT:			;										break;
-		default:									;										break;
-	}
-	
-	switch([[settings objectForKey:@"compressionMode"] intValue]) {
-		case WAVPACK_COMPRESSION_MODE_HIGH:			_flags |= CONFIG_HIGH_FLAG;				break;
-		case WAVPACK_COMPRESSION_MODE_FAST:			_flags |= CONFIG_FAST_FLAG;				break;
-		case WAVPACK_COMPRESSION_MODE_DEFAULT:		;										break;
-		default:									;										break;
-	}
-	
-	// Hybrid mode
-	if([[settings objectForKey:@"enableHybridCompression"] boolValue]) {
-		
-		_flags |= CONFIG_HYBRID_FLAG;
-		
-		if([[settings objectForKey:@"createCorrectionFile"] intValue]) {
-			_flags |= CONFIG_CREATE_WVC;
-		}
-		
-		if([[settings objectForKey:@"maximumHybridCompression"] intValue]) {
-			_flags |= CONFIG_OPTIMIZE_WVC;
-		}
-		
-		switch([[settings objectForKey:@"hybridMode"] intValue]) {
-			
-			case WAVPACK_HYBRID_MODE_BITS_PER_SAMPLE:
-				_bitrate = [[settings objectForKey:@"bitsPerSample"] floatValue];
-				break;
-				
-			case WAVPACK_HYBRID_MODE_BITRATE:
-				_bitrate = [[settings objectForKey:@"bitrate"] floatValue];
-				_flags |= CONFIG_BITRATE_KBPS;
-				break;
-				
-			default:									;									break;
-		}
-		
-		_noiseShaping = [[settings objectForKey:@"noiseShaping"] floatValue];
-		if(0.0 != _noiseShaping) {
-			_flags |= (CONFIG_HYBRID_SHAPE | CONFIG_SHAPE_OVERRIDE);
-		}
-		
-	}
-
-}
-
 - (oneway void) encodeToFile:(NSString *) filename
 {
 	NSDate							*startTime							= [NSDate date];
-	OSStatus						err;
 
 	AudioBufferList					bufferList;
 	ssize_t							bufferLen							= 0;
@@ -118,12 +57,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 	int32_t							*wpBuf								= NULL;
 	
 	SInt64							totalFrames, framesToRead;
-	UInt32							size, frameCount;
-	
-	FSRef							ref;
-	ExtAudioFileRef					extAudioFileRef;
-	
-	AudioStreamBasicDescription		asbd;
+	UInt32							frameCount;
+		
 	int								fd, cfd;
     
 	WavpackContext					*wpc								= NULL;
@@ -136,56 +71,28 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 
 	unsigned						wideSample, sample, channel;
 	
-
+	// Tell our owner we are starting
+	[[self delegate] setStartTime:startTime];	
+	[[self delegate] setStarted:YES];
+	
+	// Setup the decoder
+	[[self decoder] finalizeSetup];
+	
 	// Parse the encoder settings
 	[self parseSettings];
-
-	// Tell our owner we are starting
-	[_delegate setStartTime:startTime];	
-	[_delegate setStarted];
 	
 	@try {
-		bufferList.mBuffers[0].mData = NULL;
-		
-		// Open the input file
-		err = FSPathMakeRef((const UInt8 *)[_inputFilename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_inputFilename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
-		
-		err = ExtAudioFileOpen(&ref, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileOpen"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Get input file information
-		size	= sizeof(asbd);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileDataFormat, &size, &asbd);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		[self setInputASBD:asbd];
-		
-		size	= sizeof(totalFrames);
-		err		= ExtAudioFileGetProperty(extAudioFileRef, kExtAudioFileProperty_FileLengthFrames, &size, &totalFrames);
-		if(err != noErr) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		framesToRead = totalFrames;
+		totalFrames			= [[self decoder] totalFrames];
+		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
-		bufferList.mBuffers[0].mNumberChannels		= [self channelsPerFrame];
+		bufferList.mBuffers[0].mData				= NULL;
+		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([self bitsPerChannel]) {
+		switch([[self decoder] pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -208,10 +115,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 				break;				
 		}
 		
-		if(NULL == bufferList.mBuffers[0].mData) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		wpBuf = (int32_t *)calloc(bufferLen, sizeof(int32_t));
 		if(NULL == wpBuf) {
@@ -243,12 +147,12 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 			@throw [NSException exceptionWithName:@"WavPackException" reason:NSLocalizedStringFromTable(@"Unable to create the WavPack encoder.", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		bzero(&config, sizeof(config));
+		memset(&config, 0, sizeof(config));
 		
-		config.num_channels				= [self channelsPerFrame];
+		config.num_channels				= [[self decoder] pcmFormat].mChannelsPerFrame;
 		config.channel_mask				= 3;
-		config.sample_rate				= [self sampleRate];
-		config.bits_per_sample			= [self bitsPerChannel];
+		config.sample_rate				= [[self decoder] pcmFormat].mSampleRate;
+		config.bits_per_sample			= [[self decoder] pcmFormat].mBitsPerChannel;
 		config.bytes_per_sample			= config.bits_per_sample / 8;
 		
 		config.flags					= _flags;
@@ -270,13 +174,13 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		// Iteratively get the PCM data and encode it
 		for(;;) {
 			
+			// Set up the buffer parameters
+			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			
 			// Read a chunk of PCM input
-			frameCount	= bufferList.mBuffers[0].mDataByteSize / [self bytesPerFrame];
-			err			= ExtAudioFileRead(extAudioFileRef, &frameCount, &bufferList);
-			if(err != noErr) {
-				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileRead"]
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -284,7 +188,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 			}
 			
 			// Fill WavPack buffer, converting to host endian byte order
-			switch([self bitsPerChannel]) {
+			switch([[self decoder] pcmFormat].mBitsPerChannel) {
 				
 				case 8:
 					buffer8 = bufferList.mBuffers[0].mData;
@@ -344,7 +248,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if([[self delegate] shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -352,9 +256,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
 				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
 				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
-				NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				
-				[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
 			
 			++iterations;
@@ -367,25 +270,15 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 	}
 	
 	@catch(StopException *exception) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
-	@finally {
-		NSException *exception;
-		
-		// Close the input file
-		err = ExtAudioFileDispose(extAudioFileRef);
-		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			NSLog(@"%@", exception);
-		}
-		
+	@finally {		
 		// Close the output file
 		if(NULL != wpc) {
 			WavpackCloseFile(wpc);
@@ -397,8 +290,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		free(wpBuf);
 	}
 	
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (NSString *) settings
@@ -408,6 +301,69 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		(_flags & CONFIG_FAST_FLAG ? @"fast " : @""),
 		(_flags & CONFIG_HYBRID_FLAG ? @"hybrid " : @""),
 		(_flags & CONFIG_JOINT_OVERRIDE ? (_flags & CONFIG_JOINT_STEREO ? @"joint stereo " : @"stereo ") : @"")];
+}
+
+@end
+
+
+@implementation WavPackEncoder (Private)
+
+- (void) parseSettings
+{
+	NSDictionary	*settings	= [[self delegate] encoderSettings];
+	
+	// Set encoding properties
+	switch([[settings objectForKey:@"stereoMode"] intValue]) {
+		case WAVPACK_STEREO_MODE_STEREO:			
+			_flags |= CONFIG_JOINT_OVERRIDE;
+			_flags &= ~CONFIG_JOINT_STEREO;
+			break;
+		case WAVPACK_STEREO_MODE_JOINT_STEREO:
+			_flags |= (CONFIG_JOINT_OVERRIDE | CONFIG_JOINT_STEREO);
+			break;
+		case WAVPACK_STEREO_MODE_DEFAULT:			;										break;
+		default:									;										break;
+	}
+	
+	switch([[settings objectForKey:@"compressionMode"] intValue]) {
+		case WAVPACK_COMPRESSION_MODE_HIGH:			_flags |= CONFIG_HIGH_FLAG;				break;
+		case WAVPACK_COMPRESSION_MODE_FAST:			_flags |= CONFIG_FAST_FLAG;				break;
+		case WAVPACK_COMPRESSION_MODE_DEFAULT:		;										break;
+		default:									;										break;
+	}
+	
+	// Hybrid mode
+	if([[settings objectForKey:@"enableHybridCompression"] boolValue]) {
+		
+		_flags |= CONFIG_HYBRID_FLAG;
+		
+		if([[settings objectForKey:@"createCorrectionFile"] intValue]) {
+			_flags |= CONFIG_CREATE_WVC;
+		}
+		
+		if([[settings objectForKey:@"maximumHybridCompression"] intValue]) {
+			_flags |= CONFIG_OPTIMIZE_WVC;
+		}
+		
+		switch([[settings objectForKey:@"hybridMode"] intValue]) {
+			
+			case WAVPACK_HYBRID_MODE_BITS_PER_SAMPLE:
+				_bitrate = [[settings objectForKey:@"bitsPerSample"] floatValue];
+				break;
+				
+			case WAVPACK_HYBRID_MODE_BITRATE:
+				_bitrate = [[settings objectForKey:@"bitrate"] floatValue];
+				_flags |= CONFIG_BITRATE_KBPS;
+				break;
+				
+			default:									;									break;
+		}
+		
+		_noiseShaping = [[settings objectForKey:@"noiseShaping"] floatValue];
+		if(0.0 != _noiseShaping) {
+			_flags |= (CONFIG_HYBRID_SHAPE | CONFIG_SHAPE_OVERRIDE);
+		}
+	}
 }
 
 @end

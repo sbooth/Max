@@ -35,9 +35,21 @@
 }
 
 - (void)			writeTags						{}
-- (int)				format							{ return [[[self userInfo] valueForKey:@"majorFormat"] intValue] | [[[self userInfo] valueForKey:@"subtypeFormat"] intValue]; }
-- (NSString *)		fileExtension					{ return [[self userInfo] valueForKey:@"extension"]; }
-- (NSString *)		outputFormatName				{ return [[self userInfo] valueForKey:@"name"]; }
+- (int)				format							{ return [[[self encoderSettings] valueForKey:@"majorFormat"] intValue] | [[[self encoderSettings] valueForKey:@"subtypeFormat"] intValue]; }
+- (NSString *)		fileExtension					{ return [[self encoderSettings] valueForKey:@"extension"]; }
+
+- (NSString *)		outputFormatName
+{
+	SF_FORMAT_INFO			formatInfo;
+
+	memset(&formatInfo, 0, sizeof(formatInfo));
+	
+	formatInfo.format		= [self format];
+		   
+	sf_command(NULL, SFC_GET_FORMAT_INFO, &formatInfo, sizeof(formatInfo));
+	
+	return [NSString stringWithCString:formatInfo.name encoding:NSASCIIStringEncoding];
+}
 
 @end
 

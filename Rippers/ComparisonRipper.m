@@ -140,8 +140,8 @@
 	
 	// Tell our owner we are starting
 	_startTime = [NSDate date];
-	[_delegate setStartTime:_startTime];
-	[_delegate setStarted];
+	[[self delegate] setStartTime:_startTime];
+	[[self delegate] setStarted:YES];
 	
 	@try {
 		// Setup output file type (same)
@@ -190,12 +190,12 @@
 	}
 	
 	@catch(StopException *exception) {
-		[_delegate setStopped];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@catch(NSException *exception) {
-		[_delegate setException:exception];
-		[_delegate setStopped];
+		[[self delegate] setException:exception];
+		[[self delegate] setStopped:YES];
 	}
 	
 	@finally {
@@ -218,8 +218,8 @@
 		}
 	}
 	
-	[_delegate setEndTime:[NSDate date]];
-	[_delegate setCompleted];	
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (void) ripSectorRange:(SectorRange *)range toFile:(ExtAudioFileRef)file
@@ -313,7 +313,7 @@
 		sectorsToRead	= [self requiredMatches] * [range length];
 		phaseStartTime	= [NSDate date];
 
-		[_delegate setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
+		[[self delegate] setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
 		
 		for(i = 0; i < [self requiredMatches]; ++i) {
 			// Clear the drive's cache
@@ -392,7 +392,7 @@
 				if(0 == iterations % 2/*MAX_DO_POLL_FREQUENCY*/) {
 					
 					// Check if we should stop, and if so throw an exception
-					if([_delegate shouldStop]) {
+					if([[self delegate] shouldStop]) {
 						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 					}
 					
@@ -402,7 +402,7 @@
 					unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
 					NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 					
-					[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+					[[self delegate] updateProgress:percentComplete timeRemaining:timeRemaining];
 				}
 				
 				++iterations;				
@@ -422,7 +422,7 @@
 			sectorsToRead	= [sectorStatus countOfZeroes];
 			phaseStartTime	= [NSDate date];
 			
-			[_delegate setPhase:NSLocalizedStringFromTable(@"Verifying", @"General", @"")];
+			[[self delegate] setPhase:NSLocalizedStringFromTable(@"Verifying", @"General", @"")];
 			[self logMessage:NSLocalizedStringFromTable(@"Verifying rip integrity", @"Log", @"")];
 			
 			for(sector = [range firstSector]; sector <= [range lastSector]; ++sector) {
@@ -509,7 +509,7 @@
 				if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 					
 					// Check if we should stop, and if so throw an exception
-					if([_delegate shouldStop]) {
+					if([[self delegate] shouldStop]) {
 						@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 					}
 					
@@ -519,7 +519,7 @@
 					 unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
 					 NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 					 
-					 [_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+					 [[self delegate] updateProgress:percentComplete timeRemaining:timeRemaining];
 				}
 				
 				++iterations;				
@@ -559,7 +559,7 @@
 			sectorsToRead	= [sectorStatus countOfZeroes];
 			phaseStartTime	= [NSDate date];
 			
-			[_delegate setPhase:NSLocalizedStringFromTable(@"Re-ripping", @"General", @"")];
+			[[self delegate] setPhase:NSLocalizedStringFromTable(@"Re-ripping", @"General", @"")];
 
 			for(i = 0; i < [range length]; ++i) {
 				
@@ -674,7 +674,7 @@
 					if(0 == iterations % 2/*MAX_DO_POLL_FREQUENCY*/) {
 						
 						// Check if we should stop, and if so throw an exception
-						if([_delegate shouldStop]) {
+						if([[self delegate] shouldStop]) {
 							@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 						}
 						
@@ -684,7 +684,7 @@
 						unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
 						NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 
-						[_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+						[[self delegate] updateProgress:percentComplete timeRemaining:timeRemaining];
 					}
 					
 					++iterations;
@@ -708,7 +708,7 @@
 		totalSectors		= [range length];
 		phaseStartTime		= [NSDate date];
 		
-		[_delegate setPhase:NSLocalizedStringFromTable(@"Saving", @"General", @"")];
+		[[self delegate] setPhase:NSLocalizedStringFromTable(@"Saving", @"General", @"")];
 		[self logMessage:NSLocalizedStringFromTable(@"Generating output", @"Log", @"")];
 		
 		while(0 < sectorsRemaining) {
@@ -746,7 +746,7 @@
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([_delegate shouldStop]) {
+				if([[self delegate] shouldStop]) {
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
 				}
 				
@@ -756,7 +756,7 @@
 				 unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsRemaining)/(double) totalSectors) - interval;
 				 NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 				 
-				 [_delegate updateProgress:percentComplete timeRemaining:timeRemaining];
+				 [[self delegate] updateProgress:percentComplete timeRemaining:timeRemaining];
 			}
 			
 			++iterations;
