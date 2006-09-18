@@ -19,18 +19,22 @@
  */
 
 #import "EncoderController.h"
+
 #import "RipperTask.h"
-#import "MPEGEncoderTask.h"
-#import "FLACEncoderTask.h"
-#import "OggFLACEncoderTask.h"
-#import "OggVorbisEncoderTask.h"
+
 #import "CoreAudioEncoderTask.h"
-#import "LibsndfileEncoderTask.h"
+#import "FLACEncoderTask.h"
 #import "MonkeysAudioEncoderTask.h"
-#import "SpeexEncoderTask.h"
+#import "MPEGEncoderTask.h"
+#import "OggFLACEncoderTask.h"
+#import "OggSpeexEncoderTask.h"
+#import "OggVorbisEncoderTask.h"
+#import "LibsndfileEncoderTask.h"
 #import "WavPackEncoderTask.h"
+
 #import "LogController.h"
 #import "RipperController.h"
+
 #import "IOException.h"
 #import "MissingResourceException.h"
 
