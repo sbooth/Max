@@ -56,8 +56,8 @@
 {
 	if((self = [super init])) {
 
-		_source = [[AudioSource audioSourceForFilename:filename] retain];
-		NSAssert(nil != _source, @"Unable to create the AudioSource");
+		_source = [[Decoder decoderForFilename:filename] retain];
+		NSAssert(nil != _source, @"Unable to create the Decoder");
 
 		return self;
 	}
@@ -71,7 +71,7 @@
 	[super dealloc];
 }
 
-- (AudioSource *)		source											{ return [[_source retain] autorelease]; }
+- (Decoder *)		source											{ return [[_source retain] autorelease]; }
 
 - (id <EncoderTaskMethods>)	delegate									{ return _delegate; }
 - (void)				setDelegate:(id <EncoderTaskMethods>)delegate	{ _delegate = delegate; }

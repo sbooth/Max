@@ -64,6 +64,9 @@
 	[[self delegate] setStartTime:startTime];
 	[[self delegate] setStarted:YES];
 	
+	// Setup the audio source
+	[[self source] finalizeSetup];
+	
 	// Parse the encoder settings
 	settings				= [[self delegate] encoderSettings];
 	

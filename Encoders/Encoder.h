@@ -22,17 +22,17 @@
 
 #import "EncoderMethods.h"
 #import "EncoderTaskMethods.h"
-#import "AudioSource.h"
+#import "Decoder.h"
 
-// An encoder is responsible for taking audio input from an AudioSource and turning it into a different format
+// An encoder is responsible for taking audio input from an Decoder and turning it into a different format
 @interface Encoder : NSObject <EncoderMethods>
 {
 	id <EncoderTaskMethods>			_delegate;
-	AudioSource						*_source;
+	Decoder						*_source;
 }
 
 - (id)						initWithFilename:(NSString *)filename;
 
-- (AudioSource *)			source;
+- (Decoder *)			source;
 
 @end
