@@ -33,11 +33,9 @@
 		8C328182096D12CA00608C9D /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C328181096D12CA00608C9D /* Exceptions.strings */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
 		8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */; };
-		8C4505120A8EEC52001BF1A1 /* AlbumArtMethods.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */; };
 		8C450C950A9043C0001BF1A1 /* FileConversionSettingsSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */; };
 		8C450CF00A9047FC001BF1A1 /* FileConversionSettingsSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C450CE60A9047FB001BF1A1 /* FileConversionSettingsSheet.nib */; };
 		8C450E750A918C50001BF1A1 /* SettingsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */; };
-		8C4803DE0A95725100448288 /* CompactDiscSettingsSheet.h in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C4803DC0A95725100448288 /* CompactDiscSettingsSheet.h */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4650093E776500A88927 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D464F093E776500A88927 /* Preferences.nib */; };
 		8C4D4698093E7C1E00A88927 /* FreeDBPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D4692093E7C1E00A88927 /* FreeDBPreferences.nib */; };
@@ -256,8 +254,6 @@
 				8C5302520A05D7A400890518 /* TagLib.framework in Copy Frameworks */,
 				8C5302530A05D7A400890518 /* Vorbis.framework in Copy Frameworks */,
 				8C5302540A05D7A400890518 /* WavPack.framework in Copy Frameworks */,
-				8C4505120A8EEC52001BF1A1 /* AlbumArtMethods.h in Copy Frameworks */,
-				8C4803DE0A95725100448288 /* CompactDiscSettingsSheet.h in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,8 +298,6 @@
 		8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SettingsToolbarImage.png; sourceTree = "<group>"; };
 		8C4802E00A95298B00448288 /* NSSizeValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSSizeValueTransformer.h; sourceTree = "<group>"; };
 		8C4802E10A95298B00448288 /* NSSizeValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSSizeValueTransformer.m; sourceTree = "<group>"; };
-		8C4803DC0A95725100448288 /* CompactDiscSettingsSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompactDiscSettingsSheet.h; sourceTree = "<group>"; };
-		8C4803DD0A95725100448288 /* CompactDiscSettingsSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompactDiscSettingsSheet.m; sourceTree = "<group>"; };
 		8C4D452F093E6CB200A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
 		8C4D4693093E7C1E00A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FreeDBPreferences.nib; sourceTree = "<group>"; };
 		8C4D46EF093E813300A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
@@ -577,8 +571,6 @@
 		8C9450EE0A12E3FC00C8DCAE /* OggFLACEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggFLACEncoderTask.mm; sourceTree = "<group>"; };
 		8C9450EF0A12E3FC00C8DCAE /* OggVorbisEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggVorbisEncoderTask.h; sourceTree = "<group>"; };
 		8C9450F00A12E3FC00C8DCAE /* OggVorbisEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = OggVorbisEncoderTask.mm; sourceTree = "<group>"; };
-		8C9450F10A12E3FC00C8DCAE /* SpeexEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SpeexEncoderTask.h; sourceTree = "<group>"; };
-		8C9450F20A12E3FC00C8DCAE /* SpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SpeexEncoderTask.m; sourceTree = "<group>"; };
 		8C9450F30A12E3FC00C8DCAE /* WavPackEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WavPackEncoderTask.h; sourceTree = "<group>"; };
 		8C9450F40A12E3FC00C8DCAE /* WavPackEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoderTask.m; sourceTree = "<group>"; };
 		8C9450F60A12E3FC00C8DCAE /* BasicRipperTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BasicRipperTask.h; sourceTree = "<group>"; };
@@ -721,6 +713,8 @@
 		8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = OggVorbisDecoder.m; path = Decoders/OggVorbisDecoder.m; sourceTree = "<group>"; };
 		8CFA4B440ABDE11800C5AE9F /* WavPackDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = WavPackDecoder.h; path = Decoders/WavPackDecoder.h; sourceTree = "<group>"; };
 		8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = WavPackDecoder.m; path = Decoders/WavPackDecoder.m; sourceTree = "<group>"; };
+		8CFA57390ABE32BB00C5AE9F /* OggSpeexEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggSpeexEncoderTask.h; sourceTree = "<group>"; };
+		8CFA573A0ABE32BB00C5AE9F /* OggSpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggSpeexEncoderTask.m; sourceTree = "<group>"; };
 		8CFF40A50A1D6030008E503C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8CFF40B20A1D6AD9008E503C /* SelectEncodersSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEncodersSheet.h; sourceTree = "<group>"; };
 		8CFF40B30A1D6AD9008E503C /* SelectEncodersSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEncodersSheet.m; sourceTree = "<group>"; };
@@ -1254,6 +1248,8 @@
 		8C9450E00A12E3FC00C8DCAE /* EncoderTasks */ = {
 			isa = PBXGroup;
 			children = (
+				8CFA57390ABE32BB00C5AE9F /* OggSpeexEncoderTask.h */,
+				8CFA573A0ABE32BB00C5AE9F /* OggSpeexEncoderTask.m */,
 				8C9450E10A12E3FC00C8DCAE /* CoreAudioEncoderTask.h */,
 				8C9450E20A12E3FC00C8DCAE /* CoreAudioEncoderTask.m */,
 				8C9450E30A12E3FC00C8DCAE /* EncoderTask.h */,
@@ -1270,8 +1266,6 @@
 				8C9450EE0A12E3FC00C8DCAE /* OggFLACEncoderTask.mm */,
 				8C9450EF0A12E3FC00C8DCAE /* OggVorbisEncoderTask.h */,
 				8C9450F00A12E3FC00C8DCAE /* OggVorbisEncoderTask.mm */,
-				8C9450F10A12E3FC00C8DCAE /* SpeexEncoderTask.h */,
-				8C9450F20A12E3FC00C8DCAE /* SpeexEncoderTask.m */,
 				8C9450F30A12E3FC00C8DCAE /* WavPackEncoderTask.h */,
 				8C9450F40A12E3FC00C8DCAE /* WavPackEncoderTask.m */,
 				8CD26D790AB5171B0037F33A /* EncoderTaskMethods.h */,
@@ -1321,8 +1315,6 @@
 				8C9451410A12E4D700C8DCAE /* Track.m */,
 				8CFF40B20A1D6AD9008E503C /* SelectEncodersSheet.h */,
 				8CFF40B30A1D6AD9008E503C /* SelectEncodersSheet.m */,
-				8C4803DC0A95725100448288 /* CompactDiscSettingsSheet.h */,
-				8C4803DD0A95725100448288 /* CompactDiscSettingsSheet.m */,
 			);
 			path = CompactDisc;
 			sourceTree = "<group>";
