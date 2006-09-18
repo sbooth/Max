@@ -178,14 +178,14 @@
 	NSEnumerator			*enumerator				= nil;
 	NSMutableIndexSet		*indexSet				= [NSMutableIndexSet indexSet];
 	NSEnumerator			*rowEnumerator			= [rows objectEnumerator];
-	id						foo;
+	id						object;
 	NSString				*filename;
 
 	while((filename = [rowEnumerator nextObject])) {
 		enumerator = [arrangedObjects objectEnumerator];
-		while((foo = [enumerator nextObject])) {
-			if([[foo valueForKey:@"filename"] isEqualToString:filename]) {
-				[indexSet addIndex:[arrangedObjects indexOfObject:foo]];
+		while((object = [enumerator nextObject])) {
+			if([[object valueForKey:@"filename"] isEqualToString:filename]) {
+				[indexSet addIndex:[arrangedObjects indexOfObject:object]];
 			}
 		}
 	}
