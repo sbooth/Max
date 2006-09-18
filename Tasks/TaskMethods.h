@@ -21,7 +21,7 @@
 #import <Cocoa/Cocoa.h>
 #import "TaskInfo.h"
 
-// The number of iterations a task will run between calls to its delegate
+// The number of iterations a task should run between calls to its delegate
 #define MAX_DO_POLL_FREQUENCY 300
 
 // The protocol exposed to Encoders/Rippers running in separate threads
@@ -55,12 +55,6 @@
 - (void)			setSecondsRemaining:(unsigned)secondsRemaining;
 
 - (void)			updateProgress:(float)percentComplete secondsRemaining:(unsigned)secondsRemaining;
-
-//- (NSString *)		inputFormat;
-//- (void)			setInputFormat:(NSString *)inputFormat;
-
-//- (NSString *)		outputFormat;
-//- (void)			setOutputFormat:(NSString *)outputFormat;
 
 - (NSException *)	exception;
 - (void)			setException:(NSException *)exception;
