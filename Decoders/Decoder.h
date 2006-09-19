@@ -34,7 +34,7 @@
 	CircularBuffer					*_pcmBuffer;	// The buffer which holds the PCM audio data
 }
 
-// Create an Decoder of the correct type for the given reader
+// Create a Decoder of the correct type for the given file
 + (id)								decoderForFilename:(NSString *)filename;
 
 
@@ -42,7 +42,7 @@
 - (NSString *)						filename;
 - (void)							setFilename:(NSString *)filename;
 
-// The type of PCM data provided by the source
+// The type of PCM data provided by this Decoder
 - (AudioStreamBasicDescription)		pcmFormat;
 
 // A descriptive string of the PCM data format
@@ -51,7 +51,7 @@
 // The buffer which holds the PCM data
 - (CircularBuffer *)				pcmBuffer;
 
-// Attempt to read frameCount frames of audio, returning the actual number read
+// Attempt to read frameCount frames of audio, returning the actual number of frames read
 - (UInt32)							readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
 
 // ========================================
