@@ -35,6 +35,8 @@
 #import "CoreAudioException.h"
 #import "SpeexException.h"
 
+#include <Carbon/Carbon.h>
+
 #include <sndfile/sndfile.h>
 #include <Ogg/ogg.h>
 
@@ -397,31 +399,6 @@ getBitmapDataForImage(NSImage					*image,
 	return [bitmapRep representationUsingType:type properties:nil]; 
 }
 
-BOOL
-outputFormatsSelected()
-{
-	NSArray		*outputFormats		= [[NSUserDefaults standardUserDefaults] objectForKey:@"outputFormats"];
-	unsigned	i					= 0;
-	
-	if(nil == outputFormats) {
-		return NO;
-	}
-	
-	for(i = 0; i < [outputFormats count]; ++i) {
-		if([[[outputFormats objectAtIndex:i] objectForKey:@"default"] boolValue]) {
-			return YES;
-		}
-	}
-	
-	return NO;
-}
-
-NSArray * 
-getDefaultOutputFormats()
-{
-	return [[[NSUserDefaults standardUserDefaults] objectForKey:@"outputFormats"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"default == 1"]];
-}
-
 NSImage *
 getIconForFile(NSString *filename, NSSize iconSize)
 {
@@ -457,4 +434,72 @@ getIconForFile(NSString *filename, NSSize iconSize)
 	}
 	
 	return [[icon retain] autorelease];
+}
+
+void
+addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
+{
+	NSDictionary				*errors				= [NSDictionary dictionary];
+	NSString					*path				= nil;
+	NSAppleScript				*appleScript		= nil;
+	NSAppleEventDescriptor		*parameters			= nil;
+	ProcessSerialNumber			psn					= { 0, kCurrentProcess };
+	NSAppleEventDescriptor		*target				= nil;
+	NSAppleEventDescriptor		*handler			= nil;
+	NSAppleEventDescriptor		*event				= nil;
+	NSAppleEventDescriptor		*result				= nil;
+	NSString					*artist				= nil;
+	NSString					*composer			= nil;
+	NSString					*genre				= nil;
+	unsigned					year				= 0;
+	NSString					*comment			= nil;
+	
+	
+	path = [[NSBundle mainBundle] pathForResource:@"Add to iTunes Library" ofType:@"scpt"];
+	if(nil == path) {
+		@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
+													userInfo:[NSDictionary dictionaryWithObject:@"Add to iTunes Library.scpt" forKey:@"filename"]];
+	}
+	
+	appleScript = [[[NSAppleScript alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] error:&errors] autorelease];
+	if(nil == appleScript) {
+		@throw [NSException exceptionWithName:@"AppleScriptError" reason:@"Unable to setup AppleScript." userInfo:errors];
+	}
+	
+	// Metadata fallback
+	artist		= (nil == [metadata trackArtist] ? [metadata albumArtist] : [metadata trackArtist]);
+	composer	= (nil == [metadata trackComposer] ? [metadata albumComposer] : [metadata trackComposer]);
+	genre		= (nil == [metadata trackGenre] ? [metadata albumGenre] : [metadata trackGenre]);
+	year		= (0 == [metadata trackYear] ? [metadata albumYear] : [metadata trackYear]);
+	comment		= (nil == [metadata albumComment] ? [metadata trackComment] : (nil == [metadata trackComment] ? [metadata albumComment] : [NSString stringWithFormat:@"%@\n%@", [metadata trackComment], [metadata albumComment]]));
+	
+	parameters		= [NSAppleEventDescriptor listDescriptor];
+	
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:filename]															atIndex:1];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata playlist] ? @"" : [metadata playlist])]			atIndex:2];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata albumTitle] ? @"" : [metadata albumTitle])]		atIndex:3];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == artist ? @"" : artist)]									atIndex:4];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == composer ? @"" : composer)]								atIndex:5];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == genre ? @"" : genre)]										atIndex:6];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:year]																atIndex:7];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == comment ? @"" : comment)]									atIndex:8];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata trackTitle] ? @"" : [metadata trackTitle])]		atIndex:9];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata trackNumber]]											atIndex:10];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata trackTotal]]												atIndex:11];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithBoolean:[metadata compilation]]											atIndex:12];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata discNumber]]												atIndex:13];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata discTotal]]												atIndex:14];
+	
+	target			= [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber bytes:&psn length:sizeof(psn)];
+	handler			= [NSAppleEventDescriptor descriptorWithString:[@"add_file_to_itunes_library" lowercaseString]];
+	event			= [NSAppleEventDescriptor appleEventWithEventClass:kASAppleScriptSuite eventID:kASSubroutineEvent targetDescriptor:target returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
+	
+	[event setParamDescriptor:handler forKeyword:keyASSubroutineName];
+	[event setParamDescriptor:parameters forKeyword:keyDirectObject];
+	
+	// Call the event in AppleScript
+	result = [appleScript executeAppleEvent:event error:&errors];
+	if(nil == result) {
+		@throw [NSException exceptionWithName:@"AppleScriptError" reason:[errors objectForKey:NSAppleScriptErrorMessage] userInfo:errors];
+	}
 }

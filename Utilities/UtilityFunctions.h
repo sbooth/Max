@@ -82,15 +82,13 @@ NSData * getPNGDataForImage(NSImage *image);
 NSData * getBitmapDataForImage(NSImage					*image,
 							   NSBitmapImageFileType	type);
 	
-// Return YES if at least one output format is selected
-BOOL outputFormatsSelected();
-
-// Get an array of the default encoders
-NSArray * getDefaultOutputFormats();
-
 // Get an image representing the file's icon, scaled to size 
 NSImage * getIconForFile(NSString	*filename,
 						 NSSize		iconSize);
+
+// Attempt to add the specified filename to the iTunes library, using metadata for the file's information
+void addFileToiTunesLibrary(NSString		*filename, 
+							AudioMetadata	*metadata);
 
 #ifdef __cplusplus
 }
