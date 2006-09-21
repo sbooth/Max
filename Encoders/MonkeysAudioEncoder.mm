@@ -46,9 +46,9 @@
 
 @implementation MonkeysAudioEncoder
 
-- (id) init
+- (id) initWithFilename:(NSString *)filename
 {	
-	if((self = [super init])) {
+	if((self = [super initWithFilename:filename])) {
 
 		_compressionLevel	= COMPRESSION_LEVEL_NORMAL;
 				
