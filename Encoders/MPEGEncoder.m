@@ -53,29 +53,15 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 @implementation MPEGEncoder
 
-- (id) init
+- (id) initWithFilename:(NSString *)filename
 {
-	if((self = [super init])) {
-		
-		@try {
-			// LAME setup
-			_gfp	= lame_init();
-			if(NULL == _gfp) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
-			// Write the Xing VBR tag
-			lame_set_bWriteVbrTag(_gfp, 1);			
-		}
+	if((self = [super initWithFilename:filename])) {
 
-		@catch(NSException *exception) {
-			if(NULL != _gfp) {
-				lame_close(_gfp);
-			}
-			
-			@throw;
-		}
+		_gfp	= lame_init();
+		NSAssert(NULL != _gfp, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+		
+		// Write the Xing VBR tag
+		lame_set_bWriteVbrTag(_gfp, 1);			
 				
 		return self;
 	}

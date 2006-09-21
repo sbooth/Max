@@ -41,9 +41,9 @@
 
 @implementation FLACEncoder
 
-- (id) init
+- (id) initWithFilename:(NSString *)filename
 {	
-	if((self = [super init])) {
+	if((self = [super initWithFilename:filename])) {
 		
 		_padding				= 4096;
 		_exhaustiveModelSearch	= NO;
