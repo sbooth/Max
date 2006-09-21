@@ -147,6 +147,10 @@
 	return success;
 }
 
+@end
+
+@implementation FileArrayController (Private)
+
 - (void) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)indexSet toIndex:(unsigned)insertIndex
 {
 	NSArray			*objects					= [self arrangedObjects];
