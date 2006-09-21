@@ -43,7 +43,7 @@
 
 #include <WavPack/wputils.h>
 
-@interface AudioMetadata (Private)
+@interface AudioMetadata (FileMetadata)
 + (AudioMetadata *)		metadataFromFLACFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMP3File:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMP4File:(NSString *)filename;
@@ -112,1077 +112,6 @@
 	else {
 		return [[[AudioMetadata alloc] init] autorelease];
 	}
-}
-
-+ (AudioMetadata *) metadataFromFLACFile:(NSString *)filename
-{
-	AudioMetadata								*result;
-	FLAC__StreamMetadata						*tags, *currentTag, streaminfo;
-	FLAC__StreamMetadata_VorbisComment_Entry	*comments;
-	unsigned									i;
-	NSString									*commentString, *key, *value;
-	NSRange										range;
-	
-	result = [[AudioMetadata alloc] init];
-	
-	if(FLAC__metadata_get_tags([filename fileSystemRepresentation], &tags)) {
-		
-		currentTag = tags;
-		
-		for(;;) {
-			
-			switch(currentTag->type) {
-				case FLAC__METADATA_TYPE_VORBIS_COMMENT:
-					comments = currentTag->data.vorbis_comment.comments;
-					
-					for(i = 0; i < currentTag->data.vorbis_comment.num_comments; ++i) {
-						
-						// Split the comment at '='
-						commentString	= [NSString stringWithUTF8String:(const char *)currentTag->data.vorbis_comment.comments[i].entry];
-						range			= [commentString rangeOfString:@"=" options:NSLiteralSearch];
-						
-						// Sanity check (comments should be well-formed)
-						if(NSNotFound != range.location && 0 != range.length) {
-							key		= [commentString substringToIndex:range.location];
-							value	= [commentString substringFromIndex:range.location + 1];
-							
-							if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ALBUM"]]) {
-								[result setAlbumTitle:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ARTIST"]]) {
-								[result setAlbumArtist:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPOSER"]]) {
-								[result setAlbumComposer:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"GENRE"]]) {
-								[result setAlbumGenre:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DATE"]]) {
-								[result setAlbumYear:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DESCRIPTION"]]) {
-								[result setAlbumComment:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TITLE"]]) {
-								[result setTrackTitle:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKNUMBER"]]) {
-								[result setTrackNumber:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKTOTAL"]]) {
-								[result setTrackTotal:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPILATION"]]) {
-								[result setCompilation:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCNUMBER"]]) {
-								[result setDiscNumber:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCTOTAL"]]) {
-								[result setDiscTotal:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ISRC"]]) {
-								[result setISRC:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"MCN"]]) {
-								[result setMCN:value];
-							}
-							
-							// Maintain backwards compability for the following tags
-							else if(NSOrderedSame == [key caseInsensitiveCompare:@"YEAR"] && 0 == [result albumYear]) {
-								[result setAlbumYear:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMMENT"] && nil == [result albumComment]) {
-								[result setAlbumComment:value];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"] && 0 == [result trackTotal]) {
-								[result setTrackTotal:[value intValue]];
-							}
-							else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCSINSET"] && 0 == [result discTotal]) {
-								[result setDiscTotal:[value intValue]];
-							}
-						}							
-					}
-						break;
-					
-				default:
-					break;
-			}
-			
-			if(currentTag->is_last) {
-				break;
-			}
-			else {
-				++currentTag;
-			}
-		}
-		
-		FLAC__metadata_object_delete(tags);
-	}
-	
-	// Get length
-	if(FLAC__metadata_get_streaminfo([filename fileSystemRepresentation], &streaminfo) && FLAC__METADATA_TYPE_STREAMINFO == streaminfo.type) {
-		[result setLength:(streaminfo.data.stream_info.total_samples * streaminfo.data.stream_info.sample_rate)];
-	}
-	
-	return [result autorelease];
-}
-
-+ (AudioMetadata *) metadataFromMP3File:(NSString *)filename
-{
-	AudioMetadata							*result;
-	TagLib::MPEG::File						f						([filename fileSystemRepresentation], false);
-	TagLib::ID3v2::AttachedPictureFrame		*picture				= NULL;
-	TagLib::String							s;
-	TagLib::ID3v2::Tag						*id3v2tag;
-	NSString								*trackString, *trackNum, *totalTracks;
-	NSRange									range;
-	
-	
-	result = [[AudioMetadata alloc] init];
-
-	if(f.isValid()) {
-			
-		// Album title
-		s = f.tag()->album();
-		if(false == s.isNull()) {
-			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Artist
-		s = f.tag()->artist();
-		if(false == s.isNull()) {
-			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Genre
-		s = f.tag()->genre();
-		if(false == s.isNull()) {
-			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Year
-		if(0 != f.tag()->year()) {
-			[result setAlbumYear:f.tag()->year()];
-		}
-		
-		// Comment
-		s = f.tag()->comment();
-		if(false == s.isNull()) {
-			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Track title
-		s = f.tag()->title();
-		if(false == s.isNull()) {
-			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Track number
-		if(0 != f.tag()->track()) {
-			[result setTrackNumber:f.tag()->track()];
-		}
-		
-		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
-			[result setLength:f.audioProperties()->length()];
-		}
-		
-		id3v2tag = f.ID3v2Tag();
-		
-		if(NULL != id3v2tag) {
-			
-			// Extract composer if present
-			TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TCOM"];
-			if(NO == frameList.isEmpty()) {
-				[result setAlbumComposer:[NSString stringWithUTF8String:frameList.front()->toString().toCString(true)]];
-			}
-			
-			// Extract total tracks if present
-			frameList = id3v2tag->frameListMap()["TRCK"];
-			if(NO == frameList.isEmpty()) {
-				// Split the tracks at '/'
-				trackString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
-				range			= [trackString rangeOfString:@"/" options:NSLiteralSearch];
-				
-				if(NSNotFound != range.location && 0 != range.length) {
-					trackNum		= [trackString substringToIndex:range.location];
-					totalTracks		= [trackString substringFromIndex:range.location + 1];
-					
-					[result setTrackNumber:[trackNum intValue]];
-					[result setTrackTotal:[totalTracks intValue]];
-				}
-				else {
-					[result setTrackNumber:[trackString intValue]];
-				}
-			}
-			
-			// Extract track length if present
-			frameList = id3v2tag->frameListMap()["TLEN"];
-			if(NO == frameList.isEmpty()) {
-				NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
-				[result setLength:([value intValue] / 1000)];
-			}			
-			
-			// Extract album art if present
-			frameList = id3v2tag->frameListMap()["APIC"];
-			if(NO == frameList.isEmpty() && NULL != (picture = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front()))) {
-				TagLib::ByteVector bv = picture->picture();
-				[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]] autorelease]];
-			}
-			
-			// Extract compilation if present (iTunes TCMP tag)
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
-				frameList = id3v2tag->frameListMap()["TCMP"];
-				if(NO == frameList.isEmpty()) {
-					// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
-					NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
-					[result setCompilation:(BOOL)[value intValue]];
-				}			
-			}
-		}
-	}
-
-	return [result autorelease];
-}
-
-+ (AudioMetadata *) metadataFromMP4File:(NSString *)filename
-{
-	AudioMetadata		*result			= [[AudioMetadata alloc] init];
-	MP4FileHandle		mp4FileHandle	= MP4Read([filename fileSystemRepresentation], 0);
-
-	if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
-		char			*s									= NULL;
-		u_int16_t		trackNumber, totalTracks;
-		u_int16_t		discNumber, discTotal;
-		u_int8_t		compilation;
-		u_int64_t		duration;
-		u_int32_t		artCount;
-		u_int8_t		*bytes								= NULL;
-		u_int32_t		length								= 0;
-		
-		// Album title
-		MP4GetMetadataAlbum(mp4FileHandle, &s);
-		if(NULL != s) {
-			[result setAlbumTitle:[NSString stringWithUTF8String:s]];
-		}
-		
-		// Artist
-		MP4GetMetadataArtist(mp4FileHandle, &s);
-		if(NULL != s) {
-			[result setAlbumArtist:[NSString stringWithUTF8String:s]];
-		}
-		
-		// Genre
-		MP4GetMetadataGenre(mp4FileHandle, &s);
-		if(NULL != s) {
-			[result setAlbumGenre:[NSString stringWithUTF8String:s]];
-		}
-		
-		// Year
-		MP4GetMetadataYear(mp4FileHandle, &s);
-		if(NULL != s) {
-			// Avoid atoi()
-			[result setAlbumYear:[[NSString stringWithUTF8String:s] intValue]];
-		}
-		
-		// Composer
-		MP4GetMetadataWriter(mp4FileHandle, &s);
-		if(NULL != s) {
-			[result setAlbumComposer:[NSString stringWithUTF8String:s]];
-		}
-
-		// Comment
-		MP4GetMetadataComment(mp4FileHandle, &s);
-		if(NULL != s) {
-			[result setAlbumComment:[NSString stringWithUTF8String:s]];
-		}
-		
-		// Track title
-		MP4GetMetadataName(mp4FileHandle, &s);
-		if(NULL != s) {
-			[result setTrackTitle:[NSString stringWithUTF8String:s]];
-		}
-		
-		// Track number
-		MP4GetMetadataTrack(mp4FileHandle, &trackNumber, &totalTracks);
-		if(0 != trackNumber) {
-			[result setTrackNumber:trackNumber];
-		}
-		if(0 != totalTracks) {
-			[result setTrackTotal:totalTracks];
-		}
-		
-		// Disc number
-		MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discTotal);
-		if(0 != discNumber) {
-			[result setDiscNumber:discNumber];
-		}
-		if(0 != discTotal) {
-			[result setDiscTotal:discTotal];
-		}
-		
-		// Compilation
-		MP4GetMetadataCompilation(mp4FileHandle, &compilation);
-		if(compilation) {
-			[result setCompilation:YES];
-		}
-		
-		// Length
-		duration = MP4GetDuration(mp4FileHandle);
-		if(0 != duration) {
-			[result setLength:(duration / MP4GetTimeScale(mp4FileHandle))];
-		}
-		
-		// Album art
-		artCount = MP4GetMetadataCoverArtCount(mp4FileHandle);
-		if(0 < artCount) {
-			MP4GetMetadataCoverArt(mp4FileHandle, &bytes, &length);
-			[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bytes length:length]] autorelease]];
-		}
-		
-		MP4Close(mp4FileHandle);
-	}
-	
-	return [result autorelease];
-}
-
-+ (AudioMetadata *)	metadataFromOggVorbisFile:(NSString *)filename
-{
-	AudioMetadata							*result;
-	TagLib::Ogg::Vorbis::File				f						([filename fileSystemRepresentation], false);
-	TagLib::String							s;
-	TagLib::Ogg::XiphComment				*xiphComment;
-	
-	
-	result = [[AudioMetadata alloc] init];
-	
-	if(f.isValid()) {
-		
-		xiphComment = f.tag();
-		
-		if(NULL != xiphComment) {
-			TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
-			NSString						*value		= nil;
-			TagLib::String					tag;
-			
-			tag = [self customizeOggVorbisTag:@"ALBUM"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumTitle:value];
-			}
-
-			tag = [self customizeOggVorbisTag:@"ARTIST"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumArtist:value];
-			}
-			
-			tag = [self customizeOggVorbisTag:@"GENRE"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumGenre:value];
-			}
-
-			tag = [self customizeOggVorbisTag:@"DATE"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumYear:[value intValue]];
-			}
-
-			tag = [self customizeOggVorbisTag:@"DESCRIPTION"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumComment:value];
-			}
-
-			tag = [self customizeOggVorbisTag:@"TITLE"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setTrackTitle:value];
-			}
-
-			tag = [self customizeOggVorbisTag:@"TRACKNUMBER"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setTrackNumber:[value intValue]];
-			}
-			
-			tag = [self customizeOggVorbisTag:@"COMPOSER"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumComposer:value];
-			}
-			
-			tag = [self customizeOggVorbisTag:@"TRACKTOTAL"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setTrackTotal:[value intValue]];
-			}
-			
-			tag = [self customizeOggVorbisTag:@"DISCNUMBER"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setDiscNumber:[value intValue]];
-			}
-			
-			tag = [self customizeOggVorbisTag:@"DISCTOTAL"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setDiscTotal:[value intValue]];
-			}
-			
-			tag = [self customizeOggVorbisTag:@"COMPILATION"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setCompilation:(BOOL)[value intValue]];
-			}
-			
-			tag = [self customizeOggVorbisTag:@"ISRC"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setISRC:value];
-			}					
-			
-			tag = [self customizeOggVorbisTag:@"MCN"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setMCN:value];
-			}					
-
-			// Maintain backwards compatibility for the following tags
-			if(fieldList.contains("DISCSINSET") && 0 == [result discTotal]) {
-				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
-				[result setDiscTotal:[value intValue]];
-			}
-			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
-				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
-				[result setAlbumYear:[value intValue]];
-			}
-			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
-				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
-				[result setAlbumComment:value];
-			}
-		}
-		
-		// Length
-		if(NULL !=f.audioProperties() && 0 != f.audioProperties()->length()) {
-			[result setLength:f.audioProperties()->length()];
-		}
-	}
-
-	return [result autorelease];
-}
-
-+ (AudioMetadata *)	metadataFromOggFLACFile:(NSString *)filename
-{
-	AudioMetadata							*result;
-	TagLib::Ogg::FLAC::File					f						([filename fileSystemRepresentation], false);
-	TagLib::String							s;
-	TagLib::Ogg::XiphComment				*xiphComment;
-	
-	
-	result = [[AudioMetadata alloc] init];
-	
-	if(f.isValid()) {
-		
-		xiphComment = f.tag();
-		
-		if(NULL != xiphComment) {
-			TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
-			NSString						*value		= nil;
-			TagLib::String					tag;
-			
-			tag = [self customizeOggFLACTag:@"ALBUM"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumTitle:value];
-			}
-			
-			tag = [self customizeOggFLACTag:@"ARTIST"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumArtist:value];
-			}
-			
-			tag = [self customizeOggFLACTag:@"GENRE"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumGenre:value];
-			}
-			
-			tag = [self customizeOggFLACTag:@"DATE"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumYear:[value intValue]];
-			}
-			
-			tag = [self customizeOggFLACTag:@"DESCRIPTION"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumComment:value];
-			}
-			
-			tag = [self customizeOggFLACTag:@"TITLE"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setTrackTitle:value];
-			}
-			
-			tag = [self customizeOggFLACTag:@"TRACKNUMBER"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setTrackNumber:[value intValue]];
-			}
-			
-			tag = [self customizeOggFLACTag:@"COMPOSER"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setAlbumComposer:value];
-			}
-			
-			tag = [self customizeOggFLACTag:@"TRACKTOTAL"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setTrackTotal:[value intValue]];
-			}
-			
-			tag = [self customizeOggFLACTag:@"DISCNUMBER"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setDiscNumber:[value intValue]];
-			}
-			
-			tag = [self customizeOggFLACTag:@"DISCTOTAL"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setDiscTotal:[value intValue]];
-			}
-			
-			tag = [self customizeOggFLACTag:@"COMPILATION"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setCompilation:(BOOL)[value intValue]];
-			}
-			
-			tag = [self customizeOggFLACTag:@"ISRC"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setISRC:value];
-			}					
-			
-			tag = [self customizeOggFLACTag:@"MCN"];
-			if(fieldList.contains(tag)) {
-				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setMCN:value];
-			}					
-			
-			// Maintain backwards compatibility for the following tags
-			if(fieldList.contains("DISCSINSET") && 0 == [result discTotal]) {
-				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
-				[result setDiscTotal:[value intValue]];
-			}
-			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
-				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
-				[result setAlbumYear:[value intValue]];
-			}
-			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
-				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
-				[result setAlbumComment:value];
-			}
-		}
-		
-		// Length
-		if(NULL !=f.audioProperties() && 0 != f.audioProperties()->length()) {
-			[result setLength:f.audioProperties()->length()];
-		}
-	}
-	
-	return [result autorelease];
-}
-
-+ (AudioMetadata *) metadataFromMonkeysAudioFile:(NSString *)filename
-{
-	AudioMetadata					*result					= [[AudioMetadata alloc] init];
-	str_utf16						*chars					= NULL;
-	str_utf16						*tagName				= NULL;
-	CAPETag							*f						= NULL;
-	CAPETagField					*tag					= NULL;		
-	
-	@try {
-		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
-		if(NULL == chars) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		f = new CAPETag(chars);
-		if(NULL == f) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
-		// Album title
-		tagName = [self customizeAPETag:@"ALBUM"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setAlbumTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-		// Artist
-		tagName = [self customizeAPETag:@"ARTIST"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setAlbumArtist:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-		// Composer
-		tagName = [self customizeAPETag:@"COMPOSER"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setAlbumComposer:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-		// Genre
-		tagName = [self customizeAPETag:@"GENRE"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setAlbumGenre:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-		// Year
-		tagName = [self customizeAPETag:@"YEAR"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setAlbumYear:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
-		}
-		free(tagName);
-		
-		// Comment
-		tagName = [self customizeAPETag:@"COMMENT"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setAlbumComment:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-		// Track title
-		tagName = [self customizeAPETag:@"TITLE"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setTrackTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-		// Track number
-		tagName = [self customizeAPETag:@"TRACK"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setTrackNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
-		}
-		free(tagName);
-		
-		// Track total
-		tagName = [self customizeAPETag:@"TRACKTOTAL"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setTrackTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
-		}
-		free(tagName);
-		
-		// Disc number
-		tagName = [self customizeAPETag:@"DISCNUMBER"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setDiscNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
-		}
-		free(tagName);
-		
-		// Discs in set
-		tagName = [self customizeAPETag:@"DISCTOTAL"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setDiscTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
-		}
-		free(tagName);
-		
-		// Compilation
-		tagName = [self customizeAPETag:@"COMPILATION"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setCompilation:(BOOL)[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
-		}
-		free(tagName);
-		
-		// ISRC
-		tagName = [self customizeAPETag:@"ISRC"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setISRC:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-		// MCN
-		tagName = [self customizeAPETag:@"MCN"];
-		tag = f->GetTagField(tagName);
-		if(NULL != tag && tag->GetIsUTF8Text()) {
-			[result setMCN:[NSString stringWithUTF8String:tag->GetFieldValue()]];
-		}
-		free(tagName);
-		
-	}
-	
-	@finally {
-		delete f;
-		free(chars);
-	}
-
-	return [result autorelease];
-}
-
-+ (AudioMetadata *) metadataFromWavPackFile:(NSString *)filename
-{
-	AudioMetadata					*result					= [[AudioMetadata alloc] init];
-	char							error [80];
-	const char						*tagName				= NULL;
-	char							*tagValue				= NULL;
-    WavpackContext					*wpc					= NULL;
-	int								len;
-	
-	@try {
-		wpc = WavpackOpenFileInput([filename fileSystemRepresentation], error, OPEN_TAGS, 0);
-		if(NULL == wpc) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
-		}
-
-		// Album title
-		tagName		= [[self customizeWavPackTag:@"ALBUM"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setAlbumTitle:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-
-		// Artist
-		tagName		= [[self customizeWavPackTag:@"ARTIST"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setAlbumArtist:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-
-		// Composer
-		tagName		= [[self customizeWavPackTag:@"COMPOSER"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setAlbumComposer:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-
-		// Genre
-		tagName		= [[self customizeWavPackTag:@"GENRE"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setAlbumGenre:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-
-		// Year
-		tagName		= [[self customizeWavPackTag:@"YEAR"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setAlbumYear:[[NSString stringWithUTF8String:tagValue] intValue]];
-			free(tagValue);
-		}
-
-		// Comment
-		tagName		= [[self customizeWavPackTag:@"COMMENT"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setAlbumComment:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-
-		// Track title
-		tagName		= [[self customizeWavPackTag:@"TITLE"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setTrackTitle:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-
-		// Track number
-		tagName		= [[self customizeWavPackTag:@"TRACK"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setTrackNumber:[[NSString stringWithUTF8String:tagValue] intValue]];
-			free(tagValue);
-		}
-
-		// Total tracks
-		tagName		= [[self customizeWavPackTag:@"TRACKTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setTrackTotal:[[NSString stringWithUTF8String:tagValue] intValue]];
-			free(tagValue);
-		}
-
-		// Disc number
-		tagName		= [[self customizeWavPackTag:@"DISCNUMBER"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setDiscNumber:[[NSString stringWithUTF8String:tagValue] intValue]];
-			free(tagValue);
-		}
-		
-		// Discs in set
-		tagName		= [[self customizeWavPackTag:@"DISCTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setDiscTotal:[[NSString stringWithUTF8String:tagValue] intValue]];
-			free(tagValue);
-		}
-
-		// Compilation
-		tagName		= [[self customizeWavPackTag:@"COMPILATION"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setCompilation:(BOOL)[[NSString stringWithUTF8String:tagValue] intValue]];
-			free(tagValue);
-		}
-
-		// MCN
-		tagName		= [[self customizeWavPackTag:@"MCN"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setMCN:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-
-		// ISRC
-		tagName		= [[self customizeWavPackTag:@"ISRC"] cStringUsingEncoding:NSASCIIStringEncoding];
-		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
-		if(0 != len) {
-			tagValue = (char *)calloc(len + 1, sizeof(char));
-			if(NULL == tagValue) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setISRC:[NSString stringWithUTF8String:tagValue]];
-			free(tagValue);
-		}
-	}
-	
-	@finally {
-		WavpackCloseFile(wpc);
-	}
-	
-	return [result autorelease];
-}
-
-+ (AudioMetadata *) metadataFromMusepackFile:(NSString *)filename
-{
-	AudioMetadata							*result;
-	TagLib::MPC::File						f						([filename fileSystemRepresentation], false);
-	TagLib::String							s;
-	TagLib::ID3v1::Tag						*id3v1Tag;
-	TagLib::APE::Tag						*apeTag;
-	
-	result = [[AudioMetadata alloc] init];
-	
-	if(f.isValid()) {
-		
-		// Album title
-		s = f.tag()->album();
-		if(false == s.isNull()) {
-			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Artist
-		s = f.tag()->artist();
-		if(false == s.isNull()) {
-			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Genre
-		s = f.tag()->genre();
-		if(false == s.isNull()) {
-			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Year
-		if(0 != f.tag()->year()) {
-			[result setAlbumYear:f.tag()->year()];
-		}
-		
-		// Comment
-		s = f.tag()->comment();
-		if(false == s.isNull()) {
-			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Track title
-		s = f.tag()->title();
-		if(false == s.isNull()) {
-			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
-		}
-		
-		// Track number
-		if(0 != f.tag()->track()) {
-			[result setTrackNumber:f.tag()->track()];
-		}
-		
-		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
-			[result setLength:f.audioProperties()->length()];
-		}
-		
-		id3v1Tag = f.ID3v1Tag();
-		if(NULL != id3v1Tag) {
-			
-		}
-		
-		apeTag = f.APETag();
-		if(NULL != apeTag) {
-			
-		}
-	}
-	
-	return [result autorelease];
-}
-
-#pragma mark Custom Tag Mapping
-
-+ (NSString *) customizeFLACTag:(NSString *)tag
-{
-	NSString *customTag;
-	
-	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"FLACTag_%@", tag]];
-	return (nil == customTag ? tag : customTag);
-}
-
-+ (TagLib::String) customizeOggVorbisTag:(NSString *)tag
-{
-	NSString *customTag;
-	
-	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"OggVorbisTag_%@", tag]];
-	return (nil == customTag ? TagLib::String([tag UTF8String], TagLib::String::UTF8) : TagLib::String([customTag UTF8String], TagLib::String::UTF8));
-}
-
-+ (TagLib::String) customizeOggFLACTag:(NSString *)tag
-{
-	NSString *customTag;
-	
-	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"FLACTag_%@", tag]];
-	return (nil == customTag ? TagLib::String([tag UTF8String], TagLib::String::UTF8) : TagLib::String([customTag UTF8String], TagLib::String::UTF8));
-}
-
-+ (str_utf16 *) customizeAPETag:(NSString *)tag
-{
-	NSString		*customTag		= nil;
-	str_utf16		*result			= NULL;
-	
-	customTag	= [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"APETag_%@", tag]];
-	result		= GetUTF16FromUTF8((const unsigned char *)[(nil == customTag ? tag : customTag) UTF8String]);
-	
-	if(NULL == result) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-	
-	return result;
-}
-
-+ (NSString *) customizeWavPackTag:(NSString *)tag
-{
-	NSString *customTag;
-	
-	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"WavPackTag_%@", tag]];
-	return (nil == customTag ? tag : customTag);
 }
 
 #pragma mark Class
@@ -1457,5 +386,1082 @@
 - (void)		setAlbumArt:(NSImage *)albumArt					{ [_albumArt release]; _albumArt = [albumArt retain]; }
 
 - (void)		setPlaylist:(NSString *)playlist				{ [_playlist release]; _playlist = [playlist retain]; }
+
+@end
+
+@implementation AudioMetadata (FileMetadata)
+
++ (AudioMetadata *) metadataFromFLACFile:(NSString *)filename
+{
+	AudioMetadata								*result;
+	FLAC__StreamMetadata						*tags, *currentTag, streaminfo;
+	FLAC__StreamMetadata_VorbisComment_Entry	*comments;
+	unsigned									i;
+	NSString									*commentString, *key, *value;
+	NSRange										range;
+	
+	result = [[AudioMetadata alloc] init];
+	
+	if(FLAC__metadata_get_tags([filename fileSystemRepresentation], &tags)) {
+		
+		currentTag = tags;
+		
+		for(;;) {
+			
+			switch(currentTag->type) {
+				case FLAC__METADATA_TYPE_VORBIS_COMMENT:
+					comments = currentTag->data.vorbis_comment.comments;
+					
+					for(i = 0; i < currentTag->data.vorbis_comment.num_comments; ++i) {
+						
+						// Split the comment at '='
+						commentString	= [NSString stringWithUTF8String:(const char *)currentTag->data.vorbis_comment.comments[i].entry];
+						range			= [commentString rangeOfString:@"=" options:NSLiteralSearch];
+						
+						// Sanity check (comments should be well-formed)
+						if(NSNotFound != range.location && 0 != range.length) {
+							key		= [commentString substringToIndex:range.location];
+							value	= [commentString substringFromIndex:range.location + 1];
+							
+							if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ALBUM"]]) {
+								[result setAlbumTitle:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ARTIST"]]) {
+								[result setAlbumArtist:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPOSER"]]) {
+								[result setAlbumComposer:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"GENRE"]]) {
+								[result setAlbumGenre:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DATE"]]) {
+								[result setAlbumYear:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DESCRIPTION"]]) {
+								[result setAlbumComment:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TITLE"]]) {
+								[result setTrackTitle:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKNUMBER"]]) {
+								[result setTrackNumber:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKTOTAL"]]) {
+								[result setTrackTotal:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPILATION"]]) {
+								[result setCompilation:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCNUMBER"]]) {
+								[result setDiscNumber:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCTOTAL"]]) {
+								[result setDiscTotal:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ISRC"]]) {
+								[result setISRC:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"MCN"]]) {
+								[result setMCN:value];
+							}
+							
+							// Maintain backwards compability for the following tags
+							else if(NSOrderedSame == [key caseInsensitiveCompare:@"YEAR"] && 0 == [result albumYear]) {
+								[result setAlbumYear:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMMENT"] && nil == [result albumComment]) {
+								[result setAlbumComment:value];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"] && 0 == [result trackTotal]) {
+								[result setTrackTotal:[value intValue]];
+							}
+							else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCSINSET"] && 0 == [result discTotal]) {
+								[result setDiscTotal:[value intValue]];
+							}
+						}							
+					}
+						break;
+					
+				default:
+					break;
+			}
+			
+			if(currentTag->is_last) {
+				break;
+			}
+			else {
+				++currentTag;
+			}
+		}
+		
+		FLAC__metadata_object_delete(tags);
+	}
+	
+	// Get length
+	if(FLAC__metadata_get_streaminfo([filename fileSystemRepresentation], &streaminfo) && FLAC__METADATA_TYPE_STREAMINFO == streaminfo.type) {
+		[result setLength:(streaminfo.data.stream_info.total_samples * streaminfo.data.stream_info.sample_rate)];
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromMP3File:(NSString *)filename
+{
+	AudioMetadata							*result;
+	TagLib::MPEG::File						f						([filename fileSystemRepresentation], false);
+	TagLib::ID3v2::AttachedPictureFrame		*picture				= NULL;
+	TagLib::String							s;
+	TagLib::ID3v2::Tag						*id3v2tag;
+	NSString								*trackString, *trackNum, *totalTracks;
+	NSRange									range;
+	
+	
+	result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		// Album title
+		s = f.tag()->album();
+		if(false == s.isNull()) {
+			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Artist
+		s = f.tag()->artist();
+		if(false == s.isNull()) {
+			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Genre
+		s = f.tag()->genre();
+		if(false == s.isNull()) {
+			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Year
+		if(0 != f.tag()->year()) {
+			[result setAlbumYear:f.tag()->year()];
+		}
+		
+		// Comment
+		s = f.tag()->comment();
+		if(false == s.isNull()) {
+			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Track title
+		s = f.tag()->title();
+		if(false == s.isNull()) {
+			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Track number
+		if(0 != f.tag()->track()) {
+			[result setTrackNumber:f.tag()->track()];
+		}
+		
+		// Length
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
+			[result setLength:f.audioProperties()->length()];
+		}
+		
+		id3v2tag = f.ID3v2Tag();
+		
+		if(NULL != id3v2tag) {
+			
+			// Extract composer if present
+			TagLib::ID3v2::FrameList frameList = id3v2tag->frameListMap()["TCOM"];
+			if(NO == frameList.isEmpty()) {
+				[result setAlbumComposer:[NSString stringWithUTF8String:frameList.front()->toString().toCString(true)]];
+			}
+			
+			// Extract total tracks if present
+			frameList = id3v2tag->frameListMap()["TRCK"];
+			if(NO == frameList.isEmpty()) {
+				// Split the tracks at '/'
+				trackString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+				range			= [trackString rangeOfString:@"/" options:NSLiteralSearch];
+				
+				if(NSNotFound != range.location && 0 != range.length) {
+					trackNum		= [trackString substringToIndex:range.location];
+					totalTracks		= [trackString substringFromIndex:range.location + 1];
+					
+					[result setTrackNumber:[trackNum intValue]];
+					[result setTrackTotal:[totalTracks intValue]];
+				}
+				else {
+					[result setTrackNumber:[trackString intValue]];
+				}
+			}
+			
+			// Extract track length if present
+			frameList = id3v2tag->frameListMap()["TLEN"];
+			if(NO == frameList.isEmpty()) {
+				NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+				[result setLength:([value intValue] / 1000)];
+			}			
+			
+			// Extract album art if present
+			frameList = id3v2tag->frameListMap()["APIC"];
+			if(NO == frameList.isEmpty() && NULL != (picture = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front()))) {
+				TagLib::ByteVector bv = picture->picture();
+				[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]] autorelease]];
+			}
+			
+			// Extract compilation if present (iTunes TCMP tag)
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+				frameList = id3v2tag->frameListMap()["TCMP"];
+				if(NO == frameList.isEmpty()) {
+					// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
+					NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+					[result setCompilation:(BOOL)[value intValue]];
+				}			
+			}
+		}
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromMP4File:(NSString *)filename
+{
+	AudioMetadata		*result			= [[AudioMetadata alloc] init];
+	MP4FileHandle		mp4FileHandle	= MP4Read([filename fileSystemRepresentation], 0);
+	
+	if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
+		char			*s									= NULL;
+		u_int16_t		trackNumber, totalTracks;
+		u_int16_t		discNumber, discTotal;
+		u_int8_t		compilation;
+		u_int64_t		duration;
+		u_int32_t		artCount;
+		u_int8_t		*bytes								= NULL;
+		u_int32_t		length								= 0;
+		
+		// Album title
+		MP4GetMetadataAlbum(mp4FileHandle, &s);
+		if(NULL != s) {
+			[result setAlbumTitle:[NSString stringWithUTF8String:s]];
+		}
+		
+		// Artist
+		MP4GetMetadataArtist(mp4FileHandle, &s);
+		if(NULL != s) {
+			[result setAlbumArtist:[NSString stringWithUTF8String:s]];
+		}
+		
+		// Genre
+		MP4GetMetadataGenre(mp4FileHandle, &s);
+		if(NULL != s) {
+			[result setAlbumGenre:[NSString stringWithUTF8String:s]];
+		}
+		
+		// Year
+		MP4GetMetadataYear(mp4FileHandle, &s);
+		if(NULL != s) {
+			// Avoid atoi()
+			[result setAlbumYear:[[NSString stringWithUTF8String:s] intValue]];
+		}
+		
+		// Composer
+		MP4GetMetadataWriter(mp4FileHandle, &s);
+		if(NULL != s) {
+			[result setAlbumComposer:[NSString stringWithUTF8String:s]];
+		}
+		
+		// Comment
+		MP4GetMetadataComment(mp4FileHandle, &s);
+		if(NULL != s) {
+			[result setAlbumComment:[NSString stringWithUTF8String:s]];
+		}
+		
+		// Track title
+		MP4GetMetadataName(mp4FileHandle, &s);
+		if(NULL != s) {
+			[result setTrackTitle:[NSString stringWithUTF8String:s]];
+		}
+		
+		// Track number
+		MP4GetMetadataTrack(mp4FileHandle, &trackNumber, &totalTracks);
+		if(0 != trackNumber) {
+			[result setTrackNumber:trackNumber];
+		}
+		if(0 != totalTracks) {
+			[result setTrackTotal:totalTracks];
+		}
+		
+		// Disc number
+		MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discTotal);
+		if(0 != discNumber) {
+			[result setDiscNumber:discNumber];
+		}
+		if(0 != discTotal) {
+			[result setDiscTotal:discTotal];
+		}
+		
+		// Compilation
+		MP4GetMetadataCompilation(mp4FileHandle, &compilation);
+		if(compilation) {
+			[result setCompilation:YES];
+		}
+		
+		// Length
+		duration = MP4GetDuration(mp4FileHandle);
+		if(0 != duration) {
+			[result setLength:(duration / MP4GetTimeScale(mp4FileHandle))];
+		}
+		
+		// Album art
+		artCount = MP4GetMetadataCoverArtCount(mp4FileHandle);
+		if(0 < artCount) {
+			MP4GetMetadataCoverArt(mp4FileHandle, &bytes, &length);
+			[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bytes length:length]] autorelease]];
+		}
+		
+		MP4Close(mp4FileHandle);
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *)	metadataFromOggVorbisFile:(NSString *)filename
+{
+	AudioMetadata							*result;
+	TagLib::Ogg::Vorbis::File				f						([filename fileSystemRepresentation], false);
+	TagLib::String							s;
+	TagLib::Ogg::XiphComment				*xiphComment;
+	
+	
+	result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		xiphComment = f.tag();
+		
+		if(NULL != xiphComment) {
+			TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
+			NSString						*value		= nil;
+			TagLib::String					tag;
+			
+			tag = [self customizeOggVorbisTag:@"ALBUM"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumTitle:value];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"ARTIST"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumArtist:value];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"GENRE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumGenre:value];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"DATE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumYear:[value intValue]];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"DESCRIPTION"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"TITLE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackTitle:value];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"TRACKNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackNumber:[value intValue]];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"COMPOSER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumComposer:value];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"TRACKTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackTotal:[value intValue]];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"DISCNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setDiscNumber:[value intValue]];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"DISCTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setDiscTotal:[value intValue]];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"COMPILATION"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setCompilation:(BOOL)[value intValue]];
+			}
+			
+			tag = [self customizeOggVorbisTag:@"ISRC"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setISRC:value];
+			}					
+			
+			tag = [self customizeOggVorbisTag:@"MCN"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setMCN:value];
+			}					
+			
+			// Maintain backwards compatibility for the following tags
+			if(fieldList.contains("DISCSINSET") && 0 == [result discTotal]) {
+				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
+				[result setDiscTotal:[value intValue]];
+			}
+			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
+				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
+				[result setAlbumYear:[value intValue]];
+			}
+			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
+				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
+		}
+		
+		// Length
+		if(NULL !=f.audioProperties() && 0 != f.audioProperties()->length()) {
+			[result setLength:f.audioProperties()->length()];
+		}
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *)	metadataFromOggFLACFile:(NSString *)filename
+{
+	AudioMetadata							*result;
+	TagLib::Ogg::FLAC::File					f						([filename fileSystemRepresentation], false);
+	TagLib::String							s;
+	TagLib::Ogg::XiphComment				*xiphComment;
+	
+	
+	result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		xiphComment = f.tag();
+		
+		if(NULL != xiphComment) {
+			TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
+			NSString						*value		= nil;
+			TagLib::String					tag;
+			
+			tag = [self customizeOggFLACTag:@"ALBUM"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumTitle:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"ARTIST"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumArtist:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"GENRE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumGenre:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DATE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumYear:[value intValue]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DESCRIPTION"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"TITLE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackTitle:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"TRACKNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackNumber:[value intValue]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"COMPOSER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumComposer:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"TRACKTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackTotal:[value intValue]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DISCNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setDiscNumber:[value intValue]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DISCTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setDiscTotal:[value intValue]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"COMPILATION"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setCompilation:(BOOL)[value intValue]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"ISRC"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setISRC:value];
+			}					
+			
+			tag = [self customizeOggFLACTag:@"MCN"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setMCN:value];
+			}					
+			
+			// Maintain backwards compatibility for the following tags
+			if(fieldList.contains("DISCSINSET") && 0 == [result discTotal]) {
+				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
+				[result setDiscTotal:[value intValue]];
+			}
+			if(fieldList.contains("YEAR") && 0 == [result albumYear]) {
+				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
+				[result setAlbumYear:[value intValue]];
+			}
+			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
+				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
+		}
+		
+		// Length
+		if(NULL !=f.audioProperties() && 0 != f.audioProperties()->length()) {
+			[result setLength:f.audioProperties()->length()];
+		}
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromMonkeysAudioFile:(NSString *)filename
+{
+	AudioMetadata					*result					= [[AudioMetadata alloc] init];
+	str_utf16						*chars					= NULL;
+	str_utf16						*tagName				= NULL;
+	CAPETag							*f						= NULL;
+	CAPETagField					*tag					= NULL;		
+	
+	@try {
+		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
+		if(NULL == chars) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		f = new CAPETag(chars);
+		if(NULL == f) {
+			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		}
+		
+		// Album title
+		tagName = [self customizeAPETag:@"ALBUM"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setAlbumTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+		// Artist
+		tagName = [self customizeAPETag:@"ARTIST"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setAlbumArtist:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+		// Composer
+		tagName = [self customizeAPETag:@"COMPOSER"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setAlbumComposer:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+		// Genre
+		tagName = [self customizeAPETag:@"GENRE"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setAlbumGenre:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+		// Year
+		tagName = [self customizeAPETag:@"YEAR"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setAlbumYear:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+		}
+		free(tagName);
+		
+		// Comment
+		tagName = [self customizeAPETag:@"COMMENT"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setAlbumComment:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+		// Track title
+		tagName = [self customizeAPETag:@"TITLE"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setTrackTitle:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+		// Track number
+		tagName = [self customizeAPETag:@"TRACK"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setTrackNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+		}
+		free(tagName);
+		
+		// Track total
+		tagName = [self customizeAPETag:@"TRACKTOTAL"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setTrackTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+		}
+		free(tagName);
+		
+		// Disc number
+		tagName = [self customizeAPETag:@"DISCNUMBER"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setDiscNumber:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+		}
+		free(tagName);
+		
+		// Discs in set
+		tagName = [self customizeAPETag:@"DISCTOTAL"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setDiscTotal:[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+		}
+		free(tagName);
+		
+		// Compilation
+		tagName = [self customizeAPETag:@"COMPILATION"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setCompilation:(BOOL)[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]];
+		}
+		free(tagName);
+		
+		// ISRC
+		tagName = [self customizeAPETag:@"ISRC"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setISRC:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+		// MCN
+		tagName = [self customizeAPETag:@"MCN"];
+		tag = f->GetTagField(tagName);
+		if(NULL != tag && tag->GetIsUTF8Text()) {
+			[result setMCN:[NSString stringWithUTF8String:tag->GetFieldValue()]];
+		}
+		free(tagName);
+		
+	}
+	
+	@finally {
+		delete f;
+		free(chars);
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromWavPackFile:(NSString *)filename
+{
+	AudioMetadata					*result					= [[AudioMetadata alloc] init];
+	char							error [80];
+	const char						*tagName				= NULL;
+	char							*tagValue				= NULL;
+    WavpackContext					*wpc					= NULL;
+	int								len;
+	
+	@try {
+		wpc = WavpackOpenFileInput([filename fileSystemRepresentation], error, OPEN_TAGS, 0);
+		if(NULL == wpc) {
+			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
+		}
+		
+		// Album title
+		tagName		= [[self customizeWavPackTag:@"ALBUM"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setAlbumTitle:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+		// Artist
+		tagName		= [[self customizeWavPackTag:@"ARTIST"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setAlbumArtist:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+		// Composer
+		tagName		= [[self customizeWavPackTag:@"COMPOSER"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setAlbumComposer:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+		// Genre
+		tagName		= [[self customizeWavPackTag:@"GENRE"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setAlbumGenre:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+		// Year
+		tagName		= [[self customizeWavPackTag:@"YEAR"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setAlbumYear:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+		
+		// Comment
+		tagName		= [[self customizeWavPackTag:@"COMMENT"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setAlbumComment:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+		// Track title
+		tagName		= [[self customizeWavPackTag:@"TITLE"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setTrackTitle:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+		// Track number
+		tagName		= [[self customizeWavPackTag:@"TRACK"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setTrackNumber:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+		
+		// Total tracks
+		tagName		= [[self customizeWavPackTag:@"TRACKTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setTrackTotal:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+		
+		// Disc number
+		tagName		= [[self customizeWavPackTag:@"DISCNUMBER"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setDiscNumber:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+		
+		// Discs in set
+		tagName		= [[self customizeWavPackTag:@"DISCTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setDiscTotal:[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+		
+		// Compilation
+		tagName		= [[self customizeWavPackTag:@"COMPILATION"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setCompilation:(BOOL)[[NSString stringWithUTF8String:tagValue] intValue]];
+			free(tagValue);
+		}
+		
+		// MCN
+		tagName		= [[self customizeWavPackTag:@"MCN"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setMCN:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+		
+		// ISRC
+		tagName		= [[self customizeWavPackTag:@"ISRC"] cStringUsingEncoding:NSASCIIStringEncoding];
+		len			= WavpackGetTagItem(wpc, tagName, NULL, 0);
+		if(0 != len) {
+			tagValue = (char *)calloc(len + 1, sizeof(char));
+			if(NULL == tagValue) {
+				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			}
+			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
+			[result setISRC:[NSString stringWithUTF8String:tagValue]];
+			free(tagValue);
+		}
+	}
+	
+	@finally {
+		WavpackCloseFile(wpc);
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromMusepackFile:(NSString *)filename
+{
+	AudioMetadata							*result;
+	TagLib::MPC::File						f						([filename fileSystemRepresentation], false);
+	TagLib::String							s;
+	TagLib::ID3v1::Tag						*id3v1Tag;
+	TagLib::APE::Tag						*apeTag;
+	
+	result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		// Album title
+		s = f.tag()->album();
+		if(false == s.isNull()) {
+			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Artist
+		s = f.tag()->artist();
+		if(false == s.isNull()) {
+			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Genre
+		s = f.tag()->genre();
+		if(false == s.isNull()) {
+			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Year
+		if(0 != f.tag()->year()) {
+			[result setAlbumYear:f.tag()->year()];
+		}
+		
+		// Comment
+		s = f.tag()->comment();
+		if(false == s.isNull()) {
+			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Track title
+		s = f.tag()->title();
+		if(false == s.isNull()) {
+			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		}
+		
+		// Track number
+		if(0 != f.tag()->track()) {
+			[result setTrackNumber:f.tag()->track()];
+		}
+		
+		// Length
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
+			[result setLength:f.audioProperties()->length()];
+		}
+		
+		id3v1Tag = f.ID3v1Tag();
+		if(NULL != id3v1Tag) {
+			
+		}
+		
+		apeTag = f.APETag();
+		if(NULL != apeTag) {
+			
+		}
+	}
+	
+	return [result autorelease];
+}
+
+@end
+
+@implementation AudioMetadata (TagMappings)
+
++ (NSString *) customizeFLACTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"FLACTag_%@", tag]];
+	return (nil == customTag ? tag : customTag);
+}
+
++ (TagLib::String) customizeOggVorbisTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"OggVorbisTag_%@", tag]];
+	return (nil == customTag ? TagLib::String([tag UTF8String], TagLib::String::UTF8) : TagLib::String([customTag UTF8String], TagLib::String::UTF8));
+}
+
++ (TagLib::String) customizeOggFLACTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"FLACTag_%@", tag]];
+	return (nil == customTag ? TagLib::String([tag UTF8String], TagLib::String::UTF8) : TagLib::String([customTag UTF8String], TagLib::String::UTF8));
+}
+
++ (str_utf16 *) customizeAPETag:(NSString *)tag
+{
+	NSString		*customTag		= nil;
+	str_utf16		*result			= NULL;
+	
+	customTag	= [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"APETag_%@", tag]];
+	result		= GetUTF16FromUTF8((const unsigned char *)[(nil == customTag ? tag : customTag) UTF8String]);
+	
+	if(NULL == result) {
+		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	}
+	
+	return result;
+}
+
++ (NSString *) customizeWavPackTag:(NSString *)tag
+{
+	NSString *customTag;
+	
+	customTag = [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"WavPackTag_%@", tag]];
+	return (nil == customTag ? tag : customTag);
+}
 
 @end
