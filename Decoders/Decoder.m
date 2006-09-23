@@ -56,7 +56,7 @@
 			case kOggStreamTypeVorbis:		result = [[OggVorbisDecoder alloc] init];		break;
 			case kOggStreamTypeFLAC:		result = [[OggFLACDecoder alloc] init];			break;
 			case kOggStreamTypeSpeex:		result = [[OggSpeexDecoder alloc] init];		break;
-			default:																		break;
+			default:						result = nil;									break;
 		}
 	}
 	else if([extension isEqualToString:@"flac"]) {
