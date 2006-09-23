@@ -90,6 +90,10 @@ NSImage * getIconForFile(NSString	*filename,
 void addFileToiTunesLibrary(NSString		*filename, 
 							AudioMetadata	*metadata);
 
+// Create a temporary filename in directory with the given extension
+NSString * generateTemporaryFilename(NSString *directory, 
+									 NSString *extension);
+
 #ifdef __cplusplus
 }
 #endif

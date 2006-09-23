@@ -36,6 +36,9 @@
 #import "SpeexException.h"
 
 #include <Carbon/Carbon.h>
+#include <Security/AuthSession.h>
+
+#include <sys/param.h>
 
 #include <sndfile/sndfile.h>
 #include <Ogg/ogg.h>
@@ -502,4 +505,40 @@ addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 	if(nil == result) {
 		@throw [NSException exceptionWithName:@"AppleScriptError" reason:[errors objectForKey:NSAppleScriptErrorMessage] userInfo:errors];
 	}
+}
+
+NSString *
+generateTemporaryFilename(NSString *directory, NSString *extension)
+{
+	NSString				*pathString;
+	OSStatus				result;
+	int						intResult;
+	SecuritySessionId		sessionID;
+	SessionAttributeBits	sessionInfo;
+	char					path [MAXPATHLEN];
+	int						fd;
+	
+	if(nil == directory) {
+		directory = NSTemporaryDirectory();
+	}
+	
+	NSCParameterAssert(nil != directory);
+	NSCParameterAssert(nil != extension);
+	
+	// Get the current session id for constructing the pathname
+	result		= SessionGetInfo(callerSecuritySession, &sessionID, &sessionInfo);
+	NSCAssert1(noErr == result, @"SessionGetInfo failed: %@", UTCreateStringForOSType(result));
+
+	// Build the pathname
+	// Should look like [directory]/[applicationName]-[sessionID]-[XXXXXXXX].[extension]
+	pathString	= [NSString stringWithFormat:@"%@/%@-%.8x-XXXXXXXX.%@", directory, @"Max", sessionID, extension];
+	strlcpy(path, [pathString fileSystemRepresentation], MAXPATHLEN); 
+	
+	fd			= mkstemps(path, 1 + [extension length]);
+	NSCAssert1(-1 != fd, @"Unable to create a temporary file: %s", strerror(errno));
+	
+	intResult = close(fd);
+	NSCAssert1(0 == intResult, @"Unable to close the temporary file: %s", strerror(errno));
+	
+	return [NSString stringWithCString:path encoding:NSASCIIStringEncoding];
 }
