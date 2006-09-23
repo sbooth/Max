@@ -109,7 +109,7 @@
 
 - (NSMutableDictionary *) dictionaryForSession:(unsigned)session
 {
-	NSParameterAssert([_sessions count] < session);
+	NSParameterAssert([_sessions count] >= session);
 	
 	return [_sessions objectAtIndex:session - 1];
 }
