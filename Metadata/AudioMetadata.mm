@@ -514,6 +514,7 @@
 	TagLib::String							s;
 	TagLib::ID3v2::Tag						*id3v2tag;
 	NSString								*trackString, *trackNum, *totalTracks;
+	NSString								*discString, *discNum, *totalDiscs;
 	NSRange									range;
 	
 	
@@ -602,6 +603,25 @@
 				[result setLength:([value intValue] / 1000)];
 			}			
 			
+			// Extract disc number and total discs
+			frameList = id3v2tag->frameListMap()["TPOS"];
+			if(NO == frameList.isEmpty()) {
+				// Split the tracks at '/'
+				discString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+				range			= [discString rangeOfString:@"/" options:NSLiteralSearch];
+				
+				if(NSNotFound != range.location && 0 != range.length) {
+					discNum			= [discString substringToIndex:range.location];
+					totalDiscs		= [discString substringFromIndex:range.location + 1];
+					
+					[result setDiscNumber:[discNum intValue]];
+					[result setDiscTotal:[totalDiscs intValue]];
+				}
+				else {
+					[result setDiscNumber:[discString intValue]];
+				}
+			}
+
 			// Extract album art if present
 			frameList = id3v2tag->frameListMap()["APIC"];
 			if(NO == frameList.isEmpty() && NULL != (picture = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front()))) {
