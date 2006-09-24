@@ -82,7 +82,7 @@
 
 - (unsigned)		bytesAvailable
 {	
-	return (_writePtr >= _readPtr ? _writePtr - _readPtr : [self size] - (_readPtr - _writePtr));
+	return (_writePtr >= _readPtr ? (unsigned)(_writePtr - _readPtr) : [self size] - (unsigned)(_readPtr - _writePtr));
 }
 
 - (unsigned)		freeSpaceAvailable				{ return _bufsize - [self bytesAvailable]; }
