@@ -15,6 +15,7 @@
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
 		8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */; };
+		8C244AFB0AC6DFEF001334D0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C244AC60AC6DFEF001334D0 /* Security.framework */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
@@ -290,6 +291,7 @@
 		8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
 		8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
 		8C0925F20A2600680017CADE /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
+		8C244AC60AC6DFEF001334D0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -745,6 +747,7 @@
 				8C53023F0A05D75500890518 /* Growl.framework in Frameworks */,
 				8C5302450A05D78300890518 /* LAME.framework in Frameworks */,
 				8C9893540AC4B69C004125CA /* Sparkle.framework in Frameworks */,
+				8C244AFB0AC6DFEF001334D0 /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -866,6 +869,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C244AC60AC6DFEF001334D0 /* Security.framework */,
 				8C9893400AC4B69C004125CA /* Sparkle.framework */,
 				8CBD75460A7F1803006B3790 /* mpcdec.framework */,
 				8C5302400A05D78300890518 /* LAME.framework */,
