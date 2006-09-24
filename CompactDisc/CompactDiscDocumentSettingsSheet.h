@@ -33,6 +33,9 @@
 	IBOutlet NSComboBox				*_albumArtFileNamingComboBox;
 	IBOutlet NSPopUpButton			*_albumArtFormatSpecifierPopUpButton;
 	
+	IBOutlet NSComboBox				*_iTunesPlaylistComboBox;
+	IBOutlet NSPopUpButton			*_iTunesPlaylistSpecifierPopUpButton;
+
 	IBOutlet NSObjectController 	*_settingsController;
 	IBOutlet NSArrayController 		*_postProcessingActionsController;
 	
@@ -53,6 +56,9 @@
 
 - (IBAction)			insertAlbumArtFileNamingFormatSpecifier:(id)sender;
 - (IBAction)			saveAlbumArtFileNamingFormat:(id)sender;
+
+- (IBAction)			insertiTunesPlaylistFormatSpecifier:(id)sender;
+- (IBAction)			saveiTunesPlaylist:(id)sender;
 
 - (IBAction)			addPostProcessingApplication:(id)sender;
 

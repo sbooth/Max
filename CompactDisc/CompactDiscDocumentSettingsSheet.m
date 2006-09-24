@@ -374,6 +374,66 @@ enum {
 	}
 }
 
+- (IBAction) insertiTunesPlaylistFormatSpecifier:(id)sender
+{
+	NSString		*string;
+	NSText			*fieldEditor;
+	
+	switch([[sender selectedItem] tag]) {
+		case kAlbumTitleMenuItem:			string = @"{albumTitle}";		break;
+		case kAlbumArtistMenuItem:			string = @"{albumArtist}";		break;
+		case kAlbumYearMenuItem:			string = @"{albumYear}";		break;
+		case kAlbumGenreMenuItem:			string = @"{albumGenre}";		break;
+		case kAlbumComposerMenuItem:		string = @"{albumComposer}";	break;
+		case kTrackTitleMenuItem:			string = @"{trackTitle}";		break;
+		case kTrackArtistMenuItem:			string = @"{trackArtist}";		break;
+		case kTrackYearMenuItem:			string = @"{trackYear}";		break;
+		case kTrackGenreMenuItem:			string = @"{trackGenre}";		break;
+		case kTrackComposerMenuItem:		string = @"{trackComposer}";	break;
+		case kTrackNumberMenuItemTag:		string = @"{trackNumber}";		break;
+		case kTrackTotalMenuItemTag:		string = @"{trackTotal}";		break;
+		case kFileFormatMenuItemTag:		string = @"{fileFormat}";		break;
+		case kDiscNumberMenuItemTag:		string = @"{discNumber}";		break;
+		case kDiscTotalMenuItemTag:			string = @"{discTotal}";		break;
+		case kSourceFilenameMenuItemTag:	string = @"{sourceFilename}";	break;
+		default:							string = @"";					break;
+	}
+	
+	fieldEditor = [_iTunesPlaylistComboBox currentEditor];
+	if(nil == fieldEditor) {
+		[_iTunesPlaylistComboBox setStringValue:string];
+		[_iTunesPlaylistComboBox sendAction:[_iTunesPlaylistComboBox action] to:[_iTunesPlaylistComboBox target]];
+	}
+	else if([_iTunesPlaylistComboBox textShouldBeginEditing:fieldEditor]) {
+		[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
+		[_iTunesPlaylistComboBox textShouldEndEditing:fieldEditor];
+	}	
+}
+
+- (IBAction) saveiTunesPlaylist:(id)sender
+{
+	NSString		*pattern	= [_iTunesPlaylistComboBox stringValue];
+	NSMutableArray	*patterns	= nil;
+	
+	patterns = [[[_settings objectForKey:@"iTunesPlaylistNamingPatterns"] mutableCopy] autorelease];
+	if(nil == patterns) {
+		patterns = [NSMutableArray array];
+	}
+	
+	if([patterns containsObject:pattern]) {
+		// Keep pattern from being released (it belongs to the combo box)
+		[patterns removeObject:[pattern retain]];
+	}	
+	
+	[patterns insertObject:pattern atIndex:0];
+	
+	while(10 < [patterns count]) {
+		[patterns removeLastObject];
+	}
+	
+	[_settings setValue:patterns forKey:@"iTunesPlaylistNamingPatterns"];	
+}
+
 - (IBAction) addPostProcessingApplication:(id)sender
 {
 	NSOpenPanel		*panel		= [NSOpenPanel openPanel];

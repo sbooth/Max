@@ -5,9 +5,11 @@
                 addPostProcessingApplication = id; 
                 insertAlbumArtFileNamingFormatSpecifier = id; 
                 insertFileNamingFormatSpecifier = id; 
+                insertiTunesPlaylistFormatSpecifier = id; 
                 ok = id; 
                 saveAlbumArtFileNamingFormat = id; 
                 saveFileNamingFormat = id; 
+                saveiTunesPlaylist = id; 
                 selectOutputDirectory = id; 
                 selectTemporaryDirectory = id; 
                 showSheet = id; 
@@ -19,6 +21,7 @@
                 "_albumArtFormatSpecifierPopUpButton" = NSPopUpButton; 
                 "_fileNamingComboBox" = NSComboBox; 
                 "_formatSpecifierPopUpButton" = NSPopUpButton; 
+                "_iTunesPlaylistComboBox" = NSComboBox; 
                 "_outputDirectoryPopUpButton" = NSPopUpButton; 
                 "_postProcessingActionsController" = NSArrayController; 
                 "_settingsController" = NSObjectController; 

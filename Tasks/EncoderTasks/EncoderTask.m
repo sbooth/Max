@@ -306,6 +306,10 @@ enum {
 
 				// Set up the iTunes playlist
 				if([[postProcessingOptions objectForKey:@"addToiTunesPlaylist"] boolValue] && nil != playlist) {
+					// Flesh out specifiers
+					playlist = [metadata replaceKeywordsInString:playlist];
+					
+					// Set the playlist in the metadata
 					[metadata setPlaylist:playlist];
 				}
 
