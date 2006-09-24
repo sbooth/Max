@@ -34,7 +34,7 @@
 		pool			= [[NSAutoreleasePool alloc] init];
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (EncoderTask *)[connection rootProxy];
-		encoder			= [[self alloc] initWithFilename:[[[owner taskInfo] inputFilenames] objectAtIndex:0]];
+		encoder			= [[self alloc] initWithFilename:[[owner taskInfo] inputFilenameAtInputFileIndex]];
 		
 		[encoder setDelegate:owner];
 		[owner encoderReady:encoder];
