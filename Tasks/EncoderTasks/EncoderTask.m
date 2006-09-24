@@ -37,8 +37,6 @@
 #include <unistd.h>			// mkstemp, unlink
 
 @interface EncoderTask (Private)
-- (void)			encoderReady:(id)anObject;
-
 - (void)			writeTags;
 
 - (void)			touchOutputFile;
@@ -125,7 +123,14 @@ enum {
 
 - (NSString *)		encoderSettingsString				{ return [_encoder settingsString]; }
 
-- (void) run
+- (void)			encoderReady:(id)anObject
+{
+	_encoder = [(NSObject*) anObject retain];
+    [anObject setProtocolForProxy:@protocol(EncoderMethods)];
+	[anObject encodeToFile:[self outputFilename]];
+}
+
+- (void)			run
 {
 	NSString				*basename;
 	NSPort					*port1				= [NSPort port];
@@ -559,13 +564,6 @@ enum {
 @end
 
 @implementation EncoderTask (Private)
-
-- (void) encoderReady:(id)anObject
-{
-	_encoder = [(NSObject*) anObject retain];
-    [anObject setProtocolForProxy:@protocol(EncoderMethods)];
-	[anObject encodeToFile:[self outputFilename]];
-}
 
 - (void)			writeTags							{}
 

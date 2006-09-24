@@ -35,20 +35,17 @@
 - (NSString *)		outputFormatName;
 - (NSString *)		fileExtension;
 
-- (NSString *)		encoderSettingsString;
+- (void)			encoderReady:(id)anObject;
 
+- (NSString *)		encoderSettingsString;
 @end
 
 @interface EncoderTask (CueSheetAdditions)
-
 - (BOOL)			formatIsValidForCueSheet;
 - (NSString *)		cueSheetFormatName;
 - (void)			generateCueSheet;
-
 @end
 
 @interface EncoderTask (iTunesAdditions)
-
 - (BOOL)			formatIsValidForiTunes;
-
 @end
