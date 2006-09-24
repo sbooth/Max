@@ -42,7 +42,6 @@
 #import "MultiplicationValueTransformer.h"
 #import "BOOLToStringValueTransformer.h"
 #import "UppercaseStringValueTransformer.h"
-#import "SelectEncodersSheet.h"
 
 static ApplicationController *sharedController = nil;
 
