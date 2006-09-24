@@ -44,9 +44,8 @@
 - (NSWindow *)		sheet					{ return [[_sheet retain] autorelease]; }
 - (NSArray *)		selectedEncoders		{ return [_encoderController selectedObjects]; }
 
-- (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet]]; }
-
-- (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet]]; }
+- (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSCancelButton]; }
+- (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton]; }
 
 - (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo 
 {
