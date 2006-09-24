@@ -864,13 +864,88 @@
 
 - (void) didEndSelectEncodersSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	SelectEncodersSheet		*selectEncodersSheet	= (SelectEncodersSheet *)contextInfo;
-	
-	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"rippingSettings"];
-    [sheet orderOut:self];
-	
-	[_settings setObject:[selectEncodersSheet selectedEncoders] forKey:@"encoders"];
-	[[RipperController sharedController] ripTracks:[self selectedTracks] settings:_settings];
+	[sheet orderOut:self];
+
+	if(NSOKButton == returnCode) {
+		SelectEncodersSheet		*selectEncodersSheet	= nil;
+		NSMutableDictionary		*settings				= nil;
+		NSMutableDictionary		*postProcessingOptions	= nil;
+		NSArray					*applications;
+		NSMutableArray			*postProcessingApplications;
+		unsigned				i;
+		
+		[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"rippingSettings"];
+
+		selectEncodersSheet	= (SelectEncodersSheet *)contextInfo;
+		settings			= [NSMutableDictionary dictionary];
+		
+		// Encoders
+		[settings setValue:[selectEncodersSheet selectedEncoders] forKey:@"encoders"];
+		
+		// File locations
+		[settings setValue:[[_settings objectForKey:@"temporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
+		[settings setValue:[[_settings objectForKey:@"outputDirectory"] stringByExpandingTildeInPath] forKey:@"outputDirectory"];
+		
+		// Conversion parameters
+//		[settings setValue:[_settings objectForKey:@"deleteSourceFiles"] forKey:@"deleteSourceFiles"];
+		[settings setValue:[_settings objectForKey:@"overwriteOutputFiles"] forKey:@"overwriteOutputFiles"];
+		
+		if([[_settings objectForKey:@"overwriteOutputFiles"] boolValue]) {
+			[settings setValue:[_settings objectForKey:@"promptBeforeOverwritingOutputFiles"] forKey:@"promptBeforeOverwritingOutputFiles"];
+		}
+		
+		// Output file naming
+		if([[_settings objectForKey:@"useCustomOutputFileNaming"] boolValue]) {
+			NSMutableDictionary		*fileNamingFormat = [NSMutableDictionary dictionary];
+			
+			[fileNamingFormat setValue:[_settings objectForKey:@"fileNamingFormat"] forKey:@"formatString"];
+			[fileNamingFormat setValue:[_settings objectForKey:@"useTwoDigitTrackNumbers"] forKey:@"useTwoDigitTrackNumbers"];
+			[fileNamingFormat setValue:[_settings objectForKey:@"useNamingFallback"] forKey:@"useNamingFallback"];
+			
+			[settings setValue:fileNamingFormat forKey:@"outputFileNaming"];
+		}
+		
+		// Post-processing options
+		postProcessingOptions = [NSMutableDictionary dictionary];
+		
+		[postProcessingOptions setValue:[_settings objectForKey:@"addToiTunes"] forKey:@"addToiTunes"];
+		if([[_settings objectForKey:@"addToiTunes"] boolValue]) {
+			
+			[postProcessingOptions setValue:[_settings objectForKey:@"addToiTunesPlaylist"] forKey:@"addToiTunesPlaylist"];
+			
+			if([[_settings objectForKey:@"addToiTunesPlaylist"] boolValue]) {
+				[postProcessingOptions setValue:[_settings objectForKey:@"iTunesPlaylistName"] forKey:@"iTunesPlaylistName"];
+			}		
+		}
+		
+		applications					= [_settings objectForKey:@"postProcessingApplications"];
+		postProcessingApplications		= [NSMutableArray arrayWithCapacity:[applications count]];
+		
+		for(i = 0; i < [applications count]; ++i) {
+			[postProcessingApplications addObject:[[applications objectAtIndex:i] objectForKey:@"path"]];
+		}
+		
+		if(0 != [postProcessingApplications count]) {
+			[postProcessingOptions setValue:postProcessingApplications forKey:@"postProcessingApplications"];
+		}
+		
+		if(0 != [postProcessingOptions count]) {
+			[settings setValue:postProcessingOptions forKey:@"postProcessingOptions"];
+		}
+		
+		// Album art
+		if([[_settings objectForKey:@"saveAlbumArt"] boolValue]) {
+			NSMutableDictionary		*albumArt = [NSMutableDictionary dictionary];
+			
+			[albumArt setValue:[_settings objectForKey:@"albumArtFileExtension"] forKey:@"extension"];
+			[albumArt setValue:[_settings objectForKey:@"albumArtFileNamingFormat"] forKey:@"formatString"];
+			
+			[settings setValue:albumArt forKey:@"albumArt"];
+		}
+
+		// Rip the tracks
+		[[RipperController sharedController] ripTracks:[self selectedTracks] settings:settings];
+	}
 }
 
 - (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
