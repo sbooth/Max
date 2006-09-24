@@ -23,8 +23,8 @@
 
 static LogController	*sharedLog = nil;
 
-static NSString			*SaveLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Save";
-static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Clear";
+static NSString			*SaveLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar.Save";
+static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar.Clear";
 
 @interface LogController (Private)
 - (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)idx;
@@ -96,7 +96,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Clear";
 
 - (void) awakeFromNib
 {
-    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.Log.ToolbarIdentifier"] autorelease];
+    NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.Log.Toolbar"] autorelease];
     
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
@@ -219,16 +219,20 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Clear";
 }
 
 - (unsigned)		countOfLogEntries								{ return [_logEntries count]; }
-- (NSDictionary *)	objectInLogEntriesAtIndex:(unsigned)idx			{ return [_logEntries objectAtIndex:idx]; }
+- (NSDictionary *)	objectInLogEntriesAtIndex:(unsigned)index		{ return [_logEntries objectAtIndex:index]; }
 
-- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)idx
+@end
+
+@implementation LogController (Private)
+
+- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)index
 {
-	[_logEntries insertObject:entry atIndex:idx];
+	[_logEntries insertObject:entry atIndex:index];
 }
 
-- (void) removeObjectFromLogEntriesAtIndex:(unsigned)idx
+- (void) removeObjectFromLogEntriesAtIndex:(unsigned)index
 {
-	[_logEntries removeObjectAtIndex:idx];
+	[_logEntries removeObjectAtIndex:index];
 }
 
 @end
