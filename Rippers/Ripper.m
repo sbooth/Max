@@ -47,7 +47,7 @@
 	@catch(NSException *exception) {
 		if(nil != owner) {
 			[owner setException:exception];
-			[owner setStopped];
+			[owner setStopped:YES];
 		}
 	}
 	
@@ -84,8 +84,8 @@
 
 - (NSString *)			deviceName									{ return [[_deviceName retain] autorelease]; }
 
-- (void)				setDelegate:(id <TaskMethods>)delegate		{ _delegate = delegate; }
-- (id <TaskMethods>)	delegate									{ return _delegate; }
+- (void)					setDelegate:(id <RipperTaskMethods>)delegate	{ _delegate = delegate; }
+- (id <RipperTaskMethods>)	delegate										{ return _delegate; }
 
 - (oneway void) ripToFile:(NSString *)filename
 {}

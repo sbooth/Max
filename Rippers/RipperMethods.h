@@ -19,14 +19,13 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
-#import "TaskMethods.h"
+#import "RipperTaskMethods.h"
 
 @protocol RipperMethods
 
 - (oneway void)				ripToFile:(NSString *)filename;
 
-- (id <TaskMethods>)		delegate;
-- (void)					setDelegate:(id <TaskMethods>)delegate;
+- (id <RipperTaskMethods>)	delegate;
+- (void)					setDelegate:(id <RipperTaskMethods>)delegate;
 
 @end
