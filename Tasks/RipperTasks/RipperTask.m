@@ -23,8 +23,13 @@
 #import "RipperController.h"
 #import "SectorRange.h"
 #import "CompactDiscDocument.h"
+#import "UtilityFunctions.h"
 #import "IOException.h"
 #import "StopException.h"
+
+@interface RipperTask (Private)
+- (void)	touchOutputFile;
+@end
 
 @implementation RipperTask
 
@@ -67,6 +72,7 @@
 	[_connection release];	_connection = nil;
 	[_sectors release];		_sectors = nil;	
 	[_tracks release];		_tracks = nil;	
+	[_phase release];		_phase = nil;
 	
 	[super dealloc];
 }
@@ -76,8 +82,8 @@
 - (unsigned)			countOfTracks							{ return [_tracks count]; }
 - (Track *)				objectInTracksAtIndex:(unsigned)index	{ return [_tracks objectAtIndex:index]; }
 
-- (NSString *)		phase										{ return [[_phase retain] autorelease]; }
-- (void)			setPhase:(NSString *)phase					{ [_phase release]; _phase = [phase retain]; }
+- (NSString *)			phase									{ return [[_phase retain] autorelease]; }
+- (void)				setPhase:(NSString *)phase				{ [_phase release]; _phase = [phase retain]; }
 
 - (void) run
 {
@@ -90,7 +96,7 @@
 	
 	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
-	[super setStarted];
+	[super setStarted:YES];
 	
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_ripperClass withObject:portArray];
 }
@@ -98,22 +104,23 @@
 - (void) ripperReady:(id)anObject
 {
     [anObject setProtocolForProxy:@protocol(RipperMethods)];
+	[self setOutputFilename:generateTemporaryFilename([[[self taskInfo] settings] objectForKey:@"temporaryDirectory"], @"caf")];
 	[self touchOutputFile];
 	[anObject ripToFile:[self outputFilename]];
 }
 
-- (void) setStarted
+- (void) setStarted:(BOOL)started
 {
-	[super setStarted];
+	[super setStarted:started];
 	[[RipperController sharedController] ripperTaskDidStart:self]; 
 }
 
-- (void) setStopped 
+- (void) setStopped :(BOOL)stopped
 {
 	NSEnumerator		*enumerator;
 	Track				*track;
 	
-	[super setStopped];
+	[super setStopped:stopped];
 	
 	[_connection invalidate];
 	[_connection release];
@@ -127,12 +134,12 @@
 	[[RipperController sharedController] ripperTaskDidStop:self]; 
 }
 
-- (void) setCompleted 
+- (void) setCompleted:(BOOL)completed
 {
 	NSEnumerator		*enumerator;
 	Track				*track;
 	
-	[super setCompleted];
+	[super setCompleted:completed];
 	
 	[_connection invalidate];
 	[_connection release];
@@ -149,10 +156,10 @@
 - (void) stop
 {
 	if([self started] && NO == [self stopped]) {
-		[self setShouldStop];
+		[self setShouldStop:YES];
 	}
 	else {
-		[self setStopped];
+		[self setStopped:YES];
 	}
 }
 
@@ -171,7 +178,27 @@
 }
 
 - (void) generateCueSheet
+{}
+
+- (NSString *)		description
 {
+	NSString		*result		= nil;
+	
+	result =  [[[self taskInfo] metadata] description];
+	
+	return (nil == result ? @"unk" : result);
+}
+
+@end
+
+@implementation RipperTask (Private)
+
+- (void) touchOutputFile
+{
+	NSNumber		*permissions	= [NSNumber numberWithUnsignedLong:S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH];
+	NSDictionary	*attributes		= [NSDictionary dictionaryWithObject:permissions forKey:NSFilePosixPermissions];	
+	BOOL			result			= [[NSFileManager defaultManager] createFileAtPath:[self outputFilename] contents:nil attributes:attributes];
+	NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));	
 }
 
 @end
