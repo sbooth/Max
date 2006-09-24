@@ -39,7 +39,6 @@
 static RipperController *sharedController = nil;
 
 @interface RipperController (Private)
-- (void)	updateFreeSpace:(NSTimer *)theTimer;
 - (void)	addTask:(RipperTask *)task;
 - (void)	removeTask:(RipperTask *)task;
 - (void)	spawnThreads;
@@ -106,35 +105,83 @@ static RipperController *sharedController = nil;
 
 #pragma mark Functionality
 
-- (void) ripTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings
+- (void) ripTracks:(NSArray *)tracks settings:(NSDictionary *)settings
 {
 	RipperTask				*ripperTask				= nil;
 	TaskInfo				*taskInfo				= nil;	
 	int						selectedRipper			= kComparisonRipper;
 		
+	NSParameterAssert(nil != tracks);
+	
 	// Create the task
-	selectedRipper	= [[NSUserDefaults standardUserDefaults] integerForKey:@"selectedRipper"];
-	switch(selectedRipper) {
-		case kBasicRipper:		ripperTask = [[BasicRipperTask alloc] initWithTracks:tracks];		break;
-		case kComparisonRipper:	ripperTask = [[ComparisonRipperTask alloc] initWithTracks:tracks];	break;
-		case kParanoiaRipper:	ripperTask = [[ParanoiaRipperTask alloc] initWithTracks:tracks];	break;
-//		case kSecureRipper:		ripperTask = [[SecureRipperTask alloc] initWithTracks:tracks];		break;
-		default:				ripperTask = [[ComparisonRipperTask alloc] initWithTracks:tracks];	break;
+	selectedRipper	= [[settings objectForKey:@"selectedRipper"] intValue];
+	
+	// Create one RipperTask for all the tracks
+	if([[settings objectForKey:@"ripToSingleFile"] boolValue] && 1 < [tracks count]) {
+		AudioMetadata			*metadata				= nil;
+		
+		metadata = [[tracks objectAtIndex:0] metadata];
+		
+		// Adjust metadata to reflect only album tags
+		[metadata setTrackNumber:0];
+		[metadata setTrackTitle:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"")];
+		[metadata setTrackArtist:nil];
+		[metadata setTrackGenre:nil];
+		[metadata setTrackComposer:nil];
+		[metadata setTrackYear:0];
+		[metadata setISRC:nil];
+
+		switch(selectedRipper) {
+			case kBasicRipper:		ripperTask = [[BasicRipperTask alloc] initWithTracks:tracks];		break;
+			case kComparisonRipper:	ripperTask = [[ComparisonRipperTask alloc] initWithTracks:tracks];	break;
+			case kParanoiaRipper:	ripperTask = [[ParanoiaRipperTask alloc] initWithTracks:tracks];	break;
+			default:				ripperTask = [[ComparisonRipperTask alloc] initWithTracks:tracks];	break;
+		}
+		
+		// Create the task info
+		taskInfo		= [TaskInfo taskInfoWithSettings:settings metadata:metadata];
+		[taskInfo setInputTracks:tracks];
+		[ripperTask setTaskInfo:taskInfo];
+		
+		// Show the window if it is hidden
+		if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+			[[self window] orderFront:self];
+		}
+		
+		// Add the ripper to our list of ripping tasks
+		[self addTask:[ripperTask autorelease]];
+		[self spawnThreads];
 	}
-	
-	// Create the task info
-	taskInfo		= [TaskInfo taskInfoWithSettings:settings metadata:metadata];
-	[taskInfo setInputTracks:tracks];
-	[ripperTask setTaskInfo:taskInfo];
-	
-	// Show the window if it is hidden
-	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
-		[[self window] orderFront:self];
+	// Create one RipperTask per track
+	else {
+		Track			*track;
+		NSEnumerator	*enumerator;
+
+		enumerator		= [tracks objectEnumerator];
+		
+		while((track = [enumerator nextObject])) {
+			switch(selectedRipper) {
+				case kBasicRipper:		ripperTask = [[BasicRipperTask alloc] initWithTracks:[NSArray arrayWithObject:track]];		break;
+				case kComparisonRipper:	ripperTask = [[ComparisonRipperTask alloc] initWithTracks:[NSArray arrayWithObject:track]];	break;
+				case kParanoiaRipper:	ripperTask = [[ParanoiaRipperTask alloc] initWithTracks:[NSArray arrayWithObject:track]];	break;
+				default:				ripperTask = [[ComparisonRipperTask alloc] initWithTracks:[NSArray arrayWithObject:track]];	break;
+			}
+			
+			// Create the task info
+			taskInfo		= [TaskInfo taskInfoWithSettings:settings metadata:[track metadata]];
+			[taskInfo setInputTracks:[NSArray arrayWithObject:track]];
+			[ripperTask setTaskInfo:taskInfo];
+			
+			// Show the window if it is hidden
+			if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+				[[self window] orderFront:self];
+			}
+			
+			// Add the ripper to our list of ripping tasks
+			[self addTask:[ripperTask autorelease]];
+			[self spawnThreads];
+		}
 	}
-	
-	// Add the ripper to our list of ripping tasks
-	[self addTask:[ripperTask autorelease]];
-	[self spawnThreads];
 }
 
 - (BOOL) documentHasRipperTasks:(CompactDiscDocument *)document
@@ -252,14 +299,18 @@ static RipperController *sharedController = nil;
 		[[[task objectInTracksAtIndex:0] document] ejectDisc:self];
 	}
 
-//	[[EncoderController sharedController] runEncodersForTask:task];
-//	[[EncoderController sharedController] encodeFile: taskInfo:[task taskInfo]];
+	[[EncoderController sharedController] encodeFile:[task outputFilename] metadata:[[task taskInfo] metadata] settings:[[task taskInfo] settings]];
 }
 
 #pragma mark Task Management
 
 - (unsigned)	countOfTasks							{ return [_tasks count]; }
 - (BOOL)		hasTasks								{ return (0 != [_tasks count]); }
+
+@end
+
+@implementation RipperController (Private)
+
 - (void)		addTask:(RipperTask *)task				{ [_tasksController addObject:task]; }
 
 - (void) removeTask:(RipperTask *)task

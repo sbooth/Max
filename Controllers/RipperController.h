@@ -42,7 +42,7 @@ enum {
 + (RipperController *)	sharedController;
 
 // Functionality
-- (void)			ripTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings;
+- (void)			ripTracks:(NSArray *)tracks settings:(NSDictionary *)settings;
 
 - (BOOL)			documentHasRipperTasks:(CompactDiscDocument *)document;
 - (void)			stopRipperTasksForDocument:(CompactDiscDocument *)document;
