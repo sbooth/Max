@@ -224,6 +224,7 @@ static ApplicationController *sharedController = nil;
 - (IBAction) encodeFile:(id)sender
 {
 	[[FileConversionController sharedController] showWindow:self];
+	[[FileConversionController sharedController] addFiles:self];
 }
 
 - (void) encodeFiles:(NSArray *)filenames
