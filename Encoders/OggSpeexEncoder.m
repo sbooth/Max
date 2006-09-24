@@ -310,7 +310,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		comment_init(&comments, &comments_length, [[NSString stringWithFormat:@"Encoded with Max %@", bundleVersion] UTF8String]);
 		
 		if(_saveSettingsInComment) {
-			comment_add(&comments, &comments_length, NULL, [[self encoderSettingsString] UTF8String]);
+			comment_add(&comments, &comments_length, NULL, [[self settingsString] UTF8String]);
 		}
 		
 		op.packet		= (unsigned char *)comments;
@@ -660,7 +660,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 
 - (void) parseSettings
 {
-	NSDictionary *settings	= [[self taskInfo] encoderSettings];
+	NSDictionary *settings	= [[self delegate] encoderSettings];
 	
 	_mode				= [[settings objectForKey:@"mode"] intValue];
 	
