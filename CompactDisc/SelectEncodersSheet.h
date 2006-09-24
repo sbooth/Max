@@ -19,21 +19,14 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "CompactDiscDocument.h"
 
 @interface SelectEncodersSheet : NSObject
 {
-	CompactDiscDocument			*_doc;
-	
     IBOutlet NSWindow			*_sheet;
     IBOutlet NSArrayController	*_encoderController;
 }
 
-- (id)				initWithCompactDiscDocument:(CompactDiscDocument *)doc;
-
 - (NSWindow *)		sheet;
-- (void)			showSheet;
-- (void)			showSheet:(NSWindow *)window;
 
 - (NSArray *)		selectedEncoders;
 

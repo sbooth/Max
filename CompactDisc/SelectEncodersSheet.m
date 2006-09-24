@@ -21,11 +21,6 @@
 #import "SelectEncodersSheet.h"
 #import "MissingResourceException.h"
 
-#import "UtilityFunctions.h"
-
-// A bastardized hybrid of an application-modal sheet (for file conversion) and
-// a regular sheet (for ripping)
-
 @implementation SelectEncodersSheet
 
 - (id) init
@@ -35,84 +30,27 @@
 			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
 														userInfo:[NSDictionary dictionaryWithObject:@"SelectEncodersSheet.nib" forKey:@"filename"]];
 		}
-				
-		_doc = nil;
-		
+						
 		return self;
 	}
 	return nil;
-}
-
-- (id) initWithCompactDiscDocument:(CompactDiscDocument *)doc;
-{
-	if((self = [self init])) {
-		
-		_doc = [doc retain];
-		
-		return self;
-	}
-	return nil;
-}
-
-- (void) dealloc
-{
-	[_doc release];		_doc = nil;
-	
-	[super dealloc];
 }
 
 - (void) awakeFromNib
 {
-	[_encoderController setSelectedObjects:getDefaultOutputFormats()];
+//	[_encoderController setSelectedObjects:getDefaultOutputFormats()];
 }
 
-- (NSWindow *) sheet
+- (NSWindow *)		sheet					{ return [[_sheet retain] autorelease]; }
+- (NSArray *)		selectedEncoders		{ return [_encoderController selectedObjects]; }
+
+- (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet]]; }
+
+- (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet]]; }
+
+- (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo 
 {
-	return _sheet;
-}
-
-- (void) showSheet
-{
-	if(nil != _doc) {
-		[self showSheet:[_doc windowForSheet]];
-	}
-}
-
-- (void) showSheet:(NSWindow *)window
-{
-	[[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
-}
-
-- (NSArray *) selectedEncoders
-{
-	return [_encoderController selectedObjects];
-}
-
-- (IBAction) cancel:(id)sender
-{
-    [[NSApplication sharedApplication] endSheet:_sheet];
-
-	if(nil == _doc) {
-		[[NSApplication sharedApplication] stopModalWithCode:NSCancelButton];
-	}
-}
-
-- (IBAction) ok:(id)sender
-{	
-    [[NSApplication sharedApplication] endSheet:_sheet];
-	
-	if(nil == _doc) {
-		[[NSApplication sharedApplication] stopModalWithCode:NSOKButton];
-	}
-	else {
-		[_doc setActiveEncoders:[self selectedEncoders]];
-		[_doc customEncodersSelected];
-	}
-}
-
-- (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    [sheet orderOut:self];
+	[sheet orderOut:self];
 }
 
 @end
