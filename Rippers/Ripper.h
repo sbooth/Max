@@ -21,10 +21,11 @@
 #import <Cocoa/Cocoa.h>
 
 #import "RipperMethods.h"
+#import "RipperTaskMethods.h"
 
 @interface Ripper : NSObject <RipperMethods>
 {
-	id <TaskMethods>		_delegate;
+	id <RipperTaskMethods>	_delegate;
 	
 	NSArray					*_sectors;
 	NSString				*_deviceName;
