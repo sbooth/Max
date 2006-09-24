@@ -21,12 +21,9 @@
 #import <Cocoa/Cocoa.h>
 
 #import "RipperTask.h"
-#import "Track.h"
 
 @interface ParanoiaRipperTask : RipperTask
 {
 }
-
-- (id)				initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
 
 @end

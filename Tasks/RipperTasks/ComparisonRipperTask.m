@@ -23,9 +23,9 @@
 
 @implementation ComparisonRipperTask
 
-- (id) initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata
+- (id) initWithTracks:(NSArray *)tracks
 {
-	if((self = [super initWithTracks:tracks metadata:metadata])) {
+	if((self = [super initWithTracks:tracks])) {
 
 		_ripperClass	= [ComparisonRipper class];
 					

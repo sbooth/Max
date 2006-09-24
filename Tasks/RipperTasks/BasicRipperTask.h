@@ -26,6 +26,4 @@
 {
 }
 
-- (id)				initWithTracks:(NSArray *)tracks metadata:(AudioMetadata *)metadata;
-
 @end
