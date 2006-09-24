@@ -41,8 +41,14 @@
 
 @interface EncoderTask (CueSheetAdditions)
 
-- (BOOL)			formatLegalForCueSheet;
+- (BOOL)			formatIsValidForCueSheet;
 - (NSString *)		cueSheetFormatName;
 - (void)			generateCueSheet;
+
+@end
+
+@interface EncoderTask (iTunesAdditions)
+
+- (BOOL)			formatIsValidForiTunes;
 
 @end

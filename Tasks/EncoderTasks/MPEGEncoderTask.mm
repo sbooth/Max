@@ -313,7 +313,13 @@
 
 @implementation MPEGEncoderTask (CueSheetExtensions)
 
-- (BOOL)			formatLegalForCueSheet			{ return YES; }
+- (BOOL)			formatIsValidForCueSheet			{ return YES; }
 - (NSString *)		cueSheetFormatName				{ return @"MP3"; }
+
+@end
+
+@implementation MPEGEncoderTask (iTunesAdditions)
+
+- (BOOL)			formatIsValidForiTunes			{ return YES; }
 
 @end

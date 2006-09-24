@@ -85,7 +85,7 @@ enum {
 
 - (void) dealloc
 {
-/*	NSEnumerator	*enumerator;
+	NSEnumerator	*enumerator;
 	Track			*track;
 
 	if(nil != [[self taskInfo] inputTracks]) {
@@ -96,7 +96,7 @@ enum {
 				[track setSelected:NO];
 			}
 		}
-	}*/
+	}
 	
 	[_connection release];				_connection = nil;
 	[(NSObject *)_encoder release];		_encoder = nil;
@@ -235,6 +235,17 @@ enum {
 - (void) setStarted:(BOOL)started
 {
 	[super setStarted:YES];
+
+	// Mark tracks as complete
+	if(nil != [[self taskInfo] inputTracks]) {
+		NSArray			*tracks		= [[self taskInfo] inputTracks];
+		unsigned		i;
+		
+		for(i = 0; i < [tracks count]; ++i) {
+			[[tracks objectAtIndex:i] encodeStarted];
+		}
+	}
+
 	[[EncoderController sharedController] encoderTaskDidStart:self]; 
 }
 
@@ -290,8 +301,6 @@ enum {
 			}
 			
 			if([[postProcessingOptions objectForKey:@"addToiTunes"] boolValue]) {
-				NSLog(@"add to iTunes");
-
 				AudioMetadata	*metadata		= [[self taskInfo] metadata];
 				NSString		*playlist		= [postProcessingOptions objectForKey:@"iTunesPlaylistName"];
 
@@ -299,23 +308,11 @@ enum {
 				if([[postProcessingOptions objectForKey:@"addToiTunesPlaylist"] boolValue] && nil != playlist) {
 					[metadata setPlaylist:playlist];
 				}
-				
-				addFileToiTunesLibrary([self outputFilename], metadata);
-				
-				// File already contains metadata, just use the playlist
-				/*
-				if([task isKindOfClass:[MPEGEncoderTask class]] || ([task isKindOfClass:[CoreAudioEncoderTask class]] && kAudioFileM4AType == [(CoreAudioEncoderTask *)task fileType])) {
-					AudioMetadata	*metadata = [[[AudioMetadata alloc] init] autorelease];
-					
-					[metadata setPlaylist:[[[task taskInfo] metadata] playlist]];
-					[self addFileToiTunesLibrary:[task outputFilename] metadata:metadata];
-				}
-				// Need to set metadata using AppleScript
-				else if(([task isKindOfClass:[CoreAudioEncoderTask class]] && (kAudioFileAIFFType == [(CoreAudioEncoderTask *)task fileType] || kAudioFileWAVEType == [(CoreAudioEncoderTask *)task fileType])) ||
-						([task isKindOfClass:[LibsndfileEncoderTask class]] && (SF_FORMAT_AIFF == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK) || SF_FORMAT_WAV == ([(LibsndfileEncoderTask *)task format] & SF_FORMAT_TYPEMASK)))) {
-					[self addFileToiTunesLibrary:[task outputFilename] metadata:[[task taskInfo] metadata]];
-				}
-			*/	
+
+				// Add to iTunes
+				if([self formatIsValidForiTunes]) {
+					addFileToiTunesLibrary([self outputFilename], metadata);
+				}				
 			}
 		}
 	}
@@ -350,7 +347,7 @@ enum {
 
 		// Generate cue sheet
 		if(nil != [[self taskInfo] inputTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"generateCueSheet"]) {
-			if([self formatLegalForCueSheet]) {
+			if([self formatIsValidForCueSheet]) {
 				[self generateCueSheet];
 			}
 			/*else {
@@ -410,7 +407,7 @@ enum {
 
 @implementation EncoderTask (CueSheetAdditions)
 
-- (BOOL)			formatLegalForCueSheet				{ return NO; }
+- (BOOL)			formatIsValidForCueSheet				{ return NO; }
 - (NSString *)		cueSheetFormatName					{ return nil; }
 
 - (void) generateCueSheet
@@ -806,5 +803,11 @@ enum {
 	
 	return [[basename retain] autorelease];
 }
+
+@end
+
+@implementation EncoderTask (iTunesAdditions)
+
+- (BOOL)			formatIsValidForiTunes			{ return NO; }
 
 @end

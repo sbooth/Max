@@ -248,7 +248,7 @@
 
 @implementation FLACEncoderTask (CueSheetAdditions)
 
-- (BOOL)			formatLegalForCueSheet			{ return YES; }
+- (BOOL)			formatIsValidForCueSheet			{ return YES; }
 
 - (void) generateCueSheet
 {

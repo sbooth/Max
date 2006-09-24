@@ -197,6 +197,9 @@
 			// mp4v2 creates a temp file in ., so use a custom file and manually rename it
 			
 			tmpDir = [[[[self taskInfo] settings] objectForKey:@"temporaryDirectory"] fileSystemRepresentation];
+			if(nil == tmpDir) {
+				tmpDir = [NSTemporaryDirectory() fileSystemRepresentation];
+			}
 			
 			validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);
 			
@@ -391,11 +394,26 @@
 	}
 }
 
-- (BOOL) formatLegalForCueSheet
+- (BOOL) formatIsValidForCueSheet
 {
  	switch([self fileType]) {
 		case kAudioFileWAVEType:	return YES;					break;
 		case kAudioFileAIFFType:	return YES;					break;
+		case kAudioFileMP3Type:		return YES;					break;
+		default:					return NO;					break;
+	}
+}
+
+@end
+
+@implementation CoreAudioEncoderTask (iTunesAdditions)
+
+- (BOOL)			formatIsValidForiTunes
+{
+ 	switch([self fileType]) {
+		case kAudioFileWAVEType:	return YES;					break;
+		case kAudioFileAIFFType:	return YES;					break;
+		case kAudioFileM4AType:		return YES;					break;
 		case kAudioFileMP3Type:		return YES;					break;
 		default:					return NO;					break;
 	}

@@ -55,7 +55,7 @@
 
 @implementation LibsndfileEncoderTask (CueSheetAdditions)
 
-- (BOOL) formatLegalForCueSheet
+- (BOOL) formatIsValidForCueSheet
 { 
 	switch([self format] & SF_FORMAT_TYPEMASK) {
 		case SF_FORMAT_WAV:			return YES;					break;
@@ -70,6 +70,19 @@
 		case SF_FORMAT_WAV:			return @"WAVE";				break;
 		case SF_FORMAT_AIFF:		return @"AIFF";				break;
 		default:					return nil;					break;
+	}
+}
+
+@end
+
+@implementation LibsndfileEncoderTask (iTunesAdditions)
+
+- (BOOL)			formatIsValidForiTunes
+{
+	switch([self format] & SF_FORMAT_TYPEMASK) {
+		case SF_FORMAT_WAV:			return YES;					break;
+		case SF_FORMAT_AIFF:		return YES;					break;
+		default:					return NO;					break;
 	}
 }
 
