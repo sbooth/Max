@@ -20,20 +20,18 @@
 
 #import <Cocoa/Cocoa.h>
 
-enum {
-	kDontOverwriteExistingFiles			= 0,
-	kOverwriteExistingFiles				= 1,
-	kPromptForExistingFiles				= 2
-};
-
 @interface FileConversionSettingsSheet : NSObject
 {
 	IBOutlet NSWindow				*_sheet;
 	
 	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
 	IBOutlet NSPopUpButton			*_temporaryDirectoryPopUpButton;
+	
 	IBOutlet NSComboBox				*_fileNamingComboBox;
 	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
+
+	IBOutlet NSComboBox				*_albumArtFileNamingComboBox;
+	IBOutlet NSPopUpButton			*_albumArtFormatSpecifierPopUpButton;
 	
 	IBOutlet NSObjectController 	*_settingsController;
 	IBOutlet NSArrayController 		*_postProcessingActionsController;
@@ -52,6 +50,9 @@ enum {
 
 - (IBAction)			insertFileNamingFormatSpecifier:(id)sender;
 - (IBAction)			saveFileNamingFormat:(id)sender;
+
+- (IBAction)			insertAlbumArtFileNamingFormatSpecifier:(id)sender;
+- (IBAction)			saveAlbumArtFileNamingFormat:(id)sender;
 
 - (IBAction)			addPostProcessingApplication:(id)sender;
 

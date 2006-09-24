@@ -45,14 +45,12 @@ enum {
 	kTrackTotalMenuItemTag				= 12,
 	kFileFormatMenuItemTag				= 13,
 	kDiscNumberMenuItemTag				= 14,
-	kDiscTotalMenuItemTag				= 15
+	kDiscTotalMenuItemTag				= 15,
+	kSourceFilenameMenuItemTag			= 16
 };
 
 @interface FileConversionSettingsSheet (Private)
-- (void)	didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)	updateOutputDirectoryMenuItemImage;
-- (void)	selectOutputDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (void)	selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)	updateTemporaryDirectoryMenuItemImage;
 @end
 
@@ -84,7 +82,7 @@ enum {
 
 - (void) awakeFromNib
 {
-	NSArray			*patterns			= nil;
+//	NSArray			*patterns			= nil;
 	NSArray			*applications		= nil;
 	NSDictionary	*application		= nil;
 	NSString		*applicationPath	= nil;
@@ -103,6 +101,10 @@ enum {
 	[[_formatSpecifierPopUpButton selectedItem] setState:NSOffState];
 	[_formatSpecifierPopUpButton selectItemAtIndex:-1];
 	[_formatSpecifierPopUpButton synchronizeTitleAndSelectedItem];
+
+	[[_albumArtFormatSpecifierPopUpButton selectedItem] setState:NSOffState];
+	[_albumArtFormatSpecifierPopUpButton selectItemAtIndex:-1];
+	[_albumArtFormatSpecifierPopUpButton synchronizeTitleAndSelectedItem];
 	
 	// Set the value to the most recently-saved pattern
 /*	patterns = [_settings objectForKey:@"fileNamingPatterns"];
@@ -262,6 +264,66 @@ enum {
 	[_settings setValue:patterns forKey:@"fileNamingPatterns"];	
 }	
 
+- (IBAction) insertAlbumArtFileNamingFormatSpecifier:(id)sender
+{
+	NSString		*string;
+	NSText			*fieldEditor;
+	
+	switch([[sender selectedItem] tag]) {
+		case kAlbumTitleMenuItem:			string = @"{albumTitle}";		break;
+		case kAlbumArtistMenuItem:			string = @"{albumArtist}";		break;
+		case kAlbumYearMenuItem:			string = @"{albumYear}";		break;
+		case kAlbumGenreMenuItem:			string = @"{albumGenre}";		break;
+		case kAlbumComposerMenuItem:		string = @"{albumComposer}";	break;
+		case kTrackTitleMenuItem:			string = @"{trackTitle}";		break;
+		case kTrackArtistMenuItem:			string = @"{trackArtist}";		break;
+		case kTrackYearMenuItem:			string = @"{trackYear}";		break;
+		case kTrackGenreMenuItem:			string = @"{trackGenre}";		break;
+		case kTrackComposerMenuItem:		string = @"{trackComposer}";	break;
+		case kTrackNumberMenuItemTag:		string = @"{trackNumber}";		break;
+		case kTrackTotalMenuItemTag:		string = @"{trackTotal}";		break;
+		case kFileFormatMenuItemTag:		string = @"{fileFormat}";		break;
+		case kDiscNumberMenuItemTag:		string = @"{discNumber}";		break;
+		case kDiscTotalMenuItemTag:			string = @"{discTotal}";		break;
+		case kSourceFilenameMenuItemTag:	string = @"{sourceFilename}";	break;
+		default:							string = @"";					break;
+	}
+	
+	fieldEditor = [_albumArtFileNamingComboBox currentEditor];
+	if(nil == fieldEditor) {
+		[_albumArtFileNamingComboBox setStringValue:string];
+		[_albumArtFileNamingComboBox sendAction:[_albumArtFileNamingComboBox action] to:[_albumArtFileNamingComboBox target]];
+	}
+	else if([_albumArtFileNamingComboBox textShouldBeginEditing:fieldEditor]) {
+		[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
+		[_albumArtFileNamingComboBox textShouldEndEditing:fieldEditor];
+	}
+}
+
+- (IBAction) saveAlbumArtFileNamingFormat:(id)sender
+{
+	NSString		*pattern	= [_albumArtFileNamingComboBox stringValue];
+	NSMutableArray	*patterns	= nil;
+	
+	patterns = [[[_settings objectForKey:@"albumArtFileNamingPatterns"] mutableCopy] autorelease];
+	if(nil == patterns) {
+		patterns = [NSMutableArray array];
+	}
+	
+	if([patterns containsObject:pattern]) {
+		// Keep pattern from being released (it belongs to the combo box)
+		[patterns removeObject:[pattern retain]];
+	}	
+	
+	[patterns insertObject:pattern atIndex:0];
+	
+	while(10 < [patterns count]) {
+		[patterns removeLastObject];
+	}
+	
+	[_settings setValue:patterns forKey:@"albumArtFileNamingPatterns"];	
+}	
+
 - (IBAction) selectTemporaryDirectory:(id)sender
 {
 	NSOpenPanel		*panel			= nil;
@@ -312,6 +374,34 @@ enum {
 	}
 }
 
+- (IBAction) addPostProcessingApplication:(id)sender
+{
+	NSOpenPanel		*panel		= [NSOpenPanel openPanel];
+	
+	[panel setAllowsMultipleSelection:YES];
+	
+	if(NSOKButton == [panel runModalForTypes:[NSArray arrayWithObject:@"app"]]) {
+		NSArray				*applications		= [panel filenames];
+		NSDictionary		*application		= nil;
+		NSString			*applicationPath	= nil;
+		unsigned			i;
+		
+		for(i = 0; i < [applications count]; ++i) {
+			applicationPath = [applications objectAtIndex:i];
+			application		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil] forKeys:[NSArray arrayWithObjects:@"path", @"displayName", @"icon", nil]];
+			
+			// Don't add existing items
+			if(0 == [[[_postProcessingActionsController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path == %@", applicationPath]] count]) {
+				[_postProcessingActionsController addObject:application];
+			}			
+		}
+	}
+}
+
+@end
+
+@implementation FileConversionSettingsSheet (Private)
+
 - (void) updateOutputDirectoryMenuItemImage
 {
 	NSMenuItem	*menuItem	= nil;
@@ -351,30 +441,6 @@ enum {
 	else {
 		[menuItem setTitle:NSLocalizedStringFromTable(@"Not Specified", @"FileConversion", @"")];
 		[menuItem setImage:nil];
-	}
-}
-
-- (IBAction) addPostProcessingApplication:(id)sender
-{
-	NSOpenPanel		*panel		= [NSOpenPanel openPanel];
-	
-	[panel setAllowsMultipleSelection:YES];
-	
-	if(NSOKButton == [panel runModalForTypes:[NSArray arrayWithObject:@"app"]]) {
-		NSArray				*applications		= [panel filenames];
-		NSDictionary		*application		= nil;
-		NSString			*applicationPath	= nil;
-		unsigned			i;
-		
-		for(i = 0; i < [applications count]; ++i) {
-			applicationPath = [applications objectAtIndex:i];
-			application		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil] forKeys:[NSArray arrayWithObjects:@"path", @"displayName", @"icon", nil]];
-
-			// Don't add existing items
-			if(0 == [[[_postProcessingActionsController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path == %@", applicationPath]] count]) {
-				[_postProcessingActionsController addObject:application];
-			}			
-		}
 	}
 }
 

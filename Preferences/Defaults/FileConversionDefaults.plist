@@ -8,12 +8,14 @@
 		<false/>
 		<key>addToiTunesPlaylist</key>
 		<false/>
+		<key>iTunesPlaylistName</key>
+		<string>foo</string>
 		<key>deleteSourceFiles</key>
 		<false/>
 		<key>outputDirectory</key>
 		<string>~/Music</string>
 		<key>overwriteExistingFiles</key>
-		<integer>0</integer>
+		<false/>
 		<key>postProcessingApplications</key>
 		<array/>
 		<key>temporaryDirectory</key>

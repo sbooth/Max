@@ -95,7 +95,6 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	if((self = [super initWithWindowNibName:@"FileConversion"])) {
 
 		_settings = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"conversionSettings"] mutableCopy];
-
 		return self;
 	}
 	return nil;
@@ -104,7 +103,7 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 - (void) dealloc
 {
 	[_settings release];	_settings = nil;
-
+	
 	[super dealloc];
 }
 
@@ -200,17 +199,21 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	
 	// Conversion parameters
 	[settings setValue:[_settings objectForKey:@"deleteSourceFiles"] forKey:@"deleteSourceFiles"];
-	[settings setValue:[_settings objectForKey:@"overwriteExistingFiles"] forKey:@"overwriteExistingFiles"];
+	[settings setValue:[_settings objectForKey:@"overwriteOutputFiles"] forKey:@"overwriteOutputFiles"];
 	
-	// Custom output file naming
-	if([[_settings objectForKey:@"useCustomNaming"] boolValue]) {
+	if([[_settings objectForKey:@"overwriteOutputFiles"] boolValue]) {
+		[settings setValue:[_settings objectForKey:@"promptBeforeOverwritingOutputFiles"] forKey:@"promptBeforeOverwritingOutputFiles"];
+	}
+	
+	// Output file naming
+	if([[_settings objectForKey:@"useCustomOutputFileNaming"] boolValue]) {
 		NSMutableDictionary		*fileNamingFormat = [NSMutableDictionary dictionary];
-		
+				
 		[fileNamingFormat setValue:[_settings objectForKey:@"fileNamingFormat"] forKey:@"formatString"];
 		[fileNamingFormat setValue:[_settings objectForKey:@"useTwoDigitTrackNumbers"] forKey:@"useTwoDigitTrackNumbers"];
 		[fileNamingFormat setValue:[_settings objectForKey:@"useNamingFallback"] forKey:@"useNamingFallback"];
 		
-		[settings setValue:fileNamingFormat forKey:@"fileNamingFormat"];
+		[settings setValue:fileNamingFormat forKey:@"outputFileNaming"];
 	}
 	
 	// Post-processing options
@@ -241,15 +244,24 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		[settings setValue:postProcessingOptions forKey:@"postProcessingOptions"];
 	}
 	
-	// Iterate through file list and convert each one
+	// Album art
+	if([[_settings objectForKey:@"saveAlbumArt"] boolValue]) {
+		NSMutableDictionary		*albumArt = [NSMutableDictionary dictionary];
+		
+		[albumArt setValue:[_settings objectForKey:@"albumArtFileExtension"] forKey:@"extension"];
+		[albumArt setValue:[_settings objectForKey:@"albumArtFileNamingFormat"] forKey:@"formatString"];
+		
+		[settings setValue:albumArt forKey:@"albumArt"];
+	}
+	
+	// Process the files
 	filenames = [_filesController arrangedObjects];
-	for(i = 0; i < [filenames count]; ++i) {
-
-		filename	= [[filenames objectAtIndex:i] objectForKey:@"filename"];
-		metadata	= [[filenames objectAtIndex:i] objectForKey:@"metadata"];
+	if([[_settings objectForKey:@"joinFiles"] boolValue]) {
+		filename	= [[filenames objectAtIndex:0] objectForKey:@"filename"];
+		metadata	= [[filenames objectAtIndex:0] objectForKey:@"metadata"];
 		
 		@try {
-			[[EncoderController sharedController] encodeFile:filename metadata:metadata settings:settings];
+			[[EncoderController sharedController] encodeFiles:filenames metadata:metadata settings:settings];
 		}
 		
 		@catch(NSException *exception) {
@@ -260,6 +272,28 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 			[alert setAlertStyle:NSWarningAlertStyle];		
 			[alert runModal];
 		}			
+		
+	}
+	// Iterate through file list and convert each one
+	else {
+		for(i = 0; i < [filenames count]; ++i) {
+
+			filename	= [[filenames objectAtIndex:i] objectForKey:@"filename"];
+			metadata	= [[filenames objectAtIndex:i] objectForKey:@"metadata"];
+			
+			@try {
+				[[EncoderController sharedController] encodeFile:filename metadata:metadata settings:settings];
+			}
+			
+			@catch(NSException *exception) {
+				NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+				[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+				[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while converting the file \"%@\".", @"Exceptions", @""), [filename lastPathComponent]]];
+				[alert setInformativeText:[exception reason]];
+				[alert setAlertStyle:NSWarningAlertStyle];		
+				[alert runModal];
+			}			
+		}
 	}
 
 	// Get ready for next time
@@ -277,21 +311,6 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	[panel beginSheetForDirectory:nil file:nil types:getAudioExtensions() modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(addFilesPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];	
 }
 
-- (void) addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	NSArray			*filenames;
-	unsigned		i;
-
-	if(NSOKButton == returnCode) {
-		
-		filenames = [panel filenames];
-
-		for(i = 0; i < [filenames count]; ++i) {
-			[self addFile:[filenames objectAtIndex:i]];
-		}
-	}
-}
-
 - (IBAction) removeFiles:(id)sender
 {
 	[_filesController removeObjects:[_filesController selectedObjects]];	
@@ -307,12 +326,6 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 {
 	FileConversionSettingsSheet *sheet = [[FileConversionSettingsSheet alloc] initWithSettings:_settings];
     [[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(didEndSettingsSheet:returnCode:contextInfo:) contextInfo:nil];
-}
-
-- (void) didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"conversionSettings"];
-    [sheet orderOut:self];
 }
 
 #pragma mark File Management
@@ -385,44 +398,9 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	return success;
 }
 
-- (BOOL) addOneFile:(NSString *)filename atIndex:(unsigned)index
-{
-	NSImage				*icon			= nil;
-	AudioMetadata		*metadata		= nil;
-
-	// Don't re-add files
-	if([_filesController containsFile:filename]) {
-		return YES;
-	}
-	// Only accept files with our extensions
-	else if(NO == [getAudioExtensions() containsObject:[filename pathExtension]]) {	
-		return NO;
-	}
-	
-	// Get file's metadata
-	metadata = [AudioMetadata metadataFromFile:filename];
-	
-	// Get the icon for the file
-	icon = getIconForFile(filename, NSMakeSize(16, 16));
-
-	if(NSNotFound == index) {
-		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]]];
-	}
-	else {
-		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]] atArrangedObjectIndex:index];			
-	}
-	
-	return YES;
-}
-
 #pragma mark Miscellaneous
 
 - (NSArray *)				genres											{ return [Genres sharedGenres]; }
-
-- (void) clearFileList
-{
-	[_filesController removeObjects:[_filesController arrangedObjects]];
-}
 
 #pragma mark Album Art
 
@@ -436,8 +414,8 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	return [[_filesController selection] valueForKeyPath:@"metadata.albumTitle"];
 }
 
-- (int) albumArtWidth	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].width; }
-- (int) albumArtHeight	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].height; }
+- (unsigned) albumArtWidth	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].width; }
+- (unsigned) albumArtHeight	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].height; }
 
 - (void) setAlbumArt:(NSImage *)albumArt
 {
@@ -461,23 +439,6 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	[panel setCanChooseFiles:YES];
 	
 	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectAlbumArtPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-}
-
-- (void) selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if(NSOKButton == returnCode) {
-		NSArray		*filesToOpen	= [sheet filenames];
-		unsigned	count			= [filesToOpen count];
-		unsigned	i;
-		NSImage		*image			= nil;
-		
-		for(i = 0; i < count; ++i) {
-			image = [[[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]] autorelease];
-			if(nil != image) {
-				[[_filesController selection] setValue:image forKeyPath:@"metadata.albumArt"];
-			}
-		}
-	}	
 }
 
 #pragma mark NSToolbar Delegate Methods
@@ -539,6 +500,83 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier,
 		nil];
+}
+
+@end
+
+@implementation FileConversionController (Private)
+
+- (void) addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	NSArray			*filenames;
+	unsigned		i;
+	
+	if(NSOKButton == returnCode) {
+		
+		filenames = [panel filenames];
+		
+		for(i = 0; i < [filenames count]; ++i) {
+			[self addFile:[filenames objectAtIndex:i]];
+		}
+	}
+}
+
+- (BOOL) addOneFile:(NSString *)filename atIndex:(unsigned)index
+{
+	NSImage				*icon			= nil;
+	AudioMetadata		*metadata		= nil;
+	
+	// Don't re-add files
+	if([_filesController containsFile:filename]) {
+		return YES;
+	}
+	// Only accept files with our extensions
+	else if(NO == [getAudioExtensions() containsObject:[filename pathExtension]]) {	
+		return NO;
+	}
+	
+	// Get file's metadata
+	metadata = [AudioMetadata metadataFromFile:filename];
+	
+	// Get the icon for the file
+	icon = getIconForFile(filename, NSMakeSize(16, 16));
+	
+	if(NSNotFound == index) {
+		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]]];
+	}
+	else {
+		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]] atArrangedObjectIndex:index];			
+	}
+	
+	return YES;
+}
+
+- (void) clearFileList
+{
+	[_filesController removeObjects:[_filesController arrangedObjects]];
+}
+
+- (void) selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if(NSOKButton == returnCode) {
+		NSArray		*filesToOpen	= [sheet filenames];
+		unsigned	count			= [filesToOpen count];
+		unsigned	i;
+		NSImage		*image			= nil;
+		
+		for(i = 0; i < count; ++i) {
+			image = [[[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]] autorelease];
+			if(nil != image) {
+				[[_filesController selection] setValue:image forKeyPath:@"metadata.albumArt"];
+			}
+		}
+	}	
+}
+
+- (void) didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"conversionSettings"];
+    [sheet orderOut:self];
 }
 
 @end
