@@ -22,6 +22,7 @@
 
 #import "CompactDiscDocumentToolbar.h"
 #import "CompactDiscController.h"
+#import "CompactDiscDocumentSettingsSheet.h"
 #import "Track.h"
 #import "AudioMetadata.h"
 #import "FreeDB.h"
@@ -31,7 +32,6 @@
 #import "PreferencesController.h"
 #import "Encoder.h"
 #import "MediaController.h"
-#import "GetPlaylistNameSheet.h"
 #import "SelectEncodersSheet.h"
 
 #import "MallocException.h"
@@ -44,10 +44,10 @@
 #import "UtilityFunctions.h"
 
 @interface CompactDiscDocument (Private)
-- (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
-- (void)			updateAlbumArtImageRep;
-- (void)			displayExceptionAlert:(NSAlert *)alert;
-- (BOOL)			displayAlertIfNoOutputFormats;
+- (void)		displayExceptionAlert:(NSAlert *)alert;
+- (void)		didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)		didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)		openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
 @implementation CompactDiscDocument
@@ -86,32 +86,9 @@
 - (id) init
 {
 	if((self = [super init])) {
-
-		_disc				= nil;
-		_discInDrive		= NO;
-		_discID				= 0;
-		_freeDBQueryInProgress = NO;
-		_freeDBQuerySuccessful = NO;
 		
-		_activeEncoders		= [getDefaultOutputFormats() retain];
-		
-		_title				= nil;
-		_artist				= nil;
-		_year				= 0;
-		_genre				= nil;
-		_composer			= nil;
-		_comment			= nil;
-		
-		_albumArt			= nil;
-		_albumArtDownloadDate = nil;
-		
-		_discNumber			= 0;
-		_discTotal			= 0;
-		_compilation		= NO;
-		
-		_MCN				= nil;
-		
-		_tracks				= [[NSMutableArray arrayWithCapacity:20] retain];
+		_tracks				= [[NSMutableArray alloc] init];		
+		_settings			= [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"rippingSettings"] mutableCopy];
 		
 		return self;
 	}
@@ -135,7 +112,7 @@
 	
 	[_tracks release];					_tracks = nil;
 	
-	[_activeEncoders release];			_activeEncoders = nil;
+	[_settings release];				_settings = nil;
 	
 	[super dealloc];
 }
@@ -319,24 +296,6 @@
 	return [self undoManager];
 }
 
-#pragma mark Exception Display
-
-- (void) displayExceptionAlert:(NSAlert *)alert
-{
-	NSWindow *window = [self windowForSheet];
-	if(nil == window) {
-		[alert runModal];
-	}
-	else {
-		[alert beginSheetModalForWindow:window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
-	}
-}
-
-- (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	// Nothing for now
-}
-
 #pragma mark Disc Management
 
 - (void) discEjected			{ [self setDisc:nil]; }
@@ -387,9 +346,6 @@
 	return NO;
 }
 
-- (NSArray *)		activeEncoders										{ return _activeEncoders; }
-- (void)			setActiveEncoders:(NSArray *)activeEncoders			{ [_activeEncoders release]; _activeEncoders = [activeEncoders retain]; }
-
 #pragma mark Action Methods
 
 - (IBAction) selectAll:(id)sender
@@ -412,7 +368,7 @@
 
 - (IBAction) encode:(id)sender
 {
-	GetPlaylistNameSheet *sheet = nil;
+	SelectEncodersSheet		*sheet	= nil;
 
 	@try {
 		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
@@ -426,120 +382,8 @@
 			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
 		}
 		
-		// Set the encoders to the defaults
-		[self setActiveEncoders:getDefaultOutputFormats()];
-
-		if(YES == [self displayAlertIfNoOutputFormats]) {
-			return;
-		}
-
-		// Display the sheet requesting the playlist name
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"createiTunesAlbumPlaylist"]) {
-			sheet = [[GetPlaylistNameSheet alloc] initWithCompactDiscDocument:self];
-			[sheet showSheet];
-		}
-		else {
-			[self encodeToPlaylist:nil];
-		}
-	}
-	
-	@catch(NSException *exception) {
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), (nil == [self title] ? [NSString stringWithFormat:@"0x%.8x", [self discID]] : [self title])]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[self displayExceptionAlert:alert];
-	}
-}
-
-- (IBAction) encodeCustom:(id)sender
-{
-	SelectEncodersSheet *sheet = nil;
-
-	@try {
-		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
-		if(NO == [self discInDrive]) {
-			return;
-		}
-		else if([self emptySelection]) {
-			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @"") userInfo:nil];
-		}
-		else if([self ripInProgress] || [self encodeInProgress]) {
-			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
-		}
-		
-		sheet = [[SelectEncodersSheet alloc] initWithCompactDiscDocument:self];
-		[sheet showSheet];	
-	}
-	
-	@catch(NSException *exception) {
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), (nil == [self title] ? [NSString stringWithFormat:@"0x%.8x", [self discID]] : [self title])]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[self displayExceptionAlert:alert];
-	}
-}
-
-- (void) customEncodersSelected
-{
-	GetPlaylistNameSheet *sheet = nil;
-	
-	if(YES == [self displayAlertIfNoOutputFormats]) {
-		return;
-	}
-	
-	// Display the sheet requesting the playlist name
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyAddToiTunes"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"createiTunesAlbumPlaylist"]) {
-		sheet = [[GetPlaylistNameSheet alloc] initWithCompactDiscDocument:self];
-		[sheet showSheet];
-	}
-	else {
-		[self encodeToPlaylist:nil];
-	}
-}
-
-- (void) encodeToPlaylist:(NSString *)playlist
-{
-	Track			*track;
-	NSArray			*selectedTracks;
-	NSEnumerator	*enumerator;
-	AudioMetadata	*metadata;
-	
-	@try {
-		// Iterate through the selected tracks and rip/encode them
-		selectedTracks	= [self selectedTracks];
-		
-		// Create one single file for more than one track
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && 1 < [selectedTracks count]) {
-			
-			metadata = [[selectedTracks objectAtIndex:0] metadata];
-			
-			[metadata setTrackNumber:0];
-			[metadata setTrackTitle:NSLocalizedStringFromTable(@"Multiple Tracks", @"CompactDisc", @"")];
-			[metadata setTrackArtist:nil];
-			[metadata setTrackGenre:nil];
-			[metadata setTrackComposer:nil];
-			[metadata setTrackYear:0];
-			[metadata setISRC:nil];
-
-			[metadata setPlaylist:playlist];
-			
-			[[RipperController sharedController] ripTracks:selectedTracks metadata:metadata settings:nil];
-		}
-		// Create one file per track
-		else {			
-			enumerator		= [selectedTracks objectEnumerator];
-			
-			while((track = [enumerator nextObject])) {
-				metadata = [track metadata];
-				[metadata setPlaylist:playlist];
-				
-				[[RipperController sharedController] ripTracks:[NSArray arrayWithObject:track] metadata:metadata];
-			}
-		}
+		sheet = [[SelectEncodersSheet alloc] init];
+		[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSelectEncodersSheet:returnCode:contextInfo:) contextInfo:sheet];
 	}
 	
 	@catch(NSException *exception) {
@@ -684,23 +528,6 @@
 	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
 }
 
-- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if(NSOKButton == returnCode) {
-		NSArray		*filesToOpen	= [sheet filenames];
-		unsigned	count			= [filesToOpen count];
-		unsigned	i;
-		NSImage		*image			= nil;
-		
-		for(i = 0; i < count; ++i) {
-			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
-			if(nil != image) {
-				[self setAlbumArt:[image autorelease]];
-			}
-		}
-	}	
-}
-
 #pragma mark FreeDB
 
 - (void) clearFreeDBData
@@ -779,7 +606,7 @@
 	return [[result retain] autorelease];
 }
 
-- (BOOL) displayAlertIfNoOutputFormats
+/*- (BOOL) displayAlertIfNoOutputFormats
 {
 	// Verify at least one output format is selected
 	if(0 == [_activeEncoders count]) {
@@ -806,7 +633,7 @@
 	}
 	
 	return NO;
-}
+}*/
 
 #pragma mark Accessors
 
@@ -843,7 +670,7 @@
 {
 	unsigned			i;
 
-	if(NO == [_disc isEqual:disc]) {
+	if(NO == [[self disc] isEqual:disc]) {
 
 		[_disc release];
 		_disc = [disc retain];
@@ -858,14 +685,14 @@
 		[self setMCN:[_disc MCN]];
 		
 		if(0 == [self countOfTracks]) {
-			for(i = 0; i < [_disc countOfTracks]; ++i) {
+			for(i = 0; i < [[self disc] countOfTracks]; ++i) {
 				Track *track = [[Track alloc] init];
 				[track setDocument:self];
 				[_tracks addObject:[track autorelease]];
 			}
 		}
 		
-		for(i = 0; i < [_disc countOfTracks]; ++i) {
+		for(i = 0; i < [[self disc] countOfTracks]; ++i) {
 			Track			*track		= [_tracks objectAtIndex:i];
 			
 			[track setNumber:i + 1];
@@ -888,7 +715,7 @@
 
 - (void) setTitle:(NSString *)title
 {
-	if(NO == [_title isEqualToString:title]) {
+	if(NO == [[self title] isEqualToString:title]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setTitle:) object:_title];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Title", @"UndoRedo", @"")];
 		[_title release];
@@ -898,7 +725,7 @@
 
 - (void) setArtist:(NSString *)artist
 {
-	if(NO == [_artist isEqualToString:artist]) {
+	if(NO == [[self artist] isEqualToString:artist]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setArtist:) object:_artist];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Artist", @"UndoRedo", @"")];
 		[_artist release];
@@ -917,7 +744,7 @@
 
 - (void) setGenre:(NSString *)genre
 {
-	if(NO == [_genre isEqualToString:genre]) {
+	if(NO == [[self genre] isEqualToString:genre]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setGenre:) object:_genre];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Genre", @"UndoRedo", @"")];
 		[_genre release];
@@ -927,7 +754,7 @@
 
 - (void) setComposer:(NSString *)composer
 {
-	if(NO == [_composer isEqualToString:composer]) {
+	if(NO == [[self composer] isEqualToString:composer]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComposer:) object:_composer];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Composer", @"UndoRedo", @"")];
 		[_composer release];
@@ -937,7 +764,7 @@
 
 - (void) setComment:(NSString *)comment
 {
-	if(NO == [_comment isEqualToString:comment]) {
+	if(NO == [[self comment] isEqualToString:comment]) {
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setComment:) object:_comment];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Comment", @"UndoRedo", @"")];
 		[_comment release];
@@ -947,7 +774,7 @@
 
 - (void) setAlbumArt:(NSImage *)albumArt
 {
-	if(NO == [_albumArt isEqual:albumArt]) {
+	if(NO == [[self albumArt] isEqual:albumArt]) {
 		[[self undoManager] beginUndoGrouping];
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArt:) object:_albumArt];
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArtDownloadDate:) object:_albumArtDownloadDate];
@@ -991,7 +818,15 @@
 - (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
 - (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
 
-#pragma mark Scripting Additions
+- (IBAction )		editSettings:(id)sender
+{
+	CompactDiscDocumentSettingsSheet *sheet = [[CompactDiscDocumentSettingsSheet alloc] initWithSettings:_settings];
+    [[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSettingsSheet:returnCode:contextInfo:) contextInfo:nil];
+}
+
+@end
+
+@implementation CompactDiscDocument (ScriptingAdditions)
 
 - (id) handleEncodeScriptCommand:(NSScriptCommand *)command				{ [self encode:command]; return nil; }
 - (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command			{ [self ejectDisc:command]; return nil; }
@@ -1000,5 +835,59 @@
 - (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command { [self toggleTrackInformation:command]; return nil; }
 - (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self toggleAlbumArt:command]; return nil; }
 - (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self fetchAlbumArt:command]; return nil; }
+
+@end
+
+@implementation CompactDiscDocument (Private)
+
+- (void) displayExceptionAlert:(NSAlert *)alert
+{
+	NSWindow *window = [self windowForSheet];
+	if(nil == window) {
+		[alert runModal];
+	}
+	else {
+		[alert beginSheetModalForWindow:window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+	}
+}
+
+- (void) alertDidEnd:(NSAlert *)alert returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	// Nothing for now
+}
+
+- (void) didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"rippingSettings"];
+    [sheet orderOut:self];
+}
+
+- (void) didEndSelectEncodersSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	SelectEncodersSheet		*selectEncodersSheet	= (SelectEncodersSheet *)contextInfo;
+	
+	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"rippingSettings"];
+    [sheet orderOut:self];
+	
+	[_settings setObject:[selectEncodersSheet selectedEncoders] forKey:@"encoders"];
+	[[RipperController sharedController] ripTracks:[self selectedTracks] settings:_settings];
+}
+
+- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if(NSOKButton == returnCode) {
+		NSArray		*filesToOpen	= [sheet filenames];
+		unsigned	count			= [filesToOpen count];
+		unsigned	i;
+		NSImage		*image			= nil;
+		
+		for(i = 0; i < count; ++i) {
+			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
+			if(nil != image) {
+				[self setAlbumArt:[image autorelease]];
+			}
+		}
+	}	
+}
 
 @end

@@ -189,7 +189,7 @@ enum {
 		[toolbarItem setImage: [NSImage imageNamed:@"SettingsToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
-		[toolbarItem setAction:@selector(ejectDisc:)];
+		[toolbarItem setAction:@selector(editSettings:)];
 	}
 	else {
 		toolbarItem = nil;

@@ -2,17 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>outputDirectory</key>
-	<string>~/Music/</string>
-	<key>singleFileOutput</key>
-	<false/>
-	<key>useCustomNaming</key>
-	<false/>
-	<key>customNamingScheme</key>
-	<string></string>
-	<key>customNamingUseFallback</key>
-	<false/>
-	<key>customNamingUseTwoDigitTrackNumbers</key>
-	<false/>
+	<key>rippingSettings</key>
+	<dict>
+		<key>outputDirectory</key>
+		<string>~/Music</string>
+		<key>temporaryDirectory</key>
+		<string>/tmp</string>
+		<key>addToiTunes</key>
+		<false/>
+		<key>addToiTunesPlaylist</key>
+		<false/>
+		<key>overwriteExistingFiles</key>
+		<false/>
+		<key>postProcessingApplications</key>
+		<array/>
+		<key>useCustomNaming</key>
+		<false/>
+		<key>useCustomTemporaryDirectory</key>
+		<false/>
+		<key>useNamingFallback</key>
+		<false/>
+		<key>useTwoDigitTrackNumbers</key>
+		<false/>
+	</dict>
 </dict>
 </plist>

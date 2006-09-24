@@ -48,8 +48,8 @@ enum {
 	BOOL							_freeDBQueryInProgress;
 	BOOL							_freeDBQuerySuccessful;
 	
-	NSArray							*_activeEncoders;
-		
+	NSMutableDictionary				*_settings;
+
 	// Disc information
 	NSString						*_title;
 	NSString						*_artist;
@@ -85,15 +85,11 @@ enum {
 - (BOOL)			ripInProgress;
 - (BOOL)			encodeInProgress;
 
-- (NSArray *)		activeEncoders;
-- (void)			setActiveEncoders:(NSArray *)activeEncoders;
-
 // Action methods
 - (IBAction)		selectAll:(id)sender;
 - (IBAction)		selectNone:(id)sender;
 
 - (IBAction)		encode:(id)sender;
-- (IBAction)		encodeCustom:(id)sender;
 
 - (IBAction)		ejectDisc:(id)sender;
 
@@ -114,9 +110,6 @@ enum {
 - (void)			updateDiscFromFreeDB:(NSDictionary *) info;
 
 // Miscellaneous
-- (void)			customEncodersSelected;
-- (void)			encodeToPlaylist:(NSString *)playlist;
-
 - (void)			discEjected;
 
 - (NSArray *)		selectedTracks;
@@ -175,6 +168,9 @@ enum {
 
 - (NSString *)		MCN;
 - (void)			setMCN:(NSString *)MCN;
+
+// Settings
+- (IBAction )		editSettings:(id)sender;
 
 // KVC methods
 - (unsigned)		countOfTracks;
