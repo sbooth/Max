@@ -27,7 +27,6 @@ static PreferencesController	*sharedPreferences			= nil;
 
 NSString *GeneralPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.General";
 NSString *FormatsPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Formats";
-NSString *OutputPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Output";
 NSString *TaggingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Tagging";
 NSString *FreeDBPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.FreeDB";
 NSString *RipperPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.Ripper";
@@ -175,17 +174,6 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
-    else if([itemIdentifier isEqualToString:OutputPreferencesToolbarItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select where output files will be saved and how they will be named", @"Preferences", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
-		
-		[toolbarItem setTarget:self];
-		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
-	}
     else if([itemIdentifier isEqualToString:TaggingPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
@@ -242,7 +230,6 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 	return [NSArray arrayWithObjects:
 		GeneralPreferencesToolbarItemIdentifier,
 		FormatsPreferencesToolbarItemIdentifier,
-		OutputPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier,
 		FreeDBPreferencesToolbarItemIdentifier,
 		TaggingPreferencesToolbarItemIdentifier,
@@ -255,7 +242,6 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 	return [NSArray arrayWithObjects:
 		GeneralPreferencesToolbarItemIdentifier,
 		FormatsPreferencesToolbarItemIdentifier,
-		OutputPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier,
 		FreeDBPreferencesToolbarItemIdentifier,
 		TaggingPreferencesToolbarItemIdentifier,
@@ -272,17 +258,11 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 	return [NSArray arrayWithObjects:
 		GeneralPreferencesToolbarItemIdentifier,
 		FormatsPreferencesToolbarItemIdentifier,
-		OutputPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier,
 		FreeDBPreferencesToolbarItemIdentifier,
 		TaggingPreferencesToolbarItemIdentifier,
 		AlbumArtPreferencesToolbarItemIdentifier,
 		nil];
-}
-
-- (void) selectPreferencePaneUsingToolbar:(id)sender
-{
-	[self selectPreferencePane:[[[self window] toolbar] selectedItemIdentifier]];
 }
 
 - (void) selectPreferencePane:(NSString *)itemIdentifier
@@ -328,6 +308,15 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preference
 	// Why does this cause a crash?
 	//[prefPaneObject release];
 	//[oldContentView release];
+}
+
+@end
+
+@implementation PreferencesController (Private)
+
+- (void) selectPreferencePaneUsingToolbar:(id)sender
+{
+	[self selectPreferencePane:[[[self window] toolbar] selectedItemIdentifier]];
 }
 
 @end
