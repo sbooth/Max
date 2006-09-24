@@ -40,7 +40,7 @@
 				<string>spx</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Speex Audio</string>
+			<string>Ogg (Speex) Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -196,7 +196,7 @@
 				<string>oggflac</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Ogg FLAC Audio</string>
+			<string>Ogg (FLAC) Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -238,7 +238,7 @@
 				<string>caf</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Core Audio File</string>
+			<string>Core Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
