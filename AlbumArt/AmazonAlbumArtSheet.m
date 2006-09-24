@@ -62,7 +62,7 @@
 		}
 		
 		_source		= source;
-		_images		= [[NSMutableArray arrayWithCapacity:10] retain];
+		_images		= [[NSMutableArray alloc] init];
 
 		[_artistTextField setStringValue:[_source artist]];
 		[_titleTextField setStringValue:[_source title]];
@@ -184,7 +184,7 @@
 	image = [[NSImage alloc] initWithContentsOfURL:[NSURL URLWithString:[[_images objectAtIndex:[_table selectedRow]] valueForKey:@"URL"]]];
 	if(nil != image) {
 		[_source setAlbumArt:[image autorelease]];
-		if([_source respondsToSelector:@selector(setAlbumArtDownloadDate:)]) {
+		if([(NSObject *)_source respondsToSelector:@selector(setAlbumArtDownloadDate:)]) {
 			[_source setAlbumArtDownloadDate:[NSDate date]];
 		}
 	}
@@ -200,6 +200,10 @@
 {
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[@"http://www.amazon." stringByAppendingString:[self localeDomain]]]];
 }
+
+@end
+
+@implementation AmazonAlbumArtSheet (Private)
 
 - (NSString *) localeDomain
 {
