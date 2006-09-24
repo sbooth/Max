@@ -51,7 +51,7 @@ enum {
 @end
 
 // cdparanoia callback
-static char *callback_strings[15] = {
+/*static char *callback_strings[15] = {
 	"wrote",
 	"finished",
 	"read",
@@ -67,7 +67,7 @@ static char *callback_strings[15] = {
 	"dropped",
 	"duped",
 	"transport error"
-};
+};*/
 
 static void 
 callback(long inpos, int function, void *userdata)
@@ -315,9 +315,8 @@ callback(long inpos, int function, void *userdata)
 			double percentComplete = ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0;
 			NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
 			unsigned int secondsRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
-			NSString *timeRemaining = [NSString stringWithFormat:@"%i:%02i", secondsRemaining / 60, secondsRemaining % 60];
 			
-			[[self delegate] updateProgress:percentComplete timeRemaining:timeRemaining];
+			[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 		}
 		
 		++iterations;
