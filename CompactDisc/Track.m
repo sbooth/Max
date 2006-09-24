@@ -136,7 +136,6 @@
 
 - (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
 - (CompactDiscDocument *)	document			{ return [[_document retain] autorelease]; }
-- (NSUndoManager *)			undoManager			{ return [[self document] undoManager]; }
 
 - (BOOL)					ripInProgress		{ return _ripInProgress; }
 - (BOOL)					encodeInProgress	{ return (0 != _activeEncoders); }
@@ -405,4 +404,8 @@
     }
 }
 
+@end
+
+@implementation Track (Private)
+- (NSUndoManager *)			undoManager			{ return [[self document] undoManager]; }
 @end
