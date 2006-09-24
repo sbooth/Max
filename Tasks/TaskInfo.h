@@ -28,6 +28,8 @@
 	
 	NSArray				*_inputFilenames;		// Input filename(s) for the task
 	NSArray				*_inputTracks;			// For rips, the Track(s) that were ripped
+	
+	unsigned			_inputFileIndex;
 }
 
 + (TaskInfo *)				taskInfoWithSettings:(NSDictionary *)settings metadata:(AudioMetadata *)metadata;
@@ -43,5 +45,11 @@
 
 - (NSArray *)				inputTracks;
 - (void)					setInputTracks:(NSArray *)inputTracks;
+
+- (unsigned)				inputFileIndex;
+- (void)					setInputFileIndex:(unsigned)inputFileIndex;
+- (void)					incrementInputFileIndex;
+
+- (NSString *)				inputFilenameAtInputFileIndex;
 
 @end

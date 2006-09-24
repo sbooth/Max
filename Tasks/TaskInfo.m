@@ -70,9 +70,16 @@
 #pragma mark Input
 
 - (NSArray *)				inputFilenames								{ return [[_inputFilenames retain] autorelease]; }
-- (void)					setInputFilenames:(NSArray *)inputFilenames	{ [_inputFilenames release]; _inputFilenames = [inputFilenames retain]; }
+- (void)					setInputFilenames:(NSArray *)inputFilenames	{ [_inputFilenames release]; _inputFilenames = [inputFilenames retain]; [self setInputFileIndex:0]; }
 
 - (NSArray *)				inputTracks									{ return [[_inputTracks retain] autorelease]; }
 - (void)					setInputTracks:(NSArray *)inputTracks		{ [_inputTracks release]; _inputTracks = [inputTracks retain]; }
+
+- (unsigned)				inputFileIndex								{ return _inputFileIndex; }
+- (void)					setInputFileIndex:(unsigned)inputFileIndex	{ _inputFileIndex = inputFileIndex; }
+
+- (void)					incrementInputFileIndex						{ ++_inputFileIndex; }
+
+- (NSString *)				inputFilenameAtInputFileIndex				{ return [[self inputFilenames] objectAtIndex:[self inputFileIndex]]; }
 
 @end
