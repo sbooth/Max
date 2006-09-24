@@ -40,7 +40,6 @@
 - (IBAction)			toggleEncoderWindow:(id)sender;
 - (IBAction)			toggleLogWindow:(id)sender;
 
-- (IBAction)			checkForUpdate:(id)sender;
 - (IBAction)			openHomeURL:(id)sender;
 
 - (IBAction)			encodeFile:(id)sender;

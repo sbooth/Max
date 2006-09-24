@@ -2,7 +2,6 @@
     IBClasses = (
         {
             ACTIONS = {
-                checkForUpdate = id; 
                 encodeFile = id; 
                 openHomeURL = id; 
                 showAcknowledgments = id; 
@@ -41,6 +40,12 @@
             LANGUAGE = ObjC; 
             OUTLETS = {progressBar = NSProgressIndicator; }; 
             SUPERCLASS = NSCell; 
+        }, 
+        {
+            ACTIONS = {checkForUpdates = id; }; 
+            CLASS = SUUpdater; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
         }
     ); 
     IBVersion = 1; 

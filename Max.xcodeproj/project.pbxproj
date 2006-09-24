@@ -20,7 +20,6 @@
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
 		8C29D94B097F442700E8B766 /* Genres.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D94A097F442700E8B766 /* Genres.strings */; };
 		8C29D981097F46A200E8B766 /* Log.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D980097F46A200E8B766 /* Log.strings */; };
-		8C3280F6096D0C7500608C9D /* UpdateChecker.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C3280F5096D0C7500608C9D /* UpdateChecker.nib */; };
 		8C3280FA096D0C8B00608C9D /* Ripper.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C3280F9096D0C8B00608C9D /* Ripper.nib */; };
 		8C328102096D0C9C00608C9D /* Log.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C328101096D0C9C00608C9D /* Log.nib */; };
 		8C328107096D0CAC00608C9D /* FreeDBMatches.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C328106096D0CAC00608C9D /* FreeDBMatches.nib */; };
@@ -62,7 +61,6 @@
 		8C5301950A05D1D400890518 /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5300DE0A05D1D400890518 /* Vorbis.framework */; };
 		8C5301960A05D1D400890518 /* WavPack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5300DF0A05D1D400890518 /* WavPack.framework */; };
 		8C5301A30A05D2DB00890518 /* CompactDiscController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5301A10A05D2DB00890518 /* CompactDiscController.m */; };
-		8C5301E50A05D4A200890518 /* MacPAD.url in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301E40A05D4A200890518 /* MacPAD.url */; };
 		8C5302080A05D5D800890518 /* AlbumArtToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F20A05D5D800890518 /* AlbumArtToolbarImage.png */; };
 		8C5302090A05D5D800890518 /* ClearLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F30A05D5D800890518 /* ClearLogToolbarImage.png */; };
 		8C53020A0A05D5D800890518 /* EjectDiscToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F40A05D5D800890518 /* EjectDiscToolbarImage.png */; };
@@ -132,7 +130,6 @@
 		8C53FF6B0A05CCA400890518 /* MultiplicationValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF5F0A05CCA400890518 /* MultiplicationValueTransformer.m */; };
 		8C53FF6D0A05CCA400890518 /* NegateBooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF610A05CCA400890518 /* NegateBooleanArrayValueTransformer.m */; };
 		8C53FF6F0A05CCA400890518 /* UppercaseStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF630A05CCA400890518 /* UppercaseStringValueTransformer.m */; };
-		8C53FF740A05CCDC00890518 /* MacPADSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF720A05CCDC00890518 /* MacPADSocket.m */; };
 		8C53FF7B0A05CD2D00890518 /* FreeDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF770A05CD2D00890518 /* FreeDB.m */; };
 		8C53FF7D0A05CD2D00890518 /* FreeDBMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF790A05CD2D00890518 /* FreeDBMatchSheet.m */; };
 		8C53FF8D0A05CD4100890518 /* BasicRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF800A05CD4100890518 /* BasicRipper.m */; };
@@ -143,7 +140,6 @@
 		8C53FF970A05CD4100890518 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF8A0A05CD4100890518 /* Ripper.m */; };
 		8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */; };
 		8C74F84A0A0B2C7C002260CF /* AudioMetadata.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8480A0B2C7C002260CF /* AudioMetadata.mm */; };
-		8C74F85E0A0B2D2E002260CF /* UpdateChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F85C0A0B2D2E002260CF /* UpdateChecker.m */; };
 		8C74F8690A0B2D89002260CF /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8670A0B2D89002260CF /* Genres.m */; };
 		8C74F8930A0B307E002260CF /* ServicesProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8910A0B307E002260CF /* ServicesProvider.m */; };
 		8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */; };
@@ -223,7 +219,6 @@
 		8CD26EFC0AB531F50037F33A /* CoreAudioEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E20A12E3FC00C8DCAE /* CoreAudioEncoderTask.m */; };
 		8CD26F4B0AB536120037F33A /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEF50A05CB8E00890518 /* CoreAudioEncoder.m */; };
 		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
-		8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CDBA03A09DF925800126090 /* GetPlaylistName.nib */; };
 		8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA8CF00942939800207809 /* DiskArbitration.framework */; };
 		8CEDBFFF094B8ECE0023DD01 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */; };
 		8CF2B1310A0DC0E5008738E4 /* MonkeysAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2B1300A0DC0E5008738E4 /* MonkeysAudio.png */; };
@@ -354,7 +349,6 @@
 		8C5300DF0A05D1D400890518 /* WavPack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WavPack.framework; path = Frameworks/WavPack.framework; sourceTree = "<group>"; };
 		8C5301A00A05D2DB00890518 /* CompactDiscController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscController.h; sourceTree = "<group>"; };
 		8C5301A10A05D2DB00890518 /* CompactDiscController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscController.m; sourceTree = "<group>"; };
-		8C5301E40A05D4A200890518 /* MacPAD.url */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = MacPAD.url; sourceTree = "<group>"; };
 		8C5301F20A05D5D800890518 /* AlbumArtToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AlbumArtToolbarImage.png; sourceTree = "<group>"; };
 		8C5301F30A05D5D800890518 /* ClearLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ClearLogToolbarImage.png; sourceTree = "<group>"; };
 		8C5301F40A05D5D800890518 /* EjectDiscToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EjectDiscToolbarImage.png; sourceTree = "<group>"; };
@@ -452,8 +446,6 @@
 		8C53FF610A05CCA400890518 /* NegateBooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NegateBooleanArrayValueTransformer.m; sourceTree = "<group>"; };
 		8C53FF620A05CCA400890518 /* UppercaseStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UppercaseStringValueTransformer.h; sourceTree = "<group>"; };
 		8C53FF630A05CCA400890518 /* UppercaseStringValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = UppercaseStringValueTransformer.m; sourceTree = "<group>"; };
-		8C53FF710A05CCDC00890518 /* MacPADSocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MacPADSocket.h; sourceTree = "<group>"; };
-		8C53FF720A05CCDC00890518 /* MacPADSocket.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MacPADSocket.m; sourceTree = "<group>"; };
 		8C53FF760A05CD2D00890518 /* FreeDB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FreeDB.h; sourceTree = "<group>"; };
 		8C53FF770A05CD2D00890518 /* FreeDB.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FreeDB.m; sourceTree = "<group>"; };
 		8C53FF780A05CD2D00890518 /* FreeDBMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FreeDBMatchSheet.h; sourceTree = "<group>"; };
@@ -485,15 +477,12 @@
 		8C6C4F7509CC5B0700F234E5 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
 		8C74F8470A0B2C7C002260CF /* AudioMetadata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AudioMetadata.h; sourceTree = "<group>"; };
 		8C74F8480A0B2C7C002260CF /* AudioMetadata.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioMetadata.mm; sourceTree = "<group>"; };
-		8C74F85B0A0B2D2E002260CF /* UpdateChecker.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UpdateChecker.h; sourceTree = "<group>"; };
-		8C74F85C0A0B2D2E002260CF /* UpdateChecker.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = UpdateChecker.m; sourceTree = "<group>"; };
 		8C74F8660A0B2D89002260CF /* Genres.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genres.h; sourceTree = "<group>"; };
 		8C74F8670A0B2D89002260CF /* Genres.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genres.m; sourceTree = "<group>"; };
 		8C74F8900A0B307E002260CF /* ServicesProvider.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ServicesProvider.h; sourceTree = "<group>"; };
 		8C74F8910A0B307E002260CF /* ServicesProvider.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ServicesProvider.m; sourceTree = "<group>"; };
 		8C7634F509E0F11D00616BE9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
 		8C781DE709E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
-		8C781DE809E8B61C001D85EF /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
 		8C781F5009E8DAB4001D85EF /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
 		8C794DFB097F191C0081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8C794DFE097F19450081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
@@ -509,10 +498,8 @@
 		8C794E0D097F19470081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Preferences.nib; sourceTree = "<group>"; };
 		8C794E0E097F19470081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Ripper.nib; sourceTree = "<group>"; };
 		8C794E0F097F19470081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
-		8C794E11097F19480081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/UpdateChecker.nib; sourceTree = "<group>"; };
 		8C794E2A097F1C480081CD7F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		8C7C837909E799E600A6B846 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
-		8C7C837F09E79AA300A6B846 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
 		8C7C88BB08EC37D800F6FCB1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Preferences.nib; sourceTree = "<group>"; };
 		8C89C62C0A069E5000359E67 /* AlbumArtPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AlbumArtPreferencesController.h; sourceTree = "<group>"; };
 		8C89C62D0A069E5000359E67 /* AlbumArtPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AlbumArtPreferencesController.m; sourceTree = "<group>"; };
@@ -554,7 +541,6 @@
 		8C89D0620A075EF500359E67 /* MP3SettingsSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MP3SettingsSheet.m; sourceTree = "<group>"; };
 		8C89D0800A07617E00359E67 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MP3SettingsSheet.nib; sourceTree = "<group>"; };
 		8C8B0CC2092E5DAA00418C45 /* English */ = {isa = PBXFileReference; lastKnownFileType = folder; name = English; path = "English.lproj/Max Help"; sourceTree = "<group>"; };
-		8C8B0EC8092E710200418C45 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/UpdateChecker.nib; sourceTree = "<group>"; };
 		8C91B798099AF1FE0040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FormatsPreferences.nib; sourceTree = "<group>"; };
 		8C91B7A0099AF2FF0040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FreeDBMatches.nib; sourceTree = "<group>"; };
 		8C91B7A8099AF35E0040C8DE /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FreeDBPreferences.nib; sourceTree = "<group>"; };
@@ -623,7 +609,6 @@
 		8CA73E8F0A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/FreeDBMatches.nib; sourceTree = "<group>"; };
 		8CA73E900A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/FreeDBPreferences.nib; sourceTree = "<group>"; };
 		8CA73E910A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
-		8CA73E920A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
 		8CA73E930A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/LibsndfileSettingsSheet.nib; sourceTree = "<group>"; };
 		8CA73E940A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/Log.nib; sourceTree = "<group>"; };
 		8CA73E950A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MonkeysAudioSettingsSheet.nib; sourceTree = "<group>"; };
@@ -633,7 +618,6 @@
 		8CA73E9A0A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/Ripper.nib; sourceTree = "<group>"; };
 		8CA73E9B0A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
 		8CA73E9D0A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
-		8CA73E9E0A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/UpdateChecker.nib; sourceTree = "<group>"; };
 		8CA73E9F0A0FD33300B12829 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/WavPackSettingsSheet.nib; sourceTree = "<group>"; };
 		8CA73EA10A0FD36000B12829 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/CoreAudioSettingsSheet.nib; sourceTree = "<group>"; };
 		8CA73EA20A0FD38C00B12829 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FLACSettingsSheet.nib; sourceTree = "<group>"; };
@@ -669,7 +653,6 @@
 		8CBA9F680999B7D5007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/ComponentVersions.nib; sourceTree = "<group>"; };
 		8CBA9F7F0999BA0F007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Encoder.nib; sourceTree = "<group>"; };
 		8CBA9F870999BA9D007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Ripper.nib; sourceTree = "<group>"; };
-		8CBA9F900999BB38007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/UpdateChecker.nib; sourceTree = "<group>"; };
 		8CBA9F980999BB98007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Preferences.nib; sourceTree = "<group>"; };
 		8CBA9FA20999BC3B007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Log.nib; sourceTree = "<group>"; };
 		8CBAB14809D7AA6B00F97BDC /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -682,7 +665,6 @@
 		8CD26D790AB5171B0037F33A /* EncoderTaskMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncoderTaskMethods.h; sourceTree = "<group>"; };
 		8CD26E160AB520A20037F33A /* RipperTaskMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RipperTaskMethods.h; sourceTree = "<group>"; };
 		8CD7F7D1098B0B19002C4D9F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/Credits.rtf; sourceTree = "<group>"; };
-		8CDBA03B09DF925800126090 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GetPlaylistName.nib; sourceTree = "<group>"; };
 		8CDE897B09D3B61600FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8CDE897C09D3B67F00FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
 		8CDE899609D3B9F600FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
@@ -814,7 +796,6 @@
 				8C89C62B0A069E5000359E67 /* Preferences */,
 				8C89CA6D0A06F7B200359E67 /* EncoderSettingsSheets */,
 				8C53FF750A05CD2D00890518 /* FreeDB */,
-				8C53FF700A05CCDC00890518 /* MacPAD */,
 				8C53FF570A05CCA400890518 /* ValueTransformers */,
 				8C53FF1E0A05CC4600890518 /* Exceptions */,
 				8C5302700A05DC9A00890518 /* AppleScript */,
@@ -855,7 +836,6 @@
 				8C89CAE80A07019700359E67 /* LibsndfileSettingsSheet.nib */,
 				8C89CA330A06F47D00359E67 /* MonkeysAudioSettingsSheet.nib */,
 				8C89C6FD0A06A91000359E67 /* FLACSettingsSheet.nib */,
-				8CDBA03A09DF925800126090 /* GetPlaylistName.nib */,
 				8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */,
 				8CA3FBA309BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib */,
 				8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */,
@@ -871,7 +851,6 @@
 				8CD7F5E0098B0A30002C4D9F /* Credits.rtf */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
-				8C3280F5096D0C7500608C9D /* UpdateChecker.nib */,
 				8C328101096D0C9C00608C9D /* Log.nib */,
 				8C328122096D0CDF00608C9D /* Acknowledgments.nib */,
 				8C32811A096D0CD000608C9D /* ComponentVersions.nib */,
@@ -1155,18 +1134,6 @@
 			path = ValueTransformers;
 			sourceTree = "<group>";
 		};
-		8C53FF700A05CCDC00890518 /* MacPAD */ = {
-			isa = PBXGroup;
-			children = (
-				8C74F85B0A0B2D2E002260CF /* UpdateChecker.h */,
-				8C74F85C0A0B2D2E002260CF /* UpdateChecker.m */,
-				8C5301E40A05D4A200890518 /* MacPAD.url */,
-				8C53FF710A05CCDC00890518 /* MacPADSocket.h */,
-				8C53FF720A05CCDC00890518 /* MacPADSocket.m */,
-			);
-			path = MacPAD;
-			sourceTree = "<group>";
-		};
 		8C53FF750A05CD2D00890518 /* FreeDB */ = {
 			isa = PBXGroup;
 			children = (
@@ -1431,7 +1398,6 @@
 				8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */,
 				8C4D4650093E776500A88927 /* Preferences.nib in Resources */,
 				8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */,
-				8C3280F6096D0C7500608C9D /* UpdateChecker.nib in Resources */,
 				8C328107096D0CAC00608C9D /* FreeDBMatches.nib in Resources */,
 				8C328102096D0C9C00608C9D /* Log.nib in Resources */,
 				8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */,
@@ -1452,10 +1418,8 @@
 				8CA3FBA409BF5B2000BB1BD4 /* AmazonAlbumArtSheet.nib in Resources */,
 				8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */,
 				8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */,
-				8CDBA04009DF925800126090 /* GetPlaylistName.nib in Resources */,
 				8C7634F609E0F11D00616BE9 /* AlbumArtPreferences.nib in Resources */,
 				8C781F5109E8DAB4001D85EF /* CueSheetDocument.nib in Resources */,
-				8C5301E50A05D4A200890518 /* MacPAD.url in Resources */,
 				8C5302080A05D5D800890518 /* AlbumArtToolbarImage.png in Resources */,
 				8C5302090A05D5D800890518 /* ClearLogToolbarImage.png in Resources */,
 				8C53020A0A05D5D800890518 /* EjectDiscToolbarImage.png in Resources */,
@@ -1539,7 +1503,6 @@
 				8C53FF6B0A05CCA400890518 /* MultiplicationValueTransformer.m in Sources */,
 				8C53FF6D0A05CCA400890518 /* NegateBooleanArrayValueTransformer.m in Sources */,
 				8C53FF6F0A05CCA400890518 /* UppercaseStringValueTransformer.m in Sources */,
-				8C53FF740A05CCDC00890518 /* MacPADSocket.m in Sources */,
 				8C53FF7B0A05CD2D00890518 /* FreeDB.m in Sources */,
 				8C53FF7D0A05CD2D00890518 /* FreeDBMatchSheet.m in Sources */,
 				8C53FF8D0A05CD4100890518 /* BasicRipper.m in Sources */,
@@ -1579,7 +1542,6 @@
 				8C89D01C0A075BB600359E67 /* OggVorbisSettingsSheet.m in Sources */,
 				8C89D0640A075EF500359E67 /* MP3SettingsSheet.m in Sources */,
 				8C74F84A0A0B2C7C002260CF /* AudioMetadata.mm in Sources */,
-				8C74F85E0A0B2D2E002260CF /* UpdateChecker.m in Sources */,
 				8C74F8690A0B2D89002260CF /* Genres.m in Sources */,
 				8C74F8930A0B307E002260CF /* ServicesProvider.m in Sources */,
 				8C9451250A12E3FD00C8DCAE /* BasicRipperTask.m in Sources */,
@@ -1711,17 +1673,6 @@
 				8C643A7609D7392400F6C1F6 /* Dutch */,
 			);
 			name = Log.strings;
-			sourceTree = "<group>";
-		};
-		8C3280F5096D0C7500608C9D /* UpdateChecker.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8C8B0EC8092E710200418C45 /* English */,
-				8C794E11097F19480081CD7F /* French */,
-				8CBA9F900999BB38007C9F11 /* German */,
-				8CA73E9E0A0FD33300B12829 /* Dutch */,
-			);
-			name = UpdateChecker.nib;
 			sourceTree = "<group>";
 		};
 		8C3280F9096D0C8B00608C9D /* Ripper.nib */ = {
@@ -2048,17 +1999,6 @@
 				8C643A7809D7393400F6C1F6 /* Dutch */,
 			);
 			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
-		8CDBA03A09DF925800126090 /* GetPlaylistName.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8CDBA03B09DF925800126090 /* English */,
-				8C7C837F09E79AA300A6B846 /* French */,
-				8C781DE809E8B61C001D85EF /* German */,
-				8CA73E920A0FD33300B12829 /* Dutch */,
-			);
-			name = GetPlaylistName.nib;
 			sourceTree = "<group>";
 		};
 		8CFF40A40A1D6030008E503C /* SelectEncodersSheet.nib */ = {

@@ -31,8 +31,6 @@
 #import "LogController.h"
 #import "CoreAudioUtilities.h"
 #import "UtilityFunctions.h"
-#import "UpdateChecker.h"
-#import "MacPADSocket.h"
 #import "IOException.h"
 #import "MissingResourceException.h"
 #import "FileFormatNotSupportedException.h"
@@ -138,12 +136,7 @@ static ApplicationController *sharedController = nil;
 	
 	// Setup MediaController to receive DiskAppeared/DiskDisappeared callbacks
 	[MediaController sharedController];
-		
-	// Check for new version
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"startupVersionCheck"]) {
-		[[UpdateChecker sharedController] checkForUpdate:NO];
-	}
-	
+			
 	// Register services
 	[[NSApplication sharedApplication] setServicesProvider:[[ServicesProvider alloc] init]];
 	
@@ -276,11 +269,6 @@ static ApplicationController *sharedController = nil;
 	else {
 		[logWindow makeKeyAndOrderFront:self];
 	}
-}
-
-- (IBAction) checkForUpdate:(id)sender
-{
-	[[UpdateChecker sharedController] checkForUpdate:YES];
 }
 
 - (IBAction) openHomeURL:(id)sender

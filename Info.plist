@@ -308,5 +308,7 @@
 	</array>
 	<key>OSAScriptingDefinition</key>
 	<string>Max.sdef</string>
+	<key>SUFeedURL</key> 
+	<string>http://sbooth.org/Max/appcast.xml</string> 
 </dict>
 </plist>
