@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>Presets</TITLE>
+<META NAME="description" CONTENT="Command line switch reference">
+<META NAME="keywords" CONTENT="lame">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso_8859_1">
+<LINK REL="STYLESHEET" HREF="lame.css">
+</HEAD>
+<BODY TEXT=#000000
+        BGCOLOR=#F9FBFB LINK=#006666 VLINK=#4C4C4C
+        ALINK=#995500>
+<H1>Built-in presets</H1>
+<p>&nbsp;</p>
+<p>Lame features some built-in presets. Those presets are designed to provide 
+  the highest possible quality.<br>
+  They have for the most part been subject to and tuned via rigorous listening 
+  tests to verify and achieve this objective. These are continually updated to 
+  coincide with the latest developments that occur and as a result should provide 
+  you with nearly the best quality currently possible from LAME.</p>
+<p><br>
+  If your goal is quality, these presets are highly recommended over any custom 
+  set of parameters you might use. To activate presets, you should use:<br>
+  <tt>lame --preset preset_name</tt><br>
+  <br>
+  <br>
+</p>
+<h2>VBR modes</h2>
+<h3>--preset medium</h3>
+<p>This preset should provide near transparency to most people on most music.<br>
+  The resulting bitrate should be in the 150-180kbps range, according to music 
+  complexity.</p>
+<h3>--preset standard</h3>
+<p>This preset should generally be transparent to most people on most music and 
+  is already quite high in quality.<br>
+  The resulting bitrate should be in the 170-210kbps range, according to music 
+  complexity.</p>
+<h3>--preset extreme</h3>
+<p>If you have extremely good hearing and similar equipment, this preset will 
+  provide slightly higher quality than the &quot;standard&quot; mode.<br>
+  The resulting bitrate should be in the 200-240kbps range, according to music 
+  complexity.</p>
+<p>Any of those VBR presets can also be used in fast mode, using the new vbr algorithm. 
+  This mode is faster, but its quality could be a little lower. To enable the 
+  fast mode, use:<br>
+  <tt>lame --preset fast preset_name</tt></p>
+<p>&nbsp;</p>
+<h2>CBR 320kbps</h2>
+<h3>--preset insane</h3>
+<p>This preset will usually be overkill for most people and most situations, but 
+  if you must have the absolute highest quality with no regard to filesize, this 
+  is the way to go. This preset is the highest preset quality available.</p>
+<p>&nbsp;</p>
+<h2>ABR modes</h2>
+<h3>--preset &lt;kbps&gt;</h3>
+<p>Using this preset will usually give you good quality at a specified bitrate. 
+  Depending on the bitrate entered, this preset will determine the optimal settings 
+  for that particular situation.<br>
+  While this approach works, it is not nearly as flexible as VBR, and usually 
+  will not reach the same quality level as VBR at higher bitrates.<br>
+  If you need CBR encoding, those presets can also be used in CBR mode by using:<br>
+  <tt>lame --preset cbr &lt;kbps&gt;</tt></p>
+</BODY>
+</HTML>

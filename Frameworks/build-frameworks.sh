@@ -54,3 +54,11 @@ cd vorbis && \
 		-target vorbis.framework \
 		-configuration Release \
 	&& cd $WD
+
+## LAME framework
+cd lame && \
+	xcodebuild \
+		-project lame.xcodeproj \
+		-target lame.framework \
+		-configuration Release \
+	&& cd $WD

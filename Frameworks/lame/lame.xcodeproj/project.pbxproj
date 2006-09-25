@@ -1,0 +1,369 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8CEA0A420AC7930D009E46CB /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A340AC7930D009E46CB /* bitstream.c */; };
+		8CEA0A430AC7930D009E46CB /* encoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A350AC7930D009E46CB /* encoder.c */; };
+		8CEA0A440AC7930D009E46CB /* fft.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A360AC7930D009E46CB /* fft.c */; };
+		8CEA0A450AC7930D009E46CB /* gain_analysis.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A370AC7930D009E46CB /* gain_analysis.c */; };
+		8CEA0A460AC7930D009E46CB /* id3tag.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A380AC7930D009E46CB /* id3tag.c */; };
+		8CEA0A470AC7930D009E46CB /* lame.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A390AC7930D009E46CB /* lame.c */; };
+		8CEA0A480AC7930D009E46CB /* mpglib_interface.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A3A0AC7930D009E46CB /* mpglib_interface.c */; };
+		8CEA0A490AC7930D009E46CB /* newmdct.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A3B0AC7930D009E46CB /* newmdct.c */; };
+		8CEA0A4A0AC7930D009E46CB /* presets.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A3C0AC7930D009E46CB /* presets.c */; };
+		8CEA0A4B0AC7930D009E46CB /* psymodel.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A3D0AC7930D009E46CB /* psymodel.c */; };
+		8CEA0A4C0AC7930D009E46CB /* quantize_pvt.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A3E0AC7930D009E46CB /* quantize_pvt.c */; };
+		8CEA0A4D0AC7930D009E46CB /* quantize.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A3F0AC7930D009E46CB /* quantize.c */; };
+		8CEA0A4E0AC7930D009E46CB /* reservoir.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A400AC7930D009E46CB /* reservoir.c */; };
+		8CEA0A4F0AC7930D009E46CB /* set_get.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A410AC7930D009E46CB /* set_get.c */; };
+		8CEA0A510AC79327009E46CB /* lame.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA0A500AC79327009E46CB /* lame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CEA0A790AC7947D009E46CB /* tables.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A730AC7947D009E46CB /* tables.c */; };
+		8CEA0A7A0AC7947D009E46CB /* takehiro.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A740AC7947D009E46CB /* takehiro.c */; };
+		8CEA0A7B0AC7947D009E46CB /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A750AC7947D009E46CB /* util.c */; };
+		8CEA0A7C0AC7947D009E46CB /* vbrquantize.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A760AC7947D009E46CB /* vbrquantize.c */; };
+		8CEA0A7D0AC7947D009E46CB /* VbrTag.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A770AC7947D009E46CB /* VbrTag.c */; };
+		8CEA0A7E0AC7947D009E46CB /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A780AC7947D009E46CB /* version.c */; };
+		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		32DBCF5E0370ADEE00C91783 /* lame_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame_Prefix.pch; sourceTree = "<group>"; };
+		8CEA0A340AC7930D009E46CB /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitstream.c; path = lame/libmp3lame/bitstream.c; sourceTree = "<group>"; };
+		8CEA0A350AC7930D009E46CB /* encoder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encoder.c; path = lame/libmp3lame/encoder.c; sourceTree = "<group>"; };
+		8CEA0A360AC7930D009E46CB /* fft.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fft.c; path = lame/libmp3lame/fft.c; sourceTree = "<group>"; };
+		8CEA0A370AC7930D009E46CB /* gain_analysis.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = gain_analysis.c; path = lame/libmp3lame/gain_analysis.c; sourceTree = "<group>"; };
+		8CEA0A380AC7930D009E46CB /* id3tag.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = id3tag.c; path = lame/libmp3lame/id3tag.c; sourceTree = "<group>"; };
+		8CEA0A390AC7930D009E46CB /* lame.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lame.c; path = lame/libmp3lame/lame.c; sourceTree = "<group>"; };
+		8CEA0A3A0AC7930D009E46CB /* mpglib_interface.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = mpglib_interface.c; path = lame/libmp3lame/mpglib_interface.c; sourceTree = "<group>"; };
+		8CEA0A3B0AC7930D009E46CB /* newmdct.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = newmdct.c; path = lame/libmp3lame/newmdct.c; sourceTree = "<group>"; };
+		8CEA0A3C0AC7930D009E46CB /* presets.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = presets.c; path = lame/libmp3lame/presets.c; sourceTree = "<group>"; };
+		8CEA0A3D0AC7930D009E46CB /* psymodel.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = psymodel.c; path = lame/libmp3lame/psymodel.c; sourceTree = "<group>"; };
+		8CEA0A3E0AC7930D009E46CB /* quantize_pvt.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = quantize_pvt.c; path = lame/libmp3lame/quantize_pvt.c; sourceTree = "<group>"; };
+		8CEA0A3F0AC7930D009E46CB /* quantize.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = quantize.c; path = lame/libmp3lame/quantize.c; sourceTree = "<group>"; };
+		8CEA0A400AC7930D009E46CB /* reservoir.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = reservoir.c; path = lame/libmp3lame/reservoir.c; sourceTree = "<group>"; };
+		8CEA0A410AC7930D009E46CB /* set_get.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = set_get.c; path = lame/libmp3lame/set_get.c; sourceTree = "<group>"; };
+		8CEA0A500AC79327009E46CB /* lame.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lame.h; path = lame/include/lame.h; sourceTree = "<group>"; };
+		8CEA0A730AC7947D009E46CB /* tables.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = tables.c; path = lame/libmp3lame/tables.c; sourceTree = "<group>"; };
+		8CEA0A740AC7947D009E46CB /* takehiro.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = takehiro.c; path = lame/libmp3lame/takehiro.c; sourceTree = "<group>"; };
+		8CEA0A750AC7947D009E46CB /* util.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = util.c; path = lame/libmp3lame/util.c; sourceTree = "<group>"; };
+		8CEA0A760AC7947D009E46CB /* vbrquantize.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = vbrquantize.c; path = lame/libmp3lame/vbrquantize.c; sourceTree = "<group>"; };
+		8CEA0A770AC7947D009E46CB /* VbrTag.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = VbrTag.c; path = lame/libmp3lame/VbrTag.c; sourceTree = "<group>"; };
+		8CEA0A780AC7947D009E46CB /* version.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = version.c; path = lame/libmp3lame/version.c; sourceTree = "<group>"; };
+		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8DC2EF5B0486A6940098B216 /* lame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = lame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DC2EF560486A6940098B216 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5B0486A6940098B216 /* lame.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* lame */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AEFE84172EC02AAC07 /* libmp3lame */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = lame;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
+				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5A0486A6940098B216 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* libmp3lame */ = {
+			isa = PBXGroup;
+			children = (
+				8CEA0A730AC7947D009E46CB /* tables.c */,
+				8CEA0A740AC7947D009E46CB /* takehiro.c */,
+				8CEA0A750AC7947D009E46CB /* util.c */,
+				8CEA0A760AC7947D009E46CB /* vbrquantize.c */,
+				8CEA0A770AC7947D009E46CB /* VbrTag.c */,
+				8CEA0A780AC7947D009E46CB /* version.c */,
+				8CEA0A500AC79327009E46CB /* lame.h */,
+				8CEA0A340AC7930D009E46CB /* bitstream.c */,
+				8CEA0A350AC7930D009E46CB /* encoder.c */,
+				8CEA0A360AC7930D009E46CB /* fft.c */,
+				8CEA0A370AC7930D009E46CB /* gain_analysis.c */,
+				8CEA0A380AC7930D009E46CB /* id3tag.c */,
+				8CEA0A390AC7930D009E46CB /* lame.c */,
+				8CEA0A3A0AC7930D009E46CB /* mpglib_interface.c */,
+				8CEA0A3B0AC7930D009E46CB /* newmdct.c */,
+				8CEA0A3C0AC7930D009E46CB /* presets.c */,
+				8CEA0A3D0AC7930D009E46CB /* psymodel.c */,
+				8CEA0A3E0AC7930D009E46CB /* quantize_pvt.c */,
+				8CEA0A3F0AC7930D009E46CB /* quantize.c */,
+				8CEA0A400AC7930D009E46CB /* reservoir.c */,
+				8CEA0A410AC7930D009E46CB /* set_get.c */,
+			);
+			name = libmp3lame;
+			sourceTree = "<group>";
+		};
+		1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7B2FEA5585E11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
+				D2F7E79907B2D74100F64583 /* CoreData.framework */,
+				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32DBCF5E0370ADEE00C91783 /* lame_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8DC2EF500486A6940098B216 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CEA0A510AC79327009E46CB /* lame.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8DC2EF4F0486A6940098B216 /* lame.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "lame.framework" */;
+			buildPhases = (
+				8DC2EF500486A6940098B216 /* Headers */,
+				8DC2EF520486A6940098B216 /* Resources */,
+				8DC2EF540486A6940098B216 /* Sources */,
+				8DC2EF560486A6940098B216 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = lame.framework;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = lame;
+			productReference = 8DC2EF5B0486A6940098B216 /* lame.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "lame" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* lame */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			targets = (
+				8DC2EF4F0486A6940098B216 /* lame.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DC2EF520486A6940098B216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DC2EF540486A6940098B216 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CEA0A420AC7930D009E46CB /* bitstream.c in Sources */,
+				8CEA0A430AC7930D009E46CB /* encoder.c in Sources */,
+				8CEA0A440AC7930D009E46CB /* fft.c in Sources */,
+				8CEA0A450AC7930D009E46CB /* gain_analysis.c in Sources */,
+				8CEA0A460AC7930D009E46CB /* id3tag.c in Sources */,
+				8CEA0A470AC7930D009E46CB /* lame.c in Sources */,
+				8CEA0A480AC7930D009E46CB /* mpglib_interface.c in Sources */,
+				8CEA0A490AC7930D009E46CB /* newmdct.c in Sources */,
+				8CEA0A4A0AC7930D009E46CB /* presets.c in Sources */,
+				8CEA0A4B0AC7930D009E46CB /* psymodel.c in Sources */,
+				8CEA0A4C0AC7930D009E46CB /* quantize_pvt.c in Sources */,
+				8CEA0A4D0AC7930D009E46CB /* quantize.c in Sources */,
+				8CEA0A4E0AC7930D009E46CB /* reservoir.c in Sources */,
+				8CEA0A4F0AC7930D009E46CB /* set_get.c in Sources */,
+				8CEA0A790AC7947D009E46CB /* tables.c in Sources */,
+				8CEA0A7A0AC7947D009E46CB /* takehiro.c in Sources */,
+				8CEA0A7B0AC7947D009E46CB /* util.c in Sources */,
+				8CEA0A7C0AC7947D009E46CB /* vbrquantize.c in Sources */,
+				8CEA0A7D0AC7947D009E46CB /* VbrTag.c in Sources */,
+				8CEA0A7E0AC7947D009E46CB /* version.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91AE08733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = lame_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_INTTYPES_H,
+					HAVE_STDINT_H,
+					"ieee754_float32_t=float",
+					BRHIST,
+				);
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = lame;
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB91AF08733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = lame_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_INTTYPES_H,
+					HAVE_STDINT_H,
+					"ieee754_float32_t=float",
+					BRHIST,
+				);
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = lame;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1DEB91B208733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB91B308733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "lame.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91AE08733DA50010E9CD /* Debug */,
+				1DEB91AF08733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "lame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91B208733DA50010E9CD /* Debug */,
+				1DEB91B308733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

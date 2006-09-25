@@ -1,0 +1,167 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "ADbg"=.\ACM\ADbg\ADbg.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "LameMp3EncDll"=.\Dll\LameDll_vc6.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmp3lame
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name mpglib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MP3x"=.\frontend\mp3x_vc6.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name mpglib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libmp3lame
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "lame"=.\frontend\lame_vc6.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libmp3lame
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name mpglib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "lameACM"=.\ACM\lameACM_vc6.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name ADbg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name libmp3lame
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name tinyxml
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name mpglib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "lame_projects"=.\lame_projects_vc6.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name lame
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name LameMp3EncDll
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name lameACM
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MP3x
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "libmp3lame"=.\libmp3lame\libmp3lame_vc6.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "mpglib"=.\mpglib\mpglib_vc6.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "tinyxml"=.\ACM\tinyxml\tinyxml.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
