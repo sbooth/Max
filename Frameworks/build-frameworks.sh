@@ -78,3 +78,19 @@ cd speex && \
 		-target speex.framework \
 		-configuration Release \
 	&& cd $WD
+
+## FLAC framework
+cd flac && \
+	xcodebuild \
+		-project flac.xcodeproj \
+		-target FLAC.framework \
+		-configuration Release \
+	&& cd $WD
+
+## OggFLAC framework
+cd flac && \
+	xcodebuild \
+		-project flac.xcodeproj \
+		-target OggFLAC.framework \
+		-configuration Release \
+	&& cd $WD
