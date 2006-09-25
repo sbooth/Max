@@ -70,3 +70,11 @@ cd wavpack && \
 		-target wavpack.framework \
 		-configuration Release \
 	&& cd $WD
+
+## speex framework
+cd speex && \
+	xcodebuild \
+		-project speex.xcodeproj \
+		-target speex.framework \
+		-configuration Release \
+	&& cd $WD

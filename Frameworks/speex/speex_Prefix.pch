@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'speex' target in the 'speex' project.
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
