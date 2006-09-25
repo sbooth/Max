@@ -1,0 +1,373 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8CEA0AAD0AC7976A009E46CB /* bits.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A9E0AC7976A009E46CB /* bits.c */; };
+		8CEA0AAE0AC7976A009E46CB /* extra1.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0A9F0AC7976A009E46CB /* extra1.c */; };
+		8CEA0AAF0AC7976A009E46CB /* extra2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA00AC7976A009E46CB /* extra2.c */; };
+		8CEA0AB00AC7976A009E46CB /* float.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA10AC7976A009E46CB /* float.c */; };
+		8CEA0AB10AC7976A009E46CB /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA20AC7976A009E46CB /* md5.c */; };
+		8CEA0AB20AC7976A009E46CB /* metadata.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA30AC7976A009E46CB /* metadata.c */; };
+		8CEA0AB30AC7976A009E46CB /* pack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA40AC7976A009E46CB /* pack.c */; };
+		8CEA0AB40AC7976A009E46CB /* unpack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA50AC7976A009E46CB /* unpack.c */; };
+		8CEA0AB50AC7976A009E46CB /* unpack3.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA60AC7976A009E46CB /* unpack3.c */; };
+		8CEA0AB60AC7976A009E46CB /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA70AC7976A009E46CB /* utils.c */; };
+		8CEA0AB70AC7976A009E46CB /* wavpack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA80AC7976A009E46CB /* wavpack.c */; };
+		8CEA0AB80AC7976A009E46CB /* words.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AA90AC7976A009E46CB /* words.c */; };
+		8CEA0AB90AC7976A009E46CB /* wputils.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0AAA0AC7976A009E46CB /* wputils.c */; };
+		8CEA0AC00AC79793009E46CB /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA0ABC0AC79793009E46CB /* md5.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CEA0AC10AC79793009E46CB /* unpack3.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA0ABD0AC79793009E46CB /* unpack3.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CEA0AC20AC79793009E46CB /* wavpack.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA0ABE0AC79793009E46CB /* wavpack.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CEA0AC30AC79793009E46CB /* wputils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA0ABF0AC79793009E46CB /* wputils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		32DBCF5E0370ADEE00C91783 /* wavpack_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wavpack_Prefix.pch; sourceTree = "<group>"; };
+		8CEA0A9E0AC7976A009E46CB /* bits.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bits.c; path = wavpack/bits.c; sourceTree = "<group>"; };
+		8CEA0A9F0AC7976A009E46CB /* extra1.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = extra1.c; path = wavpack/extra1.c; sourceTree = "<group>"; };
+		8CEA0AA00AC7976A009E46CB /* extra2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = extra2.c; path = wavpack/extra2.c; sourceTree = "<group>"; };
+		8CEA0AA10AC7976A009E46CB /* float.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = float.c; path = wavpack/float.c; sourceTree = "<group>"; };
+		8CEA0AA20AC7976A009E46CB /* md5.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = md5.c; path = wavpack/md5.c; sourceTree = "<group>"; };
+		8CEA0AA30AC7976A009E46CB /* metadata.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = metadata.c; path = wavpack/metadata.c; sourceTree = "<group>"; };
+		8CEA0AA40AC7976A009E46CB /* pack.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = pack.c; path = wavpack/pack.c; sourceTree = "<group>"; };
+		8CEA0AA50AC7976A009E46CB /* unpack.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unpack.c; path = wavpack/unpack.c; sourceTree = "<group>"; };
+		8CEA0AA60AC7976A009E46CB /* unpack3.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = unpack3.c; path = wavpack/unpack3.c; sourceTree = "<group>"; };
+		8CEA0AA70AC7976A009E46CB /* utils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = utils.c; path = wavpack/utils.c; sourceTree = "<group>"; };
+		8CEA0AA80AC7976A009E46CB /* wavpack.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = wavpack.c; path = wavpack/wavpack.c; sourceTree = "<group>"; };
+		8CEA0AA90AC7976A009E46CB /* words.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = words.c; path = wavpack/words.c; sourceTree = "<group>"; };
+		8CEA0AAA0AC7976A009E46CB /* wputils.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = wputils.c; path = wavpack/wputils.c; sourceTree = "<group>"; };
+		8CEA0AAB0AC7976A009E46CB /* wvgain.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = wvgain.c; path = wavpack/wvgain.c; sourceTree = "<group>"; };
+		8CEA0AAC0AC7976A009E46CB /* wvunpack.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = wvunpack.c; path = wavpack/wvunpack.c; sourceTree = "<group>"; };
+		8CEA0ABC0AC79793009E46CB /* md5.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = md5.h; path = wavpack/md5.h; sourceTree = "<group>"; };
+		8CEA0ABD0AC79793009E46CB /* unpack3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = unpack3.h; path = wavpack/unpack3.h; sourceTree = "<group>"; };
+		8CEA0ABE0AC79793009E46CB /* wavpack.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wavpack.h; path = wavpack/wavpack.h; sourceTree = "<group>"; };
+		8CEA0ABF0AC79793009E46CB /* wputils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wputils.h; path = wavpack/wputils.h; sourceTree = "<group>"; };
+		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8DC2EF5B0486A6940098B216 /* wavpack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = wavpack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DC2EF560486A6940098B216 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5B0486A6940098B216 /* wavpack.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* wavpack */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AEFE84172EC02AAC07 /* wavpack */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = wavpack;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
+				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5A0486A6940098B216 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* wavpack */ = {
+			isa = PBXGroup;
+			children = (
+				8CEA0ABC0AC79793009E46CB /* md5.h */,
+				8CEA0ABD0AC79793009E46CB /* unpack3.h */,
+				8CEA0ABE0AC79793009E46CB /* wavpack.h */,
+				8CEA0ABF0AC79793009E46CB /* wputils.h */,
+				8CEA0A9E0AC7976A009E46CB /* bits.c */,
+				8CEA0A9F0AC7976A009E46CB /* extra1.c */,
+				8CEA0AA00AC7976A009E46CB /* extra2.c */,
+				8CEA0AA10AC7976A009E46CB /* float.c */,
+				8CEA0AA20AC7976A009E46CB /* md5.c */,
+				8CEA0AA30AC7976A009E46CB /* metadata.c */,
+				8CEA0AA40AC7976A009E46CB /* pack.c */,
+				8CEA0AA50AC7976A009E46CB /* unpack.c */,
+				8CEA0AA60AC7976A009E46CB /* unpack3.c */,
+				8CEA0AA70AC7976A009E46CB /* utils.c */,
+				8CEA0AA80AC7976A009E46CB /* wavpack.c */,
+				8CEA0AA90AC7976A009E46CB /* words.c */,
+				8CEA0AAA0AC7976A009E46CB /* wputils.c */,
+				8CEA0AAB0AC7976A009E46CB /* wvgain.c */,
+				8CEA0AAC0AC7976A009E46CB /* wvunpack.c */,
+			);
+			name = wavpack;
+			sourceTree = "<group>";
+		};
+		1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7B2FEA5585E11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
+				D2F7E79907B2D74100F64583 /* CoreData.framework */,
+				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32DBCF5E0370ADEE00C91783 /* wavpack_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8DC2EF500486A6940098B216 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CEA0AC00AC79793009E46CB /* md5.h in Headers */,
+				8CEA0AC10AC79793009E46CB /* unpack3.h in Headers */,
+				8CEA0AC20AC79793009E46CB /* wavpack.h in Headers */,
+				8CEA0AC30AC79793009E46CB /* wputils.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8DC2EF4F0486A6940098B216 /* wavpack.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "wavpack.framework" */;
+			buildPhases = (
+				8DC2EF500486A6940098B216 /* Headers */,
+				8DC2EF520486A6940098B216 /* Resources */,
+				8DC2EF540486A6940098B216 /* Sources */,
+				8DC2EF560486A6940098B216 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = wavpack.framework;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = wavpack;
+			productReference = 8DC2EF5B0486A6940098B216 /* wavpack.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "wavpack" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* wavpack */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			targets = (
+				8DC2EF4F0486A6940098B216 /* wavpack.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DC2EF520486A6940098B216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DC2EF540486A6940098B216 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CEA0AAD0AC7976A009E46CB /* bits.c in Sources */,
+				8CEA0AAE0AC7976A009E46CB /* extra1.c in Sources */,
+				8CEA0AAF0AC7976A009E46CB /* extra2.c in Sources */,
+				8CEA0AB00AC7976A009E46CB /* float.c in Sources */,
+				8CEA0AB10AC7976A009E46CB /* md5.c in Sources */,
+				8CEA0AB20AC7976A009E46CB /* metadata.c in Sources */,
+				8CEA0AB30AC7976A009E46CB /* pack.c in Sources */,
+				8CEA0AB40AC7976A009E46CB /* unpack.c in Sources */,
+				8CEA0AB50AC7976A009E46CB /* unpack3.c in Sources */,
+				8CEA0AB60AC7976A009E46CB /* utils.c in Sources */,
+				8CEA0AB70AC7976A009E46CB /* wavpack.c in Sources */,
+				8CEA0AB80AC7976A009E46CB /* words.c in Sources */,
+				8CEA0AB90AC7976A009E46CB /* wputils.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91AE08733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = wavpack_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					PACK,
+					UNPACK,
+					USE_FSTREAMS,
+					TAGS,
+					SEEKING,
+					VER3,
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION_OS=\\\"Darwin\\\"";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-lm",
+					"-liconv",
+				);
+				PRODUCT_NAME = wavpack;
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB91AF08733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = wavpack_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1)",
+					PACK,
+					UNPACK,
+					USE_FSTREAMS,
+					TAGS,
+					SEEKING,
+					VER3,
+				);
+				GCC_PREPROCESSOR_DEFINITIONS_QUOTED_1 = "VERSION_OS=\\\"Darwin\\\"";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-lm",
+					"-liconv",
+				);
+				PRODUCT_NAME = wavpack;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1DEB91B208733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB91B308733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "wavpack.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91AE08733DA50010E9CD /* Debug */,
+				1DEB91AF08733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "wavpack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91B208733DA50010E9CD /* Debug */,
+				1DEB91B308733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

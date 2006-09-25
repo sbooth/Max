@@ -62,3 +62,11 @@ cd lame && \
 		-target lame.framework \
 		-configuration Release \
 	&& cd $WD
+
+## wavpack framework
+cd wavpack && \
+	xcodebuild \
+		-project wavpack.xcodeproj \
+		-target wavpack.framework \
+		-configuration Release \
+	&& cd $WD
