@@ -217,7 +217,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = ogg;
-				USER_HEADER_SEARCH_PATHS = libogg/include;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/libogg/include";
 				WRAPPER_EXTENSION = framework;
 				ZERO_LINK = YES;
 			};
@@ -241,7 +241,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = ogg;
-				USER_HEADER_SEARCH_PATHS = libogg/include;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/libogg/include";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;

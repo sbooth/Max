@@ -39,11 +39,18 @@ cd Growl && \
 		-configuration Deployment \
 	&& cd $WD
 
-## Ogg framework
+## ogg framework
 cd ogg && \
 	xcodebuild \
 		-project ogg.xcodeproj \
 		-target ogg.framework \
 		-configuration Release \
 	&& cd $WD
-		
+
+## vorbis framework
+cd vorbis && \
+	xcodebuild \
+		-project vorbis.xcodeproj \
+		-target vorbis.framework \
+		-configuration Release \
+	&& cd $WD
