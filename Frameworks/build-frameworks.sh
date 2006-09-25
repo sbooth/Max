@@ -20,10 +20,30 @@
  #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ##
 
+## Save the current directory
+WD=`pwd`
 
 ## Sparkle framework
 cd Sparkle && \
 	xcodebuild \
 		-project Sparkle.xcodeproj \
 		-target Sparkle \
-		-configuration Release
+		-configuration Release \
+	&& cd $WD
+		
+## Growl framework
+cd Growl && \
+	xcodebuild \
+		-project Growl.xcodeproj \
+		-target Growl.framework \
+		-configuration Deployment \
+	&& cd $WD
+
+## Ogg framework
+cd ogg && \
+	xcodebuild \
+		-project ogg.xcodeproj \
+		-target ogg.framework \
+		-configuration Release \
+	&& cd $WD
+		

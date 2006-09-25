@@ -1,0 +1,8 @@
+cpan_user=CNANDOR
+sf_user=pudge
+sf_group_id=68116
+sf_package_id=145840
+sf_type_id=5002
+sf_processor_id=2000
+sf_release_match=^.+-([\d.]+)$
+sf_release_replace=$1

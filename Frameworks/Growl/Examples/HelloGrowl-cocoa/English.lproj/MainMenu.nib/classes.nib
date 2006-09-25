@@ -1,0 +1,16 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {growlIt = id; }; 
+            CLASS = HelloGrowlController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                notificationDescriptionTextField = NSTextField; 
+                notificationTitleTextField = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

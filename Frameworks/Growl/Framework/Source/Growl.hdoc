@@ -1,0 +1,8 @@
+/*!
+ * @framework Growl Framework
+ * @abstract Growl notification framework
+ * @discussion The Growl framework provides an easy way to integrate Growl
+ *  notifications into your application. The framework should be part of
+ *  your application bundle, it should not be installed in /Library/Frameworks
+ *  or ~/Library/Frameworks.
+ */

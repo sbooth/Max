@@ -1,0 +1,630 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html>
+<head>
+<title>Functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="HeaderDoc">
+<style type="text/css"><!--a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}body {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10pt;}--></style>
+</head>
+<body bgcolor="#ffffff">
+<h1><font face="Geneva,Arial,Helvtica">Functions</font></h1>
+<br><a name="HeaderDoc_functions"></a><dl>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromBundle" target="doc">Growl_CopyRegistrationDictionaryFromBundle</a></tt></dt>
+<dd>Looks in a bundle for a registration dictionary.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromDelegate" target="doc">Growl_CopyRegistrationDictionaryFromDelegate</a></tt></dt>
+<dd>Asks the delegate for a registration dictionary.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_CreateBestRegistrationDictionary" target="doc">Growl_CreateBestRegistrationDictionary</a></tt></dt>
+<dd>Obtains a registration dictionary, filled out to the best of
+GrowlApplicationBridge's knowledge.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionary" target="doc">Growl_CreateRegistrationDictionaryByFillingInDictionary</a></tt></dt>
+<dd>Tries to fill in missing keys in a registration dictionary.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys" target="doc">Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys</a></tt></dt>
+<dd>Tries to fill in missing keys in a registration dictionary.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_GetDelegate" target="doc">Growl_GetDelegate</a></tt></dt>
+<dd>Returns the current Growl delegate, if any.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_IsInstalled" target="doc">Growl_IsInstalled</a></tt></dt>
+<dd>Determines whether the Growl prefpane and its helper app are
+installed.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_IsRunning" target="doc">Growl_IsRunning</a></tt></dt>
+<dd>Cycles through the process list to find whether GrowlHelperApp
+is running.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_LaunchIfInstalled" target="doc">Growl_LaunchIfInstalled</a></tt></dt>
+<dd>Launches GrowlHelperApp if it is not already running.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext" target="doc">Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext</a></tt></dt>
+<dd>Posts a Growl notification using parameter values.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_PostNotification" target="doc">Growl_PostNotification</a></tt></dt>
+<dd>Posts a Growl notification.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_PostNotificationWithDictionary" target="doc">Growl_PostNotificationWithDictionary</a></tt></dt>
+<dd>Notifies using a userInfo dictionary suitable for passing to
+CFDistributedNotificationCenter.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_RegisterWithDictionary" target="doc">Growl_RegisterWithDictionary</a></tt></dt>
+<dd>Register your application with Growl without setting a delegate.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_Reregister" target="doc">Growl_Reregister</a></tt></dt>
+<dd>Updates your registration with Growl.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_SetDelegate" target="doc">Growl_SetDelegate</a></tt></dt>
+<dd>Replaces the current Growl delegate with a new one, or removes
+the Growl delegate.
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_SetWillRegisterWhenGrowlIsReady" target="doc">Growl_SetWillRegisterWhenGrowlIsReady</a></tt></dt>
+<dd>Tells GrowlApplicationBridge to register with Growl when Growl
+launches (or not).
+</dd>
+<dt><tt><a href="Functions.html#//apple_ref/c/func/Growl_WillRegisterWhenGrowlIsReady" target="doc">Growl_WillRegisterWhenGrowlIsReady</a></tt></dt>
+<dd>Reports whether GrowlApplicationBridge will register with Growl
+when Growl next launches.
+</dd>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromBundle;  name=Growl_CopyRegistrationDictionaryFromBundle --><a name="//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromBundle"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_CopyRegistrationDictionaryFromBundle">Growl_CopyRegistrationDictionaryFromBundle</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Looks in a bundle for a registration dictionary.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromBundle" logicalPath="//apple_ref/c/instm/Growl_CopyRegistrationDictionaryFromBundle //apple_ref/c/clm/Growl_CopyRegistrationDictionaryFromBundle //apple_ref/c/intfcm/Growl_CopyRegistrationDictionaryFromBundle //apple_ref/c/func/Growl_CopyRegistrationDictionaryFromBundle"><font class="function">Growl_CopyRegistrationDictionaryFromBundle</font></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/CFBundleRef //apple_ref/c/cl/CFBundleRef //apple_ref/c/tdef/CFBundleRef //apple_ref/c/tag/CFBundleRef //apple_ref/c/econst/CFBundleRef //apple_ref/c/struct/CFBundleRef //apple_ref/c/clconst/CFBundleRef" --><font class="type">CFBundleRef</font><!-- /a --> <font class="param">bundle</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>A registration dictionary.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This function looks in a bundle for an auto-discoverable
+registration dictionary file using <code>CFBundleCopyResourceURL</code>.
+If it finds one, it loads the file using <code>CFPropertyList</code> and
+returns the result.
+<br><br>
+If you pass <code>NULL</code> as the bundle, the main bundle is examined.
+<br><br>
+This function does not attempt to clean up the dictionary in any way - for
+example, if it is missing the <code>GROWL_APP_NAME</code> key, the result
+will be missing it too. Use
+<code>Growl_CreateRegistrationDictionaryByFillingInDictionary:</code> or
+<code>Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys</code>
+to try to fill in missing keys.
+<br><br>
+This function was introduced in Growl.framework 0.7.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromDelegate;  name=Growl_CopyRegistrationDictionaryFromDelegate --><a name="//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromDelegate"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_CopyRegistrationDictionaryFromDelegate">Growl_CopyRegistrationDictionaryFromDelegate</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Asks the delegate for a registration dictionary.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_CopyRegistrationDictionaryFromDelegate" logicalPath="//apple_ref/c/instm/Growl_CopyRegistrationDictionaryFromDelegate //apple_ref/c/clm/Growl_CopyRegistrationDictionaryFromDelegate //apple_ref/c/intfcm/Growl_CopyRegistrationDictionaryFromDelegate //apple_ref/c/func/Growl_CopyRegistrationDictionaryFromDelegate"><font class="function">Growl_CopyRegistrationDictionaryFromDelegate</font></a>(
+    <font class="param">void</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>A registration dictionary.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>If no delegate is set, or if the delegate's
+<code>registrationDictionary</code> member is <code>NULL</code>, this
+function returns <code>NULL</code>.
+<br><br>
+This function does not attempt to clean up the dictionary in any way - for
+example, if it is missing the <code>GROWL_APP_NAME</code> key, the result
+will be missing it too. Use
+<code>Growl_CreateRegistrationDictionaryByFillingInDictionary:</code> or
+<code>Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys</code>
+to try to fill in missing keys.
+<br><br>
+This function was introduced in Growl.framework 0.7.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_CreateBestRegistrationDictionary;  name=Growl_CreateBestRegistrationDictionary --><a name="//apple_ref/c/func/Growl_CreateBestRegistrationDictionary"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_CreateBestRegistrationDictionary">Growl_CreateBestRegistrationDictionary</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Obtains a registration dictionary, filled out to the best of
+GrowlApplicationBridge's knowledge.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_CreateBestRegistrationDictionary" logicalPath="//apple_ref/c/instm/Growl_CreateBestRegistrationDictionary //apple_ref/c/clm/Growl_CreateBestRegistrationDictionary //apple_ref/c/intfcm/Growl_CreateBestRegistrationDictionary //apple_ref/c/func/Growl_CreateBestRegistrationDictionary"><font class="function">Growl_CreateBestRegistrationDictionary</font></a>(
+    <font class="param">void</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>A registration dictionary.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This function creates a registration dictionary as best
+GrowlApplicationBridge knows how.
+<br><br>
+First, GrowlApplicationBridge examines the Growl delegate (if there is
+one) and gets the registration dictionary from that. If no such dictionary
+was obtained, GrowlApplicationBridge looks in your application's main
+bundle for an auto-discoverable registration dictionary file. If that
+doesn't exist either, this function returns <code>NULL</code>.
+<br><br>
+Second, GrowlApplicationBridge calls
+<code>Growl_CreateRegistrationDictionaryByFillingInDictionary</code> with
+whatever dictionary was obtained. The result of that function is the
+result of this function.
+<br><br>
+GrowlApplicationBridge uses this function when you call
+<code>Growl_SetDelegate</code>, or when you call
+<code>Growl_RegisterWithDictionary</code> with <code>NULL</code>.
+<br><br>
+This function was introduced in Growl.framework 0.7.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionary;  name=Growl_CreateRegistrationDictionaryByFillingInDictionary --><a name="//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionary"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_CreateRegistrationDictionaryByFillingInDictionary">Growl_CreateRegistrationDictionaryByFillingInDictionary</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Tries to fill in missing keys in a registration dictionary.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionary" logicalPath="//apple_ref/c/instm/Growl_CreateRegistrationDictionaryByFillingInDictionary //apple_ref/c/clm/Growl_CreateRegistrationDictionaryByFillingInDictionary //apple_ref/c/intfcm/Growl_CreateRegistrationDictionaryByFillingInDictionary //apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionary"><font class="function">Growl_CreateRegistrationDictionaryByFillingInDictionary</font></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <font class="param">regDict</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>regDict</i></code></dt>
+<dd>The dictionary to fill in.</dd>
+</dl>
+</blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>The dictionary with the keys filled in.
+</dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This function examines the passed-in dictionary for missing keys,
+and tries to work out correct values for them. As of 0.7, it uses:
+<br><br>
+Key							             Value
+---							             -----
+<code>GROWL_APP_NAME</code>                 <code>CFBundleExecutableName</code>
+<code>GROWL_APP_ICON</code>                 The icon of the application.
+<code>GROWL_APP_LOCATION</code>             The location of the application.
+<code>GROWL_NOTIFICATIONS_DEFAULT</code>    <code>GROWL_NOTIFICATIONS_ALL</code>
+<br><br>
+Keys are only filled in if missing; if a key is present in the dictionary,
+its value will not be changed.
+<br><br>
+This function was introduced in Growl.framework 0.7.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys;  name=Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys --><a name="//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys">Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Tries to fill in missing keys in a registration dictionary.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys" logicalPath="//apple_ref/c/instm/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys //apple_ref/c/clm/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys //apple_ref/c/intfcm/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys //apple_ref/c/func/Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys"><font class="function">Growl_CreateRegistrationDictionaryByFillingInDictionaryRestrictedToKeys</font></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <font class="param">regDict</font>,
+    <!-- a logicalPath="//apple_ref/c/cl/CFSetRef //apple_ref/c/cl/CFSetRef //apple_ref/c/tdef/CFSetRef //apple_ref/c/tag/CFSetRef //apple_ref/c/econst/CFSetRef //apple_ref/c/struct/CFSetRef //apple_ref/c/clconst/CFSetRef" --><font class="type">CFSetRef</font><!-- /a --> <font class="param">keys</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>regDict</i></code></dt>
+<dd>The dictionary to fill in.</dd>
+<dt><code><i>keys</i></code></dt>
+<dd>The keys to fill in. If <code>NULL</code>, any missing keys are filled in.</dd>
+</dl>
+</blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>The dictionary with the keys filled in.
+</dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This function examines the passed-in dictionary for missing keys,
+and tries to work out correct values for them. As of 0.7, it uses:
+<br><br>
+Key							             Value
+---							             -----
+<code>GROWL_APP_NAME</code>                 <code>CFBundleExecutableName</code>
+<code>GROWL_APP_ICON</code>                 The icon of the application.
+<code>GROWL_APP_LOCATION</code>             The location of the application.
+<code>GROWL_NOTIFICATIONS_DEFAULT</code>    <code>GROWL_NOTIFICATIONS_ALL</code>
+<br><br>
+Only those keys that are listed in <code>keys</code> will be filled in.
+Other missing keys are ignored. Also, keys are only filled in if missing;
+if a key is present in the dictionary, its value will not be changed.
+<br><br>
+This function was introduced in Growl.framework 0.7.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_GetDelegate;  name=Growl_GetDelegate --><a name="//apple_ref/c/func/Growl_GetDelegate"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_GetDelegate">Growl_GetDelegate</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Returns the current Growl delegate, if any.
+</p>
+<blockquote><pre><font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/tag/Growl_Delegate" logicalPath="//apple_ref/c/cl/Growl_Delegate //apple_ref/c/cl/Growl_Delegate //apple_ref/c/tdef/Growl_Delegate //apple_ref/c/tag/Growl_Delegate"><font class="type">Growl_Delegate</font></a> <font class="type">*</font><a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_GetDelegate" logicalPath="//apple_ref/c/instm/Growl_GetDelegate //apple_ref/c/clm/Growl_GetDelegate //apple_ref/c/intfcm/Growl_GetDelegate //apple_ref/c/func/Growl_GetDelegate"><font class="function">Growl_GetDelegate</font></a>(
+    <font class="param">void</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>The current Growl delegate.
+</dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>Returns the last pointer passed into Growl_SetDelegate, or
+<code>NULL</code> if no such call has been made.
+<br><br>
+This function follows standard Core Foundation reference-counting rules.
+Because it is a Get function, not a Copy function, it will not retain the
+delegate on your behalf. You are responsible for retaining and releasing
+the delegate as needed.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_IsInstalled;  name=Growl_IsInstalled --><a name="//apple_ref/c/func/Growl_IsInstalled"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_IsInstalled">Growl_IsInstalled</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Determines whether the Growl prefpane and its helper app are
+installed.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_IsInstalled" logicalPath="//apple_ref/c/instm/Growl_IsInstalled //apple_ref/c/clm/Growl_IsInstalled //apple_ref/c/intfcm/Growl_IsInstalled //apple_ref/c/func/Growl_IsInstalled"><font class="function">Growl_IsInstalled</font></a>(
+    <font class="param">void</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>Returns true if Growl is installed, false otherwise.
+ </dd>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_IsRunning;  name=Growl_IsRunning --><a name="//apple_ref/c/func/Growl_IsRunning"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_IsRunning">Growl_IsRunning</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Cycles through the process list to find whether GrowlHelperApp
+is running.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_IsRunning" logicalPath="//apple_ref/c/instm/Growl_IsRunning //apple_ref/c/clm/Growl_IsRunning //apple_ref/c/intfcm/Growl_IsRunning //apple_ref/c/func/Growl_IsRunning"><font class="function">Growl_IsRunning</font></a>(
+    <font class="param">void</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>Returns true if Growl is running, false otherwise.
+ </dd>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_LaunchIfInstalled;  name=Growl_LaunchIfInstalled --><a name="//apple_ref/c/func/Growl_LaunchIfInstalled"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_LaunchIfInstalled">Growl_LaunchIfInstalled</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Launches GrowlHelperApp if it is not already running.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_LaunchIfInstalled" logicalPath="//apple_ref/c/instm/Growl_LaunchIfInstalled //apple_ref/c/clm/Growl_LaunchIfInstalled //apple_ref/c/intfcm/Growl_LaunchIfInstalled //apple_ref/c/func/Growl_LaunchIfInstalled"><font class="function">Growl_LaunchIfInstalled</font></a>(
+    <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/tdef/GrowlLaunchCallback" logicalPath="//apple_ref/c/cl/GrowlLaunchCallback //apple_ref/c/cl/GrowlLaunchCallback //apple_ref/c/tdef/GrowlLaunchCallback"><font class="type">GrowlLaunchCallback</font></a> <font class="param">callback</font>,
+    <!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/econst/void //apple_ref/c/struct/void //apple_ref/c/clconst/void" --><font class="type">void</font><!-- /a --> *<font class="param">context</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>callback</i></code></dt>
+<dd>A callback function which will be called if Growl was successfully
+launched or was already running. Can be <code>NULL</code>.</dd>
+<dt><code><i>context</i></code></dt>
+<dd>The context pointer to pass to the callback. Can be <code>NULL</code>.</dd>
+</dl>
+</blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>Returns true if Growl was successfully launched or was already
+running; returns false and does not call the callback otherwise.
+</dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>Returns true and calls the callback (if the callback is not
+<code>NULL</code>) if the Growl helper app began launching or was already
+running. Returns false and performs no other action if Growl could not be
+launched (e.g. because the Growl preference pane is not properly installed).
+<br><br>
+If <code>Growl_CreateBestRegistrationDictionary</code> returns
+non-<code>NULL</code>, this function will register with Growl atomically.
+<br><br>
+The callback should take a single argument; this is to allow applications
+to have context-relevant information passed back. It is perfectly
+acceptable for context to be <code>NULL</code>. The callback itself can be
+<code>NULL</code> if you don't want one.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext;  name=Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext --><a name="//apple_ref/c/func/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext">Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Posts a Growl notification using parameter values.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/econst/void //apple_ref/c/struct/void //apple_ref/c/clconst/void" --><font class="type">void</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext" logicalPath="//apple_ref/c/instm/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext //apple_ref/c/clm/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext //apple_ref/c/intfcm/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext //apple_ref/c/func/Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext"><font class="function">Growl_NotifyWithTitleDescriptionNameIconPriorityStickyClickContext</font></a>( 
+    <font class="comment">/*inhale*/</font>
+    <!-- a logicalPath="//apple_ref/c/cl/CFStringRef //apple_ref/c/cl/CFStringRef //apple_ref/c/tdef/CFStringRef //apple_ref/c/tag/CFStringRef //apple_ref/c/econst/CFStringRef //apple_ref/c/struct/CFStringRef //apple_ref/c/clconst/CFStringRef" --><font class="type">CFStringRef</font><!-- /a --> <font class="param">title</font>, 
+    <!-- a logicalPath="//apple_ref/c/cl/CFStringRef //apple_ref/c/cl/CFStringRef //apple_ref/c/tdef/CFStringRef //apple_ref/c/tag/CFStringRef //apple_ref/c/econst/CFStringRef //apple_ref/c/struct/CFStringRef //apple_ref/c/clconst/CFStringRef" --><font class="type">CFStringRef</font><!-- /a --> <font class="param">description</font>, 
+    <!-- a logicalPath="//apple_ref/c/cl/CFStringRef //apple_ref/c/cl/CFStringRef //apple_ref/c/tdef/CFStringRef //apple_ref/c/tag/CFStringRef //apple_ref/c/econst/CFStringRef //apple_ref/c/struct/CFStringRef //apple_ref/c/clconst/CFStringRef" --><font class="type">CFStringRef</font><!-- /a --> <font class="param">notificationName</font>, 
+    <!-- a logicalPath="//apple_ref/c/cl/CFDataRef //apple_ref/c/cl/CFDataRef //apple_ref/c/tdef/CFDataRef //apple_ref/c/tag/CFDataRef //apple_ref/c/econst/CFDataRef //apple_ref/c/struct/CFDataRef //apple_ref/c/clconst/CFDataRef" --><font class="type">CFDataRef</font><!-- /a --> <font class="param">iconData</font>, 
+    <font class="keyword">signed</font> <!-- a logicalPath="//apple_ref/c/cl/int //apple_ref/c/cl/int //apple_ref/c/tdef/int //apple_ref/c/tag/int //apple_ref/c/econst/int //apple_ref/c/struct/int //apple_ref/c/clconst/int" --><font class="type">int</font><!-- /a --> <font class="param">priority</font>, 
+    <!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <font class="param">isSticky</font>, 
+    <!-- a logicalPath="//apple_ref/c/cl/CFPropertyListRef //apple_ref/c/cl/CFPropertyListRef //apple_ref/c/tdef/CFPropertyListRef //apple_ref/c/tag/CFPropertyListRef //apple_ref/c/econst/CFPropertyListRef //apple_ref/c/struct/CFPropertyListRef //apple_ref/c/clconst/CFPropertyListRef" --><font class="type">CFPropertyListRef</font><!-- /a --> <font class="param">clickContext</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>title</i></code></dt>
+<dd>The title of the notification.</dd>
+<dt><code><i>description</i></code></dt>
+<dd>The description of the notification.</dd>
+<dt><code><i>notificationName</i></code></dt>
+<dd>The name of the notification as listed in the
+registration dictionary.</dd>
+<dt><code><i>iconData</i></code></dt>
+<dd>Data representing a notification icon. Can be <code>NULL</code>.</dd>
+<dt><code><i>priority</i></code></dt>
+<dd>The priority of the notification (-2 to +2, with -2
+being Very Low and +2 being Very High).</dd>
+<dt><code><i>isSticky</i></code></dt>
+<dd>If true, requests that this notification wait for a
+response from the user.</dd>
+<dt><code><i>clickContext</i></code></dt>
+<dd>An object to pass to the clickCallback, if any. Can
+be <code>NULL</code>, in which case the clickCallback is not called.</dd>
+</dl>
+</blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>Creates a temporary Growl_Notification, fills it out with the
+supplied information, and calls Growl_PostNotification on it.
+See struct Growl_Notification and Growl_PostNotification for more
+information.
+<br><br>
+The icon data can be in any format supported by NSImage. As of Mac OS X<br></p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_PostNotification;  name=Growl_PostNotification --><a name="//apple_ref/c/func/Growl_PostNotification"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_PostNotification">Growl_PostNotification</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Posts a Growl notification.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/econst/void //apple_ref/c/struct/void //apple_ref/c/clconst/void" --><font class="type">void</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_PostNotification" logicalPath="//apple_ref/c/instm/Growl_PostNotification //apple_ref/c/clm/Growl_PostNotification //apple_ref/c/intfcm/Growl_PostNotification //apple_ref/c/func/Growl_PostNotification"><font class="function">Growl_PostNotification</font></a>(
+    <font class="keyword">const</font> <font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/tag/Growl_Notification" logicalPath="//apple_ref/c/cl/Growl_Notification //apple_ref/c/cl/Growl_Notification //apple_ref/c/tdef/Growl_Notification //apple_ref/c/tag/Growl_Notification"><font class="type">Growl_Notification</font></a> *<font class="param">notification</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>notification</i></code></dt>
+<dd>The notification to post.</dd>
+</dl>
+</blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This is the preferred means for sending a Growl notification.
+The notification name and at least one of the title and description are
+required (all three are preferred). All other parameters may be
+<code>NULL</code> (or 0 or false as appropriate) to accept default values.
+<br><br>
+If using the Growl-WithInstaller framework, if Growl is not installed the
+user will be prompted to install Growl.
+If the user cancels, this function will have no effect until the next
+application session, at which time when it is called the user will be
+prompted again. The user is also given the option to not be prompted again.
+If the user does choose to install Growl, the requested notification will
+be displayed once Growl is installed and running.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_PostNotificationWithDictionary;  name=Growl_PostNotificationWithDictionary --><a name="//apple_ref/c/func/Growl_PostNotificationWithDictionary"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_PostNotificationWithDictionary">Growl_PostNotificationWithDictionary</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Notifies using a userInfo dictionary suitable for passing to
+CFDistributedNotificationCenter.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/econst/void //apple_ref/c/struct/void //apple_ref/c/clconst/void" --><font class="type">void</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_PostNotificationWithDictionary" logicalPath="//apple_ref/c/instm/Growl_PostNotificationWithDictionary //apple_ref/c/clm/Growl_PostNotificationWithDictionary //apple_ref/c/intfcm/Growl_PostNotificationWithDictionary //apple_ref/c/func/Growl_PostNotificationWithDictionary"><font class="function">Growl_PostNotificationWithDictionary</font></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <font class="param">userInfo</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>userInfo</i></code></dt>
+<dd>The dictionary to notify with.</dd>
+</dl>
+</blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>Before Growl 0.6, your application would have posted
+notifications using CFDistributedNotificationCenter by creating a userInfo
+dictionary with the notification data. This had the advantage of allowing
+you to add other data to the dictionary for programs besides Growl that
+might be listening.
+<br><br>
+This function allows you to use such dictionaries without being restricted
+to using CFDistributedNotificationCenter. The keys for this dictionary
+can be found in GrowlDefines.h.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_RegisterWithDictionary;  name=Growl_RegisterWithDictionary --><a name="//apple_ref/c/func/Growl_RegisterWithDictionary"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_RegisterWithDictionary">Growl_RegisterWithDictionary</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Register your application with Growl without setting a delegate.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_RegisterWithDictionary" logicalPath="//apple_ref/c/instm/Growl_RegisterWithDictionary //apple_ref/c/clm/Growl_RegisterWithDictionary //apple_ref/c/intfcm/Growl_RegisterWithDictionary //apple_ref/c/func/Growl_RegisterWithDictionary"><font class="function">Growl_RegisterWithDictionary</font></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/CFDictionaryRef //apple_ref/c/cl/CFDictionaryRef //apple_ref/c/tdef/CFDictionaryRef //apple_ref/c/tag/CFDictionaryRef //apple_ref/c/econst/CFDictionaryRef //apple_ref/c/struct/CFDictionaryRef //apple_ref/c/clconst/CFDictionaryRef" --><font class="type">CFDictionaryRef</font><!-- /a --> <font class="param">regDict</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>
+<code>false</code> if registration failed (e.g. if Growl isn't installed).
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>When you call this function with a dictionary,
+GrowlApplicationBridge registers your application using that dictionary.
+If you pass <code>NULL</code>, GrowlApplicationBridge will ask the delegate
+(if there is one) for a dictionary, and if that doesn't work, it will look
+in your application's bundle for an auto-discoverable plist.
+(XXX refer to more information on that)
+<br><br>
+If you pass a dictionary to this function, it must include the
+<code>GROWL_APP_NAME</code> key, unless a delegate is set.
+<br><br>
+This function is mainly an alternative to the delegate system introduced
+with Growl 0.6. Without a delegate, you cannot receive callbacks such as
+<code>growlIsReady</code> (since they are sent to the delegate). You can,
+however, set a delegate after registering without one.
+<br><br>
+This function was introduced in Growl.framework 0.7.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_Reregister;  name=Growl_Reregister --><a name="//apple_ref/c/func/Growl_Reregister"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_Reregister">Growl_Reregister</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Updates your registration with Growl.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/econst/void //apple_ref/c/struct/void //apple_ref/c/clconst/void" --><font class="type">void</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_Reregister" logicalPath="//apple_ref/c/instm/Growl_Reregister //apple_ref/c/clm/Growl_Reregister //apple_ref/c/intfcm/Growl_Reregister //apple_ref/c/func/Growl_Reregister"><font class="function">Growl_Reregister</font></a>(
+    <font class="param">void</font>); </pre></blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>If your application changes the contents of the
+GROWL_NOTIFICATIONS_ALL key in the registrationDictionary member of the
+Growl delegate, or if it changes the value of that member, or if it
+changes the contents of its auto-discoverable plist, call this function
+to have Growl update its registration information for your application.
+<br><br>
+Otherwise, this function does not normally need to be called. If you're
+using a delegate, your application will be registered when you set the
+delegate if both the delegate and its registrationDictionary member are
+non-<code>NULL</code>.
+<br><br>
+This function is now implemented using
+<code>Growl_RegisterWithDictionary</code>.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_SetDelegate;  name=Growl_SetDelegate --><a name="//apple_ref/c/func/Growl_SetDelegate"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_SetDelegate">Growl_SetDelegate</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Replaces the current Growl delegate with a new one, or removes
+the Growl delegate.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_SetDelegate" logicalPath="//apple_ref/c/instm/Growl_SetDelegate //apple_ref/c/clm/Growl_SetDelegate //apple_ref/c/intfcm/Growl_SetDelegate //apple_ref/c/func/Growl_SetDelegate"><font class="function">Growl_SetDelegate</font></a>(
+    <font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/tag/Growl_Delegate" logicalPath="//apple_ref/c/cl/Growl_Delegate //apple_ref/c/cl/Growl_Delegate //apple_ref/c/tdef/Growl_Delegate //apple_ref/c/tag/Growl_Delegate"><font class="type">Growl_Delegate</font></a> *<font class="param">newDelegate</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>newDelegate</i></code></dt>
+<dd></dd>
+</dl>
+</blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>Returns false and does nothing else if a pointer that was passed in
+is unsatisfactory (because it is non-<code>NULL</code>, but at least one
+required member of it is <code>NULL</code>). Otherwise, sets or unsets the
+delegate and returns true.
+</dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>When <code>newDelegate</code> is non-<code>NULL</code>, sets
+the delegate to <code>newDelegate</code>. When it is <code>NULL</code>,
+the current delegate will be unset, and no delegate will be in place.
+<br><br>
+It is legal for <code>newDelegate</code> to be the current delegate;
+nothing will happen, and Growl_SetDelegate will return true. It is also
+legal for it to be <code>NULL</code>, as described above; again, it will
+return true.
+<br><br>
+If there was a delegate in place before the call, Growl_SetDelegate will
+call the old delegate's release member if it was non-<code>NULL</code>. If
+<code>newDelegate</code> is non-<code>NULL</code>, Growl_SetDelegate will
+call <code>newDelegate-&gt;retain</code>, and set the delegate to its return
+value.
+<br><br>
+If you are using Growl-WithInstaller.framework, and an older version of
+Growl is installed on the user's system, the user will automatically be
+prompted to update.
+<br><br>
+GrowlApplicationBridge currently does not copy this structure, nor does it
+retain any of the CF objects in the structure (it regards the structure as
+a container that retains the objects when they are added and releases them
+when they are removed or the structure is destroyed). Also,
+GrowlApplicationBridge currently does not modify any member of the
+structure, except possibly the referenceCount by calling the retain and
+release members.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_SetWillRegisterWhenGrowlIsReady;  name=Growl_SetWillRegisterWhenGrowlIsReady --><a name="//apple_ref/c/func/Growl_SetWillRegisterWhenGrowlIsReady"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_SetWillRegisterWhenGrowlIsReady">Growl_SetWillRegisterWhenGrowlIsReady</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Tells GrowlApplicationBridge to register with Growl when Growl
+launches (or not).
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/void //apple_ref/c/cl/void //apple_ref/c/tdef/void //apple_ref/c/tag/void //apple_ref/c/econst/void //apple_ref/c/struct/void //apple_ref/c/clconst/void" --><font class="type">void</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_SetWillRegisterWhenGrowlIsReady" logicalPath="//apple_ref/c/instm/Growl_SetWillRegisterWhenGrowlIsReady //apple_ref/c/clm/Growl_SetWillRegisterWhenGrowlIsReady //apple_ref/c/intfcm/Growl_SetWillRegisterWhenGrowlIsReady //apple_ref/c/func/Growl_SetWillRegisterWhenGrowlIsReady"><font class="function">Growl_SetWillRegisterWhenGrowlIsReady</font></a>(
+    <!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <font class="param">flag</font>); </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Parameter Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code><i>flag</i></code></dt>
+<dd>
+<code>true</code> if you want GrowlApplicationBridge to register with
+Growl when next it is ready; <code>false</code> if not.</dd>
+</dl>
+</blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>When Growl has started listening for notifications, it posts a
+<code>GROWL_IS_READY</code> notification on the Distributed Notification
+Center. GrowlApplicationBridge listens for this notification, using it to
+perform various tasks (such as calling your delegate's
+<code>growlIsReady</code> callback, if it has one). If this function is
+called with <code>true</code>, one of those tasks will be to reregister
+with Growl (in the manner of <code>Growl_Reregister</code>).
+<br><br>
+This attribute is automatically set back to <code>false</code>
+(the default) after every <code>GROWL_IS_READY</code> notification.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=func;  uid=//apple_ref/c/func/Growl_WillRegisterWhenGrowlIsReady;  name=Growl_WillRegisterWhenGrowlIsReady --><a name="//apple_ref/c/func/Growl_WillRegisterWhenGrowlIsReady"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="Growl_WillRegisterWhenGrowlIsReady">Growl_WillRegisterWhenGrowlIsReady</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Reports whether GrowlApplicationBridge will register with Growl
+when Growl next launches.
+</p>
+<blockquote><pre><!-- a logicalPath="//apple_ref/c/cl/Boolean //apple_ref/c/cl/Boolean //apple_ref/c/tdef/Boolean //apple_ref/c/tag/Boolean //apple_ref/c/econst/Boolean //apple_ref/c/struct/Boolean //apple_ref/c/clconst/Boolean" --><font class="type">Boolean</font><!-- /a --> <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/func/Growl_WillRegisterWhenGrowlIsReady" logicalPath="//apple_ref/c/instm/Growl_WillRegisterWhenGrowlIsReady //apple_ref/c/clm/Growl_WillRegisterWhenGrowlIsReady //apple_ref/c/intfcm/Growl_WillRegisterWhenGrowlIsReady //apple_ref/c/func/Growl_WillRegisterWhenGrowlIsReady"><font class="function">Growl_WillRegisterWhenGrowlIsReady</font></a>(
+    <font class="param">void</font>); </pre></blockquote>
+<dl>
+<dt><i>function result</i></dt>
+<dd>
+<code>true</code> if GrowlApplicationBridge will register with
+Growl when next it posts GROWL_IS_READY; <code>false</code> if not.
+ </dd>
+</dl>
+<p></p>
+<p>&copy; The Growl Project (Last Updated May 14, 2005)
+</p>
+</body>
+</html>

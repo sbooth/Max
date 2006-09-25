@@ -1,0 +1,6 @@
+﻿/* Localized versions of Info.plist keys */
+
+CFBundleName = "GrowlMail";
+CFBundleShortVersionString = "1.0";
+CFBundleGetInfoString = "GrowlMail version 1.0, Copyright (c) 2004-2005 The Growl Project.";
+NSHumanReadableCopyright = "Copyright (c) 2004-2005 The Growl Project.";

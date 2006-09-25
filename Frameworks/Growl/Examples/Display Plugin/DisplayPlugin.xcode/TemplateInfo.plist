@@ -1,0 +1,20 @@
+{
+	FilesToRename = {
+		"DisplayPlugin_Prefix.pch" = "ÇPROJECTNAMEÈ_Prefix.pch";
+		"MyDisplayController.m" = "ÇPROJECTNAMEÈDisplayController.m";
+		"MyDisplayController.h" = "ÇPROJECTNAMEÈDisplayController.h";
+		"MyDisplayPreferences.m" = "ÇPROJECTNAMEÈDisplayPreferences.m";
+		"MyDisplayPreferences.h" = "ÇPROJECTNAMEÈDisplayPreferences.h";
+		"English.lproj/MyDisplayPreferences.nib" = "English.lproj/ÇPROJECTNAMEÈDisplayPreferences.nib";
+	};
+	FilesToMacroExpand = (
+		"Info.plist",
+		"English.lproj/InfoPlist.strings",
+		"ÇPROJECTNAMEÈ_Prefix.pch",
+		"ÇPROJECTNAMEÈDisplayController.m",
+		"ÇPROJECTNAMEÈDisplayController.h",
+		"ÇPROJECTNAMEÈDisplayPreferences.m",
+		"ÇPROJECTNAMEÈDisplayPreferences.h",
+	);
+	Description = "This project builds a display plugin for the Growl notification framework.";
+}

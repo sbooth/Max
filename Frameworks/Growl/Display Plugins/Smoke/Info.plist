@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>Smoke</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.Growl.Smoke</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>DISP</string>
+	<key>CFBundleSignature</key>
+	<string>GRRR</string>
+	<key>CFBundleVersion</key>
+	<string>1.1</string>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>GrowlSmokeDisplay</string>
+	<key>CFBundleName</key>
+	<string>Smoke</string>
+	<key>GrowlPluginAuthor</key>
+	<string>Matthew Walton</string>
+	<key>GrowlPluginDescription</key>
+	<string>Dark translucent notifications</string>
+</dict>
+</plist>

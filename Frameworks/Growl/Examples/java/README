@@ -1,0 +1,3 @@
+Building from source:
+ * First, compile the Java binding in Bindings/Java.
+ * Then, type 'make'.

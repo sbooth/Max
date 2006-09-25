@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html>
+<head>
+<title>GrowlPlugin</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="HeaderDoc">
+<style type="text/css"><!--a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}body {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10pt;}--></style>
+</head>
+<body bgcolor="#ffffff">
+<h1><font face="Geneva,Arial,Helvtica">GrowlPlugin</font></h1>
+<br><a name="//apple_ref/doc/protocol/GrowlPlugin" title="GrowlPlugin"></a><h2>Abstract</h2>
+<p>
+	The base plug-in protocol.
+</p>
+<h2>Discussion</h2>
+<p>
+	The methods declared in this protocol are supported by all
+Growl plug-ins.
+ </p>
+<hr>
+<br><h2>Methods</h2>
+<a name="HeaderDoc_methods"></a><dl>
+<dt><tt><a href="CompositePage.html#//apple_ref/occ/instm/GrowlPlugin/preferencePane" target="_top">-preferencePane</a></tt></dt>
+<dd>Return an NSPreferencePane instance that manages the plugin's
+preferences.
+</dd>
+</dl>
+<hr>
+<!-- headerDoc=instm;  uid=//apple_ref/occ/instm/GrowlPlugin/preferencePane;  name=GrowlPlugin::preferencePane --><a name="//apple_ref/occ/instm/GrowlPlugin/preferencePane"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="preferencePane">preferencePane</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Return an NSPreferencePane instance that manages the plugin's
+preferences.
+</p>
+<blockquote><pre>- (<!-- a logicalPath="//apple_ref/occ/cl/NSPreferencePane //apple_ref/occ/cl/NSPreferencePane //apple_ref/occ/tdef/NSPreferencePane //apple_ref/occ/tag/NSPreferencePane //apple_ref/occ/econst/NSPreferencePane //apple_ref/occ/struct/NSPreferencePane //apple_ref/occ/clconst/NSPreferencePane" --><font class="type">NSPreferencePane</font><!-- /a --> <font class="type">*</font>) <font class="param">preferencePane</font> </pre></blockquote>
+<dl>
+<dt><i>method result</i></dt>
+<dd>The preference pane.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>Your plug-in should put the controls for its preferences in
+this preference pane.<br>
+The size of the preference pane's view should be 354 pixels by 289 pixels.
+This is because that's all the available space right now. We haven't yet
+figured out what to do if there are more options than fit in that space.
+You should set the springs of the view and its subviews under the
+assumption that it can be resized horizontally and vertically to any size.
+</p>
+</dl>
+<p></p>
+<p>&copy; The Growl Project (Last Updated May 14, 2005)
+</p>
+</body>
+</html>

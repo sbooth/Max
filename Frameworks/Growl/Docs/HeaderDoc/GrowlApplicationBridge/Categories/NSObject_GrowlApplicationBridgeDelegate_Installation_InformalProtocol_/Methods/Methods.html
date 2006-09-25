@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html>
+<head>
+<title>Methods</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="HeaderDoc">
+<style type="text/css"><!--a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}body {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10pt;}--></style>
+</head>
+<body bgcolor="#ffffff">
+<h1><font face="Geneva,Arial,Helvtica">Methods</font></h1>
+<br><a name="HeaderDoc_methods"></a><dl>
+<dt><tt><a href="CompositePage.html#//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlInstallationInformation" target="doc">-growlInstallationInformation</a></tt></dt>
+<dd>Return the information to display when installing.
+</dd>
+<dt><tt><a href="CompositePage.html#//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlInstallationWindowTitle" target="doc">-growlInstallationWindowTitle</a></tt></dt>
+<dd>Return the title of the installation window.
+</dd>
+<dt><tt><a href="CompositePage.html#//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlUpdateInformation" target="doc">-growlUpdateInformation</a></tt></dt>
+<dd>Return the information to display when upgrading.
+</dd>
+<dt><tt><a href="CompositePage.html#//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlUpdateWindowTitle" target="doc">-growlUpdateWindowTitle</a></tt></dt>
+<dd>Return the title of the upgrade window.
+</dd>
+</dl>
+<hr>
+<!-- headerDoc=instm;  uid=//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlInstallationInformation;  name=NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)::growlInstallationInformation --><a name="//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlInstallationInformation"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="growlInstallationInformation">growlInstallationInformation</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Return the information to display when installing.
+</p>
+<blockquote><pre>- (<!-- a logicalPath="//apple_ref/occ/cl/NSAttributedString //apple_ref/occ/cl/NSAttributedString //apple_ref/occ/tdef/NSAttributedString //apple_ref/occ/tag/NSAttributedString //apple_ref/occ/econst/NSAttributedString //apple_ref/occ/struct/NSAttributedString //apple_ref/occ/clconst/NSAttributedString" --><font class="type">NSAttributedString</font><!-- /a --> <font class="type">*</font>)<font class="param">growlInstallationInformation</font>;</pre></blockquote>
+<dl>
+<dt><i>method result</i></dt>
+<dd>An NSAttributedString object to display.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This information may be as long or short as desired (the window
+will be sized to fit it). It will be displayed to the user as an
+explanation of what Growl is and what it can do in your application. It
+should probably note that no download is required to install.<br>
+If this is not implemented, Growl will use a default, localized explanation.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=instm;  uid=//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlInstallationWindowTitle;  name=NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)::growlInstallationWindowTitle --><a name="//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlInstallationWindowTitle"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="growlInstallationWindowTitle">growlInstallationWindowTitle</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Return the title of the installation window.
+</p>
+<blockquote><pre>- (<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString" --><font class="type">NSString</font><!-- /a --> <font class="type">*</font>)<font class="param">growlInstallationWindowTitle</font>;</pre></blockquote>
+<dl>
+<dt><i>method result</i></dt>
+<dd>An NSString object to use as the title.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>If not implemented, Growl will use a default, localized title.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=instm;  uid=//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlUpdateInformation;  name=NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)::growlUpdateInformation --><a name="//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlUpdateInformation"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="growlUpdateInformation">growlUpdateInformation</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Return the information to display when upgrading.
+</p>
+<blockquote><pre>- (<!-- a logicalPath="//apple_ref/occ/cl/NSAttributedString //apple_ref/occ/cl/NSAttributedString //apple_ref/occ/tdef/NSAttributedString //apple_ref/occ/tag/NSAttributedString //apple_ref/occ/econst/NSAttributedString //apple_ref/occ/struct/NSAttributedString //apple_ref/occ/clconst/NSAttributedString" --><font class="type">NSAttributedString</font><!-- /a --> <font class="type">*</font>)<font class="param">growlUpdateInformation</font>;</pre></blockquote>
+<dl>
+<dt><i>method result</i></dt>
+<dd>An NSAttributedString object to display.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This information may be as long or short as desired (the window
+will be sized to fit it). It will be displayed to the user as an
+explanation that an updated version of Growl is included in your
+application and no download is required.<br>
+If this is not implemented, Growl will use a default, localized explanation.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=instm;  uid=//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlUpdateWindowTitle;  name=NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)::growlUpdateWindowTitle --><a name="//apple_ref/occ/instm/NSObject(GrowlApplicationBridgeDelegate_Installation_InformalProtocol)/growlUpdateWindowTitle"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="growlUpdateWindowTitle">growlUpdateWindowTitle</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Return the title of the upgrade window.
+</p>
+<blockquote><pre>- (<!-- a logicalPath="//apple_ref/occ/cl/NSString //apple_ref/occ/cl/NSString //apple_ref/occ/tdef/NSString //apple_ref/occ/tag/NSString //apple_ref/occ/econst/NSString //apple_ref/occ/struct/NSString //apple_ref/occ/clconst/NSString" --><font class="type">NSString</font><!-- /a --> <font class="type">*</font>)<font class="param">growlUpdateWindowTitle</font>;</pre></blockquote>
+<dl>
+<dt><i>method result</i></dt>
+<dd>An NSString object to use as the title.
+ </dd>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>If not implemented, Growl will use a default, localized title.
+</p>
+</dl>
+<p></p>
+<p>&copy; The Growl Project (Last Updated May 14, 2005)
+</p>
+</body>
+</html>

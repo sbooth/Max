@@ -1,0 +1,61 @@
+.\"Modified from man(1) of FreeBSD, the NetBSD mdoc.template, and mdoc.samples.
+.\"See Also:
+.\"man mdoc.samples for a complete listing of options
+.\"man mdoc for the short list of editing options
+.\"/usr/share/misc/mdoc.template
+.Dd 2005-03-22               \" DATE 
+.Dt growlctl 1      \" Program name and manual section number 
+.Os Growl
+.Sh NAME                 \" Section Header - required - don't modify 
+.Nm growlctl
+.\" The following lines are read in generating the apropos(man -k) database. Use only key
+.\" words here as the database is built based on the words here and in the .ND line. 
+.\" Use .Nm macro to designate other names for the documented program.
+.Nd control Growl from the command line
+.Sh SYNOPSIS             \" Section Header - required - don't modify
+.Nm
+start
+.Pp
+.Nm
+stop
+.Pp
+.Nm
+restart
+.Pp
+.Nm
+isRunning
+.Op Fl q
+.Pp
+.Nm
+getpref
+.Op Ar name
+.Pp
+.Nm
+setpref
+.Ar name
+.Ar value
+.Pp
+.Sh DESCRIPTION          \" Section Header - required - don't modify
+The start command starts Growl if it is not already running. This is like clicking 'Start Growl' in the Growl preference pane.
+.Pp
+The stop command stops Growl if it is already running. This is like clicking 'Stop Growl' in the Growl preference pane.
+.Pp
+The restart command works as if you had entered
+.Ap Nm
+stop', followed by
+.Ap Nm
+start'.
+.Pp
+The isRunning command tells you whether or not Growl is running. By default, it does this by printing a message to stdout. With -q, 
+.Nm
+will use its exit status instead. An exit status of 0 means Growl is running, whereas an exit status of 1 means Growl is not running.
+.Pp
+The getpref command accesses one (if you specify a key) or all (if you don't) of Growl's preferences.
+.Pp
+The setpref command changes one of Growl's preferences. Its syntax is that of 
+.Xr defaults 1 (in fact, the setpref command works by calling
+.Xr defaults 1 ).
+.Pp
+.Sh SEE ALSO 
+.Xr defaults 1
+.\" .Sh BUGS              \" Document known, unremedied bugs 

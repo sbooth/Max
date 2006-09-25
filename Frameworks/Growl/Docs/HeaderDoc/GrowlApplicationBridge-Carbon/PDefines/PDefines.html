@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html>
+<head>
+<title>#defines</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="HeaderDoc">
+<style type="text/css"><!--a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}body {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10pt;}--></style>
+</head>
+<body bgcolor="#ffffff">
+<h1><font face="Geneva,Arial,Helvtica">#defines</font></h1>
+<br><hr>
+<!-- headerDoc=macro;  uid=//apple_ref/c/macro/GROWL_PREFPANE_BUNDLE_IDENTIFIER;  name=GROWL_PREFPANE_BUNDLE_IDENTIFIER --><a name="//apple_ref/c/macro/GROWL_PREFPANE_BUNDLE_IDENTIFIER"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="GROWL_PREFPANE_BUNDLE_IDENTIFIER">GROWL_PREFPANE_BUNDLE_IDENTIFIER</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>The CFBundleIdentifier of the Growl preference pane bundle.</p>
+<blockquote><pre>#define <!-- a logicalPath="//apple_ref/c/cl/GROWL_PREFPANE_BUNDLE_IDENTIFIER //apple_ref/c/cl/GROWL_PREFPANE_BUNDLE_IDENTIFIER //apple_ref/c/tdef/GROWL_PREFPANE_BUNDLE_IDENTIFIER //apple_ref/c/tag/GROWL_PREFPANE_BUNDLE_IDENTIFIER //apple_ref/c/econst/GROWL_PREFPANE_BUNDLE_IDENTIFIER //apple_ref/c/struct/GROWL_PREFPANE_BUNDLE_IDENTIFIER //apple_ref/c/clconst/GROWL_PREFPANE_BUNDLE_IDENTIFIER" --><font class="type">GROWL_PREFPANE_BUNDLE_IDENTIFIER</font><!-- /a --> <!-- a logicalPath="//apple_ref/c/instm/CFSTR //apple_ref/c/clm/CFSTR //apple_ref/c/intfcm/CFSTR //apple_ref/c/func/CFSTR //apple_ref/c/ftmplt/CFSTR //apple_ref/c/defn/CFSTR //apple_ref/c/macro/CFSTR" --><font class="function">CFSTR</font><!-- /a -->(
+    "<!-- a logicalPath="//apple_ref/c/cl/com //apple_ref/c/cl/com //apple_ref/c/tdef/com //apple_ref/c/tag/com //apple_ref/c/econst/com //apple_ref/c/struct/com //apple_ref/c/clconst/com" --><font class="type">com</font><!-- /a -->.<!-- a logicalPath="//apple_ref/c/cl/growl //apple_ref/c/cl/growl //apple_ref/c/tdef/growl //apple_ref/c/tag/growl //apple_ref/c/econst/growl //apple_ref/c/struct/growl //apple_ref/c/clconst/growl" --><font class="type">growl</font><!-- /a -->.<!-- a logicalPath="//apple_ref/c/cl/prefpanel //apple_ref/c/cl/prefpanel //apple_ref/c/tdef/prefpanel //apple_ref/c/tag/prefpanel //apple_ref/c/econst/prefpanel //apple_ref/c/struct/prefpanel //apple_ref/c/clconst/prefpanel" --><font class="type">prefpanel</font><!-- /a -->") </pre></blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>GrowlApplicationBridge uses this to determine whether Growl is
+currently installed, by searching for the Growl preference pane. Your
+application probably does not need to use this macro itself.
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=macro;  uid=//apple_ref/c/macro/InitGrowlDelegate;  name=InitGrowlDelegate --><a name="//apple_ref/c/macro/InitGrowlDelegate"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="InitGrowlDelegate">InitGrowlDelegate</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Callable macro. Initializes a Growl delegate structure to defaults.</p>
+<blockquote><pre>#define <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/macro/InitGrowlDelegate" logicalPath="//apple_ref/c/instm/InitGrowlDelegate //apple_ref/c/clm/InitGrowlDelegate //apple_ref/c/intfcm/InitGrowlDelegate //apple_ref/c/func/InitGrowlDelegate //apple_ref/c/ftmplt/InitGrowlDelegate //apple_ref/c/defn/InitGrowlDelegate //apple_ref/c/macro/InitGrowlDelegate"><font class="function">InitGrowlDelegate</font></a>(
+    <font class="var">delegate</font>) \ <!-- a logicalPath="//apple_ref/c/cl/do //apple_ref/c/cl/do //apple_ref/c/tdef/do //apple_ref/c/tag/do //apple_ref/c/econst/do //apple_ref/c/struct/do //apple_ref/c/clconst/do" --><font class="type">do</font><!-- /a --> {
+    \ <!-- a logicalPath="//apple_ref/c/instm/if //apple_ref/c/clm/if //apple_ref/c/intfcm/if //apple_ref/c/func/if //apple_ref/c/ftmplt/if //apple_ref/c/defn/if //apple_ref/c/macro/if" --><font class="function">if</font><!-- /a --> (
+    <font class="var">delegate</font>) {
+    \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/size //apple_ref/c/cl/size //apple_ref/c/tdef/size //apple_ref/c/tag/size //apple_ref/c/econst/size //apple_ref/c/struct/size //apple_ref/c/clconst/size" --><font class="type">size</font><!-- /a --> = <!-- a logicalPath="//apple_ref/c/instm/sizeof //apple_ref/c/clm/sizeof //apple_ref/c/intfcm/sizeof //apple_ref/c/func/sizeof //apple_ref/c/ftmplt/sizeof //apple_ref/c/defn/sizeof //apple_ref/c/macro/sizeof" --><font class="function">sizeof</font><!-- /a -->(
+    <font class="keyword">struct</font> <font class="var">Growl_Delegate</font>); \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/applicationName //apple_ref/c/cl/applicationName //apple_ref/c/tdef/applicationName //apple_ref/c/tag/applicationName //apple_ref/c/econst/applicationName //apple_ref/c/struct/applicationName //apple_ref/c/clconst/applicationName" --><font class="type">applicationName</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/registrationDictionary //apple_ref/c/cl/registrationDictionary //apple_ref/c/tdef/registrationDictionary //apple_ref/c/tag/registrationDictionary //apple_ref/c/econst/registrationDictionary //apple_ref/c/struct/registrationDictionary //apple_ref/c/clconst/registrationDictionary" --><font class="type">registrationDictionary</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/applicationIconData //apple_ref/c/cl/applicationIconData //apple_ref/c/tdef/applicationIconData //apple_ref/c/tag/applicationIconData //apple_ref/c/econst/applicationIconData //apple_ref/c/struct/applicationIconData //apple_ref/c/clconst/applicationIconData" --><font class="type">applicationIconData</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/growlInstallationWindowTitle //apple_ref/c/cl/growlInstallationWindowTitle //apple_ref/c/tdef/growlInstallationWindowTitle //apple_ref/c/tag/growlInstallationWindowTitle //apple_ref/c/econst/growlInstallationWindowTitle //apple_ref/c/struct/growlInstallationWindowTitle //apple_ref/c/clconst/growlInstallationWindowTitle" --><font class="type">growlInstallationWindowTitle</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/growlInstallationInformation //apple_ref/c/cl/growlInstallationInformation //apple_ref/c/tdef/growlInstallationInformation //apple_ref/c/tag/growlInstallationInformation //apple_ref/c/econst/growlInstallationInformation //apple_ref/c/struct/growlInstallationInformation //apple_ref/c/clconst/growlInstallationInformation" --><font class="type">growlInstallationInformation</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/growlUpdateWindowTitle //apple_ref/c/cl/growlUpdateWindowTitle //apple_ref/c/tdef/growlUpdateWindowTitle //apple_ref/c/tag/growlUpdateWindowTitle //apple_ref/c/econst/growlUpdateWindowTitle //apple_ref/c/struct/growlUpdateWindowTitle //apple_ref/c/clconst/growlUpdateWindowTitle" --><font class="type">growlUpdateWindowTitle</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/growlUpdateInformation //apple_ref/c/cl/growlUpdateInformation //apple_ref/c/tdef/growlUpdateInformation //apple_ref/c/tag/growlUpdateInformation //apple_ref/c/econst/growlUpdateInformation //apple_ref/c/struct/growlUpdateInformation //apple_ref/c/clconst/growlUpdateInformation" --><font class="type">growlUpdateInformation</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/referenceCount //apple_ref/c/cl/referenceCount //apple_ref/c/tdef/referenceCount //apple_ref/c/tag/referenceCount //apple_ref/c/econst/referenceCount //apple_ref/c/struct/referenceCount //apple_ref/c/clconst/referenceCount" --><font class="type">referenceCount</font><!-- /a --> = <font class="var">1U</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/retain //apple_ref/c/cl/retain //apple_ref/c/tdef/retain //apple_ref/c/tag/retain //apple_ref/c/econst/retain //apple_ref/c/struct/retain //apple_ref/c/clconst/retain" --><font class="type">retain</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/release //apple_ref/c/cl/release //apple_ref/c/tdef/release //apple_ref/c/tag/release //apple_ref/c/econst/release //apple_ref/c/struct/release //apple_ref/c/clconst/release" --><font class="type">release</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/growlIsReady //apple_ref/c/cl/growlIsReady //apple_ref/c/tdef/growlIsReady //apple_ref/c/tag/growlIsReady //apple_ref/c/econst/growlIsReady //apple_ref/c/struct/growlIsReady //apple_ref/c/clconst/growlIsReady" --><font class="type">growlIsReady</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/growlNotificationWasClicked //apple_ref/c/cl/growlNotificationWasClicked //apple_ref/c/tdef/growlNotificationWasClicked //apple_ref/c/tag/growlNotificationWasClicked //apple_ref/c/econst/growlNotificationWasClicked //apple_ref/c/struct/growlNotificationWasClicked //apple_ref/c/clconst/growlNotificationWasClicked" --><font class="type">growlNotificationWasClicked</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">delegate</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/growlNotificationTimedOut //apple_ref/c/cl/growlNotificationTimedOut //apple_ref/c/tdef/growlNotificationTimedOut //apple_ref/c/tag/growlNotificationTimedOut //apple_ref/c/econst/growlNotificationTimedOut //apple_ref/c/struct/growlNotificationTimedOut //apple_ref/c/clconst/growlNotificationTimedOut" --><font class="type">growlNotificationTimedOut</font><!-- /a --> = <font class="keyword">NULL</font>; \ 
+} \ 
+} <!-- a logicalPath="//apple_ref/c/instm/while //apple_ref/c/clm/while //apple_ref/c/intfcm/while //apple_ref/c/func/while //apple_ref/c/ftmplt/while //apple_ref/c/defn/while //apple_ref/c/macro/while" --><font class="function">while</font><!-- /a -->(
+    <font class="number">0</font>) </pre></blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>Call with a pointer to a struct Growl_Delegate. All of the
+members of the structure will be set to 0 or <code>NULL</code>, except for
+size (which will be set to <code>sizeof(struct Growl_Delegate)</code>) and
+referenceCount (which will be set to 1).
+ </p>
+</dl>
+<hr>
+<!-- headerDoc=macro;  uid=//apple_ref/c/macro/InitGrowlNotification;  name=InitGrowlNotification --><a name="//apple_ref/c/macro/InitGrowlNotification"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="InitGrowlNotification">InitGrowlNotification</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Callable macro. Initializes a Growl notification structure to defaults.</p>
+<blockquote><pre>#define <a href="../../../HeaderDoc/GrowlApplicationBridge-Carbon/CompositePage.html#//apple_ref/c/macro/InitGrowlNotification" logicalPath="//apple_ref/c/instm/InitGrowlNotification //apple_ref/c/clm/InitGrowlNotification //apple_ref/c/intfcm/InitGrowlNotification //apple_ref/c/func/InitGrowlNotification //apple_ref/c/ftmplt/InitGrowlNotification //apple_ref/c/defn/InitGrowlNotification //apple_ref/c/macro/InitGrowlNotification"><font class="function">InitGrowlNotification</font></a>(
+    <font class="var">notification</font>) \ <!-- a logicalPath="//apple_ref/c/cl/do //apple_ref/c/cl/do //apple_ref/c/tdef/do //apple_ref/c/tag/do //apple_ref/c/econst/do //apple_ref/c/struct/do //apple_ref/c/clconst/do" --><font class="type">do</font><!-- /a --> {
+    \ <!-- a logicalPath="//apple_ref/c/instm/if //apple_ref/c/clm/if //apple_ref/c/intfcm/if //apple_ref/c/func/if //apple_ref/c/ftmplt/if //apple_ref/c/defn/if //apple_ref/c/macro/if" --><font class="function">if</font><!-- /a --> (
+    <font class="var">notification</font>) {
+    \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/size //apple_ref/c/cl/size //apple_ref/c/tdef/size //apple_ref/c/tag/size //apple_ref/c/econst/size //apple_ref/c/struct/size //apple_ref/c/clconst/size" --><font class="type">size</font><!-- /a --> = <!-- a logicalPath="//apple_ref/c/instm/sizeof //apple_ref/c/clm/sizeof //apple_ref/c/intfcm/sizeof //apple_ref/c/func/sizeof //apple_ref/c/ftmplt/sizeof //apple_ref/c/defn/sizeof //apple_ref/c/macro/sizeof" --><font class="function">sizeof</font><!-- /a -->(
+    <font class="keyword">struct</font> <font class="var">Growl_Notification</font>); \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/name //apple_ref/c/cl/name //apple_ref/c/tdef/name //apple_ref/c/tag/name //apple_ref/c/econst/name //apple_ref/c/struct/name //apple_ref/c/clconst/name" --><font class="type">name</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/title //apple_ref/c/cl/title //apple_ref/c/tdef/title //apple_ref/c/tag/title //apple_ref/c/econst/title //apple_ref/c/struct/title //apple_ref/c/clconst/title" --><font class="type">title</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/description //apple_ref/c/cl/description //apple_ref/c/tdef/description //apple_ref/c/tag/description //apple_ref/c/econst/description //apple_ref/c/struct/description //apple_ref/c/clconst/description" --><font class="type">description</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/iconData //apple_ref/c/cl/iconData //apple_ref/c/tdef/iconData //apple_ref/c/tag/iconData //apple_ref/c/econst/iconData //apple_ref/c/struct/iconData //apple_ref/c/clconst/iconData" --><font class="type">iconData</font><!-- /a --> = <font class="keyword">NULL</font>; \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/priority //apple_ref/c/cl/priority //apple_ref/c/tdef/priority //apple_ref/c/tag/priority //apple_ref/c/econst/priority //apple_ref/c/struct/priority //apple_ref/c/clconst/priority" --><font class="type">priority</font><!-- /a --> = <font class="number">0</font>; \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/reserved //apple_ref/c/cl/reserved //apple_ref/c/tdef/reserved //apple_ref/c/tag/reserved //apple_ref/c/econst/reserved //apple_ref/c/struct/reserved //apple_ref/c/clconst/reserved" --><font class="type">reserved</font><!-- /a --> = <font class="var">0U</font>; \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/isSticky //apple_ref/c/cl/isSticky //apple_ref/c/tdef/isSticky //apple_ref/c/tag/isSticky //apple_ref/c/econst/isSticky //apple_ref/c/struct/isSticky //apple_ref/c/clconst/isSticky" --><font class="type">isSticky</font><!-- /a --> = <font class="keyword">false</font>; \ (
+    <font class="var">notification</font>)-&gt;<!-- a logicalPath="//apple_ref/c/cl/clickContext //apple_ref/c/cl/clickContext //apple_ref/c/tdef/clickContext //apple_ref/c/tag/clickContext //apple_ref/c/econst/clickContext //apple_ref/c/struct/clickContext //apple_ref/c/clconst/clickContext" --><font class="type">clickContext</font><!-- /a --> = <font class="keyword">NULL</font>; \ 
+} \ 
+} <!-- a logicalPath="//apple_ref/c/instm/while //apple_ref/c/clm/while //apple_ref/c/intfcm/while //apple_ref/c/func/while //apple_ref/c/ftmplt/while //apple_ref/c/defn/while //apple_ref/c/macro/while" --><font class="function">while</font><!-- /a -->(
+    <font class="number">0</font>) </pre></blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>Call with a pointer to a struct Growl_Notification. All of
+the members of the structure will be set to 0 or <code>NULL</code>, except
+for size (which will be set to
+<code>sizeof(struct Growl_Notification)</code>).
+ </p>
+</dl>
+<p></p>
+<p>&copy; The Growl Project (Last Updated May 14, 2005)
+</p>
+</body>
+</html>

@@ -1,0 +1,5 @@
+//
+// Prefix header for all source files of the 'Beep-Carbon' target in the 'Beep-Carbon' project.
+//
+
+#include <Carbon/Carbon.h>

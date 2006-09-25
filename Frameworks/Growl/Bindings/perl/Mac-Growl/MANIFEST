@@ -1,0 +1,8 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Mac-Growl.t
+lib/Mac/Glue/glues/GrowlHelperApp
+lib/Mac/Glue/glues/GrowlHelperApp.pod
+lib/Mac/Growl.pm
