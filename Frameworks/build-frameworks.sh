@@ -142,3 +142,11 @@ cd cdparanoia && \
 		-target cdparanoia.framework \
 		-configuration Release \
 	&& cd $WD
+
+## mp4v2 framework
+cd mp4v2 && \
+	xcodebuild \
+		-project mp4v2.xcodeproj \
+		-target mp4v2.framework \
+		-configuration Release \
+	&& cd $WD
