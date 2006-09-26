@@ -102,3 +102,11 @@ cd taglib && \
 		-target taglib.framework \
 		-configuration Release \
 	&& cd $WD
+
+## mac framework
+cd mac && \
+	xcodebuild \
+		-project mac.xcodeproj \
+		-target mac.framework \
+		-configuration Release \
+	&& cd $WD
