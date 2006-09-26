@@ -94,3 +94,11 @@ cd flac && \
 		-target OggFLAC.framework \
 		-configuration Release \
 	&& cd $WD
+
+## taglib framework
+cd taglib && \
+	xcodebuild \
+		-project taglib.xcodeproj \
+		-target taglib.framework \
+		-configuration Release \
+	&& cd $WD
