@@ -31,11 +31,11 @@
 		8CEA1AD20AC8D74D009E46CB /* cddb_net.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC10AC8D74D009E46CB /* cddb_net.h */; };
 		8CEA1AD30AC8D74D009E46CB /* cddb_ni.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC20AC8D74D009E46CB /* cddb_ni.h */; };
 		8CEA1AD40AC8D74D009E46CB /* cddb_regex.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC30AC8D74D009E46CB /* cddb_regex.h */; };
-		8CEA1AD50AC8D74D009E46CB /* cddb_site.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC40AC8D74D009E46CB /* cddb_site.h */; };
+		8CEA1AD50AC8D74D009E46CB /* cddb_site.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC40AC8D74D009E46CB /* cddb_site.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA1AD60AC8D74D009E46CB /* cddb_track.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC50AC8D74D009E46CB /* cddb_track.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA1AD70AC8D74D009E46CB /* cddb.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC60AC8D74D009E46CB /* cddb.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA1AD80AC8D74D009E46CB /* ll.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC70AC8D74D009E46CB /* ll.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CEA1AD90AC8D74D009E46CB /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC80AC8D74D009E46CB /* version.h */; };
+		8CEA1AD90AC8D74D009E46CB /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1AC80AC8D74D009E46CB /* version.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA1B040AC8D8E0009E46CB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA1B030AC8D8E0009E46CB /* config.h */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
