@@ -62,22 +62,22 @@
 		8CEA146F0AC8B233009E46CB /* UnBitArrayOld.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14610AC8B233009E46CB /* UnBitArrayOld.h */; };
 		8CEA14700AC8B233009E46CB /* UnMAC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA14620AC8B233009E46CB /* UnMAC.cpp */; };
 		8CEA14710AC8B233009E46CB /* UnMAC.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14630AC8B233009E46CB /* UnMAC.h */; };
-		8CEA14940AC8B296009E46CB /* All.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA147B0AC8B296009E46CB /* All.h */; };
+		8CEA14940AC8B296009E46CB /* All.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA147B0AC8B296009E46CB /* All.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA14960AC8B296009E46CB /* APEInfoDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA147D0AC8B296009E46CB /* APEInfoDialog.h */; };
 		8CEA14970AC8B296009E46CB /* CharacterHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA147E0AC8B296009E46CB /* CharacterHelper.cpp */; };
 		8CEA14980AC8B296009E46CB /* CharacterHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA147F0AC8B296009E46CB /* CharacterHelper.h */; };
 		8CEA14990AC8B296009E46CB /* CircleBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA14800AC8B296009E46CB /* CircleBuffer.cpp */; };
 		8CEA149A0AC8B296009E46CB /* CircleBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14810AC8B296009E46CB /* CircleBuffer.h */; };
-		8CEA149B0AC8B296009E46CB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14820AC8B296009E46CB /* config.h */; };
+		8CEA149B0AC8B296009E46CB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14820AC8B296009E46CB /* config.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA149C0AC8B296009E46CB /* GlobalFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA14830AC8B296009E46CB /* GlobalFunctions.cpp */; };
 		8CEA149D0AC8B296009E46CB /* GlobalFunctions.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14840AC8B296009E46CB /* GlobalFunctions.h */; };
 		8CEA149E0AC8B296009E46CB /* ID3Genres.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14850AC8B296009E46CB /* ID3Genres.h */; };
 		8CEA149F0AC8B296009E46CB /* IO.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14860AC8B296009E46CB /* IO.h */; };
 		8CEA14A00AC8B296009E46CB /* MACUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA14870AC8B296009E46CB /* MACUtils.cpp */; };
-		8CEA14A10AC8B296009E46CB /* MACUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14880AC8B296009E46CB /* MACUtils.h */; };
-		8CEA14A20AC8B296009E46CB /* NoWindows.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14890AC8B296009E46CB /* NoWindows.h */; };
+		8CEA14A10AC8B296009E46CB /* MACUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14880AC8B296009E46CB /* MACUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CEA14A20AC8B296009E46CB /* NoWindows.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14890AC8B296009E46CB /* NoWindows.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA14A30AC8B296009E46CB /* RollBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA148A0AC8B296009E46CB /* RollBuffer.h */; };
-		8CEA14A40AC8B296009E46CB /* SmartPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA148B0AC8B296009E46CB /* SmartPtr.h */; };
+		8CEA14A40AC8B296009E46CB /* SmartPtr.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA148B0AC8B296009E46CB /* SmartPtr.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA14A50AC8B296009E46CB /* StdLibFileIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA148C0AC8B296009E46CB /* StdLibFileIO.cpp */; };
 		8CEA14A60AC8B296009E46CB /* StdLibFileIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA148D0AC8B296009E46CB /* StdLibFileIO.h */; };
 		8CEA14A70AC8B296009E46CB /* StdString.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA148E0AC8B296009E46CB /* StdString.h */; };
@@ -85,7 +85,6 @@
 		8CEA177E0AC8C237009E46CB /* Assembly.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA177C0AC8C237009E46CB /* Assembly.h */; };
 		8CEA177F0AC8C237009E46CB /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA177D0AC8C237009E46CB /* common.cpp */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
-		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -186,7 +185,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

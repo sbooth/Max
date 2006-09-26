@@ -5,6 +5,8 @@
 
 #include "MACUtils.h"
 
+#define _T(x)    x
+
 #define FALSE    0
 #define TRUE    1
 
@@ -23,7 +25,9 @@ typedef unsigned char        str_utf8;
 typedef wchar_t                str_utf16;
 
 typedef unsigned long       DWORD;
+#ifndef __OBJC__
 typedef int                 BOOL;
+#endif
 typedef unsigned char       BYTE;
 typedef unsigned short      WORD;
 typedef float               FLOAT;
