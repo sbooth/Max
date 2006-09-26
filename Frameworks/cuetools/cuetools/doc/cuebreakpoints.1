@@ -1,0 +1,46 @@
+.TH cuetools 1
+.
+.SH NAME
+cuebreakpoints
+.
+.SH DESCRIPTION
+cuebreakpoints \- print the breakpoints from a cue or toc file
+.
+.SH SYNOPSIS
+.B cuebreakpoints
+[option...] [file...]
+.
+.SH OPTIONS
+.TP
+.B \-h, \--help
+print usage information
+.
+.TP
+.B \-i, \--input-format cue|toc
+set format of file(s)
+.
+.TP
+.B \--append-gaps
+append pregaps to previous track (default)
+.
+.TP
+.B \--prepend-gaps
+prefix pregaps to track
+.
+.TP
+.B \--split-gaps
+split at beginning and end of pregaps
+.
+.SH NOTES
+The breakpoints are in a format usable by shnsplit (part of the shntool package).
+.PP
+The first track's pregap cannot be appended to the previous track, so it is prefixed to the track in both append and prepend modes.  If you want the track without it, use the split mode.
+.PP
+If no files are specified, stdin is used.  If a filename is specified and the format is not specified, the format will be set based on a ".cue" or ".toc" suffix.
+.
+.SH AUTHOR
+Svend Sorensen
+.
+.SH "SEE ALSO"
+cueconvert(1),
+cueprint(1)

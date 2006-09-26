@@ -1,0 +1,34 @@
+.TH cuetools 1
+.
+.SH NAME
+cueconvert
+.
+.SH DESCRIPTION
+cueconvert \- convert between the cue and toc formats
+.
+.SH SYNOPSIS
+.B cueconvert
+[option...] [infile [outfile]]
+.
+.SH OPTIONS
+.TP
+.B \-h, \--help
+print usage information
+.
+.TP
+.B \-i, \--input-format cue|toc
+set format of input file
+.
+.TP
+.B \-o, \--output-format cue|toc
+set format of output file
+.
+.SH NOTES
+If infile or outfile is not specified, stdin and stdout are used, respectively.  If a filename is specified and the format is not specified, the format will be set based on a ".cue" or ".toc" suffix.  If the output file format is not specified, and it cannot be determined from the suffix, it will be set to the opposite of the input format.
+.
+.SH AUTHOR
+Svend Sorensen
+.
+.SH "SEE ALSO"
+cuebreakpoints(1),
+cueprint(1)

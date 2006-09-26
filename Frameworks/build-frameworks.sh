@@ -126,3 +126,11 @@ cd mpcdec && \
 		-target mpcdec.framework \
 		-configuration Release \
 	&& cd $WD
+
+## cuetools framework
+cd cuetools && \
+	xcodebuild \
+		-project cuetools.xcodeproj \
+		-target cuetools.framework \
+		-configuration Release \
+	&& cd $WD
