@@ -118,3 +118,11 @@ cd sndfile && \
 		-target sndfile.framework \
 		-configuration Release \
 	&& cd $WD
+
+## mpcdec framework
+cd mpcdec && \
+	xcodebuild \
+		-project mpcdec.xcodeproj \
+		-target mpcdec.framework \
+		-configuration Release \
+	&& cd $WD
