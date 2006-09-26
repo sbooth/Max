@@ -134,3 +134,11 @@ cd cuetools && \
 		-target cuetools.framework \
 		-configuration Release \
 	&& cd $WD
+
+## cdparanoia framework
+cd cdparanoia && \
+	xcodebuild \
+		-project cdparanoia.xcodeproj \
+		-target cdparanoia.framework \
+		-configuration Release \
+	&& cd $WD
