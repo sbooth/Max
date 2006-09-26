@@ -110,3 +110,11 @@ cd mac && \
 		-target mac.framework \
 		-configuration Release \
 	&& cd $WD
+
+## sndfile framework
+cd sndfile && \
+	xcodebuild \
+		-project sndfile.xcodeproj \
+		-target sndfile.framework \
+		-configuration Release \
+	&& cd $WD
