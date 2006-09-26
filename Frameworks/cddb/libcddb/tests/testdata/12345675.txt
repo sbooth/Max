@@ -1,0 +1,8 @@
+Artist:   DiscTitle
+Title:    DiscTitle
+Ext.data: DiscExt
+Genre:    Test data
+Year:     2003
+Length:   0:10 (10 seconds)
+1 tracks
+  [01] 'TrackTitle1' by DiscTitle (0:10)

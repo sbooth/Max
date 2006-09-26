@@ -1,0 +1,65 @@
+
+        Overview of the CDDB disc entries in the test cache
+        ===================================================
+
+DISCID          01      Disc ID
+                02      Track count
+                03      Disc length
+DYEAR           04      Disc year
+DGENRE          05      Disc genre
+PLAYORDER       06      Play order
+
+DTITLE          1_
+TTITLE          2_
+EXTD            3_
+EXTT            4_
+
+                _0      PartA1 
+                _1      PartA1
+                        PartA2
+                _2      PartA1_
+                        PartA2
+                _3      PartA1
+                         PartA2
+                _4      PartA1 / PartB1
+                _5      PartA1_
+                        PartA2 / PartB1
+                _6      PartA1
+                         PartA2 / PartB1
+                _7      PartA1
+                         / 
+                        PartB1
+                _8      PartA1 / PartB1_
+                        PartB2
+                _9      PartA1 / PartB1
+                         PartB2
+                _a      PartA1/PartA2 / PartB1
+                _b      PartA1/ PartA2 / PartB1
+                _c      PartA1 /PartA2 / PartB1
+                _d      PartA1 / PartB1/PartB2
+                _e      PartA1 / PartB1/ PartB2
+                _f      PartA1 / PartB1 /PartB2
+
+_ = trailing space
+
+
+      01 02   03 04  10 13 16 19 1c 1f  22 25 28 2b 2e  31  40 43
+                  05  11 14 17 1a 1d  20 23 26 29 2c 2f  32  41
+                   06  12 15 18 1b 1e  21 24 27 2a 2d  30 33  42
+
+12345674  1   10 xx. x............... x............... x... ....
+12345675  1   10 xx. .x.............. x............... .x.. ....
+12345676  1   10 xx. ..x............. x............... ..x. ....
+12345677  1   10 xx. ...x............ x............... ...x ....
+12345678 16  160 xx. ....x........... xxxxxxxxxxxxxxxx .... xxxx
+12345679  1   10 xx. .....x.......... x............... .... ....
+1234567a  1   10 xx. ......x......... x............... .... ....
+1234567b  1   10 xx. .......x........ x............... .... ....
+1234567c  1   10 xx. ........x....... x............... .... ....
+1234567d  1   10 xx. .........x...... x............... .... ....
+1234567e  1   10 xx. ..........x..... x............... .... ....
+1234567f  1   10 xx. ...........x.... x............... .... ....
+12345680  1   10 xx. ............x... x............... .... ....
+12345681  1   10 xx. .............x.. x............... .... ....
+12345682  1   10 xx. ..............x. x............... .... ....
+12345683  1   10 xx. ...............x x............... .... ....

@@ -1,0 +1,16 @@
+# xmcd
+#
+# Track frame offsets:
+#      0
+#
+# Disc length: 10 seconds
+#
+# Revision: 1
+#
+DISCID=12345679
+DTITLE=DiscArtist
+DTITLE= / 
+DTITLE=DiscTitle
+DYEAR=2003
+DGENRE=Test data
+TTITLE0=TrackTitle1

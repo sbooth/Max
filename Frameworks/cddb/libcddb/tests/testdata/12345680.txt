@@ -1,0 +1,7 @@
+Artist:   Disc /Artist
+Title:    DiscTitle
+Genre:    Test data
+Year:     2003
+Length:   0:10 (10 seconds)
+1 tracks
+  [01] 'TrackTitle1' by Disc /Artist (0:10)

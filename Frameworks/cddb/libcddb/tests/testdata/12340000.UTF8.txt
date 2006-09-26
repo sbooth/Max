@@ -1,0 +1,8 @@
+Artist:   Aïi
+Title:    Aïi
+Ext.data: Aïi
+Genre:    misc
+Year:     2004
+Length:   33:20 (2000 seconds)
+1 tracks
+  [01] 'Aïi' by Aïi (33:18) [Aïi]

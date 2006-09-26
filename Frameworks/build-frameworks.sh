@@ -150,3 +150,11 @@ cd mp4v2 && \
 		-target mp4v2.framework \
 		-configuration Release \
 	&& cd $WD
+
+## cddb framework
+cd cddb && \
+	xcodebuild \
+		-project cddb.xcodeproj \
+		-target cddb.framework \
+		-configuration Release \
+	&& cd $WD

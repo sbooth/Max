@@ -1,0 +1,22 @@
+Artist:   DiscArtist
+Title:    DiscTitle
+Genre:    Test data
+Year:     2003
+Length:   2:40 (160 seconds)
+16 tracks
+  [01] 'TrackTitle1' by DiscArtist (0:10) [TrackExt1]
+  [02] 'TrackTitle2' by TrackArtist2 (0:10) [TrackExt2]
+  [03] 'TrackTitle3' by TrackArtist3 cntd. (0:10) [TrackExt3 cntd.]
+  [04] 'TrackTitle4' by TrackArtist4 cntd. (0:10) [TrackExt4 cntd.]
+  [05] 'TrackTitle5' by TrackArtist5 (0:10)
+  [06] 'TrackTitle6 cntd.' by TrackArtist6 (0:10)
+  [07] 'TrackTitle7 cntd.' by TrackArtist7 (0:10)
+  [08] 'TrackTitle8' by Track/Artist8 (0:10)
+  [09] 'TrackTitle9' by Track/ Artist9 (0:10)
+  [10] 'TrackTitle10' by Track /Artist10 (0:10)
+  [11] 'Track/Title11' by TrackArtist11 (0:10)
+  [12] 'Track/ Title12' by TrackArtist12 (0:10)
+  [13] 'Track /Title13' by TrackArtist10 (0:10)
+  [14] 'TrackTitle14' by DiscArtist (0:10)
+  [15] 'TrackTitle15 cntd.' by DiscArtist (0:10)
+  [16] 'TrackTitle16 cntd.' by DiscArtist (0:10)

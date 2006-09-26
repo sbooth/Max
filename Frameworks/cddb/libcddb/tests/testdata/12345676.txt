@@ -1,0 +1,8 @@
+Artist:   DiscTitle cntd.
+Title:    DiscTitle cntd.
+Ext.data: DiscExt cntd.
+Genre:    Test data
+Year:     2003
+Length:   0:10 (10 seconds)
+1 tracks
+  [01] 'TrackTitle1' by DiscTitle cntd. (0:10)

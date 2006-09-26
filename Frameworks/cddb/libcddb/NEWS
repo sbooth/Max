@@ -1,0 +1,284 @@
+$Id: NEWS,v 1.15 2005/08/04 18:56:54 airborne Exp $
+
+
+This file describes the external changes and important bug fixes
+between different libcddb releases.  These changes might impact the
+programs that use this library.  It does not describe every single
+change made to the code tree.  An overview of the CVS changes can be
+found in the Changelog file.
+
+
+CHANGES 1.2.0 -> 1.2.1
+
+* [NEW] It is now possible to fine tune the text search by specifying
+  which fields and categories to consider.
+
+* [BUGFIX] Fixed cddb_sites function returning random values due to
+  uninitialized value.
+
+* [UPDATE] The value of the LIBCDDB_VERSION_NUM defined variable is
+  now 121.
+
+
+CHANGES 1.1.0 -> 1.2.0
+
+* [NEW] Support for searching the FreeDB database using a text string
+  has been added.  This feature has a similar API as the query
+  command but uses a string instead of actual disc data.
+
+* [UPDATE] The value of the LIBCDDB_VERSION_NUM defined variable is
+  now 120.
+
+
+CHANGES 1.0.2 -> 1.1.0
+
+* [IMPORTANT] The installed header files now no longer contain any
+  actual structure definitions.  All libcddb structures are now truly
+  opaque for the user of the library.  Some of the structures have
+  also been updated.  This means that the library is not binary
+  compatible with the previous version.  It should however be possible
+  to just recompile any software using libcddb and link it against
+  this new library.  The API is backwards compatible so no changes to
+  the software should be necessary.
+
+* [NEW] Support for the FreeDB sites command that can be used to get a
+  list of mirror servers.  A function was also added to initialize the
+  libcddb server connection data using one of the servers returned by
+  this command
+
+* [NEW] A new error code was added (CDDB_ERR_INVALID) that is returned
+  when invalid input parameters are passed to one of the library
+  functions.
+
+* [UPDATE] The value of the LIBCDDB_VERSION_NUM defined variable is
+  now 110.
+
+
+CHANGES 1.0.1 -> 1.0.2
+
+* [NEW] Added cddb_set_http_proxy_credentials function that allows you
+  to specify proxy user name and password in one go.  It also does not
+  store the user's credentials as cleartext in memory.
+
+* [FIX] An extra error code/message has been added to signal proxy
+  authentication failure.
+
+
+CHANGES 1.0.0 -> 1.0.1
+
+* [NEW] Added --without-cdio option to the configure script so you can
+  manually disable CD access support for the example program.
+
+* Fixed iconv compiler warnings for Solaris and Cygwin.
+
+* Fixed regex compilation issue on MacOS X.
+
+
+CHANGES 0.9.6 -> 1.0.0
+
+* [NEW] Added support for proxy authentication.
+
+* [BUGFIX] Memory leaks fixed in regular expression handling.
+
+* Iconv compilation fixes for Solaris.
+
+
+CHANGES 0.9.5 -> 0.9.6
+
+* Libcddb now uses the FreeDB protocol version 6.  The difference with
+  version 5 is that now the responses from the FreeDB server are in
+  UTF-8 format instead of ISO8859-1.  So if the CD you query contains
+  non-US-ASCII characters the results will be different in this new
+  version of libcddb.
+
+* [NEW] It is now possible to set the character set that libcddb has
+  to use when returning disc data (see also above).  Use the
+  cddb_set_charset function to set the user's character set.  The
+  example program, cddb_query, now also has a command-line option for
+  specifying the character set.
+
+* [BUGFIX] FreeDB changed the specs of their CDDB file format.  The
+  results for certain discs failed to parse correctly because the
+  libcddb parser was too strict.  This should be fixed now.
+
+* [BUGFIX] When writing disc to cache, fill in category if genre is
+  not specified.
+
+* [BUGFIX] When in CACHE_ONLY mode, do not perform network access when
+  writing disc record.
+
+
+CHANGES 0.9.4 -> 0.9.5
+
+* It is now possible to query CD entries if you only know the track
+  length.  Previous versions of libcddb needed the track offsets from
+  the CD.  Track offsets will be calculated automatically when a
+  length is specified and the offset is missing.  This is less precise
+  than using the actual frame offsets.  So whenever possible use the
+  offsets instead.
+
+* Fixed some possible buffer overflows.  The internal buffer size has
+  also been increased from 257 to 1024 bytes.  It is now also possible
+  to change this buffer size in the cddb_cmd.h.
+
+* Updated regression tests with less strict testing.  Changes in the
+  queried CDDB entries should no longer trigger a test failure.
+
+* Improved support for Win32 platforms (thx to Rocky Bernstein).
+
+* Improved support for Mac OS X (thx to Rocky Bernstein and Derk-Jan
+  Hartman).
+
+* It is now possible to specify the CD-ROM device to be used in the
+  example program.
+
+
+CHANGES 0.9.3 -> 0.9.4
+
+* The libcddb now installs a pkg-config(1) configuration file.
+
+* Support for tilde-expansion (~) in the local cache directory has
+  been added.  If the cache directory starts wit a tilde and the $HOME
+  environment variable is defined, then the tilde will be replaced by
+  the value of $HOME.
+
+* All the networking code (DNS query, connect, read, write) now
+  supports time-outs to prevent blocking indefinitely.  By default
+  this time-out is set to ten seconds.  See the cddb_conn_t structure
+  for more information.
+
+* A logging framework was added.  This framework supports different
+  log levels and provides the possibility to install a custom log
+  handler.  (based on a similar framework in libcdio, thx Rocky)
+  Because of this new framework, the --enable-debug configure
+  parameter has been obsoleted by --enable-loglevel=LVL.
+
+* Added support for extended disc and track data.  The parsing has
+  been updated and getters and setters were added to the disc and
+  track structures.
+
+* If the DTITLE field of a CDDB entry does not contain both an artist
+  name and a disc title, libcddb assumes that they are equal.
+
+* Extra regression tests were updated and added.  The test framework
+  was also improved to skip proxy tests if the http_proxy environment
+  variable is not defined.
+
+
+CHANGES 0.9.2 -> 0.9.3
+
+* [SECURITY] The default values for the user name and the host name
+  that is used when contacting a CDDB server have been changed to
+  'anonymous@localhost'.  Libcddb used to take the values from the
+  $USER and $HOSTNAME environment variables if they were present.
+  This would reveal confidential information about a user without that
+  person knowing it.  It is still necessary to use a valid e-mail
+  address when submitting a new or updated CDDB entry to the server.
+  The libcddb write command will fail if the default value are still
+  present.
+
+* Extra regression tests were added to test caching behaviour.
+
+* Some getters and setters were added for fields in the connection
+  structure.
+
+* It is now possible to customize the program name and version that is
+  used when contacting a CDDB server.  This used to default to
+  'libcddb' and the version number of the library being used.  Now it
+  is possible for a developer to use the name of the program using the
+  library.
+
+
+CHANGES 0.9.1 -> 0.9.2
+
+* [BUGFIX] There was a problem with multi-line track titles.  The
+  title was being appended to title of the disc instead of to the one
+  from the track.  This should now work correctly.
+
+* [BUGFIX] The parsing state machine did not correctly detect the end
+  of the stream if there was no extended data present.  This has been
+  fixed by putting the state machine in the STOP state when the end of
+  the stream is encountered.
+
+* [BUGFIX] Fixed some memory leaks reported by Valgrind.
+
+* The example program now returns the libcddb error code when exiting
+  after a failure.  Proxy support has also been implemented.
+
+* The regression tests have been expanded to include scripts that test
+  the libcddb CDDB entry parser and networking code.  These networking
+  tests need Internet connectivity and a working proxy server enabled
+  through the http_proxy environment variable.
+
+
+CHANGES 0.9.0 -> 0.9.1
+
+* A Gentoo Linux ebuild file has been added in the misc/ directory.
+
+* It is now possible to delete a disc/track title and artist name by
+  setting it to NULL using one of the set functions for these fields.
+
+* [BUGFIX] In the previous release, when reusing a CDDB disc structure
+  for subsequent read operations, the disc and artist name were
+  appended to what was already present in the structure.  This has
+  been fixed by reseting those strings before setting the new values.
+
+* The example program has been improved.  It now supports two extra
+  commands.  One can be used to calculate the disc ID.  The other will
+  query a CDDB server and report any matches that are found.  Support
+  was also added to retrieve the necessary disc information from a CD
+  in the CD-ROM drive.  To use this feature you will need an extra
+  library, i.e. libcdio.  Information about this library can be found
+  at: http://savannah.nongnu.org/projects/libcdio/.
+
+* Extra getters and setters were added and the documentation of other
+  library functions has been updated.
+
+
+CHANGES 0.1.6 -> 0.9.0
+
+* The src/ directory has been removed from the distribution.  But a
+  new examples/ directory was added.  Currently the example program
+  only supports the CDDB read command.  This example will be expanded
+  in order to demonstrate every public function of the library.
+
+* Local CDDB cache semantics have been expanded.  Next to the option
+  to enable and disable caching that was already present, it is now
+  also possible to force the use of the cache.  When this
+  functionality is enabled and an entry is not found in the local
+  cache a CDDB_ERR_DISC_NOT_FOUND error is returned.  Three functions
+  have also been added to set the desired caching mode:
+  - cddb_cache_enable(c)
+  - cddb_cache_only(c)
+  - cddb_cache_disable(c)
+  All three functions expect a CDDB connection structure as a
+  parameter.
+
+* Several get and set functions have been added to the API.  It is my
+  intention to have such functions for every possible field that a
+  user is allowed to alter in the different library structures.  This
+  will prevent problems in the future if the internal structures
+  should change.
+
+* When the length of a CD track is not set when you call the
+  cddb_track_get_length function, it will be calculated.  The
+  calculation uses the frame offsets of the current and next track and
+  possibly the disc length.  The current implementation does not do
+  any rounding of the calculated value to the nearest second.
+  Therefore it is possible that the sum of the track lengths does not
+  equal the disc length.  If the length can not be calculated -1 is
+  returned.
+
+* The network access code has been rewritten to use the network
+  sockets directly instead of wrapping them in file descriptors.  This
+  should enable BeOS users to use the library without having to change
+  any code.  I don not have a BeOS system myself and am still waiting
+  for a confirmation whether the changes were enough.
+
+* Support has been added for reading CDDB entries that have
+  multi-lined fields.  Support to also split certain fields into
+  multiple lines when writing them (to the network or disc) is not yet
+  present.  The FreeDB spec states that no line should be longer than
+  256 characters.  This limit is not yet checked.
+
+* Support to parse the year field of a CDDB entry has been added.

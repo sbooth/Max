@@ -1,0 +1,7 @@
+Artist:   DiscArtist cntd.
+Title:    DiscTitle
+Genre:    Test data
+Year:     2003
+Length:   0:10 (10 seconds)
+1 tracks
+  [01] 'TrackTitle1' by DiscArtist cntd. (0:10)

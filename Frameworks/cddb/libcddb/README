@@ -1,0 +1,54 @@
+$Id: README,v 1.5 2004/07/21 12:31:30 airborne Exp $
+
+WHAT IS LIBCDDB
+
+Libcddb is a library that implements the different protocols (CDDBP,
+HTTP, SMTP) to access data on a CDDB server (http://freedb.org).  It
+tries to be as cross-platform as possible.  The initial libary will
+have a C API.
+
+
+DOCUMENTATION
+
+The API documentation can be consulted on the project homepage:
+    http://libcddb.sourceforge.net/
+
+It is possible to create your own copy of this documentation in both
+HTML and LaTeX format using the doxygen program (http://doxygen.org).
+If you have doxygen installed, execute the following command in the
+doc/ directory:
+    doxygen doxygen.conf
+
+This will create two subdirectories html/ and latex/ in which you will
+find the documentation in the respective formats.
+
+
+COMPILING
+
+See INSTALL for instructions.
+
+
+TESTING
+
+The regression tests also test the networking code.  For all these
+tests to complete successfully, you will need an Internet connection.
+The FreeDB server at www.freedb.org needs to be accessible on both
+ports 888 (CDDBP protocol) and 80 (HTTP protocol).  The test also
+includes code to verify the proxy functionality.  These tests can only
+succeed when the 'http_proxy' enviroment variable is defined.  Set
+this variable with a statement similar as the one below:
+
+    export http_proxy='http://proxy:80'
+
+
+INFORMATION
+
+The primary source of information for this project is:
+    http://libcddb.sourceforge.net/
+
+Bugs, patches, feature request can be submitted on the project
+homepage:
+    http://sourceforge.net/projects/libcddb/
+
+Or they can be send directly to me:
+    Kris Verbeeck <airborne@advalvas.be>

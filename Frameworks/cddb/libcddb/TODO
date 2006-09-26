@@ -1,0 +1,15 @@
+$Id: TODO,v 1.25 2005/07/23 07:09:52 airborne Exp $
+
+* charset conversion for full text search results??
+
+* check out-of-memory on malloc
+
+* revision number handling for CDDB entries (if necessary)
+
+* support for playing order field
+
+* support for writing multi-lined fields
+
+* create some sort of local CDDB query index?
+
+* add lscat command

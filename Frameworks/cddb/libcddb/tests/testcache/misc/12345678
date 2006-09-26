@@ -1,0 +1,60 @@
+# xmcd
+#
+# Track frame offsets:
+#      0
+#	 750
+#	1500
+#	2250
+#	3000
+#	3750
+#	4500
+#	5250
+#	6000
+#	6750
+#	7500
+#	8250
+#	9000
+#   9750
+#  10500
+#  11250
+#
+# Disc length: 160 seconds
+#
+# Revision: 1
+#
+DISCID=12345678
+DTITLE=DiscArtist / DiscTitle
+DYEAR=2003
+DGENRE=Test data
+TTITLE0=TrackTitle1
+TTITLE1=TrackArtist2 / TrackTitle2
+TTITLE2=TrackArtist3 
+TTITLE2=cntd. / TrackTitle3
+TTITLE3=TrackArtist4
+TTITLE3= cntd. / TrackTitle4
+TTITLE4=TrackArtist5
+TTITLE4= / 
+TTITLE4=TrackTitle5
+TTITLE5=TrackArtist6 / TrackTitle6 
+TTITLE5=cntd.
+TTITLE6=TrackArtist7 / TrackTitle7
+TTITLE6= cntd.
+TTITLE7=Track/Artist8 / TrackTitle8
+TTITLE8=Track/ Artist9 / TrackTitle9
+TTITLE9=Track /Artist10 / TrackTitle10
+TTITLE10=TrackArtist11 / Track/Title11
+TTITLE11=TrackArtist12 / Track/ Title12
+TTITLE12=TrackArtist10 / Track /Title13
+TTITLE13=Track
+TTITLE13=Title14
+TTITLE14=TrackTitle15 
+TTITLE14=cntd.
+TTITLE15=TrackTitle16
+TTITLE15= cntd.
+EXTT0=TrackExt1
+EXTT1=Track
+EXTT1=Ext2
+EXTT2=TrackExt3 
+EXTT2=cntd.
+EXTT3=TrackExt4
+EXTT3= cntd.
