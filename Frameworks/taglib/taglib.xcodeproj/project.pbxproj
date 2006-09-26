@@ -100,8 +100,24 @@
 		8CEA13510AC8A95C009E46CB /* tstringlist.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA12D90AC8A95C009E46CB /* tstringlist.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA13520AC8A95C009E46CB /* unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA12DA0AC8A95C009E46CB /* unicode.cpp */; };
 		8CEA13530AC8A95C009E46CB /* unicode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA12DB0AC8A95C009E46CB /* unicode.h */; settings = {ATTRIBUTES = (); }; };
+		8CEA1C4E0AC8E2B4009E46CB /* tlist.tcc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8CEA12D30AC8A95C009E46CB /* tlist.tcc */; };
+		8CEA1C4F0AC8E2B4009E46CB /* tmap.tcc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8CEA12D50AC8A95C009E46CB /* tmap.tcc */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8CEA1C4C0AC8E28C009E46CB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = taglib.framework/Headers;
+			dstSubfolderSpec = 16;
+			files = (
+				8CEA1C4E0AC8E2B4009E46CB /* tlist.tcc in CopyFiles */,
+				8CEA1C4F0AC8E2B4009E46CB /* tmap.tcc in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -550,6 +566,7 @@
 				8DC2EF520486A6940098B216 /* Resources */,
 				8DC2EF540486A6940098B216 /* Sources */,
 				8DC2EF560486A6940098B216 /* Frameworks */,
+				8CEA1C4C0AC8E28C009E46CB /* CopyFiles */,
 			);
 			buildRules = (
 			);
