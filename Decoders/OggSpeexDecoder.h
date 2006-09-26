@@ -21,9 +21,9 @@
 #import <Cocoa/Cocoa.h>
 #import "Decoder.h"
 
-#include <Ogg/ogg.h>
-#include <Speex/speex_bits.h>
-#include <Speex/speex_stereo.h>
+#include <ogg/ogg.h>
+#include <speex/speex_bits.h>
+#include <speex/speex_stereo.h>
 
 @interface OggSpeexDecoder : Decoder
 {

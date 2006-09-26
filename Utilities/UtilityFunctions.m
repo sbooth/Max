@@ -41,7 +41,7 @@
 #include <sys/param.h>
 
 #include <sndfile/sndfile.h>
-#include <Ogg/ogg.h>
+#include <ogg/ogg.h>
 
 static NSDateFormatter		*sDateFormatter			= nil;
 static NSString				*sDataDirectory			= nil;

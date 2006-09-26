@@ -23,23 +23,23 @@
 #import "IOException.h"
 #import "UtilityFunctions.h"
 
-#include <TagLib/fileref.h>					// TagLib::FileRef
-#include <TagLib/mpegfile.h>				// TagLib::MPEG::File
-#include <TagLib/vorbisfile.h>				// TagLib::Ogg::Vorbis::File
-#include <TagLib/oggflacfile.h>				// TagLib::Ogg::FLAC::File
-#include <TagLib/id3v2tag.h>				// TagLib::ID3v2::Tag
-#include <TagLib/id3v2frame.h>				// TagLib::ID3v2::Frame
-#include <TagLib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
-#include <TagLib/xiphcomment.h>				// TagLib::Ogg::XiphComment
-#include <TagLib/tbytevector.h>				// TagLib::ByteVector
-#include <TagLib/mpcfile.h>					// TagLib::MPC::File
+#include <taglib/fileref.h>					// TagLib::FileRef
+#include <taglib/mpegfile.h>				// TagLib::MPEG::File
+#include <taglib/vorbisfile.h>				// TagLib::Ogg::Vorbis::File
+#include <taglib/oggflacfile.h>				// TagLib::Ogg::FLAC::File
+#include <taglib/id3v2tag.h>				// TagLib::ID3v2::Tag
+#include <taglib/id3v2frame.h>				// TagLib::ID3v2::Frame
+#include <taglib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
+#include <taglib/xiphcomment.h>				// TagLib::Ogg::XiphComment
+#include <taglib/tbytevector.h>				// TagLib::ByteVector
+#include <taglib/mpcfile.h>					// TagLib::MPC::File
 
 #include <mp4v2/mp4.h>						// MP4FileHandle
 
-#include <MAC/All.h>
-#include <MAC/MACLib.h>
-#include <MAC/APETag.h>
-#include <MAC/CharacterHelper.h>
+#include <mac/All.h>
+#include <mac/MACLib.h>
+#include <mac/APETag.h>
+#include <mac/CharacterHelper.h>
 
 #include <WavPack/wputils.h>
 

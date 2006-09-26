@@ -20,10 +20,10 @@
 
 #import "MonkeysAudioDecoder.h"
 
-#include <MAC/All.h>
-#include <MAC/MACLib.h>
-#include <MAC/APEDecompress.h>
-#include <MAC/CharacterHelper.h>
+#include <mac/All.h>
+#include <mac/MACLib.h>
+#include <mac/APEDecompress.h>
+#include <mac/CharacterHelper.h>
 
 #define SELF_DECOMPRESSOR	(reinterpret_cast<IAPEDecompress *>(_decompressor))
 

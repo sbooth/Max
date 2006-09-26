@@ -20,7 +20,7 @@
 
 #import "OggVorbisEncoder.h"
 
-#include <Vorbis/vorbisenc.h>
+#include <vorbis/vorbisenc.h>
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>
 #include <AudioToolbox/AudioConverter.h>

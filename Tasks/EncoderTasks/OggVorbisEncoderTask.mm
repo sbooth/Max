@@ -22,8 +22,8 @@
 #import "OggVorbisEncoder.h"
 #import "IOException.h"
 
-#include <TagLib/vorbisfile.h>			// TagLib::Ogg::Vorbis::File
-#include <TagLib/tag.h>					// TagLib::Tag
+#include <taglib/vorbisfile.h>			// TagLib::Ogg::Vorbis::File
+#include <taglib/tag.h>					// TagLib::Tag
 
 @interface AudioMetadata (TagMappings)
 + (TagLib::String)		customizeOggVorbisTag:(NSString *)tag;

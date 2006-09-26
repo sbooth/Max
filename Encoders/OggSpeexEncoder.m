@@ -32,7 +32,7 @@
 #include <Speex/speex_callbacks.h>
 #include <Speex/speex_preprocess.h>
 
-#include <Ogg/ogg.h>
+#include <ogg/ogg.h>
 
 #import "MallocException.h"
 #import "IOException.h"

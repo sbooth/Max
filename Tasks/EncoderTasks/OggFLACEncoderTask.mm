@@ -22,8 +22,8 @@
 #import "OggFLACEncoder.h"
 #import "IOException.h"
 
-#include <TagLib/oggflacfile.h>			// TagLib::File
-#include <TagLib/tag.h>					// TagLib::Tag
+#include <taglib/oggflacfile.h>			// TagLib::File
+#include <taglib/tag.h>					// TagLib::Tag
 
 @interface AudioMetadata (TagMappings)
 + (TagLib::String)		customizeOggFLACTag:(NSString *)tag;
@@ -42,9 +42,6 @@
 
 - (void) writeTags
 {
-	// TagLib corrupts Ogg FLAC streams (http://bugs.kde.org/show_bug.cgi?id=124171)
-	return;
-	
 	AudioMetadata								*metadata				= [[self taskInfo] metadata];
 	unsigned									trackNumber				= 0;
 	unsigned									trackTotal				= 0;

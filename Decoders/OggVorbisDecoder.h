@@ -21,8 +21,7 @@
 #import <Cocoa/Cocoa.h>
 #import "Decoder.h"
 
-//#include <vorbis/vorbisfile.h>
-#include <Vorbis/vorbisfile.h>
+#include <vorbis/vorbisfile.h>
 
 @interface OggVorbisDecoder : Decoder
 {

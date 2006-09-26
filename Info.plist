@@ -68,7 +68,7 @@
 				<string>ogg</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Ogg Vorbis Audio</string>
+			<string>Ogg Multimedia</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -308,7 +308,7 @@
 	</array>
 	<key>OSAScriptingDefinition</key>
 	<string>Max.sdef</string>
-	<key>SUFeedURL</key> 
-	<string>http://sbooth.org/Max/appcast.xml</string> 
+	<key>SUFeedURL</key>
+	<string>http://sbooth.org/Max/appcast.xml</string>
 </dict>
 </plist>

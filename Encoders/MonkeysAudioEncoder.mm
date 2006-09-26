@@ -20,10 +20,10 @@
 
 #import "MonkeysAudioEncoder.h"
 
-#include <MAC/All.h>
-#include <MAC/MACLib.h>
-#include <MAC/APECompress.h>
-#include <MAC/CharacterHelper.h>
+#include <mac/All.h>
+#include <mac/MACLib.h>
+#include <mac/APECompress.h>
+#include <mac/CharacterHelper.h>
 
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>

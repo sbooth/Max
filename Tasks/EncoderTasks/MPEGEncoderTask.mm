@@ -27,13 +27,13 @@
 
 #include <LAME/lame.h>						// get_lame_version
 
-#include <TagLib/mpegfile.h>				// TagLib::MPEG::File
-#include <TagLib/tag.h>						// TagLib::Tag
-#include <TagLib/tstring.h>					// TagLib::String
-#include <TagLib/tbytevector.h>				// TagLib::ByteVector
-#include <TagLib/textidentificationframe.h>	// TagLib::ID3V2::TextIdentificationFrame
-#include <TagLib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
-#include <TagLib/id3v2tag.h>				// TagLib::ID3V2::Tag
+#include <taglib/mpegfile.h>				// TagLib::MPEG::File
+#include <taglib/tag.h>						// TagLib::Tag
+#include <taglib/tstring.h>					// TagLib::String
+#include <taglib/tbytevector.h>				// TagLib::ByteVector
+#include <taglib/textidentificationframe.h>	// TagLib::ID3V2::TextIdentificationFrame
+#include <taglib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
+#include <taglib/id3v2tag.h>				// TagLib::ID3V2::Tag
 
 @implementation MPEGEncoderTask
 

@@ -20,9 +20,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <MAC/All.h>
-#include <MAC/MACLib.h>
-#include <MAC/APECompress.h>
+#include <mac/All.h>
+#include <mac/MACLib.h>
+#include <mac/APECompress.h>
 
 #import "Encoder.h"
 

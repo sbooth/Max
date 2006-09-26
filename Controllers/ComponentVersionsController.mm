@@ -24,7 +24,7 @@
 #include <FLAC/format.h>
 #include <Speex/speex.h>
 #include <sndfile/sndfile.h>
-#include <MAC/All.h>
+#include <mac/All.h>
 
 static ComponentVersionsController *sharedController = nil;
 
