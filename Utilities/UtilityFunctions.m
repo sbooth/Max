@@ -347,7 +347,7 @@ oggStreamType(NSString *filename)
 			1 /*OggFLAC__MAPPING_VERSION_MINOR_LENGTH*/ +
 			2 /*OggFLAC__MAPPING_NUM_HEADERS_LENGTH*/;
 		
-		if(op.bytes == (long)headerLength) {
+		if(op.bytes >= (long)headerLength) {
 			bytes += 1 /*OggFLAC__MAPPING_PACKET_TYPE_LENGTH*/;
 			if(0 == memcmp(bytes, "FLAC" /*OggFLAC__MAPPING_MAGIC*/, 4 /*OggFLAC__MAPPING_MAGIC_LENGTH*/)) {
 				streamType = kOggStreamTypeFLAC;
