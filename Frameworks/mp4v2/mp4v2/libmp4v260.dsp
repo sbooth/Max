@@ -174,6 +174,10 @@ SOURCE=.\atom_mvhd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\atom_ohdr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\atom_root.cpp
 # End Source File
 # Begin Source File

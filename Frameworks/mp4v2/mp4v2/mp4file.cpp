@@ -33,6 +33,9 @@
 MP4File::MP4File(u_int32_t verbosity)
 {
 	m_fileName = NULL;
+	#ifdef _WIN32
+	m_fileName_w = NULL;
+	#endif
 	m_pFile = NULL;
 	m_orgFileSize = 0;
 	m_fileSize = 0;
@@ -62,6 +65,9 @@ MP4File::MP4File(u_int32_t verbosity)
 MP4File::~MP4File()
 {
 	MP4Free(m_fileName);
+	#ifdef _WIN32
+	MP4Free(m_fileName_w);
+	#endif
 	if (m_pFile != NULL) {
 	  // not closed ?
 	  fclose(m_pFile);
@@ -87,6 +93,20 @@ void MP4File::Read(const char* fileName)
 
 	CacheProperties();
 }
+
+#ifdef _WIN32
+void MP4File::Read(const wchar_t* fileName)
+{
+	m_fileName_w = MP4Stralloc(fileName);
+	m_mode = 'r';
+
+	Open(L"rb");
+
+	ReadFromFile();
+
+	CacheProperties();
+}
+#endif
 
 void MP4File::Create(const char* fileName, u_int32_t flags, 
 		     int add_ftyp, int add_iods, 
@@ -117,20 +137,36 @@ void MP4File::Create(const char* fileName, u_int32_t flags,
 
 	// start writing
 	m_pRootAtom->BeginWrite();
+	if (add_iods != 0) {
+	  AddChildAtom("moov", "iods");
+	}
 }
 
 bool MP4File::Use64Bits (const char *atomName)
 {
-  if (!strcmp(atomName, "mdat") || !strcmp(atomName, "stbl")) {
+  uint32_t atomid = ATOMID(atomName);
+  if (atomid == ATOMID("mdat") || atomid == ATOMID("stbl")) {
     return (m_createFlags & MP4_CREATE_64BIT_DATA) == MP4_CREATE_64BIT_DATA;
-  }
-
-  if (!strcmp(atomName, "mvhd") || 
-      !strcmp(atomName, "tkhd") ||
-      !strcmp(atomName, "mdhd")) {
+  } 
+  if (atomid == ATOMID("mvhd") ||
+      atomid == ATOMID("tkhd") ||
+      atomid == ATOMID("mdhd")) {
     return (m_createFlags & MP4_CREATE_64BIT_TIME) == MP4_CREATE_64BIT_TIME;
   }
   return false;
+}
+
+void MP4File::Check64BitStatus (const char *atomName)
+{
+  uint32_t atomid = ATOMID(atomName);
+
+  if (atomid == ATOMID("mdat") || atomid == ATOMID("stbl")) {
+    m_createFlags |= MP4_CREATE_64BIT_DATA;
+  } else if (atomid == ATOMID("mvhd") ||
+	     atomid == ATOMID("tkhd") ||
+	     atomid == ATOMID("mdhd")) {
+    m_createFlags |= MP4_CREATE_64BIT_TIME;
+  }
 }
 
     
@@ -239,6 +275,9 @@ void MP4File::Optimize(const char* orgFileName, const char* newFileName)
 
 	// now switch over to writing the new file
 	MP4Free(m_fileName);
+	#ifdef _WIN32
+	MP4Free(m_fileName_w);
+	#endif
 
 	// create a temporary file if necessary
 	if (newFileName == NULL) {
@@ -399,6 +438,53 @@ void MP4File::Open(const char* fmode)
 		m_orgFileSize = m_fileSize = 0;
 	}
 }
+
+#ifdef _WIN32
+void MP4File::Open(const wchar_t* fmode)
+{
+	ASSERT(m_pFile == NULL);
+
+#ifdef O_LARGEFILE
+	// UGH! fopen doesn't open a file in 64-bit mode, period.
+	// So we need to use open() and then fdopen()
+	int fd;
+	int flags = O_LARGEFILE;
+
+	if (strchr(fmode, '+')) {
+		flags |= O_CREAT | O_RDWR;
+		if (fmode[0] == 'w') {
+			flags |= O_TRUNC;
+		}
+	} else {
+		if (fmode[0] == 'w') {
+			flags |= O_CREAT | O_TRUNC | O_WRONLY;
+		} else {
+			flags |= O_RDONLY;
+		}
+	}
+	fd = _wopen(m_fileName_w, flags, 0666);
+
+	if (fd >= 0) {
+		m_pFile = _wfdopen(fd, fmode);
+	}
+#else
+	m_pFile = _wfopen(m_fileName_w, fmode);
+#endif
+	if (m_pFile == NULL) {
+		throw new MP4Error(errno, "failed", "MP4Open");
+	}
+
+	if (m_mode == 'r') {
+		struct stat s;
+		if (fstat(fileno(m_pFile), &s) < 0) {
+			throw new MP4Error(errno, "stat failed", "MP4Open");
+		}
+		m_orgFileSize = m_fileSize = s.st_size;
+	} else {
+		m_orgFileSize = m_fileSize = 0;
+	}
+}
+#endif
 
 void MP4File::ReadFromFile()
 {
@@ -1345,7 +1431,8 @@ MP4TrackId MP4File::AddEncAudioTrack(u_int32_t timeScale,
                                      u_int8_t  key_ind_len,
                                      u_int8_t  iv_len,
                                      bool      selective_enc,
-                                     char      *kms_uri
+                                     char      *kms_uri,
+				     bool use_ismacryp
                                      )
 {
   u_int32_t original_fmt = 0;
@@ -1370,38 +1457,48 @@ MP4TrackId MP4File::AddEncAudioTrack(u_int32_t timeScale,
 
   /* set all the ismacryp-specific values */
   // original format is mp4a
-  original_fmt = ('m'<<24 | 'p'<<16 | '4'<<8 | 'a');
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.enca.sinf.frma.data-format", 
-			  original_fmt);
+  if (use_ismacryp) {
+    original_fmt = ('m'<<24 | 'p'<<16 | '4'<<8 | 'a');
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.enca.sinf.frma.data-format", 
+			    original_fmt);
 
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.enca.sinf.schm.scheme_type", 
-			  scheme_type);
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.enca.sinf"), 
+		 "schm");
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.enca.sinf"), 
+		 "schi");
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.enca.sinf.schi"), 
+		 "iKMS");
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.enca.sinf.schi"), 
+		 "iSFM");
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.enca.sinf.schm.scheme_type", 
+			    scheme_type);
 
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.enca.sinf.schm.scheme_version", 
-			  scheme_version);
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.enca.sinf.schm.scheme_version", 
+			    scheme_version);
   
-  SetTrackStringProperty(trackId,
-			 "mdia.minf.stbl.stsd.enca.sinf.schi.iKMS.kms_URI", 
-			 kms_uri);
-  if (kms_uri != NULL) {
-    free(kms_uri);
-  }  
+    SetTrackStringProperty(trackId,
+			   "mdia.minf.stbl.stsd.enca.sinf.schi.iKMS.kms_URI", 
+			   kms_uri);
+    if (kms_uri != NULL) {
+      free(kms_uri);
+    }  
 
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.enca.sinf.schi.iSFM.selective-encryption", 
-			  selective_enc);
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.enca.sinf.schi.iSFM.selective-encryption", 
+			    selective_enc);
 
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.enca.sinf.schi.iSFM.key-indicator-length", 
-			  key_ind_len);
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.enca.sinf.schi.iSFM.key-indicator-length", 
+			    key_ind_len);
 
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.enca.sinf.schi.iSFM.IV-length", 
-			  iv_len);
-  /* end ismacryp */
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.enca.sinf.schi.iSFM.IV-length", 
+			    iv_len);
+    /* end ismacryp */
+  }
 
   SetTrackIntegerProperty(trackId, 
 			  "mdia.minf.stbl.stsd.enca.timeScale", timeScale);
@@ -1549,7 +1646,8 @@ MP4TrackId MP4File::AddEncVideoTrack(u_int32_t timeScale,
 				     u_int8_t key_ind_len,
                                      u_int8_t iv_len,
                                      bool selective_enc,
-                                     char *kms_uri
+                                     char *kms_uri,
+				     bool use_ismacryp
                                      )
 {
   u_int32_t original_fmt = 0;
@@ -1567,38 +1665,49 @@ MP4TrackId MP4File::AddEncVideoTrack(u_int32_t timeScale,
 
   /* set all the ismacryp-specific values */
   // original format is mp4v
-  original_fmt = ATOMID("mp4v");
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.encv.sinf.frma.data-format", 
-			  original_fmt);
+  if (use_ismacryp) {
+    original_fmt = ATOMID("mp4v");
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.encv.sinf.frma.data-format", 
+			    original_fmt);
 
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.encv.sinf.schm.scheme_type", 
-			  scheme_type);
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.encv.sinf"), 
+		 "schm");
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.encv.sinf"), 
+		 "schi");
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.encv.sinf.schi"), 
+		 "iKMS");
+    AddChildAtom(MakeTrackName(trackId, "mdia.minf.stbl.stsd.encv.sinf.schi"), 
+		 "iSFM");
 
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.encv.sinf.schm.scheme_version", 
-			  scheme_version);
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.encv.sinf.schm.scheme_type", 
+			    scheme_type);
+
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.encv.sinf.schm.scheme_version", 
+			    scheme_version);
   
-  SetTrackStringProperty(trackId,
-			 "mdia.minf.stbl.stsd.encv.sinf.schi.iKMS.kms_URI", 
-			 kms_uri);
+    SetTrackStringProperty(trackId,
+			   "mdia.minf.stbl.stsd.encv.sinf.schi.iKMS.kms_URI", 
+			   kms_uri);
+
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.encv.sinf.schi.iSFM.selective-encryption", 
+			    selective_enc);
+
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.encv.sinf.schi.iSFM.key-indicator-length", 
+			    key_ind_len);
+
+    SetTrackIntegerProperty(trackId,
+			    "mdia.minf.stbl.stsd.encv.sinf.schi.iSFM.IV-length", 
+			    iv_len);
+  }
+  /* end ismacryp */
   if (kms_uri != NULL) {
     free(kms_uri);
   }  
-
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.encv.sinf.schi.iSFM.selective-encryption", 
-			  selective_enc);
-
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.encv.sinf.schi.iSFM.key-indicator-length", 
-			  key_ind_len);
-
-  SetTrackIntegerProperty(trackId,
-			  "mdia.minf.stbl.stsd.encv.sinf.schi.iSFM.IV-length", 
-			  iv_len);
-  /* end ismacryp */
 
 
   SetTrackIntegerProperty(trackId, 
@@ -2126,6 +2235,11 @@ char* MP4File::MakeTrackName(MP4TrackId trackId, const char* name)
 	return m_trakName;
 }
 
+MP4Atom *MP4File::FindTrackAtom (MP4TrackId trackId, const char *name)
+{
+  return FindAtom(MakeTrackName(trackId, name));
+}
+
 u_int64_t MP4File::GetTrackIntegerProperty(MP4TrackId trackId, const char* name)
 {
 	return GetIntegerProperty(MakeTrackName(trackId, name));
@@ -2329,8 +2443,14 @@ MP4Duration MP4File::GetTrackDuration(MP4TrackId trackId)
 u_int8_t MP4File::GetTrackEsdsObjectTypeId(MP4TrackId trackId)
 {
 	// changed mp4a to * to handle enca case
+  try {
 	return GetTrackIntegerProperty(trackId, 
 		"mdia.minf.stbl.stsd.*.esds.decConfigDescr.objectTypeId");
+  } catch (MP4Error *e) {
+    delete e;
+    return GetTrackIntegerProperty(trackId, 
+		"mdia.minf.stbl.stsd.*.*.esds.decConfigDescr.objectTypeId");
+  }
 }
 
 u_int8_t MP4File::GetTrackAudioMpeg4Type(MP4TrackId trackId)
@@ -2402,9 +2522,16 @@ bool MP4File::IsIsmaCrypMediaTrack(MP4TrackId trackId)
 void MP4File::GetTrackESConfiguration(MP4TrackId trackId, 
 	u_int8_t** ppConfig, u_int32_t* pConfigSize)
 {
+  try {
 	GetTrackBytesProperty(trackId, 
 		"mdia.minf.stbl.stsd.*[0].esds.decConfigDescr.decSpecificInfo[0].info",
 		ppConfig, pConfigSize);
+  } catch (MP4Error *e) {
+    delete e;
+	GetTrackBytesProperty(trackId, 
+		"mdia.minf.stbl.stsd.*[0].*.esds.decConfigDescr.decSpecificInfo[0].info",
+		ppConfig, pConfigSize);
+  }
 }
 
 void MP4File::GetTrackVideoMetadata(MP4TrackId trackId, 
@@ -2502,7 +2629,8 @@ bool MP4File::GetTrackH264SeqPictHeaders (MP4TrackId trackId,
 
   *ppSeqHeaderSize = pSeqHeaderSize;
   for (count = 0; count < pSeqCount->GetValue(); count++) {
-    pSeqVal->GetValue(&(ppSeqHeader[count]), &(pSeqHeaderSize[count]));
+    pSeqVal->GetValue(&(ppSeqHeader[count]), &(pSeqHeaderSize[count]),
+		      count);
   }
   ppSeqHeader[count] = NULL;
   pSeqHeaderSize[count] = 0;
@@ -2526,7 +2654,8 @@ bool MP4File::GetTrackH264SeqPictHeaders (MP4TrackId trackId,
   *ppPictHeaderSize = pPictHeaderSize;
 
   for (count = 0; count < pPictCount->GetValue(); count++) {
-    pPictVal->GetValue(&(ppPictHeader[count]), &(pPictHeaderSize[count]));
+    pPictVal->GetValue(&(ppPictHeader[count]), &(pPictHeaderSize[count]),
+		       count);
   }
   ppPictHeader[count] = NULL;
   pPictHeaderSize[count] = 0;

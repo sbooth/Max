@@ -297,8 +297,10 @@ u_int64_t MP4ConvertTime(u_int64_t t,
 	}
 
 	// final resort is to use floating point
-	double d = ((double)newTimeScale / (double)oldTimeScale) + 0.5;
+	double d = (double)newTimeScale;
 	d *= UINT64_TO_DOUBLE(t);
+	d /= (double)oldTimeScale;	
+	d += 0.5; // round up.
 
 	return (u_int64_t)d;
 }

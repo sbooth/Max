@@ -241,13 +241,18 @@ protected:
 	void AddProperties(u_int8_t version);
 };
 
-class MP4MeanAtom : public MP4Atom {
-public:
-    MP4MeanAtom();
-    void Read();
+class MP4Meta1Atom : public MP4Atom {
+ public:
+  MP4Meta1Atom(const char *name);
+  void Read();
 };
 
-
+class MP4Meta2Atom : public MP4Atom {
+ public:
+  MP4Meta2Atom(const char *name);
+  void Read();
+};
+	       
 class MP4MvhdAtom : public MP4Atom {
 public:
 	MP4MvhdAtom();
@@ -257,10 +262,11 @@ protected:
 	void AddProperties(u_int8_t version);
 };
 
-class MP4NameAtom : public MP4Atom {
-public:
-    MP4NameAtom();
-    void Read();
+class MP4OhdrAtom : public MP4Atom {
+ public:
+  MP4OhdrAtom();
+  ~MP4OhdrAtom();
+  void Read();
 };
 
 class MP4RtpAtom : public MP4Atom {

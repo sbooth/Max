@@ -119,6 +119,9 @@
 /* Define to 1 if the system has the type `socklen_t'. */
 #define HAVE_SOCKLEN_T 1
 
+/* enable use of srtp library */
+/* #undef HAVE_SRTP */
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
 
@@ -174,13 +177,13 @@
 #define PACKAGE_NAME "mpeg4ip"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "mpeg4ip 1.4.1"
+#define PACKAGE_STRING "mpeg4ip 1.5.0.1"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "mpeg4ip"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.4.1"
+#define PACKAGE_VERSION "1.5.0.1"
 
 /* The size of a `bool', as computed by sizeof. */
 #define SIZEOF_BOOL 4

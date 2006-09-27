@@ -450,6 +450,26 @@ void MP4ContentIdDescriptor::Read(MP4File* pFile)
 	/* which allows us to reconfigure ourselves */
 	Mutate();
 
+	bool contentTypeFlag = ((MP4BitfieldProperty*)m_pProperties[1])->GetValue();
+
+	bool contentIdFlag = ((MP4BitfieldProperty*)m_pProperties[2])->GetValue();
+
+  if (contentIdFlag) {
+
+    u_int32_t cIdOffset = 2;
+
+    if (contentTypeFlag) {
+
+      cIdOffset++;
+
+    }
+
+  	((MP4BytesProperty*)m_pProperties[7])->SetValueSize(m_size - cIdOffset);
+
+  }
+
+
+
 	/* read the remaining properties */
 	ReadProperties(pFile, 5);
 }
@@ -462,6 +482,7 @@ void MP4ContentIdDescriptor::Mutate()
 	bool contentIdFlag = ((MP4BitfieldProperty*)m_pProperties[2])->GetValue();
 	m_pProperties[6]->SetImplicit(!contentIdFlag);
 	m_pProperties[7]->SetImplicit(!contentIdFlag);
+
 }
 
 MP4SupplContentIdDescriptor::MP4SupplContentIdDescriptor()

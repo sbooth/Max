@@ -191,6 +191,14 @@ inline char* MP4Stralloc(const char* s1) {
 	return s2;
 }
 
+#ifdef _WIN32
+inline wchar_t* MP4Stralloc(const wchar_t* s1) {
+	wchar_t* s2 = (wchar_t*)MP4Malloc((wcslen(s1) + 1)*sizeof(wchar_t));
+	wcscpy(s2, s1);
+	return s2;
+}
+#endif
+
 inline void* MP4Realloc(void* p, u_int32_t newSize) {
 	// workaround library bug
 	if (p == NULL && newSize == 0) {

@@ -23,33 +23,15 @@
 
 #include "mp4common.h"
 
-MP4MeanAtom::MP4MeanAtom()
-    : MP4Atom("mean")
+MP4Meta1Atom::MP4Meta1Atom(const char *name)
+    : MP4Atom(name)
 {
-	AddVersionAndFlags(); /* 0, 1 */
+  AddVersionAndFlags(); /* 0, 1 */
 
-    AddProperty(
-        new MP4BytesProperty("metadata")); /* 2 */
+  AddProperty(new MP4BytesProperty("metadata")); /* 2 */
 }
 
-void MP4MeanAtom::Read() 
-{
-	// calculate size of the metadata from the atom size
-	((MP4BytesProperty*)m_pProperties[2])->SetValueSize(m_size - 4);
-
-	MP4Atom::Read();
-}
-
-MP4NameAtom::MP4NameAtom()
-    : MP4Atom("name")
-{
-	AddVersionAndFlags(); /* 0, 1 */
-
-    AddProperty(
-        new MP4BytesProperty("metadata")); /* 2 */
-}
-
-void MP4NameAtom::Read() 
+void MP4Meta1Atom::Read() 
 {
 	// calculate size of the metadata from the atom size
 	((MP4BytesProperty*)m_pProperties[2])->SetValueSize(m_size - 4);
@@ -75,3 +57,28 @@ void MP4DataAtom::Read()
 	MP4Atom::Read();
 }
 
+
+// MP4Meta2Atom is for \251nam and \251cmt flags, which appear differently
+// in .mov and in itunes file.  In .movs, they appear under udata, in 
+// itunes, they appear under ilst.
+MP4Meta2Atom::MP4Meta2Atom (const char *name) : MP4Atom(name)
+{
+}
+
+void MP4Meta2Atom::Read ()
+{
+  MP4Atom *parent = GetParentAtom();
+  if (ATOMID(parent->GetType()) == ATOMID("udta")) {
+    // add data property
+    AddReserved("reserved2", 4); /* 0 */
+
+    AddProperty(
+        new MP4BytesProperty("metadata")); /* 1 */
+    ((MP4BytesProperty*)m_pProperties[1])->SetValueSize(m_size - 4);
+  } else {
+    ExpectChildAtom("data", Required, OnlyOne);
+  }
+  MP4Atom::Read();
+}
+
+  

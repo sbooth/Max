@@ -63,8 +63,8 @@ am_libmp4v2_la_OBJECTS = 3gp.lo atom_amr.lo atom_avc1.lo atom_avcC.lo \
 	atom_enca.lo atom_encv.lo atom_free.lo atom_ftyp.lo \
 	atom_hdlr.lo atom_hinf.lo atom_hnti.lo atom_href.lo \
 	atom_mdat.lo atom_mdhd.lo atom_meta.lo atom_mp4s.lo \
-	atom_mp4v.lo atom_mvhd.lo atom_root.lo atom_rtp.lo \
-	atom_s263.lo atom_sdp.lo atom_smi.lo atom_sound.lo \
+	atom_mp4v.lo atom_mvhd.lo atom_ohdr.lo atom_root.lo \
+	atom_rtp.lo atom_s263.lo atom_sdp.lo atom_smi.lo atom_sound.lo \
 	atom_standard.lo atom_stbl.lo atom_stdp.lo atom_stsc.lo \
 	atom_stsd.lo atom_stsz.lo atom_tfhd.lo atom_tkhd.lo \
 	atom_treftype.lo atom_trun.lo atom_udta.lo atom_url.lo \
@@ -184,7 +184,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-ISMACRYP_FLAGS = @ISMACRYP_FLAGS@
 LAME_LIB = @LAME_LIB@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -313,6 +312,7 @@ libmp4v2_la_SOURCES = \
 	atom_mp4s.cpp \
 	atom_mp4v.cpp \
 	atom_mvhd.cpp \
+	atom_ohdr.cpp \
 	atom_root.cpp \
 	atom_rtp.cpp \
 	atom_s263.cpp \
@@ -370,7 +370,6 @@ libmp4v2_la_SOURCES = \
 EXTRA_DIST = API_CHANGES \
 	INTERNALS \
 	libmp4v260.dsp \
-	libmp4v2_st60.dsp \
 	TODO 
 
 all: all-recursive
@@ -464,6 +463,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_mp4s.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_mp4v.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_mvhd.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_ohdr.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_root.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_rtp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atom_s263.Plo@am__quote@

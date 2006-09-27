@@ -63,6 +63,7 @@ void MP4File::MakeIsmaCompliant(bool addIsmaComplianceSdp)
 	    videoTrackId == MP4_INVALID_TRACK_ID) return;
 
 	const char *audio_media_data_name, *video_media_data_name;
+	uint8_t videoProfile = 0xff;
 	if (audioTrackId != MP4_INVALID_TRACK_ID) {
 	  audio_media_data_name = MP4GetTrackMediaDataName(this, audioTrackId);
 	  if (!(ATOMID(audio_media_data_name) == ATOMID("mp4a") ||
@@ -84,6 +85,10 @@ void MP4File::MakeIsmaCompliant(bool addIsmaComplianceSdp)
 			  );
 	    return;
 	  }
+	  uint32_t verb = GetVerbosity();
+	  SetVerbosity(verb & ~MP4_DETAILS_ERROR);
+	  videoProfile = MP4GetVideoProfileLevel(this, videoTrackId);
+	  SetVerbosity(verb);
 	}
 
 	m_useIsma = true;
@@ -96,15 +101,19 @@ void MP4File::MakeIsmaCompliant(bool addIsmaComplianceSdp)
 		DeleteTrack(m_odTrackId);
 	}
 
+	if (m_pRootAtom->FindAtom("moov.iods") == NULL) {
+	  AddChildAtom("moov", "iods");
+	}
 	AddODTrack();
 	SetODProfileLevel(0xFF);
 
 	if (audioTrackId != MP4_INVALID_TRACK_ID) {
 		AddTrackToOd(audioTrackId);
+		MP4SetAudioProfileLevel(this, 0xf);
 	}
-
 	if (videoTrackId != MP4_INVALID_TRACK_ID) {
 		AddTrackToOd(videoTrackId);
+		MP4SetVideoProfileLevel(this, videoProfile);
 	}
 
 	// delete any existing scene track

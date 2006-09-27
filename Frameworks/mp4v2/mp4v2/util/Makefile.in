@@ -40,6 +40,7 @@ target_triplet = @target@
 bin_PROGRAMS = mp4dump$(EXEEXT) mp4extract$(EXEEXT) mp4info$(EXEEXT) \
 	mp4trackdump$(EXEEXT) mp4tags$(EXEEXT) mp4art$(EXEEXT) \
 	mp4videoinfo$(EXEEXT)
+check_PROGRAMS = mp4syncfiles$(EXEEXT)
 subdir = lib/mp4v2/util
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -68,6 +69,10 @@ am_mp4info_OBJECTS = mp4info.$(OBJEXT)
 mp4info_OBJECTS = $(am_mp4info_OBJECTS)
 mp4info_DEPENDENCIES = $(top_builddir)/lib/mp4v2/libmp4v2.la \
 	$(top_builddir)/lib/gnu/libmpeg4ip_gnu.la
+am_mp4syncfiles_OBJECTS = mp4syncfiles.$(OBJEXT)
+mp4syncfiles_OBJECTS = $(am_mp4syncfiles_OBJECTS)
+mp4syncfiles_DEPENDENCIES = $(top_builddir)/lib/mp4v2/libmp4v2.la \
+	$(top_builddir)/lib/gnu/libmpeg4ip_gnu.la
 am_mp4tags_OBJECTS = mp4tags.$(OBJEXT)
 mp4tags_OBJECTS = $(am_mp4tags_OBJECTS)
 mp4tags_DEPENDENCIES = $(top_builddir)/lib/mp4v2/libmp4v2.la \
@@ -93,10 +98,11 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(mp4art_SOURCES) $(mp4dump_SOURCES) $(mp4extract_SOURCES) \
-	$(mp4info_SOURCES) $(mp4tags_SOURCES) $(mp4trackdump_SOURCES) \
-	$(mp4videoinfo_SOURCES)
+	$(mp4info_SOURCES) $(mp4syncfiles_SOURCES) $(mp4tags_SOURCES) \
+	$(mp4trackdump_SOURCES) $(mp4videoinfo_SOURCES)
 DIST_SOURCES = $(mp4art_SOURCES) $(mp4dump_SOURCES) \
-	$(mp4extract_SOURCES) $(mp4info_SOURCES) $(mp4tags_SOURCES) \
+	$(mp4extract_SOURCES) $(mp4info_SOURCES) \
+	$(mp4syncfiles_SOURCES) $(mp4tags_SOURCES) \
 	$(mp4trackdump_SOURCES) $(mp4videoinfo_SOURCES)
 ETAGS = etags
 CTAGS = ctags
@@ -178,7 +184,6 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-ISMACRYP_FLAGS = @ISMACRYP_FLAGS@
 LAME_LIB = @LAME_LIB@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -310,8 +315,12 @@ mp4art_SOURCES = mp4art.cpp
 mp4art_LDADD = $(top_builddir)/lib/mp4v2/libmp4v2.la \
 	$(top_builddir)/lib/gnu/libmpeg4ip_gnu.la
 
-EXTRA_DIST = mp4dump60.dsp mp4extract60.dsp \
-	mp4info.dsp 
+mp4syncfiles_SOURCES = mp4syncfiles.cpp
+mp4syncfiles_LDADD = $(top_builddir)/lib/mp4v2/libmp4v2.la \
+	$(top_builddir)/lib/gnu/libmpeg4ip_gnu.la
+
+EXTRA_DIST = mp4dump60.dsp  \
+	mp4info.dsp mp4tags.dsp
 
 all: all-am
 
@@ -374,6 +383,13 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+
+clean-checkPROGRAMS:
+	@list='$(check_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
 mp4art$(EXEEXT): $(mp4art_OBJECTS) $(mp4art_DEPENDENCIES) 
 	@rm -f mp4art$(EXEEXT)
 	$(CXXLINK) $(mp4art_LDFLAGS) $(mp4art_OBJECTS) $(mp4art_LDADD) $(LIBS)
@@ -386,6 +402,9 @@ mp4extract$(EXEEXT): $(mp4extract_OBJECTS) $(mp4extract_DEPENDENCIES)
 mp4info$(EXEEXT): $(mp4info_OBJECTS) $(mp4info_DEPENDENCIES) 
 	@rm -f mp4info$(EXEEXT)
 	$(CXXLINK) $(mp4info_LDFLAGS) $(mp4info_OBJECTS) $(mp4info_LDADD) $(LIBS)
+mp4syncfiles$(EXEEXT): $(mp4syncfiles_OBJECTS) $(mp4syncfiles_DEPENDENCIES) 
+	@rm -f mp4syncfiles$(EXEEXT)
+	$(CXXLINK) $(mp4syncfiles_LDFLAGS) $(mp4syncfiles_OBJECTS) $(mp4syncfiles_LDADD) $(LIBS)
 mp4tags$(EXEEXT): $(mp4tags_OBJECTS) $(mp4tags_DEPENDENCIES) 
 	@rm -f mp4tags$(EXEEXT)
 	$(CXXLINK) $(mp4tags_LDFLAGS) $(mp4tags_OBJECTS) $(mp4tags_LDADD) $(LIBS)
@@ -406,6 +425,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp4dump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp4extract.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp4info.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp4syncfiles.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp4tags.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp4trackdump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mp4videoinfo.Po@am__quote@
@@ -517,6 +537,7 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS)
 check: check-am
 all-am: Makefile $(PROGRAMS)
 installdirs:
@@ -549,7 +570,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-checkPROGRAMS clean-generic \
+	clean-libtool mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -598,16 +620,17 @@ ps-am:
 uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS uninstall-info-am
+	clean-checkPROGRAMS clean-generic clean-libtool ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-exec install-exec-am \
+	install-info install-info-am install-man install-strip \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-binPROGRAMS \
+	uninstall-info-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

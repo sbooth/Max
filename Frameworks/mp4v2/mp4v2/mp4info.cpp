@@ -364,11 +364,11 @@ static char* PrintVideoInfo(
 	  // note encv might needs it's own field eventually.
 	  type = MP4GetTrackEsdsObjectTypeId(mp4File, trackId);
 	  if (type == MP4_MPEG4_VIDEO_TYPE) {
-	    type = MP4GetVideoProfileLevel(mp4File);
+	    type = MP4GetVideoProfileLevel(mp4File, trackId);
 	    typeName = Mpeg4VisualProfileName(type);
 	    if (typeName == NULL) {
 	      typeName = "MPEG-4 Unknown Profile";
-		} else {
+	    } else {
 	      foundTypeName = true;
 	    }
 	  } else {

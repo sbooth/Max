@@ -46,6 +46,9 @@ public: /* equivalent to MP4 library API */
 
 	/* file operations */
 	void Read(const char* fileName);
+	#ifdef _WIN32
+	void Read(const wchar_t* fileName);
+	#endif
 	void Create(const char* fileName, u_int32_t flags, 
 		    int add_ftyp = 1, int add_iods = 1,
 		    char* majorBrand = NULL, 
@@ -67,7 +70,7 @@ public: /* equivalent to MP4 library API */
 	}
 
 	bool Use64Bits(const char *atomName);
-
+	void Check64BitStatus(const char *atomName);
 	/* file properties */
 
 	u_int64_t GetIntegerProperty(const char* name);
@@ -123,7 +126,7 @@ public: /* equivalent to MP4 library API */
 	u_int16_t FindTrakAtomIndex(MP4TrackId trackId);
 
 	/* track properties */
-
+	MP4Atom *FindTrackAtom(MP4TrackId trackId, const char *name);
 	u_int64_t GetTrackIntegerProperty(
 		MP4TrackId trackId, const char* name);
 	float GetTrackFloatProperty(
@@ -212,7 +215,8 @@ public: /* equivalent to MP4 library API */
                 u_int8_t  key_ind_len,
                 u_int8_t  iv_len, 
                 bool      selective_enc,
-                char      *kms_uri);
+                char      *kms_uri,
+		bool      use_ismacryp);
 
 	void SetAmrVendor(
 			MP4TrackId trackId,
@@ -255,7 +259,8 @@ public: /* equivalent to MP4 library API */
                 u_int8_t  key_ind_len,
                 u_int8_t  iv_len,
                 bool      selective_enc,
-                char      *kms_uri);
+                char      *kms_uri,
+		bool      use_ismacryp);
 
 
 	void SetH263Vendor(
@@ -541,8 +546,8 @@ public: /* equivalent to MP4 library API */
 	/* iTunes metadata handling */
  protected:
 	bool CreateMetadataAtom(const char* name);
-	bool DeleteMetadataAtom(const char* name);
-	bool GetMetadataString(const char *atom, char **value);
+	bool DeleteMetadataAtom(const char* name, bool try_udta = false);
+	bool GetMetadataString(const char *atom, char **value, bool try_udta = false);
 	bool SetMetadataString(const char *atom, const char *value);
  public:
 	bool MetadataDelete(void);
@@ -698,6 +703,9 @@ public: /* equivalent to MP4 library API */
 
 protected:
 	void Open(const char* fmode);
+	#ifdef _WIN32
+	void Open(const wchar_t* fmode);
+	#endif
 	void ReadFromFile();
 	void GenerateTracks();
 	void BeginWrite();
@@ -802,6 +810,9 @@ protected:
 
 protected:
 	char*			m_fileName;
+	#ifdef _WIN32
+	wchar_t*    	m_fileName_w;
+	#endif
 	FILE*			m_pFile;
 	u_int64_t		m_orgFileSize;
 	u_int64_t		m_fileSize;

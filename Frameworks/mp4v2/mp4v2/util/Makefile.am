@@ -3,7 +3,8 @@ INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/lib/mp4v2 -I$(top_srcdir)/lib
 
 AM_CXXFLAGS = @BILLS_CPPWARNINGS@
 
-bin_PROGRAMS = mp4dump mp4extract mp4info mp4trackdump mp4tags mp4art mp4videoinfo
+bin_PROGRAMS = mp4dump mp4extract mp4info mp4trackdump mp4tags mp4art mp4videoinfo 
+check_PROGRAMS = mp4syncfiles
 
 mp4dump_SOURCES = mp4dump.cpp
 mp4dump_LDADD = $(top_builddir)/lib/mp4v2/libmp4v2.la \
@@ -34,5 +35,9 @@ mp4art_SOURCES = mp4art.cpp
 mp4art_LDADD = $(top_builddir)/lib/mp4v2/libmp4v2.la \
 	$(top_builddir)/lib/gnu/libmpeg4ip_gnu.la
 
-EXTRA_DIST = mp4dump60.dsp mp4extract60.dsp \
-	mp4info.dsp 
+mp4syncfiles_SOURCES = mp4syncfiles.cpp
+mp4syncfiles_LDADD = $(top_builddir)/lib/mp4v2/libmp4v2.la \
+	$(top_builddir)/lib/gnu/libmpeg4ip_gnu.la
+
+EXTRA_DIST = mp4dump60.dsp  \
+	mp4info.dsp mp4tags.dsp

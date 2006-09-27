@@ -382,6 +382,7 @@ char* MP4File::ReadString()
 	do {
 		if (length == alloced) {
 			data = (char*)MP4Realloc(data, alloced * 2);
+			alloced *= 2;
 		}
 		ReadBytes((u_int8_t*)&data[length], 1);
 		length++;

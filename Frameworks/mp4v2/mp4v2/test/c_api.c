@@ -38,9 +38,18 @@ main(int argc, char** argv)
 #else
 	MP4FileHandle mp4File;
 
-	mp4File = MP4Modify(argv[1], MP4_DETAILS_ERROR, 0);
+	mp4File = MP4Read(argv[1], MP4_DETAILS_ERROR);
 	MP4SetVerbosity(mp4File, MP4_DETAILS_ALL);
-#if 1
+	if (MP4HaveAtom(mp4File, "moov.mbhd")) {
+	  printf("found moov.mvhd\n");
+	}
+	if (MP4HaveTrackAtom(mp4File, 1, argv[2])) {
+	  printf("found %s\n", argv[2]);
+	} else {
+	  printf("didn't find it\n");
+	}
+	    
+#if 0
 	u_int8_t* data=(u_int8_t*)"this is my tag data";
 	u_int32_t len=strlen((char*)data);
 	MP4SetMetadataFreeForm(mp4File, "mytag1",data,len);

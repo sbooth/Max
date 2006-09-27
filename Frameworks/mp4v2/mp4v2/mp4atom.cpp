@@ -21,10 +21,14 @@
  * Portions created by Ximpo Group Ltd. are
  * Copyright (C) Ximpo Group Ltd. 2003, 2004.  All Rights Reserved.
  * 
+ *  Portions created by Adnecto d.o.o. are
+ *  Copyright (C) Adnecto d.o.o. 2005.  All Rights Reserved
+ *
  * Contributor(s): 
  *		Dave Mackie			dmackie@cisco.com
  *		Alix Marchandise-Franquet	alix@cisco.com
  *              Ximpo Group Ltd.                mp4v2@ximpo.com
+ *              Danijel Kopcinovic              danijel.kopcinovic@adnecto.net
  */
 
 #include "mp4common.h"
@@ -81,7 +85,9 @@ MP4Atom* MP4Atom::CreateAtom(const char* type)
       } else if (ATOMID(type) == ATOMID("alis")) {
 	pAtom = new MP4UrlAtom("alis");
       } else if (ATOMID(type) == ATOMID("alaw")) {
-	pAtom = new MP4SoundAtom("alaw");
+	pAtom = new MP4SoundAtom(type);
+      } else if (ATOMID(type) == ATOMID("alac")) {
+	pAtom = new MP4SoundAtom(type);
       }
       break;
     case 'd':
@@ -156,12 +162,17 @@ MP4Atom* MP4Atom::CreateAtom(const char* type)
       } else if (ATOMID(type) == ATOMID("mp4v")) {
 	pAtom = new MP4Mp4vAtom();
       } else if (ATOMID(type) == ATOMID("mean")) { // iTunes
-	pAtom = new MP4MeanAtom();
+	pAtom = new MP4Meta1Atom(type);
       }
       break;
     case 'n':
       if (ATOMID(type) == ATOMID("name")) { // iTunes
-	pAtom = new MP4NameAtom();
+	pAtom = new MP4Meta1Atom(type);
+      }
+      break;
+    case 'o':
+      if (ATOMID(type) == ATOMID("ohdr")) {
+	pAtom = new MP4OhdrAtom();
       }
       break;
     case 'r':
@@ -238,6 +249,20 @@ MP4Atom* MP4Atom::CreateAtom(const char* type)
 	pAtom = new MP4SmiAtom();
       }
       break;
+    case 0251:
+      static const char name[5]={0251,'n', 'a', 'm', '\0'};
+      static const char cmt[5]={0251,'c', 'm', 't', '\0'};
+      static const char cpy[5]={0251,'c', 'p', 'y', '\0'};
+      static const char des[5]={0251,'d', 'e', 's','\0'};
+      static const char prd[5]={0251, 'p', 'r', 'd', '\0'};
+      if (ATOMID(type) == ATOMID(name) ||
+	  ATOMID(type) == ATOMID(cmt) ||
+	  ATOMID(type) == ATOMID(cpy) ||
+	  ATOMID(type) == ATOMID(prd) ||
+	  ATOMID(type) == ATOMID(des)) {
+	pAtom = new MP4Meta2Atom(type);
+      }
+      break;
     }
   }
 
@@ -299,6 +324,7 @@ MP4Atom* MP4Atom::ReadAtom(MP4File* pFile, MP4Atom* pParentAtom)
 	if (dataSize == 1) {
 		dataSize = pFile->ReadUInt64(); 
 		hdrSize += 8;
+		pFile->Check64BitStatus(type);
 	}
 
 	// extended type
