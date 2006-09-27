@@ -363,7 +363,7 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 					continue;
 				}
 				// Ignore files that don't have our extensions
-				else if(NO == [allowedTypes containsObject:[subpath pathExtension]]) {
+				else if(NO == [allowedTypes containsObject:[[subpath pathExtension] lowercaseString]]) {
 					continue;
 				}
 				
@@ -531,12 +531,25 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		return YES;
 	}
 	// Only accept files with our extensions
-	else if(NO == [getAudioExtensions() containsObject:[filename pathExtension]]) {	
+	else if(NO == [getAudioExtensions() containsObject:[[filename pathExtension] lowercaseString]]) {	
 		return NO;
 	}
 	
 	// Get file's metadata
-	metadata = [AudioMetadata metadataFromFile:filename];
+	@try {
+		metadata = [AudioMetadata metadataFromFile:filename];
+	}
+
+	@catch(NSException *exception) {
+		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the document \"%@\".", @"Exceptions", @""), [filename lastPathComponent]]];
+		[alert setInformativeText:[exception reason]];
+		[alert setAlertStyle:NSWarningAlertStyle];		
+		[alert runModal];
+		
+		return NO;
+	}
 	
 	// Get the icon for the file
 	icon = getIconForFile(filename, NSMakeSize(16, 16));
