@@ -20,10 +20,10 @@
 
 #import "OggSpeexDecoder.h"
 
-#include <Speex/speex.h>
-#include <Speex/speex_header.h>
-#include <Speex/speex_stereo.h>
-#include <Speex/speex_callbacks.h>
+#include <speex/speex.h>
+#include <speex/speex_header.h>
+#include <speex/speex_stereo.h>
+#include <speex/speex_callbacks.h>
 
 @interface OggSpeexDecoder (Private)
 - (void)		incrementPacketCount;

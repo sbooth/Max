@@ -25,7 +25,7 @@
 #import "IOException.h"
 #import "UtilityFunctions.h"
 
-#include <LAME/lame.h>						// get_lame_version
+#include <lame/lame.h>						// get_lame_version
 
 #include <taglib/mpegfile.h>				// TagLib::MPEG::File
 #include <taglib/tag.h>						// TagLib::Tag

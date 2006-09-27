@@ -27,7 +27,7 @@
 #include <AudioToolbox/ExtendedAudioFile.h>
 #include <AudioUnit/AudioCodec.h>
 
-#include <LAME/lame.h>
+#include <lame/lame.h>
 
 #import "MallocException.h"
 #import "IOException.h"

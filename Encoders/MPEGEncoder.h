@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <LAME/lame.h>
+#include <lame/lame.h>
 
 #import "Encoder.h"
 

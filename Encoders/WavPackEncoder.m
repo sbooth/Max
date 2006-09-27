@@ -26,7 +26,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-#include <WavPack/wputils.h>
+#include <wavpack/wputils.h>
 
 #import "UtilityFunctions.h"
 #import "MissingResourceException.h"

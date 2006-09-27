@@ -22,7 +22,7 @@
 #import "WavPackEncoder.h"
 #import "IOException.h"
 
-#include <WavPack/wputils.h>
+#include <wavpack/wputils.h>
 
 @interface AudioMetadata (TagMappings)
 + (NSString *)			customizeWavPackTag:(NSString *)tag;

@@ -20,9 +20,9 @@
 
 #import "ComponentVersionsController.h"
 
-#include <LAME/lame.h>
+#include <lame/lame.h>
 #include <FLAC/format.h>
-#include <Speex/speex.h>
+#include <speex/speex.h>
 #include <sndfile/sndfile.h>
 #include <mac/All.h>
 
