@@ -69,7 +69,7 @@
 // Attempt to parse metadata from filename
 + (AudioMetadata *) metadataFromFile:(NSString *)filename
 {
-	NSString *extension = [filename pathExtension];
+	NSString *extension = [[filename pathExtension] lowercaseString];
 	
 	if([extension isEqualToString:@"flac"]) {
 		return [self metadataFromFLACFile:filename];
