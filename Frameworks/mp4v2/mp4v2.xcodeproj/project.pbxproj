@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C5ED1C00ACAD957003E8ECF /* atom_ohdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C5ED1BF0ACAD957003E8ECF /* atom_ohdr.cpp */; };
 		8CEA1A050AC8D35E009E46CB /* 3gp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA19B90AC8D35D009E46CB /* 3gp.cpp */; };
 		8CEA1A060AC8D35E009E46CB /* atom_amr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA19BA0AC8D35D009E46CB /* atom_amr.cpp */; };
 		8CEA1A070AC8D35E009E46CB /* atom_avc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA19BB0AC8D35D009E46CB /* atom_avc1.cpp */; };
@@ -95,6 +96,7 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* mp4v2_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mp4v2_Prefix.pch; sourceTree = "<group>"; };
+		8C5ED1BF0ACAD957003E8ECF /* atom_ohdr.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = atom_ohdr.cpp; path = mp4v2/atom_ohdr.cpp; sourceTree = "<group>"; };
 		8CEA19B90AC8D35D009E46CB /* 3gp.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = 3gp.cpp; path = mp4v2/3gp.cpp; sourceTree = "<group>"; };
 		8CEA19BA0AC8D35D009E46CB /* atom_amr.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = atom_amr.cpp; path = mp4v2/atom_amr.cpp; sourceTree = "<group>"; };
 		8CEA19BB0AC8D35D009E46CB /* atom_avc1.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = atom_avc1.cpp; path = mp4v2/atom_avc1.cpp; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 		08FB77AEFE84172EC02AAC07 /* mp4v2 */ = {
 			isa = PBXGroup;
 			children = (
+				8C5ED1BF0ACAD957003E8ECF /* atom_ohdr.cpp */,
 				8CEA1C720AC8E380009E46CB /* mpeg4ip.h */,
 				8CEA1A6B0AC8D474009E46CB /* mpeg4ip_config.h */,
 				8CEA1A6C0AC8D474009E46CB /* mpeg4ip_version.h */,
@@ -483,6 +486,7 @@
 				8CEA1A4B0AC8D35E009E46CB /* odcommands.cpp in Sources */,
 				8CEA1A4D0AC8D35E009E46CB /* qosqualifiers.cpp in Sources */,
 				8CEA1A4F0AC8D35E009E46CB /* rtphint.cpp in Sources */,
+				8C5ED1C00ACAD957003E8ECF /* atom_ohdr.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
