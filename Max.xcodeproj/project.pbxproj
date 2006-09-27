@@ -15,6 +15,8 @@
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
 		8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */; };
+		8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
+		8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C244AFB0AC6DFEF001334D0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C244AC60AC6DFEF001334D0 /* Security.framework */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
@@ -205,7 +207,6 @@
 		8CEA0D900AC7AB32009E46CB /* OggFLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */; };
 		8CEA0D910AC7AB37009E46CB /* OggFLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */; };
 		8CEA13CE0AC8ACEB009E46CB /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
-		8CEA13CF0AC8ACF0009E46CB /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8CEA17890AC8C2BE009E46CB /* mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA17870AC8C2BE009E46CB /* mac.framework */; };
 		8CEA178A0AC8C2C7009E46CB /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA17870AC8C2BE009E46CB /* mac.framework */; };
 		8CEA18750AC8C7A7009E46CB /* sndfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA18730AC8C7A7009E46CB /* sndfile.framework */; };
@@ -250,6 +251,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */,
 				8CEA1B290AC8D980009E46CB /* cddb.framework in Copy Frameworks */,
 				8CEA1A8D0AC8D5D7009E46CB /* mp4v2.framework in Copy Frameworks */,
 				8CEA19A80AC8D213009E46CB /* cdparanoia.framework in Copy Frameworks */,
@@ -257,7 +259,6 @@
 				8CEA18DB0AC8CA96009E46CB /* mpcdec.framework in Copy Frameworks */,
 				8CEA18760AC8C7AB009E46CB /* sndfile.framework in Copy Frameworks */,
 				8CEA178A0AC8C2C7009E46CB /* mac.framework in Copy Frameworks */,
-				8CEA13CF0AC8ACF0009E46CB /* taglib.framework in Copy Frameworks */,
 				8CEA0D910AC7AB37009E46CB /* OggFLAC.framework in Copy Frameworks */,
 				8CEA0D830AC7AB20009E46CB /* FLAC.framework in Copy Frameworks */,
 				8CEA0B910AC7A05C009E46CB /* speex.framework in Copy Frameworks */,
@@ -748,6 +749,7 @@
 				8CEA19A70AC8D20F009E46CB /* cdparanoia.framework in Frameworks */,
 				8CEA1A8C0AC8D5D2009E46CB /* mp4v2.framework in Frameworks */,
 				8CEA1B280AC8D97C009E46CB /* cddb.framework in Frameworks */,
+				8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
