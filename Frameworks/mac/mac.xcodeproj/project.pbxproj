@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C5ED6D90ACB54E7003E8ECF /* APETag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA140B0AC8B207009E46CB /* APETag.cpp */; };
 		8CEA14250AC8B207009E46CB /* APECompress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA13FC0AC8B207009E46CB /* APECompress.cpp */; };
 		8CEA14260AC8B207009E46CB /* APECompress.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA13FD0AC8B207009E46CB /* APECompress.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA14270AC8B207009E46CB /* APECompressCore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA13FE0AC8B207009E46CB /* APECompressCore.cpp */; };
@@ -22,7 +23,6 @@
 		8CEA14310AC8B207009E46CB /* APELink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA14080AC8B207009E46CB /* APELink.cpp */; };
 		8CEA14320AC8B207009E46CB /* APELink.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA14090AC8B207009E46CB /* APELink.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA14330AC8B207009E46CB /* APESimple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA140A0AC8B207009E46CB /* APESimple.cpp */; };
-		8CEA14340AC8B207009E46CB /* APETag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA140B0AC8B207009E46CB /* APETag.cpp */; };
 		8CEA14350AC8B207009E46CB /* APETag.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA140C0AC8B207009E46CB /* APETag.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA14360AC8B207009E46CB /* BitArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA140D0AC8B207009E46CB /* BitArray.cpp */; };
 		8CEA14370AC8B207009E46CB /* BitArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA140E0AC8B207009E46CB /* BitArray.h */; };
@@ -458,7 +458,6 @@
 				8CEA142F0AC8B207009E46CB /* APEInfo.cpp in Sources */,
 				8CEA14310AC8B207009E46CB /* APELink.cpp in Sources */,
 				8CEA14330AC8B207009E46CB /* APESimple.cpp in Sources */,
-				8CEA14340AC8B207009E46CB /* APETag.cpp in Sources */,
 				8CEA14360AC8B207009E46CB /* BitArray.cpp in Sources */,
 				8CEA14380AC8B207009E46CB /* MACLib.cpp in Sources */,
 				8CEA143A0AC8B207009E46CB /* MACProgressHelper.cpp in Sources */,
@@ -485,6 +484,7 @@
 				8CEA14A50AC8B296009E46CB /* StdLibFileIO.cpp in Sources */,
 				8CEA14AB0AC8B296009E46CB /* WinFileIO.cpp in Sources */,
 				8CEA177F0AC8C237009E46CB /* common.cpp in Sources */,
+				8C5ED6D90ACB54E7003E8ECF /* APETag.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
