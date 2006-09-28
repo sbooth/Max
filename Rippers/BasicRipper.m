@@ -26,6 +26,8 @@
 #import "IOException.h"
 #import "CoreAudioException.h"
 
+#include <IOKit/storage/IOCDTypes.h>
+
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 

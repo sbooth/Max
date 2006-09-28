@@ -23,8 +23,6 @@
 #import "SectorRange.h"
 #import "TrackDescriptor.h"
 
-#include <IOKit/storage/IOCDTypes.h>
-
 enum {
 	kCDSectorSizeQSubchannel		= 16,
 	kCDSectorSizeErrorFlags			= 294

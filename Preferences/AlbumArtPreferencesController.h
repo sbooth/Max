@@ -22,10 +22,6 @@
 
 @interface AlbumArtPreferencesController : NSWindowController 
 {
-    IBOutlet NSTextField	*_customNameTextField;
-    NSString				*_customNameExample;
 }
-
-- (IBAction)	customNamingButtonAction:(id)sender;
 
 @end

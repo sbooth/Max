@@ -117,29 +117,7 @@
 		genre = [metadata albumGenre];
 	}
 	if(nil != genre) {
-		// There is a bug in iTunes that will show numeric genres for ID3v2.4 genre tags
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
-			index = [[Genres unsortedGenres] indexOfObject:genre];
-			
-			frame = new TagLib::ID3v2::TextIdentificationFrame("TCON", TagLib::String::Latin1);
-			if(nil == frame) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-
-			// Only use numbers for the original ID3v1 genre list
-			if(NSNotFound == index) {
-				frame->setText(TagLib::String([genre UTF8String], TagLib::String::UTF8));
-			}
-			else {
-				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%u)", index] UTF8String], TagLib::String::UTF8));
-			}
-			
-			f.ID3v2Tag()->addFrame(frame);
-		}
-		else {
-			f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
-		}
+		f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
 	}
 	
 	// Year

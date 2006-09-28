@@ -41,7 +41,7 @@
 
 - (NSDictionary *) findFile:(NSString *)filename
 {
-	// TODO: Should I use filteredArrayUsingPredicate: here?
+	NSParameterAssert(nil != filename);
 	
 	NSEnumerator			*enumerator;
 	NSDictionary			*current;
@@ -58,6 +58,8 @@
 
 - (void) selectFile:(NSString *)filename
 {
+	NSParameterAssert(nil != filename);
+
 	NSDictionary *file = [self findFile:filename];
 	if(nil != file) {
 		[self setSelectionIndex:[[self arrangedObjects] indexOfObject:file]];

@@ -19,8 +19,12 @@
  */
 
 #import "FormatsPreferencesController.h"
+
 #import "CoreAudioUtilities.h"
+
+#import "PreferencesController.h"
 #import "EncoderController.h"
+
 #import "EncoderSettingsSheet.h"
 #import "CoreAudioSettingsSheet.h"
 #import "LibsndfileSettingsSheet.h"
@@ -31,9 +35,11 @@
 #import "MP3SettingsSheet.h"
 #import "OggSpeexSettingsSheet.h"
 
-#import "CoreAudioUtilities.h"
-
 #include <sndfile/sndfile.h>
+
+@interface FormatsPreferencesController (Private)
+- (void)	didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+@end
 
 @implementation FormatsPreferencesController
 
@@ -185,7 +191,6 @@
 		type = [types objectAtIndex:i];
 		
 		[result setObject:[type valueForKey:@"name"] forKey:@"name"];
-		[result setObject:[type valueForKey:@"source"] forKey:@"source"];
 		[result setObject:[type valueForKey:@"component"] forKey:@"component"];
 		
 		// Configure default encoder settings
@@ -196,7 +201,6 @@
 				customSettings = [NSMutableDictionary dictionary];
 				[customSettings addEntriesFromDictionary:[CoreAudioSettingsSheet defaultSettings]];
 				[customSettings setObject:[type objectForKey:@"fileType"] forKey:@"fileType"];
-//				[customSettings setObject:[type objectForKey:@"name"] forKey:@"fileTypeName"];
 				[customSettings setObject:[type objectForKey:@"extensionsForType"] forKey:@"extensionsForType"];
 				defaultSettings = customSettings;
 				break;
@@ -205,7 +209,6 @@
 				customSettings = [NSMutableDictionary dictionary];
 				[customSettings addEntriesFromDictionary:[LibsndfileSettingsSheet defaultSettings]];
 				[customSettings setObject:[type objectForKey:@"majorFormat"] forKey:@"majorFormat"];
-//				[customSettings setObject:[type valueForKey:@"name"] forKey:@"name"];
 				[customSettings setObject:[type objectForKey:@"extension"] forKey:@"extension"];
 				defaultSettings = customSettings;
 				break;
@@ -219,7 +222,7 @@
 			// Lossy encoders
 			case kComponentOggVorbis:		defaultSettings = [OggVorbisSettingsSheet defaultSettings];			break;
 			case kComponentMPEG:			defaultSettings = [MP3SettingsSheet defaultSettings];				break;
-			case kComponentOggSpeex:		defaultSettings = [OggSpeexSettingsSheet defaultSettings];				break;
+			case kComponentOggSpeex:		defaultSettings = [OggSpeexSettingsSheet defaultSettings];			break;
 
 			default:						defaultSettings = [NSDictionary dictionary];						break;
 		}
@@ -277,11 +280,20 @@
 
 	settingsSheet = [[[settingsSheetClass alloc] initWithSettings:settings] autorelease];
 	[settingsSheet setSearchKey:format];
-//	[settingsSheet setUserInfo:format];
-	[settingsSheet editSettings:self];
+
+	[[NSApplication sharedApplication] beginSheet:[settingsSheet sheet] modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(didEndSettingsSheet:returnCode:contextInfo:) contextInfo:settingsSheet];
 }		
 
 - (unsigned)		countOfAvailableFormats							{ return [_availableFormats count]; }
 - (NSDictionary *)	objectInAvailableFormatsAtIndex:(unsigned)idx	{ return [_availableFormats objectAtIndex:idx]; }
+
+@end
+
+@implementation FormatsPreferencesController (Private)
+
+- (void) didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	[sheet orderOut:self];
+}
 
 @end

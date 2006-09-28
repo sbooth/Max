@@ -149,7 +149,7 @@
 - (NSString *)				composer			{ return [[_composer retain] autorelease]; }
 - (NSString *)				comment				{ return [[_comment retain] autorelease]; }
 
-- (unsigned)				size				{ return (([self lastSector] - [self firstSector]) * kCDSectorSizeCDDA); }
+- (unsigned)				byteSize			{ return (([self lastSector] - [self firstSector]) * kCDSectorSizeCDDA); }
 
 - (unsigned)				number				{ return _number; }
 - (unsigned)				firstSector			{ return _firstSector; }

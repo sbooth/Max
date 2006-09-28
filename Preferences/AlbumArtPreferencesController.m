@@ -20,15 +20,6 @@
 
 #import "AlbumArtPreferencesController.h"
 
-enum {
-	kDiscNumberButton		= 0,
-	kDiscsInSetButton		= 1,
-	kDiscArtistButton		= 2,
-	kDiscTitleButton		= 3,
-	kDiscGenreButton		= 4,
-	kDiscYearButton			= 5
-};
-
 @implementation AlbumArtPreferencesController
 
 - (id) init
@@ -37,64 +28,6 @@ enum {
 		return self;		
 	}
 	return nil;
-}
-
-- (void) awakeFromNib
-{
-	// Update the example track text field
-	[self controlTextDidChange:nil];
-}
-
-- (IBAction)customNamingButtonAction:(id)sender
-{
-	NSString *string;
-	
-	switch([(NSButton *)sender tag]) {
-		case kDiscNumberButton:			string = @"{discNumber}";		break;
-		case kDiscsInSetButton:			string = @"{discsInSet}";		break;
-		case kDiscArtistButton:			string = @"{discArtist}";		break;
-		case kDiscTitleButton:			string = @"{discTitle}";		break;
-		case kDiscGenreButton:			string = @"{discGenre}";		break;
-		case kDiscYearButton:			string = @"{discYear}";			break;
-	}
-	
-	NSText *fieldEditor = [_customNameTextField currentEditor];
-	if(nil == fieldEditor) {
-		[_customNameTextField setStringValue:string];
-	}
-	else {
-		if([_customNameTextField textShouldBeginEditing:fieldEditor]) {
-			[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
-			[_customNameTextField textShouldEndEditing:fieldEditor];
-			[self controlTextDidChange:nil];
-		}
-	}
-}
-
-#pragma mark Delegate methods
-
-- (void) controlTextDidChange:(NSNotification *)aNotification
-{
-	NSString *scheme = [_customNameTextField stringValue];
-	if(nil == scheme) {
-		scheme = [[NSUserDefaults standardUserDefaults] stringForKey:@"albumArtNamingScheme"];
-	}
-	// No love
-	if(nil == scheme) {
-		return;
-	}
-	
-	NSMutableString *sample = [NSMutableString stringWithCapacity:[scheme length]];
-	[sample setString:scheme];		
-	
-	[sample replaceOccurrencesOfString:@"{discNumber}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discsInSet}"		withString:@"" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discArtist}"		withString:@"Nirvana" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discTitle}"		withString:@"MTV Unplugged in New York" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discGenre}"		withString:@"Grunge" options:nil range:NSMakeRange(0, [sample length])];
-	[sample replaceOccurrencesOfString:@"{discYear}"		withString:@"1994" options:nil range:NSMakeRange(0, [sample length])];
-	
-	[self setValue:sample forKey:@"customNameExample"];
 }
 
 @end

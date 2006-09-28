@@ -20,6 +20,7 @@
 
 #import "Drive.h"
 
+#include <IOKit/storage/IOCDTypes.h>
 #include <IOKit/storage/IOCDMediaBSDClient.h>
 #include <util.h> // opendev
 
@@ -58,8 +59,8 @@
 		_fd				= -1;
 		_cacheSize		= 2 * 1024 * 1024;
 		
-		_sessions		= [[NSMutableArray alloc] initWithCapacity:20];
-		_tracks			= [[NSMutableArray alloc] initWithCapacity:20];
+		_sessions		= [[NSMutableArray alloc] init];
+		_tracks			= [[NSMutableArray alloc] init];
 		
 		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
 
@@ -101,18 +102,9 @@
 - (void)				setCacheSize:(unsigned)cacheSize			{ _cacheSize = cacheSize; }
 
 - (NSString *)			deviceName									{ return [[_deviceName retain] autorelease]; }
-- (int)					fileDescriptor								{ return _fd; }
 
 // Disc track information
 - (unsigned)			countOfTracks								{ return [_tracks count]; }
-- (TrackDescriptor *)	objectInTracksAtIndex:(unsigned)idx			{ return [_tracks objectAtIndex:idx]; }
-
-- (NSMutableDictionary *) dictionaryForSession:(unsigned)session
-{
-	NSParameterAssert([_sessions count] >= session);
-	
-	return [_sessions objectAtIndex:session - 1];
-}
 
 - (unsigned)			sessionContainingSector:(unsigned)sector
 {
@@ -143,29 +135,12 @@
 
 // Disc session information
 - (unsigned)			firstSession								{ return _firstSession; }
-- (void)				setFirstSession:(unsigned)session			{ _firstSession = session; }
-
 - (unsigned)			lastSession									{ return _lastSession; }
-- (void)				setLastSession:(unsigned)session			{ _lastSession = session; }
 
 // First and last track and lead out information (session-based)
 - (unsigned)			firstTrackForSession:(unsigned)session		{ return [[[self dictionaryForSession:session] objectForKey:@"firstTrack"] unsignedIntValue]; }
-- (void)				setFirstTrack:(unsigned)track forSession:(unsigned)session
-{
-	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:track] forKey:@"firstTrack"];
-}
-
 - (unsigned)			lastTrackForSession:(unsigned)session		{ return [[[self dictionaryForSession:session] objectForKey:@"lastTrack"] unsignedIntValue]; }
-- (void)				setLastTrack:(unsigned)track forSession:(unsigned)session
-{
-	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:track] forKey:@"lastTrack"];
-}
-
 - (unsigned)			leadOutForSession:(unsigned)session			{ return [[[self dictionaryForSession:session] objectForKey:@"leadOut"] unsignedIntValue]; }
-- (void)				setLeadOut:(unsigned)leadOut forSession:(unsigned)session
-{
-	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:leadOut] forKey:@"leadOut"];
-}
 
 // Track sector information
 - (unsigned)			firstSectorForSession:(unsigned)session		{ return [self firstSectorForTrack:[[[self dictionaryForSession:session] objectForKey:@"firstTrack"] unsignedIntValue]]; }
@@ -182,12 +157,6 @@
 	}
 	
 	return ([self lastTrackForSession:[thisTrack session]] == number ? [self lastSectorForSession:[thisTrack session]] : [nextTrack firstSector] - 1);
-}
-
-
-- (void)				logMessage:(NSString *)message
-{
-	[[LogController sharedController] performSelectorOnMainThread:@selector(logMessage:) withObject:message waitUntilDone:NO];
 }
 
 - (TrackDescriptor *)		trackNumber:(unsigned)number
@@ -207,13 +176,10 @@
 
 - (uint16_t)		speed
 {
-	uint16_t	speed;
-	
-	speed = 0;
+	uint16_t	speed	= 0;
 	
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDGETSPEED, &speed)) {
 		[self logMessage:NSLocalizedStringFromTable(@"Unable to get the drive's speed", @"Exceptions", @"")];
-		return 0;
 	}
 	
 	return speed;
@@ -328,118 +294,6 @@
 	}
 }
 
-- (void)			readTOC
-{
-	dk_cd_read_toc_t	cd_read_toc;
-	uint8_t				buffer					[2048];
-	CDTOC				*toc					= NULL;
-	CDTOCDescriptor		*desc					= NULL;
-	TrackDescriptor		*track					= nil;
-	unsigned			i, numDescriptors;
-
-	/* formats:
-		kCDTOCFormatTOC  = 0x02, // CDTOC
-		kCDTOCFormatPMA  = 0x03, // CDPMA
-		kCDTOCFormatATIP = 0x04, // CDATIP
-		kCDTOCFormatTEXT = 0x05  // CDTEXT
-		*/
-	
-	bzero(&cd_read_toc, sizeof(cd_read_toc));
-	bzero(buffer, sizeof(buffer));
-	
-	cd_read_toc.format			= kCDTOCFormatTOC;
-	cd_read_toc.buffer			= buffer;
-	cd_read_toc.bufferLength	= sizeof(buffer);
-		
-	if(-1 == ioctl([self fileDescriptor], DKIOCCDREADTOC, &cd_read_toc)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read the disc's table of contents.", @"Exceptions", @"")
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-	
-	toc				= (CDTOC*)buffer;
-	numDescriptors	= CDTOCGetDescriptorCount(toc);
-	
-	[self setFirstSession:toc->sessionFirst];
-	[self setLastSession:toc->sessionLast];
-	
-	// Set up dictionaries that will hold first sector, last sector and lead out information for each session
-	for(i = [self firstSession]; i <= [self lastSession]; ++i) {
-		[_sessions addObject:[NSMutableDictionary dictionary]];
-	}
-	
-	// Iterate through each descriptor and extract the information we need
-	for(i = 0; i < numDescriptors; ++i) {
-		desc = &toc->descriptors[i];
-		
-		// This is a normal audio or data track
-		if(0x63 >= desc->point && 1 == desc->adr) {
-			track		= [[TrackDescriptor alloc] init];
-			
-			[track setSession:desc->session];
-			[track setNumber:desc->point];
-			[track setFirstSector:CDConvertMSFToLBA(desc->p)];
-			
-			switch(desc->control) {
-				case 0x00:	[track setChannels:2];	[track setPreEmphasis:NO];	[track setCopyPermitted:NO];	break;
-				case 0x01:	[track setChannels:2];	[track setPreEmphasis:YES];	[track setCopyPermitted:NO];	break;
-				case 0x02:	[track setChannels:2];	[track setPreEmphasis:NO];	[track setCopyPermitted:YES];	break;
-				case 0x03:	[track setChannels:2];	[track setPreEmphasis:YES];	[track setCopyPermitted:YES];	break;
-				case 0x04:	[track setDataTrack:YES];							[track setCopyPermitted:NO];	break;
-				case 0x06:	[track setDataTrack:YES];							[track setCopyPermitted:YES];	break;
-				case 0x08:	[track setChannels:4];	[track setPreEmphasis:NO];	[track setCopyPermitted:NO];	break;
-				case 0x09:	[track setChannels:4];	[track setPreEmphasis:YES];	[track setCopyPermitted:NO];	break;
-				case 0x0A:	[track setChannels:4];	[track setPreEmphasis:NO];	[track setCopyPermitted:YES];	break;
-				case 0x0B:	[track setChannels:4];	[track setPreEmphasis:NO];	[track setCopyPermitted:YES];	break;
-			}
-			
-			[_tracks addObject:[track autorelease]];
-		}
-		else if(0xA0 == desc->point && 1 == desc->adr) {
-			[self setFirstTrack:desc->p.minute forSession:desc->session];
-			/*printf("Disc type:                 %d (%s)\n", (int)desc->p.second,
-				   (desc->p.second == 0x00) ? "CD-DA, or CD-ROM with first track in Mode 1":
-				   (desc->p.second == 0x10) ? "CD-I disc":
-				   (desc->p.second == 0x20) ? "CD-ROM XA disc with first track in Mode 2":"unknown");*/
-		}
-		// Last track
-		else if(0xA1 == desc->point && 1 == desc->adr) {
-			[self setLastTrack:desc->p.minute forSession:desc->session];
-		}
-		// Lead-out
-		else if(0xA2 == desc->point && 1 == desc->adr) {
-			[self setLeadOut:CDConvertMSFToLBA(desc->p) forSession:desc->session];
-		}
-		/*else if(0xB0 == desc->point && 5 == desc->adr) {
-			printf("Next possible track start: %02d:%02d.%02d\n",
-				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);
-			printf("Number of ptrs in Mode 5:  %d\n",
-				   (int)desc->zero);
-			printf("Last possible lead-out:    %02d:%02d.%02d\n",
-				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
-		}
-		else if(0xB1 == desc->point && 5 == desc->adr) {
-			printf("Skip interval pointers:    %d\n", (int)desc->p.minute);
-			printf("Skip track pointers:       %d\n", (int)desc->p.second);
-		}
-		else if(0xB2 <= desc->point && 0xB2 >= desc->point && 5 == desc->adr) {
-			printf("Skip numbers:              %d, %d, %d, %d, %d, %d, %d\n",
-				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame,
-				   (int)desc->zero, (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
-		}
-		else if(1 == desc->point && 40 >= desc->point && 5 == desc->adr) {
-			printf("Skip from %02d:%02d.%02d to %02d:%02d.%02d\n",
-				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame,
-				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);
-		}
-		else if(0xC0 == desc->point && 5 == desc->adr) {
-			printf("Optimum recording power:   %d\n", (int)desc->address.minute);
-			printf("Application code:          %d\n", (int)desc->address.second);
-			printf("Start of first lead-in:    %02d:%02d.%02d\n",
-				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
-		}*/
-	}
-}
-
 - (unsigned)		readAudio:(void *)buffer sector:(unsigned)sector
 {
 	return [self readAudio:buffer startSector:sector sectorCount:1];
@@ -530,33 +384,6 @@
 	return [self readCD:buffer sectorAreas:(kCDSectorAreaUser | kCDSectorAreaErrorFlags | kCDSectorAreaSubChannelQ) startSector:startSector sectorCount:sectorCount];
 }
 
-// Implementation method
-- (unsigned)		readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
-{
-	dk_cd_read_t	cd_read;
-	unsigned		blockSize		= 0;
-	
-	if(kCDSectorAreaUser & sectorAreas)					{ blockSize += kCDSectorSizeCDDA; }
-	if(kCDSectorAreaErrorFlags & sectorAreas)			{ blockSize += kCDSectorSizeErrorFlags; }
-	if(kCDSectorAreaSubChannelQ & sectorAreas)			{ blockSize += kCDSectorSizeQSubchannel; }
-	
-	bzero(&cd_read, sizeof(cd_read));
-	bzero(buffer, blockSize * sectorCount);
-	
-	cd_read.offset			= blockSize * startSector;
-	cd_read.sectorArea		= sectorAreas;
-	cd_read.sectorType		= kCDSectorTypeCDDA;
-	cd_read.buffer			= buffer;
-	cd_read.bufferLength	= blockSize * sectorCount;
-	
-	if(-1 == ioctl([self fileDescriptor], DKIOCCDREAD, &cd_read)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"")
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
-	
-	return cd_read.bufferLength / blockSize;
-}
-
 - (NSString *)		readMCN
 {
 	dk_cd_read_mcn_t	cd_read_mcn;
@@ -590,6 +417,183 @@
 - (NSString *)		description
 {
 	return [NSString stringWithFormat:@"{\n\tDevice: %@\n\tFirst Session: %u\n\tLast Session: %u\n}", [self deviceName], [self firstSession], [self lastSession]];
+}
+
+@end
+
+@implementation Drive (Private)
+
+- (void)				logMessage:(NSString *)message
+{
+	[[LogController sharedController] performSelectorOnMainThread:@selector(logMessage:) withObject:message waitUntilDone:NO];
+}
+
+- (TrackDescriptor *)	objectInTracksAtIndex:(unsigned)idx			{ return [_tracks objectAtIndex:idx]; }
+
+- (void)				setFirstSession:(unsigned)session			{ _firstSession = session; }
+- (void)				setLastSession:(unsigned)session			{ _lastSession = session; }
+
+- (void)				setFirstTrack:(unsigned)track forSession:(unsigned)session
+{
+	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:track] forKey:@"firstTrack"];
+}
+
+- (void)				setLastTrack:(unsigned)track forSession:(unsigned)session
+{
+	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:track] forKey:@"lastTrack"];
+}
+
+- (void)				setLeadOut:(unsigned)leadOut forSession:(unsigned)session
+{
+	[[self dictionaryForSession:session] setObject:[NSNumber numberWithUnsignedInt:leadOut] forKey:@"leadOut"];
+}
+
+- (void)			readTOC
+{
+	dk_cd_read_toc_t	cd_read_toc;
+	uint8_t				buffer					[2048];
+	CDTOC				*toc					= NULL;
+	CDTOCDescriptor		*desc					= NULL;
+	TrackDescriptor		*track					= nil;
+	unsigned			i, numDescriptors;
+	
+	/* formats:
+		kCDTOCFormatTOC  = 0x02, // CDTOC
+		kCDTOCFormatPMA  = 0x03, // CDPMA
+		kCDTOCFormatATIP = 0x04, // CDATIP
+		kCDTOCFormatTEXT = 0x05  // CDTEXT
+		*/
+	
+	bzero(&cd_read_toc, sizeof(cd_read_toc));
+	bzero(buffer, sizeof(buffer));
+	
+	cd_read_toc.format			= kCDTOCFormatTOC;
+	cd_read_toc.buffer			= buffer;
+	cd_read_toc.bufferLength	= sizeof(buffer);
+	
+	if(-1 == ioctl([self fileDescriptor], DKIOCCDREADTOC, &cd_read_toc)) {
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read the disc's table of contents.", @"Exceptions", @"")
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	}
+	
+	toc				= (CDTOC*)buffer;
+	numDescriptors	= CDTOCGetDescriptorCount(toc);
+	
+	[self setFirstSession:toc->sessionFirst];
+	[self setLastSession:toc->sessionLast];
+	
+	// Set up dictionaries that will hold first sector, last sector and lead out information for each session
+	for(i = [self firstSession]; i <= [self lastSession]; ++i) {
+		[_sessions addObject:[NSMutableDictionary dictionary]];
+	}
+	
+	// Iterate through each descriptor and extract the information we need
+	for(i = 0; i < numDescriptors; ++i) {
+		desc = &toc->descriptors[i];
+		
+		// This is a normal audio or data track
+		if(0x63 >= desc->point && 1 == desc->adr) {
+			track		= [[TrackDescriptor alloc] init];
+			
+			[track setSession:desc->session];
+			[track setNumber:desc->point];
+			[track setFirstSector:CDConvertMSFToLBA(desc->p)];
+			
+			switch(desc->control) {
+				case 0x00:	[track setChannels:2];	[track setPreEmphasis:NO];	[track setCopyPermitted:NO];	break;
+				case 0x01:	[track setChannels:2];	[track setPreEmphasis:YES];	[track setCopyPermitted:NO];	break;
+				case 0x02:	[track setChannels:2];	[track setPreEmphasis:NO];	[track setCopyPermitted:YES];	break;
+				case 0x03:	[track setChannels:2];	[track setPreEmphasis:YES];	[track setCopyPermitted:YES];	break;
+				case 0x04:	[track setDataTrack:YES];							[track setCopyPermitted:NO];	break;
+				case 0x06:	[track setDataTrack:YES];							[track setCopyPermitted:YES];	break;
+				case 0x08:	[track setChannels:4];	[track setPreEmphasis:NO];	[track setCopyPermitted:NO];	break;
+				case 0x09:	[track setChannels:4];	[track setPreEmphasis:YES];	[track setCopyPermitted:NO];	break;
+				case 0x0A:	[track setChannels:4];	[track setPreEmphasis:NO];	[track setCopyPermitted:YES];	break;
+				case 0x0B:	[track setChannels:4];	[track setPreEmphasis:NO];	[track setCopyPermitted:YES];	break;
+			}
+			
+			[_tracks addObject:[track autorelease]];
+		}
+		else if(0xA0 == desc->point && 1 == desc->adr) {
+			[self setFirstTrack:desc->p.minute forSession:desc->session];
+			/*printf("Disc type:                 %d (%s)\n", (int)desc->p.second,
+			(desc->p.second == 0x00) ? "CD-DA, or CD-ROM with first track in Mode 1":
+			(desc->p.second == 0x10) ? "CD-I disc":
+			(desc->p.second == 0x20) ? "CD-ROM XA disc with first track in Mode 2":"unknown");*/
+		}
+		// Last track
+		else if(0xA1 == desc->point && 1 == desc->adr) {
+			[self setLastTrack:desc->p.minute forSession:desc->session];
+		}
+		// Lead-out
+		else if(0xA2 == desc->point && 1 == desc->adr) {
+			[self setLeadOut:CDConvertMSFToLBA(desc->p) forSession:desc->session];
+		}
+		else if(0xB0 == desc->point && 5 == desc->adr) {
+			printf("Next possible track start: %02d:%02d.%02d\n",
+				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);
+			printf("Number of ptrs in Mode 5:  %d\n",
+				   (int)desc->zero);
+			printf("Last possible lead-out:    %02d:%02d.%02d\n",
+				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
+		}
+		else if(0xB1 == desc->point && 5 == desc->adr) {
+			printf("Skip interval pointers:    %d\n", (int)desc->p.minute);
+			printf("Skip track pointers:       %d\n", (int)desc->p.second);
+		}
+		else if(0xB2 <= desc->point && 0xB2 >= desc->point && 5 == desc->adr) {
+			printf("Skip numbers:              %d, %d, %d, %d, %d, %d, %d\n",
+				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame,
+				   (int)desc->zero, (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
+		}
+		else if(1 == desc->point && 40 >= desc->point && 5 == desc->adr) {
+			printf("Skip from %02d:%02d.%02d to %02d:%02d.%02d\n",
+				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame,
+				   (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);
+		}
+		else if(0xC0 == desc->point && 5 == desc->adr) {
+			printf("Optimum recording power:   %d\n", (int)desc->address.minute);
+			printf("Application code:          %d\n", (int)desc->address.second);
+			printf("Start of first lead-in:    %02d:%02d.%02d\n",
+				   (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
+		}
+	}
+}
+
+- (int)					fileDescriptor								{ return _fd; }
+
+// Implementation method
+- (unsigned)		readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+{
+	dk_cd_read_t	cd_read;
+	unsigned		blockSize		= 0;
+	
+	if(kCDSectorAreaUser & sectorAreas)					{ blockSize += kCDSectorSizeCDDA; }
+	if(kCDSectorAreaErrorFlags & sectorAreas)			{ blockSize += kCDSectorSizeErrorFlags; }
+	if(kCDSectorAreaSubChannelQ & sectorAreas)			{ blockSize += kCDSectorSizeQSubchannel; }
+	
+	bzero(&cd_read, sizeof(cd_read));
+	bzero(buffer, blockSize * sectorCount);
+	
+	cd_read.offset			= blockSize * startSector;
+	cd_read.sectorArea		= sectorAreas;
+	cd_read.sectorType		= kCDSectorTypeCDDA;
+	cd_read.buffer			= buffer;
+	cd_read.bufferLength	= blockSize * sectorCount;
+	
+	if(-1 == ioctl([self fileDescriptor], DKIOCCDREAD, &cd_read)) {
+		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"")
+									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+	}
+	
+	return cd_read.bufferLength / blockSize;
+}
+
+- (NSMutableDictionary *) dictionaryForSession:(unsigned)session
+{
+	NSParameterAssert([_sessions count] >= session);
+	
+	return [_sessions objectAtIndex:session - 1];
 }
 
 @end

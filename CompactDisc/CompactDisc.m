@@ -45,7 +45,7 @@
 
 		// To avoid keeping an open file descriptor, read the disc's properties from the drive
 		// and store them in our ivars
-		drive = [[[Drive alloc] initWithDeviceName:[self deviceName]] autorelease];
+		drive = [[Drive alloc] initWithDeviceName:[self deviceName]];
 
 		// Is this is a multisession disc?
 		if([drive lastSession] - [drive firstSession] > 1) {
@@ -62,7 +62,7 @@
 		_MCN = [[drive readMCN] retain];
 		
 		// Iterate through the tracks and get their information
-		_tracks		= [[NSMutableArray arrayWithCapacity:[drive countOfTracks] + 1] retain];
+		_tracks		= [[NSMutableArray alloc] initWithCapacity:[drive countOfTracks] + 1];
 		
 		for(i = [drive firstTrackForSession:session]; i <= [drive lastTrackForSession:session]; ++i) {
 
@@ -115,7 +115,9 @@
 		if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
 			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to calculate the disc's FreeDB ID.", @"Exceptions", @"") userInfo:nil];
 		}
-				
+		
+		[drive release];
+		
 		return self;
 	}
 	

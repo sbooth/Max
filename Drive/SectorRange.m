@@ -26,6 +26,8 @@
 
 + (id) rangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector
 {
+	NSParameterAssert(lastSector >= firstSector);
+	
 	SectorRange *range = [[SectorRange alloc] init];
 	
 	[range setFirstSector:firstSector];
@@ -36,6 +38,8 @@
 
 + (id) rangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount
 {
+	NSParameterAssert(0 < sectorCount);
+
 	SectorRange *range = [[SectorRange alloc] init];
 	
 	[range setFirstSector:firstSector];
@@ -52,18 +56,6 @@
 	[range setLastSector:sector];
 	
 	return [range autorelease];
-}
-
-
-- (id) init
-{
-	if((self = [super init])) {
-		_firstSector	= 0;
-		_lastSector		= 0;
-		return self;
-	}
-	
-	return nil;
 }
 
 - (unsigned)		firstSector										{ return _firstSector; }

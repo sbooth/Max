@@ -29,6 +29,8 @@
 #import "MissingResourceException.h"
 #import "CoreAudioException.h"
 
+#include <IOKit/storage/IOCDTypes.h>
+
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
@@ -798,11 +800,9 @@
 	NSString			*result			= nil;
 	
 	@try {
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomTmpDirectory"]) {
-			tmpDir = [[[[NSUserDefaults standardUserDefaults] stringForKey:@"tmpDirectory"] stringByAppendingString:@"/"] fileSystemRepresentation];
-		}
-		else {
-			tmpDir = _PATH_TMP;
+		tmpDir = [[[[[self delegate] taskInfo] settings] objectForKey:@"temporaryDirectory"] fileSystemRepresentation];
+		if(nil == tmpDir) {
+			tmpDir = [NSTemporaryDirectory() fileSystemRepresentation];
 		}
 		
 		validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);

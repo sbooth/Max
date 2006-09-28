@@ -22,7 +22,6 @@
 #import "BasicRipperTask.h"
 #import "ComparisonRipperTask.h"
 #import "ParanoiaRipperTask.h"
-//#import "SecureRipperTask.h"
 #import "LogController.h"
 #import "EncoderController.h"
 #import "ApplicationController.h"
@@ -112,6 +111,7 @@ static RipperController *sharedController = nil;
 	int						selectedRipper			= kComparisonRipper;
 		
 	NSParameterAssert(nil != tracks);
+	NSParameterAssert(nil != settings);
 	
 	// Create the task
 	selectedRipper	= [[settings objectForKey:@"selectedRipper"] intValue];

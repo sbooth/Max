@@ -88,7 +88,7 @@
 - (NSString *)		comment;
 - (void)			setComment:(NSString *)comment;
 
-- (unsigned)		size;
+- (unsigned)		byteSize;
 
 - (unsigned)		minute;
 - (unsigned)		second;
