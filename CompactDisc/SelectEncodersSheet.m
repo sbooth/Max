@@ -19,6 +19,7 @@
  */
 
 #import "SelectEncodersSheet.h"
+#import "PreferencesController.h"
 #import "MissingResourceException.h"
 
 @implementation SelectEncodersSheet
@@ -46,6 +47,12 @@
 
 - (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSCancelButton]; }
 - (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton]; }
+
+- (IBAction) setupEncoders:(id)sender
+{
+	[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
+	[[PreferencesController sharedPreferences] showWindow:self];
+}
 
 - (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo 
 {

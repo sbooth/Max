@@ -2,7 +2,7 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {cancel = id; ok = id; }; 
+            ACTIONS = {cancel = id; ok = id; setupEncoders = id; }; 
             CLASS = SelectEncodersSheet; 
             LANGUAGE = ObjC; 
             OUTLETS = {"_encoderController" = NSArrayController; "_sheet" = NSWindow; }; 

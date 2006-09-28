@@ -48,7 +48,7 @@
 
 - (IBAction)						editSettings:(id)sender;
 
-- (void)							openFormatsPreferences;
+- (IBAction)						setupEncoders:(id)sender;
 
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;

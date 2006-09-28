@@ -33,4 +33,6 @@
 - (IBAction)		ok:(id)sender;
 - (IBAction)		cancel:(id)sender;
 
+- (IBAction)		setupEncoders:(id)sender;
+
 @end

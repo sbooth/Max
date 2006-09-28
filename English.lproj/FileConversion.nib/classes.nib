@@ -8,6 +8,7 @@
                 downloadAlbumArt = id; 
                 removeFiles = id; 
                 selectAlbumArt = id; 
+                setupEncoders = id; 
             }; 
             CLASS = ConvertFilesController; 
             LANGUAGE = ObjC; 

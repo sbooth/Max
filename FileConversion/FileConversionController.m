@@ -316,7 +316,7 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	[_filesController removeObjects:[_filesController selectedObjects]];	
 }
 
-- (void) openFormatsPreferences
+- (IBAction) setupEncoders:(id)sender
 {
 	[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
 	[[PreferencesController sharedPreferences] showWindow:self];
