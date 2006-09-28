@@ -498,8 +498,6 @@
 		8C89C6310A069E5000359E67 /* FreeDBPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FreeDBPreferencesController.m; sourceTree = "<group>"; };
 		8C89C6320A069E5000359E67 /* GeneralPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = GeneralPreferencesController.h; sourceTree = "<group>"; };
 		8C89C6330A069E5000359E67 /* GeneralPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GeneralPreferencesController.m; sourceTree = "<group>"; };
-		8C89C6340A069E5000359E67 /* OutputPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OutputPreferencesController.h; sourceTree = "<group>"; };
-		8C89C6350A069E5000359E67 /* OutputPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OutputPreferencesController.m; sourceTree = "<group>"; };
 		8C89C6360A069E5000359E67 /* PreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PreferencesController.h; sourceTree = "<group>"; };
 		8C89C6370A069E5000359E67 /* PreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PreferencesController.m; sourceTree = "<group>"; };
 		8C89C6380A069E5000359E67 /* RipperPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RipperPreferencesController.h; sourceTree = "<group>"; };
@@ -1175,8 +1173,6 @@
 				8C89C6310A069E5000359E67 /* FreeDBPreferencesController.m */,
 				8C89C6320A069E5000359E67 /* GeneralPreferencesController.h */,
 				8C89C6330A069E5000359E67 /* GeneralPreferencesController.m */,
-				8C89C6340A069E5000359E67 /* OutputPreferencesController.h */,
-				8C89C6350A069E5000359E67 /* OutputPreferencesController.m */,
 				8C89C6360A069E5000359E67 /* PreferencesController.h */,
 				8C89C6370A069E5000359E67 /* PreferencesController.m */,
 				8C89C6380A069E5000359E67 /* RipperPreferencesController.h */,

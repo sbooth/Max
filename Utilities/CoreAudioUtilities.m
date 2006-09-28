@@ -456,3 +456,40 @@ getCoreAudioExtensions()
 	
 	return sAudioExtensions;
 }
+
+// Set the format name
+NSString * 
+getCoreAudioOutputFormatName(AudioFileTypeID fileType, UInt32 formatID, UInt32 formatFlags)
+{
+	OSStatus						result;
+	UInt32							specifierSize;
+	UInt32							dataSize;
+	AudioStreamBasicDescription		asbd;
+	NSString						*fileFormat				= nil;
+	NSString						*audioFormat			= nil;
+	NSString						*name					= nil;
+	
+	// Determine the name of the file (container) type
+	specifierSize			= sizeof(fileType);
+	dataSize				= sizeof(fileFormat);
+	result					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, specifierSize, &fileType, &dataSize, &fileFormat);
+	
+	NSCAssert1(noErr == result, @"AudioFileGetGlobalInfo failed: %@", UTCreateStringForOSType(result));
+	
+	// Determine the name of the format contained in the file (if specified)
+	if(0 != formatID) {
+		bzero(&asbd, sizeof(AudioStreamBasicDescription));
+		
+		asbd.mFormatID			= formatID;
+		asbd.mFormatFlags		= formatFlags;
+		
+		specifierSize			= sizeof(audioFormat);
+		result					= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &specifierSize, &audioFormat);
+		
+		NSCAssert1(noErr == result, @"AudioFormatGetProperty failed: %@", UTCreateStringForOSType(result));
+	}
+	
+	name = [NSString stringWithFormat:@"%@ (%@)", [fileFormat autorelease], [audioFormat autorelease]];
+	
+	return [[name retain] autorelease];
+}

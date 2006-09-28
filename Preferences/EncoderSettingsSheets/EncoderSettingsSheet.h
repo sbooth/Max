@@ -27,7 +27,6 @@
 
 	NSMutableDictionary				*_settings;
 	NSDictionary					*_searchKey;
-//	NSDictionary					*_userInfo;
 }
 
 + (NSDictionary *)		defaultSettings;
@@ -40,7 +39,7 @@
 - (NSDictionary *)		settings;
 - (void)				setSettings:(NSDictionary *)settings;
 
-- (IBAction)			editSettings:(id)sender;
+- (NSWindow *)			sheet;
 
 - (IBAction)			ok:(id)sender;
 

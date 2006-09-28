@@ -20,6 +20,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#include <AudioToolbox/AudioToolbox.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,6 +34,11 @@ NSArray *	getCoreAudioReadableTypes();
 
 // Return an array of valid audio file extensions recognized by Core Audio
 NSArray *	getCoreAudioExtensions();
+
+// Get a descriptive string for the given filetype and format
+NSString * getCoreAudioOutputFormatName(AudioFileTypeID		fileType, 
+										UInt32				formatID,
+										UInt32				formatFlags);
 
 #ifdef __cplusplus
 }

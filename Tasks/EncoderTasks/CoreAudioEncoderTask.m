@@ -20,6 +20,7 @@
 
 #import "CoreAudioEncoderTask.h"
 #import "CoreAudioEncoder.h"
+#import "CoreAudioUtilities.h"
 #import "LogController.h"
 #import "UtilityFunctions.h"
 #import "CoreAudioException.h"
@@ -347,34 +348,7 @@
 
 - (NSString *) outputFormatName
 {
-	OSStatus						result;
-	UInt32							specifierSize;
-	UInt32							dataSize;
-	AudioFileTypeID					fileType;
-	AudioStreamBasicDescription		asbd;
-	NSString						*fileFormat;
-	NSString						*audioFormat;
-	
-	// Determine the name of the file (container) type
-	fileType				= [self fileType];
-	specifierSize			= sizeof(fileType);
-	dataSize				= sizeof(fileFormat);
-	result					= AudioFileGetGlobalInfo(kAudioFileGlobalInfo_FileTypeName, specifierSize, &fileType, &dataSize, &fileFormat);
-	
-	NSAssert1(noErr == result, @"AudioFileGetGlobalInfo failed: %@", UTCreateStringForOSType(result));
-	
-	// Determine the name of the format
-	bzero(&asbd, sizeof(AudioStreamBasicDescription));
-	
-	asbd.mFormatID			= [self formatID];
-	asbd.mFormatFlags		= [[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue];
-	
-	specifierSize			= sizeof(audioFormat);
-	result					= AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &asbd, &specifierSize, &audioFormat);
-	
-	NSAssert1(noErr == result, @"AudioFormatGetProperty failed: %@", UTCreateStringForOSType(result));
-	
-	return [NSString stringWithFormat:@"%@ (%@)", [fileFormat autorelease], [audioFormat autorelease]];;
+	return getCoreAudioOutputFormatName([self fileType], [self formatID], [[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue]);
 }
 
 - (AudioFileTypeID)		fileType		{ return [[[self encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }

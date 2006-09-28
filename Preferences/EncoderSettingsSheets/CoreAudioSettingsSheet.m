@@ -21,7 +21,6 @@
 #import "CoreAudioSettingsSheet.h"
 #import "CoreAudioUtilities.h"
 
-
 @implementation CoreAudioSettingsSheet
 
 + (NSDictionary *)	defaultSettings		{ return [NSDictionary dictionary]; }
@@ -30,8 +29,9 @@
 {
 	NSArray					*coreAudioFormats;
 	unsigned				i;
-	OSType					fileType;
-	UInt32					formatID, subtypeFormatID;
+	AudioFileTypeID			fileType				= 0;
+	UInt32					formatID				= 0;
+	UInt32					subtypeFormatID			= 0;
 	NSDictionary			*format, *subtype;
 	NSDictionary			*objectToSelect			= nil;
 
@@ -41,6 +41,8 @@
 		coreAudioFormats	= getCoreAudioWritableTypes();
 		fileType			= [[settings objectForKey:@"fileType"] unsignedLongValue];
 		formatID			= [[settings objectForKey:@"formatID"] unsignedLongValue];
+
+		[self setFormatName:getCoreAudioOutputFormatName(fileType, formatID, 0)];
 
 		// Iterate through each CoreAudio file type and find the one matching ours
 		for(i = 0; i < [coreAudioFormats count]; ++i) {
@@ -79,16 +81,23 @@
 - (void) dealloc
 {
 	[_availableSubtypes release];	_availableSubtypes = nil;
+	[_formatName release];			_formatName = nil;
 	
 	[super dealloc];
 }
+
+- (NSString *)		formatName									{ return [[_formatName retain] autorelease]; }
+- (void)			setFormatName:(NSString *)formatName		{ [_formatName release]; _formatName = [formatName retain]; }
 
 #pragma mark Delegate methods
 
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-	NSArray			*selectedObjects	= [_subtypesController selectedObjects];
-	NSDictionary	*subtypeInfo		= nil;
+	NSArray				*selectedObjects		= [_subtypesController selectedObjects];
+	NSDictionary		*subtypeInfo			= nil;
+	AudioFileTypeID		fileType				= 0;
+	UInt32				formatID				= 0;
+	UInt32				formatFlags				= 0;
 	
 	if(nil == selectedObjects) {
 		return;
@@ -96,12 +105,18 @@
 	
 	subtypeInfo = [selectedObjects objectAtIndex:0];
 	
+	// Update name
+	fileType			= [[[self settings] objectForKey:@"fileType"] unsignedLongValue];
+	formatID			= [[subtypeInfo objectForKey:@"formatID"] unsignedLongValue];
+	formatFlags			= [[subtypeInfo objectForKey:@"formatFlags"] unsignedLongValue];
+
+	[self setFormatName:getCoreAudioOutputFormatName(fileType, formatID, formatFlags)];
+
 	// Add the subtype information to our settings	
 	
 	// The following keys will (should?!) be present in every CoreAudio dataFormat description
 	[_settings setObject:[subtypeInfo objectForKey:@"formatID"] forKey:@"formatID"];
 	[_settings setObject:[subtypeInfo objectForKey:@"formatFlags"] forKey:@"formatFlags"];
-//	[_settings setObject:[subtypeInfo objectForKey:@"description"] forKey:@"description"];
 	
 	// For later, make these customizable
 	[_settings setObject:[subtypeInfo objectForKey:@"bitsPerChannel"] forKey:@"bitsPerChannel"];

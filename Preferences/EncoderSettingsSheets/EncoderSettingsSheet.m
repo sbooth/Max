@@ -22,10 +22,6 @@
 #import "PreferencesController.h"
 #import "MissingResourceException.h"
 
-@interface EncoderSettingsSheet (Private)
-- (void)	didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-@end
-
 @implementation EncoderSettingsSheet
 
 + (NSDictionary *) defaultSettings { return [NSDictionary dictionary]; }
@@ -62,10 +58,7 @@
 - (NSDictionary *)	settings									{ return [[_settings retain] autorelease]; }
 - (void)			setSettings:(NSDictionary *)settings		{ [_settings release]; _settings = [settings retain]; }
 
-- (IBAction) editSettings:(id)sender;
-{
-    [[NSApplication sharedApplication] beginSheet:_sheet modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
-}
+- (NSWindow *)		sheet										{ return [[_sheet retain] autorelease]; }
 
 - (IBAction) ok:(id)sender
 {
@@ -80,7 +73,12 @@
 	if(NSNotFound != index) {
 		newFormat	= [[self searchKey] mutableCopy];
 		
-		[newFormat setObject:_settings forKey:@"settings"];
+		// Special case for Core Audio subclass
+		if([self respondsToSelector:@selector(formatName)]) {
+			[newFormat setObject:[self formatName] forKey:@"name"];
+		}
+		
+		[newFormat setObject:[self settings] forKey:@"settings"];
 		[formats replaceObjectAtIndex:index withObject:newFormat];
 		
 		// Save changes
@@ -88,12 +86,7 @@
 	}
 
 	// We're finished
-    [[NSApplication sharedApplication] endSheet:_sheet];
-}
-
-- (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    [sheet orderOut:self];
+	[[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton];
 }
 
 @end

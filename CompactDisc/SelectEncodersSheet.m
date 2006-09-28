@@ -54,9 +54,4 @@
 	[[PreferencesController sharedPreferences] showWindow:self];
 }
 
-- (void) didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo 
-{
-	[sheet orderOut:self];
-}
-
 @end
