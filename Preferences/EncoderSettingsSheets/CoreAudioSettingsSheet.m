@@ -31,16 +31,23 @@
 	unsigned				i;
 	AudioFileTypeID			fileType				= 0;
 	UInt32					formatID				= 0;
+	UInt32					formatFlags				= 0;
+	UInt32					bitsPerChannel			= 0;
 	UInt32					subtypeFormatID			= 0;
-	NSDictionary			*format, *subtype;
+	UInt32					subtypeFormatFlags		= 0;
+	UInt32					subtypeBitsPerChannel	= 0;
+	NSDictionary			*format					= nil;
+	NSDictionary			*subtype				= nil;
 	NSDictionary			*objectToSelect			= nil;
 
 	
 	if((self = [super initWithNibName:@"CoreAudioSettingsSheet" settings:settings])) {
-
 		coreAudioFormats	= getCoreAudioWritableTypes();
+
 		fileType			= [[settings objectForKey:@"fileType"] unsignedLongValue];
 		formatID			= [[settings objectForKey:@"formatID"] unsignedLongValue];
+		formatFlags			= [[settings objectForKey:@"formatFlags"] unsignedLongValue];
+		bitsPerChannel		= [[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
 
 		[self setFormatName:getCoreAudioOutputFormatName(fileType, formatID, 0)];
 
@@ -61,9 +68,13 @@
 		if(0 != formatID) {
 			// Iterate through the data format list and select the one specified in the settings
 			for(i = 0; i < [_availableSubtypes count]; ++i) {
-				subtype				= [_availableSubtypes objectAtIndex:i];
-				subtypeFormatID		= [[subtype objectForKey:@"formatID"] unsignedLongValue];
-				if(formatID == subtypeFormatID) {
+				subtype					= [_availableSubtypes objectAtIndex:i];
+
+				subtypeFormatID			= [[subtype objectForKey:@"formatID"] unsignedLongValue];
+				subtypeFormatFlags		= [[subtype objectForKey:@"formatFlags"] unsignedLongValue];
+				subtypeBitsPerChannel	= [[subtype objectForKey:@"bitsPerChannel"] unsignedLongValue];
+
+				if(formatID == subtypeFormatID && formatFlags == subtypeFormatFlags && bitsPerChannel == subtypeBitsPerChannel) {
 					objectToSelect = subtype;
 				}
 			}
