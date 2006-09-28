@@ -20,141 +20,33 @@
  #  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ##
 
-## Save the current directory
-WD=`pwd`
-
-## Sparkle framework
-cd Sparkle && \
-	xcodebuild \
-		-project Sparkle.xcodeproj \
-		-target Sparkle \
-		-configuration Release \
-	&& cd $WD
 		
 ## Growl framework
-cd Growl && \
-	xcodebuild \
-		-project Growl.xcodeproj \
-		-target Growl.framework \
-		-configuration Deployment \
-	&& cd $WD
+## Growl uses the older-style "Deployment" target name
+cd Growl
+xcodebuild \
+	-project Growl.xcodeproj \
+	-target Growl.framework \
+	-configuration Deployment
+cd ..
 
-## ogg framework
-cd ogg && \
-	xcodebuild \
-		-project ogg.xcodeproj \
-		-target ogg.framework \
-		-configuration Release \
-	&& cd $WD
+## Sparkle framework
+## Only build the framework, not the test app
+cd Sparkle
+xcodebuild \
+	-project Sparkle.xcodeproj \
+	-target Sparkle \
+	-configuration Release
+cd ..
 
-## vorbis framework
-cd vorbis && \
-	xcodebuild \
-		-project vorbis.xcodeproj \
-		-target vorbis.framework \
-		-configuration Release \
-	&& cd $WD
+## Max custom-built frameworks
+subdirs=( cdparanoia cddb taglib mp4v2 cuetools ogg vorbis flac speex lame wavpack mac sndfile mpcdec )
 
-## LAME framework
-cd lame && \
+for subdir in "${subdirs[@]}"
+do
+	cd $subdir
 	xcodebuild \
-		-project lame.xcodeproj \
-		-target lame.framework \
-		-configuration Release \
-	&& cd $WD
-
-## wavpack framework
-cd wavpack && \
-	xcodebuild \
-		-project wavpack.xcodeproj \
-		-target wavpack.framework \
-		-configuration Release \
-	&& cd $WD
-
-## speex framework
-cd speex && \
-	xcodebuild \
-		-project speex.xcodeproj \
-		-target speex.framework \
-		-configuration Release \
-	&& cd $WD
-
-## FLAC framework
-cd flac && \
-	xcodebuild \
-		-project flac.xcodeproj \
-		-target FLAC.framework \
-		-configuration Release \
-	&& cd $WD
-
-## OggFLAC framework
-cd flac && \
-	xcodebuild \
-		-project flac.xcodeproj \
-		-target OggFLAC.framework \
-		-configuration Release \
-	&& cd $WD
-
-## taglib framework
-cd taglib && \
-	xcodebuild \
-		-project taglib.xcodeproj \
-		-target taglib.framework \
-		-configuration Release \
-	&& cd $WD
-
-## mac framework
-cd mac && \
-	xcodebuild \
-		-project mac.xcodeproj \
-		-target mac.framework \
-		-configuration Release \
-	&& cd $WD
-
-## sndfile framework
-cd sndfile && \
-	xcodebuild \
-		-project sndfile.xcodeproj \
-		-target sndfile.framework \
-		-configuration Release \
-	&& cd $WD
-
-## mpcdec framework
-cd mpcdec && \
-	xcodebuild \
-		-project mpcdec.xcodeproj \
-		-target mpcdec.framework \
-		-configuration Release \
-	&& cd $WD
-
-## cuetools framework
-cd cuetools && \
-	xcodebuild \
-		-project cuetools.xcodeproj \
-		-target cuetools.framework \
-		-configuration Release \
-	&& cd $WD
-
-## cdparanoia framework
-cd cdparanoia && \
-	xcodebuild \
-		-project cdparanoia.xcodeproj \
-		-target cdparanoia.framework \
-		-configuration Release \
-	&& cd $WD
-
-## mp4v2 framework
-cd mp4v2 && \
-	xcodebuild \
-		-project mp4v2.xcodeproj \
-		-target mp4v2.framework \
-		-configuration Release \
-	&& cd $WD
-
-## cddb framework
-cd cddb && \
-	xcodebuild \
-		-project cddb.xcodeproj \
-		-target cddb.framework \
-		-configuration Release \
-	&& cd $WD
+		-alltargets \
+		-configuration Release
+	cd ..
+done
