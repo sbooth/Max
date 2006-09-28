@@ -111,6 +111,8 @@
 		8C53FF930A05CD4100890518 /* ParanoiaRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF860A05CD4100890518 /* ParanoiaRipper.m */; };
 		8C53FF950A05CD4100890518 /* Rip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF880A05CD4100890518 /* Rip.m */; };
 		8C53FF970A05CD4100890518 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF8A0A05CD4100890518 /* Ripper.m */; };
+		8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
+		8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
 		8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */; };
 		8C74F84A0A0B2C7C002260CF /* AudioMetadata.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8480A0B2C7C002260CF /* AudioMetadata.mm */; };
 		8C74F8690A0B2D89002260CF /* Genres.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C74F8670A0B2D89002260CF /* Genres.m */; };
@@ -207,8 +209,6 @@
 		8CEA0D900AC7AB32009E46CB /* OggFLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */; };
 		8CEA0D910AC7AB37009E46CB /* OggFLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */; };
 		8CEA13CE0AC8ACEB009E46CB /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
-		8CEA17890AC8C2BE009E46CB /* mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA17870AC8C2BE009E46CB /* mac.framework */; };
-		8CEA178A0AC8C2C7009E46CB /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA17870AC8C2BE009E46CB /* mac.framework */; };
 		8CEA18750AC8C7A7009E46CB /* sndfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA18730AC8C7A7009E46CB /* sndfile.framework */; };
 		8CEA18760AC8C7AB009E46CB /* sndfile.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA18730AC8C7A7009E46CB /* sndfile.framework */; };
 		8CEA18D90AC8CA91009E46CB /* mpcdec.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA18CD0AC8CA90009E46CB /* mpcdec.framework */; };
@@ -251,6 +251,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */,
 				8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */,
 				8CEA1B290AC8D980009E46CB /* cddb.framework in Copy Frameworks */,
 				8CEA1A8D0AC8D5D7009E46CB /* mp4v2.framework in Copy Frameworks */,
@@ -258,7 +259,6 @@
 				8CEA19490AC8CF82009E46CB /* cuetools.framework in Copy Frameworks */,
 				8CEA18DB0AC8CA96009E46CB /* mpcdec.framework in Copy Frameworks */,
 				8CEA18760AC8C7AB009E46CB /* sndfile.framework in Copy Frameworks */,
-				8CEA178A0AC8C2C7009E46CB /* mac.framework in Copy Frameworks */,
 				8CEA0D910AC7AB37009E46CB /* OggFLAC.framework in Copy Frameworks */,
 				8CEA0D830AC7AB20009E46CB /* FLAC.framework in Copy Frameworks */,
 				8CEA0B910AC7A05C009E46CB /* speex.framework in Copy Frameworks */,
@@ -452,6 +452,7 @@
 		8C53FF8A0A05CD4100890518 /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
 		8C53FF8B0A05CD4100890518 /* RipperMethods.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RipperMethods.h; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		8C5ED73B0ACB581C003E8ECF /* mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mac.framework; path = Frameworks/mac/build/Release/mac.framework; sourceTree = "<group>"; };
 		8C643A7009D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
 		8C643A7109D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8C643A7209D7392400F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/CompactDisc.strings; sourceTree = "<group>"; };
@@ -667,7 +668,6 @@
 		8CEA0D710AC7AB1A009E46CB /* FLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLAC.framework; path = Frameworks/flac/build/Release/FLAC.framework; sourceTree = "<group>"; };
 		8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OggFLAC.framework; path = Frameworks/flac/build/Release/OggFLAC.framework; sourceTree = "<group>"; };
 		8CEA139B0AC8ACEB009E46CB /* taglib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = taglib.framework; path = Frameworks/taglib/build/Release/taglib.framework; sourceTree = "<group>"; };
-		8CEA17870AC8C2BE009E46CB /* mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mac.framework; path = Frameworks/mac/build/Release/mac.framework; sourceTree = "<group>"; };
 		8CEA18730AC8C7A7009E46CB /* sndfile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = sndfile.framework; path = Frameworks/sndfile/build/Release/sndfile.framework; sourceTree = "<group>"; };
 		8CEA18CD0AC8CA90009E46CB /* mpcdec.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mpcdec.framework; path = Frameworks/mpcdec/build/Release/mpcdec.framework; sourceTree = "<group>"; };
 		8CEA193F0AC8CF7D009E46CB /* cuetools.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = cuetools.framework; path = Frameworks/cuetools/build/Release/cuetools.framework; sourceTree = "<group>"; };
@@ -742,7 +742,6 @@
 				8CEA0D820AC7AB1B009E46CB /* FLAC.framework in Frameworks */,
 				8CEA0D900AC7AB32009E46CB /* OggFLAC.framework in Frameworks */,
 				8CEA13CE0AC8ACEB009E46CB /* taglib.framework in Frameworks */,
-				8CEA17890AC8C2BE009E46CB /* mac.framework in Frameworks */,
 				8CEA18750AC8C7A7009E46CB /* sndfile.framework in Frameworks */,
 				8CEA18D90AC8CA91009E46CB /* mpcdec.framework in Frameworks */,
 				8CEA19480AC8CF7D009E46CB /* cuetools.framework in Frameworks */,
@@ -750,6 +749,7 @@
 				8CEA1A8C0AC8D5D2009E46CB /* mp4v2.framework in Frameworks */,
 				8CEA1B280AC8D97C009E46CB /* cddb.framework in Frameworks */,
 				8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */,
+				8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1305,13 +1305,13 @@
 		8CEA08B70AC78374009E46CB /* External Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C5ED73B0ACB581C003E8ECF /* mac.framework */,
 				8CEA1B1B0AC8D97C009E46CB /* cddb.framework */,
 				8CEA1A870AC8D5D2009E46CB /* mp4v2.framework */,
 				8CEA19A10AC8D20F009E46CB /* cdparanoia.framework */,
 				8CEA193F0AC8CF7D009E46CB /* cuetools.framework */,
 				8CEA18CD0AC8CA90009E46CB /* mpcdec.framework */,
 				8CEA18730AC8C7A7009E46CB /* sndfile.framework */,
-				8CEA17870AC8C2BE009E46CB /* mac.framework */,
 				8CEA139B0AC8ACEB009E46CB /* taglib.framework */,
 				8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */,
 				8CEA0D710AC7AB1A009E46CB /* FLAC.framework */,
