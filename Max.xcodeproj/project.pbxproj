@@ -111,6 +111,7 @@
 		8C53FF930A05CD4100890518 /* ParanoiaRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF860A05CD4100890518 /* ParanoiaRipper.m */; };
 		8C53FF950A05CD4100890518 /* Rip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF880A05CD4100890518 /* Rip.m */; };
 		8C53FF970A05CD4100890518 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF8A0A05CD4100890518 /* Ripper.m */; };
+		8C5E60860ACDC6F600D92D9A /* SecondsFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5E60840ACDC6F500D92D9A /* SecondsFormatter.m */; };
 		8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
 		8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
 		8C6C4F7609CC5B0700F234E5 /* TaggingPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C6C4F7409CC5B0700F234E5 /* TaggingPreferences.nib */; };
@@ -456,6 +457,8 @@
 		8C53FF8A0A05CD4100890518 /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
 		8C53FF8B0A05CD4100890518 /* RipperMethods.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RipperMethods.h; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		8C5E60830ACDC6F500D92D9A /* SecondsFormatter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SecondsFormatter.h; path = Formatters/SecondsFormatter.h; sourceTree = "<group>"; };
+		8C5E60840ACDC6F500D92D9A /* SecondsFormatter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SecondsFormatter.m; path = Formatters/SecondsFormatter.m; sourceTree = "<group>"; };
 		8C5ED73B0ACB581C003E8ECF /* mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mac.framework; path = Frameworks/mac/build/Release/mac.framework; sourceTree = "<group>"; };
 		8C643A7009D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
 		8C643A7109D7391000F6C1F6 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -808,6 +811,7 @@
 				8C89CA6D0A06F7B200359E67 /* EncoderSettingsSheets */,
 				8C53FF750A05CD2D00890518 /* FreeDB */,
 				8C53FF570A05CCA400890518 /* ValueTransformers */,
+				8C5E60800ACDC6DA00D92D9A /* Formatters */,
 				8C53FF1E0A05CC4600890518 /* Exceptions */,
 				8C5302700A05DC9A00890518 /* AppleScript */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -1159,6 +1163,15 @@
 				8C53FF8B0A05CD4100890518 /* RipperMethods.h */,
 			);
 			path = Rippers;
+			sourceTree = "<group>";
+		};
+		8C5E60800ACDC6DA00D92D9A /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				8C5E60830ACDC6F500D92D9A /* SecondsFormatter.h */,
+				8C5E60840ACDC6F500D92D9A /* SecondsFormatter.m */,
+			);
+			name = Formatters;
 			sourceTree = "<group>";
 		};
 		8C74F8460A0B2C7C002260CF /* Metadata */ = {
@@ -1614,6 +1627,7 @@
 				8CABDFC70ABE768100905814 /* LibsndfileEncoder.m in Sources */,
 				8CB596ED0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.m in Sources */,
 				8CC9A0C80ACD90BF00948BAA /* ShortenDecoder.m in Sources */,
+				8C5E60860ACDC6F600D92D9A /* SecondsFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

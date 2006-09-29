@@ -19,6 +19,8 @@
  */
 
 #import "RipperController.h"
+
+#import "SecondsFormatter.h"
 #import "BasicRipperTask.h"
 #import "ComparisonRipperTask.h"
 #import "ParanoiaRipperTask.h"
@@ -93,6 +95,7 @@ static RipperController *sharedController = nil;
 - (void) awakeFromNib
 {
 	[_taskTable setAutosaveTableColumns:YES];
+	[[[_taskTable tableColumnWithIdentifier:@"remaining"] dataCell] setFormatter:[[[SecondsFormatter alloc] init] autorelease]];
 }
 
 - (void) windowDidLoad

@@ -20,6 +20,7 @@
 
 #import "EncoderController.h"
 
+#import "SecondsFormatter.h"
 #import "RipperTask.h"
 
 #import "CoreAudioEncoderTask.h"
@@ -104,6 +105,7 @@ static EncoderController *sharedController = nil;
 - (void) awakeFromNib
 {
 	[_taskTable setAutosaveTableColumns:YES];
+	[[[_taskTable tableColumnWithIdentifier:@"remaining"] dataCell] setFormatter:[[[SecondsFormatter alloc] init] autorelease]];
 }
 
 - (void) windowDidLoad
