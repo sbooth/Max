@@ -30,6 +30,7 @@
 #import "OggSpeexDecoder.h"
 #import "OggVorbisDecoder.h"
 #import "WavPackDecoder.h"
+#import "ShortenDecoder.h"
 
 #include <AudioToolbox/AudioFormat.h>
 
@@ -74,10 +75,11 @@
 	else if([extension isEqualToString:@"wv"]) {
 		result = [[WavPackDecoder alloc] init];
 	}
-/*	else if([extension isEqualToString:@"shn"]) {
-	}*/
 	else if([extension isEqualToString:@"mpc"]) {
 		result = [[MusepackDecoder alloc] init];
+	}
+	else if([extension isEqualToString:@"shn"]) {
+		result = [[ShortenDecoder alloc] init];
 	}
 	else if([coreAudioExtensions containsObject:extension]) {
 		result = [[CoreAudioDecoder alloc] init];

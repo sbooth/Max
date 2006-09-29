@@ -277,6 +277,7 @@ enum {
 
 - (void) setCompleted:(BOOL)completed
 {
+/*
 	// This file is finished
 	[[self taskInfo] setInputFileIndex:[[self taskInfo] inputFileIndex] + 1];
 	
@@ -284,6 +285,7 @@ enum {
 	if([[self taskInfo] inputFileIndex] < [[[self taskInfo] inputFilenames] count]) {
 		
 	}
+ */
 	
 	@try {
 

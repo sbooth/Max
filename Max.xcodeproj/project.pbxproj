@@ -184,6 +184,9 @@
 		8CB596FB0AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB596F50AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
+		8CC9A0C00ACD909300948BAA /* shorten.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC9A0B90ACD909300948BAA /* shorten.framework */; };
+		8CC9A0C10ACD909C00948BAA /* shorten.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC9A0B90ACD909300948BAA /* shorten.framework */; };
+		8CC9A0C80ACD90BF00948BAA /* ShortenDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */; };
 		8CD25D310AABF75E0037F33A /* TaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD25D2F0AABF75E0037F33A /* TaskInfo.m */; };
 		8CD25ED50AAD122D0037F33A /* Speex.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD25ED40AAD122C0037F33A /* Speex.png */; };
 		8CD26CA50AB50B580037F33A /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E40A12E3FC00C8DCAE /* EncoderTask.m */; };
@@ -251,6 +254,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8CC9A0C10ACD909C00948BAA /* shorten.framework in Copy Frameworks */,
 				8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */,
 				8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */,
 				8CEA1B290AC8D980009E46CB /* cddb.framework in Copy Frameworks */,
@@ -644,6 +648,9 @@
 		8CBAB14809D7AA6B00F97BDC /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8CBF384009CFA0FE00E89546 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8CC111C308CA4538008BB9B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CompactDiscDocument.nib; sourceTree = "<group>"; };
+		8CC9A0B90ACD909300948BAA /* shorten.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = shorten.framework; path = Frameworks/shorten/build/Release/shorten.framework; sourceTree = "<group>"; };
+		8CC9A0C50ACD90BF00948BAA /* ShortenDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShortenDecoder.h; path = Decoders/ShortenDecoder.h; sourceTree = "<group>"; };
+		8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShortenDecoder.m; path = Decoders/ShortenDecoder.m; sourceTree = "<group>"; };
 		8CD25D2E0AABF75E0037F33A /* TaskInfo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TaskInfo.h; path = Tasks/TaskInfo.h; sourceTree = "<group>"; };
 		8CD25D2F0AABF75E0037F33A /* TaskInfo.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = TaskInfo.m; path = Tasks/TaskInfo.m; sourceTree = "<group>"; };
 		8CD25ED40AAD122C0037F33A /* Speex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Speex.png; sourceTree = "<group>"; };
@@ -748,6 +755,7 @@
 				8CEA1B280AC8D97C009E46CB /* cddb.framework in Frameworks */,
 				8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */,
 				8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */,
+				8CC9A0C00ACD909300948BAA /* shorten.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1301,6 +1309,7 @@
 		8CEA08B70AC78374009E46CB /* External Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8CC9A0B90ACD909300948BAA /* shorten.framework */,
 				8C5ED73B0ACB581C003E8ECF /* mac.framework */,
 				8CEA1B1B0AC8D97C009E46CB /* cddb.framework */,
 				8CEA1A870AC8D5D2009E46CB /* mp4v2.framework */,
@@ -1347,6 +1356,8 @@
 				8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */,
 				8CFA4B440ABDE11800C5AE9F /* WavPackDecoder.h */,
 				8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */,
+				8CC9A0C50ACD90BF00948BAA /* ShortenDecoder.h */,
+				8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */,
 			);
 			name = Decoders;
 			sourceTree = "<group>";
@@ -1602,6 +1613,7 @@
 				8CABDFB70ABE751100905814 /* OggSpeexEncoder.m in Sources */,
 				8CABDFC70ABE768100905814 /* LibsndfileEncoder.m in Sources */,
 				8CB596ED0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.m in Sources */,
+				8CC9A0C80ACD90BF00948BAA /* ShortenDecoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2049,6 +2061,7 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_14)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_15)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_16)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_17)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks/Sparkle/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_10 = "\"$(SRCROOT)/Frameworks/mac/build/Release\"";
@@ -2058,6 +2071,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_14 = "\"$(SRCROOT)/Frameworks/cdparanoia/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/cddb/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
@@ -2072,6 +2086,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX__;
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Frameworks/shorten/build/Release/shorten.framework/Headers",
 					"$(SRCROOT)/Frameworks/taglib/build/Release/taglib.framework/Headers",
 					"$(SRCROOT)/Frameworks/mp4v2/build/Release/mp4v2.framework/Headers",
 					"$(SRCROOT)/Frameworks/flac/build/Release/FLAC.framework/Headers",
@@ -2134,6 +2149,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PREPROCESSOR_DEFINITIONS = __MACOSX__;
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Frameworks/shorten/build/Release/shorten.framework/Headers",
 					"$(SRCROOT)/Frameworks/taglib/build/Release/taglib.framework/Headers",
 					"$(SRCROOT)/Frameworks/mp4v2/build/Release/mp4v2.framework/Headers",
 					"$(SRCROOT)/Frameworks/flac/build/Release/FLAC.framework/Headers",
