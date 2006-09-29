@@ -31,6 +31,7 @@
 
 - (id) initWithSettings:(NSDictionary *)settings
 {
+	SF_FORMAT_INFO			formatInfo;
 	SF_FORMAT_INFO			subtypeInfo;
 	SF_INFO					info;
 	int						i, majorFormat, currentSubtypeFormat;
@@ -45,14 +46,14 @@
 		currentSubtypeFormat = [[settings objectForKey:@"subtypeFormat"] intValue];
 
 		[self willChangeValueForKey:@"availableSubtypes"];
-		_availableSubtypes		= [[NSMutableArray arrayWithCapacity:20] retain];
+		_availableSubtypes		= [[NSMutableArray alloc] init];
 		
 		// Get the count of all available subtypes (even invalid ones for this format)
 		sf_command(NULL, SFC_GET_FORMAT_SUBTYPE_COUNT, &subtypeCount, sizeof(int)) ;
 		
 		// The sndile major format we are dealing with
-		majorFormat			= [[_settings objectForKey:@"majorFormat"] intValue];
-		
+		majorFormat			= [[[self settings] objectForKey:@"majorFormat"] intValue];
+				
 		// Set up generic defaults for format verification
 		info.channels		= 2;
 		info.samplerate		= 44100;
@@ -93,6 +94,13 @@
 		}
 		
 		[self didChangeValueForKey:@"availableSubtypes"];
+
+		// Get the name of the format
+		formatInfo.format	= majorFormat | currentSubtypeFormat;
+		
+		sf_command(NULL, SFC_GET_FORMAT_INFO, &formatInfo, sizeof(formatInfo));
+		
+		[self setFormatName:[NSString stringWithCString:formatInfo.name encoding:NSASCIIStringEncoding]];
 		
 		if(nil != objectToSelect) {
 			[_subtypesController setSelectedObjects:[NSArray arrayWithObject:objectToSelect]];
@@ -106,26 +114,41 @@
 - (void) dealloc
 {
 	[_availableSubtypes release];	_availableSubtypes = nil;
-	
+	[_formatName release];			_formatName = nil;
+
 	[super dealloc];
 }
+
+- (NSString *)		formatName									{ return [[_formatName retain] autorelease]; }
+- (void)			setFormatName:(NSString *)formatName		{ [_formatName release]; _formatName = [formatName retain]; }
 
 #pragma mark Delegate methods
 
 - (void) tableViewSelectionDidChange:(NSNotification *)aNotification
 {
-	NSArray			*selectedObjects	= [_subtypesController selectedObjects];
-	NSDictionary	*subtypeInfo		= nil;
-
+	NSArray				*selectedObjects	= [_subtypesController selectedObjects];
+	NSDictionary		*subtypeInfo		= nil;
+	SF_FORMAT_INFO		formatInfo;
+	int					majorFormat;
+	int					subtypeFormat;
+	
 	if(nil == selectedObjects) {
 		return;
 	}
 	
 	subtypeInfo = [selectedObjects objectAtIndex:0];
+
+	// Get the name of the format
+	majorFormat			= [[[self settings] objectForKey:@"majorFormat"] intValue];
+	subtypeFormat		= [[subtypeInfo objectForKey:@"subtypeFormat"] intValue];
+	formatInfo.format	= majorFormat | subtypeFormat;
+	
+	sf_command(NULL, SFC_GET_FORMAT_INFO, &formatInfo, sizeof(formatInfo));
+	
+	[self setFormatName:[NSString stringWithCString:formatInfo.name encoding:NSASCIIStringEncoding]];
 	
 	// Add the subtype information to our settings
 	[_settings setObject:[subtypeInfo objectForKey:@"subtypeFormat"] forKey:@"subtypeFormat"];
 }
-
 
 @end

@@ -25,8 +25,13 @@
 {
 	IBOutlet NSArrayController		*_subtypesController;
 	NSMutableArray					*_availableSubtypes;
+	
+	NSString						*_formatName;
 }
 
 - (id)				initWithSettings:(NSDictionary *)settings;
+
+- (NSString *)		formatName;
+- (void)			setFormatName:(NSString *)formatName;
 
 @end
