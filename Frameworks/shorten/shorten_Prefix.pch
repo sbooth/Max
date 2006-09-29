@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'shorten' target in the 'shorten' project.
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
