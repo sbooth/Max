@@ -864,7 +864,7 @@
 		}
 		
 		// Length
-		if(NULL !=f.audioProperties() && 0 != f.audioProperties()->length()) {
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
 			[result setLength:f.audioProperties()->length()];
 		}
 	}
@@ -991,7 +991,7 @@
 		}
 		
 		// Length
-		if(NULL !=f.audioProperties() && 0 != f.audioProperties()->length()) {
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length()) {
 			[result setLength:f.audioProperties()->length()];
 		}
 	}
