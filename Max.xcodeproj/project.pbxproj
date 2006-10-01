@@ -162,6 +162,10 @@
 		8CA6E46E09D065260047C35C /* UndoRedo.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8CA6E46C09D065260047C35C /* UndoRedo.strings */; };
 		8CA73F2E0A0FE45C00B12829 /* Cuesheet.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8CA73F2D0A0FE45C00B12829 /* Cuesheet.icns */; };
 		8CA73F4B0A0FE6F300B12829 /* ComparisonRipperDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */; };
+		8CA99CFD0AD06B57000EF903 /* expat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99CF70AD06B57000EF903 /* expat.framework */; };
+		8CA99CFE0AD06B64000EF903 /* expat.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99CF70AD06B57000EF903 /* expat.framework */; };
+		8CA99D020AD06CBB000EF903 /* musicbrainz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99D000AD06CBB000EF903 /* musicbrainz.framework */; };
+		8CA99D030AD06CC3000EF903 /* musicbrainz.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99D000AD06CBB000EF903 /* musicbrainz.framework */; };
 		8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
 		8CABDD050ABE5C4F00905814 /* FLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEFA0A05CB8E00890518 /* FLACEncoder.m */; };
 		8CABDD580ABE621F00905814 /* FLACEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E60A12E3FC00C8DCAE /* FLACEncoderTask.m */; };
@@ -255,6 +259,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8CA99D030AD06CC3000EF903 /* musicbrainz.framework in Copy Frameworks */,
+				8CA99CFE0AD06B64000EF903 /* expat.framework in Copy Frameworks */,
 				8CC9A0C10ACD909C00948BAA /* shorten.framework in Copy Frameworks */,
 				8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */,
 				8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */,
@@ -622,6 +628,8 @@
 		8CA73EA90A0FD3AC00B12829 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/LibsndfileSettingsSheet.nib; sourceTree = "<group>"; };
 		8CA73F2D0A0FE45C00B12829 /* Cuesheet.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Cuesheet.icns; sourceTree = "<group>"; };
 		8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ComparisonRipperDefaults.plist; sourceTree = "<group>"; };
+		8CA99CF70AD06B57000EF903 /* expat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = expat.framework; path = Frameworks/expat/build/Release/expat.framework; sourceTree = "<group>"; };
+		8CA99D000AD06CBB000EF903 /* musicbrainz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = musicbrainz.framework; path = Frameworks/musicbrainz/build/Release/musicbrainz.framework; sourceTree = "<group>"; };
 		8CABDE8F0ABE6A0600905814 /* OggSpeexSettingsSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggSpeexSettingsSheet.h; sourceTree = "<group>"; };
 		8CABDE900ABE6A0600905814 /* OggSpeexSettingsSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggSpeexSettingsSheet.m; sourceTree = "<group>"; };
 		8CABDED10ABE6AF900905814 /* OggSpeexEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggSpeexEncoder.h; sourceTree = "<group>"; };
@@ -759,6 +767,8 @@
 				8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */,
 				8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */,
 				8CC9A0C00ACD909300948BAA /* shorten.framework in Frameworks */,
+				8CA99CFD0AD06B57000EF903 /* expat.framework in Frameworks */,
+				8CA99D020AD06CBB000EF903 /* musicbrainz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1322,6 +1332,8 @@
 		8CEA08B70AC78374009E46CB /* External Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8CA99D000AD06CBB000EF903 /* musicbrainz.framework */,
+				8CA99CF70AD06B57000EF903 /* expat.framework */,
 				8CC9A0B90ACD909300948BAA /* shorten.framework */,
 				8C5ED73B0ACB581C003E8ECF /* mac.framework */,
 				8CEA1B1B0AC8D97C009E46CB /* cddb.framework */,
@@ -2076,6 +2088,8 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_15)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_16)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_17)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_18)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_19)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks/Sparkle/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_10 = "\"$(SRCROOT)/Frameworks/mac/build/Release\"";
@@ -2086,6 +2100,8 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/cddb/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
@@ -2144,6 +2160,8 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_15)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_16)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_17)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_18)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_19)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks/Sparkle/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_10 = "\"$(SRCROOT)/Frameworks/mac/build/Release\"";
@@ -2154,6 +2172,8 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/cddb/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
