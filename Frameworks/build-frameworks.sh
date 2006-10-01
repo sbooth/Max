@@ -40,7 +40,7 @@ xcodebuild \
 cd ..
 
 ## Max custom-built frameworks
-subdirs=( cdparanoia cddb taglib mp4v2 cuetools ogg vorbis flac speex lame wavpack mac sndfile mpcdec shorten )
+subdirs=( cdparanoia cddb taglib mp4v2 cuetools ogg vorbis flac speex lame wavpack mac sndfile mpcdec shorten expat )
 
 for subdir in "${subdirs[@]}"
 do
