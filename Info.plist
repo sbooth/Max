@@ -207,6 +207,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>mp4</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>MPEG-4 Multimedia</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>Binary</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>aiff</string>
 			</array>
 			<key>CFBundleTypeName</key>
