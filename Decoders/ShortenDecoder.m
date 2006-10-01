@@ -50,14 +50,20 @@
 	config.seek_tables_path				= NULL;
 	config.relative_seek_tables_path	= NULL;
 	config.verbose						= 0;
-	config.swap_bytes					= __BIG_ENDIAN__;
+#if defined(__BIG_ENDIAN__)
+	config.swap_bytes					= 1;
+#elif defined(__LITTLE_ENDIAN__)
+	config.swap_bytes					= 0;
+#else
+#error "Target processor byte order unknown"
+#endif
 	
 	// Setup decoder
 	_shn = shn_load([[self filename] fileSystemRepresentation], config);
 	NSAssert(NULL != _shn, @"Unable to open the input file.");
 	
 	result	= shn_init_decoder(_shn);
-	NSAssert(1 == result, @"Unable to initialzie the Shorten decoder.");
+	NSAssert(1 == result, @"Unable to initialize the Shorten decoder.");
 	
 	// Setup input format descriptor
 	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
