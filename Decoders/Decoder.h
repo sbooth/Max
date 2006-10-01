@@ -24,7 +24,6 @@
 #import "CircularBuffer.h"
 
 // A decoder reads audio data in some format and provides it as PCM:
-//   - The raw audio stream is provided by _reader
 //   - The audio stream is converted to PCM and placed in _pcmBuffer
 @interface Decoder : NSObject
 {
@@ -65,7 +64,7 @@
 - (SInt64)			currentFrame;
 - (SInt64)			seekToFrame:(SInt64)frame;
 
-// Finalize reader setup prior to reading
+// Finalize setup prior to reading
 - (void)			finalizeSetup;
 
 // The meat & potatoes- 
