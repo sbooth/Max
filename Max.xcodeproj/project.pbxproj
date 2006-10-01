@@ -2143,6 +2143,7 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_14)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_15)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_16)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_17)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks/Sparkle/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_10 = "\"$(SRCROOT)/Frameworks/mac/build/Release\"";
@@ -2152,6 +2153,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_14 = "\"$(SRCROOT)/Frameworks/cdparanoia/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/cddb/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
