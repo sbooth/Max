@@ -5,14 +5,14 @@
 /* #undef FLAC__ALIGN_MALLOC_DATA */
 
 /* define if building for ia32/i386 */
-#if __LITTLE_ENDIAN__
+#if defined(__LITTLE_ENDIAN__)
 #define FLAC__CPU_IA32 1
 #else
 #define FLAC__CPU_IA32 0
 #endif
 
 /* define if building for PowerPC */
-#if __BIG_ENDIAN__
+#if defined(__BIG_ENDIAN__)
 #define FLAC__CPU_PPC 1
 #else
 #define FLAC__CPU_PPC 0

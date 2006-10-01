@@ -2,10 +2,12 @@
 /* expat_config.h.in.  Generated from configure.in by autoheader.  */
 
 /* 1234 = LIL_ENDIAN, 4321 = BIGENDIAN */
-#if __BIG_ENDIAN__
+#if defined(__BIG_ENDIAN__)
 #define BYTEORDER 4321
-#else
+#elif defined(__LITTLE_ENDIAN__)
 #define BYTEORDER 1234
+#else
+#error "Target processor byte order unknown"
 #endif
 
 /* Define to 1 if you have the `bcopy' function. */

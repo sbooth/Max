@@ -87,10 +87,10 @@
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
-#if __BIG_ENDIAN__
+#if defined(__BIG_ENDIAN__)
 #define WORDS_BIGENDIAN 1
 #else
-#define WORDS_BIGENDIAN 0
+#undef WORDS_BIGENDIAN
 #endif
 
 /* Define to empty if `const' does not conform to ANSI C. */
