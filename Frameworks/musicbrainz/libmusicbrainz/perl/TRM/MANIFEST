@@ -1,0 +1,10 @@
+# $Id: MANIFEST 779 2005-11-20 04:00:20Z sander $
+Changes
+Makefile.PL
+MANIFEST
+README
+TRM.pm
+TRM.xs
+typemap
+t/1.t
+META.yml                                 Module meta-data (added by MakeMaker)

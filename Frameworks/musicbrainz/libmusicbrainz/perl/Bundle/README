@@ -1,0 +1,35 @@
+Bundle::MusicBrainz::Client
+===========================
+
+This is not a module that people generally need to download
+and install locally. This Bundle is meant to live on CPAN so
+that people can use CPAN.pm magic to automagically download and
+install modules.
+
+For more information about the MusicBrainz project visit the projects
+website at http://www.musicbrainz.org/
+
+INSTALLATION
+
+To install all the modules in this bundle using CPAN.pm type the following:
+
+   perl -MCPAN -e 'install Bundle::MusicBrainz::Client'
+
+This bundle gathers together all of the CPAN hosted modules for 
+MusicBrainz::Client.
+
+DEPENDENCIES
+
+This bundle requires these libraries to be installed:
+
+  libmusicbrainz 2.0 or later
+  -  from http://www.musicbrainz.org/products/client/download.html
+
+COPYRIGHT AND LICENSE
+
+Copyright (C) 2003 Alexander van Zoest
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+
+$Id: README 608 2003-03-01 02:20:07Z sander $

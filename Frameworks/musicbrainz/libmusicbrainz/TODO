@@ -1,0 +1,9 @@
+MusicBrainz Client Library TODO List:
+-------------------------------------
+
+1) This library has been compiled and tested under Linux, Windows, FreeBSD,
+   and Mac OS X.
+   It still needs to be compiled and tested under:
+     
+       Win32/cygwin, IRIX, NetBSD, OpenBSD
+

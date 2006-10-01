@@ -1,0 +1,95 @@
+Credits
+=======
+
+The following people have contributed to this program:
+
+  Adam Wozniak <adam@mudlist.eorbit.net>
+  - original CD-ROM TOC code
+
+  Ben Wong <cdindex@wongs.net>
+  - support for SGI Irix
+
+  Bert Vermeulen <bert@biot.com>
+  - improved endian support
+
+  Johnny Tevessen <j.tevessen@gmx.net>
+  - brought in autoconf support
+
+  Jukka Poikolainen <jukka.poikolainen@poikosoft.com>
+  - brought in Win32 TOC code
+
+  Marc E E van Woerkom <van.woerkom@netcologne.de>
+  - support for FreeBSD, NetBSD, OpenBSD, Solaris and Win32/Cygwin
+  - current maintainer
+
+  Mark A Mankins <raider@dnaco.net>
+  - improved Netscape support 
+
+  Rick Bradey <roundeye@bellsouth.net>
+  - support Linux 2.2 kernel and -l command line option
+
+  Robert Kaye <rob@emusic.com>
+  - hacked it together in the first place
+  - support for Win32/MS VC++
+  - coordination of the CD Index/MusicBrainz project
+  - move the CD Index over to MusicBrainz
+  - All the RDF/XML work in the client library
+
+  Stephen van Egmond <svanegmond@home.com>
+  - support for BeOS
+
+  Winston Chang <winston@stdout.org>
+  - support for Solaris
+
+  David W. Gray <david@thegray.com>
+  - cmd.dsp and added support for exporting the C++ interface in Win32
+
+  Alexey Zakhlestine <indy@mgupp.ru> 
+  - Supplied a patch compile this lib under BeOS
+
+  Brian Reichert <reichert@numachi.com>
+  - Supplied a patch compile this lib under FreeBSD-4.3
+
+  Erik Gavert <erik@jsdata.se>
+  - A small browser launch patch
+
+  Patrick Mauritz <oxygene@studentenbude.ath.cx>
+  - A patch to allow building mb_client from a different directory.
+
+  Chris Gray <cgray4@cs.mcgill.ca>
+  - A patch to keep the trm stuff from crashing.
+
+  Myers Carpenter <myers@maski.org> 
+  - Added track duration queries to queries.h
+  - Added all the python and debian support
+
+  Matthias Friedrich <mfriedrich@users.sourceforge.net>
+  - Provided a patch for fixing NetBSD cdrom TOC code
+
+  Sander van Zoest <sander@vanZoest.com>
+  - Wrote the perl bindings
+
+  Philippe Normand <sweafty@free.fr>
+  - Supplied a couple of minor patches to the new build system
+
+  Andreas Rottmann <a.rottmann@gmx.at>
+  - Improve build system and debian support
+
+  Tim Van Holder <tim.van.holder@pandora.be>
+  - Supplied a patch to fix some compile issues under cygwin
+
+  Clayton O'Neill <coneill@oneill.net>
+  - Improved the mp3 sanity checking code in the lib/bitzi/mp3.c
+
+  Juergen Kreileder <jk@blackdown.de>
+  - Supplied minimal patch for making sure that mb_client still works
+    when CDO_CHECK_TYPE is defined.
+
+  Martin Michlmayr <tbm@cyrius.com>
+  - Supplied a number of patches that fixed minor issues with the reintegrated python bindings
+
+  Ryan McCabe <ryan@numb.org>
+  - Supplied a patch to fix pointer issues in comhttpsocket.cpp and
+    comsocket.cpp on 64-bit architectures.
+  
+(please send change requests to rob@musicbrainz.org or maintainer)

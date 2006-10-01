@@ -1,0 +1,479 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8CA99C450AD067B3000EF903 /* expat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99C440AD067B3000EF903 /* expat.framework */; };
+		8CA99C700AD067CD000EF903 /* apsmetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C480AD067CD000EF903 /* apsmetadata.h */; };
+		8CA99C710AD067CD000EF903 /* apsutility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C490AD067CD000EF903 /* apsutility.h */; };
+		8CA99C720AD067CD000EF903 /* audiosig.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C4A0AD067CD000EF903 /* audiosig.h */; };
+		8CA99C730AD067CD000EF903 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4B0AD067CD000EF903 /* base64.c */; };
+		8CA99C740AD067CD000EF903 /* base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C4C0AD067CD000EF903 /* base64.h */; };
+		8CA99C750AD067CD000EF903 /* browser.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4D0AD067CD000EF903 /* browser.c */; };
+		8CA99C760AD067CD000EF903 /* c_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4E0AD067CD000EF903 /* c_wrapper.cpp */; };
+		8CA99C770AD067CD000EF903 /* comhttpsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4F0AD067CD000EF903 /* comhttpsocket.cpp */; };
+		8CA99C780AD067CD000EF903 /* comhttpsocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C500AD067CD000EF903 /* comhttpsocket.h */; };
+		8CA99C790AD067CD000EF903 /* comsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C510AD067CD000EF903 /* comsocket.cpp */; };
+		8CA99C7A0AD067CD000EF903 /* comsocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C520AD067CD000EF903 /* comsocket.h */; };
+		8CA99C7B0AD067CD000EF903 /* diskid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C530AD067CD000EF903 /* diskid.cpp */; };
+		8CA99C7C0AD067CD000EF903 /* diskid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C540AD067CD000EF903 /* diskid.h */; };
+		8CA99C7D0AD067CD000EF903 /* haar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C550AD067CD000EF903 /* haar.cpp */; };
+		8CA99C7E0AD067CD000EF903 /* haar.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C560AD067CD000EF903 /* haar.h */; };
+		8CA99C7F0AD067CD000EF903 /* http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C570AD067CD000EF903 /* http.cpp */; };
+		8CA99C800AD067CD000EF903 /* http.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C580AD067CD000EF903 /* http.h */; };
+		8CA99C810AD067CD000EF903 /* mp3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C590AD067CD000EF903 /* mp3.cpp */; };
+		8CA99C820AD067CD000EF903 /* mp3.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C5A0AD067CD000EF903 /* mp3.h */; };
+		8CA99C830AD067CD000EF903 /* musicbrainz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C5B0AD067CD000EF903 /* musicbrainz.cpp */; };
+		8CA99C840AD067CD000EF903 /* rdfextract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C5C0AD067CD000EF903 /* rdfextract.cpp */; };
+		8CA99C850AD067CD000EF903 /* rdfextract.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C5D0AD067CD000EF903 /* rdfextract.h */; };
+		8CA99C860AD067CD000EF903 /* rdfparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C5E0AD067CD000EF903 /* rdfparse.c */; };
+		8CA99C870AD067CD000EF903 /* rdfparse.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C5F0AD067CD000EF903 /* rdfparse.h */; };
+		8CA99C880AD067CD000EF903 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C600AD067CD000EF903 /* sha1.c */; };
+		8CA99C890AD067CD000EF903 /* sha1.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C610AD067CD000EF903 /* sha1.h */; };
+		8CA99C8A0AD067CD000EF903 /* sigclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C620AD067CD000EF903 /* sigclient.cpp */; };
+		8CA99C8B0AD067CD000EF903 /* sigclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C630AD067CD000EF903 /* sigclient.h */; };
+		8CA99C8C0AD067CD000EF903 /* sigcomplex.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C640AD067CD000EF903 /* sigcomplex.h */; };
+		8CA99C8D0AD067CD000EF903 /* sigfft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C650AD067CD000EF903 /* sigfft.cpp */; };
+		8CA99C8E0AD067CD000EF903 /* sigfft.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C660AD067CD000EF903 /* sigfft.h */; };
+		8CA99C8F0AD067CD000EF903 /* signature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C670AD067CD000EF903 /* signature.cpp */; };
+		8CA99C900AD067CD000EF903 /* sigxdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C680AD067CD000EF903 /* sigxdr.cpp */; };
+		8CA99C910AD067CD000EF903 /* sigxdr.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C690AD067CD000EF903 /* sigxdr.h */; };
+		8CA99C920AD067CD000EF903 /* trm.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6A0AD067CD000EF903 /* trm.h */; };
+		8CA99C930AD067CD000EF903 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6B0AD067CD000EF903 /* types.h */; };
+		8CA99C940AD067CD000EF903 /* uuid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C6C0AD067CD000EF903 /* uuid.cpp */; };
+		8CA99C950AD067CD000EF903 /* uuid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6D0AD067CD000EF903 /* uuid.h */; };
+		8CA99C9B0AD067EE000EF903 /* mb_darwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C990AD067EE000EF903 /* mb_darwin.cpp */; };
+		8CA99C9C0AD067EE000EF903 /* mb_darwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C9A0AD067EE000EF903 /* mb_darwin.h */; };
+		8CA99CAA0AD0687B000EF903 /* browser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA50AD0687B000EF903 /* browser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CA99CAB0AD0687B000EF903 /* errors.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA60AD0687B000EF903 /* errors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CA99CAC0AD0687B000EF903 /* mb_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA70AD0687B000EF903 /* mb_c.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CA99CAD0AD0687B000EF903 /* musicbrainz.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA80AD0687B000EF903 /* musicbrainz.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CA99CAE0AD0687B000EF903 /* queries.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA90AD0687B000EF903 /* queries.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CA99CB50AD068FF000EF903 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CB40AD068FF000EF903 /* config.h */; };
+		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		32DBCF5E0370ADEE00C91783 /* musicbrainz_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = musicbrainz_Prefix.pch; sourceTree = "<group>"; };
+		8CA99C440AD067B3000EF903 /* expat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = expat.framework; path = ../expat/build/Release/expat.framework; sourceTree = SOURCE_ROOT; };
+		8CA99C480AD067CD000EF903 /* apsmetadata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = apsmetadata.h; path = libmusicbrainz/lib/apsmetadata.h; sourceTree = "<group>"; };
+		8CA99C490AD067CD000EF903 /* apsutility.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = apsutility.h; path = libmusicbrainz/lib/apsutility.h; sourceTree = "<group>"; };
+		8CA99C4A0AD067CD000EF903 /* audiosig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = audiosig.h; path = libmusicbrainz/lib/audiosig.h; sourceTree = "<group>"; };
+		8CA99C4B0AD067CD000EF903 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = base64.c; path = libmusicbrainz/lib/base64.c; sourceTree = "<group>"; };
+		8CA99C4C0AD067CD000EF903 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = base64.h; path = libmusicbrainz/lib/base64.h; sourceTree = "<group>"; };
+		8CA99C4D0AD067CD000EF903 /* browser.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = browser.c; path = libmusicbrainz/lib/browser.c; sourceTree = "<group>"; };
+		8CA99C4E0AD067CD000EF903 /* c_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = c_wrapper.cpp; path = libmusicbrainz/lib/c_wrapper.cpp; sourceTree = "<group>"; };
+		8CA99C4F0AD067CD000EF903 /* comhttpsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = comhttpsocket.cpp; path = libmusicbrainz/lib/comhttpsocket.cpp; sourceTree = "<group>"; };
+		8CA99C500AD067CD000EF903 /* comhttpsocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = comhttpsocket.h; path = libmusicbrainz/lib/comhttpsocket.h; sourceTree = "<group>"; };
+		8CA99C510AD067CD000EF903 /* comsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = comsocket.cpp; path = libmusicbrainz/lib/comsocket.cpp; sourceTree = "<group>"; };
+		8CA99C520AD067CD000EF903 /* comsocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = comsocket.h; path = libmusicbrainz/lib/comsocket.h; sourceTree = "<group>"; };
+		8CA99C530AD067CD000EF903 /* diskid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = diskid.cpp; path = libmusicbrainz/lib/diskid.cpp; sourceTree = "<group>"; };
+		8CA99C540AD067CD000EF903 /* diskid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = diskid.h; path = libmusicbrainz/lib/diskid.h; sourceTree = "<group>"; };
+		8CA99C550AD067CD000EF903 /* haar.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = haar.cpp; path = libmusicbrainz/lib/haar.cpp; sourceTree = "<group>"; };
+		8CA99C560AD067CD000EF903 /* haar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = haar.h; path = libmusicbrainz/lib/haar.h; sourceTree = "<group>"; };
+		8CA99C570AD067CD000EF903 /* http.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = http.cpp; path = libmusicbrainz/lib/http.cpp; sourceTree = "<group>"; };
+		8CA99C580AD067CD000EF903 /* http.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = http.h; path = libmusicbrainz/lib/http.h; sourceTree = "<group>"; };
+		8CA99C590AD067CD000EF903 /* mp3.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mp3.cpp; path = libmusicbrainz/lib/mp3.cpp; sourceTree = "<group>"; };
+		8CA99C5A0AD067CD000EF903 /* mp3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mp3.h; path = libmusicbrainz/lib/mp3.h; sourceTree = "<group>"; };
+		8CA99C5B0AD067CD000EF903 /* musicbrainz.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = musicbrainz.cpp; path = libmusicbrainz/lib/musicbrainz.cpp; sourceTree = "<group>"; };
+		8CA99C5C0AD067CD000EF903 /* rdfextract.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = rdfextract.cpp; path = libmusicbrainz/lib/rdfextract.cpp; sourceTree = "<group>"; };
+		8CA99C5D0AD067CD000EF903 /* rdfextract.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rdfextract.h; path = libmusicbrainz/lib/rdfextract.h; sourceTree = "<group>"; };
+		8CA99C5E0AD067CD000EF903 /* rdfparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = rdfparse.c; path = libmusicbrainz/lib/rdfparse.c; sourceTree = "<group>"; };
+		8CA99C5F0AD067CD000EF903 /* rdfparse.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rdfparse.h; path = libmusicbrainz/lib/rdfparse.h; sourceTree = "<group>"; };
+		8CA99C600AD067CD000EF903 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sha1.c; path = libmusicbrainz/lib/sha1.c; sourceTree = "<group>"; };
+		8CA99C610AD067CD000EF903 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = libmusicbrainz/lib/sha1.h; sourceTree = "<group>"; };
+		8CA99C620AD067CD000EF903 /* sigclient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sigclient.cpp; path = libmusicbrainz/lib/sigclient.cpp; sourceTree = "<group>"; };
+		8CA99C630AD067CD000EF903 /* sigclient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigclient.h; path = libmusicbrainz/lib/sigclient.h; sourceTree = "<group>"; };
+		8CA99C640AD067CD000EF903 /* sigcomplex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigcomplex.h; path = libmusicbrainz/lib/sigcomplex.h; sourceTree = "<group>"; };
+		8CA99C650AD067CD000EF903 /* sigfft.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sigfft.cpp; path = libmusicbrainz/lib/sigfft.cpp; sourceTree = "<group>"; };
+		8CA99C660AD067CD000EF903 /* sigfft.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigfft.h; path = libmusicbrainz/lib/sigfft.h; sourceTree = "<group>"; };
+		8CA99C670AD067CD000EF903 /* signature.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = signature.cpp; path = libmusicbrainz/lib/signature.cpp; sourceTree = "<group>"; };
+		8CA99C680AD067CD000EF903 /* sigxdr.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sigxdr.cpp; path = libmusicbrainz/lib/sigxdr.cpp; sourceTree = "<group>"; };
+		8CA99C690AD067CD000EF903 /* sigxdr.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigxdr.h; path = libmusicbrainz/lib/sigxdr.h; sourceTree = "<group>"; };
+		8CA99C6A0AD067CD000EF903 /* trm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = trm.h; path = libmusicbrainz/lib/trm.h; sourceTree = "<group>"; };
+		8CA99C6B0AD067CD000EF903 /* types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = types.h; path = libmusicbrainz/lib/types.h; sourceTree = "<group>"; };
+		8CA99C6C0AD067CD000EF903 /* uuid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = uuid.cpp; path = libmusicbrainz/lib/uuid.cpp; sourceTree = "<group>"; };
+		8CA99C6D0AD067CD000EF903 /* uuid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = uuid.h; path = libmusicbrainz/lib/uuid.h; sourceTree = "<group>"; };
+		8CA99C6E0AD067CD000EF903 /* wincomsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wincomsocket.cpp; path = libmusicbrainz/lib/wincomsocket.cpp; sourceTree = "<group>"; };
+		8CA99C6F0AD067CD000EF903 /* wincomsocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wincomsocket.h; path = libmusicbrainz/lib/wincomsocket.h; sourceTree = "<group>"; };
+		8CA99C990AD067EE000EF903 /* mb_darwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mb_darwin.cpp; path = libmusicbrainz/osdep/mb_darwin.cpp; sourceTree = "<group>"; };
+		8CA99C9A0AD067EE000EF903 /* mb_darwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb_darwin.h; path = libmusicbrainz/osdep/mb_darwin.h; sourceTree = "<group>"; };
+		8CA99CA50AD0687B000EF903 /* browser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = browser.h; path = libmusicbrainz/include/musicbrainz/browser.h; sourceTree = "<group>"; };
+		8CA99CA60AD0687B000EF903 /* errors.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = errors.h; path = libmusicbrainz/include/musicbrainz/errors.h; sourceTree = "<group>"; };
+		8CA99CA70AD0687B000EF903 /* mb_c.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb_c.h; path = libmusicbrainz/include/musicbrainz/mb_c.h; sourceTree = "<group>"; };
+		8CA99CA80AD0687B000EF903 /* musicbrainz.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = musicbrainz.h; path = libmusicbrainz/include/musicbrainz/musicbrainz.h; sourceTree = "<group>"; };
+		8CA99CA90AD0687B000EF903 /* queries.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = queries.h; path = libmusicbrainz/include/musicbrainz/queries.h; sourceTree = "<group>"; };
+		8CA99CB40AD068FF000EF903 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = libmusicbrainz/config.h; sourceTree = "<group>"; };
+		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8DC2EF5B0486A6940098B216 /* musicbrainz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = musicbrainz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DC2EF560486A6940098B216 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CA99C450AD067B3000EF903 /* expat.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5B0486A6940098B216 /* musicbrainz.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* musicbrainz */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AEFE84172EC02AAC07 /* Classes */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = musicbrainz;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				8CA99C440AD067B3000EF903 /* expat.framework */,
+				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
+				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5A0486A6940098B216 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				8CA99CB40AD068FF000EF903 /* config.h */,
+				8CA99CA50AD0687B000EF903 /* browser.h */,
+				8CA99CA60AD0687B000EF903 /* errors.h */,
+				8CA99CA70AD0687B000EF903 /* mb_c.h */,
+				8CA99CA80AD0687B000EF903 /* musicbrainz.h */,
+				8CA99CA90AD0687B000EF903 /* queries.h */,
+				8CA99C990AD067EE000EF903 /* mb_darwin.cpp */,
+				8CA99C9A0AD067EE000EF903 /* mb_darwin.h */,
+				8CA99C480AD067CD000EF903 /* apsmetadata.h */,
+				8CA99C490AD067CD000EF903 /* apsutility.h */,
+				8CA99C4A0AD067CD000EF903 /* audiosig.h */,
+				8CA99C4B0AD067CD000EF903 /* base64.c */,
+				8CA99C4C0AD067CD000EF903 /* base64.h */,
+				8CA99C4D0AD067CD000EF903 /* browser.c */,
+				8CA99C4E0AD067CD000EF903 /* c_wrapper.cpp */,
+				8CA99C4F0AD067CD000EF903 /* comhttpsocket.cpp */,
+				8CA99C500AD067CD000EF903 /* comhttpsocket.h */,
+				8CA99C510AD067CD000EF903 /* comsocket.cpp */,
+				8CA99C520AD067CD000EF903 /* comsocket.h */,
+				8CA99C530AD067CD000EF903 /* diskid.cpp */,
+				8CA99C540AD067CD000EF903 /* diskid.h */,
+				8CA99C550AD067CD000EF903 /* haar.cpp */,
+				8CA99C560AD067CD000EF903 /* haar.h */,
+				8CA99C570AD067CD000EF903 /* http.cpp */,
+				8CA99C580AD067CD000EF903 /* http.h */,
+				8CA99C590AD067CD000EF903 /* mp3.cpp */,
+				8CA99C5A0AD067CD000EF903 /* mp3.h */,
+				8CA99C5B0AD067CD000EF903 /* musicbrainz.cpp */,
+				8CA99C5C0AD067CD000EF903 /* rdfextract.cpp */,
+				8CA99C5D0AD067CD000EF903 /* rdfextract.h */,
+				8CA99C5E0AD067CD000EF903 /* rdfparse.c */,
+				8CA99C5F0AD067CD000EF903 /* rdfparse.h */,
+				8CA99C600AD067CD000EF903 /* sha1.c */,
+				8CA99C610AD067CD000EF903 /* sha1.h */,
+				8CA99C620AD067CD000EF903 /* sigclient.cpp */,
+				8CA99C630AD067CD000EF903 /* sigclient.h */,
+				8CA99C640AD067CD000EF903 /* sigcomplex.h */,
+				8CA99C650AD067CD000EF903 /* sigfft.cpp */,
+				8CA99C660AD067CD000EF903 /* sigfft.h */,
+				8CA99C670AD067CD000EF903 /* signature.cpp */,
+				8CA99C680AD067CD000EF903 /* sigxdr.cpp */,
+				8CA99C690AD067CD000EF903 /* sigxdr.h */,
+				8CA99C6A0AD067CD000EF903 /* trm.h */,
+				8CA99C6B0AD067CD000EF903 /* types.h */,
+				8CA99C6C0AD067CD000EF903 /* uuid.cpp */,
+				8CA99C6D0AD067CD000EF903 /* uuid.h */,
+				8CA99C6E0AD067CD000EF903 /* wincomsocket.cpp */,
+				8CA99C6F0AD067CD000EF903 /* wincomsocket.h */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7B2FEA5585E11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
+				D2F7E79907B2D74100F64583 /* CoreData.framework */,
+				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32DBCF5E0370ADEE00C91783 /* musicbrainz_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8DC2EF500486A6940098B216 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CA99C700AD067CD000EF903 /* apsmetadata.h in Headers */,
+				8CA99C710AD067CD000EF903 /* apsutility.h in Headers */,
+				8CA99C720AD067CD000EF903 /* audiosig.h in Headers */,
+				8CA99C740AD067CD000EF903 /* base64.h in Headers */,
+				8CA99C780AD067CD000EF903 /* comhttpsocket.h in Headers */,
+				8CA99C7A0AD067CD000EF903 /* comsocket.h in Headers */,
+				8CA99C7C0AD067CD000EF903 /* diskid.h in Headers */,
+				8CA99C7E0AD067CD000EF903 /* haar.h in Headers */,
+				8CA99C800AD067CD000EF903 /* http.h in Headers */,
+				8CA99C820AD067CD000EF903 /* mp3.h in Headers */,
+				8CA99C850AD067CD000EF903 /* rdfextract.h in Headers */,
+				8CA99C870AD067CD000EF903 /* rdfparse.h in Headers */,
+				8CA99C890AD067CD000EF903 /* sha1.h in Headers */,
+				8CA99C8B0AD067CD000EF903 /* sigclient.h in Headers */,
+				8CA99C8C0AD067CD000EF903 /* sigcomplex.h in Headers */,
+				8CA99C8E0AD067CD000EF903 /* sigfft.h in Headers */,
+				8CA99C910AD067CD000EF903 /* sigxdr.h in Headers */,
+				8CA99C920AD067CD000EF903 /* trm.h in Headers */,
+				8CA99C930AD067CD000EF903 /* types.h in Headers */,
+				8CA99C950AD067CD000EF903 /* uuid.h in Headers */,
+				8CA99C9C0AD067EE000EF903 /* mb_darwin.h in Headers */,
+				8CA99CAA0AD0687B000EF903 /* browser.h in Headers */,
+				8CA99CAB0AD0687B000EF903 /* errors.h in Headers */,
+				8CA99CAC0AD0687B000EF903 /* mb_c.h in Headers */,
+				8CA99CAD0AD0687B000EF903 /* musicbrainz.h in Headers */,
+				8CA99CAE0AD0687B000EF903 /* queries.h in Headers */,
+				8CA99CB50AD068FF000EF903 /* config.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8DC2EF4F0486A6940098B216 /* musicbrainz.framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "musicbrainz.framework" */;
+			buildPhases = (
+				8DC2EF500486A6940098B216 /* Headers */,
+				8DC2EF520486A6940098B216 /* Resources */,
+				8DC2EF540486A6940098B216 /* Sources */,
+				8DC2EF560486A6940098B216 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = musicbrainz.framework;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = musicbrainz;
+			productReference = 8DC2EF5B0486A6940098B216 /* musicbrainz.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "musicbrainz" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* musicbrainz */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			targets = (
+				8DC2EF4F0486A6940098B216 /* musicbrainz.framework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DC2EF520486A6940098B216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DC2EF540486A6940098B216 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CA99C730AD067CD000EF903 /* base64.c in Sources */,
+				8CA99C750AD067CD000EF903 /* browser.c in Sources */,
+				8CA99C760AD067CD000EF903 /* c_wrapper.cpp in Sources */,
+				8CA99C770AD067CD000EF903 /* comhttpsocket.cpp in Sources */,
+				8CA99C790AD067CD000EF903 /* comsocket.cpp in Sources */,
+				8CA99C7B0AD067CD000EF903 /* diskid.cpp in Sources */,
+				8CA99C7D0AD067CD000EF903 /* haar.cpp in Sources */,
+				8CA99C7F0AD067CD000EF903 /* http.cpp in Sources */,
+				8CA99C810AD067CD000EF903 /* mp3.cpp in Sources */,
+				8CA99C830AD067CD000EF903 /* musicbrainz.cpp in Sources */,
+				8CA99C840AD067CD000EF903 /* rdfextract.cpp in Sources */,
+				8CA99C860AD067CD000EF903 /* rdfparse.c in Sources */,
+				8CA99C880AD067CD000EF903 /* sha1.c in Sources */,
+				8CA99C8A0AD067CD000EF903 /* sigclient.cpp in Sources */,
+				8CA99C8D0AD067CD000EF903 /* sigfft.cpp in Sources */,
+				8CA99C8F0AD067CD000EF903 /* signature.cpp in Sources */,
+				8CA99C900AD067CD000EF903 /* sigxdr.cpp in Sources */,
+				8CA99C940AD067CD000EF903 /* uuid.cpp in Sources */,
+				8CA99C9B0AD067EE000EF903 /* mb_darwin.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91AE08733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../expat/build/Release\"";
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = musicbrainz_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = musicbrainz;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../expat/build/Release/expat.framework/Headers\"";
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB91AF08733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../expat/build/Release\"";
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = musicbrainz_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				PRODUCT_NAME = musicbrainz;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../expat/build/Release/expat.framework/Headers\"";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1DEB91B208733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB91B308733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "musicbrainz.framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91AE08733DA50010E9CD /* Debug */,
+				1DEB91AF08733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "musicbrainz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91B208733DA50010E9CD /* Debug */,
+				1DEB91B308733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}
