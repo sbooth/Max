@@ -1,4 +1,4 @@
-$Id: NEWS,v 1.15 2005/08/04 18:56:54 airborne Exp $
+$Id: NEWS,v 1.16 2006/09/29 15:36:49 airborne Exp $
 
 
 This file describes the external changes and important bug fixes
@@ -6,6 +6,12 @@ between different libcddb releases.  These changes might impact the
 programs that use this library.  It does not describe every single
 change made to the code tree.  An overview of the CVS changes can be
 found in the Changelog file.
+
+
+CHANGES 1.2.1 -> 1.2.2
+
+* [BUGFIX] Correctly specify the character set (UTF-8) when submitting
+  data to a server.
 
 
 CHANGES 1.2.0 -> 1.2.1

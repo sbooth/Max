@@ -2,11 +2,11 @@
 /** \file version.h 
  *
  *  \brief A file containing the libcdio package version
- *  number (121) and OS build name. 
+ *  number (122) and OS build name. 
  */
 
 /*! CDDB_VERSION can as a string in programs to show what version is used. */
-#define CDDB_VERSION "1.2.1 i686-pc-linux-gnu"
+#define CDDB_VERSION "1.2.2 i686-pc-linux-gnu"
 
 /*! LIBCDDB_VERSION_NUM  can be used for testing in the C preprocessor */
-#define LIBCDDB_VERSION_NUM 121
+#define LIBCDDB_VERSION_NUM 122

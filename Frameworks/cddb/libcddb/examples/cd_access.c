@@ -1,5 +1,5 @@
 /*
-    $Id: cd_access.c,v 1.13 2005/07/09 08:20:07 airborne Exp $
+    $Id: cd_access.c,v 1.14 2006/09/29 16:01:42 airborne Exp $
 
     Copyright (C) 2003, 2004, 2005 Kris Verbeeck <airborne@advalvas.be>
 
@@ -25,12 +25,6 @@
 #ifdef HAVE_LIBCDIO
 #include <cdio/cdio.h>
 #endif
-
-#if LIBCDIO_VERSION_NUM >= 72
-#include <cdio/cdda.h>
-#else
-#define CdIo_t CdIo
-#endif    
 
 #define libcdio_error_exit(...) error_exit(GENERIC_ERROR, "libcdio: " __VA_ARGS__)
 

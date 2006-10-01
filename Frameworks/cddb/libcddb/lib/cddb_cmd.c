@@ -1,5 +1,5 @@
 /*
-    $Id: cddb_cmd.c,v 1.61 2005/08/04 18:44:27 airborne Exp $
+    $Id: cddb_cmd.c,v 1.62 2006/09/29 15:34:53 airborne Exp $
 
     Copyright (C) 2003, 2004, 2005 Kris Verbeeck <airborne@advalvas.be>
 
@@ -476,6 +476,7 @@ int cddb_http_send_cmd(cddb_conn_t *c, cddb_cmd_t cmd, va_list args)
                 sock_fprintf(c, "User-Email: %s@%s\r\n", c->user, c->hostname);
                 sock_fprintf(c, "Submit-Mode: submit\r\n");
                 sock_fprintf(c, "Content-Length: %d\r\n", size);
+                sock_fprintf(c, "Charset: UTF-8\r\n");
                 sock_fprintf(c, "\r\n");
             }
             break;
