@@ -185,7 +185,7 @@
 - (NSString *)		UPC									{ return [[_UPC retain] autorelease]; }
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
-- (id)				objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
+- (id)				objectInTracksAtIndex:(unsigned)index { return [_tracks objectAtIndex:index]; }
 
 #pragma mark Mutators
 
@@ -198,7 +198,7 @@
 - (void) setArranger:(NSString *)arranger				{ [_arranger release]; _arranger = [arranger retain]; }
 - (void) setUPC:(NSString *)UPC							{ [_UPC release]; _UPC = [UPC retain]; }
 
-- (void) insertObject:(id)track inTracksAtIndex:(unsigned)idx			{ [_tracks insertObject:track atIndex:idx]; }
-- (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
+- (void) insertObject:(id)track inTracksAtIndex:(unsigned)index			{ [_tracks insertObject:track atIndex:index]; }
+- (void) removeObjectFromTracksAtIndex:(unsigned)index					{ [_tracks removeObjectAtIndex:index]; }
 
 @end
