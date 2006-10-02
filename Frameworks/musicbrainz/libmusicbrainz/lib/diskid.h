@@ -37,7 +37,7 @@ using namespace std;
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #include "../osdep/mb_win32.h"  // MSVC++ (not Cygwin!)
 #else
-#include "mb.h"        // platforms using configure script
+#include "mb_darwin.h"   // platforms using configure script
 #endif
 #include "types.h"
 #include "errors.h"
@@ -86,6 +86,8 @@ class DiskId
 
         Error GenerateDiskIdRDF(const string &device, string &xml);
         Error GenerateDiskIdQueryRDF(const string &device, string &xml,
+                                     bool associateCD);
+        Error GenerateDiskIdQueryRDF(const PMUSICBRAINZ_CDINFO pCDInfo, string &xml,
                                      bool associateCD);
         Error GetWebSubmitURLArgs(const string &device, string &args);
         void  GetLastError(string &err);

@@ -213,73 +213,80 @@ Error DiskId::GenerateDiskIdQueryRDF(const string &device, string &xml,
                                      bool associateCD)
 {
    MUSICBRAINZ_CDINFO cdinfo;
-   int   i;
-   char  id[33];
    Error eRet;
 
    eRet = FillCDInfo(device, cdinfo);
    if (IsError(eRet))
       return eRet;
 
-   GenerateId(&cdinfo, id);
+   return GenerateDiskIdQueryRDF(&cdinfo, xml, associateCD);
+}
 
-   if (associateCD)
-       xml = string("  <mq:AssociateCD>\n");
-   else
-       xml = string("  <mq:GetCDInfo>\n");
-
-   xml += string("  <mq:depth>@DEPTH@</mq:depth>\n");
-   xml += string("    <mm:cdindexid>") + string(id) + 
-          string("</mm:cdindexid>\n");
-   if (associateCD)
-      xml += string("    <mq:associate>@1@</mq:associate>\n");
-   xml += string("    <mm:firstTrack>") + 
-          MakeString(cdinfo.FirstTrack) +
-          string("</mm:firstTrack>\n");
-   xml += string("    <mm:lastTrack>") + 
-          MakeString(cdinfo.LastTrack) +
-          string("</mm:lastTrack>\n");
-   xml += string("    <mm:toc>\n      <rdf:Seq>\n");
-
-   xml += string("       <rdf:li>\n");
-   xml += string("         <mm:TocInfo>\n");
-   xml += string("           <mm:sectorOffset>");
-   xml += MakeString(cdinfo.FrameOffset[0]) +
-          string("</mm:sectorOffset>\n");
-   xml += string("           <mm:numSectors>0</mm:numSectors>\n");
-   xml += string("         </mm:TocInfo>\n");
-   xml += string("       </rdf:li>\n");
-
-   for (i = cdinfo.FirstTrack; i <= cdinfo.LastTrack; i++)
-   {
-       xml += string("       <rdf:li>\n");
-       xml += string("         <mm:TocInfo>\n");
-       xml += string("           <mm:sectorOffset>") + 
-              MakeString(cdinfo.FrameOffset[i]) +
-              string("</mm:sectorOffset>\n");
-       xml += string("           <mm:numSectors>");
-       if (i < cdinfo.LastTrack)
-       {
-          xml += MakeString(cdinfo.FrameOffset[i + 1] - cdinfo.FrameOffset[i]);
-       }
-       else
-       {
-          xml += MakeString(cdinfo.FrameOffset[0] - cdinfo.FrameOffset[i]);
-       }
-       xml += string("</mm:numSectors>\n");
-       xml += string("         </mm:TocInfo>\n");
-       xml += string("       </rdf:li>\n");
-   }
-
-   xml += string("      </rdf:Seq>\n");
-   xml += string("    </mm:toc>\n");
-
-   if (associateCD)
-       xml += string("  </mq:AssociateCD>\n\n");
-   else
-       xml += string("  </mq:GetCDInfo>\n\n");
-
-   return kError_NoErr;
+Error DiskId::GenerateDiskIdQueryRDF(const PMUSICBRAINZ_CDINFO pCDInfo, string &xml,
+                                     bool associateCD)
+{
+	int   i;
+	char  id[33];
+		
+	GenerateId(pCDInfo, id);
+	
+	if (associateCD)
+		xml = string("  <mq:AssociateCD>\n");
+	else
+		xml = string("  <mq:GetCDInfo>\n");
+	
+	xml += string("  <mq:depth>@DEPTH@</mq:depth>\n");
+	xml += string("    <mm:cdindexid>") + string(id) + 
+		string("</mm:cdindexid>\n");
+	if (associateCD)
+		xml += string("    <mq:associate>@1@</mq:associate>\n");
+	xml += string("    <mm:firstTrack>") + 
+		MakeString(pCDInfo->FirstTrack) +
+		string("</mm:firstTrack>\n");
+	xml += string("    <mm:lastTrack>") + 
+		MakeString(pCDInfo->LastTrack) +
+		string("</mm:lastTrack>\n");
+	xml += string("    <mm:toc>\n      <rdf:Seq>\n");
+	
+	xml += string("       <rdf:li>\n");
+	xml += string("         <mm:TocInfo>\n");
+	xml += string("           <mm:sectorOffset>");
+	xml += MakeString(pCDInfo->FrameOffset[0]) +
+		string("</mm:sectorOffset>\n");
+	xml += string("           <mm:numSectors>0</mm:numSectors>\n");
+	xml += string("         </mm:TocInfo>\n");
+	xml += string("       </rdf:li>\n");
+	
+	for (i = pCDInfo->FirstTrack; i <= pCDInfo->LastTrack; i++)
+	{
+		xml += string("       <rdf:li>\n");
+		xml += string("         <mm:TocInfo>\n");
+		xml += string("           <mm:sectorOffset>") + 
+			MakeString(pCDInfo->FrameOffset[i]) +
+			string("</mm:sectorOffset>\n");
+		xml += string("           <mm:numSectors>");
+		if (i < pCDInfo->LastTrack)
+		{
+			xml += MakeString(pCDInfo->FrameOffset[i + 1] - pCDInfo->FrameOffset[i]);
+		}
+		else
+		{
+			xml += MakeString(pCDInfo->FrameOffset[0] - pCDInfo->FrameOffset[i]);
+		}
+		xml += string("</mm:numSectors>\n");
+		xml += string("         </mm:TocInfo>\n");
+		xml += string("       </rdf:li>\n");
+	}
+	
+	xml += string("      </rdf:Seq>\n");
+	xml += string("    </mm:toc>\n");
+	
+	if (associateCD)
+		xml += string("  </mq:AssociateCD>\n\n");
+	else
+		xml += string("  </mq:GetCDInfo>\n\n");
+	
+	return kError_NoErr;	
 }
 
 Error DiskId::GetWebSubmitURLArgs(const string &device, string &args)

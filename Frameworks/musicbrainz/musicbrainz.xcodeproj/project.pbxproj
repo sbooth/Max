@@ -20,7 +20,7 @@
 		8CA99C790AD067CD000EF903 /* comsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C510AD067CD000EF903 /* comsocket.cpp */; };
 		8CA99C7A0AD067CD000EF903 /* comsocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C520AD067CD000EF903 /* comsocket.h */; };
 		8CA99C7B0AD067CD000EF903 /* diskid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C530AD067CD000EF903 /* diskid.cpp */; };
-		8CA99C7C0AD067CD000EF903 /* diskid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C540AD067CD000EF903 /* diskid.h */; };
+		8CA99C7C0AD067CD000EF903 /* diskid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C540AD067CD000EF903 /* diskid.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99C7D0AD067CD000EF903 /* haar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C550AD067CD000EF903 /* haar.cpp */; };
 		8CA99C7E0AD067CD000EF903 /* haar.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C560AD067CD000EF903 /* haar.h */; };
 		8CA99C7F0AD067CD000EF903 /* http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C570AD067CD000EF903 /* http.cpp */; };
@@ -43,11 +43,11 @@
 		8CA99C900AD067CD000EF903 /* sigxdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C680AD067CD000EF903 /* sigxdr.cpp */; };
 		8CA99C910AD067CD000EF903 /* sigxdr.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C690AD067CD000EF903 /* sigxdr.h */; };
 		8CA99C920AD067CD000EF903 /* trm.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6A0AD067CD000EF903 /* trm.h */; };
-		8CA99C930AD067CD000EF903 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6B0AD067CD000EF903 /* types.h */; };
+		8CA99C930AD067CD000EF903 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6B0AD067CD000EF903 /* types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99C940AD067CD000EF903 /* uuid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C6C0AD067CD000EF903 /* uuid.cpp */; };
 		8CA99C950AD067CD000EF903 /* uuid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6D0AD067CD000EF903 /* uuid.h */; };
 		8CA99C9B0AD067EE000EF903 /* mb_darwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C990AD067EE000EF903 /* mb_darwin.cpp */; };
-		8CA99C9C0AD067EE000EF903 /* mb_darwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C9A0AD067EE000EF903 /* mb_darwin.h */; };
+		8CA99C9C0AD067EE000EF903 /* mb_darwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C9A0AD067EE000EF903 /* mb_darwin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAA0AD0687B000EF903 /* browser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA50AD0687B000EF903 /* browser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAB0AD0687B000EF903 /* errors.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA60AD0687B000EF903 /* errors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAC0AD0687B000EF903 /* mb_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA70AD0687B000EF903 /* mb_c.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,6 +56,18 @@
 		8CA99CB50AD068FF000EF903 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CB40AD068FF000EF903 /* config.h */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8CA9AC470AD0D638000EF903 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -297,6 +309,7 @@
 				8DC2EF520486A6940098B216 /* Resources */,
 				8DC2EF540486A6940098B216 /* Sources */,
 				8DC2EF560486A6940098B216 /* Frameworks */,
+				8CA9AC470AD0D638000EF903 /* CopyFiles */,
 			);
 			buildRules = (
 			);
