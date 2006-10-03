@@ -18,37 +18,27 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "TrackDescriptor.h"
+#import "SessionDescriptor.h"
 
-@implementation TrackDescriptor
+@implementation SessionDescriptor
 
 + (BOOL)				accessInstanceVariablesDirectly			{ return NO; }
-
-- (unsigned)			session									{ return _session; }
-- (void)				setSession:(unsigned)session			{ _session = session; }
 
 - (unsigned)			number									{ return _number; }
 - (void)				setNumber:(unsigned)number				{ _number = number; }
 
-- (unsigned)			firstSector								{ return _firstSector; }
-- (void)				setFirstSector:(unsigned)firstSector	{ _firstSector = firstSector; }
+- (unsigned)			firstTrack								{ return _firstTrack; }
+- (void)				setFirstTrack:(unsigned)firstTrack		{ _firstTrack = firstTrack; }
 
-- (unsigned)			channels								{ return _channels; }
-- (void)				setChannels:(unsigned)channels			{ _channels = channels; }
+- (unsigned)			lastTrack								{ return _lastTrack; }
+- (void)				setLastTrack:(unsigned)lastTrack		{ _lastTrack = lastTrack; }
 
-- (BOOL)				preEmphasis								{ return _preEmphasis; }
-- (void)				setPreEmphasis:(BOOL)preEmphasis		{ _preEmphasis = preEmphasis; }
-
-- (BOOL)				copyPermitted							{ return _copyPermitted; }
-- (void)				setCopyPermitted:(BOOL)copyPermitted	{ _copyPermitted = copyPermitted; }
-
-- (BOOL)				dataTrack								{ return _dataTrack; }
-- (void)				setDataTrack:(BOOL)dataTrack			{ _dataTrack = dataTrack; }
+- (unsigned)			leadOut									{ return _leadOut; }
+- (void)				setLeadOut:(unsigned)leadOut			{ _leadOut = leadOut; }
 
 - (NSString *) description
 {
-	return [NSString stringWithFormat:@"{\n\tSession: %u\n\tTrack: %u\n\tFirst Sector: %i\n}", [self session], [self number], [self firstSector]];
+	return [NSString stringWithFormat:@"{\n\tSession: %u\n\tFirst Track: %u\n\tLast Track: %u\n\tLead Out: %u\n}", [self number], [self firstTrack], [self lastTrack], [self leadOut]];
 }
 
 @end
-

@@ -22,6 +22,7 @@
 
 #import "SectorRange.h"
 #import "TrackDescriptor.h"
+#import "SessionDescriptor.h"
 
 enum {
 	kCDSectorSizeQSubchannel		= 16,
@@ -45,13 +46,11 @@ enum {
 // Set up to read the drive corresponding to deviceName
 - (id)					initWithDeviceName:(NSString *)deviceName;
 
-// Disc track information
-- (unsigned)			countOfTracks;
-- (TrackDescriptor *)	trackNumber:(unsigned)number;
-
 // Disc session information
 - (unsigned)			firstSession;
 - (unsigned)			lastSession;
+
+- (SessionDescriptor *)	sessionNumber:(unsigned)number;
 
 - (unsigned)			firstTrackForSession:(unsigned)session;
 - (unsigned)			lastTrackForSession:(unsigned)session;
@@ -64,6 +63,9 @@ enum {
 
 - (unsigned)			sessionContainingSector:(unsigned)sector;
 - (unsigned)			sessionContainingSectorRange:(SectorRange *)sectorRange;
+
+// Disc track information
+- (TrackDescriptor *)	trackNumber:(unsigned)number;
 
 // Track sector information
 - (unsigned)			firstSectorForTrack:(unsigned)number;
