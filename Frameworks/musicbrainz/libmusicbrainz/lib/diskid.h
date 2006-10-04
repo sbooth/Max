@@ -37,7 +37,7 @@ using namespace std;
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #include "../osdep/mb_win32.h"  // MSVC++ (not Cygwin!)
 #else
-#include "mb_darwin.h"   // platforms using configure script
+#include "mb.h"   // platforms using configure script
 #endif
 #include "types.h"
 #include "errors.h"

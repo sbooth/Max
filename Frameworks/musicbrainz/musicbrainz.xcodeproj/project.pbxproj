@@ -46,14 +46,14 @@
 		8CA99C930AD067CD000EF903 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6B0AD067CD000EF903 /* types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99C940AD067CD000EF903 /* uuid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C6C0AD067CD000EF903 /* uuid.cpp */; };
 		8CA99C950AD067CD000EF903 /* uuid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6D0AD067CD000EF903 /* uuid.h */; };
-		8CA99C9B0AD067EE000EF903 /* mb_darwin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C990AD067EE000EF903 /* mb_darwin.cpp */; };
-		8CA99C9C0AD067EE000EF903 /* mb_darwin.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C9A0AD067EE000EF903 /* mb_darwin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAA0AD0687B000EF903 /* browser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA50AD0687B000EF903 /* browser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAB0AD0687B000EF903 /* errors.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA60AD0687B000EF903 /* errors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAC0AD0687B000EF903 /* mb_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA70AD0687B000EF903 /* mb_c.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAD0AD0687B000EF903 /* musicbrainz.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA80AD0687B000EF903 /* musicbrainz.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CAE0AD0687B000EF903 /* queries.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA90AD0687B000EF903 /* queries.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA99CB50AD068FF000EF903 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CB40AD068FF000EF903 /* config.h */; };
+		8CE25B130AD3725F009E1323 /* mb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CE25B110AD3725F009E1323 /* mb.cpp */; };
+		8CE25B1B0AD37295009E1323 /* mb.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CE25B120AD3725F009E1323 /* mb.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -116,14 +116,14 @@
 		8CA99C6D0AD067CD000EF903 /* uuid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = uuid.h; path = libmusicbrainz/lib/uuid.h; sourceTree = "<group>"; };
 		8CA99C6E0AD067CD000EF903 /* wincomsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wincomsocket.cpp; path = libmusicbrainz/lib/wincomsocket.cpp; sourceTree = "<group>"; };
 		8CA99C6F0AD067CD000EF903 /* wincomsocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wincomsocket.h; path = libmusicbrainz/lib/wincomsocket.h; sourceTree = "<group>"; };
-		8CA99C990AD067EE000EF903 /* mb_darwin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mb_darwin.cpp; path = libmusicbrainz/osdep/mb_darwin.cpp; sourceTree = "<group>"; };
-		8CA99C9A0AD067EE000EF903 /* mb_darwin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb_darwin.h; path = libmusicbrainz/osdep/mb_darwin.h; sourceTree = "<group>"; };
 		8CA99CA50AD0687B000EF903 /* browser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = browser.h; path = libmusicbrainz/include/musicbrainz/browser.h; sourceTree = "<group>"; };
 		8CA99CA60AD0687B000EF903 /* errors.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = errors.h; path = libmusicbrainz/include/musicbrainz/errors.h; sourceTree = "<group>"; };
 		8CA99CA70AD0687B000EF903 /* mb_c.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb_c.h; path = libmusicbrainz/include/musicbrainz/mb_c.h; sourceTree = "<group>"; };
 		8CA99CA80AD0687B000EF903 /* musicbrainz.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = musicbrainz.h; path = libmusicbrainz/include/musicbrainz/musicbrainz.h; sourceTree = "<group>"; };
 		8CA99CA90AD0687B000EF903 /* queries.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = queries.h; path = libmusicbrainz/include/musicbrainz/queries.h; sourceTree = "<group>"; };
 		8CA99CB40AD068FF000EF903 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = libmusicbrainz/config.h; sourceTree = "<group>"; };
+		8CE25B110AD3725F009E1323 /* mb.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mb.cpp; path = libmusicbrainz/lib/mb.cpp; sourceTree = "<group>"; };
+		8CE25B120AD3725F009E1323 /* mb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb.h; path = libmusicbrainz/lib/mb.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* musicbrainz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = musicbrainz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -152,7 +152,7 @@
 		0867D691FE84028FC02AAC07 /* musicbrainz */ = {
 			isa = PBXGroup;
 			children = (
-				08FB77AEFE84172EC02AAC07 /* Classes */,
+				08FB77AEFE84172EC02AAC07 /* Library Source */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
@@ -180,17 +180,17 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+		08FB77AEFE84172EC02AAC07 /* Library Source */ = {
 			isa = PBXGroup;
 			children = (
+				8CE25B110AD3725F009E1323 /* mb.cpp */,
+				8CE25B120AD3725F009E1323 /* mb.h */,
 				8CA99CB40AD068FF000EF903 /* config.h */,
 				8CA99CA50AD0687B000EF903 /* browser.h */,
 				8CA99CA60AD0687B000EF903 /* errors.h */,
 				8CA99CA70AD0687B000EF903 /* mb_c.h */,
 				8CA99CA80AD0687B000EF903 /* musicbrainz.h */,
 				8CA99CA90AD0687B000EF903 /* queries.h */,
-				8CA99C990AD067EE000EF903 /* mb_darwin.cpp */,
-				8CA99C9A0AD067EE000EF903 /* mb_darwin.h */,
 				8CA99C480AD067CD000EF903 /* apsmetadata.h */,
 				8CA99C490AD067CD000EF903 /* apsutility.h */,
 				8CA99C4A0AD067CD000EF903 /* audiosig.h */,
@@ -232,7 +232,7 @@
 				8CA99C6E0AD067CD000EF903 /* wincomsocket.cpp */,
 				8CA99C6F0AD067CD000EF903 /* wincomsocket.h */,
 			);
-			name = Classes;
+			name = "Library Source";
 			sourceTree = "<group>";
 		};
 		1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */ = {
@@ -288,13 +288,13 @@
 				8CA99C920AD067CD000EF903 /* trm.h in Headers */,
 				8CA99C930AD067CD000EF903 /* types.h in Headers */,
 				8CA99C950AD067CD000EF903 /* uuid.h in Headers */,
-				8CA99C9C0AD067EE000EF903 /* mb_darwin.h in Headers */,
 				8CA99CAA0AD0687B000EF903 /* browser.h in Headers */,
 				8CA99CAB0AD0687B000EF903 /* errors.h in Headers */,
 				8CA99CAC0AD0687B000EF903 /* mb_c.h in Headers */,
 				8CA99CAD0AD0687B000EF903 /* musicbrainz.h in Headers */,
 				8CA99CAE0AD0687B000EF903 /* queries.h in Headers */,
 				8CA99CB50AD068FF000EF903 /* config.h in Headers */,
+				8CE25B1B0AD37295009E1323 /* mb.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,7 +371,7 @@
 				8CA99C8F0AD067CD000EF903 /* signature.cpp in Sources */,
 				8CA99C900AD067CD000EF903 /* sigxdr.cpp in Sources */,
 				8CA99C940AD067CD000EF903 /* uuid.cpp in Sources */,
-				8CA99C9B0AD067EE000EF903 /* mb_darwin.cpp in Sources */,
+				8CE25B130AD3725F009E1323 /* mb.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
