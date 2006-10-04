@@ -25,7 +25,6 @@
                 queryMusicBrainz = id; 
                 selectNextTrack = id; 
                 selectPreviousTrack = id; 
-                submitToFreeDB = id; 
                 toggleAlbumArt = id; 
                 toggleTrackInformation = id; 
             }; 

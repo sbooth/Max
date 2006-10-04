@@ -142,7 +142,6 @@
 		case kEncodeMenuItemTag:				result = [self encodeAllowed];					break;
 		case kEncodeCustomMenuItemTag:			result = [self encodeAllowed];					break;
 		case kQueryMusicBrainzMenuItemTag:		result = [self queryMusicBrainzAllowed];		break;
-//		case kSubmitToFreeDBMenuItemTag:		result = [self submitToFreeDBAllowed];			break;
 		case kEjectDiscMenuItemTag:				result = [self ejectDiscAllowed];				break;
 		case kSelectNextTrackMenuItemTag:		result = [_trackController canSelectNext];		break;
 		case kSelectPreviousTrackMenuItemTag:	result = [_trackController canSelectPrevious];	break;
@@ -311,19 +310,6 @@
 - (BOOL) queryMusicBrainzAllowed	{ return [self discInDrive]; }
 - (BOOL) ejectDiscAllowed			{ return [self discInDrive]; }
 - (BOOL) emptySelection				{ return (0 == [[self selectedTracks] count]); }
-
-/*- (BOOL) submitToFreeDBAllowed
-{
-	unsigned i;
-
-	for(i = 0; i < [self countOfTracks]; ++i) {
-		if(nil == [[self objectInTracksAtIndex:i] title]) {
-			return NO;
-		}
-	}
-	
-	return ([self discInDrive] && nil != [self title] && nil != [self artist] && nil != [self genre]);
-}*/
 
 - (BOOL) ripInProgress
 {
@@ -725,7 +711,6 @@
 - (id) handleEncodeScriptCommand:(NSScriptCommand *)command				{ [self encode:command]; return nil; }
 - (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command			{ [self ejectDisc:command]; return nil; }
 - (id) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command	{ [self queryMusicBrainz:command]; return nil; }
-//- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command		{ [self submitToFreeDB:command]; return nil; }
 - (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command { [self toggleTrackInformation:command]; return nil; }
 - (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self toggleAlbumArt:command]; return nil; }
 - (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self fetchAlbumArt:command]; return nil; }

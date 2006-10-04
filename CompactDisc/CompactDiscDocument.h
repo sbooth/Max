@@ -30,7 +30,6 @@ enum {
 	kTrackInfoMenuItemTag				= 2,
 	kQueryMusicBrainzMenuItemTag		= 3,
 	kEjectDiscMenuItemTag				= 4,
-//	kSubmitToFreeDBMenuItemTag			= 5,
 	kSelectNextTrackMenuItemTag			= 6,
 	kSelectPreviousTrackMenuItemTag		= 7,
 	kEncodeCustomMenuItemTag			= 8
@@ -78,7 +77,6 @@ enum {
 // State
 - (BOOL)			encodeAllowed;
 - (BOOL)			queryMusicBrainzAllowed;
-//- (BOOL)			submitToFreeDBAllowed;
 - (BOOL)			ejectDiscAllowed;
 
 - (BOOL)			emptySelection;
@@ -95,7 +93,6 @@ enum {
 
 - (IBAction)		queryMusicBrainz:(id)sender;
 - (void)			queryMusicBrainzNonInteractive;
-//- (IBAction)		submitToFreeDB:(id)sender;
 
 - (IBAction)		toggleTrackInformation:(id)sender;
 - (IBAction)		toggleAlbumArt:(id)sender;
@@ -176,7 +173,6 @@ enum {
 - (id) handleEncodeScriptCommand:(NSScriptCommand *)command;
 - (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command;
 - (id) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command;
-//- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command;
 - (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command;
 - (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command;
 - (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command;

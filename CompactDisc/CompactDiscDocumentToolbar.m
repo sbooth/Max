@@ -33,7 +33,6 @@ enum {
 	kEncodeToolbarItemTag					= 1,
 	kTrackInfoToolbarItemTag				= 2,
 	kQueryMusicBrainzToolbarItemTag			= 3,
-//	kSubmitToFreeDBToolbarItemTag			= 4,
 	kEjectDiscToolbarItemTag				= 5,
 	kSelectNextTrackToolbarItemTag			= 6,
 	kSelectPreviousTrackToolbarItemTag		= 7,
@@ -69,8 +68,7 @@ enum {
 		switch([item tag]) {
 			default:								[item setEnabled:YES];									break;
 			case kEncodeToolbarItemTag:				[item setEnabled:[_document encodeAllowed]];			break;
-			case kQueryMusicBrainzToolbarItemTag:	[item setEnabled:[_document queryMusicBrainzAllowed]];		break;
-//			case kSubmitToFreeDBToolbarItemTag:		[item setEnabled:[_document submitToFreeDBAllowed]];	break;
+			case kQueryMusicBrainzToolbarItemTag:	[item setEnabled:[_document queryMusicBrainzAllowed]];	break;
 			case kEjectDiscToolbarItemTag:			[item setEnabled:[_document ejectDiscAllowed]];			break;
 		}
 	}
