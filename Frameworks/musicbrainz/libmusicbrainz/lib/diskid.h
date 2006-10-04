@@ -92,10 +92,11 @@ class DiskId
         Error GetWebSubmitURLArgs(const string &device, string &args);
         void  GetLastError(string &err);
 
+        void  GenerateId(PMUSICBRAINZ_CDINFO pCDInfo, char DiscId[33]);
+		
     protected:
 
         void  TestGenerateId();
-        void  GenerateId(PMUSICBRAINZ_CDINFO pCDInfo, char DiscId[33]);
         void  ReportError(char *err);
         Error FillCDInfo(const string &device, MUSICBRAINZ_CDINFO &cdinfo);
         const string &MakeString(int i);
