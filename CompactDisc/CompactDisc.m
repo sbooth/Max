@@ -49,7 +49,7 @@
 		drive = [[Drive alloc] initWithDeviceName:[self deviceName]];
 
 		// Is this is a multisession disc?
-		if([drive lastSession] - [drive firstSession] > 1) {
+		if([drive lastSession] - [drive firstSession] > 0) {
 			[LogController logMessage:NSLocalizedStringFromTable(@"Multisession disc detected", @"Log", @"")];
 		}
 		
