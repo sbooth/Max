@@ -519,10 +519,10 @@
 		}
 		else if(0xA0 == desc->point && 1 == desc->adr) {
 			[[self sessionNumber:desc->session] setFirstTrack:desc->p.minute];
-			NSLog(@"Disc type:                 %d (%s)\n", (int)desc->p.second,
+/*			NSLog(@"Disc type:                 %d (%s)\n", (int)desc->p.second,
 				  (0x00 == desc->p.second) ? "CD-DA, or CD-ROM with first track in Mode 1":
 				  (0x10 == desc->p.second) ? "CD-I disc":
-				  (0x20 == desc->p.second) ? "CD-ROM XA disc with first track in Mode 2" : "Unknown");
+				  (0x20 == desc->p.second) ? "CD-ROM XA disc with first track in Mode 2" : "Unknown");*/
 		}
 		// Last track
 		else if(0xA1 == desc->point && 1 == desc->adr) {
