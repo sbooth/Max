@@ -25,8 +25,6 @@
 #import "CompactDiscDocumentSettingsSheet.h"
 #import "Track.h"
 #import "AudioMetadata.h"
-#import "FreeDB.h"
-#import "FreeDBMatchSheet.h"
 #import "Genres.h"
 #import "RipperController.h"
 #import "PreferencesController.h"
@@ -34,9 +32,10 @@
 #import "MediaController.h"
 #import "SelectEncodersSheet.h"
 
+#import "MusicBrainzMatchSheet.h"
+
 #import "MallocException.h"
 #import "IOException.h"
-#import "FreeDBException.h"
 #import "EmptySelectionException.h"
 #import "MissingResourceException.h"
 
@@ -45,9 +44,13 @@
 
 @interface CompactDiscDocument (Private)
 - (void)		displayExceptionAlert:(NSAlert *)alert;
+
 - (void)		didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (void)		didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)		didEndSelectEncodersSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)		didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)		openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+
+- (void)		updateMetadataFromMusicBrainz:(unsigned)index;
 @end
 
 @implementation CompactDiscDocument
@@ -99,6 +102,8 @@
 {	
 	[_disc release];					_disc = nil;
 
+	[_mbHelper release];				_mbHelper = nil;
+
 	[_title release];					_title = nil;
 	[_artist release];					_artist = nil;
 	[_genre release];					_genre = nil;
@@ -119,7 +124,7 @@
 
 - (void) awakeFromNib
 {
-	[_trackTable setAutosaveName:[NSString stringWithFormat: @"Tracks for 0x%.8x", [self discID]]];
+	[_trackTable setAutosaveName:[NSString stringWithFormat: @"Tracks for %@", [self discID]]];
 	[_trackTable setAutosaveTableColumns:YES];
 	[_trackController setSortDescriptors:[NSArray arrayWithObjects:
 		[[[NSSortDescriptor alloc] initWithKey:@"number" ascending:YES] autorelease],
@@ -136,8 +141,8 @@
 		default:								result = [super validateMenuItem:item];			break;
 		case kEncodeMenuItemTag:				result = [self encodeAllowed];					break;
 		case kEncodeCustomMenuItemTag:			result = [self encodeAllowed];					break;
-		case kQueryFreeDBMenuItemTag:			result = [self queryFreeDBAllowed];				break;
-		case kSubmitToFreeDBMenuItemTag:		result = [self submitToFreeDBAllowed];			break;
+		case kQueryMusicBrainzMenuItemTag:		result = [self queryMusicBrainzAllowed];		break;
+//		case kSubmitToFreeDBMenuItemTag:		result = [self submitToFreeDBAllowed];			break;
 		case kEjectDiscMenuItemTag:				result = [self ejectDiscAllowed];				break;
 		case kSelectNextTrackMenuItemTag:		result = [_trackController canSelectNext];		break;
 		case kSelectPreviousTrackMenuItemTag:	result = [_trackController canSelectPrevious];	break;
@@ -156,9 +161,9 @@
 - (void) windowControllerDidLoadNib:(NSWindowController *)controller
 {
 	[controller setShouldCascadeWindows:NO];
-	[controller setWindowFrameAutosaveName:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Compact Disc 0x%.8x", @"CompactDisc", @""), [self discID]]];
+	[controller setWindowFrameAutosaveName:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Compact Disc %@", @"CompactDisc", @""), [self discID]]];
 	
-	NSToolbar *toolbar = [[[CompactDiscDocumentToolbar alloc] initWithCompactDiscDocument:self] autorelease];
+	NSToolbar *toolbar = [[CompactDiscDocumentToolbar alloc] initWithCompactDiscDocument:self];
     
     [toolbar setAllowsUserCustomization: YES];
     [toolbar setAutosavesConfiguration: YES];
@@ -166,7 +171,7 @@
     
     [toolbar setDelegate:toolbar];
 	
-    [[controller window] setToolbar:toolbar];
+    [[controller window] setToolbar:[toolbar autorelease]];
 }
 
 - (NSData *) dataOfType:(NSString *)typeName error:(NSError **)outError
@@ -188,7 +193,7 @@
 		[result setObject:[NSNumber numberWithUnsignedInt:[self discTotal]] forKey:@"discTotal"];
 		[result setObject:[NSNumber numberWithBool:[self compilation]] forKey:@"compilation"];
 		[result setValue:[self MCN] forKey:@"MCN"];
-		[result setObject:[NSNumber numberWithInt:[self discID]] forKey:@"discID"];
+		[result setObject:[self discID] forKey:@"discID"];
 		
 		data = getPNGDataForImage([self albumArt]); 
 		[result setValue:data forKey:@"albumArt"];
@@ -246,7 +251,7 @@
 			
 			[_MCN release];							_MCN = nil;
 			
-			_discID			= [[dictionary valueForKey:@"discID"] intValue];
+			_discID			= [dictionary valueForKey:@"discID"];
 
 			_title			= [[dictionary valueForKey:@"title"] retain];
 			_artist			= [[dictionary valueForKey:@"artist"] retain];
@@ -298,16 +303,16 @@
 
 #pragma mark Disc Management
 
-- (void) discEjected			{ [self setDisc:nil]; }
+- (void) discEjected				{ [self setDisc:nil]; }
 
 #pragma mark State
 
-- (BOOL) encodeAllowed			{ return ([self discInDrive] && NO == [self emptySelection] && NO == [self ripInProgress] && NO == [self encodeInProgress]); }
-- (BOOL) queryFreeDBAllowed		{ return [self discInDrive]; }
-- (BOOL) ejectDiscAllowed		{ return [self discInDrive]; }
-- (BOOL) emptySelection			{ return (0 == [[self selectedTracks] count]); }
+- (BOOL) encodeAllowed				{ return ([self discInDrive] && NO == [self emptySelection] && NO == [self ripInProgress] && NO == [self encodeInProgress]); }
+- (BOOL) queryMusicBrainzAllowed	{ return [self discInDrive]; }
+- (BOOL) ejectDiscAllowed			{ return [self discInDrive]; }
+- (BOOL) emptySelection				{ return (0 == [[self selectedTracks] count]); }
 
-- (BOOL) submitToFreeDBAllowed
+/*- (BOOL) submitToFreeDBAllowed
 {
 	unsigned i;
 
@@ -318,7 +323,7 @@
 	}
 	
 	return ([self discInDrive] && nil != [self title] && nil != [self artist] && nil != [self genre]);
-}
+}*/
 
 - (BOOL) ripInProgress
 {
@@ -389,7 +394,7 @@
 	@catch(NSException *exception) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), (nil == [self title] ? [NSString stringWithFormat:@"0x%.8x", [self discID]] : [self title])]];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while ripping tracks from the disc \"%@\".", @"Exceptions", @""), (nil == [self title] ? [self discID] : [self title])]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[self displayExceptionAlert:alert];
@@ -406,7 +411,7 @@
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Do you want to eject the disc \"%@\" while ripping is in progress?", @"CompactDisc", @""), (nil == [self title] ? [NSString stringWithFormat:@"0x%.8x", [self discID]] : [self title])]];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Do you want to eject the disc \"%@\" while ripping is in progress?", @"CompactDisc", @""), (nil == [self title] ? [self discID] : [self title])]];
 		[alert setInformativeText:NSLocalizedStringFromTable(@"Your incomplete rips will be lost.", @"CompactDisc", @"")];
 		[alert setAlertStyle:NSWarningAlertStyle];
 		
@@ -422,87 +427,66 @@
 	[[MediaController sharedController] ejectDiscForDocument:self];
 }
 
-- (IBAction) queryFreeDB:(id)sender
+- (IBAction) queryMusicBrainz:(id)sender
 {
-	FreeDB				*freeDB				= nil;
-	NSArray				*matches			= nil;
-	FreeDBMatchSheet	*sheet				= nil;
+	unsigned				matchCount	= 0;
 	
-	if(NO == [self queryFreeDBAllowed]) {
+	if(NO == [self queryMusicBrainzAllowed]) {
 		return;
 	}
 	
-	@try {
-		[self setFreeDBQuerySuccessful:NO];
-		[self setFreeDBQueryInProgress:YES];
-		
-		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
-		
-		matches = [freeDB fetchMatches];
-		
-		if(0 == [matches count]) {
-			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @"") userInfo:nil];
-		}
-		else if(1 == [matches count]) {
-			[self updateDiscFromFreeDB:[matches objectAtIndex:0]];
-		}
-		else {
-			sheet = [[[FreeDBMatchSheet alloc] initWithCompactDiscDocument:self] autorelease];
-			[sheet setValue:matches forKey:@"matches"];
-			[sheet showFreeDBMatches];
-		}
+	if(nil == _mbHelper) {
+		_mbHelper	= [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
 	}
 	
-	@catch(NSException *exception) {
-		NSAlert				*alert				= nil;
-		
-		[self setFreeDBQueryInProgress:NO];
-		alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while querying FreeDB for the disc \"%@\".", @"Exceptions", @""), (nil == [self title] ? [NSString stringWithFormat:@"0x%.8x", [self discID]] : [self title])]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[self displayExceptionAlert:alert];
-	}
+	[_mbHelper performQuery:sender];
 	
-	@finally {
-		[freeDB release];
+	matchCount	= [_mbHelper matchCount];
+
+	if(0 == matchCount) {
+		@throw [NSException exceptionWithName:@"MusicBrainzException" reason:NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @"") userInfo:nil];
 	}
+	// If only match was found, update ourselves
+	else if(1 == matchCount) {
+		[self updateMetadataFromMusicBrainz:1];
+	}
+	else {
+		MusicBrainzMatchSheet		*sheet		= nil;
+		NSMutableArray				*matches	= nil;
+		NSDictionary				*match		= nil;
+		unsigned					i;
+		
+		sheet		= [[MusicBrainzMatchSheet alloc] init];
+		matches		= [[NSMutableArray alloc] init];
+		
+		for(i = 1; i <= matchCount; ++i) {
+			[_mbHelper selectMatch:i];
+			
+			match = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[_mbHelper albumTitle], [_mbHelper albumArtist], [NSNumber numberWithUnsignedInt:i], nil]
+												forKeys:[NSArray arrayWithObjects:@"title", @"artist", @"index", nil]];
+						
+			[matches addObject:match];
+		}
+		
+		[sheet setValue:[matches autorelease] forKey:@"matches"];
+		[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndQueryMusicBrainzSheet:returnCode:contextInfo:) contextInfo:sheet];
+	}	
 }
 
-- (IBAction) submitToFreeDB:(id) sender
+- (void) queryMusicBrainzNonInteractive
 {
-	FreeDB				*freeDB				= nil;
-	NSAlert				*alert				= nil;
-	
-	if(NO == [self submitToFreeDBAllowed]) {
+	if(NO == [self queryMusicBrainzAllowed]) {
 		return;
 	}
 	
-	@try {
-		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];		
-		[freeDB submitDisc];
-		alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText: [NSString stringWithFormat:NSLocalizedStringFromTable(@"The information for the disc \"%@\" has been successfully submitted to FreeDB.", @"General", @""), [self title]]];
-		[alert setInformativeText: NSLocalizedStringFromTable(@"Thank you for using FreeDB!", @"General", @"")];
-		
-		[alert setAlertStyle: NSInformationalAlertStyle];
-		
-		[alert beginSheetModalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	if(nil == _mbHelper) {
+		_mbHelper	= [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
 	}
 	
-	@catch(NSException *exception) {
-		alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while submitting information for the disc \"%@\" to FreeDB.", @"Exceptions", @""), [self title]]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[self displayExceptionAlert:alert];
-	}
+	[_mbHelper performQuery:self];
 	
-	@finally {
-		[freeDB release];
+	if(1 <= [_mbHelper matchCount]) {
+		[self updateMetadataFromMusicBrainz:1];
 	}
 }
 
@@ -528,63 +512,6 @@
 	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
 }
 
-#pragma mark FreeDB
-
-- (void) clearFreeDBData
-{
-	unsigned	i;
-	Track		*track;
-	
-	[self setTitle:nil];
-	[self setArtist:nil];
-	[self setYear:0];
-	[self setGenre:nil];
-	[self setComment:nil];
-	[self setDiscNumber:0];
-	[self setDiscTotal:0];
-	[self setCompilation:NO];
-	
-	for(i = 0; i < [self countOfTracks]; ++i) {
-		track = [self objectInTracksAtIndex:i];
-		if(NO == [track ripInProgress] && NO == [track encodeInProgress]) {
-			[track clearFreeDBData];
-		}
-	}
-}
-
-- (void) updateDiscFromFreeDB:(NSDictionary *)info
-{
-	FreeDB *freeDB;
-	
-	@try {
-		freeDB = [[FreeDB alloc] initWithCompactDiscDocument:self];
-		
-		[[self undoManager] beginUndoGrouping];
-		[self clearFreeDBData];
-		[freeDB updateDisc:info];
-		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"FreeDB", @"UndoRedo", @"")];
-		[[self undoManager] endUndoGrouping];
-		
-		[self updateChangeCount:NSChangeReadOtherContents];
-		
-		[self setFreeDBQuerySuccessful:YES];
-	}
-	
-	@catch(NSException *exception) {
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while retrieving information for the disc \"%@\" from FreeDB.", @"Exceptions", @""), [self title]]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[self displayExceptionAlert:alert];
-	}
-	
-	@finally {
-		[self setFreeDBQueryInProgress:NO];
-		[freeDB release];		
-	}	
-}
-
 #pragma mark Miscellaneous
 
 - (NSString *)		length								{ return [NSString stringWithFormat:@"%u:%.02u", [[self disc] length] / 60, [[self disc] length] % 60]; }
@@ -606,42 +533,11 @@
 	return [[result retain] autorelease];
 }
 
-/*- (BOOL) displayAlertIfNoOutputFormats
-{
-	// Verify at least one output format is selected
-	if(0 == [_activeEncoders count]) {
-		int		result;
-		
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
-		[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
-		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
-		[alert setAlertStyle: NSWarningAlertStyle];
-		
-		result = [alert runModal];
-		
-		if(NSAlertFirstButtonReturn == result) {
-			// do nothing
-		}
-		else if(NSAlertSecondButtonReturn == result) {
-			[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
-			[[PreferencesController sharedPreferences] showWindow:self];
-		}
-
-		return YES;
-	}
-	
-	return NO;
-}*/
-
 #pragma mark Accessors
 
 - (CompactDisc *)	disc								{ return [[_disc retain] autorelease]; }
 - (BOOL)			discInDrive							{ return _discInDrive; }
-- (int)				discID								{ return ([self discInDrive] ? [_disc discID] : _discID); }
-- (BOOL)			freeDBQueryInProgress				{ return _freeDBQueryInProgress; }
-- (BOOL)			freeDBQuerySuccessful				{ return _freeDBQuerySuccessful; }
+- (NSString *)		discID								{ return ([self discInDrive] ? [[self disc] discID] : _discID); }
 
 - (NSString *)		title								{ return [[_title retain] autorelease]; }
 - (NSString *)		artist								{ return [[_artist retain] autorelease]; }
@@ -708,9 +604,7 @@
 }
 
 - (void) setDiscInDrive:(BOOL)discInDrive						{ _discInDrive = discInDrive; }
-- (void) setDiscID:(int)discID									{ _discID = discID; }
-- (void) setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress	{ _freeDBQueryInProgress = freeDBQueryInProgress; }
-- (void) setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful	{ _freeDBQuerySuccessful = freeDBQuerySuccessful; }
+- (void) setDiscID:(NSString *)discID							{ [_discID release]; _discID = [discID retain]; }
 - (void) setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate { [_albumArtDownloadDate release]; _albumArtDownloadDate = [albumArtDownloadDate retain]; }
 
 - (void) setTitle:(NSString *)title
@@ -830,8 +724,8 @@
 
 - (id) handleEncodeScriptCommand:(NSScriptCommand *)command				{ [self encode:command]; return nil; }
 - (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command			{ [self ejectDisc:command]; return nil; }
-- (id) handleQueryFreeDBScriptCommand:(NSScriptCommand *)command		{ [self queryFreeDB:command]; return nil; }
-- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command		{ [self submitToFreeDB:command]; return nil; }
+- (id) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command	{ [self queryMusicBrainz:command]; return nil; }
+//- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command		{ [self submitToFreeDB:command]; return nil; }
 - (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command { [self toggleTrackInformation:command]; return nil; }
 - (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self toggleAlbumArt:command]; return nil; }
 - (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self fetchAlbumArt:command]; return nil; }
@@ -858,16 +752,17 @@
 
 - (void) didEndSettingsSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"rippingSettings"];
     [sheet orderOut:self];
+	[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"rippingSettings"];
 }
 
 - (void) didEndSelectEncodersSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
+	SelectEncodersSheet		*selectEncodersSheet	= (SelectEncodersSheet *)contextInfo;
+
 	[sheet orderOut:self];
 
 	if(NSOKButton == returnCode) {
-		SelectEncodersSheet		*selectEncodersSheet	= nil;
 		NSMutableDictionary		*settings				= nil;
 		NSMutableDictionary		*postProcessingOptions	= nil;
 		NSArray					*applications;
@@ -876,7 +771,6 @@
 		
 		[[NSUserDefaults standardUserDefaults] setValue:_settings forKey:@"rippingSettings"];
 
-		selectEncodersSheet	= (SelectEncodersSheet *)contextInfo;
 		settings			= [NSMutableDictionary dictionary];
 		
 		// Encoders
@@ -946,6 +840,21 @@
 		// Rip the tracks
 		[[RipperController sharedController] ripTracks:[self selectedTracks] settings:settings];
 	}
+	
+	[selectEncodersSheet release];
+}
+
+- (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	MusicBrainzMatchSheet	*musicBrainzMatchSheet	= (MusicBrainzMatchSheet *)contextInfo;
+
+	[sheet orderOut:self];
+	
+	if(NSOKButton == returnCode) {
+		[self updateMetadataFromMusicBrainz:[musicBrainzMatchSheet selectedAlbumIndex]];
+	}
+
+	[musicBrainzMatchSheet release];
 }
 
 - (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
@@ -963,6 +872,38 @@
 			}
 		}
 	}	
+}
+
+- (void) updateMetadataFromMusicBrainz:(unsigned)index
+{
+	Track						*track		= nil;
+	NSString					*trackArtist = nil;
+	unsigned					i;
+	
+	[_mbHelper selectMatch:index];
+	
+	[[self undoManager] beginUndoGrouping];
+		
+	[self setTitle:[_mbHelper albumTitle]];
+	[self setArtist:[_mbHelper albumArtist]];
+				
+	for(i = 1; i <= [_mbHelper trackCount]; ++i) {
+		
+		track			= [self objectInTracksAtIndex:i - 1];
+		trackArtist		= [_mbHelper trackArtist:i];
+		
+		[track setTitle:[_mbHelper trackTitle:i]];
+		
+		if(NO == [trackArtist isEqualToString:[self artist]]) {
+			[track setArtist:trackArtist];
+		}
+	}
+	
+	[self updateChangeCount:NSChangeReadOtherContents];
+	
+	[[self undoManager] setActionName:NSLocalizedStringFromTable(@"MusicBrainz", @"UndoRedo", @"")];
+	[[self undoManager] endUndoGrouping];
+	
 }
 
 @end

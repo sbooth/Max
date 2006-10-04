@@ -21,7 +21,7 @@
 #import "UtilityFunctions.h"
 
 #import "CoreAudioUtilities.h"
-#import "FreeDBException.h"
+
 #import "MallocException.h"
 #import "IOException.h"
 #import "LAMEException.h"

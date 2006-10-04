@@ -22,7 +22,7 @@
                 encode = id; 
                 encodeCustom = id; 
                 fetchAlbumArt = id; 
-                queryFreeDB = id; 
+                queryMusicBrainz = id; 
                 selectNextTrack = id; 
                 selectPreviousTrack = id; 
                 submitToFreeDB = id; 

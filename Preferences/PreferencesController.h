@@ -24,7 +24,7 @@ extern NSString	*		GeneralPreferencesToolbarItemIdentifier;
 extern NSString *		FormatsPreferencesToolbarItemIdentifier;
 extern NSString *		OutputPreferencesToolbarItemIdentifier;
 extern NSString *		RipperPreferencesToolbarItemIdentifier;
-extern NSString *		FreeDBPreferencesToolbarItemIdentifier;
+extern NSString *		MusicBrainzPreferencesToolbarItemIdentifier;
 extern NSString *		TaggingPreferencesToolbarItemIdentifier;
 extern NSString *		AlbumArtPreferencesToolbarItemIdentifier;
 

@@ -18,8 +18,6 @@
 		<false/>
 		<key>postProcessingApplications</key>
 		<array/>
-		<key>temporaryDirectory</key>
-		<string>/tmp</string>
 		<key>useCustomNaming</key>
 		<false/>
 		<key>useCustomTemporaryDirectory</key>

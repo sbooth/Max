@@ -380,14 +380,6 @@
 	return [result autorelease];
 }
 
-- (void) clearFreeDBData
-{
-	[self setTitle:nil];
-	[self setArtist:nil];
-	[self setYear:0];
-	[self setGenre:nil];
-}
-
 #pragma Scripting
 
 - (NSScriptObjectSpecifier *) objectSpecifier

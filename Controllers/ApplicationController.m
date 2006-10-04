@@ -34,7 +34,7 @@
 #import "IOException.h"
 #import "MissingResourceException.h"
 #import "FileFormatNotSupportedException.h"
-#import "FreeDBProtocolValueTransformer.h"
+
 #import "BooleanArrayValueTransformer.h"
 #import "NegateBooleanArrayValueTransformer.h"
 #import "MultiplicationValueTransformer.h"
@@ -52,9 +52,6 @@ static ApplicationController *sharedController = nil;
 	NSString					*defaultsValuesPath;
     NSDictionary				*defaultsValuesDictionary;
     
-	
-	transformer = [[[FreeDBProtocolValueTransformer alloc] init] autorelease];
-	[NSValueTransformer setValueTransformer:transformer forName:@"FreeDBProtocolValueTransformer"];
 
 	transformer = [[[BooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"BooleanArrayValueTransformer"];

@@ -26,9 +26,9 @@
 - (NSString *) windowTitleForDocumentDisplayName:(NSString *)displayName
 {
 	NSString *title = [[self document] title];
-	
+		
 	if(nil == title) {
-		return [NSString stringWithFormat:NSLocalizedStringFromTable(@"Compact Disc 0x%.8x", @"CompactDisc", @""), [[self document] discID]];
+		return [NSString stringWithFormat:NSLocalizedStringFromTable(@"Compact Disc %@", @"CompactDisc", @""), [[self document] discID]];
 	}
 	else {
 		return title;

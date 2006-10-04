@@ -20,19 +20,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <cddb/cddb_disc.h>
-
+// This class only represents one session (a physical disc could contain many sessions)
 @interface CompactDisc : NSObject
 {
 	NSString			*_deviceName;
 
 	NSMutableArray		*_tracks;
 	NSString			*_MCN;
-	
+
 	unsigned			_firstSector;
 	unsigned			_lastSector;
 	
-	cddb_disc_t			*_freeDBDisc;
+	unsigned			_leadOut;
+		
 	unsigned			_length;
 }
 
@@ -43,6 +43,8 @@
 // Physical disc properties
 - (unsigned)			firstSector;
 - (unsigned)			lastSector;
+
+- (unsigned)			leadOut;
 
 - (NSString *)			MCN;
 
@@ -62,9 +64,7 @@
 - (NSDictionary *)		objectInTracksAtIndex:(unsigned)index;
 
 // Derived properties
-- (int)					discID;
+- (NSString *)			discID;
 - (unsigned)			length;
-
-- (cddb_disc_t *)		freeDBDisc;
 
 @end

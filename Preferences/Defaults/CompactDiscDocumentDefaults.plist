@@ -6,8 +6,6 @@
 	<dict>
 		<key>outputDirectory</key>
 		<string>~/Music</string>
-		<key>temporaryDirectory</key>
-		<string>/tmp</string>
 		<key>addToiTunes</key>
 		<false/>
 		<key>addToiTunesPlaylist</key>

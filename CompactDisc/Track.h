@@ -125,6 +125,4 @@
 - (NSDictionary *)	getDictionary;
 - (void)			setPropertiesFromDictionary:(NSDictionary *)properties;
 
-- (void)			clearFreeDBData;
-
 @end

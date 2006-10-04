@@ -4,8 +4,6 @@
 <dict>
 	<key>amazonDefaultLocale</key>
 	<integer>1</integer>
-	<key>saveAlbumArtToFile</key>
-	<false/>
 	<key>albumArtFileFormat</key>
 	<integer>3</integer>
 </dict>

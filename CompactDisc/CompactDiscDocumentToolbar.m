@@ -26,15 +26,14 @@ static NSString		*TrackInfoToolbarItemIdentifier				= @"org.sbooth.Max.CompactDi
 static NSString		*AlbumArtToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.AlbumArt";
 static NSString		*SelectNextTrackToolbarItemIdentifier		= @"org.sbooth.Max.CompactDiscDocument.Toolbar.SelectNextTrack";
 static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.CompactDiscDocument.Toolbar.SelectPreviousTrack";
-static NSString		*QueryFreeDBToolbarItemIdentifier			= @"org.sbooth.Max.CompactDiscDocument.Toolbar.QueryFreeDB";
-static NSString		*SubmitToFreeDBToolbarItemIdentifier		= @"org.sbooth.Max.CompactDiscDocument.Toolbar.SubmitToFreeDB";
+static NSString		*QueryMusicBrainzToolbarItemIdentifier		= @"org.sbooth.Max.CompactDiscDocument.Toolbar.QueryMusicBrainz";
 static NSString		*EjectDiscToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.EjectDisc";
 
 enum {
 	kEncodeToolbarItemTag					= 1,
 	kTrackInfoToolbarItemTag				= 2,
-	kQueryFreeDBToolbarItemTag				= 3,
-	kSubmitToFreeDBToolbarItemTag			= 4,
+	kQueryMusicBrainzToolbarItemTag			= 3,
+//	kSubmitToFreeDBToolbarItemTag			= 4,
 	kEjectDiscToolbarItemTag				= 5,
 	kSelectNextTrackToolbarItemTag			= 6,
 	kSelectPreviousTrackToolbarItemTag		= 7,
@@ -68,11 +67,11 @@ enum {
 	
 	while((item = [enumerator nextObject])) {
 		switch([item tag]) {
-			default:							[item setEnabled:YES];									break;
-			case kEncodeToolbarItemTag:			[item setEnabled:[_document encodeAllowed]];			break;
-			case kQueryFreeDBToolbarItemTag:	[item setEnabled:[_document queryFreeDBAllowed]];		break;
-			case kSubmitToFreeDBToolbarItemTag:	[item setEnabled:[_document submitToFreeDBAllowed]];	break;
-			case kEjectDiscToolbarItemTag:		[item setEnabled:[_document ejectDiscAllowed]];			break;
+			default:								[item setEnabled:YES];									break;
+			case kEncodeToolbarItemTag:				[item setEnabled:[_document encodeAllowed]];			break;
+			case kQueryMusicBrainzToolbarItemTag:	[item setEnabled:[_document queryMusicBrainzAllowed]];		break;
+//			case kSubmitToFreeDBToolbarItemTag:		[item setEnabled:[_document submitToFreeDBAllowed]];	break;
+			case kEjectDiscToolbarItemTag:			[item setEnabled:[_document ejectDiscAllowed]];			break;
 		}
 	}
 }
@@ -143,29 +142,17 @@ enum {
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(selectPreviousTrack:)];
 	}
-    else if([itemIdentifier isEqualToString:QueryFreeDBToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:QueryMusicBrainzToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kQueryFreeDBToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Query FreeDB", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Query FreeDB", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Query FreeDB for album information", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"FreeDBToolbarImage"]];
+		[toolbarItem setTag:kQueryMusicBrainzToolbarItemTag];
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Query", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Query", @"CompactDisc", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Query MusicBrainz for album information", @"CompactDisc", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"MusicBrainz"]];
 		
 		[toolbarItem setTarget:_document];
-		[toolbarItem setAction:@selector(queryFreeDB:)];
-	}
-    else if([itemIdentifier isEqualToString:SubmitToFreeDBToolbarItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setTag:kSubmitToFreeDBToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Submit", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Submit", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Submit album information to FreeDB", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"SubmitToFreeDBToolbarImage"]];
-		
-		[toolbarItem setTarget:_document];
-		[toolbarItem setAction:@selector(submitToFreeDB:)];
+		[toolbarItem setAction:@selector(queryMusicBrainz:)];
 	}
     else if([itemIdentifier isEqualToString:EjectDiscToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
@@ -202,7 +189,7 @@ enum {
 {
     return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, SettingsToolbarItemIdentifier, 
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
-		QueryFreeDBToolbarItemIdentifier,
+		QueryMusicBrainzToolbarItemIdentifier,
 		NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
 }
@@ -212,7 +199,7 @@ enum {
     return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, SettingsToolbarItemIdentifier,
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		SelectPreviousTrackToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
-		QueryFreeDBToolbarItemIdentifier, SubmitToFreeDBToolbarItemIdentifier,
+		QueryMusicBrainzToolbarItemIdentifier,
 		EjectDiscToolbarItemIdentifier, 
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier, nil];

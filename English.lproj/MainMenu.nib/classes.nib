@@ -22,7 +22,7 @@
                 ejectDisc = id; 
                 encode = id; 
                 fetchAlbumArt = id; 
-                queryFreeDB = id; 
+                queryMusicBrainz = id; 
                 selectAlbumArt = id; 
                 selectNextTrack = id; 
                 selectPreviousTrack = id; 

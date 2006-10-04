@@ -212,7 +212,7 @@ static MediaController *sharedController = nil;
 		[LogController logMessage:[NSString stringWithFormat:@"Found CD on device %@", deviceName]];
 		
 		disc		= [[[CompactDisc alloc] initWithDeviceName:deviceName] autorelease];
-		filename	= [NSString stringWithFormat:@"%@/0x%.08x.cdinfo", getApplicationDataDirectory(), [disc discID]];
+		filename	= [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [disc discID]];
 		url			= [NSURL fileURLWithPath:filename];
 		
 		// Ugly hack to avoid letting the user specify the save filename
@@ -231,16 +231,19 @@ static MediaController *sharedController = nil;
 				[doc showWindows];
 			}
 			
-			// Automatically query FreeDB for new discs if desired
+			// Automatically query MusicBrainz for new discs if desired
 			if(newDisc) {
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryFreeDB"]) {
-					[doc addObserver:self forKeyPath:@"freeDBQueryInProgress" options:(NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld) context:doc];
-					[doc queryFreeDB:self];
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryMusicBrainz"]) {
+					[doc queryMusicBrainzNonInteractive];
 				}
+
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallySaveMusicBrainzInfo"]) {
+					[doc saveDocument:self];
+				}				
 			}
 			
 			// Automatic rip/encode functionality
-			else if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && (NO == [[NSUserDefaults standardUserDefaults] boolForKey:@"onFirstInsertOnly"] || newDisc)) {
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && (NO == [[NSUserDefaults standardUserDefaults] boolForKey:@"onFirstInsertOnly"] || newDisc)) {
 				[doc selectAll:self];
 				//[[doc objectInTracksAtIndex:0] setSelected:YES];
 				[doc encode:self];
@@ -285,26 +288,6 @@ static MediaController *sharedController = nil;
 	DADiskUnmount(disk, kDADiskUnmountOptionWhole, unmountCallback, document);
 	
 	CFRelease(disk);
-}
-
-// This elaborate scheme is necessary since multiple threads are going at the same time
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-	CompactDiscDocument		*doc		= (CompactDiscDocument *)context;
-	
-	if([keyPath isEqualToString:@"freeDBQueryInProgress"] && (NO == [[change objectForKey:NSKeyValueChangeNewKey] boolValue])) {
-		[doc removeObserver:self forKeyPath:@"freeDBQueryInProgress"];
-
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallySaveFreeDBInfo"]) {
-			[doc saveDocument:self];
-		}
-		
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyEncodeTracks"] && [doc freeDBQuerySuccessful]) {
-			[doc selectAll:self];
-			//[[doc objectInTracksAtIndex:0] setSelected:YES];
-			[doc encode:self];			
-		}
-	}
 }
 	
 @end

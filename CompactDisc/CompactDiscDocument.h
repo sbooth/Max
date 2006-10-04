@@ -22,14 +22,15 @@
 
 #import "CompactDisc.h"
 #import "Track.h"
+#import "MusicBrainzHelper.h"
 #import "AlbumArtMethods.h"
 
 enum {
 	kEncodeMenuItemTag					= 1,
 	kTrackInfoMenuItemTag				= 2,
-	kQueryFreeDBMenuItemTag				= 3,
+	kQueryMusicBrainzMenuItemTag		= 3,
 	kEjectDiscMenuItemTag				= 4,
-	kSubmitToFreeDBMenuItemTag			= 5,
+//	kSubmitToFreeDBMenuItemTag			= 5,
 	kSelectNextTrackMenuItemTag			= 6,
 	kSelectPreviousTrackMenuItemTag		= 7,
 	kEncodeCustomMenuItemTag			= 8
@@ -44,10 +45,9 @@ enum {
 
 	CompactDisc						*_disc;
 	BOOL							_discInDrive;
-	int								_discID;
-	BOOL							_freeDBQueryInProgress;
-	BOOL							_freeDBQuerySuccessful;
+	NSString						*_discID;
 	
+	MusicBrainzHelper				*_mbHelper;
 	NSMutableDictionary				*_settings;
 
 	// Disc information
@@ -77,8 +77,8 @@ enum {
 
 // State
 - (BOOL)			encodeAllowed;
-- (BOOL)			queryFreeDBAllowed;
-- (BOOL)			submitToFreeDBAllowed;
+- (BOOL)			queryMusicBrainzAllowed;
+//- (BOOL)			submitToFreeDBAllowed;
 - (BOOL)			ejectDiscAllowed;
 
 - (BOOL)			emptySelection;
@@ -93,8 +93,9 @@ enum {
 
 - (IBAction)		ejectDisc:(id)sender;
 
-- (IBAction)		queryFreeDB:(id)sender;
-- (IBAction)		submitToFreeDB:(id)sender;
+- (IBAction)		queryMusicBrainz:(id)sender;
+- (void)			queryMusicBrainzNonInteractive;
+//- (IBAction)		submitToFreeDB:(id)sender;
 
 - (IBAction)		toggleTrackInformation:(id)sender;
 - (IBAction)		toggleAlbumArt:(id)sender;
@@ -104,10 +105,6 @@ enum {
 
 - (IBAction)		fetchAlbumArt:(id)sender;
 - (IBAction)		selectAlbumArt:(id)sender;
-
-// FreeDB
-- (void)			clearFreeDBData;
-- (void)			updateDiscFromFreeDB:(NSDictionary *) info;
 
 // Miscellaneous
 - (void)			discEjected;
@@ -120,14 +117,8 @@ enum {
 - (BOOL)			discInDrive;
 - (void)			setDiscInDrive:(BOOL)discInDrive;
 
-- (int)				discID;
-- (void)			setDiscID:(int)discID;
-
-- (BOOL)			freeDBQueryInProgress;
-- (void)			setFreeDBQueryInProgress:(BOOL)freeDBQueryInProgress;
-
-- (BOOL)			freeDBQuerySuccessful;
-- (void)			setFreeDBQuerySuccessful:(BOOL)freeDBQuerySuccessful;
+- (NSString *)		discID;
+- (void)			setDiscID:(NSString *)discID;
 
 // Metadata
 - (NSString *)		title;
@@ -184,8 +175,8 @@ enum {
 @interface CompactDiscDocument (ScriptingAdditions)
 - (id) handleEncodeScriptCommand:(NSScriptCommand *)command;
 - (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command;
-- (id) handleQueryFreeDBScriptCommand:(NSScriptCommand *)command;
-- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command;
+- (id) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command;
+//- (id) handleSubmitToFreeDBScriptCommand:(NSScriptCommand *)command;
 - (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command;
 - (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command;
 - (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command;

@@ -20,13 +20,14 @@
 
 #import "CompactDisc.h"
 
-#import "MallocException.h"
 #import "Drive.h"
 #import "LogController.h"
-#import "IOException.h"
-#import "FreeDBException.h"
+#import "MusicBrainzHelper.h"
 
-#include <paths.h>			// _PATH_DEV
+#import "MallocException.h"
+#import "IOException.h"
+
+#include <IOKit/storage/IOCDTypes.h>
 
 @implementation CompactDisc
 
@@ -50,19 +51,21 @@
 		// Is this is a multisession disc?
 		if([drive lastSession] - [drive firstSession] > 1) {
 			[LogController logMessage:NSLocalizedStringFromTable(@"Multisession disc detected", @"Log", @"")];
-
-			// Use first session for now
-			session = 1;
 		}
+		
+		// Use first session for now
+		session			= 1;
 		
 		// Disc information
 		_firstSector	= [drive firstSectorForSession:session];
 		_lastSector		= [drive lastSectorForSession:session];
 
-		_MCN = [[drive readMCN] retain];
+		_leadOut		= [drive leadOutForSession:session];
+
+		_MCN			= [[drive readMCN] retain];
 		
 		// Iterate through the tracks and get their information
-		_tracks		= [[NSMutableArray alloc] initWithCapacity:[drive countOfTracks] + 1];
+		_tracks			= [[NSMutableArray alloc] init];
 		
 		for(i = [drive firstTrackForSession:session]; i <= [drive lastTrackForSession:session]; ++i) {
 
@@ -89,35 +92,13 @@
 			[_tracks addObject:trackInfo];
 		}
 		
-		// Setup libcddb data structures
-		_freeDBDisc	= cddb_disc_new();
-		if(NULL == _freeDBDisc) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
-		
 		for(i = 0; i < [self countOfTracks]; ++i) {
-			cddb_track_t *cddb_track;
-			
-			cddb_track = cddb_track_new();
-			if(NULL == cddb_track) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
-			
-			cddb_track_set_frame_offset(cddb_track, [self firstSectorForTrack:i] + 150);
-			cddb_disc_add_track(_freeDBDisc, cddb_track);
 			discLength += [self lastSectorForTrack:i] - [self firstSectorForTrack:i] + 1;
 		}
 		_length = (unsigned) (60 * (discLength / (60 * 75))) + (unsigned)((discLength / 75) % 60);
-		cddb_disc_set_length(_freeDBDisc, _length);
-		
-		if(0 == cddb_disc_calc_discid(_freeDBDisc)) {
-			@throw [FreeDBException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to calculate the disc's FreeDB ID.", @"Exceptions", @"") userInfo:nil];
-		}
 		
 		[drive release];
-		
+				
 		return self;
 	}
 	
@@ -129,11 +110,7 @@
 	[_deviceName release];		_deviceName = nil;
 	[_tracks release];			_tracks = nil;
 	[_MCN release];				_MCN = nil;
-		
-	if(NULL != _freeDBDisc) {
-		cddb_disc_destroy(_freeDBDisc);		_freeDBDisc = NULL;
-	}
-	
+
 	[super dealloc];
 }
 
@@ -143,6 +120,8 @@
 
 - (unsigned)		firstSector								{ return _firstSector; }
 - (unsigned)		lastSector								{ return _lastSector; }
+
+- (unsigned)		leadOut									{ return _leadOut; }
 
 - (unsigned)		firstSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"firstSector"] unsignedIntValue]; }
 - (unsigned)		lastSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"lastSector"] unsignedIntValue]; }
@@ -155,13 +134,23 @@
 
 - (NSString *)		ISRCForTrack:(unsigned)track			{ return [[self objectInTracksAtIndex:track] objectForKey:@"ISRC"]; }
 
-- (int)				discID									{ return cddb_disc_get_discid(_freeDBDisc); }
+- (NSString *) discID
+{
+	MusicBrainzHelper	*mb			= nil;
+	NSString			*discID		= nil;
+
+	mb		= [[MusicBrainzHelper alloc] initWithCompactDisc:self];
+	discID	= [mb discID];
+	
+	[mb release];
+	
+	return [[discID retain] autorelease];
+}
+
 - (unsigned)		length									{ return _length; }
 
 // KVC
 - (unsigned)		countOfTracks							{ return [_tracks count]; }
-- (NSDictionary *)	objectInTracksAtIndex:(unsigned)idx		{ return [_tracks objectAtIndex:idx]; }
-
-- (cddb_disc_t *)	freeDBDisc								{ return _freeDBDisc; }
+- (NSDictionary *)	objectInTracksAtIndex:(unsigned)index	{ return [_tracks objectAtIndex:index]; }
 
 @end

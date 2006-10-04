@@ -44,6 +44,23 @@
 		NSAssert(NULL != _mb, @"Unable to allocate memory");
 		
 		[self mb]->UseUTF8(true);
+
+		// Set MB server and port
+		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzServerPort"]) {
+			[self mb]->SetServer([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"] cStringUsingEncoding:NSUTF8StringEncoding],
+								 [[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"]);
+		}
+		
+		// Use authentication, if specified
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzUseProxy"] && nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzProxyServerPort"]) {
+			[self mb]->SetProxy([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] cStringUsingEncoding:NSUTF8StringEncoding],
+								[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
+						
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzProxyServerUseAuthentication"] && nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerUsername"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzProxyServerPassword"]) {
+				[self mb]->Authenticate([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerUsername"] cStringUsingEncoding:NSUTF8StringEncoding],
+										[[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerPassword"] cStringUsingEncoding:NSUTF8StringEncoding]);
+			}
+		}
 		
 		return self;
 	}
