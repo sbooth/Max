@@ -532,7 +532,7 @@
 		else if(0xA2 == desc->point && 1 == desc->adr) {
 			[[self sessionNumber:desc->session] setLeadOut:CDConvertMSFToLBA(desc->p)];
 		}
-		else if(0xB0 == desc->point && 5 == desc->adr) {
+/*		else if(0xB0 == desc->point && 5 == desc->adr) {
 			NSLog(@"Next possible track start: %02d:%02d.%02d\n",
 				  (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);
 			NSLog(@"Number of ptrs in Mode 5:  %d\n",
@@ -559,7 +559,7 @@
 			NSLog(@"Application code:          %d\n", (int)desc->address.second);
 			NSLog(@"Start of first lead-in:    %02d:%02d.%02d\n",
 				  (int)desc->p.minute, (int)desc->p.second, (int)desc->p.frame);
-		}
+		}*/
 	}
 }
 
