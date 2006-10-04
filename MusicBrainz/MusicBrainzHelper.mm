@@ -52,14 +52,15 @@
 		}
 		
 		// Use authentication, if specified
+		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzPassword"]) {
+			[self mb]->Authenticate([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] cStringUsingEncoding:NSUTF8StringEncoding],
+									[[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzPassword"] cStringUsingEncoding:NSUTF8StringEncoding]);
+		}
+
+		// Proxy setup
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzUseProxy"] && nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzProxyServerPort"]) {
 			[self mb]->SetProxy([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] cStringUsingEncoding:NSUTF8StringEncoding],
-								[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
-						
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzProxyServerUseAuthentication"] && nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerUsername"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzProxyServerPassword"]) {
-				[self mb]->Authenticate([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerUsername"] cStringUsingEncoding:NSUTF8StringEncoding],
-										[[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerPassword"] cStringUsingEncoding:NSUTF8StringEncoding]);
-			}
+								[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);						
 		}
 		
 		return self;
