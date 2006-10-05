@@ -22,12 +22,7 @@
 
 #include <sndfile/sndfile.h>
 
-#import "LibsndfileEncoderTask.h"
-#import "MallocException.h"
-#import "IOException.h"
-#import "FLACException.h"
 #import "StopException.h"
-#import "MissingResourceException.h"
 
 #import "UtilityFunctions.h"
 
@@ -57,21 +52,23 @@
 	
 	unsigned						wideSample, sample, channel;
 	
-	
-	// This will never work if these sizes aren't the same
-	NSAssert(sizeof(int32_t) == sizeof(int), @"Type size mismatch.");
-	
-	// Tell our owner we are starting
-	[[self delegate] setStartTime:startTime];	
-	[[self delegate] setStarted:YES];
-	
-	// Setup the decoder
-	[[self decoder] finalizeSetup];
-	
-	// Parse settings
-	format = [[[[self delegate] encoderSettings] objectForKey:@"majorFormat"] intValue] | [[[[self delegate] encoderSettings] objectForKey:@"subtypeFormat"] intValue];
+	double							percentComplete;
+	NSTimeInterval					interval;
+	unsigned						secondsRemaining;
 	
 	@try {
+		// This will never work if these sizes aren't the same
+		NSAssert(sizeof(int32_t) == sizeof(int), @"Type size mismatch.");
+		
+		// Tell our owner we are starting
+		[[self delegate] setStartTime:startTime];	
+		[[self delegate] setStarted:YES];
+		
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+		
+		// Parse settings
+		format = [[[[self delegate] encoderSettings] objectForKey:@"majorFormat"] intValue] | [[[[self delegate] encoderSettings] objectForKey:@"subtypeFormat"] intValue];
 		
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
@@ -109,10 +106,7 @@
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		buf = (int32_t *)calloc(bufferLen, sizeof(int32_t));
-		if(NULL == buf) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != buf, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		// Setup output file
 		memset(&info, 0, sizeof(info));
@@ -120,11 +114,7 @@
 		info.channels		= [[self decoder] pcmFormat].mChannelsPerFrame;
 		info.format			= format;
 		sf					= sf_open([filename fileSystemRepresentation], SFM_WRITE, &info);
-		if(NULL == sf) {
-			NSLog(@"%@", [NSString stringWithCString:sf_strerror(NULL) encoding:NSASCIIStringEncoding]);
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithCString:sf_strerror(NULL) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != sf, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 
 		// Iteratively get the PCM data and encode it
 		for(;;) {
@@ -211,9 +201,9 @@
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
+				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
+				interval			= -1.0 * [startTime timeIntervalSinceNow];
+				secondsRemaining	= (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -236,8 +226,9 @@
 		free(buf);
 				
 		if(0 != sf_close(sf)) {
-			NSException *exception =[IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-															userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithCString:sf_strerror(NULL) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSException *exception =[NSException exceptionWithName:@"IOException"
+															reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
+														  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:sf_error(NULL)], [NSString stringWithCString:sf_strerror(NULL) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 	}	
