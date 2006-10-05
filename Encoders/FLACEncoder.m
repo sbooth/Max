@@ -26,11 +26,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-#import "MallocException.h"
-#import "IOException.h"
-#import "FLACException.h"
 #import "StopException.h"
-#import "CoreAudioException.h"
 
 #import "UtilityFunctions.h"
 
@@ -66,23 +62,29 @@
 	unsigned long					iterations					= 0;
 	AudioBufferList					bufferList;
 	ssize_t							bufferLen					= 0;
+	FLAC__bool						result;
+	FLAC__FileEncoderState			encoderState;
 	FLAC__StreamMetadata			padding;
 	FLAC__StreamMetadata			*metadata [1];
 	SInt64							totalFrames, framesToRead;
 	UInt32							frameCount;
-	
-	// Tell our owner we are starting
-	[[self delegate] setStartTime:startTime];	
-	[[self delegate] setStarted:YES];
-
-	// Setup the decoder
-	[[self decoder] finalizeSetup];
-
-	// Parse the encoder settings
-	[self parseSettings];
+	double							percentComplete;
+	NSTimeInterval					interval;
+	unsigned						secondsRemaining;
 	
 	@try {
+		bufferList.mBuffers[0].mData = NULL;
+
+		// Tell our owner we are starting
+		[[self delegate] setStartTime:startTime];	
+		[[self delegate] setStarted:YES];
 		
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+		
+		// Parse the encoder settings
+		[self parseSettings];
+
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
 		
@@ -125,38 +127,36 @@
 		// Setup FLAC encoder
 		
 		// Input information
-		if(NO == FLAC__file_encoder_set_sample_rate(_flac, [[self decoder] pcmFormat].mSampleRate)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_bits_per_sample(_flac, [[self decoder] pcmFormat].mBitsPerChannel)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_channels(_flac, [[self decoder] pcmFormat].mChannelsPerFrame)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
+		result = FLAC__file_encoder_set_sample_rate(_flac, [[self decoder] pcmFormat].mSampleRate);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_sample_rate failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_bits_per_sample(_flac, [[self decoder] pcmFormat].mBitsPerChannel);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_bits_per_sample failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_channels(_flac, [[self decoder] pcmFormat].mChannelsPerFrame);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_channels failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
 			
 		// Encoder parameters
-		if(NO == FLAC__file_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_do_mid_side_stereo(_flac, _enableMidSide)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_loose_mid_side_stereo(_flac, _enableLooseMidSide)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_qlp_coeff_precision(_flac, _QLPCoeffPrecision)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_min_residual_partition_order(_flac, _minPartitionOrder)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_max_residual_partition_order(_flac, _maxPartitionOrder)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_max_lpc_order(_flac, _maxLPCOrder)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
+		result = FLAC__file_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_do_exhaustive_model_search failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_do_mid_side_stereo(_flac, _enableMidSide);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_do_mid_side_stereo failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_loose_mid_side_stereo(_flac, _enableLooseMidSide);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_loose_mid_side_stereo failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_qlp_coeff_precision(_flac, _QLPCoeffPrecision);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_qlp_coeff_precision failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_min_residual_partition_order(_flac, _minPartitionOrder);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_min_residual_partition_order failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_max_residual_partition_order(_flac, _maxPartitionOrder);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_max_residual_partition_order failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_max_lpc_order(_flac, _maxLPCOrder);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_max_lpc_order failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
 
 		// Create the padding metadata block if desired
 		if(0 < _padding) {
@@ -165,21 +165,19 @@
 			padding.length		= _padding;
 			metadata[0]			= &padding;
 			
-			if(NO == FLAC__file_encoder_set_metadata(_flac, metadata, 1)) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-			}
+			result = FLAC__file_encoder_set_metadata(_flac, metadata, 1);
+			NSAssert1(YES == result, @"FLAC__file_encoder_set_metadata failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
 		}
 		
 		// Initialize the FLAC encoder
-		if(NO == FLAC__file_encoder_set_total_samples_estimate(_flac, totalFrames)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(NO == FLAC__file_encoder_set_filename(_flac, [filename UTF8String])) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
-		if(FLAC__FILE_ENCODER_OK != FLAC__file_encoder_init(_flac)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}		
+		result = FLAC__file_encoder_set_total_samples_estimate(_flac, totalFrames);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_total_samples_estimate failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		result = FLAC__file_encoder_set_filename(_flac, [filename UTF8String]);
+		NSAssert1(YES == result, @"FLAC__file_encoder_set_filename failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
+
+		encoderState = FLAC__file_encoder_init(_flac);
+		NSAssert1(FLAC__FILE_ENCODER_OK == encoderState, @"FLAC__file_encoder_init failed: %s", FLAC__FileEncoderStateString[encoderState]);
 
 		// Iteratively get the PCM data and encode it
 		for(;;) {
@@ -212,9 +210,9 @@
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
+				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
+				interval			= -1.0 * [startTime timeIntervalSinceNow];
+				secondsRemaining	= (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -274,7 +272,7 @@
 
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount
 {
-	FLAC__bool		flacResult;
+	FLAC__bool		result;
 	
 	int32_t			**buffer				= NULL;
 	
@@ -291,10 +289,7 @@
 	@try {
 		// Allocate the FLAC buffer
 		buffer = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(int32_t *));
-		if(NULL == buffer) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != buffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Initialize each channel buffer to zero
 		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
@@ -304,10 +299,7 @@
 		// Allocate channel buffers
 		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 			buffer[channel] = calloc(frameCount, sizeof(int32_t));
-			if(NULL == buffer[channel]) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(NULL != buffer[channel], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		}
 		
 		// Split PCM data into channels and convert to 32-bit sample size for FLAC
@@ -360,11 +352,8 @@
 		}
 		
 		// Encode the chunk
-		flacResult = FLAC__file_encoder_process(_flac, (const FLAC__int32 * const *)buffer, frameCount);
-		
-		if(NO == flacResult) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithCString:FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)] encoding:NSASCIIStringEncoding] userInfo:nil];
-		}
+		result = FLAC__file_encoder_process(_flac, (const FLAC__int32 * const *)buffer, frameCount);
+		NSAssert1(YES == result, @"FLAC__file_encoder_process failed: %s", FLAC__FileEncoderStateString[FLAC__file_encoder_get_state(_flac)]);
 	}
 		
 	@finally {
