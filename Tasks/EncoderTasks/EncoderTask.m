@@ -216,7 +216,7 @@ enum {
 {
 	[super setStarted:YES];
 
-	// Mark tracks as complete
+	// Mark tracks as started
 	if(nil != [[self taskInfo] inputTracks]) {
 		NSArray			*tracks		= [[self taskInfo] inputTracks];
 		unsigned		i;
@@ -393,7 +393,7 @@ enum {
 
 @implementation EncoderTask (CueSheetAdditions)
 
-- (BOOL)			formatIsValidForCueSheet				{ return NO; }
+- (BOOL)			formatIsValidForCueSheet			{ return NO; }
 - (NSString *)		cueSheetFormatName					{ return nil; }
 
 - (void) generateCueSheet
@@ -556,7 +556,7 @@ enum {
 {
 	NSString			*basename			= nil;
 	NSMutableString		*customPath			= [NSMutableString stringWithCapacity:100];
-	NSString			*customNamingScheme = [[settings objectForKey:@"outputFileNaming"] objectForKey:@"formatString"];
+	NSString			*customNamingScheme = [settings objectForKey:@"formatString"];
 	
 	// Get the elements needed to build the pathname
 	unsigned			discNumber			= [metadata discNumber];
