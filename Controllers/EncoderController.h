@@ -50,7 +50,10 @@ enum {
 
 // Functionality
 - (void)			encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings;
+- (void)			encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings inputTracks:(NSArray *)inputTracks;
+
 - (void)			encodeFiles:(NSArray *)filenames metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings;
+- (void)			encodeFiles:(NSArray *)filenames metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings inputTracks:(NSArray *)inputTracks;
 
 - (BOOL)			documentHasEncoderTasks:(CompactDiscDocument *)document;
 - (void)			stopEncoderTasksForDocument:(CompactDiscDocument *)document;

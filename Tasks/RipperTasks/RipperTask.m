@@ -40,6 +40,7 @@
 	NSEnumerator		*enumerator;
 	Track				*track;
 	
+	NSParameterAssert(nil != tracks);
 	NSParameterAssert(0 != [tracks count]);
 	
 	if((self = [super init])) {

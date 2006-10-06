@@ -119,10 +119,20 @@ static EncoderController *sharedController = nil;
 
 - (void) encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings
 {
-	[self encodeFiles:[NSArray arrayWithObject:filename] metadata:metadata settings:settings];
+	[self encodeFiles:[NSArray arrayWithObject:filename] metadata:metadata settings:settings inputTracks:nil];
+}
+
+- (void) encodeFile:(NSString *)filename metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings inputTracks:(NSArray *)inputTracks
+{
+	[self encodeFiles:[NSArray arrayWithObject:filename] metadata:metadata settings:settings inputTracks:inputTracks];
 }
 
 - (void) encodeFiles:(NSArray *)filenames metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings
+{
+	[self encodeFiles:filenames metadata:metadata settings:settings inputTracks:nil];
+}
+
+- (void) encodeFiles:(NSArray *)filenames metadata:(AudioMetadata *)metadata settings:(NSDictionary *)settings inputTracks:(NSArray *)inputTracks
 {
 	TaskInfo		*taskInfo			= [TaskInfo taskInfoWithSettings:settings metadata:metadata];
 	NSArray			*outputFormats		= [settings objectForKey:@"encoders"];
@@ -130,6 +140,7 @@ static EncoderController *sharedController = nil;
 	unsigned		i					= 0;
 	
 	[taskInfo setInputFilenames:filenames];
+	[taskInfo setInputTracks:inputTracks];
 	
 	for(i = 0; i < [outputFormats count]; ++i) {
 		format = [outputFormats objectAtIndex:i];

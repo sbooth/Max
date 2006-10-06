@@ -174,7 +174,7 @@ static RipperController *sharedController = nil;
 			taskInfo		= [TaskInfo taskInfoWithSettings:settings metadata:[track metadata]];
 			[taskInfo setInputTracks:[NSArray arrayWithObject:track]];
 			[ripperTask setTaskInfo:taskInfo];
-			
+
 			// Show the window if it is hidden
 			if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
 				[[self window] orderFront:self];
@@ -302,7 +302,7 @@ static RipperController *sharedController = nil;
 		[[[task objectInTracksAtIndex:0] document] ejectDisc:self];
 	}
 
-	[[EncoderController sharedController] encodeFile:[task outputFilename] metadata:[[task taskInfo] metadata] settings:[[task taskInfo] settings]];
+	[[EncoderController sharedController] encodeFile:[task outputFilename] metadata:[[task taskInfo] metadata] settings:[[task taskInfo] settings] inputTracks:[[task taskInfo] inputTracks]];
 }
 
 #pragma mark Task Management
