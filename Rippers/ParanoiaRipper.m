@@ -24,12 +24,7 @@
 #import "LogController.h"
 #import "CompactDiscDocument.h"
 #import "CompactDisc.h"
-#import "MallocException.h"
 #import "StopException.h"
-#import "IOException.h"
-#import "ParanoiaException.h"
-#import "MissingResourceException.h"
-#import "CoreAudioException.h"
 
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
@@ -88,10 +83,8 @@ callback(long inpos, int function, void *userdata)
     
 	@try {
 		paranoiaDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ParanoiaDefaults" ofType:@"plist"];
-		if(nil == paranoiaDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"ParanoiaDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != paranoiaDefaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"ParanoiaDefaults.plist");
+
 		paranoiaDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:paranoiaDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:paranoiaDefaultsValuesDictionary];
 	}
@@ -111,17 +104,15 @@ callback(long inpos, int function, void *userdata)
 	if((self = [super initWithSectors:sectors deviceName:deviceName])) {
 		int			paranoiaLevel	= 0;
 		int			paranoiaMode	= PARANOIA_MODE_DISABLE;
+		int			result;
 		NSString	*bsdName		= [NSString stringWithFormat:@"%sr%@", _PATH_DEV, deviceName];
 
 		// Setup cdparanoia
 		_drive		= cdda_identify([bsdName fileSystemRepresentation], 0, NULL);
-		if(NULL == _drive) {
-			@throw [ParanoiaException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_identify"] userInfo:nil];
-		}
+		NSAssert1(NULL != _drive, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_identify");
 		
-		if(0 != cdda_open(_drive)) {
-			@throw [ParanoiaException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_open"] userInfo:nil];
-		}
+		result = cdda_open(_drive);
+		NSAssert1(0 == result, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"cdda_open");
 		
 		_paranoia	= paranoia_init(_drive);
 		
@@ -178,13 +169,13 @@ callback(long inpos, int function, void *userdata)
 	NSEnumerator					*enumerator;
 	SectorRange						*range;
 	
-	// Tell our owner we are starting
-	_startTime = [NSDate date];
-	[[self delegate] setStartTime:_startTime];
-	[[self delegate] setStarted:YES];
-	[[self delegate] setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
-
 	@try {
+		// Tell our owner we are starting
+		_startTime = [NSDate date];
+		[[self delegate] setStartTime:_startTime];
+		[[self delegate] setStarted:YES];
+		[[self delegate] setPhase:NSLocalizedStringFromTable(@"Ripping", @"General", @"")];
+
 		// Setup output file type (same)
 		bzero(&outputASBD, sizeof(AudioStreamBasicDescription));
 		
@@ -200,21 +191,13 @@ callback(long inpos, int function, void *userdata)
 		
 		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
+		NSAssert1(noErr == err, NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @""), UTCreateStringForOSType(err));
+
 		err = AudioFileInitialize(&ref, kAudioFileCAFType, &outputASBD, 0, &audioFile);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize", UTCreateStringForOSType(err));
 		
 		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID", UTCreateStringForOSType(err));
 		
 		enumerator = [_sectors objectEnumerator];
 		while((range = [enumerator nextObject])) {
@@ -238,16 +221,18 @@ callback(long inpos, int function, void *userdata)
 		// Close the output file
 		err = ExtAudioFileDispose(extAudioFileRef);
 		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"CoreAudioException"
+												reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
 		// Close the output file
 		err = AudioFileClose(audioFile);
 		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"CoreAudioException"
+												reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose"]
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 	}
@@ -268,12 +253,17 @@ callback(long inpos, int function, void *userdata)
 	OSStatus			err;
 	AudioBufferList		bufferList;
 	UInt32				frameCount;
+	double				percentComplete;
+	NSTimeInterval		interval;
+	unsigned			secondsRemaining;
 	
 	// Go to the range's first sector in preparation for reading
 	where = paranoia_seek(_paranoia, cursor, SEEK_SET);   	    
 	if(-1 == where) {
 		[[self delegate] setStopped:YES];
-		@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to access the disc.", @"Exceptions", @"") userInfo:nil];
+		@throw [NSException exceptionWithName:@"ParanoiaException"
+									   reason:NSLocalizedStringFromTable(@"Unable to access the disc.", @"Exceptions", @"")
+									 userInfo:nil];
 	}
 
 	// Rip the track
@@ -281,9 +271,7 @@ callback(long inpos, int function, void *userdata)
 		
 		// Read a chunk
 		buf = paranoia_read_limited(_paranoia, callback, self, (-1 == _maximumRetries ? 20 : _maximumRetries));
-		if(NULL == buf) {
-			@throw [ParanoiaException exceptionWithReason:NSLocalizedStringFromTable(@"The skip tolerance was exceeded.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != buf, NSLocalizedStringFromTable(@"The skip tolerance was exceeded.", @"Exceptions", @""));
 		
 		// Put the data in an AudioBufferList
 		bufferList.mNumberBuffers					= 1;
@@ -295,10 +283,7 @@ callback(long inpos, int function, void *userdata)
 		
 		// Write the data
 		err = ExtAudioFileWrite(file, frameCount, &bufferList);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrite"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrite", UTCreateStringForOSType(err));
 				
 		// Update status
 		sectorsToRead--;
@@ -312,9 +297,9 @@ callback(long inpos, int function, void *userdata)
 			}
 			
 			// Update UI
-			double percentComplete = ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0;
-			NSTimeInterval interval = -1.0 * [_startTime timeIntervalSinceNow];
-			unsigned int secondsRemaining = interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
+			percentComplete		= ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) * 100.0;
+			interval			= -1.0 * [_startTime timeIntervalSinceNow];
+			secondsRemaining	= interval / ((double)(grandTotalSectors - sectorsToRead)/(double) grandTotalSectors) - interval;
 			
 			[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 		}

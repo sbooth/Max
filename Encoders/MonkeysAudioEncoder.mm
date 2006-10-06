@@ -31,11 +31,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-#import "MallocException.h"
-#import "IOException.h"
 #import "StopException.h"
-#import "CoreAudioException.h"
-#import "MissingResourceException.h"
 
 #import "UtilityFunctions.h"
 

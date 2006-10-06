@@ -23,11 +23,7 @@
 #import "SectorRange.h"
 #import "BitArray.h"
 #import "LogController.h"
-#import "MallocException.h"
 #import "StopException.h"
-#import "IOException.h"
-#import "MissingResourceException.h"
-#import "CoreAudioException.h"
 
 #include <IOKit/storage/IOCDTypes.h>
 
@@ -59,10 +55,8 @@
     
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ComparisonRipperDefaults" ofType:@"plist"];
-		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"ComparisonRipperDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != defaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"ComparisonRipperDefaults.plist");
+
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}
@@ -161,21 +155,13 @@
 		
 		// Open the output file
 		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
-		if(noErr != err) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"filename", @"errorCode", @"errorString", nil]]];
-		}
+		NSAssert1(noErr == err, NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @""), UTCreateStringForOSType(err));
+
 		err = AudioFileInitialize(&ref, kAudioFileCAFType, &outputASBD, 0, &audioFile);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize", UTCreateStringForOSType(err));
 		
 		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
-		if(noErr != err) {
-			@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID", UTCreateStringForOSType(err));
 		
 		// Save the drive speed
 		driveSpeed = [_drive speed];
@@ -206,16 +192,18 @@
 		// Close the output file
 		err = ExtAudioFileDispose(extAudioFileRef);
 		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"CoreAudioException"
+												reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose"]
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
 		// Close the output file
 		err = AudioFileClose(audioFile);
 		if(noErr != err) {
-			exception = [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose"]
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"CoreAudioException"
+												 reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose"]
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 	}
@@ -266,7 +254,9 @@
 	unsigned			blockEnd;
 	unsigned			retries;
 	unsigned			blockPadding;
-
+	double				percentComplete;
+	NSTimeInterval		interval;
+	unsigned			secondsRemaining;	
 	
 	@try {
 		
@@ -282,17 +272,12 @@
 		bufferLen	= [range length] <  1024 ? [range length] : 1024;
 		buffer		= calloc(bufferLen, kCDSectorSizeCDDA + kCDSectorSizeErrorFlags);
 		audioBuffer	= calloc(bufferLen, kCDSectorSizeCDDA);
-		if(NULL == buffer || NULL == audioBuffer) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != buffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+		NSAssert(NULL != audioBuffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		if([self useC2]) {
 			c2Buffer	= calloc(bufferLen, kCDSectorSizeErrorFlags);
-			if(NULL == c2Buffer) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(NULL != c2Buffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		}
 		
 		// Allocate the bit array
@@ -347,9 +332,7 @@
 				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];				
 				sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
 				
-				if(sectorCount != sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Log", @"") userInfo:nil];
-				}
+				NSAssert(sectorCount == sectorsRead, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Log", @""));
 				
 				// Copy audio and (optionally) C2 data to their respective buffers
 				for(j = 0; j < sectorsRead; ++j) {
@@ -399,9 +382,9 @@
 					}
 					
 					// Update UI
-					double percentComplete = ((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0;
-					NSTimeInterval interval = -1.0 * [phaseStartTime timeIntervalSinceNow];
-					unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
+					percentComplete		= ((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0;
+					interval			= -1.0 * [phaseStartTime timeIntervalSinceNow];
+					secondsRemaining	= interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
 					
 					[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 				}
@@ -515,9 +498,9 @@
 					}
 					
 					// Update UI
-					 double percentComplete = ((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0;
-					 NSTimeInterval interval = -1.0 * [phaseStartTime timeIntervalSinceNow];
-					 unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
+					 percentComplete	= ((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0;
+					 interval			= -1.0 * [phaseStartTime timeIntervalSinceNow];
+					 secondsRemaining	= interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
 					 
 					 [[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 				}
@@ -545,7 +528,9 @@
 				// Abort rip if too many read errors have occurred
 				if([self maximumRetries] < retries) {
 					[self logMessage:NSLocalizedStringFromTable(@"Retry limit exceeded", @"Log", @"")];
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"The retry limit was exceeded.", @"Exceptions", @"") userInfo:nil];
+					@throw [NSException exceptionWithName:@"IOException"
+													reason:NSLocalizedStringFromTable(@"The retry limit was exceeded.", @"Exceptions", @"")
+												 userInfo:nil];
 				}
 			}
 			
@@ -628,9 +613,7 @@
 					}
 					sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
 					
-					if(sectorCount != sectorsRead) {
-						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
-					}
+					NSAssert(sectorCount == sectorsRead, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Log", @""));
 					
 					// Copy audio and (optionally) C2 data to their respective buffers
 					for(j = 0; j < sectorsRead; ++j) {
@@ -679,9 +662,9 @@
 						}
 						
 						// Update UI
-						double percentComplete = ((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0;
-						NSTimeInterval interval = -1.0 * [phaseStartTime timeIntervalSinceNow];
-						unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
+						percentComplete		= ((double)(totalSectors - sectorsToRead)/(double) totalSectors) * 100.0;
+						interval			= -1.0 * [phaseStartTime timeIntervalSinceNow];
+						secondsRemaining	= interval / ((double)(totalSectors - sectorsToRead)/(double) totalSectors) - interval;
 
 						[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 					}
@@ -733,10 +716,7 @@
 			
 			// Write the data
 			err = ExtAudioFileWrite(file, frameCount, &bufferList);
-			if(noErr != err) {
-				@throw [CoreAudioException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrite"]
-													  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrite", UTCreateStringForOSType(err));
 			
 			// Housekeeping
 			sectorsRemaining -= [readRange length];
@@ -750,9 +730,9 @@
 				}
 				
 				// Update UI
-				 double percentComplete = ((double)(totalSectors - sectorsRemaining)/(double) totalSectors) * 100.0;
-				 NSTimeInterval interval = -1.0 * [phaseStartTime timeIntervalSinceNow];
-				 unsigned int secondsRemaining = interval / ((double)(totalSectors - sectorsRemaining)/(double) totalSectors) - interval;
+				 percentComplete	= ((double)(totalSectors - sectorsRemaining)/(double) totalSectors) * 100.0;
+				 interval			= -1.0 * [phaseStartTime timeIntervalSinceNow];
+				 secondsRemaining	= interval / ((double)(totalSectors - sectorsRemaining)/(double) totalSectors) - interval;
 				 
 				 [[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -774,15 +754,17 @@
 		for(i = 0; i < [rips count]; ++i) {
 			rip = [rips objectAtIndex:i];
 			if(0 == stat([[rip filename] fileSystemRepresentation], &sourceStat) && -1 == unlink([[rip filename] fileSystemRepresentation])) {
-				exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file.", @"Exceptions", @"")
-													 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				exception = [NSException exceptionWithName:@"IOException"
+													reason:NSLocalizedStringFromTable(@"Unable to delete the temporary file.", @"Exceptions", @"")
+												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 				NSLog(@"%@", exception);
 			}	
 		}
 		
 		if(0 == stat([[masterRip filename] fileSystemRepresentation], &sourceStat) && -1 == unlink([[masterRip filename] fileSystemRepresentation])) {
-			exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to delete the temporary file.", @"Exceptions", @"") 
-												 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"IOException"
+												 reason:NSLocalizedStringFromTable(@"Unable to delete the temporary file.", @"Exceptions", @"") 
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 	
@@ -798,6 +780,7 @@
 	ssize_t				tmpDirLen;
 	ssize_t				patternLen		= strlen(TEMPFILE_PATTERN);
 	NSString			*result			= nil;
+	int					intResult;
 	
 	@try {
 		tmpDir = [[[[[self delegate] taskInfo] settings] objectForKey:@"temporaryDirectory"] fileSystemRepresentation];
@@ -809,19 +792,14 @@
 		
 		tmpDirLen	= strlen(tmpDir);
 		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-		if(NULL == path) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != path, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+
 		memcpy(path, tmpDir, tmpDirLen);
 		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
 		path[tmpDirLen + patternLen] = '\0';
 		
 		fd = mkstemps(path, strlen(TEMPFILE_SUFFIX));
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create a temporary file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != fd, NSLocalizedStringFromTable(@"Unable to create a temporary file.", @"Exceptions", @""));
 		
 		result = [NSString stringWithCString:path encoding:NSASCIIStringEncoding];
 	}
@@ -830,9 +808,9 @@
 		free(path);
 		
 		// And close it
-		if(-1 != fd && -1 == close(fd)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the temporary file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		if(-1 != fd) {
+			intResult = close(fd);
+			NSAssert(-1 != intResult, NSLocalizedStringFromTable(@"Unable to close the temporary file.", @"Exceptions", @""));
 		}
 	}
 	

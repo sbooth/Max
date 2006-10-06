@@ -147,7 +147,7 @@
 		bufferLen						= 10 * 1024;
 		bufferList.mNumberBuffers		= 1;
 		bufferList.mBuffers[0].mData	= calloc(bufferLen, sizeof(uint8_t));
-		NSAssert1(NULL != bufferList.mBuffers[0].mData, @"Unable to allocate memory: %s", strerror(errno));
+		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		totalFrames						= [[self decoder] totalFrames];
 		framesToRead					= totalFrames;
