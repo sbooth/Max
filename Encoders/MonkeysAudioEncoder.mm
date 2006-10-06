@@ -69,18 +69,23 @@
 	int								result;
 	SInt64							totalFrames, framesToRead;
 	UInt32							frameCount;
-	
-	// Tell our owner we are starting
-	[[self delegate] setStartTime:startTime];	
-	[[self delegate] setStarted:YES];
-	
-	// Setup the decoder
-	[[self decoder] finalizeSetup];
-	
-	// Parse the encoder settings
-	[self parseSettings];
+	double							percentComplete;
+	NSTimeInterval					interval;
+	unsigned						secondsRemaining;
 	
 	@try {
+		bufferList.mBuffers[0].mData = NULL;
+
+		// Tell our owner we are starting
+		[[self delegate] setStartTime:startTime];	
+		[[self delegate] setStarted:YES];
+		
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+		
+		// Parse the encoder settings
+		[self parseSettings];
+		
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
 		
@@ -117,29 +122,18 @@
 		
 		// Create the MAC compressor
 		_compressor = CreateIAPECompress();
-		if(NULL == _compressor) {
-			@throw [NSException exceptionWithName:@"MACException" reason:NSLocalizedStringFromTable(@"Unable to create the Monkey's Audio compressor.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != _compressor, NSLocalizedStringFromTable(@"Unable to create the Monkey's Audio compressor.", @"Exceptions", @""));
 						
 		// Setup compressor
 		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
-		if(NULL == chars) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		result = FillWaveFormatEx(&formatDesc, (int)[[self decoder] pcmFormat].mSampleRate, [[self decoder] pcmFormat].mBitsPerChannel, [[self decoder] pcmFormat].mChannelsPerFrame);
-		if(ERROR_SUCCESS != result) {
-			@throw [NSException exceptionWithName:@"MACException" reason:NSLocalizedStringFromTable(@"Unable to initialize the Monkey's Audio compressor.", @"Exceptions", @"")
-										 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSNumber numberWithInt:result]] forKeys:[NSArray arrayWithObject:@"errorCode"]]];
-		}
+		NSAssert(ERROR_SUCCESS == result, NSLocalizedStringFromTable(@"Unable to initialize the Monkey's Audio compressor.", @"Exceptions", @""));
 		
 		// Start the compressor
 		result = _compressor->Start(chars, &formatDesc, totalFrames * [[self decoder] pcmFormat].mBytesPerFrame, _compressionLevel, NULL, 0);
-		if(ERROR_SUCCESS != result) {
-			@throw [NSException exceptionWithName:@"MACException" reason:NSLocalizedStringFromTable(@"Unable to start the Monkey's Audio compressor.", @"Exceptions", @"")
-										 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSNumber numberWithInt:result]] forKeys:[NSArray arrayWithObject:@"errorCode"]]];
-		}
+		NSAssert(ERROR_SUCCESS == result, NSLocalizedStringFromTable(@"Unable to start the Monkey's Audio compressor.", @"Exceptions", @""));
 		
 		// Iteratively get the PCM data and encode it
 		for(;;) {
@@ -172,9 +166,9 @@
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
+				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
+				interval			= -1.0 * [startTime timeIntervalSinceNow];
+				secondsRemaining	= (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -289,10 +283,7 @@
 	
 	// Compress the chunk
 	result = _compressor->AddData((unsigned char *)chunk->mBuffers[0].mData, frameCount * [[self decoder] pcmFormat].mBytesPerFrame);
-	if(ERROR_SUCCESS != result) {
-		@throw [NSException exceptionWithName:@"MACException" reason:NSLocalizedStringFromTable(@"Monkey's Audio compressor error.", @"Exceptions", @"")
-									 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSNumber numberWithInt:result]] forKeys:[NSArray arrayWithObject:@"errorCode"]]];
-	}
+	NSAssert(ERROR_SUCCESS == result, NSLocalizedStringFromTable(@"Monkey's Audio compressor error.", @"Exceptions", @""));
 }	
 
 @end

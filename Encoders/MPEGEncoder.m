@@ -29,12 +29,7 @@
 
 #include <lame/lame.h>
 
-#import "MallocException.h"
-#import "IOException.h"
-#import "LAMEException.h"
 #import "StopException.h"
-#import "MissingResourceException.h"
-#import "CoreAudioException.h"
 
 #import "UtilityFunctions.h"
 
@@ -80,28 +75,30 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 {
 	NSDate							*startTime						= [NSDate date];
 	FILE							*file							= NULL;
-	int								lameResult;
+	int								result;
 	AudioBufferList					bufferList;
 	ssize_t							bufferLen						= 0;
 	SInt64							totalFrames, framesToRead;
 	UInt32							frameCount;
 	unsigned long					iterations						= 0;
-
-	// Tell our owner we are starting
-	[[self delegate] setStartTime:startTime];	
-	[[self delegate] setStarted:YES];
-	
-	// Setup the decoder
-	[[self decoder] finalizeSetup];
-	
-	// Parse the encoder settings
-	[self parseSettings];
+	double							percentComplete;
+	NSTimeInterval					interval;
+	unsigned						secondsRemaining;	
 	
 	@try {
+		bufferList.mBuffers[0].mData = NULL;
 
-		if(1 != [[self decoder] pcmFormat].mChannelsPerFrame && 2 != [[self decoder] pcmFormat].mChannelsPerFrame) {
-			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
-		}
+		// Tell our owner we are starting
+		[[self delegate] setStartTime:startTime];	
+		[[self delegate] setStarted:YES];
+		
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+		
+		// Parse the encoder settings
+		[self parseSettings];
+		
+		NSAssert(1 == [[self decoder] pcmFormat].mChannelsPerFrame || 2 == [[self decoder] pcmFormat].mChannelsPerFrame, NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @""));
 
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
@@ -142,17 +139,12 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		lame_set_num_channels(_gfp, [[self decoder] pcmFormat].mChannelsPerFrame);
 		lame_set_in_samplerate(_gfp, [[self decoder] pcmFormat].mSampleRate);
 		
-		lameResult = lame_init_params(_gfp);
-		if(-1 == lameResult) {
-			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @"") userInfo:nil];
-		}
+		result = lame_init_params(_gfp);
+		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @""));
 
 		// Open the output file
 		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == _out) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		
 		// Iteratively get the PCM data and encode it
 		for(;;) {
@@ -185,9 +177,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
+				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
+				interval			= -1.0 * [startTime timeIntervalSinceNow];
+				secondsRemaining	= (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -199,18 +191,14 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		[self finishEncode];
 		
 		// Close the output file
-		if(-1 == close(_out)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		result = close(_out);
+		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @""));
 		_out = -1;
 		
 		// Write the Xing VBR tag
 		file = fopen([filename fileSystemRepresentation], "r+");
-		if(NULL == file) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != file, NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @""));
+
 		lame_mp3_tags_fid(_gfp, file);
 	}
 
@@ -228,15 +216,17 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				
 		// Close the output file if not already closed
 		if(-1 != _out && -1 == close(_out)) {
-			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"IOException"
+												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 
 		// And close the other output file
 		if(NULL != file && EOF == fclose(file)) {
-			exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
-												 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"IOException" 
+												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"")
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}		
 
@@ -339,7 +329,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	int8_t			byteOne, byteTwo, byteThree;
 	int32_t			constructedSample;
 	
-	int				lameResult;
+	int				result;
 	long			bytesWritten;
 	
 	unsigned		wideSample;
@@ -349,17 +339,11 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		// Allocate the MP3 buffer using LAME guide for size
 		bufferLen	= 1.25 * (chunk->mBuffers[0].mNumberChannels * frameCount) + 7200;
 		buffer		= (unsigned char *) calloc(bufferLen, sizeof(unsigned char));
-		if(NULL == buffer) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != buffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Allocate channel buffers for sample de-interleaving
 		channelBuffers = calloc(chunk->mBuffers[0].mNumberChannels, sizeof(void *));
-		if(NULL == channelBuffers) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != channelBuffers, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Initialize each channel buffer to zero
 		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
@@ -374,13 +358,10 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 					channelBuffers16[channel] = calloc(frameCount, sizeof(short));
-					if(NULL == channelBuffers16[channel]) {
-						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(NULL != channelBuffers16[channel], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 				}
 					
-					buffer8 = chunk->mBuffers[0].mData;
+				buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						// Rescale values to short
@@ -388,7 +369,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 					}
 				}
 					
-					lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+				result = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
 				
 				break;
 				
@@ -397,20 +378,17 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 					channelBuffers16[channel] = calloc(frameCount, sizeof(short));
-					if(NULL == channelBuffers16[channel]) {
-						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(NULL != channelBuffers16[channel], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 				}
 					
-					buffer16 = chunk->mBuffers[0].mData;
+				buffer16 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						channelBuffers16[channel][wideSample] = (short)OSSwapBigToHostInt16(buffer16[sample]);
 					}
 				}
 					
-					lameResult = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
+				result = lame_encode_buffer(_gfp, channelBuffers16[0], channelBuffers16[1], frameCount, buffer, bufferLen);
 				
 				break;
 				
@@ -419,14 +397,11 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
-					if(NULL == channelBuffers32[channel]) {
-						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(NULL != channelBuffers32[channel], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 				}
-					
-					// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
-					buffer8 = chunk->mBuffers[0].mData;
+				
+				// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
+				buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						// Reconstruct the original sample
@@ -440,7 +415,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 					}
 				}
 					
-					lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
+				result = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
 				
 				break;
 				
@@ -449,20 +424,17 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
-					if(NULL == channelBuffers32[channel]) {
-						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(NULL != channelBuffers32[channel], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 				}
 					
-					buffer32 = chunk->mBuffers[0].mData;
+				buffer32 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(buffer32[sample]);
 					}
 				}
 					
-					lameResult = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
+				result = lame_encode_buffer_long2(_gfp, channelBuffers32[0], channelBuffers32[1], frameCount, buffer, bufferLen);
 				
 				break;
 				
@@ -471,15 +443,10 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				break;
 		}
 		
-		if(0 > lameResult) {
-			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME encoding error.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(0 <= result, NSLocalizedStringFromTable(@"LAME encoding error.", @"Exceptions", @""));
 		
-		bytesWritten = write(_out, buffer, lameResult);
-		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}		
+		bytesWritten = write(_out, buffer, result);
+		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 	}
 	
 	@finally {
@@ -497,7 +464,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	unsigned char	*buf;
 	int				bufSize;
 	
-	int				lameResult;
+	int				result;
 	ssize_t			bytesWritten;
 	
 	@try {
@@ -506,23 +473,15 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		// Allocate the MP3 buffer using LAME guide for size
 		bufSize		= 7200;
 		buf			= (unsigned char *) calloc(bufSize, sizeof(unsigned char));
-		if(NULL == buf) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != buf, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Flush the mp3 buffer
-		lameResult = lame_encode_flush(_gfp, buf, bufSize);
-		if(-1 == lameResult) {
-			@throw [LAMEException exceptionWithReason:NSLocalizedStringFromTable(@"LAME was unable to flush the buffers.", @"Exceptions", @"") userInfo:nil];
-		}
+		result = lame_encode_flush(_gfp, buf, bufSize);
+		NSAssert(-1 != result, NSLocalizedStringFromTable(@"LAME was unable to flush the buffers.", @"Exceptions", @""));
 		
 		// And write any frames it returns
-		bytesWritten = write(_out, buf, lameResult);
-		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		bytesWritten = write(_out, buf, result);
+		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 	}
 	
 	@finally {

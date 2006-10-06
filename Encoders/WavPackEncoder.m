@@ -29,14 +29,13 @@
 #include <wavpack/wputils.h>
 
 #import "UtilityFunctions.h"
-#import "MissingResourceException.h"
-#import "CoreAudioException.h"
-#import "IOException.h"
-#import "MallocException.h"
 #import "StopException.h"
 
 // WavPack IO wrapper
-static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return (bcount == write((int)wv_id, data, bcount)); }
+static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			
+{
+	return (bcount == write((int)wv_id, data, bcount));
+}
 
 @interface WavPackEncoder (Private)
 - (void)	parseSettings;
@@ -60,6 +59,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 	UInt32							frameCount;
 		
 	int								fd, cfd;
+	int								result;
     
 	WavpackContext					*wpc								= NULL;
 	WavpackConfig					config;
@@ -70,18 +70,24 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 	int32_t							constructedSample;
 
 	unsigned						wideSample, sample, channel;
+
+	double							percentComplete;
+	NSTimeInterval					interval;
+	unsigned						secondsRemaining;
 	
-	// Tell our owner we are starting
-	[[self delegate] setStartTime:startTime];	
-	[[self delegate] setStarted:YES];
-	
-	// Setup the decoder
-	[[self decoder] finalizeSetup];
-	
-	// Parse the encoder settings
-	[self parseSettings];
 	
 	@try {
+		bufferList.mBuffers[0].mData = NULL;
+
+		// Tell our owner we are starting
+		[[self delegate] setStartTime:startTime];	
+		[[self delegate] setStarted:YES];
+		
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+		
+		// Parse the encoder settings
+		[self parseSettings];
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
 		
@@ -118,34 +124,22 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		wpBuf = (int32_t *)calloc(bufferLen, sizeof(int32_t));
-		if(NULL == wpBuf) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != wpBuf, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Open the output file
 		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != fd, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 
 		// Open the correction file
 		cfd = -1;
 		if(_flags & CONFIG_CREATE_WVC) {
 			cfd = open([generateUniqueFilename([filename stringByDeletingPathExtension], @"wvc") fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-			if(-1 == cfd) {
-				NSLog(@"%s",strerror(errno));
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != cfd, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		}
 		
 		// Setup the encoder
 		wpc = WavpackOpenFileOutput(writeWavPackBlock, (void *)fd, (-1 == cfd ? NULL : (void *)cfd));
-		if(NULL == wpc) {
-			@throw [NSException exceptionWithName:@"WavPackException" reason:NSLocalizedStringFromTable(@"Unable to create the WavPack encoder.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != wpc, NSLocalizedStringFromTable(@"Unable to create the WavPack encoder.", @"Exceptions", @""));
 		
 		memset(&config, 0, sizeof(config));
 		
@@ -165,9 +159,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 			config.bitrate				= _bitrate;
 		}
 		
-		if(FALSE == WavpackSetConfiguration(wpc, &config, totalFrames)) {
-			@throw [NSException exceptionWithName:@"WavPackException" reason:NSLocalizedStringFromTable(@"Unable to initialize the WavPack encoder.", @"Exceptions", @"") userInfo:nil];
-		}
+		result = WavpackSetConfiguration(wpc, &config, totalFrames);
+		NSAssert(FALSE != result, NSLocalizedStringFromTable(@"Unable to initialize the WavPack encoder.", @"Exceptions", @""));
 
 		WavpackPackInit(wpc);
 		
@@ -237,9 +230,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 			}
 
 			// Write the data
-			if(FALSE == WavpackPackSamples(wpc, wpBuf, frameCount)) {
-				@throw [NSException exceptionWithName:@"WavPackException" reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"WavpackPackSamples"] userInfo:nil];
-			}
+			result = WavpackPackSamples(wpc, wpBuf, frameCount);
+			NSAssert1(FALSE != result, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"WavpackPackSamples");
 			
 			// Update status
 			framesToRead -= frameCount;
@@ -253,9 +245,9 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
+				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
+				interval			= -1.0 * [startTime timeIntervalSinceNow];
+				secondsRemaining	= (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -264,9 +256,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)			{ return
 		}
 		
 		// Flush any remaining samples
-		if(FALSE == WavpackFlushSamples(wpc)) {
-			@throw [NSException exceptionWithName:@"WavPackException" reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"WavpackFlushSamples"] userInfo:nil];
-		}
+		result = WavpackFlushSamples(wpc);
+		NSAssert1(FALSE != result, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"WavpackFlushSamples");
 	}
 	
 	@catch(StopException *exception) {

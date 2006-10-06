@@ -34,12 +34,7 @@
 
 #include <ogg/ogg.h>
 
-#import "MallocException.h"
-#import "IOException.h"
 #import "StopException.h"
-#import "MissingResourceException.h"
-#import "SpeexException.h"
-#import "CoreAudioException.h"
 
 #import "UtilityFunctions.h"
 
@@ -132,6 +127,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	NSDate						*startTime									= [NSDate date];
 
 	int							fd											= -1;
+	int							result;
 	
 	void						*speexState									= NULL;
 	const SpeexMode				*mode										= NULL;
@@ -179,23 +175,26 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	float						normalizedSample;
 
 	unsigned					sample, wideSample;
-   
+
+	double						percentComplete;
+	NSTimeInterval				interval;
+	unsigned					secondsRemaining;	
 	
-	// Tell our owner we are starting
-	[[self delegate] setStartTime:startTime];	
-	[[self delegate] setStarted:YES];
-	
-	// Setup the decoder
-	[[self decoder] finalizeSetup];
-	
-	// Parse the encoder settings
-	[self parseSettings];
 	
 	@try {
+		bufferList.mBuffers[0].mData = NULL;
 
-		if(1 != [[self decoder] pcmFormat].mChannelsPerFrame && 2 != [[self decoder] pcmFormat].mChannelsPerFrame) {
-			@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @"") userInfo:nil];
-		}
+		// Tell our owner we are starting
+		[[self delegate] setStartTime:startTime];	
+		[[self delegate] setStarted:YES];
+		
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+		
+		// Parse the encoder settings
+		[self parseSettings];
+		
+		NSAssert(1 == [[self decoder] pcmFormat].mChannelsPerFrame || 2 == [[self decoder] pcmFormat].mChannelsPerFrame, NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @""));
 		
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
@@ -226,10 +225,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		// Open the output file
 		fd = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != fd, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		
 		// Check if we should stop, and if so throw an exception
 		if([[self delegate] shouldStop]) {
@@ -238,10 +234,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		// Initialize ogg stream- use the current time as the stream id
 		srand(time(NULL));
-		if(-1 == ogg_stream_init(&os, rand())) {
-			@throw [SpeexException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the ogg stream.", @"Exceptions", @"") userInfo:nil];
-		}
-		
+		result = ogg_stream_init(&os, rand());
+		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the ogg stream.", @"Exceptions", @""));		
 		
 		// Setup encoder
 		switch(_mode) {
@@ -269,7 +263,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		switch(_target) {
 			case SPEEX_TARGET_QUALITY:
-					speex_encoder_ctl(speexState, (_vbrEnabled ? SPEEX_SET_VBR_QUALITY : SPEEX_SET_QUALITY), &_quality);
+				speex_encoder_ctl(speexState, (_vbrEnabled ? SPEEX_SET_VBR_QUALITY : SPEEX_SET_QUALITY), &_quality);
 				break;
 			case SPEEX_TARGET_BITRATE:
 				speex_encoder_ctl(speexState, SPEEX_SET_BITRATE, &_bitrate);
@@ -328,17 +322,11 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			}
 			
 			currentBytesWritten = write(fd, og.header, og.header_len);
-			if(-1 == currentBytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != currentBytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 			bytesWritten += currentBytesWritten;
 			
 			currentBytesWritten = write(fd, og.body, og.body_len);
-			if(-1 == currentBytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != currentBytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 			bytesWritten += currentBytesWritten;
 		}
 		
@@ -401,10 +389,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				
 				case 8:
 					floatBuffer = calloc(frameCount, sizeof(float));
-					if(NULL == floatBuffer) {
-						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(NULL != floatBuffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 						
 					buffer8 = bufferList.mBuffers[0].mData;
 					for(sample = 0; sample < frameCount; ++sample) {
@@ -421,10 +406,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					
 				case 24:
 					floatBuffer = calloc(frameCount, sizeof(float));
-					if(NULL == floatBuffer) {
-						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(NULL != floatBuffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 						
 					buffer8 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount && sample < bufferList.mBuffers[0].mDataByteSize; ++wideSample, ++sample) {
@@ -444,10 +426,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 
 				case 32:
 					floatBuffer = calloc(frameCount, sizeof(float));
-					if(NULL == floatBuffer) {
-						@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(NULL != floatBuffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 					buffer32 = bufferList.mBuffers[0].mData;
 					for(sample = 0; sample < frameCount; ++sample) {
@@ -524,17 +503,11 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					}
 					
 					currentBytesWritten = write(fd, og.header, og.header_len);
-					if(-1 == currentBytesWritten) {
-						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(-1 != currentBytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 					bytesWritten += currentBytesWritten;
 					
 					currentBytesWritten = write(fd, og.body, og.body_len);
-					if(-1 == currentBytesWritten) {
-						@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-													   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-					}
+					NSAssert(-1 != currentBytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 					bytesWritten += currentBytesWritten;				
 				}			
 			}
@@ -551,9 +524,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned int secondsRemaining = interval / ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) - interval;
+				percentComplete		= ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) * 100.0;
+				interval			= -1.0 * [startTime timeIntervalSinceNow];
+				secondsRemaining	= interval / ((double)(totalFileFrames - framesToRead)/(double) totalFileFrames) - interval;
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -589,17 +562,11 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			}
 			
 			currentBytesWritten = write(fd, og.header, og.header_len);
-			if(-1 == currentBytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != currentBytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 			bytesWritten += currentBytesWritten;
 			
 			currentBytesWritten = write(fd, og.body, og.body_len);
-			if(-1 == currentBytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != currentBytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 			bytesWritten += currentBytesWritten;
 		}
 	}
@@ -618,8 +585,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				
 		// Close the output file
 		if(-1 == close(fd)) {
-			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"IOException"
+												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		

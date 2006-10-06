@@ -27,12 +27,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-#import "MallocException.h"
-#import "IOException.h"
 #import "StopException.h"
-#import "MissingResourceException.h"
-#import "VorbisException.h"
-#import "CoreAudioException.h"
 
 #import "UtilityFunctions.h"
 
@@ -81,22 +76,26 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 	SInt64						totalFrames, framesToRead;
 	UInt32						frameCount;
 	
-	int							bytesWritten;
+	int							result, bytesWritten;
 	
 	unsigned long				iterations							= 0;
 	
-
-	// Tell our owner we are starting
-	[[self delegate] setStartTime:startTime];	
-	[[self delegate] setStarted:YES];
-	
-	// Setup the decoder
-	[[self decoder] finalizeSetup];
-	
-	// Parse the encoder settings
-	[self parseSettings];
+	double						percentComplete;
+	NSTimeInterval				interval;
+	unsigned					secondsRemaining;
 	
 	@try {
+		bufferList.mBuffers[0].mData = NULL;
+
+		// Tell our owner we are starting
+		[[self delegate] setStartTime:startTime];	
+		[[self delegate] setStarted:YES];
+		
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+		
+		// Parse the encoder settings
+		[self parseSettings];
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
 		
@@ -134,10 +133,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		
 		// Open the output file
 		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == _out) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		
 		// Check if we should stop, and if so throw an exception
 		if([[self delegate] shouldStop]) {
@@ -149,14 +145,12 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		
 		// Use quality-based VBR
 		if(VORBIS_MODE_QUALITY == _mode) {
-			if(vorbis_encode_init_vbr(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, _quality)) {
-				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @"") userInfo:nil];
-			}
+			result = vorbis_encode_init_vbr(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, _quality);
+			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @""));
 		}
 		else if(VORBIS_MODE_BITRATE == _mode) {
-			if(vorbis_encode_init(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1))) {
-				@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @"") userInfo:nil];
-			}
+			result = vorbis_encode_init(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1));
+			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @""));
 		}
 		else {
 			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
@@ -169,9 +163,8 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		
 		// Use the current time as the stream id
 		srand(time(NULL));
-		if(-1 == ogg_stream_init(&os, rand())) {
-			@throw [VorbisException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to initialize the ogg stream.", @"Exceptions", @"") userInfo:nil];
-		}
+		result = ogg_stream_init(&os, rand());
+		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the ogg stream.", @"Exceptions", @""));
 		
 		// Write stream headers	
 		vorbis_analysis_headerout(&vd, &vc, &header, &header_comm, &header_code);
@@ -185,16 +178,10 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			}
 			
 			bytesWritten = write(_out, og.header, og.header_len);
-			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 			
 			bytesWritten = write(_out, og.body, og.body_len);
-			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 		}
 		
 		// Iteratively get the PCM data and encode it
@@ -293,9 +280,9 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				}
 				
 				// Update UI
-				double percentComplete = ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
-				NSTimeInterval interval = -1.0 * [startTime timeIntervalSinceNow];
-				unsigned secondsRemaining = (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
+				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
+				interval			= -1.0 * [startTime timeIntervalSinceNow];
+				secondsRemaining	= (unsigned) (interval / ((double)(totalFrames - framesToRead)/(double) totalFrames) - interval);
 				
 				[[self delegate] updateProgress:percentComplete secondsRemaining:secondsRemaining];
 			}
@@ -319,16 +306,10 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 						}
 						
 						bytesWritten = write(_out, og.header, og.header_len);
-						if(-1 == bytesWritten) {
-							@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-						}
+						NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 						
 						bytesWritten = write(_out, og.body, og.body_len);
-						if(-1 == bytesWritten) {
-							@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-						}
+						NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 						
 						if(ogg_page_eos(&og)) {
 							eos = YES;
@@ -353,8 +334,9 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		
 		// Close the output file
 		if(-1 == close(_out)) {
-			exception = [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-												userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			exception = [NSException exceptionWithName:@"IOException"
+												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
+											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
 		
