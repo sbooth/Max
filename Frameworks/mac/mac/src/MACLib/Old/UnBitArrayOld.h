@@ -34,7 +34,7 @@ private:
     uint32 m_nRefillBitThreshold;
     
     // functions
-    __inline int DecodeValueNew(BOOL bCapOverflow);
+    __inline int DecodeValueNew(bool bCapOverflow);
     uint32 GetBitsRemaining();
     __inline uint32 Get_K(uint32 x);
 };

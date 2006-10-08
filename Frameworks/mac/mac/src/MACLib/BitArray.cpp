@@ -67,7 +67,7 @@ CBitArray::~CBitArray()
 /************************************************************************************
 Output the bit array via the CIO (typically saves to disk)
 ************************************************************************************/
-int CBitArray::OutputBitArray(BOOL bFinalize)
+int CBitArray::OutputBitArray(bool bFinalize)
 {
     // write the entire file to disk
     unsigned int nBytesWritten = 0;

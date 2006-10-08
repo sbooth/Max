@@ -1,7 +1,7 @@
 #ifndef APE_APEINFODIALOG_H
 #define APE_APEINFODIALOG_H
 
-BOOL CALLBACK FileInfoDialogProcedureA(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+bool CALLBACK FileInfoDialogProcedureA(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 	
 class CAPEInfoDialog
 {

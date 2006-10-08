@@ -27,7 +27,7 @@ CAPEInfo::CAPEInfo(int * pErrorCode, const wchar_t * pFilename, CAPETag * pTag)
     }
     
     // get the file information
-    if (GetFileInformation(TRUE) != 0)
+    if (GetFileInformation(true) != 0)
     {
         CloseFile();
         *pErrorCode = ERROR_INVALID_INPUT_FILE;
@@ -39,9 +39,9 @@ CAPEInfo::CAPEInfo(int * pErrorCode, const wchar_t * pFilename, CAPETag * pTag)
     {
         // we don't want to analyze right away for non-local files
         // since a single I/O object is shared, we can't tag and read at the same time (i.e. in multiple threads)
-        BOOL bAnalyzeNow = TRUE;
+        bool bAnalyzeNow = true;
         if ((wcsnicmp(pFilename, L"http://", 7) == 0) || (wcsnicmp(pFilename, L"m01p://", 7) == 0))
-            bAnalyzeNow = FALSE;
+            bAnalyzeNow = false;
 
         m_spAPETag.Assign(new CAPETag(m_spIO, bAnalyzeNow));
     }
@@ -57,10 +57,10 @@ CAPEInfo::CAPEInfo(int * pErrorCode, CIO * pIO, CAPETag * pTag)
     *pErrorCode = ERROR_SUCCESS;
     CloseFile();
 
-    m_spIO.Assign(pIO, FALSE, FALSE);
+    m_spIO.Assign(pIO, false, false);
 
     // get the file information
-    if (GetFileInformation(TRUE) != 0)
+    if (GetFileInformation(true) != 0)
     {
         CloseFile();
         *pErrorCode = ERROR_INVALID_INPUT_FILE;
@@ -69,7 +69,7 @@ CAPEInfo::CAPEInfo(int * pErrorCode, CIO * pIO, CAPETag * pTag)
 
     // get the tag (do this second so that we don't do it on failure)
     if (pTag == NULL)
-        m_spAPETag.Assign(new CAPETag(m_spIO, TRUE));
+        m_spAPETag.Assign(new CAPETag(m_spIO, true));
     else
         m_spAPETag.Assign(pTag);
 }
@@ -98,7 +98,7 @@ int CAPEInfo::CloseFile()
     
     // re-initialize variables
     m_APEFileInfo.nSeekTableElements = 0;
-    m_bHasFileInformationLoaded = FALSE;
+    m_bHasFileInformationLoaded = false;
 
     return ERROR_SUCCESS;
 }
@@ -106,7 +106,7 @@ int CAPEInfo::CloseFile()
 /*****************************************************************************************
 Get the file information about the file
 *****************************************************************************************/
-int CAPEInfo::GetFileInformation(BOOL bGetTagInformation) 
+int CAPEInfo::GetFileInformation(bool bGetTagInformation) 
 {
     // quit if there is no simple file
     if (m_spIO == NULL) { return -1; }
@@ -120,7 +120,7 @@ int CAPEInfo::GetFileInformation(BOOL bGetTagInformation)
 
     // update our internal state
     if (nRetVal == ERROR_SUCCESS)
-        m_bHasFileInformationLoaded = TRUE;
+        m_bHasFileInformationLoaded = true;
 
     // return
     return nRetVal;

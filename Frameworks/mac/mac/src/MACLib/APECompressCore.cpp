@@ -8,9 +8,9 @@
 CAPECompressCore::CAPECompressCore(CIO * pIO, const WAVEFORMATEX * pwfeInput, int nMaxFrameBlocks, int nCompressionLevel)
 {
     m_spBitArray.Assign(new CBitArray(pIO));
-    m_spDataX.Assign(new int [nMaxFrameBlocks], TRUE);
-    m_spDataY.Assign(new int [nMaxFrameBlocks], TRUE);
-    m_spTempData.Assign(new int [nMaxFrameBlocks], TRUE);
+    m_spDataX.Assign(new int [nMaxFrameBlocks], true);
+    m_spDataY.Assign(new int [nMaxFrameBlocks], true);
+    m_spTempData.Assign(new int [nMaxFrameBlocks], true);
     m_spPrepare.Assign(new CPrepare);
     m_spPredictorX.Assign(new CPredictorCompressNormal(nCompressionLevel));
     m_spPredictorY.Assign(new CPredictorCompressNormal(nCompressionLevel));
@@ -45,19 +45,19 @@ int CAPECompressCore::EncodeFrame(const void * pInputData, int nInputBytes)
 
     if (m_wfeInput.nChannels == 2) 
     {
-        BOOL bEncodeX = TRUE;
-        BOOL bEncodeY = TRUE;
+        bool bEncodeX = true;
+        bool bEncodeY = true;
         
         if ((nSpecialCodes & SPECIAL_FRAME_LEFT_SILENCE) && 
             (nSpecialCodes & SPECIAL_FRAME_RIGHT_SILENCE)) 
         {
-            bEncodeX = FALSE;
-            bEncodeY = FALSE;
+            bEncodeX = false;
+            bEncodeY = false;
         }
         
         if (nSpecialCodes & SPECIAL_FRAME_PSEUDO_STEREO) 
         {
-            bEncodeY = FALSE;
+            bEncodeY = false;
         }
         
         if (bEncodeX && bEncodeY)

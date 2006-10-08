@@ -42,7 +42,7 @@ public:
 private:
 
     // data members
-    BOOL m_bInitialized;
+    bool m_bInitialized;
     int m_LastDecodedFrameIndex;
     IAPEDecompress * m_pAPEDecompress;
     CPrepare * m_pPrepare;

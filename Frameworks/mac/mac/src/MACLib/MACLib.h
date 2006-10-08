@@ -357,10 +357,10 @@ public:
     // Parameters:
     //    int nBytesAdded
     //        the number of bytes copied into the buffer
-    //    BOOL bProcess
+    //    bool bProcess
     //        whether MAC should process as much as possible of the buffer
     //////////////////////////////////////////////////////////////////////////////////////////////
-    virtual int UnlockBuffer(int nBytesAdded, BOOL bProcess = TRUE) = 0;
+    virtual int UnlockBuffer(int nBytesAdded, bool bProcess = true) = 0;
     
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -440,7 +440,7 @@ extern "C"
     DLLEXPORT int __stdcall CompressFileW(const str_utf16 * pInputFilename, const str_utf16 * pOutputFilename, int nCompressionLevel = COMPRESSION_LEVEL_NORMAL, int * pPercentageDone = NULL, APE_PROGRESS_CALLBACK ProgressCallback = 0, int * pKillFlag = NULL);
     DLLEXPORT int __stdcall DecompressFileW(const str_utf16 * pInputFilename, const str_utf16 * pOutputFilename, int * pPercentageDone, APE_PROGRESS_CALLBACK ProgressCallback, int * pKillFlag);
     DLLEXPORT int __stdcall ConvertFileW(const str_utf16 * pInputFilename, const str_utf16 * pOutputFilename, int nCompressionLevel, int * pPercentageDone, APE_PROGRESS_CALLBACK ProgressCallback, int * pKillFlag);
-    DLLEXPORT int __stdcall VerifyFileW(const str_utf16 * pInputFilename, int * pPercentageDone, APE_PROGRESS_CALLBACK ProgressCallback, int * pKillFlag, BOOL bQuickVerifyIfPossible = FALSE); 
+    DLLEXPORT int __stdcall VerifyFileW(const str_utf16 * pInputFilename, int * pPercentageDone, APE_PROGRESS_CALLBACK ProgressCallback, int * pKillFlag, bool bQuickVerifyIfPossible = false); 
 
     // helper functions
     DLLEXPORT int __stdcall FillWaveFormatEx(WAVEFORMATEX * pWaveFormatEx, int nSampleRate = 44100, int nBitsPerSample = 16, int nChannels = 2);

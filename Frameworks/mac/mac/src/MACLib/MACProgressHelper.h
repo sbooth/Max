@@ -14,14 +14,14 @@ public:
     CMACProgressHelper(int nTotalSteps, int *pPercentageDone, APE_PROGRESS_CALLBACK ProgressCallback, int *pKillFlag);
     virtual ~CMACProgressHelper();
 
-    void UpdateProgress(int nCurrentStep = -1, BOOL bForceUpdate = FALSE);
-    void UpdateProgressComplete() { UpdateProgress(m_nTotalSteps, TRUE); }
+    void UpdateProgress(int nCurrentStep = -1, bool bForceUpdate = false);
+    void UpdateProgressComplete() { UpdateProgress(m_nTotalSteps, true); }
 
-    int ProcessKillFlag(BOOL bSleep = TRUE);
+    int ProcessKillFlag(bool bSleep = true);
     
 private:
 
-    BOOL                    m_bUseCallback;
+    bool                    m_bUseCallback;
     APE_PROGRESS_CALLBACK    m_CallbackFunction;
     
     int                        *m_pPercentageDone;

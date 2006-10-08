@@ -269,7 +269,7 @@ void CUnBitArrayOld::GenerateArrayRice(int* Output_Array, uint32 Number_of_Eleme
         // the primary loop
         for (int *p1 = &Output_Array[0]; p1 < &Output_Array[Number_of_Elements]; p1++) 
         {
-            *p1 = DecodeValueNew(FALSE);
+            *p1 = DecodeValueNew(false);
         }
     }
     else
@@ -277,12 +277,12 @@ void CUnBitArrayOld::GenerateArrayRice(int* Output_Array, uint32 Number_of_Eleme
         // the primary loop
         for (int *p1 = &Output_Array[0]; p1 < &Output_Array[Number_of_Elements]; p1++) 
         {
-            *p1 = DecodeValueNew(TRUE);
+            *p1 = DecodeValueNew(true);
         }
     }
 }
 
-__inline int CUnBitArrayOld::DecodeValueNew(BOOL bCapOverflow)
+__inline int CUnBitArrayOld::DecodeValueNew(bool bCapOverflow)
 {
     // make sure there is room for the data
     // this is a little slower than ensuring a huge block to start with, but it's safer

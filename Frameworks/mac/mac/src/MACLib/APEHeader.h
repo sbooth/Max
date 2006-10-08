@@ -48,7 +48,7 @@ protected:
     int AnalyzeCurrent(APE_FILE_INFO * pInfo);
     int AnalyzeOld(APE_FILE_INFO * pInfo);
 
-    int FindDescriptor(BOOL bSeek);
+    int FindDescriptor(bool bSeek);
 
     CIO * m_pIO;
 };

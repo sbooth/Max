@@ -10,7 +10,7 @@ CWinFileIO::CWinFileIO()
 {
     m_hFile = INVALID_HANDLE_VALUE;
     memset(m_cFileName, 0, MAX_PATH);
-    m_bReadOnly = FALSE;
+    m_bReadOnly = false;
 }
 
 CWinFileIO::~CWinFileIO()
@@ -23,9 +23,9 @@ int CWinFileIO::Open(const wchar_t * pName)
     Close();
 
     #ifdef _UNICODE
-        CSmartPtr<wchar_t> spName((wchar_t *) pName, TRUE, FALSE);    
+        CSmartPtr<wchar_t> spName((wchar_t *) pName, true, false);    
     #else
-        CSmartPtr<char> spName(GetANSIFromUTF16(pName), TRUE);
+        CSmartPtr<char> spName(GetANSIFromUTF16(pName), true);
     #endif
 
     m_hFile = ::CreateFile(spName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -38,12 +38,12 @@ int CWinFileIO::Open(const wchar_t * pName)
         }
         else 
         {
-            m_bReadOnly = TRUE;
+            m_bReadOnly = true;
         }
     }
     else
     {
-        m_bReadOnly = FALSE;
+        m_bReadOnly = false;
     }
     
     wcscpy(m_cFileName, pName);
@@ -62,14 +62,14 @@ int CWinFileIO::Read(void * pBuffer, unsigned int nBytesToRead, unsigned int * p
 {
     unsigned int nTotalBytesRead = 0;
     int nBytesLeft = nBytesToRead;
-    BOOL bRetVal = TRUE;
+    bool bRetVal = true;
     unsigned char * pucBuffer = (unsigned char *) pBuffer;
 
     *pBytesRead = 1;
     while ((nBytesLeft > 0) && (*pBytesRead > 0) && bRetVal)
     {
         bRetVal = ::ReadFile(m_hFile, &pucBuffer[nBytesToRead - nBytesLeft], nBytesLeft, (unsigned long *) pBytesRead, NULL);
-        if (bRetVal == TRUE)
+        if (bRetVal == true)
         {
             nBytesLeft -= *pBytesRead;
             nTotalBytesRead += *pBytesRead;
@@ -78,12 +78,12 @@ int CWinFileIO::Read(void * pBuffer, unsigned int nBytesToRead, unsigned int * p
     
     *pBytesRead = nTotalBytesRead;
     
-    return (bRetVal == FALSE) ? ERROR_IO_READ : 0;
+    return (bRetVal == false) ? ERROR_IO_READ : 0;
 }
 
 int CWinFileIO::Write(const void * pBuffer, unsigned int nBytesToWrite, unsigned int * pBytesWritten)
 {
-    BOOL bRetVal = WriteFile(m_hFile, pBuffer, nBytesToWrite, (unsigned long *) pBytesWritten, NULL);
+    bool bRetVal = WriteFile(m_hFile, pBuffer, nBytesToWrite, (unsigned long *) pBytesWritten, NULL);
 
     if ((bRetVal == 0) || (*pBytesWritten != nBytesToWrite))
         return ERROR_IO_WRITE;
@@ -99,8 +99,8 @@ int CWinFileIO::Seek(int nDistance, unsigned int nMoveMode)
     
 int CWinFileIO::SetEOF()
 {
-    BOOL bRetVal = SetEndOfFile(m_hFile);
-    if (bRetVal == FALSE)
+    bool bRetVal = SetEndOfFile(m_hFile);
+    if (bRetVal == false)
     {
         return -1;
     }
@@ -131,15 +131,15 @@ int CWinFileIO::Create(const wchar_t * pName)
     Close();
 
     #ifdef _UNICODE
-        CSmartPtr<wchar_t> spName((wchar_t *) pName, TRUE, FALSE);    
+        CSmartPtr<wchar_t> spName((wchar_t *) pName, true, false);    
     #else
-        CSmartPtr<char> spName(GetANSIFromUTF16(pName), TRUE);
+        CSmartPtr<char> spName(GetANSIFromUTF16(pName), true);
     #endif
 
     m_hFile = CreateFile(spName, GENERIC_WRITE | GENERIC_READ, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (m_hFile == INVALID_HANDLE_VALUE) { return -1; }
 
-    m_bReadOnly = FALSE;
+    m_bReadOnly = false;
     
     wcscpy(m_cFileName, pName);
 
@@ -151,9 +151,9 @@ int CWinFileIO::Delete()
     Close();
 
     #ifdef _UNICODE
-        CSmartPtr<wchar_t> spName(m_cFileName, TRUE, FALSE);    
+        CSmartPtr<wchar_t> spName(m_cFileName, true, false);    
     #else
-        CSmartPtr<char> spName(GetANSIFromUTF16(m_cFileName), TRUE);
+        CSmartPtr<char> spName(GetANSIFromUTF16(m_cFileName), true);
     #endif
 
     return DeleteFile(spName) ? 0 : -1;

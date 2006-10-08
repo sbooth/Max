@@ -40,7 +40,7 @@ public:
 private:
     
     wchar_t m_cFileName[MAX_PATH];
-    BOOL m_bReadOnly;
+    bool m_bReadOnly;
     FILE * m_pFile;
 };
 

@@ -6,7 +6,7 @@
 /*
 #ifndef __GNUC_IA32__
 
-extern "C" BOOL GetMMXAvailable(void)
+extern "C" bool GetMMXAvailable(void)
 {
 #ifdef ENABLE_ASSEMBLY
 
@@ -20,18 +20,18 @@ extern "C" BOOL GetMMXAvailable(void)
        }
     catch(...)
     {
-        return FALSE;
+        return false;
     }
 
     if (nRegisterEDX & 0x800000) 
-        RETURN_ON_EXCEPTION(__asm emms, FALSE)
+        RETURN_ON_EXCEPTION(__asm emms, false)
     else
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 
 #else
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -64,20 +64,20 @@ int WriteSafe(CIO * pIO, void * pBuffer, int nBytes)
     return nRetVal;
 }
 
-BOOL FileExists(wchar_t * pFilename)
+bool FileExists(wchar_t * pFilename)
 {    
     if (0 == wcscmp(pFilename, L"-")  ||  0 == wcscmp(pFilename, L"/dev/stdin"))
-        return TRUE;
+        return true;
 
 #ifdef _WIN32
 
-    BOOL bFound = FALSE;
+    bool bFound = false;
 
     WIN32_FIND_DATA WFD;
     HANDLE hFind = FindFirstFile(pFilename, &WFD);
     if (hFind != INVALID_HANDLE_VALUE)
     {
-        bFound = TRUE;
+        bFound = true;
         CloseHandle(hFind);
     }
 
@@ -85,17 +85,17 @@ BOOL FileExists(wchar_t * pFilename)
 
 #else
 
-    CSmartPtr<char> spANSI(GetANSIFromUTF16(pFilename), TRUE);
+    CSmartPtr<char> spANSI(GetANSIFromUTF16(pFilename), true);
 
     struct stat b;
 
     if (stat(spANSI, &b) != 0)
-        return FALSE;
+        return false;
 
     if (!S_ISREG(b.st_mode))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 
 #endif
 }

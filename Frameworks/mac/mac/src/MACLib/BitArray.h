@@ -34,7 +34,7 @@ public:
     int EncodeBits(unsigned int nValue, int nBits);
 
     // output (saving)
-    int OutputBitArray(BOOL bFinalize = FALSE);
+    int OutputBitArray(bool bFinalize = false);
     
     // other functions
     void Finalize();

@@ -1368,8 +1368,8 @@ struct NotSpace : public std::unary_function<CT, bool>
 #ifdef SS_ANSI
 	bool operator() (CT t) const { return !std::isspace(t, loc); }
 #else
-	bool ssisp(char c) const { return FALSE != ::isspace((int) c); }
-	bool ssisp(wchar_t c) const { return FALSE != ::iswspace((wint_t) c); }
+	bool ssisp(char c) const { return false != ::isspace((int) c); }
+	bool ssisp(wchar_t c) const { return false != ::iswspace((wint_t) c); }
 	bool operator()(CT t) const  { return !ssisp(t); }
 #endif
 };
@@ -1804,7 +1804,7 @@ public:
 	#ifdef _MFC_VER		// When in Rome...
 
 		CString strRes;
-		bLoaded				= FALSE != strRes.LoadString(nId);
+		bLoaded				= false != strRes.LoadString(nId);
 		if ( bLoaded )
 			*this			= strRes;
 

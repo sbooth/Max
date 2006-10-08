@@ -22,7 +22,7 @@ public:
 
     // allows linear, immediate access to the buffer (fast)
     int GetBufferBytesAvailable();
-    int UnlockBuffer(int nBytesAdded, BOOL bProcess = TRUE);
+    int UnlockBuffer(int nBytesAdded, bool bProcess = true);
     unsigned char * LockBuffer(int * pBytesAvailable);
     
     // slower, but easier than locking and unlocking (copies data)
@@ -37,7 +37,7 @@ public:
     
 private:
     
-    int    ProcessBuffer(BOOL bFinalize = FALSE);
+    int    ProcessBuffer(bool bFinalize = false);
     
     CSmartPtr<CAPECompressCreate> m_spAPECompressCreate;
 
@@ -45,10 +45,10 @@ private:
     int                m_nBufferTail;
     int                m_nBufferSize;
     unsigned char * m_pBuffer;
-    BOOL            m_bBufferLocked;
+    bool            m_bBufferLocked;
 
     CIO    *            m_pioOutput;
-    BOOL            m_bOwnsOutputIO;
+    bool            m_bOwnsOutputIO;
     WAVEFORMATEX    m_wfeInput;
 
 };

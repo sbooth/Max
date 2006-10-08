@@ -186,8 +186,8 @@ LRESULT CALLBACK CAPEInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 			SetDlgItemText(hDlg, COMPRESSION_RATIO_STATIC, cTemp);
 
 			// the has tag
-			BOOL bHasID3Tag = GET_TAG(pAPEDecompress)->GetHasID3Tag();
-			BOOL bHasAPETag = GET_TAG(pAPEDecompress)->GetHasAPETag();
+			bool bHasID3Tag = GET_TAG(pAPEDecompress)->GetHasID3Tag();
+			bool bHasAPETag = GET_TAG(pAPEDecompress)->GetHasAPETag();
 						
 			if (!bHasID3Tag && !bHasAPETag)
 				_stprintf(cTemp, _T("Tag: None"));
@@ -232,7 +232,7 @@ LRESULT CALLBACK CAPEInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 			GET_TAG(pAPEDecompress)->GetFieldString(APE_TAG_FIELD_GENRE, cBuffer, &nBufferBytes);
 			SetDlgItemText(hDlg, GENRE_COMBOBOX, cBuffer);
 			
-			return TRUE;
+			return true;
 			break;
 		}
 		case WM_COMMAND:
@@ -244,11 +244,11 @@ LRESULT CALLBACK CAPEInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 				case IDCANCEL: 
 					// traps the [esc] key
 					EndDialog(hDlg, 0);
-					return TRUE;
+					return true;
 					break;
 				case CANCEL_BUTTON:
 					EndDialog(hDlg, 0);
-				 	return TRUE;
+				 	return true;
 					break;
 				case REMOVE_TAG_BUTTON:
 				{
@@ -260,12 +260,12 @@ LRESULT CALLBACK CAPEInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 						if (GET_TAG(pAPEDecompress)->Remove() != 0) 
 						{
 							MessageBox(hDlg, _T("Error removing tag. (could the file be read-only?)"), _T("Error Removing Tag"), MB_OK | MB_ICONEXCLAMATION);
-							return TRUE;
+							return true;
 						}
 						else 
                         {
 							EndDialog(hDlg, 0);
-					 		return TRUE;
+					 		return true;
 						}
 					}
 					break;
@@ -291,7 +291,7 @@ LRESULT CALLBACK CAPEInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 					if (GET_TAG(pAPEDecompress)->Save() != 0) 
 					{
 						MessageBox(hDlg, _T("Error saving tag. (could the file be read-only?)"), _T("Error Saving Tag"), MB_OK | MB_ICONEXCLAMATION);
-						return TRUE;
+						return true;
 					}
 
 					EndDialog(hDlg, 0);
@@ -300,9 +300,9 @@ LRESULT CALLBACK CAPEInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 			break;
 		case WM_CLOSE:
 			EndDialog(hDlg, 0);
-			return TRUE;
+			return true;
 			break;
 	}
 	
-	return FALSE;
+	return false;
 }

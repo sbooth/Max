@@ -29,13 +29,13 @@ protected:
     int m_nStartBlock;
     int m_nFinishBlock;
     int m_nCurrentBlock;
-    BOOL m_bIsRanged;
+    bool m_bIsRanged;
 
     // decoding tools    
     CUnMAC m_UnMAC;
     CSmartPtr<CAPEInfo> m_spAPEInfo;
     
-    BOOL m_bDecompressorInitialized;
+    bool m_bDecompressorInitialized;
     int InitializeDecompressor();
 };
 

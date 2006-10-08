@@ -1,7 +1,7 @@
 #ifndef APE_WAVINFODIALOG_H
 #define APE_WAVINFODIALOG_H
 
-BOOL CALLBACK FileInfoDialogProcedureA(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+bool CALLBACK FileInfoDialogProcedureA(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 	
 class CWAVInfoDialog
 {

@@ -29,7 +29,7 @@ public:
     
     IAPEDecompress * m_pAPEDecompress;
     
-    BOOL m_bMMXAvailable;
+    bool m_bMMXAvailable;
     int m_nBlocksProcessed;
 };
 

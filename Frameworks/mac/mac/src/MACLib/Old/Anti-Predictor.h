@@ -245,7 +245,7 @@ class CAntiPredictorExtraHigh3800ToCurrent : public CAntiPredictor {
 public:
 
     // functions
-    void AntiPredict(int *pInputArray, int *pOutputArray, int NumberOfElements, BOOL bMMXAvailable, int CPULoadBalancingFactor, int nVersion);
+    void AntiPredict(int *pInputArray, int *pOutputArray, int NumberOfElements, bool bMMXAvailable, int CPULoadBalancingFactor, int nVersion);
 };
 
 #endif // #ifdef ENABLE_COMPRESSION_MODE_EXTRA_HIGH

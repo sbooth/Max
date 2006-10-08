@@ -30,7 +30,7 @@ CUnMAC class construction
 CUnMAC::CUnMAC() 
 {
     // initialize member variables
-    m_bInitialized                = FALSE;
+    m_bInitialized                = false;
     m_LastDecodedFrameIndex        = -1;
     m_pAPEDecompress            = NULL;
 
@@ -75,8 +75,8 @@ int CUnMAC::Initialize(IAPEDecompress *pAPEDecompress)
     m_pAPEDecompressCore = new CAPEDecompressCore(GET_IO(pAPEDecompress), pAPEDecompress);
     m_pPrepare = new CPrepare;
 
-    // set the initialized flag to TRUE
-    m_bInitialized = TRUE;
+    // set the initialized flag to true
+    m_bInitialized = true;
     
     m_pAPEDecompress->GetInfo(APE_INFO_WAVEFORMATEX, (int) &m_wfeInput);
 
@@ -100,8 +100,8 @@ int CUnMAC::Uninitialize()
         // set the last decoded frame again
         m_LastDecodedFrameIndex = -1;
 
-        // set the initialized flag to FALSE
-        m_bInitialized = FALSE;
+        // set the initialized flag to false
+        m_bInitialized = false;
     }
 
     return ERROR_SUCCESS;
@@ -164,7 +164,7 @@ int CUnMAC::DecompressFrameOld(unsigned char *pOutputData, int32 FrameIndex, int
     unsigned int nSpecialCodes = 0;
     uint32 nStoredCRC = 0;
     
-    if (GET_USES_CRC(m_pAPEDecompress) == FALSE)
+    if (GET_USES_CRC(m_pAPEDecompress) == false)
     {
         nStoredCRC = m_pAPEDecompressCore->GetUnBitArrray()->DecodeValue(DECODE_VALUE_METHOD_UNSIGNED_RICE, 30);
         if (nStoredCRC == 0)
@@ -176,7 +176,7 @@ int CUnMAC::DecompressFrameOld(unsigned char *pOutputData, int32 FrameIndex, int
     {
         nStoredCRC = m_pAPEDecompressCore->GetUnBitArrray()->DecodeValue(DECODE_VALUE_METHOD_UNSIGNED_INT);
         
-        // get any 'special' codes if the file uses them (for silence, FALSE stereo, etc.)
+        // get any 'special' codes if the file uses them (for silence, false stereo, etc.)
         nSpecialCodes = 0;
         if (GET_USES_SPECIAL_FRAMES(m_pAPEDecompress))
         {
@@ -216,7 +216,7 @@ int CUnMAC::DecompressFrameOld(unsigned char *pOutputData, int32 FrameIndex, int
     }
 
     // check the CRC
-    if (GET_USES_CRC(m_pAPEDecompress) == FALSE)
+    if (GET_USES_CRC(m_pAPEDecompress) == false)
     {
         uint32 nChecksum = CalculateOldChecksum(m_pAPEDecompressCore->GetDataX(), m_pAPEDecompressCore->GetDataY(), m_pAPEDecompress->GetInfo(APE_INFO_CHANNELS), nBlocks);
         if (nChecksum != nStoredCRC)

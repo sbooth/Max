@@ -127,7 +127,7 @@ LRESULT CALLBACK CWAVInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 		case WM_INITDIALOG:
 			//fill in the info on initialization
 			RetVal = g_pWAVInfoDialog->InitDialog(hDlg);
-			return TRUE;
+			return true;
 			break;
 		case WM_COMMAND:
 			wmID = LOWORD(wParam);
@@ -136,21 +136,21 @@ LRESULT CALLBACK CWAVInfoDialog::DialogProc(HWND hDlg, UINT message, WPARAM wPar
 			{
 				case IDCANCEL: //traps the [esc] key
 					EndDialog(hDlg, 0);
-					return TRUE;
+					return true;
 					break;
 				case OK_BUTTON:
 					EndDialog(hDlg, 0);
-					return TRUE;
+					return true;
 					break;
 			}
 			break;
 		case WM_CLOSE:
 			EndDialog(hDlg, 0);
-			return TRUE;
+			return true;
 			break;
 	}
 	
-	return FALSE;
+	return false;
 }
 
 

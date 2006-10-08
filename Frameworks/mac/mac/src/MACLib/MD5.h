@@ -41,18 +41,18 @@ class CMD5Helper
 {
 public:
 
-	CMD5Helper(BOOL bInitialize = TRUE)
+	CMD5Helper(bool bInitialize = true)
 	{
 		if (bInitialize)
 			Initialize();
 	}
 
-	BOOL Initialize()
+	bool Initialize()
 	{
 		memset(&m_MD5Context, 0, sizeof(m_MD5Context));
 		MD5Init(&m_MD5Context);
 		m_nTotalBytes = 0;
-		return TRUE;
+		return true;
 	}
 
 	inline void AddData(const void * pData, int nBytes)
@@ -61,17 +61,17 @@ public:
 		m_nTotalBytes += nBytes;
 	}
 
-	BOOL GetResult(unsigned char cResult[16])
+	bool GetResult(unsigned char cResult[16])
 	{
 		memset(cResult, 0, 16);
 		MD5Final(cResult, &m_MD5Context);
-		return TRUE;
+		return true;
 	}
 
 protected:
 
 	MD5_CTX m_MD5Context;
-	BOOL m_bStopped;
+	bool m_bStopped;
 	int m_nTotalBytes;
 };
 

@@ -27,12 +27,12 @@ CAPEDecompress::CAPEDecompress(int * pErrorCode, CAPEInfo * pAPEInfo, int nStart
     m_nBlockAlign = GetInfo(APE_INFO_BLOCK_ALIGN);
 
     // initialize other stuff
-    m_bDecompressorInitialized = FALSE;
+    m_bDecompressorInitialized = false;
     m_nCurrentFrame = 0;
     m_nCurrentBlock = 0;
     m_nCurrentFrameBufferBlock = 0;
     m_nFrameBufferFinishedBlocks = 0;
-    m_bErrorDecodingCurrentFrame = FALSE;
+    m_bErrorDecodingCurrentFrame = false;
 
     // set the "real" start and finish blocks
     m_nStartBlock = (nStartBlock < 0) ? 0 : min(nStartBlock, GetInfo(APE_INFO_TOTAL_BLOCKS));
@@ -52,7 +52,7 @@ int CAPEDecompress::InitializeDecompressor()
         return ERROR_SUCCESS;
 
     // update the initialized flag
-    m_bDecompressorInitialized = TRUE;
+    m_bDecompressorInitialized = true;
 
     // create a frame buffer
     m_cbFrameBuffer.CreateBuffer((GetInfo(APE_INFO_BLOCKS_PER_FRAME) + DECODE_BLOCK_SIZE) * m_nBlockAlign, m_nBlockAlign * 64);
@@ -147,7 +147,7 @@ int CAPEDecompress::Seek(int nBlockOffset)
     RETURN_ON_ERROR(SeekToFrame(m_nCurrentFrame));
 
     // skip necessary blocks
-    CSmartPtr<char> spTempBuffer(new char [nBytesToSkip], TRUE);
+    CSmartPtr<char> spTempBuffer(new char [nBytesToSkip], true);
     if (spTempBuffer == NULL) return ERROR_INSUFFICIENT_MEMORY;
     
     int nBlocksRetrieved = 0;
@@ -304,7 +304,7 @@ void CAPEDecompress::DecodeBlocksToFrameBuffer(int nBlocks)
     }
     catch(...)
     {
-        m_bErrorDecodingCurrentFrame = TRUE;
+        m_bErrorDecodingCurrentFrame = true;
     }
 
     m_nCurrentFrameBufferBlock += nBlocks;
@@ -316,9 +316,9 @@ void CAPEDecompress::StartFrame()
     
     // get the frame header
     m_nStoredCRC = m_spUnBitArray->DecodeValue(DECODE_VALUE_METHOD_UNSIGNED_INT);
-    m_bErrorDecodingCurrentFrame = FALSE;
+    m_bErrorDecodingCurrentFrame = false;
 
-    // get any 'special' codes if the file uses them (for silence, FALSE stereo, etc.)
+    // get any 'special' codes if the file uses them (for silence, false stereo, etc.)
     m_nSpecialCodes = 0;
     if (GET_USES_SPECIAL_FRAMES(m_spAPEInfo))
     {
@@ -352,7 +352,7 @@ void CAPEDecompress::EndFrame()
     m_nCRC = m_nCRC ^ 0xFFFFFFFF;
     m_nCRC >>= 1;
     if (m_nCRC != m_nStoredCRC)
-        m_bErrorDecodingCurrentFrame = TRUE;
+        m_bErrorDecodingCurrentFrame = true;
 }
 
 /*****************************************************************************************
@@ -370,7 +370,7 @@ Get information from the decompressor
 int CAPEDecompress::GetInfo(APE_DECOMPRESS_FIELDS Field, int nParam1, int nParam2)
 {
     int nRetVal = 0;
-    BOOL bHandled = TRUE;
+    bool bHandled = true;
 
     switch (Field)
     {
@@ -429,12 +429,12 @@ int CAPEDecompress::GetInfo(APE_DECOMPRESS_FIELDS Field, int nParam1, int nParam
         break;
     }
     default:
-        bHandled = FALSE;
+        bHandled = false;
     }
 
     if (!bHandled && m_bIsRanged)
     {
-        bHandled = TRUE;
+        bHandled = true;
 
         switch (Field)
         {
@@ -468,11 +468,11 @@ int CAPEDecompress::GetInfo(APE_DECOMPRESS_FIELDS Field, int nParam1, int nParam
             nRetVal = 0;
             break;
         default:
-            bHandled = FALSE;
+            bHandled = false;
         }
     }
 
-    if (bHandled == FALSE)
+    if (bHandled == false)
         nRetVal = m_spAPEInfo->GetInfo(Field, nParam1, nParam2);
 
     return nRetVal;

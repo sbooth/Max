@@ -104,7 +104,7 @@
 CStdLibFileIO::CStdLibFileIO()
 {
     memset(m_cFileName, 0, MAX_PATH);
-    m_bReadOnly = FALSE;
+    m_bReadOnly = false;
     m_pFile = NULL;
 }
 
@@ -122,19 +122,19 @@ int CStdLibFileIO::Open(const wchar_t * pName)
 {
     Close();
 
-    m_bReadOnly = FALSE;
+    m_bReadOnly = false;
 
     char * wpName = GetANSIFromUTF16(pName);
 
     if (0 == wcscmp(pName, L"-") || 0 == wcscmp(pName, L"/dev/stdin")) 
     {
         m_pFile = SETBINARY_IN(stdin);
-        m_bReadOnly = TRUE;                                                     // ReadOnly
+        m_bReadOnly = true;                                                     // ReadOnly
     }
     else if (0 == wcscmp (pName, L"/dev/stdout")) 
     {
         m_pFile = SETBINARY_OUT(stdout);
-        m_bReadOnly = FALSE;                                                    // WriteOnly
+        m_bReadOnly = false;                                                    // WriteOnly
     }
     else 
     {
@@ -146,10 +146,10 @@ int CStdLibFileIO::Open(const wchar_t * pName)
 	     * we will try Read-Only.
 	     */
 	    m_pFile = fopen(wpName, "rb");                                      // ReadOnly
-	    m_bReadOnly = TRUE;
+	    m_bReadOnly = true;
 	}
 	else
-	    m_bReadOnly = FALSE;                                                // Read/Write
+	    m_bReadOnly = false;                                                // Read/Write
     }
 
     if (!m_pFile)
@@ -228,13 +228,13 @@ int CStdLibFileIO::Create(const wchar_t * pName)
     if (0 == wcscmp (pName, L"-") || 0 == wcscmp (pName, L"/dev/stdout")) 
     {
         m_pFile = SETBINARY_OUT(stdout);
-        m_bReadOnly = FALSE;                            // WriteOnly
+        m_bReadOnly = false;                            // WriteOnly
     }
     else 
     {
 	char * wpName = GetANSIFromUTF16(pName);
         m_pFile = fopen (wpName, "wb+");                 // Read/Write
-        m_bReadOnly = FALSE;
+        m_bReadOnly = false;
     }
 
     if (!m_pFile)

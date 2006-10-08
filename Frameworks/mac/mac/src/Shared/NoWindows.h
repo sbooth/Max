@@ -7,9 +7,6 @@
 
 #define _T(x)    x
 
-#define FALSE    (BOOL)0
-#define TRUE    (BOOL)1
-
 #define NEAR
 #define FAR
 
@@ -25,9 +22,6 @@ typedef unsigned char        str_utf8;
 typedef wchar_t                str_utf16;
 
 typedef unsigned long       DWORD;
-#ifndef __OBJC__
-typedef signed char         BOOL; /* Must match Objective-C BOOL !! */
-#endif
 typedef unsigned char       BYTE;
 typedef unsigned short      WORD;
 typedef float               FLOAT;

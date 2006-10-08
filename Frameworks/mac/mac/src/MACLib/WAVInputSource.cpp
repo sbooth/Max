@@ -62,7 +62,7 @@ CInputSource * CreateInputSource(const wchar_t * pSourceName, WAVEFORMATEX * pwf
 CWAVInputSource::CWAVInputSource(CIO * pIO, WAVEFORMATEX * pwfeSource, int * pTotalBlocks, int * pHeaderBytes, int * pTerminatingBytes, int * pErrorCode)
     : CInputSource(pIO, pwfeSource, pTotalBlocks, pHeaderBytes, pTerminatingBytes, pErrorCode)
 {
-    m_bIsValid = FALSE;
+    m_bIsValid = false;
 
     if (pIO == NULL || pwfeSource == NULL)
     {
@@ -70,7 +70,7 @@ CWAVInputSource::CWAVInputSource(CIO * pIO, WAVEFORMATEX * pwfeSource, int * pTo
         return;
     }
     
-    m_spIO.Assign(pIO, FALSE, FALSE);
+    m_spIO.Assign(pIO, false, false);
 
     int nRetVal = AnalyzeSource();
     if (nRetVal == ERROR_SUCCESS)
@@ -81,7 +81,7 @@ CWAVInputSource::CWAVInputSource(CIO * pIO, WAVEFORMATEX * pwfeSource, int * pTo
         if (pHeaderBytes) *pHeaderBytes = m_nHeaderBytes;
         if (pTerminatingBytes) *pTerminatingBytes = m_nTerminatingBytes;
 
-        m_bIsValid = TRUE;
+        m_bIsValid = true;
     }
     
     if (pErrorCode) *pErrorCode = nRetVal;
@@ -90,7 +90,7 @@ CWAVInputSource::CWAVInputSource(CIO * pIO, WAVEFORMATEX * pwfeSource, int * pTo
 CWAVInputSource::CWAVInputSource(const wchar_t * pSourceName, WAVEFORMATEX * pwfeSource, int * pTotalBlocks, int * pHeaderBytes, int * pTerminatingBytes, int * pErrorCode)
     : CInputSource(pSourceName, pwfeSource, pTotalBlocks, pHeaderBytes, pTerminatingBytes, pErrorCode)
 {
-    m_bIsValid = FALSE;
+    m_bIsValid = false;
 
     if (pSourceName == NULL || pwfeSource == NULL)
     {
@@ -115,7 +115,7 @@ CWAVInputSource::CWAVInputSource(const wchar_t * pSourceName, WAVEFORMATEX * pwf
         if (pHeaderBytes) *pHeaderBytes = m_nHeaderBytes;
         if (pTerminatingBytes) *pTerminatingBytes = m_nTerminatingBytes;
 
-        m_bIsValid = TRUE;
+        m_bIsValid = true;
     }
     
     if (pErrorCode) *pErrorCode = nRetVal;

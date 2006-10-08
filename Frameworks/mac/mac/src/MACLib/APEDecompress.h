@@ -34,8 +34,8 @@ protected:
     int m_nStartBlock;
     int m_nFinishBlock;
     int m_nCurrentBlock;
-    BOOL m_bIsRanged;
-    BOOL m_bDecompressorInitialized;
+    bool m_bIsRanged;
+    bool m_bDecompressorInitialized;
 
     // decoding tools    
     CPrepare m_Prepare;
@@ -63,7 +63,7 @@ protected:
     int m_nLastX;
     
     // decoding buffer
-    BOOL m_bErrorDecodingCurrentFrame;
+    bool m_bErrorDecodingCurrentFrame;
     int m_nCurrentFrameBufferBlock;
     int m_nFrameBufferFinishedBlocks;
     CCircleBuffer m_cbFrameBuffer;

@@ -15,7 +15,7 @@ CAPEHeader::~CAPEHeader()
 
 }
 
-int CAPEHeader::FindDescriptor(BOOL bSeek)
+int CAPEHeader::FindDescriptor(bool bSeek)
 {
     // store the original location and seek to the beginning
     int nOriginalFileLocation = m_pIO->GetPosition();
@@ -39,11 +39,11 @@ int CAPEHeader::FindDescriptor(BOOL bSeek)
         nSyncSafeLength += (cID3v2Header[8] & 127) << 7;
         nSyncSafeLength += (cID3v2Header[9] & 127);
 
-        BOOL bHasTagFooter = FALSE;
+        bool bHasTagFooter = false;
 
         if (cID3v2Header[5] & 16) 
         {
-            bHasTagFooter = TRUE;
+            bHasTagFooter = true;
             nJunkBytes = nSyncSafeLength + 20;
         }
         else 
@@ -121,7 +121,7 @@ int CAPEHeader::Analyze(APE_FILE_INFO * pInfo)
     unsigned int nBytesRead = 0;
 
     // find the descriptor
-    pInfo->nJunkHeaderBytes = FindDescriptor(TRUE);
+    pInfo->nJunkHeaderBytes = FindDescriptor(true);
     if (pInfo->nJunkHeaderBytes < 0)
         return ERROR_UNDEFINED;
 
@@ -219,7 +219,7 @@ int CAPEHeader::AnalyzeCurrent(APE_FILE_INFO * pInfo)
     pInfo->nSeekTableElements    = pInfo->spAPEDescriptor->nSeekTableBytes / 4;
 
     // get the seek tables (really no reason to get the whole thing if there's extra)
-    pInfo->spSeekByteTable.Assign(new uint32 [pInfo->nSeekTableElements], TRUE);
+    pInfo->spSeekByteTable.Assign(new uint32 [pInfo->nSeekTableElements], true);
     if (pInfo->spSeekByteTable == NULL) { return ERROR_UNDEFINED; }
 
     m_pIO->Read((unsigned char *) pInfo->spSeekByteTable.GetPtr(), 4 * pInfo->nSeekTableElements, &nBytesRead);
@@ -238,7 +238,7 @@ int CAPEHeader::AnalyzeCurrent(APE_FILE_INFO * pInfo)
     // get the wave header
     if (!(APEHeader.nFormatFlags & MAC_FORMAT_FLAG_CREATE_WAV_HEADER))
     {
-        pInfo->spWaveHeaderData.Assign(new unsigned char [pInfo->nWAVHeaderBytes], TRUE);
+        pInfo->spWaveHeaderData.Assign(new unsigned char [pInfo->nWAVHeaderBytes], true);
         if (pInfo->spWaveHeaderData == NULL) { return ERROR_UNDEFINED; }
         m_pIO->Read((unsigned char *) pInfo->spWaveHeaderData, pInfo->nWAVHeaderBytes, &nBytesRead);
     }
@@ -302,13 +302,13 @@ int CAPEHeader::AnalyzeOld(APE_FILE_INFO * pInfo)
     // get the wave header
     if (!(APEHeader.nFormatFlags & MAC_FORMAT_FLAG_CREATE_WAV_HEADER))
     {
-        pInfo->spWaveHeaderData.Assign(new unsigned char [APEHeader.nHeaderBytes], TRUE);
+        pInfo->spWaveHeaderData.Assign(new unsigned char [APEHeader.nHeaderBytes], true);
         if (pInfo->spWaveHeaderData == NULL) { return ERROR_UNDEFINED; }
         m_pIO->Read((unsigned char *) pInfo->spWaveHeaderData, APEHeader.nHeaderBytes, &nBytesRead);
     }
 
     // get the seek tables (really no reason to get the whole thing if there's extra)
-    pInfo->spSeekByteTable.Assign(new uint32 [pInfo->nSeekTableElements], TRUE);
+    pInfo->spSeekByteTable.Assign(new uint32 [pInfo->nSeekTableElements], true);
     if (pInfo->spSeekByteTable == NULL) { return ERROR_UNDEFINED; }
 
     m_pIO->Read((unsigned char *) pInfo->spSeekByteTable.GetPtr(), 4 * pInfo->nSeekTableElements, &nBytesRead);
@@ -326,7 +326,7 @@ int CAPEHeader::AnalyzeOld(APE_FILE_INFO * pInfo)
 
     if (APEHeader.nVersion <= 3800) 
     {
-        pInfo->spSeekBitTable.Assign(new unsigned char [pInfo->nSeekTableElements], TRUE);
+        pInfo->spSeekBitTable.Assign(new unsigned char [pInfo->nSeekTableElements], true);
         if (pInfo->spSeekBitTable == NULL) { return ERROR_UNDEFINED; }
 
         m_pIO->Read((unsigned char *) pInfo->spSeekBitTable, pInfo->nSeekTableElements, &nBytesRead);

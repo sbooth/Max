@@ -5,10 +5,10 @@ CMACProgressHelper::CMACProgressHelper(int nTotalSteps, int * pPercentageDone, A
 {
     m_pKillFlag = pKillFlag;
     
-    m_bUseCallback = FALSE;
+    m_bUseCallback = false;
     if (ProgressCallback != NULL)
     {
-        m_bUseCallback = TRUE;
+        m_bUseCallback = true;
         m_CallbackFunction = ProgressCallback;
     }
 
@@ -26,7 +26,7 @@ CMACProgressHelper::~CMACProgressHelper()
 
 }
 
-void CMACProgressHelper::UpdateProgress(int nCurrentStep, BOOL bForceUpdate)
+void CMACProgressHelper::UpdateProgress(int nCurrentStep, bool bForceUpdate)
 {
     // update the step
     if (nCurrentStep == -1)
@@ -56,7 +56,7 @@ void CMACProgressHelper::UpdateProgress(int nCurrentStep, BOOL bForceUpdate)
     }
 }
 
-int CMACProgressHelper::ProcessKillFlag(BOOL bSleep)
+int CMACProgressHelper::ProcessKillFlag(bool bSleep)
 {
     // process any messages (allows repaint, etc.)
     if (bSleep)

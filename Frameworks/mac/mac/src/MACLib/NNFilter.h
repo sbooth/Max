@@ -21,7 +21,7 @@ private:
     int m_nOrder;
     int m_nShift;
     int m_nVersion;
-    BOOL m_bMMXAvailable;
+    bool m_bMMXAvailable;
     int m_nRunningAverage;
 
     CRollBuffer<short> m_rbInput;

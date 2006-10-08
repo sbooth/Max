@@ -25,7 +25,7 @@ CAPEDecompressOld::CAPEDecompressOld(int * pErrorCode, CAPEInfo * pAPEInfo, int 
     
     // initialize other stuff
     m_nBufferTail = 0;
-    m_bDecompressorInitialized = FALSE;
+    m_bDecompressorInitialized = false;
     m_nCurrentFrame = 0;
     m_nCurrentBlock = 0;
 
@@ -51,12 +51,12 @@ int CAPEDecompressOld::InitializeDecompressor()
 
     int nMaximumDecompressedFrameBytes = m_nBlockAlign * GetInfo(APE_INFO_BLOCKS_PER_FRAME);
     int nTotalBufferBytes = max(65536, (nMaximumDecompressedFrameBytes + 16) * 2);
-    m_spBuffer.Assign(new char [nTotalBufferBytes], TRUE);
+    m_spBuffer.Assign(new char [nTotalBufferBytes], true);
     if (m_spBuffer == NULL)
         return ERROR_INSUFFICIENT_MEMORY;
 
     // update the initialized flag
-    m_bDecompressorInitialized = TRUE;
+    m_bDecompressorInitialized = true;
 
     // seek to the beginning
     return Seek(0);
@@ -168,7 +168,7 @@ int CAPEDecompressOld::Seek(int nBlockOffset)
 int CAPEDecompressOld::GetInfo(APE_DECOMPRESS_FIELDS Field, int nParam1, int nParam2)
 {
     int nRetVal = 0;
-    BOOL bHandled = TRUE;
+    bool bHandled = true;
 
     switch (Field)
     {
@@ -227,12 +227,12 @@ int CAPEDecompressOld::GetInfo(APE_DECOMPRESS_FIELDS Field, int nParam1, int nPa
         break;
     }
     default:
-        bHandled = FALSE;
+        bHandled = false;
     }
 
     if (!bHandled && m_bIsRanged)
     {
-        bHandled = TRUE;
+        bHandled = true;
 
         switch (Field)
         {
@@ -266,11 +266,11 @@ int CAPEDecompressOld::GetInfo(APE_DECOMPRESS_FIELDS Field, int nParam1, int nPa
             nRetVal = 0;
             break;
         default:
-            bHandled = FALSE;
+            bHandled = false;
         }
     }
 
-    if (bHandled == FALSE)
+    if (bHandled == false)
         nRetVal = m_spAPEInfo->GetInfo(Field, nParam1, nParam2);
 
     return nRetVal;

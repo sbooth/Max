@@ -53,7 +53,7 @@ private:
     int m_nDataBytes;
     int m_nTerminatingBytes;
     int m_nFileBytes;
-    BOOL m_bIsValid;
+    bool m_bIsValid;
 };
 
 /*************************************************************************************

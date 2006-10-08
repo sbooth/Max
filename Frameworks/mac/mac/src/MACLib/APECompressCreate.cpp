@@ -36,7 +36,7 @@ int CAPECompressCreate::Start(CIO * pioOutput, const WAVEFORMATEX * pwfeInput, i
     else if (nCompressionLevel == COMPRESSION_LEVEL_INSANE)
         m_nSamplesPerFrame *= 16;
 
-    m_spIO.Assign(pioOutput, FALSE, FALSE);
+    m_spIO.Assign(pioOutput, false, false);
     m_spAPECompressCore.Assign(new CAPECompressCore(m_spIO, pwfeInput, m_nSamplesPerFrame, nCompressionLevel));
     
     // copy the format
@@ -94,7 +94,7 @@ int CAPECompressCreate::EncodeFrame(const void * pInputData, int nInputBytes)
 int CAPECompressCreate::Finish(const void * pTerminatingData, int nTerminatingBytes, int nWAVTerminatingBytes)
 {
     // clear the bit array
-    RETURN_ON_ERROR(m_spAPECompressCore->GetBitArray()->OutputBitArray(TRUE));
+    RETURN_ON_ERROR(m_spAPECompressCore->GetBitArray()->OutputBitArray(true));
     
     // finalize the file
     RETURN_ON_ERROR(FinalizeFile(m_spIO, m_nFrameIndex, m_nLastFrameBlocks, 
@@ -151,7 +151,7 @@ int CAPECompressCreate::InitializeFile(CIO * pIO, const WAVEFORMATEX * pwfeInput
     RETURN_ON_ERROR(pIO->Write(&APEHeader, sizeof(APEHeader), &nBytesWritten))
         
     // write an empty seek table
-    m_spSeekTable.Assign(new uint32 [nMaxFrames], TRUE);
+    m_spSeekTable.Assign(new uint32 [nMaxFrames], true);
     if (m_spSeekTable == NULL) { return ERROR_INSUFFICIENT_MEMORY; }
     ZeroMemory(m_spSeekTable, nMaxFrames * 4);
     RETURN_ON_ERROR(pIO->Write(m_spSeekTable, (nMaxFrames * 4), &nBytesWritten))
