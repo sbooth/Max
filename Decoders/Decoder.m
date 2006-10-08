@@ -31,6 +31,7 @@
 #import "OggVorbisDecoder.h"
 #import "WavPackDecoder.h"
 #import "ShortenDecoder.h"
+#import "FileFormatNotSupportedException.h"
 
 #include <AudioToolbox/AudioFormat.h>
 
@@ -57,7 +58,6 @@
 			case kOggStreamTypeVorbis:		result = [[OggVorbisDecoder alloc] init];		break;
 			case kOggStreamTypeFLAC:		result = [[OggFLACDecoder alloc] init];			break;
 			case kOggStreamTypeSpeex:		result = [[OggSpeexDecoder alloc] init];		break;
-			default:						result = nil;									break;
 		}
 	}
 	else if([extension isEqualToString:@"flac"]) {
@@ -87,9 +87,10 @@
 	else if([libsndfileExtensions containsObject:extension]) {
 		result = [[LibsndfileDecoder alloc] init];
 	}
-	
-	NSAssert(nil != result, NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @""));
-	
+	else {
+		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @"") userInfo:@""];
+	}
+		
 	[result setFilename:filename];
 	
 	return [result autorelease];
