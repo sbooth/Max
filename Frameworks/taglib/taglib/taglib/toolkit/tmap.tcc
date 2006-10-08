@@ -134,11 +134,10 @@ template <class Key, class T>
 Map<Key, T> &Map<Key,T>::erase(const Key &key)
 {
   detach();
-//  d->map.erase(find(key));
-	typename Map<Key, T>::Iterator iter = find(key);
-	if(iter != d->map.end())
-		d->map.erase(iter);
-	return *this;
+  Iterator it = d->map.find(key);
+  if(it != d->map.end())
+      d->map.erase(it);
+  return *this;
 }
 
 template <class Key, class T>
