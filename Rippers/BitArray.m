@@ -19,7 +19,6 @@
  */
 
 #import "BitArray.h"
-#import "MallocException.h"
 
 @implementation BitArray
 
@@ -39,10 +38,7 @@
 	
 	free(_bits);
 	_bits = calloc(_length, sizeof(uint32_t));
-	if(NULL == _bits) {
-		@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
+	NSAssert(NULL != _bits, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 }
 
 #pragma mark Bit Setting

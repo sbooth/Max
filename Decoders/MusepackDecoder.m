@@ -19,7 +19,6 @@
  */
 
 #import "MusepackDecoder.h"
-#import "IOException.h"
 
 @implementation MusepackDecoder
 

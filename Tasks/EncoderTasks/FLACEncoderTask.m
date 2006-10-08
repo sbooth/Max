@@ -23,10 +23,6 @@
 #import "Track.h"
 #import "UtilityFunctions.h"
 
-#import "IOException.h"
-#import "MallocException.h"
-#import "FLACException.h"
-
 #include <FLAC/metadata.h>
 #include <FLAC/format.h>
 
@@ -51,6 +47,7 @@
 	FLAC__Metadata_Chain						*chain					= NULL;
 	FLAC__Metadata_Iterator						*iterator				= NULL;
 	FLAC__StreamMetadata						*block					= NULL;
+	FLAC__bool									result;
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	unsigned									trackNumber				= 0;
@@ -72,20 +69,15 @@
 	
 	@try  {
 		chain = FLAC__metadata_chain_new();
-		if(NULL == chain) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != chain, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
-		if(NO == FLAC__metadata_chain_read(chain, [[self outputFilename] fileSystemRepresentation])) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
-		}
+		result = FLAC__metadata_chain_read(chain, [[self outputFilename] fileSystemRepresentation]);
+		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
 		
 		FLAC__metadata_chain_sort_padding(chain);
 		
 		iterator = FLAC__metadata_iterator_new();
-		if(NULL == iterator) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != iterator, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		FLAC__metadata_iterator_init(iterator, chain);
 
@@ -105,14 +97,11 @@
 			}
 			
 			block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT);
-			if(NULL == block) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-			}
+			NSAssert(NULL != block, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 			
 			// Add our metadata
-			if(NO == FLAC__metadata_iterator_insert_block_after(iterator, block)) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithFormat:@"%i", FLAC__metadata_chain_status(chain)] userInfo:nil];
-			}
+			result = FLAC__metadata_iterator_insert_block_after(iterator, block);
+			NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
 		}
 		else {
 			block = FLAC__metadata_iterator_get_block(iterator);
@@ -230,9 +219,8 @@
 		addVorbisComment(block, @"ENCODING", [self encoderSettingsString]);
 		
 		// Write the new metadata to the file
-		if(NO == FLAC__metadata_chain_write(chain, YES, NO)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithFormat:@"%i", FLAC__metadata_chain_status(chain)] userInfo:nil];
-		}
+		result = FLAC__metadata_chain_write(chain, YES, NO);
+		NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
 	}
 
 	@finally {
@@ -256,6 +244,7 @@
 	FLAC__Metadata_Iterator						*iterator				= NULL;
 	FLAC__StreamMetadata						*block					= NULL;
 	FLAC__StreamMetadata_CueSheet_Track			*track					= NULL;
+	FLAC__bool									result;
 	Track										*currentTrack			= nil;
 	NSString									*mcn					= nil;
 	NSString									*isrc					= nil;
@@ -271,20 +260,15 @@
 	
 	@try  {
 		chain = FLAC__metadata_chain_new();
-		if(NULL == chain) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != chain, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
-		if(NO == FLAC__metadata_chain_read(chain, [[self outputFilename] fileSystemRepresentation])) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
-		}
+		result = FLAC__metadata_chain_read(chain, [[self outputFilename] fileSystemRepresentation]);
+		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
 		
 		FLAC__metadata_chain_sort_padding(chain);
 		
 		iterator = FLAC__metadata_iterator_new();
-		if(NULL == iterator) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != iterator, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		FLAC__metadata_iterator_init(iterator, chain);
 		
@@ -304,14 +288,11 @@
 			}
 			
 			block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_CUESHEET);
-			if(NULL == block) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-			}
+			NSAssert(NULL != block, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 			
 			// Add our metadata
-			if(NO == FLAC__metadata_iterator_insert_block_after(iterator, block)) {
-				@throw [FLACException exceptionWithReason:[NSString stringWithFormat:@"%i", FLAC__metadata_chain_status(chain)] userInfo:nil];
-			}
+			result = FLAC__metadata_iterator_insert_block_after(iterator, block);
+			NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
 		}
 		else {
 			block = FLAC__metadata_iterator_get_block(iterator);
@@ -330,9 +311,7 @@
 		for(i = 0; i < [[[self taskInfo] inputTracks] count]; ++i) {
 			currentTrack	= [[[self taskInfo] inputTracks] objectAtIndex:i];
 			track			= FLAC__metadata_object_cuesheet_track_new();
-			if(NULL == track) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-			}
+			NSAssert(NULL != track, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 			
 			track->number		= [currentTrack number];
 			track->type			= 0;
@@ -361,34 +340,28 @@
 			
 			m += [currentTrack minute];
 			
-			if(NO == FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO)) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-			}
+			result = FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO);
+			NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 			
-			if(NO == FLAC__metadata_object_cuesheet_track_insert_blank_index(block, i, 0)) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-			}			
+			result = FLAC__metadata_object_cuesheet_track_insert_blank_index(block, i, 0);
+			NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		}
 		
 		// Lead-out
 		track = FLAC__metadata_object_cuesheet_track_new();
-		if(NULL == track) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-		}
+		NSAssert(NULL != track, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		track->number		= 0xAA;
 		track->type			= 1;
 		track->num_indices	= 0;
 		track->indices		= NULL;
 		
-		if(NO == FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO)) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-		}			
+		result = FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO);
+		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Write the new metadata to the file
-		if(NO == FLAC__metadata_chain_write(chain, YES, NO)) {
-			@throw [FLACException exceptionWithReason:[NSString stringWithFormat:@"%i", FLAC__metadata_chain_status(chain)] userInfo:nil];
-		}
+		result = FLAC__metadata_chain_write(chain, YES, NO);
+		NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
 	}
 	
 	@finally {

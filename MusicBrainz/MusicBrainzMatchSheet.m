@@ -19,17 +19,16 @@
  */
 
 #import "MusicBrainzMatchSheet.h"
-#import "MissingResourceException.h"
 
 @implementation MusicBrainzMatchSheet
 
 - (id) init
 {
 	if((self = [super init])) {
-		if(NO == [NSBundle loadNibNamed:@"MusicBrainzMatchSheet" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"MusicBrainzMatchSheet.nib" forKey:@"filename"]];
-		}
+		BOOL	result;
+		
+		result = [NSBundle loadNibNamed:@"MusicBrainzMatchSheet" owner:self];
+		NSAssert1(YES == result, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"MusicBrainzMatchSheet.nib");
 		
 		return self;
 	}

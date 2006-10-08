@@ -20,7 +20,6 @@
 
 #import "AmazonAlbumArtSheet.h"
 #import "LogController.h"
-#import "MissingResourceException.h"
 
 @interface AmazonAlbumArtSheet (Private)
 - (NSString *) localeDomain;
@@ -35,10 +34,8 @@
     
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"AlbumArtDefaults" ofType:@"plist"];
-		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"AlbumArtDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != defaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"AlbumArtDefaults.plist");
+
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}
@@ -56,10 +53,10 @@
 - (id) initWithSource:(id <AlbumArtMethods>)source;
 {
 	if((self = [super init])) {
-		if(NO == [NSBundle loadNibNamed:@"AmazonAlbumArtSheet" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"AmazonAlbumArtSheet.nib" forKey:@"filename"]];
-		}
+		BOOL	result;
+		
+		result = [NSBundle loadNibNamed:@"AmazonAlbumArtSheet" owner:self];
+		NSAssert1(YES == result, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"AmazonAlbumArtSheet.nib");
 		
 		_source		= source;
 		_images		= [[NSMutableArray alloc] init];

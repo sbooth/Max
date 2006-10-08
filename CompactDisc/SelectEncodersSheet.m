@@ -20,17 +20,16 @@
 
 #import "SelectEncodersSheet.h"
 #import "PreferencesController.h"
-#import "MissingResourceException.h"
 
 @implementation SelectEncodersSheet
 
 - (id) init
 {
 	if((self = [super init])) {
-		if(NO == [NSBundle loadNibNamed:@"SelectEncodersSheet" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"SelectEncodersSheet.nib" forKey:@"filename"]];
-		}
+		BOOL	result;
+		
+		result = [NSBundle loadNibNamed:@"SelectEncodersSheet" owner:self];
+		NSAssert1(YES == result, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"SelectEncodersSheet.nib");
 						
 		return self;
 	}

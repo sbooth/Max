@@ -22,19 +22,6 @@
 
 #import "CoreAudioUtilities.h"
 
-#import "MallocException.h"
-#import "IOException.h"
-#import "LAMEException.h"
-#import "EmptySelectionException.h"
-#import "CustomNamingException.h"
-#import "MissingResourceException.h"
-#import "ParanoiaException.h"
-#import "FLACException.h"
-#import "VorbisException.h"
-#import "FileFormatNotSupportedException.h"
-#import "CoreAudioException.h"
-#import "SpeexException.h"
-
 #include <Carbon/Carbon.h>
 #include <Security/AuthSession.h>
 
@@ -54,21 +41,20 @@ getApplicationDataDirectory()
 {
 	@synchronized(sDataDirectory) {
 		if(nil == sDataDirectory) {
-			BOOL					isDir;
+			BOOL					isDir, result;
 			NSFileManager			*manager;
 			NSArray					*paths;
 			
 			manager			= [NSFileManager defaultManager];
 			paths			= NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
 			sDataDirectory	= [[[paths objectAtIndex:0] stringByAppendingString:@"/Max"] retain];
-
-			if(NO == [manager fileExistsAtPath:sDataDirectory isDirectory:&isDir]) {
-				if(NO == [manager createDirectoryAtPath:sDataDirectory attributes:nil]) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the application data directory.", @"Exceptions", @"") userInfo:nil];
-				}
+			result			= [manager fileExistsAtPath:sDataDirectory isDirectory:&isDir];
+			if(NO == result) {
+				result		= [manager createDirectoryAtPath:sDataDirectory attributes:nil];
+				NSCAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create the application data directory.", @"Exceptions", @""));
 			}
-			else if(NO == isDir) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the application data directory.", @"Exceptions", @"") userInfo:nil];
+			else {
+				NSCAssert(YES == isDir, NSLocalizedStringFromTable(@"Unable to create the application data directory.", @"Exceptions", @""));				
 			}
 		}
 	}
@@ -254,7 +240,9 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 	entry.length	= strlen((const char *)entry.entry);
 	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
 		free(entry.entry);
-		@throw [FLACException exceptionWithReason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_append_comment"] userInfo:nil];
+		@throw [NSException exceptionWithName:@"FLACException"
+									   reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_append_comment"]
+									 userInfo:nil];
 	}	
 }
 
@@ -459,15 +447,10 @@ addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 	
 	
 	path = [[NSBundle mainBundle] pathForResource:@"Add to iTunes Library" ofType:@"scpt"];
-	if(nil == path) {
-		@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-													userInfo:[NSDictionary dictionaryWithObject:@"Add to iTunes Library.scpt" forKey:@"filename"]];
-	}
+	NSCAssert1(nil != path, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"Add to iTunes Library.scpt");
 	
 	appleScript = [[[NSAppleScript alloc] initWithContentsOfURL:[NSURL fileURLWithPath:path] error:&errors] autorelease];
-	if(nil == appleScript) {
-		@throw [NSException exceptionWithName:@"AppleScriptError" reason:@"Unable to setup AppleScript." userInfo:errors];
-	}
+	NSCAssert(nil != appleScript, @"Unable to setup AppleScript.");
 	
 	// Metadata fallback
 	artist		= (nil == [metadata trackArtist] ? [metadata albumArtist] : [metadata trackArtist]);

@@ -27,11 +27,7 @@
 
 #import "UtilityFunctions.h"
 
-#import "MallocException.h"
-#import "IOException.h"
 #import "StopException.h"
-#import "FileFormatNotSupportedException.h"
-#import "MissingResourceException.h"
 
 #include <sys/stat.h>		// stat
 #include <unistd.h>			// mkstemp, unlink
@@ -419,47 +415,32 @@ enum {
 
 		// Create the file (don't overwrite)
 		fd = open([cueSheetFilename fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the cue sheet.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != fd, NSLocalizedStringFromTable(@"Unable to create the cue sheet.", @"Exceptions", @""));
 		
 		// REM
 		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		temp			= [NSString stringWithFormat:@"REM File create by Max %@\n", bundleVersion];
 		buf				= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
-		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 		
 		// TITLE
 		temp	= [NSString stringWithFormat:@"TITLE \"%@\"\n", [[[[[self taskInfo] inputTracks] objectAtIndex:0] document] title]];
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
-		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 
 		// PERFORMER
 		temp	= [NSString stringWithFormat:@"PERFORMER \"%@\"\n", [[[[[self taskInfo] inputTracks] objectAtIndex:0] document] artist]];
 		buf		= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
-		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 
 		// FILE
 		temp	= [NSString stringWithFormat:@"FILE \"%@\" %@\n", [[self outputFilename] lastPathComponent], [self cueSheetFormatName]];
 		buf		= [temp fileSystemRepresentation];
 		bytesWritten = write(fd, buf, strlen(buf));
-		if(-1 == bytesWritten) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 		
 		for(i = 0; i < [[[self taskInfo] inputTracks] count]; ++i) {
 			currentTrack = [[[self taskInfo] inputTracks] objectAtIndex:i];
@@ -468,48 +449,33 @@ enum {
 			temp	= [NSString stringWithFormat:@"  TRACK %.02u AUDIO\n", [currentTrack number]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
-			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 
 			// ISRC
 			if(nil != [currentTrack ISRC]) {
 				temp	= [NSString stringWithFormat:@"    ISRC %@\n", [currentTrack ISRC]];
 				buf		= [temp UTF8String];
 				bytesWritten = write(fd, buf, strlen(buf));
-				if(-1 == bytesWritten) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				}
+				NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 			}
 
 			// TITLE
 			temp	= [NSString stringWithFormat:@"    TITLE \"%@\"\n", [currentTrack title]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
-			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 
 			// PERFORMER
 			temp	= [NSString stringWithFormat:@"    PERFORMER \"%@\"\n", [currentTrack artist]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
-			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 
 			// INDEX
 			temp	= [NSString stringWithFormat:@"    INDEX 01 %.2u:%.2u:%.2u\n", m, s, f];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
-			if(-1 == bytesWritten) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-			}
+			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 			
 			// Update times
 			f += [currentTrack frame];
@@ -531,9 +497,9 @@ enum {
 
 	@finally {
 		// And close it
-		if(-1 != fd && -1 == close(fd)) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the cue sheet.", @"Exceptions", @"") 
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		if(-1 != fd) {
+			int result = close(fd);
+			NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to close the cue sheet.", @"Exceptions", @""));
 		}
 	}
 }

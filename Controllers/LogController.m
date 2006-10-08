@@ -19,7 +19,6 @@
  */
 
 #import "LogController.h"
-#import "IOException.h"
 
 static LogController	*sharedLog = nil;
 
@@ -134,6 +133,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 			NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
 			NSDictionary					*current;
 			unsigned						i;
+			BOOL							result;
 			
 			// Build the strings
 			for(i = 0; i < [self countOfLogEntries]; ++i) {
@@ -151,9 +151,8 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 			
 			NSData							*rtf			= [logMessage RTFFromRange:NSMakeRange(0, [logMessage length]) documentAttributes:nil];
 			
-			if(NO == [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil]) {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @"") userInfo:@""];
-			}
+			result = [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil];
+			NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		}	
 	}
 }

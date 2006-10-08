@@ -34,11 +34,6 @@
 
 #import "MusicBrainzMatchSheet.h"
 
-#import "MallocException.h"
-#import "IOException.h"
-#import "EmptySelectionException.h"
-#import "MissingResourceException.h"
-
 #import "AmazonAlbumArtSheet.h"
 #import "UtilityFunctions.h"
 
@@ -63,10 +58,8 @@
 	@try {
 		// Set up defaults
 		compactDiscDocumentDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CompactDiscDocumentDefaults" ofType:@"plist"];
-		if(nil == compactDiscDocumentDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"CompactDiscDocumentDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != compactDiscDocumentDefaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"CompactDiscDocumentDefaults.plist");
+
 		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
 	
@@ -366,12 +359,9 @@
 		if(NO == [self discInDrive]) {
 			return;
 		}
-		else if([self emptySelection]) {
-			@throw [EmptySelectionException exceptionWithReason:NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @"") userInfo:nil];
-		}
-		else if([self ripInProgress] || [self encodeInProgress]) {
-			@throw [NSException exceptionWithName:@"ActiveTaskException" reason:NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @"") userInfo:nil];
-		}
+		
+		NSAssert(NO == [self emptySelection], NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @""));
+		NSAssert(NO == [self ripInProgress] && NO == [self encodeInProgress], NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @""));
 		
 		sheet = [[SelectEncodersSheet alloc] init];
 		[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSelectEncodersSheet:returnCode:contextInfo:) contextInfo:sheet];

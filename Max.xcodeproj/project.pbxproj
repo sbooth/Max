@@ -79,19 +79,7 @@
 		8C53037B0A05E8C600890518 /* Remove_Pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5303790A05E8C600890518 /* Remove_Pressed.png */; };
 		8C53037C0A05E8C600890518 /* Remove.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C53037A0A05E8C600890518 /* Remove.png */; };
 		8C53FF0C0A05CB8E00890518 /* Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEF70A05CB8E00890518 /* Encoder.m */; };
-		8C53FF3C0A05CC4700890518 /* CoreAudioException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF200A05CC4600890518 /* CoreAudioException.m */; };
-		8C53FF3E0A05CC4700890518 /* CustomNamingException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF220A05CC4600890518 /* CustomNamingException.m */; };
-		8C53FF400A05CC4700890518 /* EmptySelectionException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF240A05CC4600890518 /* EmptySelectionException.m */; };
-		8C53FF420A05CC4700890518 /* FileFormatNotSupportedException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF260A05CC4600890518 /* FileFormatNotSupportedException.m */; };
-		8C53FF440A05CC4700890518 /* FLACException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF280A05CC4600890518 /* FLACException.m */; };
-		8C53FF480A05CC4700890518 /* IOException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF2C0A05CC4600890518 /* IOException.m */; };
-		8C53FF4A0A05CC4700890518 /* LAMEException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF2E0A05CC4600890518 /* LAMEException.m */; };
-		8C53FF4C0A05CC4700890518 /* MallocException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF300A05CC4600890518 /* MallocException.m */; };
-		8C53FF4E0A05CC4700890518 /* MissingResourceException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF320A05CC4600890518 /* MissingResourceException.m */; };
-		8C53FF500A05CC4700890518 /* ParanoiaException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF340A05CC4600890518 /* ParanoiaException.m */; };
-		8C53FF520A05CC4700890518 /* SpeexException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF360A05CC4600890518 /* SpeexException.m */; };
 		8C53FF540A05CC4700890518 /* StopException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF380A05CC4600890518 /* StopException.m */; };
-		8C53FF560A05CC4700890518 /* VorbisException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF3A0A05CC4600890518 /* VorbisException.m */; };
 		8C53FF650A05CCA400890518 /* BooleanArrayValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF590A05CCA400890518 /* BooleanArrayValueTransformer.m */; };
 		8C53FF670A05CCA400890518 /* BOOLToStringValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF5B0A05CCA400890518 /* BOOLToStringValueTransformer.m */; };
 		8C53FF6B0A05CCA400890518 /* MultiplicationValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF5F0A05CCA400890518 /* MultiplicationValueTransformer.m */; };
@@ -192,6 +180,7 @@
 		8CD26EFC0AB531F50037F33A /* CoreAudioEncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E20A12E3FC00C8DCAE /* CoreAudioEncoderTask.m */; };
 		8CD26F4B0AB536120037F33A /* CoreAudioEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEF50A05CB8E00890518 /* CoreAudioEncoder.m */; };
 		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
+		8CDF024E0AD8A23E00193153 /* FileFormatNotSupportedException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF260A05CC4600890518 /* FileFormatNotSupportedException.m */; };
 		8CE24FE10AD30A2D009E1323 /* MusicBrainzMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE24FDF0AD30A2D009E1323 /* MusicBrainzMatchSheet.m */; };
 		8CE24FF40AD30B92009E1323 /* MusicBrainzMatchSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE24FF20AD30B92009E1323 /* MusicBrainzMatchSheet.nib */; };
 		8CE250AE0AD31943009E1323 /* MusicBrainzPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE250AC0AD31943009E1323 /* MusicBrainzPreferencesController.m */; };
@@ -397,8 +386,6 @@
 		8C53FF040A05CB8E00890518 /* OggVorbisEncoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggVorbisEncoder.m; sourceTree = "<group>"; };
 		8C53FF070A05CB8E00890518 /* WavPackEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WavPackEncoder.h; sourceTree = "<group>"; };
 		8C53FF080A05CB8E00890518 /* WavPackEncoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoder.m; sourceTree = "<group>"; };
-		8C53FF1F0A05CC4600890518 /* CoreAudioException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioException.h; sourceTree = "<group>"; };
-		8C53FF200A05CC4600890518 /* CoreAudioException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CoreAudioException.m; sourceTree = "<group>"; };
 		8C53FF210A05CC4600890518 /* CustomNamingException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CustomNamingException.h; sourceTree = "<group>"; };
 		8C53FF220A05CC4600890518 /* CustomNamingException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CustomNamingException.m; sourceTree = "<group>"; };
 		8C53FF230A05CC4600890518 /* EmptySelectionException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EmptySelectionException.h; sourceTree = "<group>"; };
@@ -1081,8 +1068,6 @@
 		8C53FF1E0A05CC4600890518 /* Exceptions */ = {
 			isa = PBXGroup;
 			children = (
-				8C53FF1F0A05CC4600890518 /* CoreAudioException.h */,
-				8C53FF200A05CC4600890518 /* CoreAudioException.m */,
 				8C53FF210A05CC4600890518 /* CustomNamingException.h */,
 				8C53FF220A05CC4600890518 /* CustomNamingException.m */,
 				8C53FF230A05CC4600890518 /* EmptySelectionException.h */,
@@ -1512,19 +1497,7 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				8C53FF0C0A05CB8E00890518 /* Encoder.m in Sources */,
-				8C53FF3C0A05CC4700890518 /* CoreAudioException.m in Sources */,
-				8C53FF3E0A05CC4700890518 /* CustomNamingException.m in Sources */,
-				8C53FF400A05CC4700890518 /* EmptySelectionException.m in Sources */,
-				8C53FF420A05CC4700890518 /* FileFormatNotSupportedException.m in Sources */,
-				8C53FF440A05CC4700890518 /* FLACException.m in Sources */,
-				8C53FF480A05CC4700890518 /* IOException.m in Sources */,
-				8C53FF4A0A05CC4700890518 /* LAMEException.m in Sources */,
-				8C53FF4C0A05CC4700890518 /* MallocException.m in Sources */,
-				8C53FF4E0A05CC4700890518 /* MissingResourceException.m in Sources */,
-				8C53FF500A05CC4700890518 /* ParanoiaException.m in Sources */,
-				8C53FF520A05CC4700890518 /* SpeexException.m in Sources */,
 				8C53FF540A05CC4700890518 /* StopException.m in Sources */,
-				8C53FF560A05CC4700890518 /* VorbisException.m in Sources */,
 				8C53FF650A05CCA400890518 /* BooleanArrayValueTransformer.m in Sources */,
 				8C53FF670A05CCA400890518 /* BOOLToStringValueTransformer.m in Sources */,
 				8C53FF6B0A05CCA400890518 /* MultiplicationValueTransformer.m in Sources */,
@@ -1622,6 +1595,7 @@
 				8CA9C1120AD2ED69000EF903 /* MusicBrainzHelper.mm in Sources */,
 				8CE24FE10AD30A2D009E1323 /* MusicBrainzMatchSheet.m in Sources */,
 				8CE250AE0AD31943009E1323 /* MusicBrainzPreferencesController.m in Sources */,
+				8CDF024E0AD8A23E00193153 /* FileFormatNotSupportedException.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2065,7 +2039,6 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_16)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_17)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_18)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_19)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks/Sparkle/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_10 = "\"$(SRCROOT)/Frameworks/mac/build/Release\"";
@@ -2074,10 +2047,9 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_13 = "\"$(SRCROOT)/Frameworks/cuetools/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_14 = "\"$(SRCROOT)/Frameworks/cdparanoia/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/cddb/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
@@ -2138,7 +2110,6 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_16)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_17)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_18)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_19)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/Frameworks/Sparkle/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_10 = "\"$(SRCROOT)/Frameworks/mac/build/Release\"";
@@ -2147,10 +2118,9 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_13 = "\"$(SRCROOT)/Frameworks/cuetools/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_14 = "\"$(SRCROOT)/Frameworks/cdparanoia/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/cddb/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";

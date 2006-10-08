@@ -24,9 +24,6 @@
 #import "LogController.h"
 #import "MusicBrainzHelper.h"
 
-#import "MallocException.h"
-#import "IOException.h"
-
 #include <IOKit/storage/IOCDTypes.h>
 
 @implementation CompactDisc

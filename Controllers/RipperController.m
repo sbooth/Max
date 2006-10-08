@@ -28,7 +28,6 @@
 #import "EncoderController.h"
 #import "ApplicationController.h"
 #import "CompactDiscDocument.h"
-#import "IOException.h"
 #import "UtilityFunctions.h"
 
 #import <Growl/GrowlApplicationBridge.h>

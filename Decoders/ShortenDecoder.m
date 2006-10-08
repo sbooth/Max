@@ -19,7 +19,6 @@
  */
 
 #import "ShortenDecoder.h"
-#import "IOException.h"
 
 #define SHORTEN_BLOCKS 512
 

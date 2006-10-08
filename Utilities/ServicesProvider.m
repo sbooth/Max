@@ -21,7 +21,6 @@
 #import "ServicesProvider.h"
 #import "ApplicationController.h"
 #import "FileFormatNotSupportedException.h"
-#import "IOException.h"
 
 @implementation ServicesProvider
 

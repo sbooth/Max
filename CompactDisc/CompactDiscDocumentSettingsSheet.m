@@ -19,7 +19,6 @@
  */
 
 #import "CompactDiscDocumentSettingsSheet.h"
-#import "MissingResourceException.h"
 #import "UtilityFunctions.h"
 
 enum {
@@ -59,13 +58,12 @@ enum {
 - (id) initWithSettings:(NSMutableDictionary *)settings
 {
 	if((self = [super init])) {
+		BOOL	result;
 		
 		_settings = [settings retain];
 		
-		if(NO == [NSBundle loadNibNamed:@"CompactDiscDocumentSettingsSheet" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"CompactDiscDocumentSettingsSheet.nib" forKey:@"filename"]];
-		}
+		result = [NSBundle loadNibNamed:@"CompactDiscDocumentSettingsSheet" owner:self];
+		NSAssert1(YES == result, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"CompactDiscDocumentSettingsSheet.nib");
 		
 		return self;
 	}

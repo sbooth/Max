@@ -25,8 +25,6 @@
 #import "Genres.h"
 #import "AmazonAlbumArtSheet.h"
 #import "UtilityFunctions.h"
-#import "IOException.h"
-#import "MissingResourceException.h"
 
 static FileConversionController		*sharedController						= nil;
 
@@ -52,10 +50,8 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	@try {
 		// Set up defaults
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"FileConversionDefaults" ofType:@"plist"];
-		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"FileConversionDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != defaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"FileConversionDefaults.plist");
+
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];		
 	}
@@ -346,53 +342,52 @@ static NSString						*SettingsToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	NSEnumerator		*enumerator;
 	NSString			*subpath;
 	NSString			*composedPath;
+	BOOL				result;
 	BOOL				success				= YES;
 	
-	if([manager fileExistsAtPath:filename isDirectory:&isDir]) {
-		newFiles = [NSMutableArray array];
+	result = [manager fileExistsAtPath:filename isDirectory:&isDir];
+	NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @""));
+	
+	newFiles = [NSMutableArray array];
+	
+	if(isDir) {
+		subpaths	= [manager subpathsAtPath:filename];
+		enumerator	= [subpaths objectEnumerator];
 		
-		if(isDir) {
-			subpaths	= [manager subpathsAtPath:filename];
-			enumerator	= [subpaths objectEnumerator];
+		while((subpath = [enumerator nextObject])) {
+			composedPath = [NSString stringWithFormat:@"%@/%@", filename, subpath];
 			
-			while((subpath = [enumerator nextObject])) {
-				composedPath = [NSString stringWithFormat:@"%@/%@", filename, subpath];
-				
-				// Ignore dotfiles
-				if([[subpath lastPathComponent] hasPrefix:@"."]) {
-					continue;
-				}
-				// Ignore files that don't have our extensions
-				else if(NO == [allowedTypes containsObject:[[subpath pathExtension] lowercaseString]]) {
-					continue;
-				}
-				
-				// Ignore directories
-				if([manager fileExistsAtPath:composedPath isDirectory:&isDir] && NO == isDir) {
-					success &= [self addOneFile:composedPath atIndex:(unsigned)index];
-				}
-				
-				if(success) {
-					file = [_filesController findFile:composedPath];
-					if(nil != file) {
-						[newFiles addObject:file];
-					}
-				}
+			// Ignore dotfiles
+			if([[subpath lastPathComponent] hasPrefix:@"."]) {
+				continue;
+			}
+			// Ignore files that don't have our extensions
+			else if(NO == [allowedTypes containsObject:[[subpath pathExtension] lowercaseString]]) {
+				continue;
+			}
+			
+			// Ignore directories
+			if([manager fileExistsAtPath:composedPath isDirectory:&isDir] && NO == isDir) {
+				success &= [self addOneFile:composedPath atIndex:(unsigned)index];
 			}
 			
 			if(success) {
-				[_filesController setSelectedObjects:newFiles];
+				file = [_filesController findFile:composedPath];
+				if(nil != file) {
+					[newFiles addObject:file];
+				}
 			}
 		}
-		else {
-			success &= [self addOneFile:filename atIndex:(unsigned)index];
-			if(success) {
-				[_filesController selectFile:filename];
-			}
+		
+		if(success) {
+			[_filesController setSelectedObjects:newFiles];
 		}
 	}
 	else {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @"") userInfo:nil];
+		success &= [self addOneFile:filename atIndex:(unsigned)index];
+		if(success) {
+			[_filesController selectFile:filename];
+		}
 	}
 	
 	return success;

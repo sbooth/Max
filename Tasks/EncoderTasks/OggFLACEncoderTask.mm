@@ -20,7 +20,6 @@
 
 #import "OggFLACEncoderTask.h"
 #import "OggFLACEncoder.h"
-#import "IOException.h"
 
 #include <taglib/oggflacfile.h>			// TagLib::File
 #include <taglib/tag.h>					// TagLib::Tag
@@ -61,10 +60,7 @@
 	NSString									*bundleVersion, *versionString;
 	TagLib::Ogg::FLAC::File						f						([[self outputFilename] fileSystemRepresentation], false);
 	
-	
-	if(NO == f.isValid()) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @"") userInfo:nil];
-	}
+	NSAssert(f.isValid(), NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
 	
 	// Album title
 	album = [metadata albumTitle];

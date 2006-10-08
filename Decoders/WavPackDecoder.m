@@ -19,7 +19,6 @@
  */
 
 #import "WavPackDecoder.h"
-#import "IOException.h"
 
 #define WP_INPUT_BUFFER_LEN		1024
 

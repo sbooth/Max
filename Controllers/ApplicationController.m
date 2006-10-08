@@ -29,11 +29,9 @@
 #import "RipperController.h"
 #import "EncoderController.h"
 #import "LogController.h"
+#import "FileFormatNotSupportedException.h"
 #import "CoreAudioUtilities.h"
 #import "UtilityFunctions.h"
-#import "IOException.h"
-#import "MissingResourceException.h"
-#import "FileFormatNotSupportedException.h"
 
 #import "BooleanArrayValueTransformer.h"
 #import "NegateBooleanArrayValueTransformer.h"
@@ -70,10 +68,8 @@ static ApplicationController *sharedController = nil;
 			
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"ApplicationControllerDefaults" ofType:@"plist"];
-		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"ApplicationControllerDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != defaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"ApplicationControllerDefaults.plist");
+
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}

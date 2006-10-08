@@ -24,7 +24,6 @@
 #import "SectorRange.h"
 #import "CompactDiscDocument.h"
 #import "UtilityFunctions.h"
-#import "IOException.h"
 #import "StopException.h"
 
 @interface RipperTask (Private)

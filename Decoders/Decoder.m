@@ -43,7 +43,7 @@
 	// Create the source based on the file's extension
 	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
 	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
-	NSString		*extension				= [filename pathExtension];
+	NSString		*extension				= [[filename pathExtension] lowercaseString];
 
 	// Determine which type of converter to use and create it
 	if([extension isEqualToString:@"ogg"]) {

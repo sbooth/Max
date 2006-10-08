@@ -20,7 +20,6 @@
 
 #import "EncoderSettingsSheet.h"
 #import "PreferencesController.h"
-#import "MissingResourceException.h"
 
 @implementation EncoderSettingsSheet
 
@@ -29,15 +28,14 @@
 - (id) initWithNibName:(NSString *)nibName settings:(NSDictionary *)settings;
 {
 	if((self = [super init])) {
+		BOOL	result;
 		
 		// Setup the settings before loading the nib
 		_settings		= [[NSMutableDictionary alloc] init];
 		[_settings addEntriesFromDictionary:settings];
 		
-		if(NO == [NSBundle loadNibNamed:nibName owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@.nib", nibName] forKey:@"filename"]];
-		}
+		result = [NSBundle loadNibNamed:nibName owner:self];
+		NSAssert1(YES == result, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), [nibName stringByAppendingString:@".nib"]);
 		
 		return self;
 	}
@@ -73,7 +71,7 @@
 	if(NSNotFound != index) {
 		newFormat	= [[self searchKey] mutableCopy];
 		
-		// Special case for Core Audio subclass
+		// Special case for Core Audio and Libsndfile subclasses
 		if([self respondsToSelector:@selector(formatName)]) {
 			[newFormat setObject:[self formatName] forKey:@"name"];
 		}

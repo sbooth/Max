@@ -19,7 +19,6 @@
  */
 
 #import "OggVorbisDecoder.h"
-#import "IOException.h"
 
 @implementation OggVorbisDecoder
 
@@ -33,17 +32,16 @@
 {
 	vorbis_info		*ovInfo		= NULL;
 	FILE			*file		= NULL;
+	int				result;
 	
-	file = fopen([[self filename] fileSystemRepresentation], "r");
+	file							= fopen([[self filename] fileSystemRepresentation], "r");
 	NSAssert1(NULL != file, @"Unable to open the input file (%s).", strerror(errno));	
 	
-	if(0 != ov_test(file, &_vf, NULL, 0)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"The file does not appear to be a valid Ogg Vorbis file.", @"Exceptions", @"") userInfo:nil];
-	}
+	result							= ov_test(file, &_vf, NULL, 0);
+	NSAssert(0 == result, NSLocalizedStringFromTable(@"The file does not appear to be a valid Ogg Vorbis file.", @"Exceptions", @""));
 	
-	if(0 != ov_test_open(&_vf)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @"") userInfo:nil];
-	}
+	result							= ov_test_open(&_vf);
+	NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @""));
 	
 	// Get input file information
 	ovInfo							= ov_info(&_vf, -1);

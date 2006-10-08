@@ -19,7 +19,6 @@
  */
 
 #import "CoreAudioDecoder.h"
-#import "IOException.h"
 
 #include <AudioToolbox/AudioFormat.h>
 

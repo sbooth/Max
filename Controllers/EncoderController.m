@@ -36,9 +36,6 @@
 #import "LogController.h"
 #import "RipperController.h"
 
-#import "IOException.h"
-#import "MissingResourceException.h"
-
 #import <Growl/GrowlApplicationBridge.h>
 #include <AudioToolbox/AudioFile.h>
 #include <sndfile/sndfile.h>

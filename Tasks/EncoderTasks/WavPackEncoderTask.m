@@ -20,7 +20,6 @@
 
 #import "WavPackEncoderTask.h"
 #import "WavPackEncoder.h"
-#import "IOException.h"
 
 #include <wavpack/wputils.h>
 
@@ -60,13 +59,10 @@
 	NSString									*bundleVersion;
     WavpackContext								*wpc					= NULL;
 	char										error [80];
-	
-	
+	int											result;
+		
 	wpc = WavpackOpenFileInput([[self outputFilename] fileSystemRepresentation], error, OPEN_EDIT_TAGS, 0);
-	if(NULL == wpc) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
-	}
+	NSAssert(NULL != wpc, NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @""));
 	
 	// Album title
 	album = [metadata albumTitle];
@@ -179,15 +175,11 @@
 	// Encoder settings
 	WavpackAppendTagItem(wpc, "ENCODING", [[self encoderSettingsString] UTF8String], strlen([[self encoderSettingsString] UTF8String]));	
 
-	if(0 == WavpackWriteTag(wpc)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
-	}
+	result = WavpackWriteTag(wpc);
+	NSAssert(0 != result, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 	
-	if(NULL != WavpackCloseFile(wpc)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObject:[NSString stringWithCString:error encoding:NSASCIIStringEncoding]] forKeys:[NSArray arrayWithObject:@"errorString"]]];
-	}
+	wpc = WavpackCloseFile(wpc);
+	NSAssert(NULL == wpc, NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @""));
 }
 
 - (NSString *)		fileExtension					{ return @"wv"; }

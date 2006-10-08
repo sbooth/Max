@@ -25,8 +25,6 @@
 #import "RipperController.h"
 #import "EncoderController.h"
 #import "LogController.h"
-#import "IOException.h"
-#import "MissingResourceException.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <DiskArbitration/DiskArbitration.h>
@@ -61,12 +59,14 @@ static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * con
 			DAReturn status = DADissenterGetStatus(dissenter);
 			if(unix_err(status)) {
 				int code = err_get_code(status);
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				@throw [NSException exceptionWithName:@"IOException"
+											   reason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
+											 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			else {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
+				@throw [NSException exceptionWithName:@"IOException"
+											   reason:NSLocalizedStringFromTable(@"Unable to unmount the disc.", @"Exceptions", @"") 
+											 userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
 			}
 		}
 		
@@ -93,12 +93,14 @@ static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * conte
 			DAReturn status = DADissenterGetStatus(dissenter);
 			if(unix_err(status)) {
 				int code = err_get_code(status);
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+				@throw [NSException exceptionWithName:@"IOException"
+											   reason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
+											 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:code], [NSString stringWithCString:strerror(code) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			}
 			else {
-				@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
+				@throw [NSException exceptionWithName:@"IOException"
+											   reason:NSLocalizedStringFromTable(@"Unable to eject the disc.", @"Exceptions", @"") 
+											 userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:status] forKey:@"errorCode"]];
 			}
 		}
 		
@@ -127,10 +129,8 @@ static MediaController *sharedController = nil;
     
 	@try {
 		defaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"MediaControllerDefaults" ofType:@"plist"];
-		if(nil == defaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"MediaControllerDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != defaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"MediaControllerDefaults.plist");
+
 		defaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:defaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:defaultsValuesDictionary];
 	}

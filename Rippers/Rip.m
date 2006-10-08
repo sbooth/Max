@@ -19,8 +19,6 @@
  */
 
 #import "Rip.h"
-#import "MallocException.h"
-#import "IOException.h"
 
 #include <IOKit/storage/IOCDTypes.h>
 
@@ -162,10 +160,7 @@
 		
 		// Allocate a buffer large enough to hold the desired sectors
 		buffer = calloc([range length], kCDSectorSizeCDDA);
-		if(NULL == buffer) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != buffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		// Grab the data
 		[self getBytes:buffer forSectorRange:range];
@@ -205,25 +200,16 @@
 		
 		// Open the file for reading
 		fd = open([_filename fileSystemRepresentation], O_RDONLY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != fd, NSLocalizedStringFromTable(@"Unable to locate the input file.", @"Exceptions", @""));
 		
 		// Seek to the offset for the first sector
 		location	= kCDSectorSizeCDDA * [_sectorRange indexForSector:[range firstSector]];
 		offset		= lseek(fd, location, SEEK_SET);
-		if(-1 == offset/* || offset != location*/) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to seek in the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != offset, NSLocalizedStringFromTable(@"Unable to seek in the input file.", @"Exceptions", @""));
 		
 		// Read the sectors into the buffer
 		bytesRead = read(fd, buffer, [range byteSize]);
-		if(-1 == bytesRead || (unsigned)bytesRead != [range byteSize]) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the input file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != bytesRead && (unsigned)bytesRead == [range byteSize], NSLocalizedStringFromTable(@"Unable to read from the input file.", @"Exceptions", @""));
 	}
 	
 	@finally {
@@ -271,25 +257,16 @@
 		
 		// Open the file for writing
 		fd = open([_filename fileSystemRepresentation], O_WRONLY | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		if(-1 == fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != fd, NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @""));
 		
 		// Seek to the offset for the first sector
 		location	= kCDSectorSizeCDDA * [_sectorRange indexForSector:[range firstSector]];
 		offset		= lseek(fd, location, SEEK_SET);
-		if(-1 == offset/* || offset != location*/) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to seek in the output file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != offset, NSLocalizedStringFromTable(@"Unable to seek in the input file.", @"Exceptions", @""));
 		
 		// Write the sectors into the file
 		bytesWritten = write(fd, buffer, [range byteSize]);
-		if(-1 == bytesWritten || (unsigned)bytesWritten != [range byteSize]) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != bytesWritten && (unsigned)bytesWritten == [range byteSize], NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 		
 		if(NO == [self calculateHashes]) {
 			return;
@@ -307,10 +284,7 @@
 			
 			// Allocate space for the hash
 			_hashes[arrayIndex] = calloc(32, sizeof(unsigned char));
-			if(NULL == _hashes[arrayIndex]) {
-				@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-												   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];				
-			}
+			NSAssert(NULL != _hashes[arrayIndex], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 			
 			// Copy the hash value
 			memcpy(_hashes[arrayIndex], hash, 32 * sizeof(unsigned char));

@@ -20,7 +20,6 @@
 
 #import "Track.h"
 #import "CompactDiscDocument.h"
-#import "MissingResourceException.h"
 
 #include <IOKit/storage/IOCDTypes.h>
 
@@ -37,10 +36,8 @@
     
 	@try {
 		trackDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TrackDefaults" ofType:@"plist"];
-		if(nil == trackDefaultsValuesPath) {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"TrackDefaults.plist" forKey:@"filename"]];
-		}
+		NSAssert1(nil != trackDefaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"TrackDefaults.plist");
+
 		trackDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:trackDefaultsValuesPath];
 		[[NSUserDefaults standardUserDefaults] registerDefaults:trackDefaultsValuesDictionary];
 		

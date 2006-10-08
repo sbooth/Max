@@ -25,8 +25,6 @@
 #include <util.h> // opendev
 
 #import "LogController.h"
-#import "IOException.h"
-#import "MallocException.h"
 
 @interface Drive (Private)
 - (void)				logMessage:(NSString *)message;
@@ -62,11 +60,7 @@
 		_tracks			= [[NSMutableArray alloc] init];
 		
 		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
-
-		if(-1 == _fd) {
-			@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to open the drive for reading.", @"Exceptions", @"")
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(-1 != _fd, NSLocalizedStringFromTable(@"Unable to open the drive for reading.", @"Exceptions", @""));
 				
 		[self readTOC];
 		
@@ -81,8 +75,9 @@
 	if(-1 == close(_fd)) {
 		NSException *exception;
 		
-		exception =  [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to close the drive.", @"Exceptions", @"")					
-											 userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+		exception =  [NSException exceptionWithName:@"IOException"
+											 reason:NSLocalizedStringFromTable(@"Unable to close the drive.", @"Exceptions", @"")					
+										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 
 		[self logMessage:[exception description]];
 	}
@@ -225,10 +220,7 @@
 		// Allocate the buffer
 		bufferLen	= requiredReadSize < 1024 ? requiredReadSize : 1024;
 		buffer		= calloc(bufferLen, kCDSectorSizeCDDA);
-		if(NULL == buffer) {
-			@throw [MallocException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") 
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-		}
+		NSAssert(NULL != buffer, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Make sure there are enough sectors outside the range to fill the cache
 		if(preSectorsAvailable + postSectorsAvailable < requiredReadSize) {
@@ -244,9 +236,8 @@
 				sectorsRead = [self readAudio:buffer
 								  startSector:sessionFirstSector + (requiredReadSize - sectorsRemaining)
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
-				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
-				}
+				NSAssert(0 != sectorsRead, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @""));
+				
 				sectorsRemaining -= sectorsRead;
 			}
 		}
@@ -256,9 +247,8 @@
 				sectorsRead = [self readAudio:buffer
 								  startSector:sessionLastSector - sectorsRemaining
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
-				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
-				}
+				NSAssert(0 != sectorsRead, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @""));
+
 				sectorsRemaining -= sectorsRead;
 			}
 		}
@@ -273,9 +263,8 @@
 				sectorsRead = [self readAudio:buffer
 								  startSector:sessionFirstSector + (boundary - sectorsRemaining)
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
-				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
-				}
+				NSAssert(0 != sectorsRead, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @""));
+
 				sectorsRemaining -= sectorsRead;
 			}
 			
@@ -292,9 +281,8 @@
 				sectorsRead = [self readAudio:buffer
 								  startSector:sessionLastSector - sectorsRemaining
 								  sectorCount:(bufferLen < sectorsRemaining ? bufferLen : sectorsRemaining)];
-				if(0 == sectorsRead) {
-					@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"") userInfo:nil];
-				}
+				NSAssert(0 != sectorsRead, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @""));
+
 				sectorsRemaining -= sectorsRead;
 			}
 			
@@ -451,6 +439,7 @@
 
 - (void)			readTOC
 {
+	int					result;
 	dk_cd_read_toc_t	cd_read_toc;
 	uint8_t				buffer					[2048];
 	CDTOC				*toc					= NULL;
@@ -472,10 +461,8 @@
 	cd_read_toc.buffer			= buffer;
 	cd_read_toc.bufferLength	= sizeof(buffer);
 	
-	if(-1 == ioctl([self fileDescriptor], DKIOCCDREADTOC, &cd_read_toc)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read the disc's table of contents.", @"Exceptions", @"")
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
+	result = ioctl([self fileDescriptor], DKIOCCDREADTOC, &cd_read_toc);
+	NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to read the disc's table of contents.", @"Exceptions", @""));
 	
 	toc				= (CDTOC*)buffer;
 	numDescriptors	= CDTOCGetDescriptorCount(toc);
@@ -568,6 +555,7 @@
 // Implementation method
 - (unsigned)		readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
 {
+	int				result;
 	dk_cd_read_t	cd_read;
 	unsigned		blockSize		= 0;
 	
@@ -584,10 +572,8 @@
 	cd_read.buffer			= buffer;
 	cd_read.bufferLength	= blockSize * sectorCount;
 	
-	if(-1 == ioctl([self fileDescriptor], DKIOCCDREAD, &cd_read)) {
-		@throw [IOException exceptionWithReason:NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @"")
-									   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-	}
+	result = ioctl([self fileDescriptor], DKIOCCDREAD, &cd_read);
+	NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @""));
 	
 	return cd_read.bufferLength / blockSize;
 }

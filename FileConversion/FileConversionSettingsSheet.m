@@ -19,7 +19,6 @@
  */
 
 #import "FileConversionSettingsSheet.h"
-#import "MissingResourceException.h"
 #import "UtilityFunctions.h"
 
 enum {
@@ -59,13 +58,12 @@ enum {
 - (id) initWithSettings:(NSMutableDictionary *)settings
 {
 	if((self = [super init])) {
-
+		BOOL	result;
+		
 		_settings = [settings retain];
 
-		if(NO == [NSBundle loadNibNamed:@"FileConversionSettingsSheet" owner:self])  {
-			@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-														userInfo:[NSDictionary dictionaryWithObject:@"FileConversionSettingsSheet.nib" forKey:@"filename"]];
-		}
+		result = [NSBundle loadNibNamed:@"FileConversionSettingsSheet" owner:self];
+		NSAssert1(YES == result, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"FileConversionSettingsSheet.nib");
 				
 		return self;
 	}

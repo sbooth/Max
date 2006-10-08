@@ -20,7 +20,6 @@
 
 #import "PreferencesController.h"
 
-#import "MissingResourceException.h"
 #import "UtilityFunctions.h"
 
 static PreferencesController	*sharedPreferences		= nil;
@@ -55,10 +54,8 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferenc
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
 			defaultsPath = [[NSBundle mainBundle] pathForResource:[defaultFiles objectAtIndex:i] ofType:@"plist"];
-			if(nil == defaultsPath) {
-				@throw [MissingResourceException exceptionWithReason:NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @"")
-															userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%@.plist", [defaultFiles objectAtIndex:i]] forKey:@"filename"]];
-			}
+			NSAssert1(nil != defaultsPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), [[defaultFiles objectAtIndex:i] stringByAppendingString:@".plist"]);
+
 			[defaultsDictionary addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:defaultsPath]];
 		}
 	    
