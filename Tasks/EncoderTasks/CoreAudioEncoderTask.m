@@ -52,8 +52,9 @@
 	NSMutableDictionary		*info;
 	UInt32					size;
 	MP4FileHandle			mp4FileHandle;
+	int						result;
 	AudioMetadata			*metadata				= [[self taskInfo] metadata];
-	UInt32					formatID				= [self formatID];
+	AudioFileTypeID			fileType				= [self fileType];
 	NSString				*bundleVersion			= nil;
 	NSString				*versionString			= nil;
 	unsigned				trackNumber				= 0;
@@ -77,148 +78,146 @@
 	ssize_t					patternLen				= strlen(TEMPFILE_PATTERN);
 	
 	
-	// Use mp4v2 for Apple lossless/AAC files
-	if(kAudioFormatMPEG4AAC == formatID || kAudioFormatAppleLossless == formatID) {
+	// Use mp4v2 for mp4/m4a files
+	if(kAudioFileMPEG4Type == fileType || kAudioFileM4AType == fileType) {
 		mp4FileHandle = MP4Modify([[self outputFilename] fileSystemRepresentation], 0, 0);
+		NSAssert(MP4_INVALID_FILE_HANDLE != mp4FileHandle, NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
+
+		// Album title
+		album = [metadata albumTitle];
+		if(nil != album) {
+			MP4SetMetadataAlbum(mp4FileHandle, [album UTF8String]);
+		}
 		
-		if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
-			
-			// Album title
-			album = [metadata albumTitle];
-			if(nil != album) {
-				MP4SetMetadataAlbum(mp4FileHandle, [album UTF8String]);
-			}
-			
-			// Artist
-			artist = [metadata trackArtist];
-			if(nil == artist) {
-				artist = [metadata albumArtist];
-			}
-			if(nil != artist) {
-				MP4SetMetadataArtist(mp4FileHandle, [artist UTF8String]);
-			}
-			
-			// Composer
-			composer = [metadata trackComposer];
-			if(nil == composer) {
-				composer = [metadata albumComposer];
-			}
-			if(nil != composer) {
-				MP4SetMetadataWriter(mp4FileHandle, [composer UTF8String]);
-			}
+		// Artist
+		artist = [metadata trackArtist];
+		if(nil == artist) {
+			artist = [metadata albumArtist];
+		}
+		if(nil != artist) {
+			MP4SetMetadataArtist(mp4FileHandle, [artist UTF8String]);
+		}
+		
+		// Composer
+		composer = [metadata trackComposer];
+		if(nil == composer) {
+			composer = [metadata albumComposer];
+		}
+		if(nil != composer) {
+			MP4SetMetadataWriter(mp4FileHandle, [composer UTF8String]);
+		}
 
-			// Genre
-			if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count]) {
-				genre = [metadata trackGenre];
-			}
-			if(nil == genre) {
-				genre = [metadata albumGenre];
-			}
-			if(nil != genre) {
-				MP4SetMetadataGenre(mp4FileHandle, [genre UTF8String]);
-			}
-			
-			// Year
-			year = [metadata trackYear];
-			if(0 == year) {
-				year = [metadata albumYear];
-			}
-			if(0 != year) {
-				MP4SetMetadataYear(mp4FileHandle, [[NSString stringWithFormat:@"%u", year] UTF8String]);
-			}
-			
-			// Comment
-			comment			= [metadata albumComment];
-			trackComment	= [metadata trackComment];
-			if(nil != trackComment) {
-				comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
-			}
-			if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
-				comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
-			}
-			if(nil != comment) {
-				MP4SetMetadataComment(mp4FileHandle, [comment UTF8String]);
-			}
-			
-			// Track title
-			title = [metadata trackTitle];
-			if(nil != title) {
-				MP4SetMetadataName(mp4FileHandle, [title UTF8String]);
-			}
-			
-			// Track number
-			trackNumber = [metadata trackNumber];
-			trackTotal = [metadata trackTotal];
-			if(0 != trackNumber && 0 != trackTotal) {
-				MP4SetMetadataTrack(mp4FileHandle, trackNumber, trackTotal);
-			}
-			else if(0 != trackNumber) {
-				MP4SetMetadataTrack(mp4FileHandle, trackNumber, 0);
-			}
-			else if(0 != trackTotal) {
-				MP4SetMetadataTrack(mp4FileHandle, 0, trackTotal);
-			}
-			
-			// Disc number
-			discNumber = [metadata discNumber];
-			discTotal = [metadata discTotal];
-			if(0 != discNumber && 0 != discTotal) {
-				MP4SetMetadataDisk(mp4FileHandle, discNumber, discTotal);
-			}
-			else if(0 != discNumber) {
-				MP4SetMetadataDisk(mp4FileHandle, discNumber, 0);
-			}
-			else if(0 != discTotal) {
-				MP4SetMetadataDisk(mp4FileHandle, 0, discTotal);
-			}
-			
-			// Compilation
-			compilation = [metadata compilation];
-			if(NO != compilation) {
-				MP4SetMetadataCompilation(mp4FileHandle, YES);
-			}
-			
-			// Album art
-			albumArt = [metadata albumArt];
-			if(nil != albumArt) {
-				data = getPNGDataForImage(albumArt); 
-				MP4SetMetadataCoverArt(mp4FileHandle, (u_int8_t *)[data bytes], [data length]);
-			}
+		// Genre
+		if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count]) {
+			genre = [metadata trackGenre];
+		}
+		if(nil == genre) {
+			genre = [metadata albumGenre];
+		}
+		if(nil != genre) {
+			MP4SetMetadataGenre(mp4FileHandle, [genre UTF8String]);
+		}
+		
+		// Year
+		year = [metadata trackYear];
+		if(0 == year) {
+			year = [metadata albumYear];
+		}
+		if(0 != year) {
+			MP4SetMetadataYear(mp4FileHandle, [[NSString stringWithFormat:@"%u", year] UTF8String]);
+		}
+		
+		// Comment
+		comment			= [metadata albumComment];
+		trackComment	= [metadata trackComment];
+		if(nil != trackComment) {
+			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
+		}
+		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+			comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
+		}
+		if(nil != comment) {
+			MP4SetMetadataComment(mp4FileHandle, [comment UTF8String]);
+		}
+		
+		// Track title
+		title = [metadata trackTitle];
+		if(nil != title) {
+			MP4SetMetadataName(mp4FileHandle, [title UTF8String]);
+		}
+		
+		// Track number
+		trackNumber = [metadata trackNumber];
+		trackTotal = [metadata trackTotal];
+		if(0 != trackNumber && 0 != trackTotal) {
+			MP4SetMetadataTrack(mp4FileHandle, trackNumber, trackTotal);
+		}
+		else if(0 != trackNumber) {
+			MP4SetMetadataTrack(mp4FileHandle, trackNumber, 0);
+		}
+		else if(0 != trackTotal) {
+			MP4SetMetadataTrack(mp4FileHandle, 0, trackTotal);
+		}
+		
+		// Disc number
+		discNumber = [metadata discNumber];
+		discTotal = [metadata discTotal];
+		if(0 != discNumber && 0 != discTotal) {
+			MP4SetMetadataDisk(mp4FileHandle, discNumber, discTotal);
+		}
+		else if(0 != discNumber) {
+			MP4SetMetadataDisk(mp4FileHandle, discNumber, 0);
+		}
+		else if(0 != discTotal) {
+			MP4SetMetadataDisk(mp4FileHandle, 0, discTotal);
+		}
+		
+		// Compilation
+		compilation = [metadata compilation];
+		if(NO != compilation) {
+			MP4SetMetadataCompilation(mp4FileHandle, YES);
+		}
+		
+		// Album art
+		albumArt = [metadata albumArt];
+		if(nil != albumArt) {
+			data = getPNGDataForImage(albumArt); 
+			MP4SetMetadataCoverArt(mp4FileHandle, (u_int8_t *)[data bytes], [data length]);
+		}
 
-			// Encoded by
-			bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-			versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
-			MP4SetMetadataTool(mp4FileHandle, [versionString UTF8String]);
-			
-			MP4Close(mp4FileHandle);
-			
-			// Optimize the atoms so the MP4 files will play on shared iTunes libraries
-			// mp4v2 creates a temp file in ., so use a custom file and manually rename it
-			
-			tmpDir = [[[[self taskInfo] settings] objectForKey:@"temporaryDirectory"] fileSystemRepresentation];
-			if(nil == tmpDir) {
-				tmpDir = [NSTemporaryDirectory() fileSystemRepresentation];
-			}
-			
-			validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);
-			
-			tmpDirLen	= strlen(tmpDir);
-			path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-			NSAssert(NULL != path, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-			memcpy(path, tmpDir, tmpDirLen);
-			memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
-			path[tmpDirLen + patternLen] = '\0';
-			
-			path = mktemp(path);
+		// Encoded by
+		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+		versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
+		MP4SetMetadataTool(mp4FileHandle, [versionString UTF8String]);
+		
+		MP4Close(mp4FileHandle);
+		
+		// Optimize the atoms so the MP4 files will play on shared iTunes libraries
+		// mp4v2 creates a temp file in ., so use a custom file and manually rename it
+		
+		tmpDir = [[[[self taskInfo] settings] objectForKey:@"temporaryDirectory"] fileSystemRepresentation];
+		if(nil == tmpDir) {
+			tmpDir = [NSTemporaryDirectory() fileSystemRepresentation];
+		}
+		
+		validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);
+		
+		tmpDirLen	= strlen(tmpDir);
+		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
+		NSAssert(NULL != path, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+		memcpy(path, tmpDir, tmpDirLen);
+		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
+		path[tmpDirLen + patternLen] = '\0';
+		
+		path = mktemp(path);
+		NSAssert(NULL != path, @"Unable to open temporary file.");
 
-			if(NO == MP4Optimize([[self outputFilename] fileSystemRepresentation], NULL, 0)) {
-				[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[self outputFilename] lastPathComponent]]];
-			}
+		if(NO == MP4Optimize([[self outputFilename] fileSystemRepresentation], path, 0)) {
+			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[self outputFilename] lastPathComponent]]];
+		}
 
-			rename(path, [[self outputFilename] fileSystemRepresentation]);
-			
-			return;
-		}		
+		result = rename(path, [[self outputFilename] fileSystemRepresentation]);
+		NSAssert1(-1 != result, NSLocalizedStringFromTable(@"Unable to optimize the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]);
 	}
 	// Use (unimplemented as of 10.4.3) CoreAudio metadata functions
 	else {
