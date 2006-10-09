@@ -136,16 +136,15 @@ validateAndCreateDirectory(NSString *path)
 {
 	NSFileManager		*manager			= [NSFileManager defaultManager];
 	BOOL				isDir;
+	BOOL				result;
 
-	if(NO == [manager fileExistsAtPath:path isDirectory:&isDir]) {
-		if(NO == [manager createDirectoryAtPath:path attributes:nil]) {
-			@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory.", @"Exceptions", @"")
-										 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
-		}
+	result = [manager fileExistsAtPath:path isDirectory:&isDir];
+	if(NO == result) {
+		result = [manager createDirectoryAtPath:path attributes:nil];
+		NSCAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create directory.", @"Exceptions", @""));
 	}
-	else if(NO == isDir) {
-		@throw [NSException exceptionWithName:@"NSObjectInaccessibleException" reason:NSLocalizedStringFromTable(@"Unable to create directory.", @"Exceptions", @"")
-									 userInfo:[NSDictionary dictionaryWithObject:path forKey:@"pathname"]];
+	else {
+		NSCAssert(YES == isDir, NSLocalizedStringFromTable(@"Unable to create directory.", @"Exceptions", @""));
 	}	
 }
 
@@ -233,9 +232,7 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 	
 	string			= [NSString stringWithFormat:@"%@=%@", key, value];
 	entry.entry		= (unsigned char *)strdup([string UTF8String]);
-	if(NULL == entry.entry) {
-		@throw [NSException exceptionWithName:@"MallocException" reason:NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @"") userInfo:nil];
-	}
+	NSCAssert(NULL != entry.entry, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 	
 	entry.length	= strlen((const char *)entry.entry);
 	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
@@ -363,14 +360,12 @@ NSData *
 getBitmapDataForImage(NSImage					*image,
 					  NSBitmapImageFileType		type)
 {
+	NSCParameterAssert(nil != image);
+
 	NSEnumerator		*enumerator					= nil;
 	NSImageRep			*currentRepresentation		= nil;
 	NSBitmapImageRep	*bitmapRep					= nil;
 	NSSize				size;
-	
-	if(nil == image) {
-		return nil;
-	}
 	
 	enumerator = [[image representations] objectEnumerator];
 	while((currentRepresentation = [enumerator nextObject])) {
@@ -430,6 +425,9 @@ getIconForFile(NSString *filename, NSSize iconSize)
 void
 addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 {
+	NSCParameterAssert(nil != filename);
+	NSCParameterAssert(nil != metadata);
+	
 	NSDictionary				*errors				= [NSDictionary dictionary];
 	NSString					*path				= nil;
 	NSAppleScript				*appleScript		= nil;

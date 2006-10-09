@@ -41,7 +41,7 @@
 	if((self = [super init])) {
 		
 		_mb = new MusicBrainz();
-		NSAssert(NULL != _mb, @"Unable to allocate memory");
+		NSAssert(NULL != _mb, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		[self mb]->UseUTF8(true);
 
@@ -95,7 +95,7 @@
 	if((self = [super init])) {
 		
 		_data = [[MusicBrainzHelperData alloc] init];
-		NSAssert(nil != _data, @"Unable to allocate memory");
+		NSAssert(NULL != _data, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		_disc = [disc retain];		
 		
@@ -150,13 +150,11 @@
 	std::string			query, data, error;
 	bool				mbResult;
 	unsigned			i;
-	unsigned			session;
 	unsigned			firstTrackIndex, lastTrackIndex;
 	
 	// Fill in the MUSICBRAINZ_CDINFO struct
 	memset(&mbCDInfo, 0, sizeof(MUSICBRAINZ_CDINFO));
 	
-	session					= 1;
 	firstTrackIndex			= 0;
 	lastTrackIndex			= [[self disc] countOfTracks] - 1;
 	
@@ -235,6 +233,6 @@
 @end
 
 @implementation MusicBrainzHelper (Private)
-- (MusicBrainzHelperData *)		data		{ return _data; }
-- (CompactDisc *)				disc		{ return _disc; }
+- (MusicBrainzHelperData *)		data		{ return [[_data retain] autorelease]; }
+- (CompactDisc *)				disc		{ return [[_disc retain] autorelease]; }
 @end

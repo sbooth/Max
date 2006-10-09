@@ -53,7 +53,7 @@
 
 	// Setup converter
 	chars			= GetUTF16FromANSI([[self filename] fileSystemRepresentation]);
-	NSAssert(NULL != chars, @"Unable to allocate memory.");
+	NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 	_decompressor	= (void *)CreateIAPEDecompress(chars, &result);
 	NSAssert(NULL != _decompressor && ERROR_SUCCESS == result, @"Unable to open the input file.");
