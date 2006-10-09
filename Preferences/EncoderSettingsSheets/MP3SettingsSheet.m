@@ -19,8 +19,7 @@
  */
 
 #import "MP3SettingsSheet.h"
-//#import "MP3Encoder.h"
-#import "MPEGEncoder.h"
+#import "MP3Encoder.h"
 
 @interface MP3SettingsSheet (Private)
 - (void)	setPresetDescription;

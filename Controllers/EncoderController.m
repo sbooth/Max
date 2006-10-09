@@ -26,7 +26,7 @@
 #import "CoreAudioEncoderTask.h"
 #import "FLACEncoderTask.h"
 #import "MonkeysAudioEncoderTask.h"
-#import "MPEGEncoderTask.h"
+#import "MP3EncoderTask.h"
 #import "OggFLACEncoderTask.h"
 #import "OggSpeexEncoderTask.h"
 #import "OggVorbisEncoderTask.h"
@@ -164,8 +164,8 @@ static EncoderController *sharedController = nil;
 				[self runEncoder:[OggVorbisEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
-			case kComponentMPEG:
-				[self runEncoder:[MPEGEncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
+			case kComponentMP3:
+				[self runEncoder:[MP3EncoderTask class] taskInfo:taskInfo encoderSettings:[format objectForKey:@"settings"]];
 				break;
 				
 			case kComponentOggSpeex:

@@ -18,7 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "MPEGEncoder.h"
+#import "MP3Encoder.h"
 
 #include <CoreAudio/CoreAudioTypes.h>
 #include <AudioToolbox/AudioFormat.h>
@@ -40,13 +40,13 @@
 // Bitrates supported for 44.1 kHz audio
 static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320 };
 
-@interface MPEGEncoder (Private)
+@interface MP3Encoder (Private)
 - (void)	parseSettings;
 - (void)	encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
 - (void)	finishEncode;
 @end
 
-@implementation MPEGEncoder
+@implementation MP3Encoder
 
 - (id) initWithFilename:(NSString *)filename
 {
@@ -266,7 +266,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 @end
 
-@implementation MPEGEncoder (Private)
+@implementation MP3Encoder (Private)
 - (void) parseSettings
 {
 	NSDictionary	*settings	= [[self delegate] encoderSettings];

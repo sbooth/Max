@@ -22,7 +22,7 @@
 
 #import "EncoderTask.h"
 
-@interface MPEGEncoderTask : EncoderTask 
+@interface MP3EncoderTask : EncoderTask 
 {
 }
 

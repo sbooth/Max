@@ -33,7 +33,7 @@ enum {
 	kComponentWavPack			= 4,
 	kComponentMonkeysAudio		= 5,
 	kComponentOggVorbis			= 6,
-	kComponentMPEG				= 7,
+	kComponentMP3				= 7,
 	kComponentOggSpeex			= 8
 };
 

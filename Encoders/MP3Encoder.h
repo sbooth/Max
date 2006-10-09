@@ -47,7 +47,7 @@ enum {
 	LAME_STEREO_MODE_JOINT_STEREO			= 3,
 };
 
-@interface MPEGEncoder : Encoder
+@interface MP3Encoder : Encoder
 {	
 	int						_out;
 	lame_global_flags		*_gfp;

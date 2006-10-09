@@ -18,8 +18,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "MPEGEncoderTask.h"
-#import "MPEGEncoder.h"
+#import "MP3EncoderTask.h"
+#import "MP3Encoder.h"
 #import "Genres.h"
 
 #import "UtilityFunctions.h"
@@ -34,12 +34,12 @@
 #include <taglib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
 #include <taglib/id3v2tag.h>				// TagLib::ID3V2::Tag
 
-@implementation MPEGEncoderTask
+@implementation MP3EncoderTask
 
 - (id) init
 {
 	if((self = [super init])) {
-		_encoderClass = [MPEGEncoder class];
+		_encoderClass = [MP3Encoder class];
 		return self;
 	}
 	return nil;
@@ -261,14 +261,14 @@
 
 @end
 
-@implementation MPEGEncoderTask (CueSheetExtensions)
+@implementation MP3EncoderTask (CueSheetExtensions)
 
 - (BOOL)			formatIsValidForCueSheet		{ return YES; }
 - (NSString *)		cueSheetFormatName				{ return @"MP3"; }
 
 @end
 
-@implementation MPEGEncoderTask (iTunesAdditions)
+@implementation MP3EncoderTask (iTunesAdditions)
 
 - (BOOL)			formatIsValidForiTunes			{ return YES; }
 
