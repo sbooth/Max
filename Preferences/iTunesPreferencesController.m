@@ -18,9 +18,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "AlbumArtPreferencesController.h"
+#import "iTunesPreferencesController.h"
+#import "PreferencesController.h"
+#import "UtilityFunctions.h"
 
-enum {	
+enum {
 	kAlbumTitleMenuItem					= 1,
 	kAlbumArtistMenuItem				= 2,
 	kAlbumYearMenuItem					= 3,
@@ -39,11 +41,11 @@ enum {
 	kSourceFilenameMenuItemTag			= 16
 };
 
-@implementation AlbumArtPreferencesController
+@implementation iTunesPreferencesController
 
 - (id) init
 {
-	if((self = [super initWithWindowNibName:@"AlbumArtPreferences"])) {
+	if((self = [super initWithWindowNibName:@"iTunesPreferences"])) {
 		return self;		
 	}
 	return nil;
@@ -51,12 +53,13 @@ enum {
 
 - (void) awakeFromNib
 {
-	[[_albumArtFormatSpecifierPopUpButton selectedItem] setState:NSOffState];
-	[_albumArtFormatSpecifierPopUpButton selectItemAtIndex:-1];
-	[_albumArtFormatSpecifierPopUpButton synchronizeTitleAndSelectedItem];
+	// Deselect all items in the File Format Specifier NSPopUpButton
+	[[_iTunesPlaylistSpecifierPopUpButton selectedItem] setState:NSOffState];
+	[_iTunesPlaylistSpecifierPopUpButton selectItemAtIndex:-1];
+	[_iTunesPlaylistSpecifierPopUpButton synchronizeTitleAndSelectedItem];
 }
 
-- (IBAction) insertAlbumArtFileNamingFormatSpecifier:(id)sender
+- (IBAction) insertiTunesPlaylistFormatSpecifier:(id)sender
 {
 	NSString		*string;
 	NSText			*fieldEditor;
@@ -81,23 +84,23 @@ enum {
 		default:							string = @"";					break;
 	}
 	
-	fieldEditor = [_albumArtFileNamingComboBox currentEditor];
+	fieldEditor = [_iTunesPlaylistComboBox currentEditor];
 	if(nil == fieldEditor) {
-		[_albumArtFileNamingComboBox setStringValue:string];
-		[_albumArtFileNamingComboBox sendAction:[_albumArtFileNamingComboBox action] to:[_albumArtFileNamingComboBox target]];
+		[_iTunesPlaylistComboBox setStringValue:string];
+		[_iTunesPlaylistComboBox sendAction:[_iTunesPlaylistComboBox action] to:[_iTunesPlaylistComboBox target]];
 	}
-	else if([_albumArtFileNamingComboBox textShouldBeginEditing:fieldEditor]) {
+	else if([_iTunesPlaylistComboBox textShouldBeginEditing:fieldEditor]) {
 		[fieldEditor replaceCharactersInRange:[fieldEditor selectedRange] withString:string];
-		[_albumArtFileNamingComboBox textShouldEndEditing:fieldEditor];
-	}
+		[_iTunesPlaylistComboBox textShouldEndEditing:fieldEditor];
+	}	
 }
 
-- (IBAction) saveAlbumArtFileNamingFormat:(id)sender
+- (IBAction) saveiTunesPlaylist:(id)sender
 {
-	NSString		*pattern	= [_albumArtFileNamingComboBox stringValue];
+	NSString		*pattern	= [_iTunesPlaylistComboBox stringValue];
 	NSMutableArray	*patterns	= nil;
 	
-	patterns = [[[NSUserDefaults standardUserDefaults] objectForKey:@"albumArtFileNamingPatterns"] mutableCopy];
+	patterns = [[[NSUserDefaults standardUserDefaults] stringArrayForKey:@"iTunesPlaylistNamingPatterns"] mutableCopy];
 	if(nil == patterns) {
 		patterns = [[NSMutableArray alloc] init];
 	}
@@ -113,9 +116,9 @@ enum {
 		[patterns removeLastObject];
 	}
 	
-	[[NSUserDefaults standardUserDefault] setValue:patterns forKey:@"albumArtFileNamingPatterns"];
-
+	[[NSUserDefaults standardUserDefaults] setValue:patterns forKey:@"iTunesPlaylistNamingPatterns"];
+	
 	[patterns release];
-}	
+}
 
 @end

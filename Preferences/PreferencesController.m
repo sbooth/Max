@@ -22,14 +22,17 @@
 
 #import "UtilityFunctions.h"
 
-static PreferencesController	*sharedPreferences		= nil;
+static PreferencesController	*sharedPreferences			= nil;
 
-NSString *GeneralPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferences.Toolbar.General";
-NSString *FormatsPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferences.Toolbar.Formats";
-NSString *TaggingPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferences.Toolbar.Tagging";
-NSString *MusicBrainzPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.MusicBrainz";
-NSString *RipperPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferences.Toolbar.Ripper";
-NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferences.Toolbar.AlbumArt";
+NSString *GeneralPreferencesToolbarItemIdentifier			= @"org.sbooth.Max.Preferences.Toolbar.General";
+NSString *FormatsPreferencesToolbarItemIdentifier			= @"org.sbooth.Max.Preferences.Toolbar.Formats";
+NSString *OutputPreferencesToolbarItemIdentifier			= @"org.sbooth.Max.Preferences.Toolbar.Output";
+NSString *TaggingPreferencesToolbarItemIdentifier			= @"org.sbooth.Max.Preferences.Toolbar.Tagging";
+NSString *MusicBrainzPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferences.Toolbar.MusicBrainz";
+NSString *RipperPreferencesToolbarItemIdentifier			= @"org.sbooth.Max.Preferences.Toolbar.Ripper";
+NSString *AlbumArtPreferencesToolbarItemIdentifier			= @"org.sbooth.Max.Preferences.Toolbar.AlbumArt";
+NSString *iTunesPreferencesToolbarItemIdentifier			= @"org.sbooth.Max.Preferences.Toolbar.iTunes";
+NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Preferences.Toolbar.PostProcessing";
 
 @interface PreferencesController (Private)
 - (void) selectPreferencePaneUsingToolbar:(id)sender;
@@ -49,7 +52,7 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferenc
 	@try {
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
 		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults",
-			@"CompactDiscDocumentDefaults", @"ComparisonRipperDefaults", @"ParanoiaDefaults", @"TrackDefaults", 
+			@"CompactDiscDocumentDefaults", @"ComparisonRipperDefaults", @"ParanoiaDefaults",
 			@"AlbumArtDefaults", @"MusicBrainzDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {
@@ -171,6 +174,17 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferenc
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
+    else if([itemIdentifier isEqualToString:OutputPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"", @"Preferences", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
+	}
     else if([itemIdentifier isEqualToString:TaggingPreferencesToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
@@ -215,6 +229,28 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferenc
 		[toolbarItem setTarget:self];
 		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
 	}
+    else if([itemIdentifier isEqualToString:iTunesPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"iTunes", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"iTunes", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify whether to save album art with the encoded files", @"Preferences", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"iTunesToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
+	}
+    else if([itemIdentifier isEqualToString:PostProcessingPreferencesToolbarItemIdentifier]) {
+        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
+		
+		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Post-Processing", @"Preferences", @"")];
+		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Post-Processing", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"", @"Preferences", @"")];
+		[toolbarItem setImage: [NSImage imageNamed:@"PostProcessingToolbarImage"]];
+		
+		[toolbarItem setTarget:self];
+		[toolbarItem setAction:@selector(selectPreferencePaneUsingToolbar:)];
+	}
 	else {
 		toolbarItem = nil;
     }
@@ -227,10 +263,13 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferenc
 	return [NSArray arrayWithObjects:
 		GeneralPreferencesToolbarItemIdentifier,
 		FormatsPreferencesToolbarItemIdentifier,
+		OutputPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier,
 		MusicBrainzPreferencesToolbarItemIdentifier,
 		TaggingPreferencesToolbarItemIdentifier,
 		AlbumArtPreferencesToolbarItemIdentifier,
+		iTunesPreferencesToolbarItemIdentifier,
+		PostProcessingPreferencesToolbarItemIdentifier,
 		nil];
 }
 
@@ -239,10 +278,13 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferenc
 	return [NSArray arrayWithObjects:
 		GeneralPreferencesToolbarItemIdentifier,
 		FormatsPreferencesToolbarItemIdentifier,
+		OutputPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier,
 		MusicBrainzPreferencesToolbarItemIdentifier,
 		TaggingPreferencesToolbarItemIdentifier,
 		AlbumArtPreferencesToolbarItemIdentifier,
+		iTunesPreferencesToolbarItemIdentifier,
+		PostProcessingPreferencesToolbarItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,
 		NSToolbarSpaceItemIdentifier,
 		NSToolbarFlexibleSpaceItemIdentifier,
@@ -255,10 +297,13 @@ NSString *AlbumArtPreferencesToolbarItemIdentifier		= @"org.sbooth.Max.Preferenc
 	return [NSArray arrayWithObjects:
 		GeneralPreferencesToolbarItemIdentifier,
 		FormatsPreferencesToolbarItemIdentifier,
+		OutputPreferencesToolbarItemIdentifier,
 		RipperPreferencesToolbarItemIdentifier,
 		MusicBrainzPreferencesToolbarItemIdentifier,
 		TaggingPreferencesToolbarItemIdentifier,
 		AlbumArtPreferencesToolbarItemIdentifier,
+		iTunesPreferencesToolbarItemIdentifier,
+		PostProcessingPreferencesToolbarItemIdentifier,
 		nil];
 }
 

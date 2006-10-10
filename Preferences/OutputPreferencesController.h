@@ -20,22 +20,19 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString	*		GeneralPreferencesToolbarItemIdentifier;
-extern NSString *		FormatsPreferencesToolbarItemIdentifier;
-extern NSString *		OutputPreferencesToolbarItemIdentifier;
-extern NSString *		RipperPreferencesToolbarItemIdentifier;
-extern NSString *		MusicBrainzPreferencesToolbarItemIdentifier;
-extern NSString *		TaggingPreferencesToolbarItemIdentifier;
-extern NSString *		AlbumArtPreferencesToolbarItemIdentifier;
-extern NSString *		iTunesPreferencesToolbarItemIdentifier;
-extern NSString *		PostProcessingPreferencesToolbarItemIdentifier;
-
-@interface PreferencesController : NSWindowController
+@interface OutputPreferencesController : NSWindowController 
 {
+	IBOutlet NSPopUpButton			*_outputDirectoryPopUpButton;
+	IBOutlet NSPopUpButton			*_temporaryDirectoryPopUpButton;
+	
+	IBOutlet NSComboBox				*_fileNamingComboBox;
+	IBOutlet NSPopUpButton			*_formatSpecifierPopUpButton;
 }
 
-+ (PreferencesController *)		sharedPreferences;
+- (IBAction)			selectOutputDirectory:(id)sender;
+- (IBAction)			selectTemporaryDirectory:(id)sender;
 
-- (void)						selectPreferencePane:(NSString *)itemIdentifier;
+- (IBAction)			insertFileNamingFormatSpecifier:(id)sender;
+- (IBAction)			saveFileNamingFormat:(id)sender;
 
 @end

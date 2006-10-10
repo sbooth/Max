@@ -170,8 +170,8 @@
 		nil]];
 	
 	[_availableFormatsController setSortDescriptors:[NSArray arrayWithObjects:
-		[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease],
 		[[[NSSortDescriptor alloc] initWithKey:@"source" ascending:YES] autorelease],
+		[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease],
 		nil]];
 }
 

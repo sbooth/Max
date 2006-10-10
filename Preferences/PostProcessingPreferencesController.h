@@ -20,22 +20,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString	*		GeneralPreferencesToolbarItemIdentifier;
-extern NSString *		FormatsPreferencesToolbarItemIdentifier;
-extern NSString *		OutputPreferencesToolbarItemIdentifier;
-extern NSString *		RipperPreferencesToolbarItemIdentifier;
-extern NSString *		MusicBrainzPreferencesToolbarItemIdentifier;
-extern NSString *		TaggingPreferencesToolbarItemIdentifier;
-extern NSString *		AlbumArtPreferencesToolbarItemIdentifier;
-extern NSString *		iTunesPreferencesToolbarItemIdentifier;
-extern NSString *		PostProcessingPreferencesToolbarItemIdentifier;
-
-@interface PreferencesController : NSWindowController
+@interface PostProcessingPreferencesController : NSWindowController 
 {
+	IBOutlet NSArrayController 		*_postProcessingActionsController;
 }
 
-+ (PreferencesController *)		sharedPreferences;
-
-- (void)						selectPreferencePane:(NSString *)itemIdentifier;
+- (IBAction)			addPostProcessingApplication:(id)sender;
+- (IBAction)			removePostProcessingApplication:(id)sender;
 
 @end

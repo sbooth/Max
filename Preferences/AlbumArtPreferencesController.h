@@ -22,6 +22,11 @@
 
 @interface AlbumArtPreferencesController : NSWindowController 
 {
+	IBOutlet NSComboBox				*_albumArtFileNamingComboBox;
+	IBOutlet NSPopUpButton			*_albumArtFormatSpecifierPopUpButton;
 }
+
+- (IBAction)			insertAlbumArtFileNamingFormatSpecifier:(id)sender;
+- (IBAction)			saveAlbumArtFileNamingFormat:(id)sender;
 
 @end

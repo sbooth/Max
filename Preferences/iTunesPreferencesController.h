@@ -20,22 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-extern NSString	*		GeneralPreferencesToolbarItemIdentifier;
-extern NSString *		FormatsPreferencesToolbarItemIdentifier;
-extern NSString *		OutputPreferencesToolbarItemIdentifier;
-extern NSString *		RipperPreferencesToolbarItemIdentifier;
-extern NSString *		MusicBrainzPreferencesToolbarItemIdentifier;
-extern NSString *		TaggingPreferencesToolbarItemIdentifier;
-extern NSString *		AlbumArtPreferencesToolbarItemIdentifier;
-extern NSString *		iTunesPreferencesToolbarItemIdentifier;
-extern NSString *		PostProcessingPreferencesToolbarItemIdentifier;
-
-@interface PreferencesController : NSWindowController
+@interface iTunesPreferencesController : NSWindowController 
 {
+	IBOutlet NSComboBox				*_iTunesPlaylistComboBox;
+	IBOutlet NSPopUpButton			*_iTunesPlaylistSpecifierPopUpButton;
 }
 
-+ (PreferencesController *)		sharedPreferences;
-
-- (void)						selectPreferencePane:(NSString *)itemIdentifier;
+- (IBAction)			insertiTunesPlaylistFormatSpecifier:(id)sender;
+- (IBAction)			saveiTunesPlaylist:(id)sender;
 
 @end
