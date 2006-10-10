@@ -52,7 +52,7 @@
 		result = [NSString stringWithFormat:@"%u:%.2u", minutes, seconds];
 	}
 	else {
-		result = [NSString stringWithFormat:@"%u", seconds];
+		result = [NSString stringWithFormat:@"%u seconds", seconds];
 	}
 	
 	return [[result retain] autorelease];
