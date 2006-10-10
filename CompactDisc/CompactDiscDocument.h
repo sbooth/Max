@@ -47,7 +47,6 @@ enum {
 	NSString						*_discID;
 	
 	MusicBrainzHelper				*_mbHelper;
-	NSMutableDictionary				*_settings;
 
 	// Disc information
 	NSString						*_title;
@@ -156,9 +155,6 @@ enum {
 
 - (NSString *)		MCN;
 - (void)			setMCN:(NSString *)MCN;
-
-// Settings
-- (IBAction )		editSettings:(id)sender;
 
 // KVC methods
 - (unsigned)		countOfTracks;

@@ -12,7 +12,6 @@
 		8C0883640A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */; };
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
-		8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */; };
 		8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C244AFB0AC6DFEF001334D0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C244AC60AC6DFEF001334D0 /* Security.framework */; };
@@ -32,8 +31,6 @@
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
 		8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */; };
 		8C450C950A9043C0001BF1A1 /* FileConversionSettingsSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */; };
-		8C450CF00A9047FC001BF1A1 /* FileConversionSettingsSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C450CE60A9047FB001BF1A1 /* FileConversionSettingsSheet.nib */; };
-		8C450E750A918C50001BF1A1 /* SettingsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4650093E776500A88927 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D464F093E776500A88927 /* Preferences.nib */; };
 		8C4D46F4093E813300A88927 /* RipperPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D46EE093E813300A88927 /* RipperPreferences.nib */; };
@@ -130,7 +127,6 @@
 		8C9451470A12E4D700C8DCAE /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513B0A12E4D700C8DCAE /* CompactDiscDocument.m */; };
 		8C9451490A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */; };
 		8C94514D0A12E4D700C8DCAE /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451410A12E4D700C8DCAE /* Track.m */; };
-		8C99D27D0A82A7AF00A8CBE4 /* FileConversionDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C99D27C0A82A7AF00A8CBE4 /* FileConversionDefaults.plist */; };
 		8C99DD5D0A82B97C00A8CBE4 /* FileArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */; };
 		8C99DD5F0A82B97C00A8CBE4 /* FileConversionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */; };
 		8C99DD610A82B97C00A8CBE4 /* FilesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */; };
@@ -174,6 +170,14 @@
 		8CC9A0C80ACD90BF00948BAA /* ShortenDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */; };
 		8CD015CB0ADAA5BD00216B29 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD015C90ADAA5BD00216B29 /* MP3Encoder.m */; };
 		8CD015EB0ADAA67A00216B29 /* MP3EncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CD015E90ADAA67A00216B29 /* MP3EncoderTask.mm */; };
+		8CD01F0B0ADB488300216B29 /* OutputPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD01F090ADB488300216B29 /* OutputPreferencesController.m */; };
+		8CD01F220ADB4A9A00216B29 /* OutputPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD01F1C0ADB4A9A00216B29 /* OutputPreferences.nib */; };
+		8CD020090ADB662600216B29 /* iTunesToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD020080ADB662600216B29 /* iTunesToolbarImage.png */; };
+		8CD0201A0ADB66E000216B29 /* iTunesPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD020180ADB66E000216B29 /* iTunesPreferencesController.m */; };
+		8CD020480ADB688600216B29 /* iTunesPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD020460ADB688600216B29 /* iTunesPreferences.nib */; };
+		8CD0251A0ADC036A00216B29 /* PostProcessingPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD025180ADC036A00216B29 /* PostProcessingPreferencesController.m */; };
+		8CD025370ADC04C900216B29 /* PostProcessingPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CD025350ADC04C900216B29 /* PostProcessingPreferences.nib */; };
+		8CD025750ADC0A4D00216B29 /* PostProcessingToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD025740ADC0A4D00216B29 /* PostProcessingToolbarImage.png */; };
 		8CD25D310AABF75E0037F33A /* TaskInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD25D2F0AABF75E0037F33A /* TaskInfo.m */; };
 		8CD25ED50AAD122D0037F33A /* Speex.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CD25ED40AAD122C0037F33A /* Speex.png */; };
 		8CD26CA50AB50B580037F33A /* EncoderTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9450E40A12E3FC00C8DCAE /* EncoderTask.m */; };
@@ -284,7 +288,6 @@
 		8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CompactDiscDocumentDefaults.plist; sourceTree = "<group>"; };
 		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
-		8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = TrackDefaults.plist; sourceTree = "<group>"; };
 		8C0925F20A2600680017CADE /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8C244AC60AC6DFEF001334D0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
@@ -301,8 +304,6 @@
 		8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlbumArtMethods.h; path = AlbumArt/AlbumArtMethods.h; sourceTree = "<group>"; };
 		8C450C920A9043BF001BF1A1 /* FileConversionSettingsSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileConversionSettingsSheet.h; sourceTree = "<group>"; };
 		8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileConversionSettingsSheet.m; sourceTree = "<group>"; };
-		8C450CE70A9047FB001BF1A1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FileConversionSettingsSheet.nib; sourceTree = "<group>"; };
-		8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SettingsToolbarImage.png; sourceTree = "<group>"; };
 		8C4D452F093E6CB200A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
 		8C4D46EF093E813300A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
 		8C4D489F093E932600A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
@@ -544,7 +545,6 @@
 		8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
 		8C9451400A12E4D700C8DCAE /* Track.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		8C9451410A12E4D700C8DCAE /* Track.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
-		8C99D27C0A82A7AF00A8CBE4 /* FileConversionDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = FileConversionDefaults.plist; sourceTree = "<group>"; };
 		8C99DD560A82B97C00A8CBE4 /* FileArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileArrayController.h; sourceTree = "<group>"; };
 		8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileArrayController.m; sourceTree = "<group>"; };
 		8C99DD580A82B97C00A8CBE4 /* FileConversionController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileConversionController.h; sourceTree = "<group>"; };
@@ -630,6 +630,17 @@
 		8CD015C90ADAA5BD00216B29 /* MP3Encoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MP3Encoder.m; sourceTree = "<group>"; };
 		8CD015E80ADAA67A00216B29 /* MP3EncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MP3EncoderTask.h; sourceTree = "<group>"; };
 		8CD015E90ADAA67A00216B29 /* MP3EncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = MP3EncoderTask.mm; sourceTree = "<group>"; };
+		8CD01F080ADB488300216B29 /* OutputPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputPreferencesController.h; sourceTree = "<group>"; };
+		8CD01F090ADB488300216B29 /* OutputPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutputPreferencesController.m; sourceTree = "<group>"; };
+		8CD01F1D0ADB4A9A00216B29 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
+		8CD020080ADB662600216B29 /* iTunesToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesToolbarImage.png; sourceTree = "<group>"; };
+		8CD020170ADB66E000216B29 /* iTunesPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunesPreferencesController.h; sourceTree = "<group>"; };
+		8CD020180ADB66E000216B29 /* iTunesPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iTunesPreferencesController.m; sourceTree = "<group>"; };
+		8CD020470ADB688600216B29 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/iTunesPreferences.nib; sourceTree = "<group>"; };
+		8CD025170ADC036A00216B29 /* PostProcessingPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostProcessingPreferencesController.h; sourceTree = "<group>"; };
+		8CD025180ADC036A00216B29 /* PostProcessingPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostProcessingPreferencesController.m; sourceTree = "<group>"; };
+		8CD025360ADC04C900216B29 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/PostProcessingPreferences.nib; sourceTree = "<group>"; };
+		8CD025740ADC0A4D00216B29 /* PostProcessingToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PostProcessingToolbarImage.png; sourceTree = "<group>"; };
 		8CD25D2E0AABF75E0037F33A /* TaskInfo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = TaskInfo.h; path = Tasks/TaskInfo.h; sourceTree = "<group>"; };
 		8CD25D2F0AABF75E0037F33A /* TaskInfo.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = TaskInfo.m; path = Tasks/TaskInfo.m; sourceTree = "<group>"; };
 		8CD25ED40AAD122C0037F33A /* Speex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Speex.png; sourceTree = "<group>"; };
@@ -824,9 +835,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CD01F1C0ADB4A9A00216B29 /* OutputPreferences.nib */,
 				8CB596F50AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib */,
 				8CABDF030ABE6CE000905814 /* OggSpeexSettingsSheet.nib */,
-				8C450CE60A9047FB001BF1A1 /* FileConversionSettingsSheet.nib */,
 				8C99E2750A82BA3A00A8CBE4 /* FileConversion.nib */,
 				8C89D07F0A07617E00359E67 /* MP3SettingsSheet.nib */,
 				8C89D02B0A075C0100359E67 /* OggVorbisSettingsSheet.nib */,
@@ -858,6 +869,8 @@
 				8CFF40A40A1D6030008E503C /* SelectEncodersSheet.nib */,
 				8CE24FF20AD30B92009E1323 /* MusicBrainzMatchSheet.nib */,
 				8CE250DA0AD31AB2009E1323 /* MusicBrainzPreferences.nib */,
+				8CD020460ADB688600216B29 /* iTunesPreferences.nib */,
+				8CD025350ADC04C900216B29 /* PostProcessingPreferences.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -886,9 +899,7 @@
 				8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */,
 				8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */,
 				8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */,
-				8C0883610A092EA500CAC5D0 /* TrackDefaults.plist */,
 				8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */,
-				8C99D27C0A82A7AF00A8CBE4 /* FileConversionDefaults.plist */,
 				8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */,
 			);
 			name = Defaults;
@@ -957,9 +968,10 @@
 		8C5301F10A05D5D800890518 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8CD025740ADC0A4D00216B29 /* PostProcessingToolbarImage.png */,
+				8CD020080ADB662600216B29 /* iTunesToolbarImage.png */,
 				8CA9C18A0AD303C1000EF903 /* MusicBrainz.png */,
 				8CD25ED40AAD122C0037F33A /* Speex.png */,
-				8C450E740A918C50001BF1A1 /* SettingsToolbarImage.png */,
 				8CF2B1370A0DC15F008738E4 /* LAME.png */,
 				8CF2B1300A0DC0E5008738E4 /* MonkeysAudio.png */,
 				8C5303790A05E8C600890518 /* Remove_Pressed.png */,
@@ -1168,6 +1180,12 @@
 				8C89C63B0A069E5000359E67 /* TaggingPreferencesController.m */,
 				8CE250AB0AD31943009E1323 /* MusicBrainzPreferencesController.h */,
 				8CE250AC0AD31943009E1323 /* MusicBrainzPreferencesController.m */,
+				8CD01F080ADB488300216B29 /* OutputPreferencesController.h */,
+				8CD01F090ADB488300216B29 /* OutputPreferencesController.m */,
+				8CD020170ADB66E000216B29 /* iTunesPreferencesController.h */,
+				8CD020180ADB66E000216B29 /* iTunesPreferencesController.m */,
+				8CD025170ADC036A00216B29 /* PostProcessingPreferencesController.h */,
+				8CD025180ADC036A00216B29 /* PostProcessingPreferencesController.m */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1468,16 +1486,12 @@
 				8C0883640A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist in Resources */,
 				8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */,
 				8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */,
-				8C08836B0A092EA500CAC5D0 /* TrackDefaults.plist in Resources */,
 				8CF2B1310A0DC0E5008738E4 /* MonkeysAudio.png in Resources */,
 				8CF2B1380A0DC15F008738E4 /* LAME.png in Resources */,
 				8CA73F2E0A0FE45C00B12829 /* Cuesheet.icns in Resources */,
 				8CA73F4B0A0FE6F300B12829 /* ComparisonRipperDefaults.plist in Resources */,
 				8CFF40A60A1D6030008E503C /* SelectEncodersSheet.nib in Resources */,
-				8C99D27D0A82A7AF00A8CBE4 /* FileConversionDefaults.plist in Resources */,
 				8C99E27B0A82BA3A00A8CBE4 /* FileConversion.nib in Resources */,
-				8C450CF00A9047FC001BF1A1 /* FileConversionSettingsSheet.nib in Resources */,
-				8C450E750A918C50001BF1A1 /* SettingsToolbarImage.png in Resources */,
 				8CD25ED50AAD122D0037F33A /* Speex.png in Resources */,
 				8CABDF090ABE6CE000905814 /* OggSpeexSettingsSheet.nib in Resources */,
 				8CB596FB0AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib in Resources */,
@@ -1485,6 +1499,11 @@
 				8CE24FF40AD30B92009E1323 /* MusicBrainzMatchSheet.nib in Resources */,
 				8CE250DC0AD31AB2009E1323 /* MusicBrainzPreferences.nib in Resources */,
 				8CE251120AD335F2009E1323 /* MusicBrainzDefaults.plist in Resources */,
+				8CD01F220ADB4A9A00216B29 /* OutputPreferences.nib in Resources */,
+				8CD020090ADB662600216B29 /* iTunesToolbarImage.png in Resources */,
+				8CD020480ADB688600216B29 /* iTunesPreferences.nib in Resources */,
+				8CD025370ADC04C900216B29 /* PostProcessingPreferences.nib in Resources */,
+				8CD025750ADC0A4D00216B29 /* PostProcessingToolbarImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1596,6 +1615,9 @@
 				8CDF024E0AD8A23E00193153 /* FileFormatNotSupportedException.m in Sources */,
 				8CD015CB0ADAA5BD00216B29 /* MP3Encoder.m in Sources */,
 				8CD015EB0ADAA67A00216B29 /* MP3EncoderTask.mm in Sources */,
+				8CD01F0B0ADB488300216B29 /* OutputPreferencesController.m in Sources */,
+				8CD0201A0ADB66E000216B29 /* iTunesPreferencesController.m in Sources */,
+				8CD0251A0ADC036A00216B29 /* PostProcessingPreferencesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1765,14 +1787,6 @@
 				8C643A7309D7392400F6C1F6 /* Dutch */,
 			);
 			name = Exceptions.strings;
-			sourceTree = "<group>";
-		};
-		8C450CE60A9047FB001BF1A1 /* FileConversionSettingsSheet.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8C450CE70A9047FB001BF1A1 /* English */,
-			);
-			name = FileConversionSettingsSheet.nib;
 			sourceTree = "<group>";
 		};
 		8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */ = {
@@ -1970,6 +1984,30 @@
 				8CB596F60AC0FAE4000DADC9 /* English */,
 			);
 			name = CompactDiscDocumentSettingsSheet.nib;
+			sourceTree = "<group>";
+		};
+		8CD01F1C0ADB4A9A00216B29 /* OutputPreferences.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8CD01F1D0ADB4A9A00216B29 /* English */,
+			);
+			name = OutputPreferences.nib;
+			sourceTree = "<group>";
+		};
+		8CD020460ADB688600216B29 /* iTunesPreferences.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8CD020470ADB688600216B29 /* English */,
+			);
+			name = iTunesPreferences.nib;
+			sourceTree = "<group>";
+		};
+		8CD025350ADC04C900216B29 /* PostProcessingPreferences.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8CD025360ADC04C900216B29 /* English */,
+			);
+			name = PostProcessingPreferences.nib;
 			sourceTree = "<group>";
 		};
 		8CD7F5E0098B0A30002C4D9F /* Credits.rtf */ = {

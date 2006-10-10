@@ -18,7 +18,6 @@
         {
             ACTIONS = {
                 "" = id; 
-                editSettings = id; 
                 ejectDisc = id; 
                 encode = id; 
                 fetchAlbumArt = id; 
