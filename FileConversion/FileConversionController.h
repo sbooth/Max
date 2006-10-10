@@ -31,7 +31,6 @@
 	IBOutlet NSDrawer				*_artDrawer;
 	
 	NSMutableArray					*_files;
-	NSMutableDictionary				*_settings;
 }
 
 + (FileConversionController *)		sharedController;
@@ -45,8 +44,6 @@
 
 - (IBAction)						downloadAlbumArt:(id)sender;
 - (IBAction)						selectAlbumArt:(id)sender;
-
-- (IBAction)						editSettings:(id)sender;
 
 - (IBAction)						setupEncoders:(id)sender;
 
