@@ -328,7 +328,7 @@ enum {
 		}
 
 		// Generate cue sheet
-		if(nil != [[self taskInfo] inputTracks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"singleFileOutput"] && [[NSUserDefaults standardUserDefaults] boolForKey:@"generateCueSheet"]) {
+		if(nil != [[self taskInfo] inputTracks] && [[[self taskInfo] objectForKey:@"generateCueSheet"] boolValue]) {
 			if([self formatIsValidForCueSheet]) {
 				[self generateCueSheet];
 			}
