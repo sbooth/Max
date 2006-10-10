@@ -118,8 +118,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	NSString				*filename				= nil;
 	NSMutableDictionary		*settings				= nil;
 	NSMutableDictionary		*postProcessingOptions	= nil;
-	NSArray					*applications;
-	NSMutableArray			*postProcessingApplications;
+	NSArray					*applicationPaths;
 	unsigned				i;
 
 	encoders = [[_encodersController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];
@@ -161,7 +160,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"deleteSourceFiles"] forKey:@"deleteSourceFiles"];
 	[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"overwriteOutputFiles"] forKey:@"overwriteOutputFiles"];
 	
-	if([[[NSUserDefaults standardUserDefaults] objectForKey:@"overwriteOutputFiles"] boolValue]) {
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"overwriteOutputFiles"]) {
 		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"promptBeforeOverwritingOutputFiles"] forKey:@"promptBeforeOverwritingOutputFiles"];
 	}
 	
@@ -189,15 +188,10 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		}		
 	}
 		
-	applications					= [[NSUserDefaults standardUserDefaults] objectForKey:@"postProcessingApplications"];
-	postProcessingApplications		= [NSMutableArray arrayWithCapacity:[applications count]];
-	
-	for(i = 0; i < [applications count]; ++i) {
-		[postProcessingApplications addObject:[[applications objectAtIndex:i] objectForKey:@"path"]];
-	}
-	
-	if(0 != [postProcessingApplications count]) {
-		[postProcessingOptions setValue:postProcessingApplications forKey:@"postProcessingApplications"];
+	applicationPaths	= [[NSUserDefaults standardUserDefaults] objectForKey:@"postProcessingApplications"];
+		
+	if(0 != [applicationPaths count]) {
+		[postProcessingOptions setValue:applicationPaths forKey:@"postProcessingApplications"];
 	}
 	
 	if(0 != [postProcessingOptions count]) {

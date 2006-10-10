@@ -723,8 +723,7 @@
 	if(NSOKButton == returnCode) {
 		NSMutableDictionary		*settings				= nil;
 		NSMutableDictionary		*postProcessingOptions	= nil;
-		NSArray					*applications;
-		NSMutableArray			*postProcessingApplications;
+		NSArray					*applicationPaths;
 		unsigned				i;
 		
 		settings			= [NSMutableDictionary dictionary];
@@ -773,15 +772,10 @@
 			}		
 		}
 		
-		applications					= [[NSUserDefaults standardUserDefaults] objectForKey:@"postProcessingApplications"];
-		postProcessingApplications		= [NSMutableArray arrayWithCapacity:[applications count]];
+		applicationPaths	= [[NSUserDefaults standardUserDefaults] objectForKey:@"postProcessingApplications"];
 		
-		for(i = 0; i < [applications count]; ++i) {
-			[postProcessingApplications addObject:[[applications objectAtIndex:i] objectForKey:@"path"]];
-		}
-		
-		if(0 != [postProcessingApplications count]) {
-			[postProcessingOptions setValue:postProcessingApplications forKey:@"postProcessingApplications"];
+		if(0 != [applicationPaths count]) {
+			[postProcessingOptions setValue:applicationPaths forKey:@"postProcessingApplications"];
 		}
 		
 		if(0 != [postProcessingOptions count]) {
