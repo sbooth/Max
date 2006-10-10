@@ -22,7 +22,6 @@
 
 #import "CompactDiscDocumentToolbar.h"
 #import "CompactDiscController.h"
-#import "CompactDiscDocumentSettingsSheet.h"
 #import "Track.h"
 #import "AudioMetadata.h"
 #import "Genres.h"

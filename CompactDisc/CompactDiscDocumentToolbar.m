@@ -172,10 +172,11 @@ enum {
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
     return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
+		NSToolbarSpaceItemIdentifier,
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		QueryMusicBrainzToolbarItemIdentifier,
 		NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
-		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier, nil];
+		nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 

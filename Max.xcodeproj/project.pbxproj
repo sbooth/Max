@@ -161,8 +161,6 @@
 		8CABDF9D0ABE731B00905814 /* WavPackEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF080A05CB8E00890518 /* WavPackEncoder.m */; };
 		8CABDFB70ABE751100905814 /* OggSpeexEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CABDED20ABE6AF900905814 /* OggSpeexEncoder.m */; };
 		8CABDFC70ABE768100905814 /* LibsndfileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEFC0A05CB8E00890518 /* LibsndfileEncoder.m */; };
-		8CB596ED0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB596EB0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.m */; };
-		8CB596FB0AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB596F50AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
 		8CC9A0C00ACD909300948BAA /* shorten.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC9A0B90ACD909300948BAA /* shorten.framework */; };
@@ -603,9 +601,6 @@
 		8CABDF0B0ABE6CFF00905814 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/OggSpeexSettingsSheet.nib; sourceTree = "<group>"; };
 		8CABDF0C0ABE6D0F00905814 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/OggSpeexSettingsSheet.nib; sourceTree = "<group>"; };
 		8CB34D16099AFF63001532C3 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/Credits.rtf; sourceTree = "<group>"; };
-		8CB596EA0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CompactDiscDocumentSettingsSheet.h; sourceTree = "<group>"; };
-		8CB596EB0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentSettingsSheet.m; sourceTree = "<group>"; };
-		8CB596F60AC0FAE4000DADC9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CompactDiscDocumentSettingsSheet.nib; sourceTree = "<group>"; };
 		8CB6E20008DACB8100345B8F /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
 		8CBA9F450999B374007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8CBA9F480999B381007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Exceptions.strings; sourceTree = "<group>"; };
@@ -836,7 +831,6 @@
 			isa = PBXGroup;
 			children = (
 				8CD01F1C0ADB4A9A00216B29 /* OutputPreferences.nib */,
-				8CB596F50AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib */,
 				8CABDF030ABE6CE000905814 /* OggSpeexSettingsSheet.nib */,
 				8C99E2750A82BA3A00A8CBE4 /* FileConversion.nib */,
 				8C89D07F0A07617E00359E67 /* MP3SettingsSheet.nib */,
@@ -1274,8 +1268,6 @@
 		8C9451350A12E4D700C8DCAE /* CompactDisc */ = {
 			isa = PBXGroup;
 			children = (
-				8CB596EA0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.h */,
-				8CB596EB0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.m */,
 				8C9451380A12E4D700C8DCAE /* CompactDisc.h */,
 				8C9451390A12E4D700C8DCAE /* CompactDisc.m */,
 				8C94513A0A12E4D700C8DCAE /* CompactDiscDocument.h */,
@@ -1494,7 +1486,6 @@
 				8C99E27B0A82BA3A00A8CBE4 /* FileConversion.nib in Resources */,
 				8CD25ED50AAD122D0037F33A /* Speex.png in Resources */,
 				8CABDF090ABE6CE000905814 /* OggSpeexSettingsSheet.nib in Resources */,
-				8CB596FB0AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib in Resources */,
 				8CA9C18B0AD303C2000EF903 /* MusicBrainz.png in Resources */,
 				8CE24FF40AD30B92009E1323 /* MusicBrainzMatchSheet.nib in Resources */,
 				8CE250DC0AD31AB2009E1323 /* MusicBrainzPreferences.nib in Resources */,
@@ -1604,7 +1595,6 @@
 				8CABDF9D0ABE731B00905814 /* WavPackEncoder.m in Sources */,
 				8CABDFB70ABE751100905814 /* OggSpeexEncoder.m in Sources */,
 				8CABDFC70ABE768100905814 /* LibsndfileEncoder.m in Sources */,
-				8CB596ED0AC0FA6C000DADC9 /* CompactDiscDocumentSettingsSheet.m in Sources */,
 				8CC9A0C80ACD90BF00948BAA /* ShortenDecoder.m in Sources */,
 				8C5E60860ACDC6F600D92D9A /* SecondsFormatter.m in Sources */,
 				8CA9B45A0AD21999000EF903 /* CompactDisc.m in Sources */,
@@ -1976,14 +1966,6 @@
 				8CABDF0C0ABE6D0F00905814 /* Dutch */,
 			);
 			name = OggSpeexSettingsSheet.nib;
-			sourceTree = "<group>";
-		};
-		8CB596F50AC0FAE4000DADC9 /* CompactDiscDocumentSettingsSheet.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8CB596F60AC0FAE4000DADC9 /* English */,
-			);
-			name = CompactDiscDocumentSettingsSheet.nib;
 			sourceTree = "<group>";
 		};
 		8CD01F1C0ADB4A9A00216B29 /* OutputPreferences.nib */ = {
