@@ -68,8 +68,6 @@
 - (BOOL)			selected;
 - (void)			setSelected:(BOOL)selected;
 
-- (NSColor *)		color;
-
 - (NSString *)		title;
 - (void)			setTitle:(NSString *)title;
 

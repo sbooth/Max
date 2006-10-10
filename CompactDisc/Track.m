@@ -31,35 +31,13 @@
 
 + (void) initialize 
 {
-	NSString				*trackDefaultsValuesPath;
-    NSDictionary			*trackDefaultsValuesDictionary;
-    
-	@try {
-		trackDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"TrackDefaults" ofType:@"plist"];
-		NSAssert1(nil != trackDefaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"TrackDefaults.plist");
-
-		trackDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:trackDefaultsValuesPath];
-		[[NSUserDefaults standardUserDefaults] registerDefaults:trackDefaultsValuesDictionary];
-		
-		[self setKeys:[NSArray arrayWithObjects:@"artist", @"year", @"genre", nil] triggerChangeNotificationsForDependentKey:@"color"];
-		
-		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"minute"];
-		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"second"];
-		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"frame"];
-		
-		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"size"];
-		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"length"];
-		[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"duration"];
-	}
+	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"minute"];
+	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"second"];
+	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"frame"];
 	
-	@catch(NSException *exception) {
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"Track"]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[alert runModal];
-	}
+	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"size"];
+	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"length"];
+	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"duration"];
 }
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
@@ -156,21 +134,6 @@
 - (BOOL)					copyPermitted		{ return _copyPermitted; }
 - (NSString *)				ISRC				{ return [[_ISRC retain] autorelease]; }
 - (BOOL)					dataTrack			{ return _dataTrack; }
-
-- (NSColor *) color
-{
-	NSData		*data;
-	NSColor		*result		= nil;
-	
-	if(nil != [self artist] || 0 != [self year] || nil != [self genre] || nil != [self composer]) {
-		data = [[NSUserDefaults standardUserDefaults] dataForKey:@"customTrackColor"];
-		if(nil != data) {
-			result = (NSColor *)[NSUnarchiver unarchiveObjectWithData:data];
-		}
-	}
-	
-	return result;
-}
 
 #pragma mark Mutators
 
