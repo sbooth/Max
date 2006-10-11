@@ -328,7 +328,7 @@ enum {
 		}
 
 		// Generate cue sheet
-		if(nil != [[self taskInfo] inputTracks] && [[[self taskInfo] objectForKey:@"generateCueSheet"] boolValue]) {
+		if(nil != [[self taskInfo] inputTracks] && [[[[self taskInfo] settings] objectForKey:@"generateCueSheet"] boolValue]) {
 			if([self formatIsValidForCueSheet]) {
 				[self generateCueSheet];
 			}
