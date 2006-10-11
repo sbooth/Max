@@ -82,6 +82,9 @@
 		// Save changes
 		[[NSUserDefaults standardUserDefaults] setObject:formats forKey:@"outputFormats"];
 	}
+	
+	// Clean up
+	[formats release];
 
 	// We're finished
 	[[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton];
