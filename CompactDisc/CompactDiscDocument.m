@@ -182,9 +182,11 @@
 		[result setValue:[self MCN] forKey:@"MCN"];
 		[result setObject:[self discID] forKey:@"discID"];
 		
-		data = getPNGDataForImage([self albumArt]); 
-		[result setValue:data forKey:@"albumArt"];
-		[result setValue:[self albumArtDownloadDate] forKey:@"albumArtDownloadDate"];
+		if(nil != [self albumArt]) {
+			data = getPNGDataForImage([self albumArt]); 
+			[result setValue:data forKey:@"albumArt"];
+			[result setValue:[self albumArtDownloadDate] forKey:@"albumArtDownloadDate"];
+		}
 		
 		for(i = 0; i < [self countOfTracks]; ++i) {
 			[tracks addObject:[[self objectInTracksAtIndex:i] getDictionary]];
@@ -254,8 +256,8 @@
 			_MCN			= [[dictionary valueForKey:@"MCN"] retain];
 
 			// Convert PNG data to an NSImage
-			_albumArt		= [[NSImage alloc] initWithData:[dictionary valueForKey:@"albumArt"]];
-			_albumArtDownloadDate = [[dictionary valueForKey:@"albumArtDownloadDate"] retain];
+			_albumArt				= [[NSImage alloc] initWithData:[dictionary valueForKey:@"albumArt"]];
+			_albumArtDownloadDate	= [[dictionary valueForKey:@"albumArtDownloadDate"] retain];
 			
 			// Album art downloaded from amazon can only be kept for 30 days
 			if(nil != [self albumArtDownloadDate] && (NSTimeInterval)(-30 * 24 * 60 * 60) >= [[self albumArtDownloadDate] timeIntervalSinceNow]) {
