@@ -42,7 +42,7 @@
 }
 
 - (NSWindow *)		sheet					{ return [[_sheet retain] autorelease]; }
-- (NSArray *)		selectedEncoders		{ return [_encoderController selectedObjects]; }
+- (NSArray *)		selectedEncoders		{ return [[_encoderController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]]; }
 
 - (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSCancelButton]; }
 - (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton]; }
