@@ -115,9 +115,7 @@
 		[applicationPaths addObject:[[applications objectAtIndex:i] objectForKey:@"path"]];
 	}
 
-	if(0 != [applicationPaths count]) {
-		[[NSUserDefaults standardUserDefaults] setObject:applicationPaths forKey:@"postProcessingApplications"];
-	}
+	[[NSUserDefaults standardUserDefaults] setObject:applicationPaths forKey:@"postProcessingApplications"];
 }
 
 @end
