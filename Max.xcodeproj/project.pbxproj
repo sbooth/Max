@@ -50,7 +50,6 @@
 		8C53020B0A05D5D800890518 /* EncodeToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F50A05D5D800890518 /* EncodeToolbarImage.png */; };
 		8C53020C0A05D5D800890518 /* FLAC.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F60A05D5D800890518 /* FLAC.png */; };
 		8C53020D0A05D5D800890518 /* FormatsToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F70A05D5D800890518 /* FormatsToolbarImage.png */; };
-		8C53020E0A05D5D800890518 /* FreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F80A05D5D800890518 /* FreeDBToolbarImage.png */; };
 		8C53020F0A05D5D800890518 /* GeneralToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301F90A05D5D800890518 /* GeneralToolbarImage.png */; };
 		8C5302110A05D5D800890518 /* libsndfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301FB0A05D5D800890518 /* libsndfile.png */; };
 		8C5302140A05D5D800890518 /* OutputToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5301FE0A05D5D800890518 /* OutputToolbarImage.png */; };
@@ -336,7 +335,6 @@
 		8C5301F50A05D5D800890518 /* EncodeToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EncodeToolbarImage.png; sourceTree = "<group>"; };
 		8C5301F60A05D5D800890518 /* FLAC.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FLAC.png; sourceTree = "<group>"; };
 		8C5301F70A05D5D800890518 /* FormatsToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FormatsToolbarImage.png; sourceTree = "<group>"; };
-		8C5301F80A05D5D800890518 /* FreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FreeDBToolbarImage.png; sourceTree = "<group>"; };
 		8C5301F90A05D5D800890518 /* GeneralToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GeneralToolbarImage.png; sourceTree = "<group>"; };
 		8C5301FB0A05D5D800890518 /* libsndfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = libsndfile.png; sourceTree = "<group>"; };
 		8C5301FE0A05D5D800890518 /* OutputToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OutputToolbarImage.png; sourceTree = "<group>"; };
@@ -383,30 +381,10 @@
 		8C53FF040A05CB8E00890518 /* OggVorbisEncoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggVorbisEncoder.m; sourceTree = "<group>"; };
 		8C53FF070A05CB8E00890518 /* WavPackEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WavPackEncoder.h; sourceTree = "<group>"; };
 		8C53FF080A05CB8E00890518 /* WavPackEncoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WavPackEncoder.m; sourceTree = "<group>"; };
-		8C53FF210A05CC4600890518 /* CustomNamingException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CustomNamingException.h; sourceTree = "<group>"; };
-		8C53FF220A05CC4600890518 /* CustomNamingException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CustomNamingException.m; sourceTree = "<group>"; };
-		8C53FF230A05CC4600890518 /* EmptySelectionException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EmptySelectionException.h; sourceTree = "<group>"; };
-		8C53FF240A05CC4600890518 /* EmptySelectionException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = EmptySelectionException.m; sourceTree = "<group>"; };
 		8C53FF250A05CC4600890518 /* FileFormatNotSupportedException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileFormatNotSupportedException.h; sourceTree = "<group>"; };
 		8C53FF260A05CC4600890518 /* FileFormatNotSupportedException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileFormatNotSupportedException.m; sourceTree = "<group>"; };
-		8C53FF270A05CC4600890518 /* FLACException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FLACException.h; sourceTree = "<group>"; };
-		8C53FF280A05CC4600890518 /* FLACException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FLACException.m; sourceTree = "<group>"; };
-		8C53FF2B0A05CC4600890518 /* IOException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IOException.h; sourceTree = "<group>"; };
-		8C53FF2C0A05CC4600890518 /* IOException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = IOException.m; sourceTree = "<group>"; };
-		8C53FF2D0A05CC4600890518 /* LAMEException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LAMEException.h; sourceTree = "<group>"; };
-		8C53FF2E0A05CC4600890518 /* LAMEException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = LAMEException.m; sourceTree = "<group>"; };
-		8C53FF2F0A05CC4600890518 /* MallocException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MallocException.h; sourceTree = "<group>"; };
-		8C53FF300A05CC4600890518 /* MallocException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MallocException.m; sourceTree = "<group>"; };
-		8C53FF310A05CC4600890518 /* MissingResourceException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MissingResourceException.h; sourceTree = "<group>"; };
-		8C53FF320A05CC4600890518 /* MissingResourceException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = MissingResourceException.m; sourceTree = "<group>"; };
-		8C53FF330A05CC4600890518 /* ParanoiaException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ParanoiaException.h; sourceTree = "<group>"; };
-		8C53FF340A05CC4600890518 /* ParanoiaException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ParanoiaException.m; sourceTree = "<group>"; };
-		8C53FF350A05CC4600890518 /* SpeexException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SpeexException.h; sourceTree = "<group>"; };
-		8C53FF360A05CC4600890518 /* SpeexException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SpeexException.m; sourceTree = "<group>"; };
 		8C53FF370A05CC4600890518 /* StopException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = StopException.h; sourceTree = "<group>"; };
 		8C53FF380A05CC4600890518 /* StopException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = StopException.m; sourceTree = "<group>"; };
-		8C53FF390A05CC4600890518 /* VorbisException.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = VorbisException.h; sourceTree = "<group>"; };
-		8C53FF3A0A05CC4600890518 /* VorbisException.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = VorbisException.m; sourceTree = "<group>"; };
 		8C53FF580A05CCA400890518 /* BooleanArrayValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BooleanArrayValueTransformer.h; sourceTree = "<group>"; };
 		8C53FF590A05CCA400890518 /* BooleanArrayValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = BooleanArrayValueTransformer.m; sourceTree = "<group>"; };
 		8C53FF5A0A05CCA400890518 /* BOOLToStringValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BOOLToStringValueTransformer.h; sourceTree = "<group>"; };
@@ -978,7 +956,6 @@
 				8C5301F50A05D5D800890518 /* EncodeToolbarImage.png */,
 				8C5301F60A05D5D800890518 /* FLAC.png */,
 				8C5301F70A05D5D800890518 /* FormatsToolbarImage.png */,
-				8C5301F80A05D5D800890518 /* FreeDBToolbarImage.png */,
 				8C5301F90A05D5D800890518 /* GeneralToolbarImage.png */,
 				8C5301FB0A05D5D800890518 /* libsndfile.png */,
 				8C5301FE0A05D5D800890518 /* OutputToolbarImage.png */,
@@ -1074,30 +1051,10 @@
 		8C53FF1E0A05CC4600890518 /* Exceptions */ = {
 			isa = PBXGroup;
 			children = (
-				8C53FF210A05CC4600890518 /* CustomNamingException.h */,
-				8C53FF220A05CC4600890518 /* CustomNamingException.m */,
-				8C53FF230A05CC4600890518 /* EmptySelectionException.h */,
-				8C53FF240A05CC4600890518 /* EmptySelectionException.m */,
 				8C53FF250A05CC4600890518 /* FileFormatNotSupportedException.h */,
 				8C53FF260A05CC4600890518 /* FileFormatNotSupportedException.m */,
-				8C53FF270A05CC4600890518 /* FLACException.h */,
-				8C53FF280A05CC4600890518 /* FLACException.m */,
-				8C53FF2B0A05CC4600890518 /* IOException.h */,
-				8C53FF2C0A05CC4600890518 /* IOException.m */,
-				8C53FF2D0A05CC4600890518 /* LAMEException.h */,
-				8C53FF2E0A05CC4600890518 /* LAMEException.m */,
-				8C53FF2F0A05CC4600890518 /* MallocException.h */,
-				8C53FF300A05CC4600890518 /* MallocException.m */,
-				8C53FF310A05CC4600890518 /* MissingResourceException.h */,
-				8C53FF320A05CC4600890518 /* MissingResourceException.m */,
-				8C53FF330A05CC4600890518 /* ParanoiaException.h */,
-				8C53FF340A05CC4600890518 /* ParanoiaException.m */,
-				8C53FF350A05CC4600890518 /* SpeexException.h */,
-				8C53FF360A05CC4600890518 /* SpeexException.m */,
 				8C53FF370A05CC4600890518 /* StopException.h */,
 				8C53FF380A05CC4600890518 /* StopException.m */,
-				8C53FF390A05CC4600890518 /* VorbisException.h */,
-				8C53FF3A0A05CC4600890518 /* VorbisException.m */,
 			);
 			path = Exceptions;
 			sourceTree = "<group>";
@@ -1448,7 +1405,6 @@
 				8C53020B0A05D5D800890518 /* EncodeToolbarImage.png in Resources */,
 				8C53020C0A05D5D800890518 /* FLAC.png in Resources */,
 				8C53020D0A05D5D800890518 /* FormatsToolbarImage.png in Resources */,
-				8C53020E0A05D5D800890518 /* FreeDBToolbarImage.png in Resources */,
 				8C53020F0A05D5D800890518 /* GeneralToolbarImage.png in Resources */,
 				8C5302110A05D5D800890518 /* libsndfile.png in Resources */,
 				8C5302140A05D5D800890518 /* OutputToolbarImage.png in Resources */,
