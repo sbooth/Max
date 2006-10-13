@@ -29,7 +29,6 @@
 #import "PreferencesController.h"
 #import "Encoder.h"
 #import "MediaController.h"
-#import "SelectEncodersSheet.h"
 
 #import "MusicBrainzMatchSheet.h"
 
@@ -39,7 +38,6 @@
 @interface CompactDiscDocument (Private)
 - (void)		displayExceptionAlert:(NSAlert *)alert;
 
-- (void)		didEndSelectEncodersSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)		didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)		openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
@@ -128,7 +126,6 @@
 	switch([item tag]) {
 		default:								result = [super validateMenuItem:item];			break;
 		case kEncodeMenuItemTag:				result = [self encodeAllowed];					break;
-		case kEncodeCustomMenuItemTag:			result = [self encodeAllowed];					break;
 		case kQueryMusicBrainzMenuItemTag:		result = [self queryMusicBrainzAllowed];		break;
 		case kEjectDiscMenuItemTag:				result = [self ejectDiscAllowed];				break;
 		case kSelectNextTrackMenuItemTag:		result = [_trackController canSelectNext];		break;
@@ -349,19 +346,90 @@
 
 - (IBAction) encode:(id)sender
 {
-	SelectEncodersSheet		*sheet	= nil;
-
 	@try {
+		NSMutableDictionary		*settings				= nil;
+		NSArray					*encoders				= nil;
+		NSMutableDictionary		*postProcessingOptions	= nil;
+		NSArray					*applicationPaths		= nil;
+		unsigned				i;
+
 		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
 		if(NO == [self discInDrive]) {
 			return;
 		}
 		
 		NSAssert(NO == [self emptySelection], NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @""));
-		NSAssert(NO == [self ripInProgress] && NO == [self encodeInProgress], NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @""));
+		NSAssert(NO == [self ripInProgress] && NO == [self encodeInProgress], NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @""));		
 		
-		sheet = [[SelectEncodersSheet alloc] init];
-		[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndSelectEncodersSheet:returnCode:contextInfo:) contextInfo:sheet];
+		settings			= [NSMutableDictionary dictionary];
+		
+		// Encoders
+		encoders			= [[[NSUserDefaults standardUserDefaults] arrayForKey:@"outputFormats"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];		
+		[settings setValue:encoders forKey:@"encoders"];
+		
+		// Ripper settings
+		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedRipper"] forKey:@"selectedRipper"];
+		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"ripToSingleFile"] forKey:@"ripToSingleFile"];
+		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"generateCueSheet"] forKey:@"generateCueSheet"];
+		
+		// File locations
+		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] forKey:@"outputDirectory"];
+		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
+		
+		// Conversion parameters
+		//		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"deleteSourceFiles"] forKey:@"deleteSourceFiles"];
+		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"overwriteOutputFiles"] forKey:@"overwriteOutputFiles"];
+		
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"overwriteOutputFiles"]) {
+			[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"promptBeforeOverwritingOutputFiles"] forKey:@"promptBeforeOverwritingOutputFiles"];
+		}
+		
+		// Output file naming
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomOutputFileNaming"]) {
+			NSMutableDictionary		*fileNamingFormat = [NSMutableDictionary dictionary];
+			
+			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"fileNamingFormat"] forKey:@"formatString"];
+			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"useTwoDigitTrackNumbers"] forKey:@"useTwoDigitTrackNumbers"];
+			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"useNamingFallback"] forKey:@"useNamingFallback"];
+			
+			[settings setValue:fileNamingFormat forKey:@"outputFileNaming"];
+		}
+		
+		// Post-processing options
+		postProcessingOptions = [NSMutableDictionary dictionary];
+		
+		[postProcessingOptions setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"addToiTunes"] forKey:@"addToiTunes"];
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"addToiTunes"]) {
+			
+			[postProcessingOptions setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"addToiTunesPlaylist"] forKey:@"addToiTunesPlaylist"];
+			
+			if([[NSUserDefaults standardUserDefaults] boolForKey:@"addToiTunesPlaylist"]) {
+				[postProcessingOptions setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"iTunesPlaylistName"] forKey:@"iTunesPlaylistName"];
+			}		
+		}
+		
+		applicationPaths	= [[NSUserDefaults standardUserDefaults] objectForKey:@"postProcessingApplications"];
+		
+		if(0 != [applicationPaths count]) {
+			[postProcessingOptions setValue:applicationPaths forKey:@"postProcessingApplications"];
+		}
+		
+		if(0 != [postProcessingOptions count]) {
+			[settings setValue:postProcessingOptions forKey:@"postProcessingOptions"];
+		}
+		
+		// Album art
+		if([[NSUserDefaults standardUserDefaults] objectForKey:@"saveAlbumArt"]) {
+			NSMutableDictionary		*albumArt = [NSMutableDictionary dictionary];
+			
+			[albumArt setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"albumArtFileExtension"] forKey:@"extension"];
+			[albumArt setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"albumArtFileNamingFormat"] forKey:@"formatString"];
+			
+			[settings setValue:albumArt forKey:@"albumArt"];
+		}
+		
+		// Rip the tracks
+		[[RipperController sharedController] ripTracks:[self selectedTracks] settings:settings];
 	}
 	
 	@catch(NSException *exception) {
@@ -415,12 +483,10 @@
 	[_mbHelper performQuery:sender];
 	
 	matchCount	= [_mbHelper matchCount];
+	NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
 
-	if(0 == matchCount) {
-		@throw [NSException exceptionWithName:@"MusicBrainzException" reason:NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @"") userInfo:nil];
-	}
 	// If only match was found, update ourselves
-	else if(1 == matchCount) {
+	if(1 == matchCount) {
 		[self updateMetadataFromMusicBrainz:1];
 	}
 	else {
@@ -463,12 +529,12 @@
 	}
 }
 
-- (IBAction) toggleTrackInformation:(id) sender				{ [_trackDrawer toggle:sender]; }
-- (IBAction) toggleAlbumArt:(id) sender						{ [_artDrawer toggle:sender]; }
+- (IBAction) toggleTrackInformation:(id)sender				{ [_trackDrawer toggle:sender]; }
+- (IBAction) toggleAlbumArt:(id)sender						{ [_artDrawer toggle:sender]; }
 - (IBAction) selectNextTrack:(id)sender						{ [_trackController selectNext:sender]; }
 - (IBAction) selectPreviousTrack:(id)sender					{ [_trackController selectPrevious:sender];	 }
 
-- (IBAction) fetchAlbumArt:(id) sender
+- (IBAction) downloadAlbumArt:(id)sender
 {	
 	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
 	[art showAlbumArtMatches];
@@ -716,91 +782,6 @@
 	// Nothing for now
 }
 
-- (void) didEndSelectEncodersSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	SelectEncodersSheet		*selectEncodersSheet	= (SelectEncodersSheet *)contextInfo;
-
-	[sheet orderOut:self];
-
-	if(NSOKButton == returnCode) {
-		NSMutableDictionary		*settings				= nil;
-		NSMutableDictionary		*postProcessingOptions	= nil;
-		NSArray					*applicationPaths;
-		unsigned				i;
-		
-		settings			= [NSMutableDictionary dictionary];
-		
-		// Encoders
-		[settings setValue:[selectEncodersSheet selectedEncoders] forKey:@"encoders"];
-		
-		// Ripper settings
-		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedRipper"] forKey:@"selectedRipper"];
-		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"ripToSingleFile"] forKey:@"ripToSingleFile"];
-		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"generateCueSheet"] forKey:@"generateCueSheet"];
-
-		// File locations
-		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] forKey:@"outputDirectory"];
-		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
-		
-		// Conversion parameters
-//		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"deleteSourceFiles"] forKey:@"deleteSourceFiles"];
-		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"overwriteOutputFiles"] forKey:@"overwriteOutputFiles"];
-		
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"overwriteOutputFiles"]) {
-			[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"promptBeforeOverwritingOutputFiles"] forKey:@"promptBeforeOverwritingOutputFiles"];
-		}
-		
-		// Output file naming
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useCustomOutputFileNaming"]) {
-			NSMutableDictionary		*fileNamingFormat = [NSMutableDictionary dictionary];
-			
-			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"fileNamingFormat"] forKey:@"formatString"];
-			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"useTwoDigitTrackNumbers"] forKey:@"useTwoDigitTrackNumbers"];
-			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"useNamingFallback"] forKey:@"useNamingFallback"];
-			
-			[settings setValue:fileNamingFormat forKey:@"outputFileNaming"];
-		}
-		
-		// Post-processing options
-		postProcessingOptions = [NSMutableDictionary dictionary];
-		
-		[postProcessingOptions setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"addToiTunes"] forKey:@"addToiTunes"];
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"addToiTunes"]) {
-			
-			[postProcessingOptions setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"addToiTunesPlaylist"] forKey:@"addToiTunesPlaylist"];
-			
-			if([[NSUserDefaults standardUserDefaults] boolForKey:@"addToiTunesPlaylist"]) {
-				[postProcessingOptions setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"iTunesPlaylistName"] forKey:@"iTunesPlaylistName"];
-			}		
-		}
-		
-		applicationPaths	= [[NSUserDefaults standardUserDefaults] objectForKey:@"postProcessingApplications"];
-		
-		if(0 != [applicationPaths count]) {
-			[postProcessingOptions setValue:applicationPaths forKey:@"postProcessingApplications"];
-		}
-		
-		if(0 != [postProcessingOptions count]) {
-			[settings setValue:postProcessingOptions forKey:@"postProcessingOptions"];
-		}
-		
-		// Album art
-		if([[NSUserDefaults standardUserDefaults] objectForKey:@"saveAlbumArt"]) {
-			NSMutableDictionary		*albumArt = [NSMutableDictionary dictionary];
-			
-			[albumArt setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"albumArtFileExtension"] forKey:@"extension"];
-			[albumArt setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"albumArtFileNamingFormat"] forKey:@"formatString"];
-			
-			[settings setValue:albumArt forKey:@"albumArt"];
-		}
-
-		// Rip the tracks
-		[[RipperController sharedController] ripTracks:[self selectedTracks] settings:settings];
-	}
-	
-	[selectEncodersSheet release];
-}
-
 - (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
 	MusicBrainzMatchSheet	*musicBrainzMatchSheet	= (MusicBrainzMatchSheet *)contextInfo;
@@ -833,26 +814,27 @@
 
 - (void) updateMetadataFromMusicBrainz:(unsigned)index
 {
-	Track						*track		= nil;
-	NSString					*trackArtist = nil;
+	Track						*track				= nil;
+	BOOL						isVariousArtists;
 	unsigned					i;
 	
 	[_mbHelper selectMatch:index];
-	
+
+	isVariousArtists	= [_mbHelper isVariousArtists];
+
 	[[self undoManager] beginUndoGrouping];
 		
 	[self setTitle:[_mbHelper albumTitle]];
 	[self setArtist:[_mbHelper albumArtist]];
-				
+						
 	for(i = 1; i <= [_mbHelper trackCount]; ++i) {
 		
 		track			= [self objectInTracksAtIndex:i - 1];
-		trackArtist		= [_mbHelper trackArtist:i];
 		
 		[track setTitle:[_mbHelper trackTitle:i]];
 		
-		if(NO == [trackArtist isEqualToString:[self artist]]) {
-			[track setArtist:trackArtist];
+		if(isVariousArtists) {
+			[track setArtist:[_mbHelper trackArtist:i]];
 		}
 	}
 	

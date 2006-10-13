@@ -231,7 +231,6 @@
 		8CFA4B590ABDE11900C5AE9F /* OggSpeexDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B410ABDE11800C5AE9F /* OggSpeexDecoder.m */; };
 		8CFA4B5B0ABDE11900C5AE9F /* OggVorbisDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */; };
 		8CFA4B5D0ABDE11900C5AE9F /* WavPackDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */; };
-		8CFF40A60A1D6030008E503C /* SelectEncodersSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CFF40A40A1D6030008E503C /* SelectEncodersSheet.nib */; };
 		8CFF40B80A1D6AE2008E503C /* SelectEncodersSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFF40B30A1D6AD9008E503C /* SelectEncodersSheet.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -285,14 +284,12 @@
 		8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CompactDiscDocumentDefaults.plist; sourceTree = "<group>"; };
 		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
-		8C0925F20A2600680017CADE /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8C244AC60AC6DFEF001334D0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
 		8C29D946097F442200E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Genres.strings; sourceTree = "<group>"; };
 		8C29D97C097F469D00E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Log.strings; sourceTree = "<group>"; };
-		8C2B9C5D0A27503D00111D14 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8C2D6FB109D195A200968B18 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8C32817D096D12C400608C9D /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
@@ -661,7 +658,6 @@
 		8CF2B1480A0DD2DA008738E4 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/OggVorbisSettingsSheet.nib; sourceTree = "<group>"; };
 		8CF2B14A0A0DD2DA008738E4 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/WavPackSettingsSheet.nib; sourceTree = "<group>"; };
 		8CF4D52309455D2300385BE4 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/FormatsPreferences.nib; sourceTree = "<group>"; };
-		8CF59C660A24AB8000368DF3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8CFA4B2E0ABDE11800C5AE9F /* CircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CircularBuffer.h; path = Decoders/CircularBuffer.h; sourceTree = "<group>"; };
 		8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = CircularBuffer.m; path = Decoders/CircularBuffer.m; sourceTree = "<group>"; };
 		8CFA4B300ABDE11800C5AE9F /* CoreAudioDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CoreAudioDecoder.h; path = Decoders/CoreAudioDecoder.h; sourceTree = "<group>"; };
@@ -686,7 +682,6 @@
 		8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = WavPackDecoder.m; path = Decoders/WavPackDecoder.m; sourceTree = "<group>"; };
 		8CFA57390ABE32BB00C5AE9F /* OggSpeexEncoderTask.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggSpeexEncoderTask.h; sourceTree = "<group>"; };
 		8CFA573A0ABE32BB00C5AE9F /* OggSpeexEncoderTask.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggSpeexEncoderTask.m; sourceTree = "<group>"; };
-		8CFF40A50A1D6030008E503C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SelectEncodersSheet.nib; sourceTree = "<group>"; };
 		8CFF40B20A1D6AD9008E503C /* SelectEncodersSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectEncodersSheet.h; sourceTree = "<group>"; };
 		8CFF40B30A1D6AD9008E503C /* SelectEncodersSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectEncodersSheet.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -838,7 +833,6 @@
 				8C328112096D0CC200608C9D /* Encoder.nib */,
 				8C7634F409E0F11D00616BE9 /* AlbumArtPreferences.nib */,
 				8C781F4F09E8DAB4001D85EF /* CueSheetDocument.nib */,
-				8CFF40A40A1D6030008E503C /* SelectEncodersSheet.nib */,
 				8CE24FF20AD30B92009E1323 /* MusicBrainzMatchSheet.nib */,
 				8CE250DA0AD31AB2009E1323 /* MusicBrainzPreferences.nib */,
 				8CD020460ADB688600216B29 /* iTunesPreferences.nib */,
@@ -1438,7 +1432,6 @@
 				8CF2B1380A0DC15F008738E4 /* LAME.png in Resources */,
 				8CA73F2E0A0FE45C00B12829 /* Cuesheet.icns in Resources */,
 				8CA73F4B0A0FE6F300B12829 /* ComparisonRipperDefaults.plist in Resources */,
-				8CFF40A60A1D6030008E503C /* SelectEncodersSheet.nib in Resources */,
 				8C99E27B0A82BA3A00A8CBE4 /* FileConversion.nib in Resources */,
 				8CD25ED50AAD122D0037F33A /* Speex.png in Resources */,
 				8CABDF090ABE6CE000905814 /* OggSpeexSettingsSheet.nib in Resources */,
@@ -1973,17 +1966,6 @@
 				8CE250DB0AD31AB2009E1323 /* English */,
 			);
 			name = MusicBrainzPreferences.nib;
-			sourceTree = "<group>";
-		};
-		8CFF40A40A1D6030008E503C /* SelectEncodersSheet.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8CFF40A50A1D6030008E503C /* English */,
-				8CF59C660A24AB8000368DF3 /* French */,
-				8C0925F20A2600680017CADE /* Dutch */,
-				8C2B9C5D0A27503D00111D14 /* German */,
-			);
-			name = SelectEncodersSheet.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -32,7 +32,7 @@ enum {
 	kEjectDiscMenuItemTag				= 4,
 	kSelectNextTrackMenuItemTag			= 6,
 	kSelectPreviousTrackMenuItemTag		= 7,
-	kEncodeCustomMenuItemTag			= 8
+	kDownloadAlbumArtMenuItemTag		= 8
 };
 
 @interface CompactDiscDocument : NSDocument <AlbumArtMethods>
@@ -99,7 +99,7 @@ enum {
 - (IBAction)		selectNextTrack:(id)sender;
 - (IBAction)		selectPreviousTrack:(id)sender;
 
-- (IBAction)		fetchAlbumArt:(id)sender;
+- (IBAction)		downloadAlbumArt:(id)sender;
 - (IBAction)		selectAlbumArt:(id)sender;
 
 // Miscellaneous
