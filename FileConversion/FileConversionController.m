@@ -39,6 +39,12 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 @implementation FileConversionController
 
++ (void) initialize
+{
+	[self setKeys:[NSArray arrayWithObject:@"metadata.albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtWidth"];
+	[self setKeys:[NSArray arrayWithObject:@"metadata.albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtHeight"];
+}
+
 + (FileConversionController *) sharedController
 {
 	@synchronized(self) {
@@ -65,6 +71,18 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		return self;
 	}
 	return nil;
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *)item
+{
+	BOOL result;
+	
+	switch([item tag]) {
+		default:								result = [super validateMenuItem:item];			break;
+		case kDownloadAlbumArtMenuItemTag:		result = (0 != [[_filesController arrangedObjects] count]);	break;
+	}
+	
+	return result;
 }
 
 - (void) awakeFromNib
@@ -371,7 +389,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 - (NSWindow *) windowForSheet { return [self window]; }
 
-- (IBAction) downloadAlbumArt:(id) sender
+- (IBAction) downloadAlbumArt:(id)sender
 {	
 	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
 	[art showAlbumArtMatches];
@@ -511,9 +529,9 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		NSImage		*image			= nil;
 		
 		for(i = 0; i < count; ++i) {
-			image = [[[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]] autorelease];
+			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
 			if(nil != image) {
-				[[_filesController selection] setValue:image forKeyPath:@"metadata.albumArt"];
+				[[_filesController selection] setValue:[image autorelease] forKeyPath:@"metadata.albumArt"];
 			}
 		}
 	}

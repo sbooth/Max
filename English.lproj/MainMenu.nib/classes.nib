@@ -18,9 +18,9 @@
         {
             ACTIONS = {
                 "" = id; 
+                downloadAlbumArt = id; 
                 ejectDisc = id; 
                 encode = id; 
-                fetchAlbumArt = id; 
                 queryMusicBrainz = id; 
                 selectAlbumArt = id; 
                 selectNextTrack = id; 
