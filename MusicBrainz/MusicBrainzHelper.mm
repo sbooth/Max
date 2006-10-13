@@ -95,7 +95,7 @@
 	if((self = [super init])) {
 		
 		_data = [[MusicBrainzHelperData alloc] init];
-		NSAssert(NULL != _data, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+		NSAssert(nil != _data, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		_disc = [disc retain];		
 		
@@ -173,10 +173,10 @@
 	
 	// Run the query
 	mbResult = [[self data] mb]->Query(query);
-	//	NSAssert1(kError_NoErr == mbResult, @"Query failed: %i", mbError);
+	//	NSAssert1(kError_NoErr == mbResult, @"MusicBrainz query failed: %i", mbResult);
 	if(kError_NoErr != mbResult) {
 		[[self data] mb]->GetQueryError(error);
-		NSLog(@"Query failed. Error: %s", error.c_str());
+		NSLog(@"MusicBrainz query failed. Error: %s (%i)", error.c_str(), mbResult);
 	}	
 }
 
