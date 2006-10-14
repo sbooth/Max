@@ -28,11 +28,6 @@
 #include <AudioToolbox/AudioFormat.h>
 #include <mp4v2/mp4.h>
 
-#include <paths.h>			// _PATH_TMP
-#include <unistd.h>			// mkstemp, unlink
-
-#define TEMPFILE_PATTERN	"MaxXXXXXXXX"
-
 @implementation CoreAudioEncoderTask
 
 - (id) init
@@ -72,10 +67,7 @@
 	BOOL					compilation				= NO;
 	NSImage					*albumArt				= nil;
 	NSData					*data					= nil;
-	char					*path					= NULL;
-	const char				*tmpDir;
-	ssize_t					tmpDirLen;
-	ssize_t					patternLen				= strlen(TEMPFILE_PATTERN);
+	NSString				*tempFilename			= NULL;
 	
 	
 	// Use mp4v2 for mp4/m4a files
@@ -193,30 +185,14 @@
 		MP4Close(mp4FileHandle);
 		
 		// Optimize the atoms so the MP4 files will play on shared iTunes libraries
-		// mp4v2 creates a temp file in ., so use a custom file and manually rename it
+		// mp4v2 creates a temp file in ., so use a custom file and manually rename it	
+		tempFilename = generateTemporaryFilename([[[self taskInfo] settings] objectForKey:@"temporaryDirectory"], [self fileExtension]);
 		
-		tmpDir = [[[[self taskInfo] settings] objectForKey:@"temporaryDirectory"] fileSystemRepresentation];
-		if(nil == tmpDir) {
-			tmpDir = [NSTemporaryDirectory() fileSystemRepresentation];
-		}
-		
-		validateAndCreateDirectory([NSString stringWithCString:tmpDir encoding:NSASCIIStringEncoding]);
-		
-		tmpDirLen	= strlen(tmpDir);
-		path		= malloc((tmpDirLen + patternLen + 1) *  sizeof(char));
-		NSAssert(NULL != path, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-		memcpy(path, tmpDir, tmpDirLen);
-		memcpy(path + tmpDirLen, TEMPFILE_PATTERN, patternLen);
-		path[tmpDirLen + patternLen] = '\0';
-		
-		path = mktemp(path);
-		NSAssert(NULL != path, @"Unable to open temporary file.");
-
-		if(NO == MP4Optimize([[self outputFilename] fileSystemRepresentation], path, 0)) {
+		if(NO == MP4Optimize([[self outputFilename] fileSystemRepresentation], [tempFilename fileSystemRepresentation], 0)) {
 			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[self outputFilename] lastPathComponent]]];
 		}
 
-		result = rename(path, [[self outputFilename] fileSystemRepresentation]);
+		result = rename([tempFilename fileSystemRepresentation], [[self outputFilename] fileSystemRepresentation]);
 		NSAssert1(-1 != result, NSLocalizedStringFromTable(@"Unable to optimize the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]);
 	}
 	// Use (unimplemented as of 10.4.3) CoreAudio metadata functions
