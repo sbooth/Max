@@ -27,11 +27,6 @@
 
 #import "UtilityFunctions.h"
 
-#import "StopException.h"
-
-#include <sys/stat.h>		// stat
-#include <unistd.h>			// mkstemp, unlink
-
 @interface EncoderTask (Private)
 - (void)			writeTags;
 
@@ -54,23 +49,43 @@ enum {
 
 - (void) dealloc
 {
-	NSEnumerator	*enumerator;
-	Track			*track;
-
+	// Process tracks
 	if(nil != [[self taskInfo] inputTracks]) {
-		enumerator = [[[self taskInfo] inputTracks] objectEnumerator];
+		NSEnumerator	*enumerator		= nil;
+		Track			*track			= nil;
+		BOOL			shouldDelete	= YES;
+		
+		enumerator	= [[[self taskInfo] inputTracks] objectEnumerator];
 	
 		while((track = [enumerator nextObject])) {
 			if(NO == [track ripInProgress] && NO == [track encodeInProgress]) {
 				[track setSelected:NO];
 			}
+			else {
+				shouldDelete = NO;
+			}
+		}
+
+		if(shouldDelete) {
+			NSArray		*inputFilenames		= [[self taskInfo] inputFilenames];
+			unsigned	i;
+			NSString	*inputFilename;
+			
+			for(i = 0; i < [inputFilenames count]; ++i) {
+				inputFilename = [inputFilenames objectAtIndex:i];
+				if([[NSFileManager defaultManager] fileExistsAtPath:inputFilename]) {
+					BOOL			result			= [[NSFileManager defaultManager] removeFileAtPath:inputFilename handler:nil];
+					NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
+				}
+			}
 		}
 	}
 	
+	
 	[_connection release];				_connection = nil;
 	[(NSObject *)_encoder release];		_encoder = nil;
-	[_outputFilename release];			_outputFilename = nil;
-	
+	[_encoderSettings release];			_encoderSettings = nil;
+
 	[super dealloc];
 }
 
@@ -132,8 +147,7 @@ enum {
 	}
 	// Use a custom file naming format
 	else {
-		NSDictionary				*outputFileNaming	= [[[self taskInfo] settings] objectForKey:@"outputFileNaming"];
-		
+		NSDictionary			*outputFileNaming	= [[[self taskInfo] settings] objectForKey:@"outputFileNaming"];
 		NSMutableDictionary		*substitutions		= [NSMutableDictionary dictionary];
 		
 		// Set up the additional key/value pairs to be substituted
@@ -208,11 +222,11 @@ enum {
 	[NSThread detachNewThreadSelector:@selector(connectWithPorts:) toTarget:_encoderClass withObject:portArray];
 }
 
-- (void) setStarted:(BOOL)started
+- (void) setTaskInfo:(TaskInfo *)taskInfo
 {
-	[super setStarted:YES];
+	[super setTaskInfo:taskInfo];
 
-	// Mark tracks as started
+	// Mark tracks as started here so we know when the temporary files can be deleted
 	if(nil != [[self taskInfo] inputTracks]) {
 		NSArray			*tracks		= [[self taskInfo] inputTracks];
 		unsigned		i;
@@ -220,7 +234,22 @@ enum {
 		for(i = 0; i < [tracks count]; ++i) {
 			[[tracks objectAtIndex:i] encodeStarted];
 		}
-	}
+	}	
+}
+
+- (void) setStarted:(BOOL)started
+{
+	[super setStarted:YES];
+
+	// Mark tracks as started
+/*	if(nil != [[self taskInfo] inputTracks]) {
+		NSArray			*tracks		= [[self taskInfo] inputTracks];
+		unsigned		i;
+		
+		for(i = 0; i < [tracks count]; ++i) {
+			[[tracks objectAtIndex:i] encodeStarted];
+		}
+	}*/
 
 	[[EncoderController sharedController] encoderTaskDidStart:self]; 
 }
@@ -242,6 +271,8 @@ enum {
 			[[tracks objectAtIndex:i] encodeCompleted];
 		}
 	}
+	
+	[self setShouldDeleteOutputFile:YES];
 	
 	[[EncoderController sharedController] encoderTaskDidStop:self]; 
 }
@@ -411,7 +442,7 @@ enum {
 	}
 	
 	@try {
-		cueSheetFilename = generateUniqueFilename([_outputFilename stringByDeletingPathExtension], @"cue");
+		cueSheetFilename = generateUniqueFilename([[self outputFilename] stringByDeletingPathExtension], @"cue");
 
 		// Create the file (don't overwrite)
 		fd = open([cueSheetFilename fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);

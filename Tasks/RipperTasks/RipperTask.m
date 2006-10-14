@@ -131,6 +131,8 @@
 		[track setRipInProgress:NO];
 	}
 	
+	[self setShouldDeleteOutputFile:YES];
+	
 	[[RipperController sharedController] ripperTaskDidStop:self]; 
 }
 
