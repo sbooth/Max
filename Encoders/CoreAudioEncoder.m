@@ -193,6 +193,9 @@
 			
 			++iterations;
 		}
+
+		[[self delegate] setEndTime:[NSDate date]];
+		[[self delegate] setCompleted:YES];	
 	}
 
 	@catch(StopException *exception) {
@@ -230,9 +233,6 @@
 		
 		free(bufferList.mBuffers[0].mData);
 	}
-
-	[[self delegate] setEndTime:[NSDate date]];
-	[[self delegate] setCompleted:YES];	
 }
 
 - (NSString *) settingsString

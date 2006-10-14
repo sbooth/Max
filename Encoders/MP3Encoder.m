@@ -200,6 +200,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		NSAssert(NULL != file, NSLocalizedStringFromTable(@"Unable to open the output file.", @"Exceptions", @""));
 
 		lame_mp3_tags_fid(_gfp, file);
+
+		[[self delegate] setEndTime:[NSDate date]];
+		[[self delegate] setCompleted:YES];	
 	}
 
 	@catch(StopException *exception) {
@@ -232,9 +235,6 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 		free(bufferList.mBuffers[0].mData);
 	}
-
-	[[self delegate] setEndTime:[NSDate date]];
-	[[self delegate] setCompleted:YES];	
 }
 
 - (NSString *) settingsString

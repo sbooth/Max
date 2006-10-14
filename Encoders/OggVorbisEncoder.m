@@ -318,6 +318,9 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				}
 			}
 		}
+
+		[[self delegate] setEndTime:[NSDate date]];
+		[[self delegate] setCompleted:YES];
 	}
 
 	@catch(StopException *exception) {
@@ -348,10 +351,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		vorbis_info_clear(&vi);
 
 		free(bufferList.mBuffers[0].mData);
-	}
-	
-	[[self delegate] setEndTime:[NSDate date]];
-	[[self delegate] setCompleted:YES];
+	}	
 }
 
 - (NSString *) settingsString

@@ -210,6 +210,9 @@
 			
 			++iterations;
 		}
+
+		[[self delegate] setEndTime:[NSDate date]];
+		[[self delegate] setCompleted:YES];	
 	}
 
 	@catch(StopException *exception) {
@@ -232,9 +235,6 @@
 			NSLog(@"%@", exception);
 		}
 	}	
-	
-	[[self delegate] setEndTime:[NSDate date]];
-	[[self delegate] setCompleted:YES];	
 }
 
 @end
