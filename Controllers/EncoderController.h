@@ -70,4 +70,8 @@ enum {
 - (void)			encoderTaskDidStop:(EncoderTask *)task;
 - (void)			encoderTaskDidComplete:(EncoderTask *)task;
 
+- (void)			encoderTaskDidStart:(EncoderTask *)task notify:(BOOL)notify;
+- (void)			encoderTaskDidStop:(EncoderTask *)task notify:(BOOL)notify;
+- (void)			encoderTaskDidComplete:(EncoderTask *)task notify:(BOOL)notify;
+
 @end

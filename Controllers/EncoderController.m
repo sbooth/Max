@@ -250,6 +250,25 @@ static EncoderController *sharedController = nil;
 
 - (void) encoderTaskDidStart:(EncoderTask *)task
 {
+	[self encoderTaskDidStart:task notify:YES];
+}
+
+- (void) encoderTaskDidStop:(EncoderTask *)task
+{
+	[self encoderTaskDidStop:task notify:YES];
+}
+
+- (void) encoderTaskDidComplete:(EncoderTask *)task
+{
+	[self encoderTaskDidComplete:task notify:YES];
+}
+
+- (void) encoderTaskDidStart:(EncoderTask *)task notify:(BOOL)notify
+{
+	if(NO == notify) {
+		return;
+	}
+	
 	NSString	*trackName		= [task description];
 	NSString	*type			= [task outputFormatName];
 	NSString	*settings		= [task encoderSettingsString];
@@ -263,39 +282,44 @@ static EncoderController *sharedController = nil;
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
 }
 
-- (void) encoderTaskDidStop:(EncoderTask *)task
+- (void) encoderTaskDidStop:(EncoderTask *)task notify:(BOOL)notify
 {
-	NSString	*trackName		= [task description];
-	NSString	*type			= [task outputFormatName];
-	
-	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode stopped for %@ [%@]", @"Log", @""), trackName, type]];
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode stopped", @"Log", @"") 
-								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
-						   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	if(notify) {
+		NSString	*trackName		= [task description];
+		NSString	*type			= [task outputFormatName];
+		
+		[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode stopped for %@ [%@]", @"Log", @""), trackName, type]];
+		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode stopped", @"Log", @"") 
+									description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
+							   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	}
 	
 	[self removeTask:task];
 	[self spawnThreads];
 }
 
-- (void) encoderTaskDidComplete:(EncoderTask *)task
+- (void) encoderTaskDidComplete:(EncoderTask *)task notify:(BOOL)notify
 {
-	NSDate			*startTime		= [task startTime];
-	NSDate			*endTime		= [task endTime];
-	unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
-	NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
-	NSString		*trackName		= [task description];
-	NSString		*type			= [task outputFormatName];
 	BOOL			justNotified	= NO;
+
+	if(notify) {
+		NSDate			*startTime		= [task startTime];
+		NSDate			*endTime		= [task endTime];
+		unsigned int	timeInSeconds	= (unsigned int) [endTime timeIntervalSinceDate:startTime];
+		NSString		*duration		= [NSString stringWithFormat:@"%i:%02i", timeInSeconds / 60, timeInSeconds % 60];
+		NSString		*trackName		= [task description];
+		NSString		*type			= [task outputFormatName];
 		
-	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode completed", @"Log", @"") 
-								description:[NSString stringWithFormat:@"%@\n%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type], [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
-						   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
+		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode completed", @"Log", @"") 
+									description:[NSString stringWithFormat:@"%@\n%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type], [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
+							   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	}
 	
 	[self removeTask:task];
 	[self spawnThreads];
 	
-	if(0 != [[[task taskInfo] inputTracks] count] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] ripInProgress] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] encodeInProgress]) {
+	if(notify && 0 != [[[task taskInfo] inputTracks] count] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] ripInProgress] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] encodeInProgress]) {
 		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"")
 									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[[task taskInfo] metadata] albumTitle]]
 							   notificationName:@"Disc encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
@@ -303,7 +327,7 @@ static EncoderController *sharedController = nil;
 	}
 
 	// No more tasks in any queues
-	if(NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks]) {
+	if(notify && NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks]) {
 
 		// Bounce dock icon if we're not the active application
 		if(NO == [[NSApplication sharedApplication] isActive]) {
