@@ -283,11 +283,11 @@
 					[info setObject:[NSNumber numberWithUnsignedInt:trackNumber] forKey:@kAFInfoDictionary_TrackNumber];
 				}
 				
-				// I'm getting *** +[NSCFDictionary count]: selector not recognized from the following section
+				// On 10.4.8, this returns a 'pty?' error- must not be settable
 				/*
-				size = sizeof(info);
-				err = AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, info);
-				 NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileSetProperty", UTCreateStringForOSType(err));
+				size	= sizeof(info);
+				err		= AudioFileSetProperty(fileID, kAudioFilePropertyInfoDictionary, size, &info);
+				NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileSetProperty", UTCreateStringForOSType(err));
 				 */
 			}
 		}
