@@ -57,7 +57,7 @@
 	if((self = [super init])) {
 
 		_decoder = [[Decoder decoderForFilename:filename] retain];
-		NSAssert1(nil != _decoder, @"Unable to create a Decoder for %@.", filename);
+		NSAssert1(nil != _decoder, @"Unable to create a Decoder for %@.", [filename lastPathComponent]);
 
 		return self;
 	}
