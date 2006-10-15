@@ -198,13 +198,28 @@ enum {
 	
 	// Check if output file exists and delete if requested
 	if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]]] && [[[[self taskInfo] settings] objectForKey:@"overwriteOutputFiles"] boolValue]) {
+		NSString		*filename		= [NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]];
 		
 		// TODO: Prompt whether to overwite
 		if([[[[self taskInfo] settings] objectForKey:@"promptBeforeOverwritingOutputFiles"] boolValue]) {
+			NSAlert		*alert		= [[[NSAlert alloc] init] autorelease];
 			
+			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"No", @"General", @"")];
+			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Yes", @"General", @"")];
+			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The file \"%@\" exists.", @"General", @""), [filename lastPathComponent]]];
+			[alert setInformativeText:NSLocalizedStringFromTable(@"Do you want to replace the existing file?", @"General", @"")];
+			[alert setAlertStyle:NSInformationalAlertStyle];
+			
+			int			result		= [alert runModal];
+			switch(result) {
+				case NSAlertFirstButtonReturn:
+					[[EncoderController sharedController] encoderTaskDidStop:self notify:NO]; 
+					break;
+					
+				case NSAlertSecondButtonReturn:				;					break;
+			}		
 		}
 		
-		NSString		*filename		= [NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]];
 		BOOL			result			= [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
 		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
 	}
