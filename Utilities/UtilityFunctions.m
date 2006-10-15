@@ -97,7 +97,7 @@ createDirectoryStructure(NSString *path)
 NSString * 
 makeStringSafeForFilename(NSString *string)
 {
-	NSCharacterSet		*characterSet		= [NSCharacterSet characterSetWithCharactersInString:@"/:?*"];
+	NSCharacterSet		*characterSet		= [NSCharacterSet characterSetWithCharactersInString:@"\"\\/<>?:*|"];
 	NSMutableString		*result				= [NSMutableString stringWithCapacity:[string length]];
 	NSRange				range;
 	
