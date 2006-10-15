@@ -257,10 +257,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		
 		// Flush any remaining samples
 		result = WavpackFlushSamples(wpc);
-		NSAssert1(FALSE != result, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"WavpackFlushSamples");
-		
-		[[self delegate] setEndTime:[NSDate date]];
-		[[self delegate] setCompleted:YES];
+		NSAssert1(FALSE != result, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"WavpackFlushSamples");		
 	}
 	
 	@catch(StopException *exception) {
@@ -283,6 +280,9 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		free(bufferList.mBuffers[0].mData);
 		free(wpBuf);
 	}	
+
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];
 }
 
 - (NSString *) settingsString

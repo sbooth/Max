@@ -566,9 +566,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			NSAssert(-1 != currentBytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 			bytesWritten += currentBytesWritten;
 		}
-
-		[[self delegate] setEndTime:[NSDate date]];
-		[[self delegate] setCompleted:YES];	
 	}
 
 	@catch(StopException *exception) {
@@ -600,6 +597,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		speex_bits_destroy(&bits);
 		ogg_stream_clear(&os);
 	}
+	
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (NSString *) settingsString

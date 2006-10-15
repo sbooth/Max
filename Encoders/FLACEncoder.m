@@ -222,9 +222,6 @@
 		
 		// Finish up the encoding process
 		FLAC__file_encoder_finish(_flac);
-
-		[[self delegate] setEndTime:[NSDate date]];
-		[[self delegate] setCompleted:YES];
 	}
 	
 	
@@ -244,6 +241,9 @@
 				
 		free(bufferList.mBuffers[0].mData);
 	}	
+
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];
 }
 
 - (NSString *) settingsString

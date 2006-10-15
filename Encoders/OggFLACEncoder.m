@@ -222,10 +222,7 @@
 		}
 		
 		// Finish up the encoding process
-		OggFLAC__file_encoder_finish(_flac);
-		
-		[[self delegate] setEndTime:[NSDate date]];
-		[[self delegate] setCompleted:YES];
+		OggFLAC__file_encoder_finish(_flac);		
 	}
 	
 	@catch(StopException *exception) {
@@ -244,6 +241,9 @@
 		
 		free(bufferList.mBuffers[0].mData);
 	}	
+
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];
 }
 
 - (NSString *) settingsString

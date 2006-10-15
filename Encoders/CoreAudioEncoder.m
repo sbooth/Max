@@ -140,7 +140,7 @@
 			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioConverterGetProperty", UTCreateStringForOSType(err));
 			
 			err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ConverterConfig, size, &converterPropertySettings);
-			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioConverterSetProperty", UTCreateStringForOSType(err));
+			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty", UTCreateStringForOSType(err));
 		}					
 				
 		// Allocate buffer
@@ -193,9 +193,6 @@
 			
 			++iterations;
 		}
-
-		[[self delegate] setEndTime:[NSDate date]];
-		[[self delegate] setCompleted:YES];	
 	}
 
 	@catch(StopException *exception) {
@@ -233,6 +230,9 @@
 		
 		free(bufferList.mBuffers[0].mData);
 	}
+
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (NSString *) settingsString

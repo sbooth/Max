@@ -174,9 +174,6 @@
 		
 		// Finish up the compression process
 		_compressor->Finish(NULL, 0, 0);
-
-		[[self delegate] setEndTime:[NSDate date]];
-		[[self delegate] setCompleted:YES];	
 	}
 	
 	
@@ -197,6 +194,9 @@
 		free(bufferList.mBuffers[0].mData);
 		free(chars);
 	}	
+
+	[[self delegate] setEndTime:[NSDate date]];
+	[[self delegate] setCompleted:YES];	
 }
 
 - (NSString *) settingsString
