@@ -368,9 +368,9 @@
 		[settings setValue:encoders forKey:@"encoders"];
 		
 		// Ripper settings
-		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"selectedRipper"] forKey:@"selectedRipper"];
-		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"ripToSingleFile"] forKey:@"ripToSingleFile"];
-		[settings setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"generateCueSheet"] forKey:@"generateCueSheet"];
+		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"selectedRipper"] forKey:@"selectedRipper"];
+		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"ripToSingleFile"] forKey:@"ripToSingleFile"];
+		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"generateCueSheet"] forKey:@"generateCueSheet"];
 		
 		// File locations
 		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] forKey:@"outputDirectory"];
@@ -389,8 +389,8 @@
 			NSMutableDictionary		*fileNamingFormat = [NSMutableDictionary dictionary];
 			
 			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"fileNamingFormat"] forKey:@"formatString"];
-			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"useTwoDigitTrackNumbers"] forKey:@"useTwoDigitTrackNumbers"];
-			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"useNamingFallback"] forKey:@"useNamingFallback"];
+			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"useTwoDigitTrackNumbers"] forKey:@"useTwoDigitTrackNumbers"];
+			[fileNamingFormat setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"useNamingFallback"] forKey:@"useNamingFallback"];
 			
 			[settings setValue:fileNamingFormat forKey:@"outputFileNaming"];
 		}
