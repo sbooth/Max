@@ -75,13 +75,13 @@
 	@try {
 		bufferList.mBuffers[0].mData = NULL;
 
+		// Setup the decoder
+		[[self decoder] finalizeSetup];
+
 		// Tell our owner we are starting
 		[[self delegate] setStartTime:startTime];	
 		[[self delegate] setStarted:YES];
-		
-		// Setup the decoder
-		[[self decoder] finalizeSetup];
-		
+				
 		// Parse the encoder settings
 		[self parseSettings];
 		

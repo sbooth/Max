@@ -184,16 +184,16 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	@try {
 		bufferList.mBuffers[0].mData = NULL;
 
+		// Parse the encoder settings
+		[self parseSettings];
+
 		// Tell our owner we are starting
 		[[self delegate] setStartTime:startTime];	
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
 		[[self decoder] finalizeSetup];
-		
-		// Parse the encoder settings
-		[self parseSettings];
-		
+				
 		NSAssert(1 == [[self decoder] pcmFormat].mChannelsPerFrame || 2 == [[self decoder] pcmFormat].mChannelsPerFrame, NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @""));
 		
 		totalFrames			= [[self decoder] totalFrames];

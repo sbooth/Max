@@ -79,6 +79,9 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 	@try {
 		bufferList.mBuffers[0].mData = NULL;
 
+		// Parse the encoder settings
+		[self parseSettings];
+
 		// Tell our owner we are starting
 		[[self delegate] setStartTime:startTime];	
 		[[self delegate] setStarted:YES];
@@ -86,8 +89,6 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		// Setup the decoder
 		[[self decoder] finalizeSetup];
 		
-		// Parse the encoder settings
-		[self parseSettings];
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
 		

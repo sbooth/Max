@@ -87,6 +87,9 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 	@try {
 		bufferList.mBuffers[0].mData = NULL;
 
+		// Parse the encoder settings
+		[self parseSettings];
+
 		// Tell our owner we are starting
 		[[self delegate] setStartTime:startTime];	
 		[[self delegate] setStarted:YES];
@@ -94,8 +97,6 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		// Setup the decoder
 		[[self decoder] finalizeSetup];
 		
-		// Parse the encoder settings
-		[self parseSettings];
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
 		

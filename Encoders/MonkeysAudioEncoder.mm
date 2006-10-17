@@ -72,16 +72,16 @@
 	@try {
 		bufferList.mBuffers[0].mData = NULL;
 
+		// Parse the encoder settings
+		[self parseSettings];
+
 		// Tell our owner we are starting
 		[[self delegate] setStartTime:startTime];	
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
 		[[self decoder] finalizeSetup];
-		
-		// Parse the encoder settings
-		[self parseSettings];
-		
+				
 		totalFrames			= [[self decoder] totalFrames];
 		framesToRead		= totalFrames;
 		
