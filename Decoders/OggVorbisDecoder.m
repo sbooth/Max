@@ -22,6 +22,19 @@
 
 @implementation OggVorbisDecoder
 
+- (void)			dealloc
+{
+	int							result;
+	
+	result						= ov_clear(&_vf); 
+	
+	if(0 != result) {
+		NSLog(@"ov_clear failed");
+	}
+
+	[super dealloc];
+}
+
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"Ogg (Vorbis, %u channels, %u Hz)", [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
 - (SInt64)			totalFrames						{ return ov_pcm_total(&_vf, -1); }
@@ -65,14 +78,32 @@
 
 - (void)			fillPCMBuffer
 {
-	CircularBuffer		*buffer				= [self pcmBuffer];
-	long				bytesRead			= 0;
-	int					currentSection		= 0;
+	CircularBuffer		*buffer;
+	long				bytesRead;
+	long				totalBytes;
+	void				*rawBuffer;
+	unsigned			availableSpace;
+	int					currentSection;
 	
-	bytesRead = ov_read(&_vf, [buffer exposeBufferForWriting], [buffer freeSpaceAvailable], YES, sizeof(int16_t), YES, &currentSection);
-	NSAssert(0 <= bytesRead, @"Ogg Vorbis decode error.");
+	buffer				= [self pcmBuffer];
+	rawBuffer			= [buffer exposeBufferForWriting];
+	availableSpace		= [buffer freeSpaceAvailable];
+	totalBytes			= 0;
+	currentSection		= 0;
 	
-	[buffer wroteBytes:bytesRead];
+	for(;;) {
+		bytesRead		= ov_read(&_vf, rawBuffer + totalBytes, availableSpace - totalBytes, YES, sizeof(int16_t), YES, &currentSection);
+		
+		NSAssert(0 <= bytesRead, @"Ogg Vorbis decode error.");
+		
+		totalBytes += bytesRead;
+		
+		if(0 == bytesRead || totalBytes >= availableSpace) {
+			break;
+		}
+	}
+	
+	[buffer wroteBytes:totalBytes];
 }
 
 @end
