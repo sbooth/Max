@@ -25,7 +25,6 @@
 
 @interface OggVorbisDecoder : Decoder
 {
-	ov_callbacks		_callbacks;
 	OggVorbis_File		_vf;
 }
 
