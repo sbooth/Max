@@ -84,7 +84,7 @@
 
 	
 	blockSize	= SELF_DECOMPRESSOR->GetInfo(APE_INFO_BLOCK_ALIGN);
-	NSAssert(ERROR_SUCCESS == result, @"Unable to determine the Monkey's Audio block size.");
+	NSAssert(0 != blockSize, @"Unable to determine the Monkey's Audio block size.");
 	
 	result		= SELF_DECOMPRESSOR->GetData((char *)[buffer exposeBufferForWriting], [buffer freeSpaceAvailable] / blockSize, &samplesRead);
 	NSAssert(ERROR_SUCCESS == result, @"Monkey's Audio invalid checksum.");
