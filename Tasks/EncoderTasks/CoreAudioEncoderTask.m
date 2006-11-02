@@ -188,12 +188,22 @@
 		// mp4v2 creates a temp file in ., so use a custom file and manually rename it	
 		tempFilename = generateTemporaryFilename([[[self taskInfo] settings] objectForKey:@"temporaryDirectory"], [self fileExtension]);
 		
-		if(NO == MP4Optimize([[self outputFilename] fileSystemRepresentation], [tempFilename fileSystemRepresentation], 0)) {
+		if(MP4Optimize([[self outputFilename] fileSystemRepresentation], [tempFilename fileSystemRepresentation], 0)) {
+			NSFileManager	*fileManager	= [NSFileManager defaultManager];
+			
+			// Delete the existing output file
+			if([fileManager removeFileAtPath:[self outputFilename] handler:nil]) {
+				if(NO == [fileManager movePath:tempFilename toPath:[self outputFilename] handler:nil]) {
+					[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Warning: the file %@ was lost.", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+				}
+			}
+			else {
+				[[LogController sharedController] logMessage:NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"")];
+			}
+		}
+		else {
 			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[self outputFilename] lastPathComponent]]];
 		}
-
-		result = rename([tempFilename fileSystemRepresentation], [[self outputFilename] fileSystemRepresentation]);
-		NSAssert1(-1 != result, NSLocalizedStringFromTable(@"Unable to optimize the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]);
 	}
 	// Use (unimplemented as of 10.4.3) CoreAudio metadata functions
 	else {
