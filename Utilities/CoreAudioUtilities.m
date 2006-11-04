@@ -237,7 +237,9 @@ getCoreAudioFileDataFormats(OSType filetype)
 	}
 
 	NSSortDescriptor *sd = [[[NSSortDescriptor alloc] initWithKey:@"description" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-	return [[[result sortedArrayUsingDescriptors:[NSArray arrayWithObject:sd]] retain] autorelease];
+	[result sortUsingDescriptors:[NSArray arrayWithObject:sd]];
+	
+	return [[result retain] autorelease];
 }
 
 static NSMutableDictionary *
