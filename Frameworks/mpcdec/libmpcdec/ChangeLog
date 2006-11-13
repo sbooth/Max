@@ -1,3 +1,7 @@
+1.2.3
+    * Added fast-seeking (bit-perfect only with mppenc 1.16 files and later, optional but safe on pre mppenc 1.16 files). Patch by Nicolas Botti
+    * Reduced memory usage and code size. Patch by Peter Pawlowski
+
 1.2.2
     * Fixed compilation under OpenBSD
     * Unix EOF again

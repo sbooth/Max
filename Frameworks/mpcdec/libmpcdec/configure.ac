@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(src/mpc_decoder.c)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(libmpcdec,1.2.2)
+AM_INIT_AUTOMAKE(libmpcdec,1.2.3)
 AM_CONFIG_HEADER(include/config.h)
 
 AM_PROG_LIBTOOL

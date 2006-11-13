@@ -58,16 +58,6 @@ mpc_streaminfo_init(mpc_streaminfo * si)
     memset(si, 0, sizeof(mpc_streaminfo));
 }
 
-// read information from SV8 header
-// not yet implemented
-static mpc_int32_t
-streaminfo_read_header_sv8(mpc_streaminfo * si, mpc_reader * fp)
-{
-    (void) si;
-    (void) fp;
-    return 0;
-}
-
 /// Reads streaminfo from SV7 header. 
 static mpc_int32_t
 streaminfo_read_header_sv7(mpc_streaminfo * si, mpc_uint32_t HeaderData[8])
@@ -105,6 +95,7 @@ streaminfo_read_header_sv7(mpc_streaminfo * si, mpc_uint32_t HeaderData[8])
     si->peak_album = (mpc_uint16_t) (HeaderData[4] & 0xFFFF);
     si->is_true_gapless = (HeaderData[5] >> 31) & 0x0001; // true gapless: used?
     si->last_frame_samples = (HeaderData[5] >> 20) & 0x07FF;  // true gapless: valid samples for last frame
+    si->fast_seek = (HeaderData[5] >> 19) & 0x0001;  // fast seeking
     si->encoder_version = (HeaderData[6] >> 24) & 0x00FF;
 
     if (si->encoder_version == 0) {
@@ -142,6 +133,7 @@ streaminfo_read_header_sv7(mpc_streaminfo * si, mpc_uint32_t HeaderData[8])
 }
 
 // read information from SV4-SV6 header
+#ifdef MPC_SUPPORT_SV456
 static mpc_int32_t
 streaminfo_read_header_sv6(mpc_streaminfo * si, mpc_uint32_t HeaderData[8])
 {
@@ -198,7 +190,7 @@ streaminfo_read_header_sv6(mpc_streaminfo * si, mpc_uint32_t HeaderData[8])
 
     return ERROR_CODE_OK;
 }
-
+#endif
 // reads file header and tags
 mpc_int32_t
 mpc_streaminfo_read(mpc_streaminfo * si, mpc_reader * r)
@@ -234,16 +226,20 @@ mpc_streaminfo_read(mpc_streaminfo * si, mpc_reader * r)
 
         // stream version 8
         if ((si->stream_version & 15) >= 8) {
-            Error = streaminfo_read_header_sv8(si, r);
+            return ERROR_CODE_INVALIDSV;
         }
         // stream version 7
         else if ((si->stream_version & 15) == 7) {
             Error = streaminfo_read_header_sv7(si, HeaderData);
+            if (Error != ERROR_CODE_OK) return Error;
         }
-    }
-    else {
+    } else {
+#ifdef MPC_SUPPORT_SV456
         // stream version 4-6
         Error = streaminfo_read_header_sv6(si, HeaderData);
+#else
+        return ERROR_CODE_INVALIDSV;
+#endif
     }
 
     // estimation, exact value needs too much time
@@ -258,7 +254,7 @@ mpc_streaminfo_read(mpc_streaminfo * si, mpc_reader * r)
         si->average_bitrate = 0;
     }
 
-    return Error;
+    return ERROR_CODE_OK;
 }
 
 double
