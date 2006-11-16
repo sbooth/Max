@@ -84,11 +84,11 @@ writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const 
 			
 		case 24:				
 			
-			// Interleave the audio
+			// Interleave the audio (no need for byte swapping)
 			alias8 = [[source pcmBuffer] exposeBufferForWriting];
 			for(sample = 0; sample < frame->header.blocksize; ++sample) {
 				for(channel = 0; channel < frame->header.channels; ++channel) {
-					audioSample	= OSSwapHostToBigInt32(buffer[channel][sample]);
+					audioSample	= buffer[channel][sample];
 					*alias8++	= (int8_t)(audioSample >> 16);
 					*alias8++	= (int8_t)(audioSample >> 8);
 					*alias8++	= (int8_t)audioSample;
