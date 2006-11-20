@@ -31,7 +31,7 @@
 	unsigned		seconds			= 0;
 	
 	
-	if(NO == [object isKindOfClass:[NSNumber class]]) {
+	if(nil == object || NO == [object isKindOfClass:[NSNumber class]]) {
 		return nil;
 	}
 	
