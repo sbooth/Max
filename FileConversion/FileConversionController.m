@@ -23,6 +23,7 @@
 #import "PreferencesController.h"
 #import "Genres.h"
 #import "AmazonAlbumArtSheet.h"
+#import "ImageAndTextCell.h"
 #import "UtilityFunctions.h"
 
 static FileConversionController		*sharedController						= nil;
@@ -87,7 +88,10 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 - (void) awakeFromNib
 {
-	NSToolbar	*toolbar	= nil;
+	NSTableColumn	*tableColumn;
+	NSCell			*dataCell;
+	
+	NSToolbar		*toolbar	= nil;
 	
 	// Set the sort descriptors
 	[_filesController setSortDescriptors:[NSArray arrayWithObjects:
@@ -111,6 +115,14 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
     [toolbar setDelegate:self];
 	
     [[self window] setToolbar:[toolbar autorelease]];
+
+	// Setup files table
+	tableColumn			= [_filesTableView tableColumnWithIdentifier:@"filename"];
+	dataCell			= [[ImageAndTextCell alloc] init];
+	
+	[tableColumn setDataCell:dataCell];
+	[tableColumn bind:@"value" toObject:_filesController withKeyPath:@"arrangedObjects.displayName" options:nil];
+	[dataCell release];		
 }
 
 - (void) windowDidLoad
@@ -451,6 +463,27 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
     return [NSArray arrayWithObjects: MetadataToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		NSToolbarSeparatorItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier, nil];
+}
+
+#pragma mark NSTableView Delegate Methods
+
+- (void) tableView:(NSTableView *)aTableView willDisplayCell:(id)aCell forTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+{
+	if(_filesTableView == aTableView && [[aTableColumn identifier] isEqualToString:@"filename"]) {
+		NSDictionary			*infoForBinding;
+		
+		infoForBinding			= [aTableView infoForBinding:NSContentBinding];
+		
+		if(nil != infoForBinding) {
+			NSArrayController	*arrayController;
+			NSDictionary		*fileDictionary;
+			
+			arrayController		= [infoForBinding objectForKey:NSObservedObjectKey];
+			fileDictionary		= [[arrayController arrangedObjects] objectAtIndex:rowIndex];
+			
+			[aCell setImage:[fileDictionary valueForKey:@"icon"]];
+		}
+	}
 }
 
 @end

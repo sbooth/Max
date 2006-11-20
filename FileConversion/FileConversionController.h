@@ -29,6 +29,7 @@
 	IBOutlet FileArrayController	*_filesController;
 	IBOutlet NSDrawer				*_metadataDrawer;
 	IBOutlet NSDrawer				*_artDrawer;
+	IBOutlet NSTableView			*_filesTableView;
 	
 	NSMutableArray					*_files;
 }
