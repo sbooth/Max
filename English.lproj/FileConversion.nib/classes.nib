@@ -16,6 +16,7 @@
                 "_artDrawer" = NSDrawer; 
                 "_encodersController" = NSArrayController; 
                 "_filesController" = FileArrayController; 
+                "_filesTableView" = NSTableView; 
                 "_metadataDrawer" = NSDrawer; 
             }; 
             SUPERCLASS = NSWindowController; 
