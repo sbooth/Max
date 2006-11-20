@@ -30,6 +30,8 @@
 #import "CoreAudioEncoderTask.h"
 #import "StopException.h"
 
+#import "GaplessUtilities.h"
+
 @interface CoreAudioEncoder (Private)
 
 - (AudioFileTypeID)		fileType;
@@ -192,6 +194,21 @@
 			}
 			
 			++iterations;
+		}
+		
+		// Write gapless info for AAC files
+		if((kAudioFileMPEG4Type == [self fileType] || kAudioFileM4AType == [self fileType]) && kAudioFormatMPEG4AAC == [self formatID]) {
+
+			// First close the output files
+			err				= ExtAudioFileDispose(extAudioFile);
+			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose", UTCreateStringForOSType(err));
+			extAudioFile	= NULL;
+		
+			err				= AudioFileClose(audioFile);
+			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose", UTCreateStringForOSType(err));
+			audioFile		= NULL;
+
+			addMPEG4AACGaplessInformationAtom(filename, [[self decoder] totalFrames]);
 		}
 	}
 
