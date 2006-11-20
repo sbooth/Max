@@ -337,14 +337,15 @@ oggStreamType(NSString *filename)
 			if(0 == memcmp(bytes, "FLAC" /*OggFLAC__MAPPING_MAGIC*/, 4 /*OggFLAC__MAPPING_MAGIC_LENGTH*/)) {
 				streamType = kOggStreamTypeFLAC;
 			}
-		}		
+		}
+		
+		ogg_stream_clear(&os);
 	}
 	
 	// Clean up
 	result = close(fd);
 	NSCAssert1(-1 != result, @"Unable to close the input file (%s).", strerror(errno));
 
-	ogg_stream_clear(&os);
 	ogg_sync_clear(&oy);
 
 	return streamType;
