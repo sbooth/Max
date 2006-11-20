@@ -87,6 +87,7 @@
 		8C53FF930A05CD4100890518 /* ParanoiaRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF860A05CD4100890518 /* ParanoiaRipper.m */; };
 		8C53FF950A05CD4100890518 /* Rip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF880A05CD4100890518 /* Rip.m */; };
 		8C53FF970A05CD4100890518 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF8A0A05CD4100890518 /* Ripper.m */; };
+		8C57F9EF0B10DE1300AA493C /* GaplessUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C57F9ED0B10DE1300AA493C /* GaplessUtilities.mm */; };
 		8C5E60860ACDC6F600D92D9A /* SecondsFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5E60840ACDC6F500D92D9A /* SecondsFormatter.m */; };
 		8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
 		8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
@@ -218,6 +219,7 @@
 		8CEA1A8D0AC8D5D7009E46CB /* mp4v2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA1A870AC8D5D2009E46CB /* mp4v2.framework */; };
 		8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA8CF00942939800207809 /* DiskArbitration.framework */; };
 		8CEDBFFF094B8ECE0023DD01 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */; };
+		8CF0E8C60B0C21570018F871 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0E8C40B0C21570018F871 /* ImageAndTextCell.m */; };
 		8CF2B1310A0DC0E5008738E4 /* MonkeysAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2B1300A0DC0E5008738E4 /* MonkeysAudio.png */; };
 		8CF2B1380A0DC15F008738E4 /* LAME.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2B1370A0DC15F008738E4 /* LAME.png */; };
 		8CFA4B470ABDE11900C5AE9F /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */; };
@@ -405,6 +407,8 @@
 		8C53FF8A0A05CD4100890518 /* Ripper.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Ripper.m; sourceTree = "<group>"; };
 		8C53FF8B0A05CD4100890518 /* RipperMethods.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RipperMethods.h; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		8C57F9EC0B10DE1300AA493C /* GaplessUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaplessUtilities.h; sourceTree = "<group>"; };
+		8C57F9ED0B10DE1300AA493C /* GaplessUtilities.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GaplessUtilities.mm; sourceTree = "<group>"; };
 		8C5E60830ACDC6F500D92D9A /* SecondsFormatter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SecondsFormatter.h; path = Formatters/SecondsFormatter.h; sourceTree = "<group>"; };
 		8C5E60840ACDC6F500D92D9A /* SecondsFormatter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SecondsFormatter.m; path = Formatters/SecondsFormatter.m; sourceTree = "<group>"; };
 		8C5ED73B0ACB581C003E8ECF /* mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mac.framework; path = Frameworks/mac/build/Release/mac.framework; sourceTree = "<group>"; };
@@ -647,6 +651,8 @@
 		8CEA8CF00942939800207809 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
 		8CEDC010094BE2D70023DD01 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Ripper.nib; sourceTree = "<group>"; };
 		8CEDC16A094BF05B0023DD01 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Encoder.nib; sourceTree = "<group>"; };
+		8CF0E8C30B0C21570018F871 /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
+		8CF0E8C40B0C21570018F871 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		8CF1EF7A09668A8B0058BE92 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		8CF2B1300A0DC0E5008738E4 /* MonkeysAudio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MonkeysAudio.png; sourceTree = "<group>"; };
 		8CF2B1370A0DC15F008738E4 /* LAME.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LAME.png; sourceTree = "<group>"; };
@@ -964,6 +970,8 @@
 		8C53021E0A05D66A00890518 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8CF0E8C30B0C21570018F871 /* ImageAndTextCell.h */,
+				8CF0E8C40B0C21570018F871 /* ImageAndTextCell.m */,
 				8C74F8900A0B307E002260CF /* ServicesProvider.h */,
 				8C74F8910A0B307E002260CF /* ServicesProvider.m */,
 				8C74F8660A0B2D89002260CF /* Genres.h */,
@@ -973,6 +981,8 @@
 				8C5302210A05D66A00890518 /* sha256-stdenis.c */,
 				8C5302220A05D66A00890518 /* UtilityFunctions.h */,
 				8C5302230A05D66A00890518 /* UtilityFunctions.m */,
+				8C57F9EC0B10DE1300AA493C /* GaplessUtilities.h */,
+				8C57F9ED0B10DE1300AA493C /* GaplessUtilities.mm */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1551,6 +1561,8 @@
 				8CD01F0B0ADB488300216B29 /* OutputPreferencesController.m in Sources */,
 				8CD0201A0ADB66E000216B29 /* iTunesPreferencesController.m in Sources */,
 				8CD0251A0ADC036A00216B29 /* PostProcessingPreferencesController.m in Sources */,
+				8CF0E8C60B0C21570018F871 /* ImageAndTextCell.m in Sources */,
+				8C57F9EF0B10DE1300AA493C /* GaplessUtilities.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2027,6 +2039,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				PRODUCT_NAME = Max;
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -2095,6 +2108,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				PRODUCT_NAME = Max;
+				USER_HEADER_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
