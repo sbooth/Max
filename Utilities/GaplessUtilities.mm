@@ -39,6 +39,7 @@ void
 addMPEG4AACGaplessInformationAtom(NSString *filename, SInt64 totalFrames)
 {
 	MP4File				*file;
+	NSString			*bundleVersion, *versionString;
 	MP4Atom				*dashAtom, *meanAtom, *nameAtom, *dataAtom;
 	MP4Property			*prop;
 	MP4BytesProperty	*bytesProp;
@@ -47,6 +48,11 @@ addMPEG4AACGaplessInformationAtom(NSString *filename, SInt64 totalFrames)
 	file		= new MP4File();
 	
 	file->Modify([filename fileSystemRepresentation]);
+
+	// Set this atom so mp4v2 will flesh out the "ilst" atom (otherwise tagging will fail)
+	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+	versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
+	file->SetMetadataTool([versionString UTF8String]);
 	
 	// Add the incredibly annoying "----" atom, with the appropriate gapless info
 	dashAtom	= file->AddDescendantAtoms("", "moov.udta.meta.ilst.----");
