@@ -9,14 +9,16 @@
         {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
             ACTIONS = {
-                customNamingButtonAction = id; 
+                insertFileNamingFormatSpecifier = id; 
+                saveFileNamingFormat = id; 
                 selectOutputDirectory = id; 
                 selectTemporaryDirectory = id; 
             }; 
             CLASS = OutputPreferencesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                "_customNameTextField" = NSTextField; 
+                "_fileNamingComboBox" = NSComboBox; 
+                "_formatSpecifierPopUpButton" = NSPopUpButton; 
                 "_outputDirectoryPopUpButton" = NSPopUpButton; 
                 "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
             }; 

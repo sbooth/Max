@@ -623,6 +623,24 @@
 		8CDE897B09D3B61600FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8CDE897C09D3B67F00FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
 		8CDE899609D3B9F600FBD401 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
+		8CDEF34F0B14026B008D2D25 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/FileConversion.nib; sourceTree = "<group>"; };
+		8CDEF3500B14026B008D2D25 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/iTunesPreferences.nib; sourceTree = "<group>"; };
+		8CDEF3510B140280008D2D25 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/FileConversion.nib; sourceTree = "<group>"; };
+		8CDEF3520B140280008D2D25 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/iTunesPreferences.nib; sourceTree = "<group>"; };
+		8CDEF3530B140299008D2D25 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/FileConversion.nib; sourceTree = "<group>"; };
+		8CDEF3540B140299008D2D25 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/iTunesPreferences.nib; sourceTree = "<group>"; };
+		8CDEF3640B140473008D2D25 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MusicBrainzMatchSheet.nib; sourceTree = "<group>"; };
+		8CDEF3650B140473008D2D25 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MusicBrainzPreferences.nib; sourceTree = "<group>"; };
+		8CDEF3660B140484008D2D25 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MusicBrainzMatchSheet.nib; sourceTree = "<group>"; };
+		8CDEF3670B140484008D2D25 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MusicBrainzPreferences.nib; sourceTree = "<group>"; };
+		8CDEF3680B140496008D2D25 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MusicBrainzMatchSheet.nib; sourceTree = "<group>"; };
+		8CDEF3690B140496008D2D25 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MusicBrainzPreferences.nib; sourceTree = "<group>"; };
+		8CDEF36B0B140524008D2D25 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
+		8CDEF36C0B140524008D2D25 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/PostProcessingPreferences.nib; sourceTree = "<group>"; };
+		8CDEF36D0B140535008D2D25 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
+		8CDEF36E0B140535008D2D25 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/PostProcessingPreferences.nib; sourceTree = "<group>"; };
+		8CDEF36F0B140547008D2D25 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
+		8CDEF3700B140547008D2D25 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/PostProcessingPreferences.nib; sourceTree = "<group>"; };
 		8CE24FDE0AD30A2D009E1323 /* MusicBrainzMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicBrainzMatchSheet.h; path = MusicBrainz/MusicBrainzMatchSheet.h; sourceTree = "<group>"; };
 		8CE24FDF0AD30A2D009E1323 /* MusicBrainzMatchSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MusicBrainzMatchSheet.m; path = MusicBrainz/MusicBrainzMatchSheet.m; sourceTree = "<group>"; };
 		8CE24FF30AD30B92009E1323 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicBrainzMatchSheet.nib; sourceTree = "<group>"; };
@@ -1886,6 +1904,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C99E2760A82BA3A00A8CBE4 /* English */,
+				8CDEF34F0B14026B008D2D25 /* French */,
+				8CDEF3510B140280008D2D25 /* Dutch */,
+				8CDEF3530B140299008D2D25 /* German */,
 			);
 			name = FileConversion.nib;
 			sourceTree = "<group>";
@@ -1927,6 +1948,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				8CD01F1D0ADB4A9A00216B29 /* English */,
+				8CDEF36B0B140524008D2D25 /* Dutch */,
+				8CDEF36D0B140535008D2D25 /* French */,
+				8CDEF36F0B140547008D2D25 /* German */,
 			);
 			name = OutputPreferences.nib;
 			sourceTree = "<group>";
@@ -1935,6 +1959,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				8CD020470ADB688600216B29 /* English */,
+				8CDEF3500B14026B008D2D25 /* French */,
+				8CDEF3520B140280008D2D25 /* Dutch */,
+				8CDEF3540B140299008D2D25 /* German */,
 			);
 			name = iTunesPreferences.nib;
 			sourceTree = "<group>";
@@ -1943,6 +1970,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				8CD025360ADC04C900216B29 /* English */,
+				8CDEF36C0B140524008D2D25 /* Dutch */,
+				8CDEF36E0B140535008D2D25 /* French */,
+				8CDEF3700B140547008D2D25 /* German */,
 			);
 			name = PostProcessingPreferences.nib;
 			sourceTree = "<group>";
@@ -1962,6 +1992,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				8CE24FF30AD30B92009E1323 /* English */,
+				8CDEF3640B140473008D2D25 /* Dutch */,
+				8CDEF3660B140484008D2D25 /* French */,
+				8CDEF3680B140496008D2D25 /* German */,
 			);
 			name = MusicBrainzMatchSheet.nib;
 			sourceTree = "<group>";
@@ -1970,6 +2003,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				8CE250DB0AD31AB2009E1323 /* English */,
+				8CDEF3650B140473008D2D25 /* Dutch */,
+				8CDEF3670B140484008D2D25 /* French */,
+				8CDEF3690B140496008D2D25 /* German */,
 			);
 			name = MusicBrainzPreferences.nib;
 			sourceTree = "<group>";

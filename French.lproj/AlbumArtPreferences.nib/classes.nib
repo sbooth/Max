@@ -1,10 +1,16 @@
 {
     IBClasses = (
         {
-            ACTIONS = {customNamingButtonAction = id; }; 
+            ACTIONS = {
+                insertAlbumArtFileNamingFormatSpecifier = id; 
+                saveAlbumArtFileNamingFormat = id; 
+            }; 
             CLASS = AlbumArtPreferencesController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_customNameTextField" = NSTextField; }; 
+            OUTLETS = {
+                "_albumArtFileNamingComboBox" = NSComboBox; 
+                "_albumArtFormatSpecifierPopUpButton" = NSPopUpButton; 
+            }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }

@@ -18,6 +18,7 @@
         {
             ACTIONS = {
                 "" = id; 
+                downloadAlbumArt = id; 
                 ejectDisc = id; 
                 encode = id; 
                 encodeCustom = id; 
