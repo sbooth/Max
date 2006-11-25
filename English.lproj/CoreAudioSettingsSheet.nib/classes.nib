@@ -1,9 +1,13 @@
 {
     IBClasses = (
         {
+            ACTIONS = {vbrButtonClicked = id; }; 
             CLASS = CoreAudioSettingsSheet; 
             LANGUAGE = ObjC; 
-            OUTLETS = {"_subtypesController" = NSArrayController; }; 
+            OUTLETS = {
+                "_bitratePopUpButton" = NSPopUpButton; 
+                "_subtypesController" = NSArrayController; 
+            }; 
             SUPERCLASS = EncoderSettingsSheet; 
         }, 
         {

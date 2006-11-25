@@ -91,14 +91,55 @@
 
 - (void) dealloc
 {
-	[_availableSubtypes release];	_availableSubtypes = nil;
-	[_formatName release];			_formatName = nil;
+	[_availableSubtypes release],	_availableSubtypes = nil;
+	[_formatName release],			_formatName = nil;
 	
 	[super dealloc];
 }
 
+- (void) awakeFromNib
+{
+	NSNumber		*useVBR;
+	NSString		*keyPath;
+	NSNumber		*selectedValue;
+	
+	useVBR			= [_settingsController valueForKeyPath:@"selection.useVBR"];
+	keyPath			= ([useVBR boolValue] ? @"selection.bitratesVBR" : @"selection.bitrates");
+	selectedValue	= [NSNumber numberWithInt:[[_bitratePopUpButton titleOfSelectedItem] intValue]];
+	
+	[_bitratePopUpButton unbind:@"content"];
+	
+	[_bitratePopUpButton bind:@"content"
+					 toObject:_subtypesController
+				  withKeyPath:keyPath
+					  options:nil];
+}
+
 - (NSString *)		formatName									{ return [[_formatName retain] autorelease]; }
 - (void)			setFormatName:(NSString *)formatName		{ [_formatName release]; _formatName = [formatName retain]; }
+
+- (IBAction) vbrButtonClicked:(id)sender
+{
+	NSString		*keyPath;
+	NSNumber		*selectedValue;
+	NSArray			*newBitrates;
+	
+	selectedValue	= [NSNumber numberWithInt:[[_bitratePopUpButton titleOfSelectedItem] intValue]];
+	keyPath			= (NSOnState == [sender state] ? @"selection.bitratesVBR" : @"selection.bitrates");
+
+	[_bitratePopUpButton unbind:@"content"];
+		
+	[_bitratePopUpButton bind:@"content"
+					 toObject:_subtypesController
+				  withKeyPath:keyPath
+					  options:nil];
+
+	newBitrates		= [_subtypesController valueForKeyPath:keyPath];
+
+	if(NO == [newBitrates containsObject:selectedValue]) {
+		[_settingsController setValue:[_bitratePopUpButton itemTitleAtIndex:0] forKeyPath:@"selection.bitrate"];
+	}
+}
 
 #pragma mark Delegate methods
 

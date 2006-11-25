@@ -23,6 +23,8 @@
 
 @interface CoreAudioSettingsSheet : EncoderSettingsSheet
 {
+	IBOutlet NSPopUpButton			*_bitratePopUpButton;
+	
 	IBOutlet NSArrayController		*_subtypesController;
 	NSMutableArray					*_availableSubtypes;
 	
@@ -33,5 +35,7 @@
 
 - (NSString *)		formatName;
 - (void)			setFormatName:(NSString *)formatName;
+
+- (IBAction)		vbrButtonClicked:(id)sender;
 
 @end
