@@ -94,7 +94,7 @@ static EncoderController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_tasks release];		_tasks = nil;
+	[_tasks release],		_tasks = nil;
 
 	[super dealloc];
 }
@@ -193,7 +193,7 @@ static EncoderController *sharedController = nil;
 	NSEnumerator	*enumerator;
 	EncoderTask		*current;
 	
-	enumerator = [[_tasksController arrangedObjects] objectEnumerator];
+	enumerator = [_tasks objectEnumerator];
 	while((current = [enumerator nextObject])) {
 		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]]) {
 			return YES;
@@ -209,7 +209,7 @@ static EncoderController *sharedController = nil;
 	EncoderTask			*current;
 	
 	_freeze = YES;
-	enumerator = [[_tasksController arrangedObjects] reverseObjectEnumerator];
+	enumerator = [_tasks reverseObjectEnumerator];
 	while((current = [enumerator nextObject])) {
 		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]]) {
 			[current stop];
@@ -382,11 +382,11 @@ static EncoderController *sharedController = nil;
 	[self spawnThreads];
 }
 
-- (void)		addTask:(EncoderTask *)task				{ [_tasksController addObject:task]; }
+- (void)		addTask:(EncoderTask *)task				{ [[self mutableArrayValueForKey:@"tasks"] addObject:task]; }
 
 - (void) removeTask:(EncoderTask *)task
 {
-	[_tasksController removeObject:task];
+	[[self mutableArrayValueForKey:@"tasks"] removeObject:task];
 	
 	// Hide the window if no more tasks
 	if(NO == [self hasTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {

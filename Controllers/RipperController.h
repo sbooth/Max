@@ -35,7 +35,7 @@ enum {
 	IBOutlet NSTableView		*_taskTable;
 	IBOutlet NSArrayController	*_tasksController;
 	
-	NSArray						*_tasks;
+	NSMutableArray				*_tasks;
 	BOOL						_freeze;
 }
 

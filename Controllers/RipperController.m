@@ -86,7 +86,7 @@ static RipperController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_tasks release];		_tasks = nil;
+	[_tasks release],		_tasks = nil;
 
 	[super dealloc];
 }
@@ -191,7 +191,7 @@ static RipperController *sharedController = nil;
 	NSEnumerator	*enumerator;
 	RipperTask		*current;
 	
-	enumerator = [[_tasksController arrangedObjects] objectEnumerator];
+	enumerator = [_tasks objectEnumerator];
 	while((current = [enumerator nextObject])) {
 		if([document isEqual:[[current objectInTracksAtIndex:0] document]]) {
 			return YES;
@@ -207,7 +207,7 @@ static RipperController *sharedController = nil;
 	RipperTask			*current;
 	
 	_freeze = YES;
-	enumerator = [[_tasksController arrangedObjects] reverseObjectEnumerator];
+	enumerator = [_tasks reverseObjectEnumerator];
 	while((current = [enumerator nextObject])) {
 		if([document isEqual:[[current objectInTracksAtIndex:0] document]]) {
 			[current stop];
@@ -313,11 +313,11 @@ static RipperController *sharedController = nil;
 
 @implementation RipperController (Private)
 
-- (void)		addTask:(RipperTask *)task				{ [_tasksController addObject:task]; }
+- (void)		addTask:(RipperTask *)task				{ [[self mutableArrayValueForKey:@"tasks"] addObject:task]; }
 
 - (void) removeTask:(RipperTask *)task
 {
-	[_tasksController removeObject:task];
+	[[self mutableArrayValueForKey:@"tasks"] removeObject:task];
 	
 	// Hide the window if no more tasks
 	if(NO == [self hasTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
