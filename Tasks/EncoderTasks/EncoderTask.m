@@ -123,7 +123,7 @@ enum {
 	NSArray					*portArray			= nil;
 	
 	// Encode in place?
-	if(nil == [[self taskInfo] inputTracks] && nil == [[[self taskInfo] settings] objectForKey:@"outputDirectory"]) {
+	if(nil == [[self taskInfo] inputTracks] && [[[[self taskInfo] settings] objectForKey:@"convertInPlace"] boolValue]) {
 		basename = [[[self taskInfo] inputFilenameAtInputFileIndex] stringByDeletingPathExtension];
 	}
 	// Use the input filename if we're not encoding in place and no metadata was found

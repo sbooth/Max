@@ -68,6 +68,7 @@ enum {
 
 - (void) awakeFromNib
 {
+	NSString		*outputDirectory;
 	//	NSArray			*patterns			= nil;
 	//	unsigned		i;
 	
@@ -76,7 +77,7 @@ enum {
 	[self updateTemporaryDirectoryMenuItemImage];
 	
 	// Select the correct items
-	[_outputDirectoryPopUpButton selectItemWithTag:(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] ? kCurrentDirectoryMenuItemTag : kSameAsSourceFileMenuItemTag)];	
+	[_outputDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"] ? kSameAsSourceFileMenuItemTag : kCurrentDirectoryMenuItemTag)];	
 	[_temporaryDirectoryPopUpButton selectItemWithTag:(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];	
 	
 	// Deselect all items in the File Format Specifier NSPopUpButton
@@ -111,7 +112,8 @@ enum {
 			break;
 			
 		case kSameAsSourceFileMenuItemTag:
-			[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"outputDirectory"];
+			[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"convertInPlace"];
+//			[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"outputDirectory"];
 			[self updateOutputDirectoryMenuItemImage];
 			break;
 	}
@@ -215,19 +217,21 @@ enum {
 	NSString	*path		= nil;
 	NSImage		*image		= nil;
 	
+	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
+
+	// If we are converting in place, reset the menu's title and image
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"]) {
+		[menuItem setTitle:NSLocalizedStringFromTable(@"Not Specified", @"FileConversion", @"")];
+		[menuItem setImage:nil];
+		return;
+	}
+	
 	// Set the menu item image for the output directory
 	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath];
 	image		= getIconForFile(path, NSMakeSize(16, 16));
-	menuItem	= [_outputDirectoryPopUpButton itemAtIndex:[_outputDirectoryPopUpButton indexOfItemWithTag:kCurrentDirectoryMenuItemTag]];	
 	
-	if(nil != path) {
-		[menuItem setTitle:[path lastPathComponent]];
-		[menuItem setImage:image];
-	}
-	else {
-		[menuItem setTitle:NSLocalizedStringFromTable(@"Not Specified", @"FileConversion", @"")];
-		[menuItem setImage:nil];
-	}
+	[menuItem setTitle:[path lastPathComponent]];
+	[menuItem setImage:image];
 }
 
 - (void) updateTemporaryDirectoryMenuItemImage
@@ -267,6 +271,7 @@ enum {
 			
 			for(i = 0; i < count; ++i) {
 				dirname = [filesToOpen objectAtIndex:i];
+				[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"convertInPlace"];
 				[[NSUserDefaults standardUserDefaults] setObject:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"outputDirectory"];
 				[self updateOutputDirectoryMenuItemImage];
 			}
@@ -276,7 +281,7 @@ enum {
 			
 		case NSCancelButton:
 			[self updateOutputDirectoryMenuItemImage];
-			[_outputDirectoryPopUpButton selectItemWithTag:(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] ? kCurrentDirectoryMenuItemTag : kSameAsSourceFileMenuItemTag)];	
+			[_outputDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"] ? kSameAsSourceFileMenuItemTag : kCurrentDirectoryMenuItemTag)];	
 			break;
 	}				
 }

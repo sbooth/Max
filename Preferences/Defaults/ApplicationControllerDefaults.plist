@@ -4,6 +4,8 @@
 <dict>
 	<key>outputDirectory</key>
 	<string>~/Music</string>
+	<key>convertInPlace</key>
+	<false />
 	<key>useiTunesWorkarounds</key>
 	<true/>
 	<key>maximumEncoderThreads</key>

@@ -52,7 +52,7 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 	@try {
 		defaultsDictionary	= [NSMutableDictionary dictionaryWithCapacity:20];
 		defaultFiles		= [NSArray arrayWithObjects:@"ApplicationControllerDefaults", @"MediaControllerDefaults",
-			@"CompactDiscDocumentDefaults", @"ComparisonRipperDefaults", @"ParanoiaDefaults",
+			@"ComparisonRipperDefaults", @"ParanoiaDefaults",
 			@"AlbumArtDefaults", @"MusicBrainzDefaults", nil];
 		// Add the default values as resettable
 		for(i = 0; i < [defaultFiles count]; ++i) {

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		8C0883620A092EA500CAC5D0 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */; };
 		8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */; };
-		8C0883640A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */; };
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
 		8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
@@ -30,7 +29,6 @@
 		8C328182096D12CA00608C9D /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C328181096D12CA00608C9D /* Exceptions.strings */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
 		8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */; };
-		8C450C950A9043C0001BF1A1 /* FileConversionSettingsSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
 		8C4D4650093E776500A88927 /* Preferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D464F093E776500A88927 /* Preferences.nib */; };
 		8C4D46F4093E813300A88927 /* RipperPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D46EE093E813300A88927 /* RipperPreferences.nib */; };
@@ -282,7 +280,6 @@
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
 		8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = AlbumArtDefaults.plist; sourceTree = "<group>"; };
 		8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
-		8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = CompactDiscDocumentDefaults.plist; sourceTree = "<group>"; };
 		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
 		8C244AC60AC6DFEF001334D0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
@@ -297,8 +294,6 @@
 		8C4505090A8EEC13001BF1A1 /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AmazonAlbumArtSheet.h; path = AlbumArt/AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
 		8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = AmazonAlbumArtSheet.m; path = AlbumArt/AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
 		8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlbumArtMethods.h; path = AlbumArt/AlbumArtMethods.h; sourceTree = "<group>"; };
-		8C450C920A9043BF001BF1A1 /* FileConversionSettingsSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileConversionSettingsSheet.h; sourceTree = "<group>"; };
-		8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileConversionSettingsSheet.m; sourceTree = "<group>"; };
 		8C4D452F093E6CB200A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
 		8C4D46EF093E813300A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
 		8C4D489F093E932600A88927 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
@@ -883,7 +878,6 @@
 			children = (
 				8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */,
 				8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */,
-				8C08835A0A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist */,
 				8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */,
 				8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */,
 				8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */,
@@ -1265,8 +1259,6 @@
 				8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */,
 				8C99DD5A0A82B97C00A8CBE4 /* FilesTableView.h */,
 				8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */,
-				8C450C920A9043BF001BF1A1 /* FileConversionSettingsSheet.h */,
-				8C450C930A9043C0001BF1A1 /* FileConversionSettingsSheet.m */,
 			);
 			path = FileConversion;
 			sourceTree = "<group>";
@@ -1448,7 +1440,6 @@
 				8C89D0810A07617E00359E67 /* MP3SettingsSheet.nib in Resources */,
 				8C0883620A092EA500CAC5D0 /* AlbumArtDefaults.plist in Resources */,
 				8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */,
-				8C0883640A092EA500CAC5D0 /* CompactDiscDocumentDefaults.plist in Resources */,
 				8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */,
 				8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */,
 				8CF2B1310A0DC0E5008738E4 /* MonkeysAudio.png in Resources */,
@@ -1535,7 +1526,6 @@
 				8C99DD5F0A82B97C00A8CBE4 /* FileConversionController.m in Sources */,
 				8C99DD610A82B97C00A8CBE4 /* FilesTableView.m in Sources */,
 				8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */,
-				8C450C950A9043C0001BF1A1 /* FileConversionSettingsSheet.m in Sources */,
 				8CD25D310AABF75E0037F33A /* TaskInfo.m in Sources */,
 				8CD26CA50AB50B580037F33A /* EncoderTask.m in Sources */,
 				8CD26EFC0AB531F50037F33A /* CoreAudioEncoderTask.m in Sources */,
