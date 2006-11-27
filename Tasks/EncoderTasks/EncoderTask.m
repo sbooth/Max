@@ -23,7 +23,6 @@
 #import "EncoderMethods.h"
 #import "EncoderController.h"
 #import "LogController.h"
-#import "FileConversionSettingsSheet.h"
 
 #import "UtilityFunctions.h"
 
