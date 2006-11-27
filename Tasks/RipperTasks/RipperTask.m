@@ -69,10 +69,11 @@
 
 - (void) dealloc
 {
-	[_connection release];	_connection = nil;
-	[_sectors release];		_sectors = nil;	
-	[_tracks release];		_tracks = nil;	
-	[_phase release];		_phase = nil;
+	[_connection invalidate];
+	[_connection release],	_connection = nil;
+	[_sectors release],		_sectors = nil;	
+	[_tracks release],		_tracks = nil;	
+	[_phase release],		_phase = nil;
 	
 	[super dealloc];
 }
@@ -122,10 +123,6 @@
 	
 	[super setStopped:stopped];
 	
-	[_connection invalidate];
-	[_connection release];
-	_connection = nil;
-	
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
 		[track setRipInProgress:NO];
@@ -142,10 +139,6 @@
 	Track				*track;
 	
 	[super setCompleted:completed];
-	
-	[_connection invalidate];
-	[_connection release];
-	_connection = nil;
 	
 	enumerator = [_tracks objectEnumerator];		
 	while((track = [enumerator nextObject])) {
