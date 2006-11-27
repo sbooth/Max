@@ -80,7 +80,7 @@ enum {
 		}
 	}
 	
-	
+	[_connection invalidate];
 	[_connection release];				_connection = nil;
 	[(NSObject *)_encoder release];		_encoder = nil;
 	[_encoderSettings release];			_encoderSettings = nil;
@@ -272,10 +272,6 @@ enum {
 {
 	[super setStopped:YES]; 
 	
-	[_connection invalidate];
-	[_connection release];
-	_connection = nil;
-
 	// Mark tracks as complete
 	if(nil != [[self taskInfo] inputTracks]) {
 		NSArray			*tracks		= [[self taskInfo] inputTracks];
@@ -355,10 +351,6 @@ enum {
 	
 	@try {
 		[super setCompleted:YES];
-		
-		[_connection invalidate];
-		[_connection release];
-		_connection = nil;
 		
 		// Delete input file if requested
 		if(nil == [[self taskInfo] inputTracks] && [[[[self taskInfo] settings] objectForKey:@"deleteSourceFiles"] boolValue]) {
