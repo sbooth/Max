@@ -37,9 +37,7 @@
 		encoder			= [[self alloc] initWithFilename:[[owner taskInfo] inputFilenameAtInputFileIndex]];
 		
 		[encoder setDelegate:owner];
-		[owner encoderReady:encoder];
-		
-		[encoder release];
+		[owner encoderReady:encoder];		
 	}	
 	
 	@catch(NSException *exception) {
@@ -48,6 +46,7 @@
 	}
 	
 	@finally {
+		[encoder release];
 		[pool release];
 	}
 }
