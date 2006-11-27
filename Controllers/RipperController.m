@@ -298,7 +298,9 @@ static RipperController *sharedController = nil;
 	}
 	
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"] && NO == [self documentHasRipperTasks:[[task objectInTracksAtIndex:0] document]]) {
-		[[[task objectInTracksAtIndex:0] document] ejectDisc:self];
+		// Allow one pass through the run loop before we eject to clean up any open file descriptors
+		[[[task objectInTracksAtIndex:0] document] performSelector:@selector(ejectDisc:) withObject:self afterDelay:0.0];
+//		[[[task objectInTracksAtIndex:0] document] ejectDisc:self];
 	}
 
 	[[EncoderController sharedController] encodeFile:[task outputFilename] metadata:[[task taskInfo] metadata] settings:[[task taskInfo] settings] inputTracks:[[task taskInfo] inputTracks]];
