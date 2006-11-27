@@ -48,29 +48,8 @@
 
 + (void) initialize
 {
-	NSString				*compactDiscDocumentDefaultsValuesPath;
-    NSDictionary			*compactDiscDocumentDefaultsValuesDictionary;
-	
-	@try {
-		// Set up defaults
-		compactDiscDocumentDefaultsValuesPath = [[NSBundle mainBundle] pathForResource:@"CompactDiscDocumentDefaults" ofType:@"plist"];
-		NSAssert1(nil != compactDiscDocumentDefaultsValuesPath, NSLocalizedStringFromTable(@"Your installation of Max appears to be incomplete.", @"Exceptions", @""), @"CompactDiscDocumentDefaults.plist");
-
-		compactDiscDocumentDefaultsValuesDictionary = [NSDictionary dictionaryWithContentsOfFile:compactDiscDocumentDefaultsValuesPath];
-		[[NSUserDefaults standardUserDefaults] registerDefaults:compactDiscDocumentDefaultsValuesDictionary];
-	
-		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtWidth"];
-		[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtHeight"];
-	}
-	
-	@catch(NSException *exception) {
-		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
-		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while initializing the %@ class.", @"Exceptions", @""), @"CompactDiscDocument"]];
-		[alert setInformativeText:[exception reason]];
-		[alert setAlertStyle:NSWarningAlertStyle];		
-		[alert runModal];
-	}
+	[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtWidth"];
+	[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtHeight"];
 }
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
@@ -374,6 +353,7 @@
 		
 		// File locations
 		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] forKey:@"outputDirectory"];
+		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"convertInPlace"] forKey:@"convertInPlace"];
 		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
 		
 		// Conversion parameters
