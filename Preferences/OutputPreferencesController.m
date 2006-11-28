@@ -106,8 +106,9 @@ enum {
 			
 			[panel setAllowsMultipleSelection:NO];
 			[panel setCanChooseDirectories:YES];
+			[panel setCanCreateDirectories:YES];
 			[panel setCanChooseFiles:NO];
-			
+
 			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(selectOutputDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
 			break;
 			
@@ -200,6 +201,7 @@ enum {
 			
 			[panel setAllowsMultipleSelection:NO];
 			[panel setCanChooseDirectories:YES];
+			[panel setCanCreateDirectories:YES];
 			[panel setCanChooseFiles:NO];
 			
 			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(selectTemporaryDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
