@@ -21,11 +21,11 @@
 #import <Cocoa/Cocoa.h>
 #import "Decoder.h"
 
-#include <FLAC/file_decoder.h>
+#include <FLAC/stream_decoder.h>
 
 @interface FLACDecoder : Decoder
 {
-	FLAC__FileDecoder			*_flac;
+	FLAC__StreamDecoder			*_flac;
 	FLAC__uint64				_totalSamples;
 }
 

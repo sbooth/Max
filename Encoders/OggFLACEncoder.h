@@ -20,13 +20,13 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <OggFLAC/file_encoder.h>
+#include <FLAC/stream_encoder.h>
 
 #import "Encoder.h"
 
 @interface OggFLACEncoder : Encoder
 {
-	OggFLAC__FileEncoder	*_flac;
+	FLAC__StreamEncoder		*_flac;
 	
 	BOOL					_exhaustiveModelSearch;
 	BOOL					_enableMidSide;

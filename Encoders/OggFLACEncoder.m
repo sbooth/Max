@@ -63,7 +63,7 @@
 	AudioBufferList					bufferList;
 	ssize_t							bufferLen					= 0;
 	FLAC__bool						result;
-	OggFLAC__FileEncoderState		encoderState;
+	FLAC__StreamEncoderInitStatus	encoderStatus;
 	FLAC__StreamMetadata			padding;
 	FLAC__StreamMetadata			*metadata					[1];
 	SInt64							totalFrames, framesToRead;
@@ -121,42 +121,42 @@
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Create the Ogg FLAC encoder
-		_flac = OggFLAC__file_encoder_new();
+		_flac = FLAC__stream_encoder_new();
 		NSAssert(NULL != _flac, NSLocalizedStringFromTable(@"Unable to create the Ogg FLAC encoder.", @"Exceptions", @""));
 		
 		// Setup Ogg FLAC encoder
 
 		// Input information
-		result = OggFLAC__file_encoder_set_sample_rate(_flac, [[self decoder] pcmFormat].mSampleRate);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_sample_rate failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_sample_rate(_flac, [[self decoder] pcmFormat].mSampleRate);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_sample_rate failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_bits_per_sample(_flac, [[self decoder] pcmFormat].mBitsPerChannel);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_bits_per_sample failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_bits_per_sample(_flac, [[self decoder] pcmFormat].mBitsPerChannel);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_bits_per_sample failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_channels(_flac, [[self decoder] pcmFormat].mChannelsPerFrame);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_channels failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_channels(_flac, [[self decoder] pcmFormat].mChannelsPerFrame);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_channels failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
 		// Encoder parameters
-		result = OggFLAC__file_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_do_exhaustive_model_search failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_do_exhaustive_model_search failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_do_mid_side_stereo(_flac, _enableMidSide);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_do_mid_side_stereo failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_do_mid_side_stereo(_flac, _enableMidSide);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_do_mid_side_stereo failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_loose_mid_side_stereo(_flac, _enableLooseMidSide);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_loose_mid_side_stereo failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_loose_mid_side_stereo(_flac, _enableLooseMidSide);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_loose_mid_side_stereo failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_qlp_coeff_precision(_flac, _QLPCoeffPrecision);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_qlp_coeff_precision failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_qlp_coeff_precision(_flac, _QLPCoeffPrecision);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_qlp_coeff_precision failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_min_residual_partition_order(_flac, _minPartitionOrder);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_min_residual_partition_order failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_min_residual_partition_order(_flac, _minPartitionOrder);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_min_residual_partition_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_max_residual_partition_order(_flac, _maxPartitionOrder);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_max_residual_partition_order failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_max_residual_partition_order(_flac, _maxPartitionOrder);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_max_residual_partition_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_max_lpc_order(_flac, _maxLPCOrder);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_max_lpc_order failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_max_lpc_order(_flac, _maxLPCOrder);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_max_lpc_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
 
 		// Create the padding metadata block if desired
@@ -166,20 +166,23 @@
 			padding.length		= _padding;
 			metadata[0]			= &padding;
 			
-			result = OggFLAC__file_encoder_set_metadata(_flac, metadata, 1);
-			NSAssert1(YES == result, @"OggFLAC__file_encoder_set_metadata failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+			result = FLAC__stream_encoder_set_metadata(_flac, metadata, 1);
+			NSAssert1(YES == result, @"FLAC__stream_encoder_set_metadata failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		}
 
 		// Initialize the Ogg FLAC encoder
-		result = OggFLAC__file_encoder_set_total_samples_estimate(_flac, totalFrames);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_total_samples_estimate failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_total_samples_estimate(_flac, totalFrames);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_total_samples_estimate failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = OggFLAC__file_encoder_set_filename(_flac, [filename UTF8String]);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_set_filename failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_set_ogg_serial_number(_flac, time(NULL));
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_ogg_serial_number failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		encoderState = OggFLAC__file_encoder_init(_flac);
-		NSAssert1(OggFLAC__FILE_ENCODER_OK == encoderState, @"OggFLAC__file_encoder_init failed: %s", OggFLAC__FileEncoderStateString[encoderState]);
-		
+		encoderStatus = FLAC__stream_encoder_init_ogg_file(_flac, 
+														   [filename fileSystemRepresentation],
+														   NULL, 
+														   self);
+		NSAssert1(FLAC__STREAM_ENCODER_INIT_STATUS_OK == encoderStatus, @"FLAC__stream_encoder_init_ogg_file failed: %s", FLAC__StreamEncoderInitStatusString[encoderStatus]);
+
 		// Iteratively get the PCM data and encode it
 		for(;;) {
 			
@@ -222,7 +225,7 @@
 		}
 		
 		// Finish up the encoding process
-		OggFLAC__file_encoder_finish(_flac);		
+		FLAC__stream_encoder_finish(_flac);		
 	}
 	
 	@catch(StopException *exception) {
@@ -236,7 +239,7 @@
 	
 	@finally {
 		if(NULL != _flac) {
-			OggFLAC__file_encoder_delete(_flac);
+			FLAC__stream_encoder_delete(_flac);
 		}
 		
 		free(bufferList.mBuffers[0].mData);
@@ -352,8 +355,8 @@
 		}
 		
 		// Encode the chunk
-		result = OggFLAC__file_encoder_process(_flac, (const FLAC__int32 * const *)buffer, frameCount);
-		NSAssert1(YES == result, @"OggFLAC__file_encoder_process failed: %s", OggFLAC__FileEncoderStateString[OggFLAC__file_encoder_get_state(_flac)]);
+		result = FLAC__stream_encoder_process(_flac, (const FLAC__int32 * const *)buffer, frameCount);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_process failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 	}
 	
 	@finally {

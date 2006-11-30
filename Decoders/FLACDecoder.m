@@ -31,7 +31,7 @@
 @end
 
 static FLAC__StreamDecoderWriteStatus 
-writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
+writeCallback(const FLAC__StreamDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 * const buffer[], void *client_data)
 {
 	FLACDecoder		*source					= (FLACDecoder *)client_data;
 
@@ -123,7 +123,7 @@ writeCallback(const FLAC__FileDecoder *decoder, const FLAC__Frame *frame, const 
 }
 
 static void
-metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
+metadataCallback(const FLAC__StreamDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data)
 {
 	FLACDecoder		*source		= (FLACDecoder *)client_data;
 	//	const FLAC__StreamMetadata_CueSheet		*cueSheet			= NULL;
@@ -158,7 +158,7 @@ metadataCallback(const FLAC__FileDecoder *decoder, const FLAC__StreamMetadata *m
 }
 
 static void
-errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
+errorCallback(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data)
 {
 //	FLACDecoder		*source		= (FLACDecoder *)client_data;
 	
@@ -171,10 +171,10 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 {
 	FLAC__bool					result;
 	
-	result = FLAC__file_decoder_finish(_flac);
-	NSAssert1(YES == result, @"FLAC__file_decoder_finish failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
+	result = FLAC__stream_decoder_finish(_flac);
+	NSAssert1(YES == result, @"FLAC__stream_decoder_finish failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
 
-	FLAC__file_decoder_delete(_flac);		_flac = NULL;
+	FLAC__stream_decoder_delete(_flac);		_flac = NULL;
 	
 	[super dealloc];	
 }
@@ -187,42 +187,31 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 
 - (void)			finalizeSetup
 {
-	FLAC__bool					result;
-	FLAC__FileDecoderState		state;	
+	FLAC__bool						result;
+	FLAC__StreamDecoderInitStatus	status;
 	
 	// Create FLAC decoder
-	_flac		= FLAC__file_decoder_new();
+	_flac		= FLAC__stream_decoder_new();
 	NSAssert(NULL != _flac, NSLocalizedStringFromTable(@"Unable to create the FLAC decoder.", @"Exceptions", @""));
 	
-	result		= FLAC__file_decoder_set_filename(_flac, [[self filename] fileSystemRepresentation]);
-	NSAssert1(YES == result, @"FLAC__file_decoder_set_filename failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
+	// Initialize decoder
+	status		= FLAC__stream_decoder_init_file(_flac, 
+												 [[self filename] fileSystemRepresentation],
+												 writeCallback, 
+												 metadataCallback, 
+												 errorCallback,
+												 self);
+	NSAssert1(FLAC__STREAM_DECODER_INIT_STATUS_OK == status, @"FLAC__stream_decoder_init_file failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
 	
 	/*
 	 // Process cue sheets
 	 result = FLAC__file_decoder_set_metadata_respond(flac, FLAC__METADATA_TYPE_CUESHEET);
-	 NSAssert(YES == result, @"%s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
+	 NSAssert(YES == result, @"%s", FLAC__stream_decoder_get_resolved_state_string(_flac));
 	 */
-				
-	// Setup callbacks
-	result		= FLAC__file_decoder_set_write_callback(_flac, writeCallback);
-	NSAssert1(YES == result, @"FLAC__file_decoder_set_write_callback failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
-	
-	result		= FLAC__file_decoder_set_metadata_callback(_flac, metadataCallback);
-	NSAssert1(YES == result, @"FLAC__file_decoder_set_metadata_callback failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
-	
-	result		= FLAC__file_decoder_set_error_callback(_flac, errorCallback);
-	NSAssert1(YES == result, @"FLAC__file_decoder_set_error_callback failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
-	
-	result		= FLAC__file_decoder_set_client_data(_flac, self);
-	NSAssert1(YES == result, @"FLAC__file_decoder_set_client_data failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
-	
-	// Initialize decoder
-	state = FLAC__file_decoder_init(_flac);
-	NSAssert1(FLAC__FILE_DECODER_OK == state, @"FLAC__file_decoder_init failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
-	
+
 	// Process metadata
-	result = FLAC__file_decoder_process_until_end_of_metadata(_flac);
-	NSAssert1(YES == result, @"FLAC__file_decoder_process_until_end_of_metadata failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
+	result		= FLAC__stream_decoder_process_until_end_of_metadata(_flac);
+	NSAssert1(YES == result, @"FLAC__stream_decoder_process_until_end_of_metadata failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
 	
 	// Setup input format descriptor
 	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
@@ -255,8 +244,9 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 
 	
 	for(;;) {
-		// EOF?
-		if(FLAC__FILE_DECODER_END_OF_FILE == FLAC__file_decoder_get_state(_flac)) {
+
+		// EOS?
+		if(FLAC__STREAM_DECODER_END_OF_STREAM == FLAC__stream_decoder_get_state(_flac)) {
 			break;
 		}
 				
@@ -267,16 +257,16 @@ errorCallback(const FLAC__FileDecoder *decoder, FLAC__StreamDecoderErrorStatus s
 		// this could blow up!
 		// It's not feasible to use the maximum possible values, because
 		// maxBlocksize(65535) * maxBitsPerSample(32) * maxChannels(8) = 16,776,960 (No 16 MB buffers here!)
-		blockSize			= FLAC__file_decoder_get_blocksize(_flac);
-		channels			= FLAC__file_decoder_get_channels(_flac);
-		bitsPerSample		= FLAC__file_decoder_get_bits_per_sample(_flac); 
+		blockSize			= FLAC__stream_decoder_get_blocksize(_flac);
+		channels			= FLAC__stream_decoder_get_channels(_flac);
+		bitsPerSample		= FLAC__stream_decoder_get_bits_per_sample(_flac); 
 		
 		blockByteSize		= blockSize * channels * (bitsPerSample / 8);
 		
 		//Ensure ssufficient space remains in the buffer
 		if([buffer freeSpaceAvailable] >= blockByteSize) {
-			result	= FLAC__file_decoder_process_single(_flac);
-			NSAssert1(YES == result, @"FLAC__file_decoder_process_single failed: %s", FLAC__FileDecoderStateString[FLAC__file_decoder_get_state(_flac)]);
+			result	= FLAC__stream_decoder_process_single(_flac);
+			NSAssert1(YES == result, @"FLAC__stream_decoder_process_single failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
 		}
 		else {
 			break;

@@ -202,8 +202,6 @@
 		8CEA0B910AC7A05C009E46CB /* speex.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0B830AC7A052009E46CB /* speex.framework */; };
 		8CEA0D820AC7AB1B009E46CB /* FLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D710AC7AB1A009E46CB /* FLAC.framework */; };
 		8CEA0D830AC7AB20009E46CB /* FLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D710AC7AB1A009E46CB /* FLAC.framework */; };
-		8CEA0D900AC7AB32009E46CB /* OggFLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */; };
-		8CEA0D910AC7AB37009E46CB /* OggFLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */; };
 		8CEA13CE0AC8ACEB009E46CB /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8CEA18750AC8C7A7009E46CB /* sndfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA18730AC8C7A7009E46CB /* sndfile.framework */; };
 		8CEA18760AC8C7AB009E46CB /* sndfile.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA18730AC8C7A7009E46CB /* sndfile.framework */; };
@@ -254,7 +252,6 @@
 				8CEA19490AC8CF82009E46CB /* cuetools.framework in Copy Frameworks */,
 				8CEA18DB0AC8CA96009E46CB /* mpcdec.framework in Copy Frameworks */,
 				8CEA18760AC8C7AB009E46CB /* sndfile.framework in Copy Frameworks */,
-				8CEA0D910AC7AB37009E46CB /* OggFLAC.framework in Copy Frameworks */,
 				8CEA0D830AC7AB20009E46CB /* FLAC.framework in Copy Frameworks */,
 				8CEA0B910AC7A05C009E46CB /* speex.framework in Copy Frameworks */,
 				8CEA0AF00AC79A02009E46CB /* wavpack.framework in Copy Frameworks */,
@@ -654,7 +651,6 @@
 		8CEA0AE70AC799F9009E46CB /* wavpack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = wavpack.framework; path = Frameworks/wavpack/build/Release/wavpack.framework; sourceTree = "<group>"; };
 		8CEA0B830AC7A052009E46CB /* speex.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = speex.framework; path = Frameworks/speex/build/Release/speex.framework; sourceTree = "<group>"; };
 		8CEA0D710AC7AB1A009E46CB /* FLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLAC.framework; path = Frameworks/flac/build/Release/FLAC.framework; sourceTree = "<group>"; };
-		8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OggFLAC.framework; path = Frameworks/flac/build/Release/OggFLAC.framework; sourceTree = "<group>"; };
 		8CEA139B0AC8ACEB009E46CB /* taglib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = taglib.framework; path = Frameworks/taglib/build/Release/taglib.framework; sourceTree = "<group>"; };
 		8CEA18730AC8C7A7009E46CB /* sndfile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = sndfile.framework; path = Frameworks/sndfile/build/Release/sndfile.framework; sourceTree = "<group>"; };
 		8CEA18CD0AC8CA90009E46CB /* mpcdec.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mpcdec.framework; path = Frameworks/mpcdec/build/Release/mpcdec.framework; sourceTree = "<group>"; };
@@ -725,7 +721,6 @@
 				8CEA0AEF0AC799F9009E46CB /* wavpack.framework in Frameworks */,
 				8CEA0B8F0AC7A052009E46CB /* speex.framework in Frameworks */,
 				8CEA0D820AC7AB1B009E46CB /* FLAC.framework in Frameworks */,
-				8CEA0D900AC7AB32009E46CB /* OggFLAC.framework in Frameworks */,
 				8CEA13CE0AC8ACEB009E46CB /* taglib.framework in Frameworks */,
 				8CEA18750AC8C7A7009E46CB /* sndfile.framework in Frameworks */,
 				8CEA18D90AC8CA91009E46CB /* mpcdec.framework in Frameworks */,
@@ -1287,7 +1282,6 @@
 				8CEA18CD0AC8CA90009E46CB /* mpcdec.framework */,
 				8CEA18730AC8C7A7009E46CB /* sndfile.framework */,
 				8CEA139B0AC8ACEB009E46CB /* taglib.framework */,
-				8CEA0D840AC7AB32009E46CB /* OggFLAC.framework */,
 				8CEA0D710AC7AB1A009E46CB /* FLAC.framework */,
 				8CEA0B830AC7A052009E46CB /* speex.framework */,
 				8CEA0AE70AC799F9009E46CB /* wavpack.framework */,
@@ -2058,7 +2052,6 @@
 					"$(SRCROOT)/Frameworks/taglib/build/Release/taglib.framework/Headers",
 					"$(SRCROOT)/Frameworks/mp4v2/build/Release/mp4v2.framework/Headers",
 					"$(SRCROOT)/Frameworks/flac/build/Release/FLAC.framework/Headers",
-					"$(SRCROOT)/Frameworks/flac/build/Release/OggFLAC.framework/Headers",
 					"$(SRCROOT)/Frameworks/musicbrainz/build/Release/musicbrainz.framework/Headers",
 				);
 				INFOPLIST_FILE = Info.plist;
@@ -2127,7 +2120,6 @@
 					"$(SRCROOT)/Frameworks/taglib/build/Release/taglib.framework/Headers",
 					"$(SRCROOT)/Frameworks/mp4v2/build/Release/mp4v2.framework/Headers",
 					"$(SRCROOT)/Frameworks/flac/build/Release/FLAC.framework/Headers",
-					"$(SRCROOT)/Frameworks/flac/build/Release/OggFLAC.framework/Headers",
 					"$(SRCROOT)/Frameworks/musicbrainz/build/Release/musicbrainz.framework/Headers",
 				);
 				INFOPLIST_FILE = Info.plist;

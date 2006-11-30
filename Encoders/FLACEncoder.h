@@ -21,11 +21,11 @@
 #import <Cocoa/Cocoa.h>
 #import "Encoder.h"
 
-#include <FLAC/file_encoder.h>
+#include <FLAC/stream_encoder.h>
 
 @interface FLACEncoder : Encoder
 {
-	FLAC__FileEncoder		*_flac;
+	FLAC__StreamEncoder		*_flac;
 	
 	BOOL					_exhaustiveModelSearch;
 	BOOL					_enableMidSide;
