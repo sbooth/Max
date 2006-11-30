@@ -63,7 +63,6 @@
 		8CEA18120AC8C3F7009E46CB /* xi.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA17D90AC8C3F7009E46CB /* xi.c */; };
 		8CEA18140AC8C5B8009E46CB /* sndfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA18130AC8C5B8009E46CB /* sndfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA18190AC8C5EE009E46CB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA18180AC8C5EE009E46CB /* config.h */; };
-		8CEA18300AC8C68E009E46CB /* FLAC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA182F0AC8C68E009E46CB /* FLAC.framework */; };
 		8CEA183D0AC8C6C2009E46CB /* g72x_priv.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA18350AC8C6C2009E46CB /* g72x_priv.h */; };
 		8CEA183F0AC8C6C2009E46CB /* g72x.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA18370AC8C6C2009E46CB /* g72x.c */; };
 		8CEA18400AC8C6C2009E46CB /* g72x.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA18380AC8C6C2009E46CB /* g72x.h */; };
@@ -156,7 +155,6 @@
 		8CEA17D90AC8C3F7009E46CB /* xi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = xi.c; path = libsndfile/src/xi.c; sourceTree = "<group>"; };
 		8CEA18130AC8C5B8009E46CB /* sndfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sndfile.h; path = libsndfile/src/sndfile.h; sourceTree = "<group>"; };
 		8CEA18180AC8C5EE009E46CB /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = libsndfile/src/config.h; sourceTree = "<group>"; };
-		8CEA182F0AC8C68E009E46CB /* FLAC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FLAC.framework; path = ../flac/build/Release/FLAC.framework; sourceTree = SOURCE_ROOT; };
 		8CEA18350AC8C6C2009E46CB /* g72x_priv.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = g72x_priv.h; path = libsndfile/src/G72x/g72x_priv.h; sourceTree = "<group>"; };
 		8CEA18360AC8C6C2009E46CB /* g72x_test.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g72x_test.c; path = libsndfile/src/G72x/g72x_test.c; sourceTree = "<group>"; };
 		8CEA18370AC8C6C2009E46CB /* g72x.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = g72x.c; path = libsndfile/src/G72x/g72x.c; sourceTree = "<group>"; };
@@ -192,7 +190,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CEA18300AC8C68E009E46CB /* FLAC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +219,6 @@
 		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				8CEA182F0AC8C68E009E46CB /* FLAC.framework */,
 				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
 				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
 			);

@@ -55,7 +55,7 @@
 /* #undef HAVE_FLAC_1_1_1 */
 
 /* Define to 1 if you have the <FLAC/all.h> header file. */
-#define HAVE_FLAC_ALL_H 1
+/* #undef HAVE_FLAC_ALL_H 1 */
 
 /* Set to 1 if the compile supports the struct hack. */
 #define HAVE_FLEXIBLE_ARRAY 1
