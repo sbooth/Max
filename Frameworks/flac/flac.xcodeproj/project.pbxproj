@@ -27,7 +27,6 @@
 		8CADD69D0B1E6D8500670EED /* stream_encoder_framing.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CADD6890B1E6D8500670EED /* stream_encoder_framing.c */; };
 		8CADD69E0B1E6D8500670EED /* stream_encoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CADD68A0B1E6D8500670EED /* stream_encoder.c */; };
 		8CADD69F0B1E6D8500670EED /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CADD68B0B1E6D8500670EED /* window.c */; };
-		8CADD6A80B1E6D9A00670EED /* config_osx.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CADD6A70B1E6D9A00670EED /* config_osx.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CADD6BB0B1E6E3200670EED /* ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA0C7B0AC7A641009E46CB /* ogg.framework */; };
 		8CADD6C60B1E6E5500670EED /* all.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CADD6BD0B1E6E5500670EED /* all.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CADD6C70B1E6E5500670EED /* assert.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CADD6BE0B1E6E5500670EED /* assert.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +37,7 @@
 		8CADD6CC0B1E6E5500670EED /* ordinals.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CADD6C30B1E6E5500670EED /* ordinals.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CADD6CD0B1E6E5500670EED /* stream_decoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CADD6C40B1E6E5500670EED /* stream_decoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CADD6CE0B1E6E5500670EED /* stream_encoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CADD6C50B1E6E5500670EED /* stream_encoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CADE1C30B1EAB1600670EED /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CADE1C20B1EAB1600670EED /* config.h */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -67,7 +67,6 @@
 		8CADD6890B1E6D8500670EED /* stream_encoder_framing.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_encoder_framing.c; path = flac/src/libFLAC/stream_encoder_framing.c; sourceTree = "<group>"; };
 		8CADD68A0B1E6D8500670EED /* stream_encoder.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = stream_encoder.c; path = flac/src/libFLAC/stream_encoder.c; sourceTree = "<group>"; };
 		8CADD68B0B1E6D8500670EED /* window.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = window.c; path = flac/src/libFLAC/window.c; sourceTree = "<group>"; };
-		8CADD6A70B1E6D9A00670EED /* config_osx.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = config_osx.h; sourceTree = "<group>"; };
 		8CADD6BD0B1E6E5500670EED /* all.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = all.h; path = flac/include/FLAC/all.h; sourceTree = "<group>"; };
 		8CADD6BE0B1E6E5500670EED /* assert.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = assert.h; path = flac/include/FLAC/assert.h; sourceTree = "<group>"; };
 		8CADD6BF0B1E6E5500670EED /* callback.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = callback.h; path = flac/include/FLAC/callback.h; sourceTree = "<group>"; };
@@ -77,6 +76,10 @@
 		8CADD6C30B1E6E5500670EED /* ordinals.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ordinals.h; path = flac/include/FLAC/ordinals.h; sourceTree = "<group>"; };
 		8CADD6C40B1E6E5500670EED /* stream_decoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_decoder.h; path = flac/include/FLAC/stream_decoder.h; sourceTree = "<group>"; };
 		8CADD6C50B1E6E5500670EED /* stream_encoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = stream_encoder.h; path = flac/include/FLAC/stream_encoder.h; sourceTree = "<group>"; };
+		8CADE1C20B1EAB1600670EED /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		8CADE1D50B1EABF100670EED /* cpu_asm.nasm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.nasm; name = cpu_asm.nasm; path = flac/src/libFLAC/ia32/cpu_asm.nasm; sourceTree = "<group>"; };
+		8CADE1D60B1EABF100670EED /* fixed_asm.nasm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.nasm; name = fixed_asm.nasm; path = flac/src/libFLAC/ia32/fixed_asm.nasm; sourceTree = "<group>"; };
+		8CADE1D70B1EABF100670EED /* lpc_asm.nasm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.nasm; name = lpc_asm.nasm; path = flac/src/libFLAC/ia32/lpc_asm.nasm; sourceTree = "<group>"; };
 		8CEA0C7B0AC7A641009E46CB /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = ../ogg/build/Release/ogg.framework; sourceTree = SOURCE_ROOT; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* FLAC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FLAC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +140,10 @@
 		08FB77AEFE84172EC02AAC07 /* libFLAC */ = {
 			isa = PBXGroup;
 			children = (
+				8CADE1D50B1EABF100670EED /* cpu_asm.nasm */,
+				8CADE1D60B1EABF100670EED /* fixed_asm.nasm */,
+				8CADE1D70B1EABF100670EED /* lpc_asm.nasm */,
+				8CADE1C20B1EAB1600670EED /* config.h */,
 				8CADD6BD0B1E6E5500670EED /* all.h */,
 				8CADD6BE0B1E6E5500670EED /* assert.h */,
 				8CADD6BF0B1E6E5500670EED /* callback.h */,
@@ -146,7 +153,6 @@
 				8CADD6C30B1E6E5500670EED /* ordinals.h */,
 				8CADD6C40B1E6E5500670EED /* stream_decoder.h */,
 				8CADD6C50B1E6E5500670EED /* stream_encoder.h */,
-				8CADD6A70B1E6D9A00670EED /* config_osx.h */,
 				8CADD6780B1E6D8500670EED /* bitbuffer.c */,
 				8CADD6790B1E6D8500670EED /* bitmath.c */,
 				8CADD67A0B1E6D8500670EED /* cpu.c */,
@@ -204,7 +210,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CADD6A80B1E6D9A00670EED /* config_osx.h in Headers */,
 				8CADD6C60B1E6E5500670EED /* all.h in Headers */,
 				8CADD6C70B1E6E5500670EED /* assert.h in Headers */,
 				8CADD6C80B1E6E5500670EED /* callback.h in Headers */,
@@ -214,6 +219,7 @@
 				8CADD6CC0B1E6E5500670EED /* ordinals.h in Headers */,
 				8CADD6CD0B1E6E5500670EED /* stream_decoder.h in Headers */,
 				8CADD6CE0B1E6E5500670EED /* stream_encoder.h in Headers */,
+				8CADE1C30B1EAB1600670EED /* config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,8 +332,13 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = flac_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_CONFIG_H,
+					__MACOSX__,
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
+				NASM_OTHER_FLAGS = " $(inherited) -I$(SRCROOT)/flac/src/libFLAC/ia32/";
 				PRODUCT_NAME = FLAC;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT) $(SRCROOT)/flac/include $(SRCROOT)/flac/src/libFLAC/include";
 				WRAPPER_EXTENSION = framework;
@@ -354,8 +365,13 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = flac_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_CONFIG_H,
+					__MACOSX__,
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
+				NASM_OTHER_FLAGS = " $(inherited) -I$(SRCROOT)/flac/src/libFLAC/ia32/";
 				PRODUCT_NAME = FLAC;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT) $(SRCROOT)/flac/include $(SRCROOT)/flac/src/libFLAC/include";
 				WRAPPER_EXTENSION = framework;

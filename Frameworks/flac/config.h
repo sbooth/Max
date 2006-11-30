@@ -31,7 +31,7 @@
 /* #undef FLAC__HAS_GAS */
 
 /* define if you are compiling for x86 and have the NASM assembler */
-#define FLAC__HAS_NASM 1
+/* #undef FLAC__HAS_NASM */
 
 /* define if you have the ogg library */
 #define FLAC__HAS_OGG 1

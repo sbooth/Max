@@ -31,8 +31,6 @@
 
 #if HAVE_CONFIG_H
 #  include <config.h>
-#else if defined __MACOSX__
-#  include "config_osx.h"
 #endif
 
 #include <stdio.h>
