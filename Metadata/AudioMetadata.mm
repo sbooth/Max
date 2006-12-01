@@ -402,7 +402,7 @@
 	result							= [[AudioMetadata alloc] init];
 
 	chain							= FLAC__metadata_chain_new();
-	NSAssert(NULL != chain, @"Unable to allocate memory.");
+	NSAssert(NULL != chain, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 	
 	if(NO == FLAC__metadata_chain_read(chain, [filename fileSystemRepresentation])) {
 		FLAC__metadata_chain_delete(chain);
@@ -410,7 +410,7 @@
 	}
 	
 	iterator					= FLAC__metadata_iterator_new();
-	NSAssert(NULL != iterator, @"Unable to allocate memory.");
+	NSAssert(NULL != iterator, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 	
 	FLAC__metadata_iterator_init(iterator, chain);
 	
