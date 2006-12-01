@@ -389,7 +389,7 @@
 
 + (AudioMetadata *) metadataFromFLACFile:(NSString *)filename
 {
-	AudioMetadata								*result;
+	AudioMetadata					*result;
 	FLAC__Metadata_Chain			*chain				= NULL;
 	FLAC__Metadata_Iterator			*iterator			= NULL;
 	FLAC__StreamMetadata			*block				= NULL;
@@ -406,7 +406,6 @@
 	
 	if(NO == FLAC__metadata_chain_read(chain, [filename fileSystemRepresentation])) {
 		FLAC__metadata_chain_delete(chain);
-		
 		return [result autorelease];
 	}
 	
