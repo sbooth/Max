@@ -154,6 +154,9 @@ metadataCallback(const FLAC__StreamDecoder *decoder, const FLAC__StreamMetadata 
 				 }
 					 break;
 				 */
+			
+		default:
+			break;
 	}
 }
 
@@ -174,7 +177,7 @@ errorCallback(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus
 	result = FLAC__stream_decoder_finish(_flac);
 	NSAssert1(YES == result, @"FLAC__stream_decoder_finish failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
 
-	FLAC__stream_decoder_delete(_flac);		_flac = NULL;
+	FLAC__stream_decoder_delete(_flac),		_flac = NULL;
 	
 	[super dealloc];	
 }
@@ -205,7 +208,7 @@ errorCallback(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus
 	
 	/*
 	 // Process cue sheets
-	 result = FLAC__file_decoder_set_metadata_respond(flac, FLAC__METADATA_TYPE_CUESHEET);
+	 result = FLAC__stream_decoder_set_metadata_respond(flac, FLAC__METADATA_TYPE_CUESHEET);
 	 NSAssert(YES == result, @"%s", FLAC__stream_decoder_get_resolved_state_string(_flac));
 	 */
 
@@ -263,7 +266,7 @@ errorCallback(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus
 		
 		blockByteSize		= blockSize * channels * (bitsPerSample / 8);
 		
-		//Ensure ssufficient space remains in the buffer
+		// Ensure sufficient space remains in the buffer
 		if([buffer freeSpaceAvailable] >= blockByteSize) {
 			result	= FLAC__stream_decoder_process_single(_flac);
 			NSAssert1(YES == result, @"FLAC__stream_decoder_process_single failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
