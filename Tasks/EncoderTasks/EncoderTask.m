@@ -289,6 +289,10 @@ enum {
 
 - (void) setCompleted:(BOOL)completed
 {
+	// A task that never started or prematurely stopped can never complete
+	if(NO == [self started] || [self stopped]) {
+		return;
+	}
 /*
 	// This file is finished
 	[[self taskInfo] setInputFileIndex:[[self taskInfo] inputFileIndex] + 1];
