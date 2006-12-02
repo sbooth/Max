@@ -218,6 +218,75 @@
 		// Encoder settings
 		addVorbisComment(block, @"ENCODING", [self encoderSettingsString]);
 		
+		// Add album art if present
+		if(nil != [metadata albumArt]) {
+			
+			FLAC__metadata_iterator_init(iterator, chain);
+			
+			// Seek to the picture block if it exists
+			while(FLAC__METADATA_TYPE_PICTURE != FLAC__metadata_iterator_get_block_type(iterator)) {
+				if(NO == FLAC__metadata_iterator_next(iterator)) {
+					break; // Already at end
+				}
+			}
+			
+			// If there isn't a picture block add one
+			if(FLAC__METADATA_TYPE_PICTURE != FLAC__metadata_iterator_get_block_type(iterator)) {
+				
+				// The padding block will be the last block if it exists; add the picture block before it
+				if(FLAC__METADATA_TYPE_PADDING == FLAC__metadata_iterator_get_block_type(iterator)) {
+					FLAC__metadata_iterator_prev(iterator);
+				}
+				
+				block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PICTURE);
+				NSAssert(NULL != block, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+				
+				// Add our metadata
+				result = FLAC__metadata_iterator_insert_block_after(iterator, block);
+				NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
+			}
+			else {
+				block = FLAC__metadata_iterator_get_block(iterator);
+			}
+			
+			NSImage				*image						= [metadata albumArt];
+			NSEnumerator		*enumerator					= nil;
+			NSImageRep			*currentRepresentation		= nil;
+			NSBitmapImageRep	*bitmapRep					= nil;
+			NSData				*imageData					= nil;
+			FLAC__byte			*data						= NULL;
+			NSSize				size;
+			
+			enumerator = [[image representations] objectEnumerator];
+			while((currentRepresentation = [enumerator nextObject])) {
+				if([currentRepresentation isKindOfClass:[NSBitmapImageRep class]]) {
+					bitmapRep = (NSBitmapImageRep *)currentRepresentation;
+				}
+			}
+			
+			// Create a bitmap representation if one doesn't exist
+			if(nil == bitmapRep) {
+				size = [image size];
+				[image lockFocus];
+				bitmapRep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0, 0, size.width, size.height)] autorelease];
+				[image unlockFocus];
+			}
+			
+			imageData	= [bitmapRep representationUsingType:NSPNGFileType properties:nil]; 			
+			data		= (FLAC__byte *)calloc([imageData length], sizeof(FLAC__byte));
+			NSAssert(NULL != data, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+			[imageData getBytes:data];
+			
+			// Add the album art
+			block->data.picture.type		= FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER;
+			block->data.picture.mime_type	= strdup("image/png");
+			block->data.picture.width		= [bitmapRep size].width;
+			block->data.picture.height		= [bitmapRep size].height;
+			block->data.picture.depth		= [bitmapRep bitsPerPixel];
+			block->data.picture.data		= data;
+			block->data.picture.data_length	= [imageData length];
+		}
+		
 		// Write the new metadata to the file
 		result = FLAC__metadata_chain_write(chain, YES, NO);
 		NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
