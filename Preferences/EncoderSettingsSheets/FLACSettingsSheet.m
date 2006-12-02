@@ -29,7 +29,7 @@
 	
 	objects = [NSArray arrayWithObjects:
 		[NSNumber numberWithInt:6],
-		[NSNumber numberWithInt:4096],
+		[NSNumber numberWithInt:8192],
 		[NSNumber numberWithBool:NO],
 		[NSNumber numberWithBool:YES],
 		[NSNumber numberWithBool:NO],

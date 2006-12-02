@@ -41,7 +41,7 @@
 {	
 	if((self = [super initWithFilename:filename])) {
 		
-		_padding				= 4096;
+		_padding				= 8192;
 		_exhaustiveModelSearch	= NO;
 		_enableMidSide			= YES;
 		_enableLooseMidSide		= NO;
