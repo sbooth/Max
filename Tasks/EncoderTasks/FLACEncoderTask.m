@@ -232,12 +232,7 @@
 			
 			// If there isn't a picture block add one
 			if(FLAC__METADATA_TYPE_PICTURE != FLAC__metadata_iterator_get_block_type(iterator)) {
-				
-				// The padding block will be the last block if it exists; add the picture block before it
-				if(FLAC__METADATA_TYPE_PADDING == FLAC__metadata_iterator_get_block_type(iterator)) {
-					FLAC__metadata_iterator_prev(iterator);
-				}
-				
+								
 				block = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PICTURE);
 				NSAssert(NULL != block, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 				
