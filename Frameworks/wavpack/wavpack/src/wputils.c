@@ -1479,7 +1479,7 @@ int WavpackStoreMD5Sum (WavpackContext *wpc, uchar data [16])
 static int create_riff_header (WavpackContext *wpc)
 {
     RiffChunkHeader riffhdr;
-    ChunkHeader datahdr, fmthdr;
+    WPChunkHeader datahdr, fmthdr;
     WaveHeader wavhdr;
 
     uint32_t total_samples = wpc->total_samples, total_data_bytes;
@@ -1645,7 +1645,7 @@ void WavpackUpdateNumSamples (WavpackContext *wpc, void *first_block)
     if (wpc->riff_header_created) {
 	if (WavpackGetWrapperLocation (first_block, &wrapper_size)) {
 	    RiffChunkHeader *riffhdr = WavpackGetWrapperLocation (first_block, NULL);
-	    ChunkHeader *datahdr = (ChunkHeader *)((char *) riffhdr + wrapper_size - sizeof (ChunkHeader));
+	    WPChunkHeader *datahdr = (WPChunkHeader *)((char *) riffhdr + wrapper_size - sizeof (WPChunkHeader));
 	    uint32_t data_size = WavpackGetSampleIndex (wpc) * WavpackGetNumChannels (wpc) * WavpackGetBytesPerSample (wpc);
 
 	    if (!strncmp (riffhdr->ckID, "RIFF", 4)) {

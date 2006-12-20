@@ -93,7 +93,7 @@ typedef struct {
 typedef struct {
     char ckID [4];
     uint32_t ckSize;
-} ChunkHeader;
+} WPChunkHeader;
 
 #define ChunkHeaderFormat "4L"
 

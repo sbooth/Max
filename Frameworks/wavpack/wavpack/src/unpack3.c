@@ -48,7 +48,7 @@ static void bs_restore3 (Bitstream3 *bs);
 WavpackContext *open_file3 (WavpackContext *wpc, char *error)
 {
     RiffChunkHeader RiffChunkHeader;
-    ChunkHeader ChunkHeader;
+    WPChunkHeader ChunkHeader;
     WavpackHeader3 wphdr;
     WavpackStream3 *wps;
     WaveHeader3 wavhdr;
