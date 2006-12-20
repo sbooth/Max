@@ -21,7 +21,7 @@
 #import "WavPackEncoderTask.h"
 #import "WavPackEncoder.h"
 
-#include <wavpack/wputils.h>
+#include <wavpack/wavpack.h>
 
 @interface AudioMetadata (TagMappings)
 + (NSString *)			customizeWavPackTag:(NSString *)tag;

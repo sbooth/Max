@@ -21,7 +21,7 @@
 #import <Cocoa/Cocoa.h>
 #import "Decoder.h"
 
-#include <wavpack/wputils.h>
+#include <wavpack/wavpack.h>
 
 @interface WavPackDecoder : Decoder
 {

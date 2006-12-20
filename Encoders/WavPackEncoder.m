@@ -26,7 +26,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
-#include <wavpack/wputils.h>
+#include <wavpack/wavpack.h>
 
 #import "UtilityFunctions.h"
 #import "StopException.h"

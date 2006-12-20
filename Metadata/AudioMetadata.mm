@@ -40,7 +40,7 @@
 #include <mac/APETag.h>
 #include <mac/CharacterHelper.h>
 
-#include <wavpack/wputils.h>
+#include <wavpack/wavpack.h>
 
 @interface AudioMetadata (FileMetadata)
 + (AudioMetadata *)		metadataFromFLACFile:(NSString *)filename;
