@@ -27,7 +27,9 @@ cd Growl
 xcodebuild \
 	-project Growl.xcodeproj \
 	-target Growl.framework \
-	-configuration Deployment
+	-configuration Deployment \
+	OBJROOT="\$(SRCROOT)/build/intermediate" \
+	SYMROOT="\$(SRCROOT)/build"
 cd ..
 
 ## Sparkle framework
@@ -36,7 +38,9 @@ cd Sparkle
 xcodebuild \
 	-project Sparkle.xcodeproj \
 	-target Sparkle \
-	-configuration Release
+	-configuration Release \
+	OBJROOT="\$(SRCROOT)/build/intermediate" \
+	SYMROOT="\$(SRCROOT)/build"
 cd ..
 
 ## Max custom-built frameworks
@@ -47,6 +51,8 @@ do
 	cd $subdir
 	xcodebuild \
 		-alltargets \
-		-configuration Release
+		-configuration Release \
+		OBJROOT="\$(SRCROOT)/build/intermediate" \
+		SYMROOT="\$(SRCROOT)/build"
 	cd ..
 done
