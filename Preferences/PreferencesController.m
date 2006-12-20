@@ -234,7 +234,7 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"iTunes", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"iTunes", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify whether to save album art with the encoded files", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"iTunesToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -245,7 +245,7 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Post-Processing", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Post-Processing", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify applications to open the encoded files", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"PostProcessingToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
