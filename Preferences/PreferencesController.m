@@ -179,7 +179,7 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Output", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select where output files will be saved and how they will be named", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"OutputToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -190,7 +190,7 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Tagging", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Tagging", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify custom tag names for FLAC, Ogg Vorbis and Monkey's Audio files", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify custom tag names for FLAC, Ogg (Vorbis) and Monkey's Audio files", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"TaggingToolbarImage"]];
 		
 		[toolbarItem setTarget:self];
@@ -234,7 +234,7 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"iTunes", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"iTunes", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify whether to add the encoded files to iTunes", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"iTunesToolbarImage"]];
 		
 		[toolbarItem setTarget:self];

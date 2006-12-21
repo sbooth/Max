@@ -27,6 +27,7 @@
 		8C32811F096D0CD700608C9D /* CompactDiscDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C32811E096D0CD700608C9D /* CompactDiscDocument.nib */; };
 		8C328123096D0CDF00608C9D /* Acknowledgments.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C328122096D0CDF00608C9D /* Acknowledgments.nib */; };
 		8C328182096D12CA00608C9D /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C328181096D12CA00608C9D /* Exceptions.strings */; };
+		8C37D3F80B3ABF0F00C5F85A /* FileConversion.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C37D3F60B3ABF0F00C5F85A /* FileConversion.strings */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
 		8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
@@ -287,6 +288,10 @@
 		8C29D97C097F469D00E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Log.strings; sourceTree = "<group>"; };
 		8C2D6FB109D195A200968B18 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8C32817D096D12C400608C9D /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Exceptions.strings; sourceTree = "<group>"; };
+		8C37D3F70B3ABF0F00C5F85A /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/FileConversion.strings; sourceTree = "<group>"; };
+		8C37D48E0B3AC85100C5F85A /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/FileConversion.strings; sourceTree = "<group>"; };
+		8C37D48F0B3AC85D00C5F85A /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/FileConversion.strings; sourceTree = "<group>"; };
+		8C37D4900B3AC86900C5F85A /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/FileConversion.strings; sourceTree = "<group>"; };
 		8C401716094901A6003413BE /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		8C4505090A8EEC13001BF1A1 /* AmazonAlbumArtSheet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AmazonAlbumArtSheet.h; path = AlbumArt/AmazonAlbumArtSheet.h; sourceTree = "<group>"; };
 		8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = AmazonAlbumArtSheet.m; path = AlbumArt/AmazonAlbumArtSheet.m; sourceTree = "<group>"; };
@@ -885,6 +890,7 @@
 		8C32817C096D12A600608C9D /* Strings */ = {
 			isa = PBXGroup;
 			children = (
+				8C37D3F60B3ABF0F00C5F85A /* FileConversion.strings */,
 				8CA6E46C09D065260047C35C /* UndoRedo.strings */,
 				8C29D980097F46A200E8B766 /* Log.strings */,
 				8C29D94A097F442700E8B766 /* Genres.strings */,
@@ -1452,6 +1458,7 @@
 				8CD020480ADB688600216B29 /* iTunesPreferences.nib in Resources */,
 				8CD025370ADC04C900216B29 /* PostProcessingPreferences.nib in Resources */,
 				8CD025750ADC0A4D00216B29 /* PostProcessingToolbarImage.png in Resources */,
+				8C37D3F80B3ABF0F00C5F85A /* FileConversion.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1734,6 +1741,17 @@
 				8C643A7309D7392400F6C1F6 /* Dutch */,
 			);
 			name = Exceptions.strings;
+			sourceTree = "<group>";
+		};
+		8C37D3F60B3ABF0F00C5F85A /* FileConversion.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C37D3F70B3ABF0F00C5F85A /* English */,
+				8C37D48E0B3AC85100C5F85A /* Dutch */,
+				8C37D48F0B3AC85D00C5F85A /* French */,
+				8C37D4900B3AC86900C5F85A /* German */,
+			);
+			name = FileConversion.strings;
 			sourceTree = "<group>";
 		};
 		8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */ = {

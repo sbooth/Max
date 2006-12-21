@@ -51,7 +51,7 @@
 	NSAssert1(NULL != file, @"Unable to open the input file (%s).", strerror(errno));	
 	
 	result							= ov_test(file, &_vf, NULL, 0);
-	NSAssert(0 == result, NSLocalizedStringFromTable(@"The file does not appear to be a valid Ogg Vorbis file.", @"Exceptions", @""));
+	NSAssert(0 == result, NSLocalizedStringFromTable(@"The file does not appear to be a valid Ogg (Vorbis) file.", @"Exceptions", @""));
 	
 	result							= ov_test_open(&_vf);
 	NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @""));
@@ -59,7 +59,7 @@
 	// Get input file information
 	ovInfo							= ov_info(&_vf, -1);
 
-	NSAssert(NULL != ovInfo, @"Unable to get information on Ogg Vorbis stream.");
+	NSAssert(NULL != ovInfo, @"Unable to get information on Ogg (Vorbis) stream.");
 	
 	// Setup input format descriptor
 	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
@@ -94,7 +94,7 @@
 	for(;;) {
 		bytesRead		= ov_read(&_vf, rawBuffer + totalBytes, availableSpace - totalBytes, YES, sizeof(int16_t), YES, &currentSection);
 		
-		NSAssert(0 <= bytesRead, @"Ogg Vorbis decode error.");
+		NSAssert(0 <= bytesRead, @"Ogg (Vorbis) decode error.");
 		
 		totalBytes += bytesRead;
 		

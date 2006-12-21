@@ -11,19 +11,10 @@
 "An error occurred while accessing the disc on device %@." = "Une erreur est intervenue en accédant au disque sur le périphérique %@.";
 
 /* No comment provided by engineer. */
-"An error occurred while adding the file \"%@\" to the iTunes library." = "Une erreur est survenue lors de l'ajout du fichier  \"%@\" à la bibliothèque iTunes.";
-
-/* No comment provided by engineer. */
 "An error occurred while attempting to download album artwork." = "Une erreur est intervenue pendant le téléchargement de l'illustration de l'album.";
 
 /* No comment provided by engineer. */
-"An error occurred while checking for a newer version of Max." = "Une erreur est intervenue pendant la vérification d'une nouvelle version de Max.";
-
-/* No comment provided by engineer. */
 "An error occurred while converting the file \"%@\"." = "Une erreur est intervenue pendant la conversion du fichier \"%@\".";
-
-/* No comment provided by engineer. */
-"An error occurred while downloading the list of FreeDB mirrors." = "Une erreur est intervenue pendant le téléchargement de la liste des mirroirs FreeDB.";
 
 /* No comment provided by engineer. */
 "An error occurred while encoding the file \"%@\"." = "Une erreur est intervenue pendant l'encodage du fichier \"%@\".";
@@ -32,19 +23,13 @@
 "An error occurred while initializing the %@ class." = "Une erreur est intervenue lors de l'initialisation de la classe %.";
 
 /* No comment provided by engineer. */
+"An error occurred while opening the document \"%@\"." = "An error occurred while opening the document \"%@\".";
+
+/* No comment provided by engineer. */
 "An error occurred while opening the file \"%@\" for conversion." = "Une erreur est intervenue à l'ouverture du fichier \"%@\" pour conversion.";
 
 /* No comment provided by engineer. */
-"An error occurred while querying FreeDB for the disc \"%@\"." = "Une erreur est intervenue lors de l'interrogation FreeDB  du disque \"%@\".";
-
-/* No comment provided by engineer. */
-"An error occurred while retrieving information for the disc \"%@\" from FreeDB." = "Une erreur est intervenue lors de la récupération des informations FreeDB du disque \"%@\".";
-
-/* No comment provided by engineer. */
 "An error occurred while ripping tracks from the disc \"%@\"." = "Une erreur est intervenue lors de l'extraction des piste du disque \"%@\".";
-
-/* No comment provided by engineer. */
-"An error occurred while submitting information for the disc \"%@\" to FreeDB." = "Une erreur est intervenue lors de la soumission des informations FreeDB du disque \"%@\".";
 
 /* No comment provided by engineer. */
 "An error occurred while tagging the file \"%@\"." = "Une erreur est intervenue lors du taggage du fichier \"%@\".";
@@ -71,7 +56,7 @@
 "Monkey's Audio compressor error." = "Erreur de compression Monkey's Audio.";
 
 /* No comment provided by engineer. */
-"Monkey's Audio invalid checksum." = "Somme de contrôle Monkey's Audio invalide.";
+"Musepack decoding error." = "Musepack decoding error.";
 
 /* No comment provided by engineer. */
 "No matching discs were found." = "Disque non trouvé.";
@@ -83,22 +68,19 @@
 "Speex only supports one or two channel input." = "Speex supporte seulement un ou deux cannaux d'entrée.";
 
 /* No comment provided by engineer. */
-"Ogg Vorbis decode error" = "Erreur de décodage Ogg Vorbis";
+"The call to %@ failed (%@)." = "Appel à %@ échoué (%2$@).";
 
 /* No comment provided by engineer. */
 "The call to %@ failed." = "Appel à %@ échoué.";
 
 /* No comment provided by engineer. */
-"The file does not appear to be a valid Ogg Vorbis file." = "Le fichier ne semble pas être un format Ogg Vorbis valide.";
+"The file does not appear to be a valid Musepack file." = "Le fichier ne semble pas être un format Musepack valide.";
 
 /* No comment provided by engineer. */
-"The file was not found." = "Fichier non trouvé.";
+"The file does not appear to be a valid Ogg (Vorbis) file." = "Le fichier ne semble pas être un format Ogg (Vorbis) valide.";
 
 /* No comment provided by engineer. */
 "The file's format was not recognized." = "Format de fichier non supporté.";
-
-/* No comment provided by engineer. */
-"The FreeDB query index was out of bounds." = "L'interrogation FreeDB était incohérente.";
 
 /* No comment provided by engineer. */
 "The retry limit was exceeded." = "Limite d'essais atteinte.";
@@ -108,6 +90,9 @@
 
 /* No comment provided by engineer. */
 "The Speex mode number %i was not recognized." = "Le numéro de mode %i Speex n'a pas été reconnue.";
+
+/* No comment provided by engineer. */
+"This file was encoded with a different version of Speex." = "This file was encoded with a different version of Speex.";
 
 /* No comment provided by engineer. */
 "This file was encoded with a newer version of Speex." = "Ce fichier a été encodé avec une version de Speex plus récente.";
@@ -122,16 +107,10 @@
 "Unable to allocate memory." = "Allocation mémoire impossible.";
 
 /* No comment provided by engineer. */
-"Unable to calculate the disc's FreeDB ID." = "Calcul de l'ID FreeDB du disque impossible.";
-
-/* No comment provided by engineer. */
 "Unable to close the cue sheet." = "Fermeture de la feuille de sélection impossible.";
 
 /* No comment provided by engineer. */
 "Unable to close the drive." = "Fermeture du disque impossible.";
-
-/* No comment provided by engineer. */
-"Unable to close the input file." = "Fermeture du fichier d'entrée impossible";
 
 /* No comment provided by engineer. */
 "Unable to close the output file." = "Fermeture du fichier de sortie impossible";
@@ -161,9 +140,6 @@
 "Unable to create the Monkey's Audio compressor." = "Impossible de créer un compresseur Monkey's Audio.";
 
 /* No comment provided by engineer. */
-"Unable to create the Ogg FLAC decoder." = "Impossible de créer un décodeur Ogg FLAC.";
-
-/* No comment provided by engineer. */
 "Unable to create the Ogg FLAC encoder." = "Impossible de créer un encodeur Ogg FLAC.";
 
 /* No comment provided by engineer. */
@@ -191,12 +167,6 @@
 "Unable to flush the drive's cache" = "Unable to flush the drive's cache";
 
 /* No comment provided by engineer. */
-"Unable to get file system statistics." = "Lecture des statistiques système du fichier impossible.";
-
-/* No comment provided by engineer. */
-"Unable to get information on the input file." = "Lecture des informations du fichier d'entrée impossible.";
-
-/* No comment provided by engineer. */
 "Unable to get the drive's speed" = "Obtention de la vitesse de lecture impossible";
 
 /* No comment provided by engineer. */
@@ -209,10 +179,13 @@
 "Unable to initialize the ogg stream." = "Initialisation du flux ogg impossible.";
 
 /* No comment provided by engineer. */
-"Unable to initialize the Ogg Vorbis encoder." = "Initialisation de l'encodeur Ogg Vorbis impossible.";
+"Unable to initialize the Ogg (Vorbis) encoder." = "Initialisation de l'encodeur Ogg (Vorbis) impossible.";
 
 /* No comment provided by engineer. */
 "Unable to initialize the WavPack encoder." = "Initialisation de l'encodeur WavPack impossible.";
+
+/* No comment provided by engineer. */
+"Unable to initialize the Musepack encoder." = "Initialisation de l'encodeur Musepack impossible.";
 
 /* No comment provided by engineer. */
 "Unable to intialize the Speex decoder." = "Initialisation du décodeur Speex impossible.";
@@ -249,14 +222,9 @@
 
 /* No comment provided by engineer. */
 "Unable to read the international standard recording code (ISRC) for track %i" = "Lecture du code standard international d'enregistrement (ISRC) pour la piste %i impossible";
-/* No comment provided by engineer. */
-"Unable to read the Speex header." = "Lecture de l'en-tête Speex impossible.";
 
 /* No comment provided by engineer. */
 "Unable to seek in the input file." = "Analyse du fichier d'entrée impossible.";
-
-/* No comment provided by engineer. */
-"Unable to seek in the output file." = "Analyse du fichier de sortie impossible.";
 
 /* No comment provided by engineer. */
 "Unable to set the drive's speed" = "Réglage de la vitesse du lecteur impossible";
@@ -275,6 +243,9 @@
 
 /* No comment provided by engineer. */
 "Unable to write to the output file." = "Ecriture du fichier de sortie impossible.";
+
+/* No comment provided by engineer. */
+"Warning: the file %@ was lost." = "Warning: the file %@ was lost.";
 
 /* No comment provided by engineer. */
 "Your installation of Max appears to be incomplete." = "Votre installation de Max semble incomplète.";
