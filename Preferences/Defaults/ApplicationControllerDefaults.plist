@@ -12,5 +12,7 @@
 	<real>2</real>
 	<key>useDynamicWindows</key>
 	<true/>
+	<key>fileNamingFormat</key>
+	<string>{albumArtist}/{albumTitle}/{trackNumber} {trackTitle}</string>
 </dict>
 </plist>
