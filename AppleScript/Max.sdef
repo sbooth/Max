@@ -274,13 +274,9 @@
 				description="Does the state of the document allow the selected tracks to be encoded?">
 				<cocoa key="encodeAllowed"/>
 			</property>
-			<property name="query FreeDB allowed" code="quer" type="boolean" access="r" 
-				description="Does the state of the document allow FreeDB to be queried for disc information?">
-				<cocoa key="queryFreeDBAllowed"/>
-			</property>
-			<property name="submit to FreeDB allowed" code="subm" type="boolean" access="r" 
-				description="Does the state of the document allow submission of the disc's data to FreeDB?">
-				<cocoa key="submitToFreeDBAllowed"/>
+			<property name="query MusicBrainz allowed" code="quer" type="boolean" access="r" 
+				description="Does the state of the document allow MusicBrainz to be queried for disc information?">
+				<cocoa key="queryMusicBrainzAllowed"/>
 			</property>
 			<property name="rip in progress" code="rip " type="boolean" access="r" 
 				description="Does this document contain tracks currently being ripped?">
@@ -294,8 +290,8 @@
 				description="Is the disc associated with this document in the drive?">
 				<cocoa key="discInDrive"/>
 			</property>
-			<property name="disc ID" code="id  " type="integer" access="r"
-				description="The disc's FreeDB ID.">
+			<property name="disc ID" code="id  " type="text" access="r"
+				description="The disc's MusicBrainz ID.">
 				<cocoa key="discID"/>
 			</property>
 			<property name="title" code="titl" type="text"
@@ -373,11 +369,8 @@
 			<responds-to name="eject disc">
 				<cocoa method="handleEjectDiscScriptCommand:"/>
 			</responds-to>
-			<responds-to name="query FreeDB">
-				<cocoa method="handleQueryFreeDBScriptCommand:"/>
-			</responds-to>
-			<responds-to name="submit to FreeDB">
-				<cocoa method="handleSubmitToFreeDBScriptCommand:"/>
+			<responds-to name="query MusicBrainz">
+				<cocoa method="handleQueryMusicBrainzScriptCommand:"/>
 			</responds-to>
 			<responds-to name="toggle track information">
 				<cocoa method="handleToggleTrackInformationScriptCommand:"/>
@@ -614,12 +607,6 @@
 				description="Is this track is currently selected?">
 				<cocoa key="selected"/>
 			</property>
-			<!--
-			<property name="color" code="colr" type="color" access="r" 
-				description="The color used to display this track.">
-				<cocoa key="color"/>
-			</property>
-			-->
 			<property name="title" code="titl" type="text"
 				description="The title of the track.">
 				<cocoa key="title"/>
@@ -704,15 +691,10 @@
 			<direct-parameter type="specifier"
 				description="The document(s) containing the disc to eject."/>
 		</command>
-		<command name="query FreeDB" code="Maxquery" 
-			description="Query FreeDB for disc information.">
+		<command name="query MusicBrainz" code="Maxquery" 
+			description="Query MusicBrainz for disc information.">
 			<direct-parameter type="specifier"
 				description="The document(s) containing the disc for which information is desired."/>
-		</command>
-		<command name="submit to FreeDB" code="Maxsubmi" 
-			description="Submit disc information to FreeDB.">
-			<direct-parameter type="specifier"
-				description="The document(s) containing the disc with the information to submit."/>
 		</command>
 		<command name="toggle track information" code="Maxtgtrc" 
 			description="Toggle the display of the track information drawer.">
