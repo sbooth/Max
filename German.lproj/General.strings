@@ -1,5 +1,5 @@
 /* No comment provided by engineer. */
-"%u seconds" = "%u seconds";
+"%u seconds" = "%u Sekunden";
 
 /* No comment provided by engineer. */
 "Built-In" = "Built-In";
@@ -62,19 +62,19 @@
 "Saving" = "Sichern";
 
 /* No comment provided by engineer. */
-"Shorten" = "Shorten";
+"Shorten" = "KŸrzen";
 
 /* No comment provided by engineer. */
-"Show Preferences" = "Voreinstellungen zeigen";
+"Show Preferences" = "Voreinstellungen anzeigen";
 
 /* No comment provided by engineer. */
-"The file \"%@\" exists." = "The file \"%@\" exists.";
+"The file \"%@\" exists." = "Die Datei \"%@\" existiert.";
 
 /* No comment provided by engineer. */
-"The resulting files will be lost if you quit now." = "Wenn Sie jetzt beenden werden die resultierenden Dateien verworfen.";
+"The resulting files will be lost if you quit now." = "Wenn Sie jetzt beenden, werden die resultierenden Dateien verworfen.";
 
 /* No comment provided by engineer. */
-"Unable to optimize file: %@" = "Unable to optimize file: %@";
+"Unable to optimize file: %@" = "Kann Datei nicht optimieren: %@";
 
 /* No comment provided by engineer. */
 "Unknown" = "Unbekannt";

@@ -23,7 +23,7 @@
 "An error occurred while initializing the %@ class." = "Es ist ein Fehler während der Initialisierung der Klasse %@ aufgetreten.";
 
 /* No comment provided by engineer. */
-"An error occurred while opening the document \"%@\"." = "An error occurred while opening the document \"%@\".";
+"An error occurred while opening the document \"%@\"." = "Es ist ein Fehler während des Öffnens von Dokument \"%@\" aufgetreten.";
 
 /* No comment provided by engineer. */
 "An error occurred while opening the file \"%@\" for conversion." = "Es ist ein Fehler aufgetreten während die Datei \"%@\" zum Konvertieren geöffnet wurde.";
@@ -56,7 +56,7 @@
 "Monkey's Audio compressor error." = "Monkey's Audio Compressor-Fehler.";
 
 /* No comment provided by engineer. */
-"Musepack decoding error." = "Musepack decoding error.";
+"Musepack decoding error." = "Musepack Dekodierungs-Fehler.";
 
 /* No comment provided by engineer. */
 "No matching discs were found." = "Es wurden keine passende CDs gefunden.";
@@ -92,7 +92,7 @@
 "The Speex mode number %i was not recognized." = "Die Speex Modus-Nummer %i wurde nicht erkannt.";
 
 /* No comment provided by engineer. */
-"This file was encoded with a different version of Speex." = "This file was encoded with a different version of Speex.";
+"This file was encoded with a different version of Speex." = "Diese Datei wurde mit einer anderen Version von Speex enkodiert.";
 
 /* No comment provided by engineer. */
 "This file was encoded with a newer version of Speex." = "Diese Datei wurde mit einer neueren Version von Speex enkodiert.";
@@ -233,7 +233,7 @@
 "Unable to start the Monkey's Audio compressor." = "Kann den Monkey's Audio Compressor nicht starten.";
 
 /* No comment provided by engineer. */
-"Unable to unmount the disc." = "Kann CD nicht unmounten.";
+"Unable to unmount the disc." = "Kann CD nicht lösen.";
 
 /* No comment provided by engineer. */
 "Unable to write the APE tags." = "Kann die APE Tags nicht schreiben.";
@@ -245,7 +245,7 @@
 "Unable to write to the output file." = "Kann Ausgabedatei nicht schreiben.";
 
 /* No comment provided by engineer. */
-"Warning: the file %@ was lost." = "Warning: the file %@ was lost.";
+"Warning: the file %@ was lost." = "Warnung: Die Datei %@ ging verloren.";
 
 /* No comment provided by engineer. */
 "Your installation of Max appears to be incomplete." = "Kann benötigte Ressource nicht laden.";
