@@ -316,6 +316,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 - (BOOL) addFile:(NSString *)filename atIndex:(unsigned)index
 {
+	NSAutoreleasePool	*pool				= [[NSAutoreleasePool alloc] init];
 	NSFileManager		*manager			= [NSFileManager defaultManager];
 	NSArray				*allowedTypes		= getAudioExtensions();
 	NSMutableArray		*newFiles;
@@ -326,6 +327,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	NSString			*subpath;
 	NSString			*composedPath;
 	BOOL				result;
+	unsigned			count				= 0;
 	BOOL				success				= YES;
 	
 	result = [manager fileExistsAtPath:filename isDirectory:&isDir];
@@ -365,6 +367,14 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		if(success) {
 			[_filesController setSelectedObjects:newFiles];
 		}
+		
+		// Clean up memory every 100 iterations
+		++count;
+		
+		if(0 == count % 100) {
+			[pool release];
+			pool = [[NSAutoreleasePool alloc] init];
+		}
 	}
 	else {
 		success &= [self addOneFile:filename atIndex:(unsigned)index];
@@ -372,6 +382,8 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 			[_filesController selectFile:filename];
 		}
 	}
+	
+	[pool release];
 	
 	return success;
 }
