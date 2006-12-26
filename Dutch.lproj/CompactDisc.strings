@@ -35,7 +35,7 @@
 "Query" = "Zoekopdracht";
 
 /* No comment provided by engineer. */
-"Query MusicBrainz for album information" = "Zoekopdracht naar MusicBrainz voor album informatie";
+"Query MusicBrainz for album information" = "Zoekopdracht aan MusicBrainz voor album-informatie";
 
 /* No comment provided by engineer. */
 "Select the next track for editing" = "Selecteer de volgende te wijzigen track";
@@ -44,10 +44,10 @@
 "Select the previous track for editing" = "Selecteer de vorige te wijzigen track";
 
 /* No comment provided by engineer. */
-"Show or hide detailed track information" = "Gedetailleerde track informatie verbergen of laten zien";
+"Show or hide detailed track information" = "Toon of verberg informatie over afzonderlijke tracks";
 
 /* No comment provided by engineer. */
-"Show or hide the artwork associated with this album" = "De bij dit album behorende illustratie verbergen of laten zien";
+"Show or hide the artwork associated with this album" = "Toon of verberg de bij dit album behorende illustratie";
 
 /* No comment provided by engineer. */
 "Tracks" = "Tracks";
