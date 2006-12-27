@@ -25,6 +25,7 @@
 #include <speex/speex.h>
 #include <sndfile/sndfile.h>
 #include <mac/All.h>
+#include <wavpack/wavpack.h>
 
 static ComponentVersionsController *sharedController = nil;
 
@@ -77,6 +78,8 @@ static ComponentVersionsController *sharedController = nil;
 		else {
 			_libsndfileVersion	= NSLocalizedStringFromTable(@"Unknown", @"General", @"");
 		}
+		
+		_wavPackVersion		= [NSString stringWithFormat:@"WavPack %s", WavpackGetLibraryVersionString()];
 		
 		return self;
 	}

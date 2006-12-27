@@ -27,6 +27,7 @@
 	NSString		*_speexVersion;
 	NSString		*_libsndfileVersion;
 	NSString		*_macVersion;
+	NSString		*_wavPackVersion;
 }
 
 + (ComponentVersionsController *)		sharedController;
