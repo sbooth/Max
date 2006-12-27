@@ -11,6 +11,7 @@
 		8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */; };
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
+		8C1F78150B4218910066072B /* WavPack.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1F78140B4218910066072B /* WavPack.png */; };
 		8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C244AFB0AC6DFEF001334D0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C244AC60AC6DFEF001334D0 /* Security.framework */; };
@@ -56,7 +57,6 @@
 		8C5302160A05D5D800890518 /* SaveLogToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302000A05D5D800890518 /* SaveLogToolbarImage.png */; };
 		8C5302170A05D5D800890518 /* SelectNextTrackToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302010A05D5D800890518 /* SelectNextTrackToolbarImage.png */; };
 		8C5302180A05D5D800890518 /* SelectPreviousTrackToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302020A05D5D800890518 /* SelectPreviousTrackToolbarImage.png */; };
-		8C53021A0A05D5D800890518 /* SubmitToFreeDBToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302040A05D5D800890518 /* SubmitToFreeDBToolbarImage.png */; };
 		8C53021B0A05D5D800890518 /* TaggingToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302050A05D5D800890518 /* TaggingToolbarImage.png */; };
 		8C53021C0A05D5D800890518 /* TrackInfoToolbarImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C5302060A05D5D800890518 /* TrackInfoToolbarImage.png */; };
 		8C5302250A05D66A00890518 /* CoreAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5302200A05D66A00890518 /* CoreAudioUtilities.m */; };
@@ -280,6 +280,7 @@
 		8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
+		8C1F78140B4218910066072B /* WavPack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WavPack.png; sourceTree = "<group>"; };
 		8C244AC60AC6DFEF001334D0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
@@ -337,7 +338,6 @@
 		8C5302000A05D5D800890518 /* SaveLogToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SaveLogToolbarImage.png; sourceTree = "<group>"; };
 		8C5302010A05D5D800890518 /* SelectNextTrackToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectNextTrackToolbarImage.png; sourceTree = "<group>"; };
 		8C5302020A05D5D800890518 /* SelectPreviousTrackToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectPreviousTrackToolbarImage.png; sourceTree = "<group>"; };
-		8C5302040A05D5D800890518 /* SubmitToFreeDBToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SubmitToFreeDBToolbarImage.png; sourceTree = "<group>"; };
 		8C5302050A05D5D800890518 /* TaggingToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TaggingToolbarImage.png; sourceTree = "<group>"; };
 		8C5302060A05D5D800890518 /* TrackInfoToolbarImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TrackInfoToolbarImage.png; sourceTree = "<group>"; };
 		8C53021F0A05D66A00890518 /* CoreAudioUtilities.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CoreAudioUtilities.h; sourceTree = "<group>"; };
@@ -950,6 +950,7 @@
 		8C5301F10A05D5D800890518 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8C1F78140B4218910066072B /* WavPack.png */,
 				8CD025740ADC0A4D00216B29 /* PostProcessingToolbarImage.png */,
 				8CD020080ADB662600216B29 /* iTunesToolbarImage.png */,
 				8CA9C18A0AD303C1000EF903 /* MusicBrainz.png */,
@@ -973,7 +974,6 @@
 				8C5302000A05D5D800890518 /* SaveLogToolbarImage.png */,
 				8C5302010A05D5D800890518 /* SelectNextTrackToolbarImage.png */,
 				8C5302020A05D5D800890518 /* SelectPreviousTrackToolbarImage.png */,
-				8C5302040A05D5D800890518 /* SubmitToFreeDBToolbarImage.png */,
 				8C5302050A05D5D800890518 /* TaggingToolbarImage.png */,
 				8C5302060A05D5D800890518 /* TrackInfoToolbarImage.png */,
 			);
@@ -1421,7 +1421,6 @@
 				8C5302160A05D5D800890518 /* SaveLogToolbarImage.png in Resources */,
 				8C5302170A05D5D800890518 /* SelectNextTrackToolbarImage.png in Resources */,
 				8C5302180A05D5D800890518 /* SelectPreviousTrackToolbarImage.png in Resources */,
-				8C53021A0A05D5D800890518 /* SubmitToFreeDBToolbarImage.png in Resources */,
 				8C53021B0A05D5D800890518 /* TaggingToolbarImage.png in Resources */,
 				8C53021C0A05D5D800890518 /* TrackInfoToolbarImage.png in Resources */,
 				8C53027E0A05DC9A00890518 /* Max.sdef in Resources */,
@@ -1459,6 +1458,7 @@
 				8CD025370ADC04C900216B29 /* PostProcessingPreferences.nib in Resources */,
 				8CD025750ADC0A4D00216B29 /* PostProcessingToolbarImage.png in Resources */,
 				8C37D3F80B3ABF0F00C5F85A /* FileConversion.strings in Resources */,
+				8C1F78150B4218910066072B /* WavPack.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
