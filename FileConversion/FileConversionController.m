@@ -317,6 +317,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 - (BOOL) addFile:(NSString *)filename atIndex:(unsigned)index
 {
 	NSAutoreleasePool	*pool				= [[NSAutoreleasePool alloc] init];
+	NSAutoreleasePool	*loopPool			= nil;
 	NSFileManager		*manager			= [NSFileManager defaultManager];
 	NSArray				*allowedTypes		= getAudioExtensions();
 	NSMutableArray		*newFiles;
@@ -327,7 +328,6 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	NSString			*subpath;
 	NSString			*composedPath;
 	BOOL				result;
-	unsigned			count				= 0;
 	BOOL				success				= YES;
 	
 	result = [manager fileExistsAtPath:filename isDirectory:&isDir];
@@ -340,7 +340,8 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		enumerator	= [subpaths objectEnumerator];
 		
 		while((subpath = [enumerator nextObject])) {
-			composedPath = [NSString stringWithFormat:@"%@/%@", filename, subpath];
+			loopPool		= [[NSAutoreleasePool alloc] init];
+			composedPath	= [NSString stringWithFormat:@"%@/%@", filename, subpath];
 			
 			// Ignore dotfiles
 			if([[subpath lastPathComponent] hasPrefix:@"."]) {
@@ -362,18 +363,12 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 					[newFiles addObject:file];
 				}
 			}
+			
+			[loopPool release];
 		}
 		
 		if(success) {
 			[_filesController setSelectedObjects:newFiles];
-		}
-		
-		// Clean up memory every 100 iterations
-		++count;
-		
-		if(0 == count % 100) {
-			[pool release];
-			pool = [[NSAutoreleasePool alloc] init];
 		}
 	}
 	else {
