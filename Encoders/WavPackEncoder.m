@@ -319,6 +319,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 	
 	switch([[settings objectForKey:@"compressionMode"] intValue]) {
 		case WAVPACK_COMPRESSION_MODE_HIGH:			_flags |= CONFIG_HIGH_FLAG;				break;
+		case WAVPACK_COMPRESSION_MODE_VERY_HIGH:	_flags |= CONFIG_VERY_HIGH_FLAG;		break;
 		case WAVPACK_COMPRESSION_MODE_FAST:			_flags |= CONFIG_FAST_FLAG;				break;
 		case WAVPACK_COMPRESSION_MODE_DEFAULT:		;										break;
 		default:									;										break;
