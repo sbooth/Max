@@ -232,7 +232,7 @@ enum {
 	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath];
 	image		= getIconForFile(path, NSMakeSize(16, 16));
 	
-	[menuItem setTitle:[path lastPathComponent]];
+	[menuItem setTitle:[[NSFileManager defaultManager] displayNameAtPath:path]];
 	[menuItem setImage:image];
 }
 
@@ -248,7 +248,7 @@ enum {
 	menuItem	= [_temporaryDirectoryPopUpButton itemAtIndex:[_temporaryDirectoryPopUpButton indexOfItemWithTag:kCurrentTempDirectoryMenuItemTag]];
 	
 	if(nil != path) {
-		[menuItem setTitle:[path lastPathComponent]];
+		[menuItem setTitle:[[NSFileManager defaultManager] displayNameAtPath:path]];
 		[menuItem setImage:image];
 	}
 	else {
