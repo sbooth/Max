@@ -80,9 +80,7 @@ enum {
 		}
 	}
 	
-	[_connection invalidate];
 	[_connection release];				_connection = nil;
-	[(NSObject *)_encoder release];		_encoder = nil;
 	[_encoderSettings release];			_encoderSettings = nil;
 
 	[super dealloc];
@@ -212,7 +210,7 @@ enum {
 			int			result		= [alert runModal];
 			switch(result) {
 				case NSAlertFirstButtonReturn:
-					[[EncoderController sharedController] encoderTaskDidStop:self notify:NO]; 
+					[[EncoderController sharedController] encoderTaskDidStop:self notify:NO];
 					break;
 					
 				case NSAlertSecondButtonReturn:				;					break;
@@ -228,8 +226,10 @@ enum {
 	[self touchOutputFile];
 	
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
+	NSLog(@"retainCount = %i", [self retainCount]);
 	[_connection setRootObject:self];
-	
+	NSLog(@"retainCount = %i", [self retainCount]);
+
 	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
 	[super setStarted:YES];
@@ -271,7 +271,11 @@ enum {
 - (void) setStopped:(BOOL)stopped
 {
 	[super setStopped:YES]; 
-	
+
+	// Once we're stopped, clean up the encoder and invalidate the connection
+	[(NSObject *)_encoder release],		_encoder = nil;
+	[_connection invalidate];
+
 	// Mark tracks as complete
 	if(nil != [[self taskInfo] inputTracks]) {
 		NSArray			*tracks		= [[self taskInfo] inputTracks];
@@ -293,6 +297,11 @@ enum {
 	if(NO == [self started] || [self stopped]) {
 		return;
 	}
+
+	// Once we're complete, clean up the encoder and invalidate the connection
+	[(NSObject *)_encoder release],		_encoder = nil;
+	[_connection invalidate];
+	
 /*
 	// This file is finished
 	[[self taskInfo] setInputFileIndex:[[self taskInfo] inputFileIndex] + 1];
