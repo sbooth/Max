@@ -226,9 +226,7 @@ enum {
 	[self touchOutputFile];
 	
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
-	NSLog(@"retainCount = %i", [self retainCount]);
 	[_connection setRootObject:self];
-	NSLog(@"retainCount = %i", [self retainCount]);
 
 	portArray = [NSArray arrayWithObjects:port2, port1, nil];
 	
