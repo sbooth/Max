@@ -650,9 +650,8 @@
 			if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
 				frameList = id3v2tag->frameListMap()["TCMP"];
 				if(NO == frameList.isEmpty()) {
-					// Is it safe to assume this will only be 0 or 1?  (Probably not, it never is)
-					NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
-					[result setCompilation:(BOOL)[value intValue]];
+					// It seems that the presence of this frame indicates a compilation
+					[result setCompilation:YES];
 				}			
 			}
 		}
