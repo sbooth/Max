@@ -82,6 +82,7 @@ enum {
 	
 	[_connection release];				_connection = nil;
 	[_encoderSettings release];			_encoderSettings = nil;
+	[_encoderSettingsString release];	_encoderSettingsString = nil;
 
 	[super dealloc];
 }
@@ -104,7 +105,7 @@ enum {
 - (NSDictionary *)	encoderSettings						{ return [[_encoderSettings retain] autorelease]; }
 - (void)			setEncoderSettings:(NSDictionary *)encoderSettings 	{ [_encoderSettings release]; _encoderSettings = [encoderSettings retain]; }
 
-- (NSString *)		encoderSettingsString				{ return [_encoder settingsString]; }
+- (NSString *)		encoderSettingsString				{ return _encoderSettingsString; }
 
 - (void)			encoderReady:(id)anObject
 {
@@ -296,6 +297,9 @@ enum {
 		return;
 	}
 
+	// Before severing the connection to the encoder, grab the settings string for tagging purposes
+	_encoderSettingsString		= [[_encoder settingsString] retain];
+	
 	// Once we're complete, clean up the encoder and invalidate the connection
 	[(NSObject *)_encoder release],		_encoder = nil;
 	[_connection invalidate];

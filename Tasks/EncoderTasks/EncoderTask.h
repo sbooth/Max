@@ -30,6 +30,7 @@
 	Class					_encoderClass;
 	id <EncoderMethods>		_encoder;
 	NSDictionary			*_encoderSettings;
+	NSString				*_encoderSettingsString;
 }
 
 - (NSString *)		outputFormatName;
