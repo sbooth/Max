@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+
+<!--
+	AppleScript command support for Growl notifications.
+-->
+
+<dictionary title="GrowlTunes Terminology">
+	<suite name="GrowlTunes Suite" description="GrowlTunes AppleScript support" code="GrTu">
+		<command name="show current track" code="showtrak" description="Show the current iTunes track">
+			<cocoa class="ShowTrackScriptCommand"/>
+		</command>
+	</suite>
+</dictionary>

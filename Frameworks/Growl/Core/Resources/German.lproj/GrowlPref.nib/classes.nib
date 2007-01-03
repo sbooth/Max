@@ -1,0 +1,67 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                checkVersion = id; 
+                customFileChosen = id; 
+                deleteTicket = id; 
+                logTypeChanged = id; 
+                openConsoleApp = id; 
+                openGrowlDonate = id; 
+                openGrowlForum = id; 
+                openGrowlTrac = id; 
+                openGrowlWebSite = id; 
+                resolveService = id; 
+                showPreview = id; 
+                startStopGrowl = id; 
+            }; 
+            CLASS = GrowlPref; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                aboutBoxTextView = NSTextView; 
+                currentPluginController = id; 
+                customMenuButton = NSPopUpButton; 
+                displayAuthor = NSTextField; 
+                displayDefaultPrefView = NSView; 
+                displayPluginsArrayController = NSArrayController; 
+                displayPluginsTable = NSTableView; 
+                displayPrefView = NSView; 
+                displayVersion = NSTextField; 
+                growlApplications = NSTableView; 
+                growlRunningProgress = NSProgressIndicator; 
+                growlRunningStatus = NSTextField; 
+                growlVersionProgress = NSProgressIndicator; 
+                logFileType = NSMatrix; 
+                notificationPriorityMenu = NSMenu; 
+                notificationStickyColumn = NSTableColumn; 
+                notificationsArrayController = NSArrayController; 
+                previewButton = NSButton; 
+                servicePasswordColumn = NSTableColumn; 
+                startStopGrowl = NSButton; 
+                ticketsArrayController = TicketsArrayController; 
+            }; 
+            SUPERCLASS = NSPreferencePane; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            CLASS = NSPreferencePane; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_firstKeyView" = id; 
+                "_initialKeyView" = id; 
+                "_lastKeyView" = id; 
+                "_window" = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = RRTableView; LANGUAGE = ObjC; SUPERCLASS = NSTableView; }, 
+        {
+            ACTIONS = {search = id; }; 
+            CLASS = TicketsArrayController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSArrayController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

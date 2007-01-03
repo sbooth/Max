@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>Speech</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.growl.Speech</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>DISP</string>
+	<key>CFBundleSignature</key>
+	<string>GRRR</string>
+	<key>CFBundleVersion</key>
+	<string>0.6</string>
+	<key>CSResourcesFileMapped</key>
+	<string>yes</string>
+	<key>NSPrincipalClass</key>
+	<string>GrowlSpeechDisplay</string>
+	<key>GrowlPluginAuthor</key>
+	<string>Ingmar Stein</string>
+	<key>CFBundleName</key>
+	<string>Speech</string>
+	<key>GrowlPluginDescription</key>
+	<string>Speak notifications.</string>
+</dict>
+</plist>

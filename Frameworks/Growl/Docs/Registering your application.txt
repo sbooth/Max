@@ -1,0 +1,38 @@
+Registering your application with Growl
+=======================================
+
+In order to register with Growl 0.7 or later, include a file named 'Growl Registration Ticket.growlRegDict' inside the Resources folder of your application bundle. Growl will register your application automatically when your application is launched. This file is a property list file containing a dictionary. We call this system 'auto-discovery'; in previous versions of Growl, you had to do something explicitly to register. See `Ticket dictionaries`_ below for the description of what should go in a ticket dictionary.
+
+If you wish to support Growl 0.6.x, you will need to set a Growl delegate. See `Growl delegate`_ below for more information.
+
+If you wish to support Growl 0.5, setting a Growl delegate won't work. You need to use the distributed notification center to post a GROWL_APP_REGISTRATION notification, containing the same information you would put in a ticket dictionary.
+
+Growl delegate
+--------------
+
+[XXX insert existing instructions on creating a Growl delegate]
+
+Ticket dictionaries
+-------------------
+
+A ticket dictionary can contain these keys:
+
+GROWL_TICKET_VERSION
+	The version of the ticket format as an integer. The current version, supported by Growl version 0.5 and later and described here, is 1. (Note that Growl 0.5 and 0.6.x ignore this key.) This tells Growl what other keys to look for.
+
+	Required for auto-discovery; optional if you use a Growl delegate or the distributed notification center to register.
+
+GROWL_APP_NAME
+	The name of your application. This is used both for user display and for internal bookkeeping, so it should clearly identify your application (but it should not be your bundle identifier, because it will be displayed to the user) and it should not change between versions and incarnations (so don't include a version number or "Lite", "Pro", etc.)
+
+	Required for auto-discovery and the distributed notification center; optional if you use a Growl delegate that supplies an application name separately.
+
+GROWL_NOTIFICATIONS_ALL
+	An array of the names of all the notifications your application can post.
+
+	Required for all methods of registration.
+
+GROWL_NOTIFICATIONS_DEFAULT
+	The names or indices (into the 'ALL' array) of the notifications that should be enabled by default.
+
+	For all methods of registration, this was required for Growl 0.5 and 0.6.x, and is optional for later versions. If omitted, all notifications will be enabled by default.

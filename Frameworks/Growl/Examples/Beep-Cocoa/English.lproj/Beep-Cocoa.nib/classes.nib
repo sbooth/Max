@@ -1,0 +1,37 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                OKNotification = id; 
+                cancelNotification = id; 
+                clearImage = id; 
+                registerBeep = id; 
+                removeNotification = id; 
+                sendNotification = id; 
+                showAddSheet = id; 
+                showEditSheet = id; 
+            }; 
+            CLASS = BeepController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addEditButton = NSButton; 
+                addNotification = NSButton; 
+                mainWindow = NSWindow; 
+                notificationDefault = NSButton; 
+                notificationDescription = NSTextField; 
+                notificationImage = NSImageView; 
+                notificationPanel = NSPanel; 
+                notificationPriority = NSPopUpButton; 
+                notificationSticky = NSButton; 
+                notificationTitle = NSTextField; 
+                notificationsTable = NSTableView; 
+                registered = NSButton; 
+                removeNotification = NSButton; 
+                sendButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

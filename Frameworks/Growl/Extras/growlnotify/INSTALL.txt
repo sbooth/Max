@@ -1,0 +1,3 @@
+Running `make' will build it into your build folder if you want to test it before installation. Running `make install' will install it into /usr/local/bin and install the manpage, and this will do a build first if it needs building.
+
+The Makefile uses xcodebuild internally with the Deployment buildstyle.

@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book>
+	<title>Growl Documentation</title>
+	<titleabbrev>Growl</titleabbrev>
+	<bookinfo>
+		<title>Growl Documentation</title>
+		<authorgroup>
+			<author><firstname>Ingmar</firstname><surname>Stein</surname></author>
+		</authorgroup>
+		<edition>Growl User's Guide version 0.7</edition>
+		<pubdate>2005</pubdate>
+		<copyright>
+			<year>2004</year>
+			<year>2005</year>
+			<holder>The Growl Project</holder>
+		</copyright>
+	</bookinfo>
+	<chapter id="getting-started">
+		<title>Getting Started</title>
+		<sect1 id="growl-package-install">
+			<title>Installing Growl from Disk Image/Package</title>
+			<sect2>
+				<title>Getting and installing Growl</title>
+				<para>Download the <ulink url="http://growl.info/files/Growl-0.6.1.dmg">package</ulink> from the <ulink url="http://growl.info/downloads.php">downloads page</ulink>. Open the disk image, and double click the package inside.</para>
+			</sect2>
+			<sect2>
+				<title>Starting Growl</title>
+				<para>Open the System Preferences and click on the Growl Preference pane.</para>
+				<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/syspref_general.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>System Preference</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+				<para>Click on the <emphasis>Start Growl</emphasis> button.  Optionally check the <emphasis>Start on Login</emphasis> checkbox. If this is not checked, you will need to manually start Growl before you can see notifications.</para>
+			</sect2>
+		</sect1>
+		<sect1 id="growl-registration-information">
+			<title>You have Growl, now what?</title>
+			<sect2>
+				<title>How does registration work?</title>
+				<sect3>
+					<title>Why is the Applications tab empty?</title>
+					<para>You have just downloaded and installed Growl. You have opened up System Preferences, clicked on the Applications tab, and it is empty?! What in the world?</para>
+					<para>That is the reaction we get from a lot of people new to Growl. Growl is what we like to refer to as a tool for other applications. Now, we don't want to include a list of all of the possible applications in the default installation, because you probably will not be using them all. We also don't know if you would want to even use the applications we have made as examples. So with the default installation of Growl, the applications tab is meant to be empty.</para>
+					<para>Have no fear. Soon it should fill up with whatever Growl enabled applications that you may have. When a Growl enabled application tries to talk to Growl, it does something called <code>Registration</code>. It registers with Growl so that Growl knows what notifications it may send out (so that Growl can list them in its preferences). This is true for scripts as well, anything from AppleScript to Tcl will register.</para>
+					<para>For the most part, all you will have to do is just launch the application. There are some exceptions. Some applications use filters or rules or whatever was chosen to allow their users control over the whole process within their application as well. If the application you want to use with Growl does not show up in the Applications tab after launching it, look in preferences. If you still don't see it, you can email us at discuss &#x41;&#x54; growl.info and we can look into the problem.</para>
+				</sect3>
+				<sect3>
+					<title>So what now?</title>
+					<para>Once the application has a registration in the Applications tab, you can control it. You can control all Growl based notifications through this one central location. You can also choose how each notification will appear. One notification can use the Bubbles display, another can use the Music Video display, and a third can use the Bezel display. You can also choose which applications will stay on the screen until clicked, and which ones will not.</para>
+				</sect3>
+			</sect2>
+		</sect1>
+		<sect1 id="growl-how-does-it-work">
+			<title>How does Growl work?</title>
+			<para>Well when a man and woman get together...er wrong discussion.  Growl.  Right.</para>
+			<sect2>
+				<title>Displaying notifications</title>
+				<para>When an application (or script) wants to display a notification to the user (that's you), it sends the information to a background application running on your Mac called GrowlHelperApp. GrowlHelperApp will then, depending on your preferences, show the notification using one of the display plug-ins.</para>
+				<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/growlFlowDiag.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>flow of data</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+				<para>
+					<emphasis>An example of the 'Bubble' display.</emphasis>
+				</para>
+				<para>The actual display of the notifications is handled by <emphasis>GrowlHelperApp</emphasis>.  But the preferences for the display types are in the preference pane.</para>
+			</sect2>
+			<sect2>
+				<title>The Growl Preference Pane</title>
+				<para>The Growl preference pane has three tabs:</para>
+				<sect3>
+					<title>General</title>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/prefPaneGeneralTab.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>General Tab</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+					<para>The General Tab holds preferences that refer to Growl as a whole. The default display is set here.</para>
+				</sect3>
+
+				<sect3>
+					<title>Applications</title>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/prefPaneAppsTab.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>Applications Tab</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+					<para>You have complete control over which notifications are displayed on your computer - In the 'Applications' tab you can configure which notifications are active - and which display they use.</para>
+					<sect4>
+						<title>Priority</title>
+						<para>You can set differing priorities to different notification types.  This may affect the way in which your notifications are presented to you, depending on the chosen display.</para>
+					</sect4>
+					<sect4>
+						<title>Sticky Notifications</title>
+						<para>Sticky notifications will stay on screen until clicked.</para>   
+						<para>The 'Sticky' checkbox allows you to decide which notification types are allowed to become sticky, or even force them to be sticky.   The checkbox has three states:  '<emphasis>On</emphasis>', '<emphasis>Off</emphasis>', and '<emphasis>Mixed</emphasis>'.</para>   
+						<para><emphasis>'Off'</emphasis> means that those types of notifications can never become sticky, even if an application requests them to be.  <emphasis>'On'</emphasis> forces them to be sticky. <emphasis>'Mixed'</emphasis> (looks like a bar -  see the screenshot above) is the default setting; it means that the application that issues the notification is allowed to decide whether or not notifications of that type should be sticky.</para>
+					</sect4>
+				</sect3>
+				<sect3>
+					<title>Display Options</title>
+					<para>Display Options is where you can configure what you are shown when Growl notifies you.</para>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/prefPaneDisplayTab.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>Display Options Tab</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+					<para>First you select which display you would like to configure. Then you can change settings on each display however you wish. Some displays have priority settings, some provide preference on the transparency, etc.</para>
+				</sect3>
+			</sect2>
+		</sect1>
+		<sect1 id="growl-package-removal.php">
+			<title>Removing Growl, if you need to</title>
+			<para>When you install Growl from the .pkg installer, it installs the following files in these locations:</para>
+			<itemizedlist>
+				<listitem><simpara>GrowlAppBridge.framework: /Library/Frameworks/</simpara></listitem>
+				<listitem><simpara>Growl.prefpane: /Library/PreferencePanes/</simpara></listitem>
+			</itemizedlist>
+			<para>The first time you run Growl, it will also create a folder in your <emphasis>Library/Application Support/</emphasis> directory called <emphasis>Growl</emphasis>. This folder contains some data that Growl uses, as well as a folder called <emphasis>Plugins</emphasis>.</para>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="../img/application_support.png" format="PNG"/>
+					</imageobject>
+					<textobject><phrase>Growl Application Support Directory</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+			<para>If you trash all of these, log out, and then log back in, Growl will be uninstalled. You can now empty your trash.</para>
+			<para>One note, if you are uninstalling Growl for a reason that the developers might want to know about, please email us at discuss &#x41;&#x54; growl.info and we can look into fixing those problems.</para>
+		</sect1>
+	</chapter>
+	<chapter id="extras">
+		<title>Extras</title>
+		<sect1 id="growltunes">
+			<title>GrowlTunes</title>
+			<sect2>
+				<title>Requirements</title>
+				<itemizedlist>
+					<listitem><simpara>Mac OS X 10.3 or higher</simpara></listitem>
+					<listitem><simpara>iTunes</simpara></listitem>
+					<listitem><simpara>Growl</simpara></listitem>
+				</itemizedlist>
+			</sect2>
+
+			<sect2>
+				<title>Installing GrowlTunes</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="../img/growlTunesIcon.png" format="PNG"/>
+					</imageobject>
+					<textobject><phrase>GrowlTunes</phrase></textobject>
+				</mediaobject>
+				<para>Place GrowlTunes in your Applications folder by dragging and dropping it from the GrowlTunes disk image.</para>
+			</sect2>
+
+			<sect2>
+				<title>Using GrowlTunes</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="../img/growlTunesMenuIcon.png" format="PNG"/>
+					</imageobject>
+					<textobject><phrase>GrowlTunes MenuBar Icon</phrase></textobject>
+				</mediaobject>
+				<para>Once you have installed GrowlTunes, double click it. This will put the headphones shown here in the menubar at the top of your screen. From here you can control GrowlTunes.</para>
+
+				<para>For users of iTunes 4.7 and later, that is all you have to do to get GrowlTunes working. Note: GrowlTunes does not poll for its information with iTunes 4.7 and later.</para>
+				<para>For iTunes 4.6 and below, the most important part of using GrowlTunes is the polling button at the bottom of the menu. This allows you to turn on and off polling of iTunes (asking it what song is currently being played).</para>
+				<para>Once you get GrowlTunes to start polling, you should see a bubble like the image below. You will see one of these each time the track changes in iTunes.</para>
+				<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/growltunes2.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Growl bubble</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+			</sect2>
+
+			<sect2>
+				<title>Artwork</title>
+				<para>Starting with Growl 0.6, GrowlTunes can get artwork from Amazon.com. (Growl 0.5 came with a version that did not have this capability.) If GrowlTunes does not see artwork in the current track playing, and it also does not see that the album artwork was previously downloaded, it will download the track. GrowlTunes does not write this information to the track, but instead to files on disk. GrowlTunes will place the downloaded artwork in your home directory, in Library/Images/Music.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="growlmail">
+			<title>GrowlMail</title>
+			<sect2>
+				<title>About GrowlMail</title>
+				<para>GrowlMail is a plug-in for <ulink url="http://www.apple.com/macosx/features/mail/">Apple Mail</ulink> that posts a Growl notification every time new mail arrives containing the text of the message.</para>
+			</sect2>
+			<sect2>
+				<title>Installing GrowlMail</title>
+				<para>Move the GrowlMail.mailbundle package into <code>~/Library/Mail/Bundles/</code>, quit Mail.app, and run the following 2 commands in the terminal:</para>
+				<para>
+					<screen>
+defaults write com.apple.mail EnableBundles -bool True
+defaults write com.apple.mail BundleCompatibilityVersion 1
+					</screen>
+				</para>
+				<para>Now relaunch Mail.app. Whenever new mail arrives, Growl will display a notification.</para>
+			</sect2>
+			<sect2>
+				<title>Compiling GrowlMail yourself</title>
+				<para><emphasis>If you're happy with the pre-built GrowlMail available at the <ulink url="http://growl.info/downloads.php">Downloads</ulink> page, you don't need to read this section.</emphasis></para>
+				<para>GrowlMail relies on having Growl compiled and installed, and Growl.framework compiled (the framework does not need to be installed anywhere). Once these tasks are complete, compiling GrowlMail is easy.</para>
+				<para>GrowlMail lives in the <code>Extras/GrowlMail/</code> directory. Simply open GrowlMail.xcode, select the build style you wish to use, and build. The finished product will be called <code>GrowlMail.mailbundle</code> and will be in the <code>build</code> directory.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="growlsafari">
+			<title>GrowlSafari</title>
+			<sect2>
+				<title>Requirements</title>
+				<itemizedlist>
+					<listitem><simpara>OS X 10.3 or higher</simpara></listitem>
+					<listitem><simpara>Safari 1.1 or higher</simpara></listitem>
+					<listitem><simpara>Growl</simpara></listitem>
+				</itemizedlist>
+			</sect2>
+
+			<sect2>
+				<title>About</title>
+				<para>GrowlSafari is a plug-in to Safari to make it post Growl notifications on download-related events.</para>
+			</sect2>
+
+			<sect2>
+				<title>Installing GrowlSafari</title>
+				<para>GrowlSafari requires <ulink url="http://culater.net/software/SIMBL/SIMBL.php">SIMBL</ulink>.  If you have <ulink url="http://culater.net/software/PithHelmet/PithHelmet.php">PithHelmet</ulink> installed, then you already have SIMBL.</para>
+
+				<para>Once SIMBL is installed, put <emphasis role="bold">GrowlSafari.bundle</emphasis> into <emphasis role="bold">/Library/Application Support/SIMBL/Plugins</emphasis></para>
+
+				<para>Then restart Safari.</para>
+
+				<para>You should now receive Growl notifications when downloads complete.</para>
+			</sect2>
+
+			<sect2>
+				<title>Notification Types</title>
+				<para>Currently, GrowlSafari posts notifications for these events:</para>
+				<itemizedlist>
+					<listitem><simpara>Decompression started</simpara></listitem>
+					<listitem><simpara>Copying disk image</simpara></listitem>
+					<listitem><simpara>Download complete</simpara></listitem>
+					<listitem><simpara>Mounting disk image</simpara></listitem>
+				</itemizedlist>
+			</sect2>
+
+			<sect2>
+				<title>Compatibility</title>
+				<para>GrowlSafari works in all versions of Safari (except 1.0) on Mac OS X 10.3 or later.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="growldict">
+			<title>GrowlDict</title>
+			<sect2>
+				<title>Requirements</title>
+				<itemizedlist>
+					<listitem><simpara>OS X 10.3 or higher</simpara></listitem>
+					<listitem><simpara>Growl</simpara></listitem>
+				</itemizedlist>
+			</sect2>
+
+			<sect2>
+				<title>Installing GrowlDict</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="../img/growldict.png" format="PNG"/>
+					</imageobject>
+					<textobject><phrase>GrowlDict Icon</phrase></textobject>
+				</mediaobject>
+				<para>In order to install GrowlDict, you will need to place it into the Library/Services folder, located in your home directory. Once GrowlDict is placed there, you will need to log out of your computer, and then log back in.</para>
+			</sect2>
+
+			<sect2>
+				<title>Using GrowlDict</title>
+				<para>Once you have logged back in, you will be able to use GrowlDict. Using GrowlDict is a 3 step process:</para>
+
+				<orderedlist>
+					<listitem>
+						<para>
+							Select the text you would like to look up.
+							<screenshot>
+								<mediaobject>
+									<imageobject>
+										<imagedata fileref="../img/growldict_hilight.png" format="PNG"/>
+									</imageobject>
+									<textobject><phrase>Text on which the service will be invoked.</phrase></textobject>
+								</mediaobject>
+							</screenshot>
+						</para>
+					</listitem>
+
+					<listitem>
+						<para>
+							Select the GrowlDict service in the Services menu for the application with the word you want to look up.
+							<screenshot>
+								<mediaobject>
+									<imageobject>
+										<imagedata fileref="../img/growldict_selection.png" format="PNG"/>
+									</imageobject>
+									<textobject><phrase>GrowlDict Service Selection</phrase></textobject>
+								</mediaobject>
+							</screenshot>
+						</para>
+					</listitem>
+
+					<listitem>
+						<para>
+							The definition will appear in a Growl notification.
+							<screenshot>
+								<mediaobject>
+									<imageobject>
+										<imagedata fileref="../img/growldict_notification.png" format="PNG"/>
+									</imageobject>
+									<textobject><phrase>GrowlDict Notification</phrase></textobject>
+								</mediaobject>
+							</screenshot>
+						</para>
+					</listitem>
+				</orderedlist>
+			</sect2>
+		</sect1>
+
+		<sect1 id="growlnotify">
+			<title>growlnotify</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="../img/executableIcon.png" format="PNG"/>
+				</imageobject>
+				<textobject><phrase>growlnotify</phrase></textobject>
+			</mediaobject>
+		
+			<sect2>
+				<title>About</title>
+				<para><code>growlnotify</code> is a command-line tool to post Growl notifications. You can control all aspects of the notification (within any boundaries set up in the Growl pane of System Preferences). It can be very useful in shell scripts.</para>
+			</sect2>
+
+			<sect2>
+				<title>Installing</title>
+				<para>In your shell, cd to the directory on the Growl disk image containing <code>growlnotify</code>, and type <code>./install.sh</code>. That script will install <code>growlnotify</code> to <code>/usr/local/bin</code> and the manpage to <code>/usr/local/man</code>.</para>
+			</sect2>
+
+			<sect2>
+				<title>Building from sources</title>
+				<para>Running '<code>make</code>' will build <code>growlnotify</code> into your build folder if you want to test it before installation.</para>
+				<para>Running '<code>make install</code>' will install <code>growlnotify</code> into <code>/usr/local/bin</code> and install the manpage into <code>/usr/local/man</code>. It will also do a build first if necessary.</para>
+				<para>The Makefile uses <code>xcodebuild</code> internally, with the Deployment buildstyle.</para>
+			</sect2>
+
+			<sect2>
+				<title>Usage</title>
+				<para>
+					<screen>
+Usage: growlnotify [-hs] [-i ext] [-I filepath] [--image filepath]
+[-p priority] [title]
+Options:
+    -h,--help     Display this help
+    -n,--name     Set the name of the application that sends the notification
+                  [Default: growlnotify]
+    -s            Make the notification sticky
+    -a,--appIcon  Specify an application name  to take the icon from
+    -i,--icon     Specify a file type or extension to look up for
+    the notification icon
+    -I,--iconpath Specify a file whose icon will be the notification icon
+    --image       Specify an image file to be used for the notification icon
+    -p,--priority Specify an int or named key (default is 0)
+
+Display a notification using the title given on the command-line and the
+message given in the standard input.
+
+Priority can be one of the following named keys: Very Low, Moderate, 
+Normal, High,
+Emergency. It can also be an int between -2 and 2.
+
+To be compatible with gNotify the following switches are accepted:
+    -t,--title    Does nothing. Any text following will be treated as the
+                  title because that's the default argument behaviour
+    -m,--message  Sets the message to the following instead of using stdin
+			    	</screen>
+			    </para>
+
+				<para>The manpage provides more information on the usage of <code>growlnotify</code>. Just type '<code>man 1 growlnotify</code>' after installing <code>growlnotify</code>.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="macyac">
+			<title>MacYac</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="../img/executableIcon.png" format="PNG"/>
+				</imageobject>
+				<textobject><phrase>MacYac</phrase></textobject>
+			</mediaobject>
+
+			<sect2>
+				<title>About</title>
+				<para>A client for the <ulink url="http://sunflowerhead.com/software/yac/">Yac</ulink> Caller-ID application.</para>
+				<para>Author:	Andrew Wellington (proton)</para>
+				<para>License:	BSD</para>
+			</sect2>
+
+			<sect2>
+				<title>Download</title>
+				<para>The MacYac source is available from the <ulink url="http://growl.info/downloads.php">Downloads</ulink> page.</para>
+			</sect2>
+		</sect1>
+	</chapter>
+
+	<chapter id="other">
+		<title>Other</title>
+		<sect1 id="catalog-of-applications">
+			<title>Catalog of applications</title>
+			<para>There is a <ulink url="http://growl.info/applications.php">catalog of applications</ulink> that have Growl support built in.</para>
+		</sect1>
+		<sect1 id="applescript-support">
+			<title>AppleScript Support for Growl</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="../img/scriptEditorIcon.png" format="PNG"/>
+				</imageobject>
+				<textobject><phrase>Script Editor</phrase></textobject>
+			</mediaobject>
+
+			<sect2 id="about">
+				<title>About AppleScript Support</title>
+				<para>AppleScript support is built into Growl; nothing special needs to be done to enable it.</para>
+
+				<sect3 id="v06Changes">
+					<title>A Note on AppleScript changes in Growl 0.6</title>
+					<para><emphasis role="bold">You must update your existing AppleScripts for Growl 0.6</emphasis>. In Growl 0.6 AppleScripts must register their notifications every time the script is run &mdash; unregistered notifications will <emphasis>not</emphasis> be displayed.  See below for an example of registration.</para>
+				</sect3>
+			</sect2>
+
+			<sect2 id="usage">
+				<title>Usage</title>
+				<sect3 id="basics">
+					<title>Basics</title>
+					<para>To send a Growl notification via AppleScript, you talk to GrowlHelperApp using two commands: <emphasis role="bold">register</emphasis> and <emphasis role="bold">notify</emphasis>. A script, like an application, must register itself (once, though multiple times is harmless) with Growl before sending any notifications.  The full syntax of the <code>register</code> and <code>notify</code> commands can be viewed by opening Script Editor, choosing File &rarr; Open Dictionary, and selecting GrowlHelperApp from the list.</para>
+
+					<example>
+						<title>Sample AppleScript Notification</title>
+						<programlisting id="simpleNotificationSampleCode">tell application &quot;GrowlHelperApp&quot;
+ -- Make a list of all the notification types 
+ -- that this script will ever send:
+ set the allNotificationsList to &not;
+  {"Test Notification" , "Another Test Notification"}
+
+ -- Make a list of the notifications 
+ -- that will be enabled by default.      
+ -- Those not enabled by default can be enabled later 
+ -- in the 'Applications' tab of the growl prefpane.
+ set the enabledNotificationsList to &not;
+  {"Test Notification"}
+
+ -- Register our script with growl.
+ -- You can optionally (as here) set a default icon 
+ -- for this script's notifications.
+ register as application "Growl AppleScript Sample" &not;
+   all notifications allNotificationsList &not;
+   default notifications enabledNotificationsList &not;
+   icon of application "Script Editor"
+	 
+ --	Send a Notification...
+ notify with name "Test Notification" &not;
+   title "Test Notification" &not;
+   description "This is a test AppleScript notification." &not;
+   application name "Growl AppleScript Sample" 
+
+ notify with name "Another Test Notification" &not;
+   title "Another Test Notification :) " &not; 
+   description "Alas &mdash; you won't see me until you enable me..." &not;
+   application name "Growl AppleScript Sample" 
+
+end tell</programlisting>
+					</example>
+					<para>Once you send the <emphasis role="bold">Registration</emphasis> command - your script will appear in the 'applications' tab of the Growl prefpane.</para>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/appleScriptRegistration.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>AppleScript Registration</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+					<para>
+						<ulink url="http://growl.info/files/growlAppleScriptBasicSample.zip">Download Sample Script</ulink> 
+					</para>
+				</sect3>
+
+				<sect3 id="usingImages">
+					<title>Notifications Using Images</title>
+					<para>Growl's notify command supports four types of images for notification when using AppleScript:</para>
+					<example>
+						<title>Application Icons</title>
+						<programlisting>notify with &not;
+  name "Some Notification"  &not;
+  title "This is a Notification with an App Icon"  &not;
+  description "We are using an Application Icon..."  &not;
+  application name "Growl AppleScript Sample" &not; 
+  icon of application "Script Editor.app"</programlisting>
+					</example>
+					<para>Note that the &quot;.app&quot; at the end is optional.</para>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/appleScriptImageAppNotific.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>ImageFile</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+
+					<example>
+						<title>File Icons</title>
+						<programlisting>notify with &not;
+  name "Some Notification"  &not;
+  title "This is a Notification with an File Icon"  &not;
+  description "We are using a File's Icon..."  &not;
+  application name "Growl AppleScript Sample" &not;
+  icon of file "file:///Users/someone/Growl"</programlisting>
+ 					</example>
+					<para>See <link linkend="filepaths">Notes on File Paths</link> for details on how to specify the path to a file icon.</para>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/appleScriptImageIconNotific.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>ImageFile</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+
+					<example>
+						<title>Image Files</title>
+						<programlisting>notify with &not;
+  name "Some Notification"  &not;
+  title "This is a Notification with an Image File"  &not;
+  description "We are using an Image File..." &not;
+  application name  "Growl AppleScript Sample" &not;
+  image from location &not;
+    "file:///Users/someone/pictures/stopWatch.png"</programlisting>
+   					</example>
+					<para><emphasis>Supported Types:</emphasis> BMP, GIF, ICNS, ICO, JPEG, JPEG 2000, PNG, PSD, TGA, TIFF</para>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/appleScriptImageFileNotific.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>ImageFile</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+
+					<example>
+						<title>Image Data</title>
+						<programlisting>set the PICTdata to my getArtworkFromiTunesRoutine() 
+
+notify with &not;
+  name "Some Notification"  &not;
+  title "This is a Notification with PICT Image Data"  &not;
+  description "We are using PICT data..." &not;
+  application name  "Growl AppleScript Sample" &not;
+  PICTimage the PICTdata</programlisting>
+ 					</example>
+					<para><emphasis>Supported Types:</emphasis> PICT, TIFF</para>
+					<para>Carbon apps tend to return PICT</para>
+					<para>When you are dealing with raw image data you should use the <emphasis role="bold">notify ... Image</emphasis>  or <emphasis role="bold">notify ... pictImage</emphasis> commands.</para>
+					<para>Cocoa apps tend to return TIFF</para>
+					<example>
+						<title>TIFF Image Data</title>
+						<programlisting>set the TIFFdata to my getPhotoFromAddressBookRoutine() 
+
+notify with &not;
+  name "Some Notification"  &not;
+  title "This is a Notification with TIFF Image Data"  &not;
+  description "We are using TIFF data..." &not;
+  application name  "Growl AppleScript Sample" &not;
+  image the TIFFdata</programlisting>
+					</example>
+					<para>If you're not sure which type you are dealing with then you can look in Script Editor's <emphasis>Event Log</emphasis>. The first four chars of the data will show the type:</para>
+					<screenshot>
+						<mediaobject>
+							<imageobject>
+								<imagedata fileref="../img/applescriptPICTData.png" format="PNG"/>
+							</imageobject>
+							<textobject><phrase>PICT data returned by iTunes</phrase></textobject>
+						</mediaobject>
+					</screenshot>
+				</sect3>
+			
+				<sect3 id="filepaths">
+					<title>Notes on File Paths</title>
+					<para>For the "notify ... image from location" and "notify ... icon of file" commands Growl accepts any of the following types as 'locations':</para>
+					<itemizedlist>
+						<listitem><simpara>Aliases - the default file reference type in AppleScript.</simpara></listitem>
+						<listitem><simpara>Local file:// URLs (as text) - e.g. "file:///Applications/" &mdash; <emphasis>n.b. you must have three slashes after the colon &mdash; the third represents the root of the filesystem.</emphasis></simpara></listitem>
+						<listitem><simpara>Paths - e.g. "~/Pictures"</simpara></listitem>
+					</itemizedlist>
+				</sect3>
+			</sect2>
+						
+			<sect2>
+				<title>Authors</title>
+				<para>v0.6 (update) &mdash; Diggory Laycock &mdash; <ulink url="http://www.monkeyfood.com">www.monkeyfood.com</ulink></para>
+	 			<para>v0.5 &mdash; Adam Nolley &mdash; <ulink url="http://nanovivid.com/contact">nanovivid.com</ulink></para>
+	 		</sect2>
+		</sect1>
+
+		<sect1 id="folder-actions">
+			<title>Folder Actions</title>
+			<sect2>
+				<title>About the Folder Actions Script</title>
+				<para>For the Folder Notification scripts to work, they have to be placed in "Scripts/Folder Action Scripts" ... either in /Library or ~/Library. If this neither the 'scripts' nor the 'Folder Action Scripts' folders exist, create them yourself.</para>
+				<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/FolderActionScriptsDir.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Folder Action Scripts Directory</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+		 		<para>After placing them there, right-click on the folder for which you want notifications and choose "Attach a Folder Action."</para>
+		 		<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/folderAttach.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Folder Attach</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+				<para>You will then be presented with a file browser pointing at your Folder Action Scripts directory - choose the appropriate script.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="growlichat">
+			<title>GrowliChat</title>
+			<sect2>
+				<title>About</title>
+				<para>GrowliChat is an AppleScript that runs as an application.</para>
+			</sect2>
+			<sect2>
+				<title>Installation</title>
+				<para>To use the app you will need to do the following:</para>
+				<orderedlist>
+					<listitem><simpara>Open the script in Script Editor</simpara></listitem>
+					<listitem>
+						<para>Save the script as an application.</para>
+				 		<screenshot>
+							<mediaobject>
+								<imageobject>
+									<imagedata fileref="../img/growliChat.png" format="PNG"/>
+								</imageobject>
+								<textobject><phrase>GrowliChat Save Dialogue</phrase></textobject>
+							</mediaobject>
+						</screenshot>
+					</listitem>
+					<listitem><simpara>Remember to check the "Stays Open" option when saving.</simpara></listitem>
+					<listitem><simpara>Launch the new application and enjoy.</simpara></listitem>
+				</orderedlist>
+			</sect2>
+
+			<sect2>
+				<title>Usage</title>
+				<para>While it is running It will periodically check your contacts, and notify you of changes in their statuses.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="growlquicksilver">
+			<title>Growl and Quicksilver</title>
+			<!--<img class="headerIcon" alt="GrowlTunes" src="../img/growlTunesIcon.png"/>-->
+			<sect2>
+				<title>About</title>
+				<para><ulink url="http://quicksilver.blacktree.com/">QuickSilver</ulink> supports Growl via a plug-in.</para>
+			</sect2>
+
+			<sect2>
+				<title>Installing The QS Growl Plug-in</title>
+
+				<para>In QuickSilver's Application menu, select the "Get More Plug-ins..." item. </para>
+		 		<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/qsGetMorePlugins.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Get More Plug-ins</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+
+				<para>You can install from the web using the plus icon - or download (and double-click) the plug-in using the arrow icon. </para>
+		 		<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/qsPluginsPage.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>QuickSilver Plug-ins Page</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+
+				<para>QuickSilver will use Growl to notify you that the plug-in has been installed.</para>
+		 		<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/qsPluginWasInstalled.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Installation Notification</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+
+				<para>Other notifications that the QuickSilver plug-in sends are iTunes track changes and when you use QuickSilver to switch network locations.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="ical-script">
+			<title>Get today's iCal events</title>
+
+			<sect2>
+				<title>Installation</title>
+				<para>Place the scripts in your 'Scripts' folder of your Library</para>
+				<note><simpara>If the scripts folder does not exist then create it yourself.</simpara></note>
+				<para>This will give you quick access to the Script via the Script Menu
+                (/Applications/AppleScript/Script/Install Script Menu)</para>
+
+		 		<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/Scripts-Folder.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Scripts Folder</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+			</sect2>
+
+			<sect2>
+				<title>Usage</title>
+				<para>The script is very simple - and requires iCal to be running.</para>
+
+				<para>When the script is run it notifies once for every event it finds for today.</para>
+			</sect2>
+		</sect1>
+
+		<sect1>
+			<title>iPod Checker</title>
+			<sect2>
+				<title>About</title>
+				<para>This script will sync your ipod with iTunes.</para>
+			</sect2>
+			<sect2>
+				<title>Installation</title>
+				<para>Place the scripts in your 'Scripts' folder of your Library</para>
+				<note><simpara>If the scripts folder does not exist then create it yourself.</simpara></note>
+				<para>This will give you quick access to the Script via the Script Menu
+				(/Applications/AppleScript/Script/Install Script Menu) </para>
+
+		 		<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/Scripts-Folder.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Scripts Folder</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+			</sect2>
+
+			<sect2>
+				<title>Modifying the Script</title>
+				<para>You will need to change a few properties in the script:</para>
+				<blockquote>
+					<programlisting>set theiPod to "foo.Propaganda"</programlisting>
+				</blockquote>
+				<para>Change "foo.propaganda" to the name of your iPod.
+				You will also need to change two Image references
+				- see the in-script comments for more details.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="irssi">
+			<title>irssi</title>
+			<para>In order to install and run this irssi plugin, you must have 3 things preinstalled:</para>
+			<orderedlist>
+				<listitem>
+					<para>irssi with perl support.</para>
+					<para>To get perl support in irssi, do one of the following:</para>
+
+					<para>When configuring irssi, do this:</para>
+					<para><code>./configure --with-perl=yes</code></para>
+
+					<para>or, if you have a install of darwinports, do this:</para>
+					<para><code>sudo port install irssi +perl</code></para>
+				</listitem>
+				<listitem><para>A working Growl install.</para></listitem>
+				<listitem>
+					<para>Mac::Growl installed.</para>
+					<para>Available as part of the 'bindings' package http://growl.info/downloads_developers.php</para>
+
+					<para>Once you have these three, move growl.pl to ~/.irssi/scripts/ and then run this command in irssi:</para>
+					<para><code>/script load growl.pl</code></para>
+
+					<para>You should get a visual notification that growl installed.</para>
+
+					<para>If you desire growl to automatically start every time you begin irssi put it in ~/.irssi/scripts/autorun/.  If you ever need to load it manually you'll need to run this command in irssi:</para>
+
+					<para><code>/script load autorun/growl.pl</code></para>
+				</listitem>
+			</orderedlist>
+		</sect1>
+
+		<sect1 id="salling-clicker">
+			<title>GrowlCalling for Salling Clicker</title>
+			<para>The Script comes in two forms</para>
+			<itemizedlist>
+				<listitem><simpara>The .cgz archive. This is the form that Clicker is expecting.</simpara></listitem>
+				<listitem><simpara>The source .scpt. This is the applescript source of the archive.</simpara></listitem>
+			</itemizedlist>
+
+			<sect2>
+				<title>Installation</title>
+				<orderedlist>
+					<listitem><simpara>Open the Salling Clicker Preference Pane.</simpara></listitem>
+					<listitem><simpara>Switch to the 'Phone Events' tab.</simpara></listitem>
+					<listitem><simpara>Drop the archive into the list.</simpara></listitem>
+				</orderedlist>
+		 		<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata fileref="../img/clickerPhoneTab.png" format="PNG"/>
+						</imageobject>
+						<textobject><phrase>Clicker Tab</phrase></textobject>
+					</mediaobject>
+				</screenshot>
+			</sect2>
+
+			<sect2>
+				<title>Usage</title>
+				<para>The script will notify via growl when clicker receives call notifications from your mobile device.</para>
+			</sect2>
+			<sect2>
+				<title>Modifying the script</title>
+				<para>To edit the script use the gear below the list.</para>
+			</sect2>
+		</sect1>
+
+		<sect1 id="snak">
+			<title>Snak and Growl</title>
+
+			<para>Place the script in the 'Scripts' folder of your 'Snak' folder:</para>
+	 		<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="../img/snak.png" format="PNG"/>
+					</imageobject>
+					<textobject><phrase>Snak</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+			<para>Then - once Snak is running type "/load Growl.scpt" into the chat box:</para>
+	 		<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="../img/snakScriptLoad.png" format="PNG"/>
+					</imageobject>
+					<textobject><phrase>Snak Script Loading</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</sect1>
+
+		<sect1 id="developers">
+			<title>Developers</title>
+			<!--
+			<a href="developer/"><img alt="Developers" class="headerIcon" src="../img/DeveloperFolderIcon.png"/></a>
+			-->
+			<para>If you're interested in supporting Growl in your application or working on Growl itself, check out the <ulink url="http://growl.info/developer/">developer docs</ulink>.</para>
+		</sect1>
+	</chapter>
+</book>

@@ -1,0 +1,156 @@
+0.7.1
+Preference Pane
+- Fixed preference pane crash on 10.3 when using the German or Japanese localization (#240)
+- Fixed logging preferences (#250)
+- Fixed cosmetic issue with hyperlinks in the about tab (#248)
+- Status item checkbox is now updated when stopping the status item with growlctl (#242)
+Styles
+- Updated Crystal style (#238)
+- Updated Candybars style
+- Fixed flickering when reloading a WebKit style on coalesce (#233)
+Localizations
+- Added Czech localization by Frantisek Erben
+- Added Simplified Chinese localization by JT Lee
+Extras
+- Fixed GrowlSafari package installer permissions (#223)
+- Fixed HardwareGrowler build settings (#239)
+- GrowlMail better truncates long message bodies
+- GrowlTunes now coalesces its notifications (for displays that support it)
+Framework
+- registrationDictionaryForGrowl is no longer called for each notification
+
+0.7
+
+Growl Core
+- Added a status item (#23)
+- Growl sends notifications when an applications registers (#112)
+- Passive version check (#62)
+- Added an option to log all notifications (#27)
+- Squelch mode (#26)
+- Networking support
+- Bonjour support (#21)
+
+Preference Pane
+- Ability to enable or disable click handlers (#143)
+- New about tab (#139)
+- Application search field (#41)
+- New preview button (#32)
+
+Display Plugins
+- New display: WebKit (#2). See http://growl.info/documentation/webkit.php for more information.
+- New display: Brushed (#5)
+- Bezel: new option for fading/shrinking (#170)
+- Bezel: two new variants (#30)
+- More customizable colors (#86, #34)
+- MusicVideo: new effect when a queued notification fades in (#125)
+- Mouse over effect for Bezel, Brushed, Bubbles and Smoke (#144)
+- Hold non sticky notifications on screen with mouseover (#133)
+- Multimonitor support (#87)
+- Smaller notifications without title or description (#56)
+- Duration sliders (#54)
+- Opacity sliders (#44, #74)
+
+Extras
+- Removed growliChat, it has moved to http://www.growlichat.com
+- New automatic summary option for GrowlMail
+- Fixed summary mode (#100)
+- GrowlMail is now compatible with Mail 2.0 (Tiger)
+- Fixed GrowlMail image fetching from Address Book (#198)
+- Fixed GrowlTunes showing 5 stars for unrated tracks (#127)
+- GrowlSafari now sends different notifications for short and long downloads (#106)
+- GrowlSafari can now send notifications for RSS feed updates
+- growlnotify can wait until the notification is clicked or timed out (#42)
+
+Developers and Scripters
+- Growl Core
+	- Passive registration (#70)
+	- Coalescing support (#33)
+	- Get GrowlHelperApp version number via the command line (#29)
+	- Applications can now specify a preferred display plugin (#126)
+- Framework
+	- Carbon apps can have a Growl installer now (#77)
+	- Fixed click notifiations using the Carbon API (#152)
+	- Easier functions for registering manually (#91)
+	- Only return click & timeout notification to the application requesting it (#203)
+- Bindings
+	- Sticky support for the Java bindings (#72)
+	- Icon support for the Perl bindings (#6)
+- Documentation
+	- More sample code (#82)
+
+
+0.6.2
+
+General
+- Resolved an issue where the version update button would crash System Preferences. See ticket http://trac.growl.info/trac/ticket/8
+- Smoke was defaulting to 0 percent opacity, making it unreadable. Resolved this issue, and defaulted it to 75%. See ticket http://trac.growl.info/trac/ticket/79
+
+Developers and Scripters
+- Carbon
+	- Resolved an issue where Growl_SetDelegate would return success even if the registrationDictionary is not filled out. Thanks to Kent Sorensen (Snak) for finding this problem. See ticket http://trac.growl.info/trac/ticket/80
+- Perl
+	- Resolved problems with the Perl bindings in regards to Mac::Glue tests. See ticket http://trac.growl.info/trac/ticket/47
+	- Updated the Perl bindings. See ticket http://trac.growl.info/trac/ticket/53 for more information.
+
+
+0.6.1
+
+- Resolved issue with the framework installed with Growl. Thanks to Timothy Hatcher to finding this issue.
+- Updated Entourage Advanced script to work with Growl .6.x
+
+0.6
+New to the DMG
+	- Scripts
+	- Extras
+	- More documentation
+
+Bindings (available in a separate download on the website)
+	- Java
+	- Ruby
+
+Prefpane
+	- General Tab
+		- Check version button
+
+	- Applications Tab
+		- Priority
+		- Sticky
+		- Remove button
+
+	- Network Tab
+New Displays
+	- Smoke
+	- Music Video
+	- NSLog
+	- MailMe
+	- Speech
+
+Changes to current displays:
+	Bubbles:
+	- Color changing abilities
+	- Support for priority (color change)
+
+	Bezel:
+	- Support for priority (brings higher priority items to the front of the queue)
+
+New Localizations
+	- German
+
+0.5 - Release
+Prefpane
+	- General Tab
+	- Applications Tab
+	- Display Options
+
+New Displays
+	- Bubbles
+	- Bezel
+
+Bindings
+	- AppleScript
+	- Carbon
+	- Cocoa
+	- Perl
+	- Python
+	- TCL
+	

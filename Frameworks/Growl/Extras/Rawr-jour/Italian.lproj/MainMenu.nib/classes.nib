@@ -1,0 +1,42 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {itemClicked = id; refreshServices = id; }; 
+            CLASS = JKMenuController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dockMenu = NSMenu; prefs = JKPreferencesController; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                addPreset = id; 
+                addService = id; 
+                closePrefsWindow = id; 
+                openPrefsWindow = id; 
+                removeService = id; 
+                saveClicked = id; 
+            }; 
+            CLASS = JKPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addServiceButton = id; 
+                localHideCheck = id; 
+                main = JKMenuController; 
+                prefWindow = id; 
+                removeServiceButton = id; 
+                servicePopUp = id; 
+                serviceTable = id; 
+                showStatusMenuItemCheck = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = JKServiceBrowserDelegate; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {serviceBrowser = NSBrowser; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AMAccepts</key>
+	<dict>
+		<key>Container</key>
+		<string>List</string>
+		<key>Optional</key>
+		<true/>
+		<key>Types</key>
+		<array>
+			<string>com.apple.applescript.object</string>
+		</array>
+	</dict>
+	<key>AMApplication</key>
+	<string>GrowlHelperApp</string>
+	<key>AMCanShowSelectedItemsWhenRun</key>
+	<false/>
+	<key>AMCanShowWhenRun</key>
+	<true/>
+	<key>AMCategory</key>
+	<string>Utility</string>
+	<key>AMDefaultParameters</key>
+	<dict>
+		<key>notificationTitle</key>
+		<string></string>
+		<key>notificationDescription</key>
+		<string></string>
+		<key>priority</key>
+		<integer>0</integer>
+		<key>sticky</key>
+		<false/>
+	</dict>
+	<key>AMDescription</key>
+	<dict>
+		<key>AMDSummary</key>
+		<string>This action shows a Growl notification.</string>
+	</dict>
+	<key>AMIconName</key>
+	<string>Action</string>
+	<key>AMKeywords</key>
+	<array>
+		<string>Growl</string>
+		<string>Notification</string>
+	</array>
+	<key>AMName</key>
+	<string>Show Growl Notification</string>
+	<key>AMProvides</key>
+	<dict>
+		<key>Container</key>
+		<string>List</string>
+		<key>Types</key>
+		<array>
+			<string>com.apple.applescript.object</string>
+		</array>
+	</dict>
+	<key>AMRequiredResources</key>
+	<array>
+		<dict>
+			<key>Display Name</key>
+			<string></string>
+			<key>Resource</key>
+			<string>/Library/PreferencePanes/Growl.prefPane</string>
+			<key>Type</key>
+			<string>file</string>
+			<key>Version</key>
+			<string>0.6</string>
+		</dict>
+	</array>
+	<key>AMWarning</key>
+	<dict>
+		<key>Action</key>
+		<string>(* Action name to be suggested to add prior to this action to make the task safer, e.g. com.apple.Automator.CopyFiles, goes here. *)</string>
+		<key>ApplyButton</key>
+		<string>(* Button label for user to add proposed Action, e.g. Add. *)</string>
+		<key>IgnoreButton</key>
+		<string>(* Button label for user not to add proposed Action, e.g. Don't Add. *)</string>
+		<key>Level</key>
+		<integer>0</integer>
+		<key>Message</key>
+		<string>(* Warning message presented to user goes here. *)</string>
+	</dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>GrowlAction</string>
+	<key>CFBundleGetInfoString</key>
+	<string>GrowlAction version 1.0, Copyright (c) 2004, The Growl Project.</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.growl.GrowlAction</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>NSPrincipalClass</key>
+	<string>AMAppleScriptAction</string>
+</dict>
+</plist>

@@ -1,0 +1,6 @@
+"CFBundleGetInfoString" = "L'équipe de Growl, 0.76, Copyright (c) 2004-2007";
+
+/* Localized versions of Info.plist keys */
+"CFBundleName" = "Growl";
+"CFBundleShortVersionString" = "0.7.6";
+"NSHumanReadableCopyright" = "L'équipe de Growl, Copyright (c) 2004-2075.";

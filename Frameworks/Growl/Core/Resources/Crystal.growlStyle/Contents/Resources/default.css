@@ -1,0 +1,83 @@
+body
+{
+	color: rgba(0, 0, 0, .9);
+	text-shadow: 0px 1px 2px #fff;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+#top, #bottom {
+	background: url("images/background_top.png") no-repeat top left;
+	height: 30px;
+}
+#bottom {
+	background: url("images/background_bottom.png") no-repeat bottom left;
+	height: 31px;
+}
+#content {
+	background: url("images/background_bottom.png") no-repeat top left;
+
+}
+
+/*body:hover {
+	background-image: url("images/background_top_hover.png");
+	
+	color: rgba(0, 0, 0, 1.0);
+}
+
+body:hover div#text {
+	background-image: url("images/background_bottom_hover.png");
+}*/
+
+div
+{
+	font-family: Lucida Grande;
+	font-size: 11px;
+	line-height: 14px;
+}
+
+div#icon
+{
+	position: absolute;
+	top: 14px;
+	left: 15px;
+
+	width: 32px;
+	height: 32px;
+	z-index:2;
+}
+
+div#icon img
+{
+	width: 32px;
+	height: 32px;
+}
+
+
+div#title, div#text
+{
+	padding: 0 22px 0 54px;
+	width: 175px;
+	overflow: hidden;
+	background: transparent;
+	float: left;
+	clear: both;
+}
+
+div#title
+{
+	font-weight: bold;
+	overflow: hidden;
+	padding-bottom: 1px;
+	margin-top: -15px;
+}
+
+div#text {
+	margin-bottom: -15px;
+}
+
+.clear {
+	clear: both;
+	height: 0px;
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "file://localhost/System/Library/DTDs/sdef.dtd">
+
+<!--
+	AppleScript command support for Growl notifications.
+-->
+
+<dictionary title="Growl Terminology">
+	<suite name="Growl Suite" description="AppleScript for the Growl Notification System" code="Grwl">
+		<command name="notify" code="notifygr" description="Post a notification to be displayed via Growl">
+			<cocoa class="GrowlNotifyScriptCommand"/>
+			<parameter name="with name" code="name" type="text" description="name of the notification to display">
+				<cocoa key="notificationName"/>
+			</parameter>
+			<parameter name="title" code="titl" type="text" description="title of the notification to display">
+				<cocoa key="title"/>
+			</parameter>
+			<parameter name="description" code="desc" type="text" description="full text of the notification to display">
+				<cocoa key="description"/>
+			</parameter>
+			<parameter name="application name" code="appl" type="text" description="name of the application posting the notification.">
+				<cocoa key="appName"/>
+			</parameter>
+			<parameter name="image from location" optional="yes" code="iurl" type="location specifier" description="Location of the image file to use for this notification. Accepts aliases, paths and file:/// URLs.">
+				<cocoa key="imageFromURL"/>
+			</parameter>
+			<parameter name="icon of file" optional="yes" code="ifil" type="location specifier" description="Location of the file whose icon should be used as the image for this notification. Accepts aliases, paths and file:/// URLs. e.g. 'file:///Applications'.">
+				<cocoa key="iconOfFile"/>
+			</parameter>
+			<parameter name="icon of application" optional="yes" code="iapp" type="text" description="Name of the application whose icon should be used for this notification. For example, 'Mail.app'.">
+				<cocoa key="iconOfApplication"/>
+			</parameter>
+			<parameter name="image" optional="yes" code="imag" type="NSData&lt;Image&gt;" description="TIFF Image to be used for the notification.">
+				<cocoa key="image"/>
+			</parameter>
+			<parameter name="pictImage" optional="yes" code="pict" type="NSData&lt;Picture&gt;" description="PICT Image to be used for the notification.">
+				<cocoa key="pictImage"/>
+			</parameter>
+			<parameter name="sticky" optional="yes" code="stck" type="boolean" description="whether or not the notification displayed should time out. Defaults to 'no'.">
+				<cocoa key="sticky"/>
+			</parameter>
+			<parameter name="priority" optional="yes" code="prio" type="integer" description="The priority of the notification, from -2 (low) to 0 (normal) to 2 (emergency).">
+				<cocoa key="priority"/>
+			</parameter>
+		</command>
+		<command name="register" code="register" description="Register an application with Growl">
+			<cocoa class="GrowlRegisterScriptCommand"/>
+			<parameter name="as application" code="appl" type="text" description="name of the application as which to register.">
+				<cocoa key="asApplication"/>
+			</parameter>
+			<parameter name="all notifications" code="anot" description="list of all notifications to register.">
+				<type type="text" list="yes"/>
+				<cocoa key="allNotifications"/>
+			</parameter>
+			<parameter name="default notifications" code="dnot" description="list of default notifications to register.">
+				<type type="text" list="yes"/>
+				<cocoa key="defaultNotifications"/>
+			</parameter>
+			<parameter name="icon of application" optional="yes" code="iapp" type="text" description="Name of the application whose icon should be used for this notification. For example, 'Mail.app'.">
+				<cocoa key="iconOfApplication"/>
+			</parameter>
+		</command>
+		<value name="Picture" code="PICT">
+			<cocoa class="NSData" name="Picture"/>
+		</value>
+		<value name="Image" code="TIFF">
+			<cocoa class="NSData" name="Image"/>
+		</value>
+	</suite>
+</dictionary>

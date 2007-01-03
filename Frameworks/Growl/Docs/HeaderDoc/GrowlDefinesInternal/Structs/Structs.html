@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/1998/REC-html40-19980424/loose.dtd">
+<html>
+<head>
+<title>Structs</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="HeaderDoc">
+<style type="text/css"><!--a:link {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #0000ff;}a:visited:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:active {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}a:hover {text-decoration: underline; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: small; color: #ff6600;}h4 {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: tiny; font-weight: bold;}body {text-decoration: none; font-family: lucida grande, geneva, helvetica, arial, sans-serif; font-size: 10pt;}--></style>
+</head>
+<body bgcolor="#ffffff">
+<h1><font face="Geneva,Arial,Helvtica">Structs</font></h1>
+<br><hr>
+<!-- headerDoc=tag;  uid=//apple_ref/c/tag/GrowlNetworkNotification;  name=GrowlNetworkNotification --><a name="//apple_ref/c/tag/GrowlNetworkNotification"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="GrowlNetworkNotificationFlags%32server%32sends%32a%32packet%32in%32this%32format.">GrowlNetworkNotificationFlags server sends a packet in this format.</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>Various flags.
+</p>
+<blockquote><pre><font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlDefinesInternal/CompositePage.html#//apple_ref/c/tag/GrowlNetworkNotification" logicalPath="//apple_ref/c/cl/GrowlNetworkNotification //apple_ref/c/cl/GrowlNetworkNotification //apple_ref/c/tdef/GrowlNetworkNotification //apple_ref/c/tag/GrowlNetworkNotification"><font class="type">GrowlNetworkNotification</font></a> { 
+    <font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlDefinesInternal/CompositePage.html#//apple_ref/c/tag/GrowlNetworkPacket" logicalPath="//apple_ref/c/cl/GrowlNetworkPacket //apple_ref/c/cl/GrowlNetworkPacket //apple_ref/c/tdef/GrowlNetworkPacket //apple_ref/c/tag/GrowlNetworkPacket"><font class="type">GrowlNetworkPacket</font></a> <font class="var">common</font>;  
+    <font class="keyword">struct</font> <!-- a logicalPath="//apple_ref/c/cl/GrowlNetworkNotificationFlags //apple_ref/c/cl/GrowlNetworkNotificationFlags //apple_ref/c/tdef/GrowlNetworkNotificationFlags //apple_ref/c/tag/GrowlNetworkNotificationFlags //apple_ref/c/econst/GrowlNetworkNotificationFlags //apple_ref/c/struct/GrowlNetworkNotificationFlags //apple_ref/c/clconst/GrowlNetworkNotificationFlags" --><font class="type">GrowlNetworkNotificationFlags</font><!-- /a --> { 
+        <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/reserved //apple_ref/c/cl/reserved //apple_ref/c/tdef/reserved //apple_ref/c/tag/reserved //apple_ref/c/econst/reserved //apple_ref/c/struct/reserved //apple_ref/c/clconst/reserved" --><font class="type">reserved</font><!-- /a -->: <font class="number">12</font>; 
+        <font class="keyword">signed</font> <!-- a logicalPath="//apple_ref/c/cl/priority //apple_ref/c/cl/priority //apple_ref/c/tdef/priority //apple_ref/c/tag/priority //apple_ref/c/econst/priority //apple_ref/c/struct/priority //apple_ref/c/clconst/priority" --><font class="type">priority</font><!-- /a -->: <font class="number">3</font>; 
+        <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/sticky //apple_ref/c/cl/sticky //apple_ref/c/tdef/sticky //apple_ref/c/tag/sticky //apple_ref/c/econst/sticky //apple_ref/c/struct/sticky //apple_ref/c/clconst/sticky" --><font class="type">sticky</font><!-- /a -->: <font class="number">1</font>; 
+        }  <font class="var">flags</font>; <font class="comment">//size = 16 (12 + 3 + 1)</font>  
+    <font class="comment">/* In addition to being unsigned, the notification name length
+ * is in network byte order.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/short //apple_ref/c/cl/short //apple_ref/c/tdef/short //apple_ref/c/tag/short //apple_ref/c/econst/short //apple_ref/c/struct/short //apple_ref/c/clconst/short" --><font class="type">short</font><!-- /a --> <font class="var">nameLen</font>; 
+    <font class="comment">/* @discussion In addition to being unsigned, the title length is in
+ * network byte order.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/short //apple_ref/c/cl/short //apple_ref/c/tdef/short //apple_ref/c/tag/short //apple_ref/c/econst/short //apple_ref/c/struct/short //apple_ref/c/clconst/short" --><font class="type">short</font><!-- /a --> <font class="var">titleLen</font>; 
+    <font class="comment">/* In addition to being unsigned, the description length is in
+ * network byte order.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/short //apple_ref/c/cl/short //apple_ref/c/tdef/short //apple_ref/c/tag/short //apple_ref/c/econst/short //apple_ref/c/struct/short //apple_ref/c/clconst/short" --><font class="type">short</font><!-- /a --> <font class="var">descriptionLen</font>; 
+    <font class="comment">/* In addition to being unsigned, the application name length
+ * is in network byte order.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/short //apple_ref/c/cl/short //apple_ref/c/tdef/short //apple_ref/c/tag/short //apple_ref/c/econst/short //apple_ref/c/struct/short //apple_ref/c/clconst/short" --><font class="type">short</font><!-- /a --> <font class="var">appNameLen</font>; 
+    <font class="comment">/* The variable-sized data of a notification is:
+ * - Notification name, in UTF-8 encoding, for nameLen bytes.
+ * - Title, in UTF-8 encoding, for titleLen bytes.
+ * - Description, in UTF-8 encoding, for descriptionLen bytes.
+ * - Application name, in UTF-8 encoding, for appNameLen bytes.
+ * - The MD5/SHA256 checksum of all the data preceding the checksum.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/econst/char //apple_ref/c/struct/char //apple_ref/c/clconst/char" --><font class="type">char</font><!-- /a --> <!-- a logicalPath="//apple_ref/c/cl/data //apple_ref/c/cl/data //apple_ref/c/tdef/data //apple_ref/c/tag/data //apple_ref/c/econst/data //apple_ref/c/struct/data //apple_ref/c/clconst/data" --><font class="type">data</font><!-- /a -->[]; 
+}; </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Field Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code>common</code></dt>
+<dd>The Growl packet header.</dd>
+<dt><code>flags</code></dt>
+<dd>The priority number and the sticky bit.</dd>
+<dt><code>nameLen</code></dt>
+<dd>The length of the notification name.</dd>
+<dt><code>titleLen</code></dt>
+<dd>The length of the notification title.</dd>
+<dt><code>descriptionLen</code></dt>
+<dd>The length of the notification description.</dd>
+<dt><code>appNameLen</code></dt>
+<dd>The length of the application name.</dd>
+<dt><code>data</code></dt>
+<dd>Variable-sized data.</dd>
+<dt><code>reserved</code></dt>
+<dd>reserved for future use.</dd>
+<dt><code>priority</code></dt>
+<dd>the priority as a signed 3-bit integer from -2 to +2.</dd>
+<dt><code>sticky</code></dt>
+<dd>the sticky flag.</dd>
+</dl>
+</blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>This 16-bit packed structure contains the priority as a
+signed 3-bit integer from -2 to +2, and the sticky flag as a single bit.
+The high 12 bits of the structure are reserved for future use.
+</p>
+</dl>
+<hr>
+<!-- headerDoc=tag;  uid=//apple_ref/c/tag/GrowlNetworkPacket;  name=GrowlNetworkPacket --><a name="//apple_ref/c/tag/GrowlNetworkPacket"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="GrowlNetworkPacket">GrowlNetworkPacket</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>This struct is a header common to all incoming Growl network
+packets which identifies the type and version of the packet.
+ </p>
+<blockquote><pre><font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlDefinesInternal/CompositePage.html#//apple_ref/c/tag/GrowlNetworkPacket" logicalPath="//apple_ref/c/cl/GrowlNetworkPacket //apple_ref/c/cl/GrowlNetworkPacket //apple_ref/c/tdef/GrowlNetworkPacket //apple_ref/c/tag/GrowlNetworkPacket"><font class="type">GrowlNetworkPacket</font></a> { 
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/econst/char //apple_ref/c/struct/char //apple_ref/c/clconst/char" --><font class="type">char</font><!-- /a --> <font class="var">version</font>; 
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/econst/char //apple_ref/c/struct/char //apple_ref/c/clconst/char" --><font class="type">char</font><!-- /a --> <font class="var">type</font>; 
+}; </pre></blockquote>
+<dl></dl>
+<hr>
+<!-- headerDoc=tag;  uid=//apple_ref/c/tag/GrowlNetworkRegistration;  name=GrowlNetworkRegistration --><a name="//apple_ref/c/tag/GrowlNetworkRegistration"></a><table border="0" cellpadding="2" cellspacing="2" width="300"><tr><td valign="top" height="12" colspan="5">
+<h3><a name="GrowlNetworkRegistration">GrowlNetworkRegistration</a></h3>
+</td></tr></table>
+<hr>
+<dl></dl>
+<p>The format of a registration packet.
+</p>
+<blockquote><pre><font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlDefinesInternal/CompositePage.html#//apple_ref/c/tag/GrowlNetworkRegistration" logicalPath="//apple_ref/c/cl/GrowlNetworkRegistration //apple_ref/c/cl/GrowlNetworkRegistration //apple_ref/c/tdef/GrowlNetworkRegistration //apple_ref/c/tag/GrowlNetworkRegistration"><font class="type">GrowlNetworkRegistration</font></a> { 
+    <font class="keyword">struct</font> <a href="../../../HeaderDoc/GrowlDefinesInternal/CompositePage.html#//apple_ref/c/tag/GrowlNetworkPacket" logicalPath="//apple_ref/c/cl/GrowlNetworkPacket //apple_ref/c/cl/GrowlNetworkPacket //apple_ref/c/tdef/GrowlNetworkPacket //apple_ref/c/tag/GrowlNetworkPacket"><font class="type">GrowlNetworkPacket</font></a> <font class="var">common</font>; 
+    <font class="comment">/* This name is used both internally and in the Growl
+ * preferences.
+ *
+ * The application name should remain stable between different versions
+ * and incarnations of your application.
+ * For example, "SurfWriter" is a good app name, whereas "SurfWriter 2.0"
+ * and "SurfWriter Lite" are not.
+ *
+ * In addition to being unsigned, the application name length is in
+ * network byte order.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/short //apple_ref/c/cl/short //apple_ref/c/tdef/short //apple_ref/c/tag/short //apple_ref/c/econst/short //apple_ref/c/struct/short //apple_ref/c/clconst/short" --><font class="type">short</font><!-- /a --> <font class="var">appNameLen</font>; 
+    <font class="comment">/* These names are used both internally and in the Growl
+ * preferences. For this reason, they should be human-readable.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/econst/char //apple_ref/c/struct/char //apple_ref/c/clconst/char" --><font class="type">char</font><!-- /a --> <font class="var">numAllNotifications</font>;  
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/econst/char //apple_ref/c/struct/char //apple_ref/c/clconst/char" --><font class="type">char</font><!-- /a --> <font class="var">numDefaultNotifications</font>; 
+    <font class="comment">/* The variable-sized data of a registration is:
+ * - The application name, in UTF-8 encoding, for appNameLen bytes.
+ * - The list of all notification names.
+ * - The list of default notifications, as 8-bit unsigned indices into the list of all notifications.
+ * - The MD5/SHA256 checksum of all the data preceding the checksum.
+ *
+ * Each notification name is encoded as:
+ * - Length: two bytes, unsigned, network byte order.
+ * - Name: As many bytes of UTF-8-encoded text as the length says.
+ * And there are numAllNotifications of these.</font>
+        <font class="comment">*/</font>
+    <font class="keyword">unsigned</font> <!-- a logicalPath="//apple_ref/c/cl/char //apple_ref/c/cl/char //apple_ref/c/tdef/char //apple_ref/c/tag/char //apple_ref/c/econst/char //apple_ref/c/struct/char //apple_ref/c/clconst/char" --><font class="type">char</font><!-- /a --> <!-- a logicalPath="//apple_ref/c/cl/data //apple_ref/c/cl/data //apple_ref/c/tdef/data //apple_ref/c/tag/data //apple_ref/c/econst/data //apple_ref/c/struct/data //apple_ref/c/clconst/data" --><font class="type">data</font><!-- /a -->[]; 
+}; </pre></blockquote>
+<h5><font face="Lucida Grande,Helvetica,Arial">Field Descriptions</font></h5>
+<blockquote>
+<dl>
+<dt><code>common</code></dt>
+<dd>The Growl packet header.</dd>
+<dt><code>appNameLen</code></dt>
+<dd>The name of the application that is registering.</dd>
+<dt><code>numAllNotifications</code></dt>
+<dd>The number of notifications in the list.</dd>
+<dt><code>numDefaultNotifications</code></dt>
+<dd>The number of notifications in the list that are enabled by default.</dd>
+<dt><code>data</code></dt>
+<dd>Variable-sized data.</dd>
+</dl>
+</blockquote>
+<dl>
+<h5><font face="Lucida Grande,Helvetica,Arial">Discussion</font></h5>
+<p>A Growl client that wants to register with a Growl server sends
+a packet in this format.
+</p>
+</dl>
+<p></p>
+<p>&copy; The Growl Project (Last Updated May 14, 2005)
+</p>
+</body>
+</html>
