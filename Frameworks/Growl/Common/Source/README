@@ -1,9 +1,0 @@
-Source/Common
-=============
-
-Code in this directory is shared between any two of:
-* The frameworks
-* The prefpane
-* GHA
-
---boredzo
