@@ -207,6 +207,7 @@ enum {
 			
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"No", @"General", @"")];
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Yes", @"General", @"")];
+			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
 			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The file \"%@\" exists.", @"General", @""), [filename lastPathComponent]]];
 			[alert setInformativeText:NSLocalizedStringFromTable(@"Do you want to replace the existing file?", @"General", @"")];
 			[alert setAlertStyle:NSInformationalAlertStyle];
@@ -221,6 +222,10 @@ enum {
 					alertResult		= [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
 					NSAssert(YES == alertResult, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
 					break;
+
+				case NSAlertThirdButtonReturn:
+					[[EncoderController sharedController] encoderTaskDidStop:self notify:NO];
+					return; //break;
 			}		
 		}
 		// Otherwise just delete it
