@@ -194,11 +194,14 @@ enum {
 		}
 	}
 	
-	// Check if output file exists and delete if requested
-	if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]]] && [[[[self taskInfo] settings] objectForKey:@"overwriteOutputFiles"] boolValue]) {
+	// Check if output file exists and delete if requested as long as the output and input files are not the same
+	if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]]] 
+	   && [[[[self taskInfo] settings] objectForKey:@"overwriteOutputFiles"] boolValue]
+	   && NO == [[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]] isEqualToString:[[self taskInfo] inputFilenameAtInputFileIndex]]) {
+		BOOL			alertResult;
 		NSString		*filename		= [NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]];
 		
-		// TODO: Prompt whether to overwite
+		// Prompt whether to overwrite
 		if([[[[self taskInfo] settings] objectForKey:@"promptBeforeOverwritingOutputFiles"] boolValue]) {
 			NSAlert		*alert		= [[[NSAlert alloc] init] autorelease];
 			
@@ -211,15 +214,20 @@ enum {
 			int			result		= [alert runModal];
 			switch(result) {
 				case NSAlertFirstButtonReturn:
-					[[EncoderController sharedController] encoderTaskDidStop:self notify:NO];
+					;
 					break;
 					
-				case NSAlertSecondButtonReturn:				;					break;
+				case NSAlertSecondButtonReturn:				
+					alertResult		= [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
+					NSAssert(YES == alertResult, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
+					break;
 			}		
 		}
-		
-		BOOL			result			= [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
-		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
+		// Otherwise just delete it
+		else {
+			alertResult		= [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
+			NSAssert(YES == alertResult, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
+		}
 	}
 
 	// Otherwise, generate a unique filename and touch the output file
