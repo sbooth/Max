@@ -484,7 +484,7 @@ enum {
 		
 		// REM
 		bundleVersion	= [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-		temp			= [NSString stringWithFormat:@"REM File create by Max %@\n", bundleVersion];
+		temp			= [NSString stringWithFormat:@"REM File created by Max %@\n", bundleVersion];
 		buf				= [temp UTF8String];
 		bytesWritten = write(fd, buf, strlen(buf));
 		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
@@ -531,11 +531,13 @@ enum {
 			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
 
 			// PERFORMER
-			temp	= [NSString stringWithFormat:@"    PERFORMER \"%@\"\n", [currentTrack artist]];
-			buf		= [temp UTF8String];
-			bytesWritten = write(fd, buf, strlen(buf));
-			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
-
+			if(nil != [currentTrack artist]) {
+				temp	= [NSString stringWithFormat:@"    PERFORMER \"%@\"\n", [currentTrack artist]];
+				buf		= [temp UTF8String];
+				bytesWritten = write(fd, buf, strlen(buf));
+				NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));
+			}
+			
 			// INDEX
 			temp	= [NSString stringWithFormat:@"    INDEX 01 %.2u:%.2u:%.2u\n", m, s, f];
 			buf		= [temp UTF8String];
@@ -545,13 +547,13 @@ enum {
 			// Update times
 			f += [currentTrack frame];
 			while(75 <= f) {
-				f /= 75;
+				f -= 75;
 				++s;
 			}
 			
 			s += [currentTrack second];
 			while(60 <= s) {
-				s /= 60;
+				s -= 60;
 				++m;
 			}
 			

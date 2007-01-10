@@ -391,14 +391,14 @@
 			
 			// Update times
 			f += [currentTrack frame];
-			while(75 < f) {
-				f /= 75;
+			while(75 <= f) {
+				f -= 75;
 				++s;
 			}
 			
 			s += [currentTrack second];
-			while(60 < s) {
-				s /= 60;
+			while(60 <= s) {
+				s -= 60;
 				++m;
 			}
 			
