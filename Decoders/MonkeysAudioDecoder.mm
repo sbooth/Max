@@ -60,7 +60,7 @@
 
 	// Setup input format descriptor
 	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
+	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
 	
 	_pcmFormat.mSampleRate			= SELF_DECOMPRESSOR->GetInfo(APE_INFO_SAMPLE_RATE);
 	_pcmFormat.mChannelsPerFrame	= SELF_DECOMPRESSOR->GetInfo(APE_INFO_CHANNELS);
@@ -81,14 +81,20 @@
 	int					result;
 	int					blockSize;
 	int					samplesRead;
+	void				*rawBuffer;
 
 	
 	blockSize	= SELF_DECOMPRESSOR->GetInfo(APE_INFO_BLOCK_ALIGN);
 	NSAssert(0 != blockSize, @"Unable to determine the Monkey's Audio block size.");
+
+	rawBuffer	= [buffer exposeBufferForWriting];
 	
-	result		= SELF_DECOMPRESSOR->GetData((char *)[buffer exposeBufferForWriting], [buffer freeSpaceAvailable] / blockSize, &samplesRead);
+	result		= SELF_DECOMPRESSOR->GetData((char *)rawBuffer, [buffer freeSpaceAvailable] / blockSize, &samplesRead);
 	NSAssert(ERROR_SUCCESS == result, @"Monkey's Audio invalid checksum.");
 
+	// Convert data to big-endian
+	swab(rawBuffer, rawBuffer, samplesRead * blockSize);
+	
 	[buffer wroteBytes:samplesRead * blockSize];
 }
 
