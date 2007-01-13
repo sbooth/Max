@@ -153,7 +153,7 @@ callback(long inpos, int function, void *userdata)
 
 - (void) dealloc
 {
-	cdda_close(_drive);
+//	cdda_close(_drive);
 	paranoia_free(_paranoia);
 
 	[super dealloc];
@@ -235,6 +235,9 @@ callback(long inpos, int function, void *userdata)
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
+
+		// Close the device file descriptor
+		cdda_close(_drive);
 	}
 	
 	[[self delegate] setEndTime:[NSDate date]];

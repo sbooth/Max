@@ -43,8 +43,13 @@ enum {
 	unsigned		_lastSession;
 }
 
-// Set up to read the drive corresponding to deviceName
+// Set up to read the drive corresponding to deviceName (will open the device and read the CDTOC)
 - (id)					initWithDeviceName:(NSString *)deviceName;
+
+// Device management
+- (BOOL)				deviceOpen;
+- (void)				openDevice;
+- (void)				closeDevice;
 
 // Disc session information
 - (unsigned)			firstSession;

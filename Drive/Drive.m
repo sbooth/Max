@@ -59,9 +59,8 @@
 		_sessions		= [[NSMutableArray alloc] init];
 		_tracks			= [[NSMutableArray alloc] init];
 		
-		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
-		NSAssert(-1 != _fd, NSLocalizedStringFromTable(@"Unable to open the drive for reading.", @"Exceptions", @""));
-				
+		[self openDevice];
+		
 		[self readTOC];
 		
 		return self;
@@ -70,25 +69,46 @@
 	return nil;
 }
 
-- (void)			dealloc
+- (void) dealloc
 {
-	if(-1 == close(_fd)) {
-		NSException *exception;
-		
-		exception =  [NSException exceptionWithName:@"IOException"
-											 reason:NSLocalizedStringFromTable(@"Unable to close the drive.", @"Exceptions", @"")					
-										   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-
-		[self logMessage:[exception description]];
-	}
-	
-	_fd = -1;
+	[self closeDevice];
 	
 	[_deviceName release];		_deviceName = nil;
 	[_sessions release];		_sessions = nil;
 	[_tracks release];			_tracks = nil;
 	
 	[super dealloc];
+}
+
+// Device management
+- (BOOL)				deviceOpen									{ return -1 != _fd; }
+
+- (void) openDevice
+{
+	if(NO == [self deviceOpen]) {
+//		NSLog(@"Opening device %@", [self deviceName]);
+		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
+		NSAssert(-1 != _fd, NSLocalizedStringFromTable(@"Unable to open the drive for reading.", @"Exceptions", @""));
+	}
+}
+
+- (void) closeDevice
+{
+	if([self deviceOpen]) {
+//		NSLog(@"Closing device %@", [self deviceName]);
+		
+		if(-1 == close(_fd)) {
+			NSException *exception;
+			
+			exception =  [NSException exceptionWithName:@"IOException"
+												 reason:NSLocalizedStringFromTable(@"Unable to close the drive.", @"Exceptions", @"")					
+											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			
+			[self logMessage:[exception description]];
+		}
+		
+		_fd = -1;
+	}
 }
 
 - (unsigned)			cacheSize									{ return _cacheSize; }

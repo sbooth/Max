@@ -206,6 +206,9 @@
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			NSLog(@"%@", exception);
 		}
+
+		// Close the device file descriptor
+		[_drive closeDevice];
 	}
 	
 	[[self delegate] setEndTime:[NSDate date]];
