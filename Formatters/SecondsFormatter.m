@@ -105,7 +105,7 @@
 	
 	if(nil == stringValue) {
 		stringValue		= NSLocalizedStringFromTable(@"Queued", @"General", @"");
-		[newAttributes setObject:[[NSColor blackColor] colorWithAlphaComponent:0.7] forKey:NSForegroundColorAttributeName];
+		[newAttributes setObject:[[NSColor blackColor] colorWithAlphaComponent:0.6] forKey:NSForegroundColorAttributeName];
 	}
 	
 	result			= [[NSAttributedString alloc] initWithString:stringValue attributes:[newAttributes autorelease]];
