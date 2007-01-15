@@ -34,6 +34,16 @@
 	[self exposeBinding:@"secondsRemaining"];
 }
 
+- (id) init
+{
+	if((self = [super init])) {
+		_secondsRemaining = UINT_MAX;
+		return self;
+	}
+	
+	return nil;
+}
+
 - (void) dealloc
 {
 	if([self shouldDeleteOutputFile]) {

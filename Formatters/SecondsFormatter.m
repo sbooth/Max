@@ -37,6 +37,10 @@
 	
 	value		= [object unsignedIntValue];
 	
+	if(UINT_MAX == value) {
+		return nil;
+	}
+	
 	seconds		= value % 60;
 	minutes		= value / 60;
 	
@@ -92,9 +96,20 @@
 
 - (NSAttributedString *) attributedStringForObjectValue:(id)object withDefaultAttributes:(NSDictionary *)attributes
 {
-	NSAttributedString		*result		= nil;
+	NSString				*stringValue	= nil;
+	NSAttributedString		*result			= nil;
+	NSMutableDictionary		*newAttributes	= nil;
 	
-	result = [[NSAttributedString alloc] initWithString:[self stringForObjectValue:object] attributes:attributes];
+	stringValue		= [self stringForObjectValue:object];
+	newAttributes	= [attributes mutableCopy];
+	
+	if(nil == stringValue) {
+		stringValue		= NSLocalizedStringFromTable(@"Queued", @"General", @"");
+		[newAttributes setObject:[[NSColor blackColor] colorWithAlphaComponent:0.7] forKey:NSForegroundColorAttributeName];
+	}
+	
+	result			= [[NSAttributedString alloc] initWithString:stringValue attributes:[newAttributes autorelease]];
+		
 	return [result autorelease];
 }
 
