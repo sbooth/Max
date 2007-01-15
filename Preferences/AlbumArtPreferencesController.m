@@ -113,7 +113,7 @@ enum {
 		[patterns removeLastObject];
 	}
 	
-	[[NSUserDefaults standardUserDefault] setValue:patterns forKey:@"albumArtFileNamingPatterns"];
+	[[NSUserDefaults standardUserDefaults] setValue:patterns forKey:@"albumArtFileNamingPatterns"];
 
 	[patterns release];
 }	
