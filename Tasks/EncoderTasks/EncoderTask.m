@@ -158,42 +158,6 @@ enum {
 		createDirectoryStructure(basename);
 	}
 	
-	// Save album art if desired
-	if(nil != [[[self taskInfo] settings] objectForKey:@"albumArt"] && nil != [[[self taskInfo] metadata] albumArt]) {
-		NSDictionary			*albumArtSettings;
-		NSBitmapImageFileType	fileType;
-		NSString				*extension, *namingScheme;
-		NSData					*bitmapData;
-		NSString				*bitmapBasename, *bitmapFilename;
-		
-		
-		albumArtSettings	= [[[self taskInfo] settings] objectForKey:@"albumArt"];
-		
-		switch([[albumArtSettings objectForKey:@"extension"] intValue]) {
-			case kTIFFFileFormatMenuItemTag:		fileType = NSTIFFFileType;			extension = @"tiff";		break;
-			case kBMPFileFormatMenuItemTag:			fileType = NSBMPFileType;			extension = @"bmp";			break;
-			case kGIFFileFormatMenuItemTag:			fileType = NSGIFFileType;			extension = @"gif";			break;
-			case kJPEGFileFormatMenuItemTag:		fileType = NSJPEGFileType;			extension = @"jpeg";		break;
-			case kPNGFileFormatMenuItemTag:			fileType = NSPNGFileType;			extension = @"png";			break;
-			case kJPEG200FileFormatMenuItemTag:		fileType = NSJPEG2000FileType;		extension = @"jpeg";		break;
-		}
-		
-		namingScheme		= [albumArtSettings objectForKey:@"formatString"];
-		if(nil == namingScheme) {
-			namingScheme = @"cover";
-		}
-		
-		bitmapData			= getBitmapDataForImage([[[self taskInfo] metadata] albumArt], fileType);
-		bitmapBasename		= [[[self outputFilename] stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[[self taskInfo] metadata] replaceKeywordsInString:makeStringSafeForFilename(namingScheme)]];
-		//bitmapFilename		= generateUniqueFilename(bitmapBasename, extension);
-		bitmapFilename		= [bitmapBasename stringByAppendingPathExtension:extension];
-		
-		// Don't overwrite existing files
-		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:bitmapFilename]) {
-			[bitmapData writeToFile:bitmapFilename atomically:NO];		
-		}
-	}
-	
 	// Check if output file exists and delete if requested as long as the output and input files are not the same
 	if([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@.%@", basename, [self fileExtension]]] 
 	   && [[[[self taskInfo] settings] objectForKey:@"overwriteOutputFiles"] boolValue]
@@ -238,6 +202,42 @@ enum {
 	// Otherwise, generate a unique filename and touch the output file
 	[self setOutputFilename:generateUniqueFilename(basename, [self fileExtension])];
 	[self touchOutputFile];
+	
+	// Save album art if desired
+	if(nil != [[[self taskInfo] settings] objectForKey:@"albumArt"] && nil != [[[self taskInfo] metadata] albumArt]) {
+		NSDictionary			*albumArtSettings;
+		NSBitmapImageFileType	fileType;
+		NSString				*extension, *namingScheme;
+		NSData					*bitmapData;
+		NSString				*bitmapBasename, *bitmapFilename;
+		
+		
+		albumArtSettings	= [[[self taskInfo] settings] objectForKey:@"albumArt"];
+		
+		switch([[albumArtSettings objectForKey:@"extension"] intValue]) {
+			case kTIFFFileFormatMenuItemTag:		fileType = NSTIFFFileType;			extension = @"tiff";		break;
+			case kBMPFileFormatMenuItemTag:			fileType = NSBMPFileType;			extension = @"bmp";			break;
+			case kGIFFileFormatMenuItemTag:			fileType = NSGIFFileType;			extension = @"gif";			break;
+			case kJPEGFileFormatMenuItemTag:		fileType = NSJPEGFileType;			extension = @"jpeg";		break;
+			case kPNGFileFormatMenuItemTag:			fileType = NSPNGFileType;			extension = @"png";			break;
+			case kJPEG200FileFormatMenuItemTag:		fileType = NSJPEG2000FileType;		extension = @"jpeg";		break;
+		}
+		
+		namingScheme		= [albumArtSettings objectForKey:@"formatString"];
+		if(nil == namingScheme) {
+			namingScheme = @"cover";
+		}
+		
+		bitmapData			= getBitmapDataForImage([[[self taskInfo] metadata] albumArt], fileType);
+		bitmapBasename		= [[[self outputFilename] stringByDeletingLastPathComponent] stringByAppendingPathComponent:[[[self taskInfo] metadata] replaceKeywordsInString:makeStringSafeForFilename(namingScheme)]];
+		//bitmapFilename		= generateUniqueFilename(bitmapBasename, extension);
+		bitmapFilename		= [bitmapBasename stringByAppendingPathExtension:extension];
+		
+		// Don't overwrite existing files
+		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:bitmapFilename]) {
+			[bitmapData writeToFile:bitmapFilename atomically:NO];		
+		}
+	}
 	
 	_connection = [[NSConnection alloc] initWithReceivePort:port1 sendPort:port2];
 	[_connection setRootObject:self];
