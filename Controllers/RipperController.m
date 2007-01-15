@@ -28,6 +28,7 @@
 #import "EncoderController.h"
 #import "ApplicationController.h"
 #import "CompactDiscDocument.h"
+#import "MediaController.h"
 #import "UtilityFunctions.h"
 
 #import <Growl/GrowlApplicationBridge.h>
@@ -258,13 +259,23 @@ static RipperController *sharedController = nil;
 - (void) ripperTaskDidStop:(RipperTask *)task
 {
 	NSString *trackName = [task description];
-	
+		
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Rip stopped for %@", @"Log", @""), trackName]];
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Rip stopped", @"Log", @"") description:trackName
 						   notificationName:@"Rip stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
-	
+
+	[task retain];
+
 	[self removeTask:task];
 	[self spawnThreads];
+
+	// Eject the disc, if necessary
+	if([[[task objectInTracksAtIndex:0] document] ejectRequested] && NO == [self documentHasRipperTasks:[[task objectInTracksAtIndex:0] document]]) {
+		[[MediaController sharedController] ejectDiscForDocument:[[task objectInTracksAtIndex:0] document]];
+		[[[task objectInTracksAtIndex:0] document] setEjectRequested:NO];
+	}
+	
+	[task release];
 }
 
 - (void) ripperTaskDidComplete:(RipperTask *)task
@@ -281,6 +292,8 @@ static RipperController *sharedController = nil;
 								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
 						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 		
+	[task retain];
+
 	[self removeTask:task];
 	[self spawnThreads];
 
@@ -302,6 +315,8 @@ static RipperController *sharedController = nil;
 	}
 
 	[[EncoderController sharedController] encodeFile:[task outputFilename] metadata:[[task taskInfo] metadata] settings:[[task taskInfo] settings] inputTracks:[[task taskInfo] inputTracks]];
+	
+	[task release];
 }
 
 #pragma mark Task Management

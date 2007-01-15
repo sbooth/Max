@@ -316,6 +316,8 @@ static EncoderController *sharedController = nil;
 							   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
 	}
 	
+	[task retain];
+	
 	[self removeTask:task];
 	[self spawnThreads];
 	
@@ -348,6 +350,8 @@ static EncoderController *sharedController = nil;
 		[doc saveDocument:self];
 		[[doc windowForSheet] performClose:self];
 	}
+	
+	[task release];
 }
 
 #pragma mark Task Management

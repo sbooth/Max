@@ -46,6 +46,8 @@ enum {
 	BOOL							_discInDrive;
 	NSString						*_discID;
 	
+	BOOL							_ejectRequested;
+	
 	MusicBrainzHelper				*_mbHelper;
 
 	// Disc information
@@ -103,6 +105,9 @@ enum {
 - (IBAction)		selectAlbumArt:(id)sender;
 
 // Miscellaneous
+- (BOOL)			ejectRequested;
+- (void)			setEjectRequested:(BOOL)ejectRequested;
+
 - (void)			discEjected;
 
 - (NSArray *)		selectedTracks;

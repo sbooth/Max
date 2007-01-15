@@ -268,6 +268,9 @@
 
 #pragma mark Disc Management
 
+- (BOOL)			ejectRequested							{ return _ejectRequested; }
+- (void)			setEjectRequested:(BOOL)ejectRequested	{ _ejectRequested = ejectRequested; }
+
 - (void) discEjected				{ [self setDisc:nil]; }
 
 #pragma mark State
@@ -443,9 +446,15 @@
 		else {
 			[[RipperController sharedController] stopRipperTasksForDocument:self];
 		}
+
+		// Until the RipperTasks have actually stopped, there could be open file
+		// descriptors on the disc and the eject will fail
+		// So just set a flag here, and the last task to stop will eject the disc
+		[self setEjectRequested:YES];
 	}
-	
-	[[MediaController sharedController] ejectDiscForDocument:self];
+	else {
+		[[MediaController sharedController] ejectDiscForDocument:self];
+	}
 }
 
 - (IBAction) queryMusicBrainz:(id)sender
