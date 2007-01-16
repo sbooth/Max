@@ -194,7 +194,7 @@
 			// Delete the existing output file
 			if([fileManager removeFileAtPath:[self outputFilename] handler:nil]) {
 				if(NO == [fileManager movePath:tempFilename toPath:[self outputFilename] handler:nil]) {
-					[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Warning: the file %@ was lost.", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+					[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Warning: the file %@ was lost.", @"Exceptions", @""), [[NSFileManager defaultManager] displayNameAtPath:[self outputFilename]]]];
 				}
 			}
 			else {
@@ -202,7 +202,7 @@
 			}
 		}
 		else {
-			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[self outputFilename] lastPathComponent]]];
+			[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[NSFileManager defaultManager] displayNameAtPath:[self outputFilename]]]];
 		}
 	}
 	// Use (unimplemented as of 10.4.3) CoreAudio metadata functions

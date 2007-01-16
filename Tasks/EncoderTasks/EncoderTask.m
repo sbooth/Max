@@ -172,7 +172,7 @@ enum {
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"No", @"General", @"")];
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Yes", @"General", @"")];
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"Cancel", @"General", @"")];
-			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The file \"%@\" exists.", @"General", @""), [filename lastPathComponent]]];
+			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The file \"%@\" exists.", @"General", @""), [[NSFileManager defaultManager] displayNameAtPath:filename]]];
 			[alert setInformativeText:NSLocalizedStringFromTable(@"Do you want to replace the existing file?", @"General", @"")];
 			[alert setAlertStyle:NSInformationalAlertStyle];
 			
@@ -371,7 +371,7 @@ enum {
 	@catch(NSException *exception) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while tagging the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while tagging the file \"%@\".", @"Exceptions", @""), [[NSFileManager defaultManager] displayNameAtPath:[self outputFilename]]]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];
@@ -419,7 +419,7 @@ enum {
 	@catch(NSException *exception) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[NSFileManager defaultManager] displayNameAtPath:[self outputFilename]]]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];
@@ -444,7 +444,7 @@ enum {
 	
 	alert = [[[NSAlert alloc] init] autorelease];
 	[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-	[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[self outputFilename] lastPathComponent]]];
+	[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while encoding the file \"%@\".", @"Exceptions", @""), [[NSFileManager defaultManager] displayNameAtPath:[self outputFilename]]]];
 	[alert setInformativeText:[[self exception] reason]];
 	[alert setAlertStyle:NSWarningAlertStyle];		
 	[alert runModal];

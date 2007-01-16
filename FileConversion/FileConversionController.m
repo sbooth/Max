@@ -252,7 +252,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		@catch(NSException *exception) {
 			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 			[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while converting the file \"%@\".", @"Exceptions", @""), [filename lastPathComponent]]];
+			[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while converting the file \"%@\".", @"Exceptions", @""), [[NSFileManager defaultManager] displayNameAtPath:filename]]];
 			[alert setInformativeText:[exception reason]];
 			[alert setAlertStyle:NSWarningAlertStyle];		
 			[alert runModal];
@@ -273,7 +273,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 			@catch(NSException *exception) {
 				NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 				[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-				[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while converting the file \"%@\".", @"Exceptions", @""), [filename lastPathComponent]]];
+				[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while converting the file \"%@\".", @"Exceptions", @""), [[NSFileManager defaultManager] displayNameAtPath:filename]]];
 				[alert setInformativeText:[exception reason]];
 				[alert setAlertStyle:NSWarningAlertStyle];		
 				[alert runModal];
@@ -535,7 +535,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	@catch(NSException *exception) {
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle:NSLocalizedStringFromTable(@"OK", @"General", @"")];
-		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the document \"%@\".", @"Exceptions", @""), [filename lastPathComponent]]];
+		[alert setMessageText:[NSString stringWithFormat:NSLocalizedStringFromTable(@"An error occurred while opening the document \"%@\".", @"Exceptions", @""), [[NSFileManager defaultManager] displayNameAtPath:filename]]];
 		[alert setInformativeText:[exception reason]];
 		[alert setAlertStyle:NSWarningAlertStyle];		
 		[alert runModal];
@@ -547,10 +547,10 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	icon = getIconForFile(filename, NSMakeSize(16, 16));
 	
 	if(NSNotFound == index) {
-		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]]];
+		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [[NSFileManager defaultManager] displayNameAtPath:filename], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]]];
 	}
 	else {
-		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [filename lastPathComponent], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]] atArrangedObjectIndex:index];			
+		[_filesController insertObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [[NSFileManager defaultManager] displayNameAtPath:filename], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]] atArrangedObjectIndex:index];			
 	}
 	
 	return YES;
