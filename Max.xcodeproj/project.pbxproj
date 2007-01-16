@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C0406530B5C584000648158 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C04064E0B5C584000648158 /* InfoPlist.strings */; };
 		8C0883620A092EA500CAC5D0 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */; };
 		8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */; };
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
@@ -276,6 +277,16 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
+		8C0406480B5C582E00648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nb_NO; path = nb_NO.lproj/Credits.rtf; sourceTree = "<group>"; };
+		8C0406490B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/CompactDisc.strings; sourceTree = "<group>"; };
+		8C04064A0B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Exceptions.strings; sourceTree = "<group>"; };
+		8C04064B0B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/FileConversion.strings; sourceTree = "<group>"; };
+		8C04064C0B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/General.strings; sourceTree = "<group>"; };
+		8C04064D0B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Genres.strings; sourceTree = "<group>"; };
+		8C04064F0B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8C0406500B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Log.strings; sourceTree = "<group>"; };
+		8C0406510B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Preferences.strings; sourceTree = "<group>"; };
+		8C0406520B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = AlbumArtDefaults.plist; sourceTree = "<group>"; };
 		8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
@@ -890,6 +901,7 @@
 		8C32817C096D12A600608C9D /* Strings */ = {
 			isa = PBXGroup;
 			children = (
+				8C04064E0B5C584000648158 /* InfoPlist.strings */,
 				8C37D3F60B3ABF0F00C5F85A /* FileConversion.strings */,
 				8CA6E46C09D065260047C35C /* UndoRedo.strings */,
 				8C29D980097F46A200E8B766 /* Log.strings */,
@@ -1366,6 +1378,7 @@
 				French,
 				German,
 				Dutch,
+				nb_NO,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* cocoa test */;
 			projectDirPath = "";
@@ -1459,6 +1472,7 @@
 				8CD025750ADC0A4D00216B29 /* PostProcessingToolbarImage.png in Resources */,
 				8C37D3F80B3ABF0F00C5F85A /* FileConversion.strings in Resources */,
 				8C1F78150B4218910066072B /* WavPack.png in Resources */,
+				8C0406530B5C584000648158 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1600,6 +1614,14 @@
 			name = MainMenu.nib;
 			sourceTree = "<group>";
 		};
+		8C04064E0B5C584000648158 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C04064F0B5C584000648158 /* nb_NO */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		8C29D8DA097F3D5D00E8B766 /* Preferences.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1607,6 +1629,7 @@
 				8C51308F0984CD1C00F41352 /* French */,
 				8CBA9F540999B3AA007C9F11 /* German */,
 				8C643A7709D7392400F6C1F6 /* Dutch */,
+				8C0406510B5C584000648158 /* nb_NO */,
 			);
 			name = Preferences.strings;
 			sourceTree = "<group>";
@@ -1618,6 +1641,7 @@
 				8C51308B0984CD1C00F41352 /* French */,
 				8CBA9F450999B374007C9F11 /* German */,
 				8C643A7209D7392400F6C1F6 /* Dutch */,
+				8C0406490B5C584000648158 /* nb_NO */,
 			);
 			name = CompactDisc.strings;
 			sourceTree = "<group>";
@@ -1629,6 +1653,7 @@
 				8C51308C0984CD1C00F41352 /* French */,
 				8CBA9F4B0999B38B007C9F11 /* German */,
 				8C643A7409D7392400F6C1F6 /* Dutch */,
+				8C04064C0B5C584000648158 /* nb_NO */,
 			);
 			name = General.strings;
 			sourceTree = "<group>";
@@ -1640,6 +1665,7 @@
 				8C51308D0984CD1C00F41352 /* French */,
 				8CBA9F4E0999B396007C9F11 /* German */,
 				8C643A7509D7392400F6C1F6 /* Dutch */,
+				8C04064D0B5C584000648158 /* nb_NO */,
 			);
 			name = Genres.strings;
 			sourceTree = "<group>";
@@ -1651,6 +1677,7 @@
 				8C51308E0984CD1C00F41352 /* French */,
 				8CBA9F510999B3A1007C9F11 /* German */,
 				8C643A7609D7392400F6C1F6 /* Dutch */,
+				8C0406500B5C584000648158 /* nb_NO */,
 			);
 			name = Log.strings;
 			sourceTree = "<group>";
@@ -1739,6 +1766,7 @@
 				8C794E2A097F1C480081CD7F /* French */,
 				8CBA9F480999B381007C9F11 /* German */,
 				8C643A7309D7392400F6C1F6 /* Dutch */,
+				8C04064A0B5C584000648158 /* nb_NO */,
 			);
 			name = Exceptions.strings;
 			sourceTree = "<group>";
@@ -1750,6 +1778,7 @@
 				8C37D48E0B3AC85100C5F85A /* Dutch */,
 				8C37D48F0B3AC85D00C5F85A /* French */,
 				8C37D4900B3AC86900C5F85A /* German */,
+				8C04064B0B5C584000648158 /* nb_NO */,
 			);
 			name = FileConversion.strings;
 			sourceTree = "<group>";
@@ -1931,6 +1960,7 @@
 				8C2D6FB109D195A200968B18 /* French */,
 				8CDE897B09D3B61600FBD401 /* German */,
 				8CA73E850A0FD2DC00B12829 /* Dutch */,
+				8C0406520B5C584000648158 /* nb_NO */,
 			);
 			name = UndoRedo.strings;
 			sourceTree = "<group>";
@@ -1986,6 +2016,7 @@
 				8CD7F7D1098B0B19002C4D9F /* French */,
 				8CB34D16099AFF63001532C3 /* German */,
 				8C643A7809D7393400F6C1F6 /* Dutch */,
+				8C0406480B5C582E00648158 /* nb_NO */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";

@@ -427,6 +427,11 @@
 				
 				for(i = 0; i < block->data.vorbis_comment.num_comments; ++i) {
 					
+					/// Skip over empty comments
+					if(NULL == block->data.vorbis_comment.comments[i].entry || 0 == block->data.vorbis_comment.comments[i].length) {
+						continue;
+					}
+					
 					// Split the comment at '='
 					commentString	= [NSString stringWithUTF8String:(const char *)block->data.vorbis_comment.comments[i].entry];
 					range			= [commentString rangeOfString:@"=" options:NSLiteralSearch];
