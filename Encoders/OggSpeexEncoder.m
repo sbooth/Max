@@ -162,6 +162,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 
 	AudioBufferList				bufferList;
 	ssize_t						bufferLen									= 0;
+	UInt32						bufferByteSize								= 0;
 	SInt64						totalFileFrames, framesToRead;
 	UInt32						frameCount;
 
@@ -357,6 +358,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				break;				
 		}
 		
+		bufferByteSize = bufferList.mBuffers[0].mDataByteSize;
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		speex_bits_init(&bits);
@@ -369,7 +371,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			
 			// Set up the buffer parameters
 			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
-			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
 			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input

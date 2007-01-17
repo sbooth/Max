@@ -36,6 +36,7 @@
 	int								format								= 0;
 	AudioBufferList					bufferList;
 	ssize_t							bufferLen							= 0;
+	UInt32							bufferByteSize						= 0;
 
 	SInt64							totalFrames, framesToRead;
 	UInt32							frameCount;
@@ -103,9 +104,10 @@
 				break;				
 		}
 		
+		bufferByteSize		= bufferList.mBuffers[0].mDataByteSize;
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		buf = (int32_t *)calloc(bufferLen, sizeof(int32_t));
+		buf					= (int32_t *)calloc(bufferLen, sizeof(int32_t));
 		NSAssert(NULL != buf, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		// Setup output file
@@ -121,7 +123,7 @@
 			
 			// Set up the buffer parameters
 			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
-			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
 			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input

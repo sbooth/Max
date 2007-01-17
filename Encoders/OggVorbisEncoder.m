@@ -73,6 +73,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 
 	AudioBufferList				bufferList;
 	ssize_t						bufferLen							= 0;
+	UInt32						bufferByteSize						= 0;
 	SInt64						totalFrames, framesToRead;
 	UInt32						frameCount;
 	
@@ -130,6 +131,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				break;				
 		}
 		
+		bufferByteSize = bufferList.mBuffers[0].mDataByteSize;
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Open the output file
@@ -190,7 +192,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			
 			// Set up the buffer parameters
 			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
-			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
 			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
