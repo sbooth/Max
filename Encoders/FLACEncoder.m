@@ -169,6 +169,10 @@
 			NSAssert1(YES == result, @"FLAC__stream_encoder_set_metadata failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		}
 		
+		// Make this an option in the future
+//		result = FLAC__stream_encoder_set_verify(_flac, YES);
+//		NSAssert1(YES == result, @"FLAC__stream_encoder_set_verify failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
+
 		// Initialize the FLAC encoder
 		result = FLAC__stream_encoder_set_total_samples_estimate(_flac, totalFrames);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_total_samples_estimate failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
