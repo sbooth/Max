@@ -221,7 +221,8 @@
 		}
 		
 		// Finish up the encoding process
-		FLAC__stream_encoder_finish(_flac);
+		result = FLAC__stream_encoder_finish(_flac);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_finish failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 	}
 	
 	
