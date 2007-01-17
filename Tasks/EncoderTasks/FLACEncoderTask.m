@@ -282,6 +282,9 @@
 			block->data.picture.data_length	= [imageData length];
 		}
 		
+		// Sort the chain
+		FLAC__metadata_chain_sort_padding(chain);
+		
 		// Write the new metadata to the file
 		result = FLAC__metadata_chain_write(chain, YES, NO);
 		NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
