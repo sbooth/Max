@@ -5,17 +5,13 @@
 /* #undef FLAC__ALIGN_MALLOC_DATA */
 
 /* define if building for ia32/i386 */
-#if defined(__LITTLE_ENDIAN__)
+#if __LITTLE_ENDIAN__
 #define FLAC__CPU_IA32 1
-#else
-#define FLAC__CPU_IA32 0
 #endif
 
 /* define if building for PowerPC */
-#if defined(__BIG_ENDIAN__)
+#if __BIG_ENDIAN__
 #define FLAC__CPU_PPC 1
-#else
-#define FLAC__CPU_PPC 0
 #endif
 
 /* define if building for SPARC */
@@ -37,7 +33,7 @@
 #define FLAC__HAS_OGG 1
 
 /* define to disable use of assembly code */
-/* #undef FLAC__NO_ASM */
+#define FLAC__NO_ASM 1
 
 /* define if your operating system supports SSE instructions */
 /* #undef FLAC__SSE_OS */
