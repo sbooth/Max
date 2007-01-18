@@ -249,7 +249,7 @@
 			NSImageRep			*currentRepresentation		= nil;
 			NSBitmapImageRep	*bitmapRep					= nil;
 			NSData				*imageData					= nil;
-			FLAC__byte			*data						= NULL;
+			const char			*errorDescription;
 			NSSize				size;
 			
 			enumerator = [[image representations] objectEnumerator];
@@ -268,18 +268,22 @@
 			}
 			
 			imageData	= [bitmapRep representationUsingType:NSPNGFileType properties:nil]; 			
-			data		= (FLAC__byte *)calloc([imageData length], sizeof(FLAC__byte));
-			NSAssert(NULL != data, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-			[imageData getBytes:data];
 			
-			// Add the album art
-			block->data.picture.type		= FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER;
-			block->data.picture.mime_type	= strdup("image/png");
-			block->data.picture.width		= [bitmapRep size].width;
-			block->data.picture.height		= [bitmapRep size].height;
-			block->data.picture.depth		= [bitmapRep bitsPerPixel];
-			block->data.picture.data		= data;
-			block->data.picture.data_length	= [imageData length];
+			// Add the image data to the metadata block
+ 			block->data.picture.type		= FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER;
+
+			result = FLAC__metadata_object_picture_set_mime_type(block, "image/png", YES);
+			NSAssert1(YES == result, @"FLAC__metadata_object_picture_set_mime_type: %i", FLAC__metadata_chain_status(chain));
+
+			result = FLAC__metadata_object_picture_set_data(block, [imageData bytes], [imageData length], YES);
+			NSAssert1(YES == result, @"FLAC__metadata_object_picture_set_data: %i", FLAC__metadata_chain_status(chain));
+
+ 			block->data.picture.width		= [bitmapRep size].width;
+ 			block->data.picture.height		= [bitmapRep size].height;
+ 			block->data.picture.depth		= [bitmapRep bitsPerPixel];			
+
+			result = FLAC__metadata_object_picture_is_legal(block, &errorDescription);
+			NSAssert1(YES == result, @"FLAC__metadata_object_picture_is_legal: %s", errorDescription);
 		}
 		
 		// Sort the chain
