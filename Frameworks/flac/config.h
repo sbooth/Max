@@ -18,7 +18,7 @@
 /* #undef FLAC__CPU_SPARC */
 
 /* define if you are compiling for PowerPC and have the 'as' assembler */
-#define FLAC__HAS_AS 1
+/* #undef FLAC__HAS_AS */
 
 /* define if you have docbook-to-man or docbook2man */
 /* #undef FLAC__HAS_DOCBOOK_TO_MAN */
