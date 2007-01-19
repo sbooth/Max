@@ -33,6 +33,7 @@
                 openWith = id; 
                 openWithFinder = id; 
                 playWithCog = id; 
+                playWithPlay = id; 
                 revealInFinder = id; 
             }; 
             CLASS = FilesTableView; 
