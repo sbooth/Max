@@ -26,6 +26,22 @@
 
 @implementation FilesTableView
 
+- (BOOL) validateMenuItem:(NSMenuItem *)menuItem
+{
+	if([menuItem action] == @selector(playWithCog:)) {
+		return (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"Cog"]);
+	}
+	else if([menuItem action] == @selector(playWithPlay:)) {
+		return (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"Play"]);
+	}
+	else if([menuItem action] == @selector(editWithTag:)) {
+		return (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"Tag"]);
+	}
+	else {
+		return YES;
+	}
+}
+
 - (unsigned) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
 	return (isLocal ? NSDragOperationMove : NSDragOperationCopy);
@@ -87,6 +103,12 @@
 {
 	NSString *path = [[_filesController selection] valueForKey:@"filename"];
 	[[NSWorkspace sharedWorkspace] openFile:path withApplication:@"Cog"];
+}
+
+- (IBAction) playWithPlay:(id)sender
+{
+	NSString *path = [[_filesController selection] valueForKey:@"filename"];
+	[[NSWorkspace sharedWorkspace] openFile:path withApplication:@"Play"];
 }
 
 - (IBAction) editWithTag:(id)sender
