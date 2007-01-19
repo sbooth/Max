@@ -394,9 +394,10 @@
 	FLAC__Metadata_Iterator			*iterator			= NULL;
 	FLAC__StreamMetadata			*block				= NULL;
 	unsigned						i;
+	char							*fieldName			= NULL;
+	char							*fieldValue			= NULL;
 	NSMutableDictionary				*metadataDictionary;
-	NSString						*commentString, *key, *value;
-	NSRange							range;
+	NSString						*key, *value;
 	NSImage							*picture;
 	
 	result							= [[AudioMetadata alloc] init];
@@ -426,78 +427,78 @@
 				metadataDictionary			= [NSMutableDictionary dictionary];
 				
 				for(i = 0; i < block->data.vorbis_comment.num_comments; ++i) {
-					
-					/// Skip over empty comments
-					if(NULL == block->data.vorbis_comment.comments[i].entry || 0 == block->data.vorbis_comment.comments[i].length) {
+										
+					// Let FLAC parse the comment for us
+					if(NO == FLAC__metadata_object_vorbiscomment_entry_to_name_value_pair(block->data.vorbis_comment.comments[i], &fieldName, &fieldValue)) {
+						// Ignore malformed comments
 						continue;
 					}
-					
-					// Split the comment at '='
-					commentString	= [NSString stringWithUTF8String:(const char *)block->data.vorbis_comment.comments[i].entry];
-					range			= [commentString rangeOfString:@"=" options:NSLiteralSearch];
-					
-					// Sanity check (comments should be well-formed)
-					if(NSNotFound != range.location && 0 != range.length) {
-						key				= [[commentString substringToIndex:range.location] uppercaseString];
-						value			= [commentString substringFromIndex:range.location + 1];
-						
-						if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ALBUM"]]) {
-							[result setAlbumTitle:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ARTIST"]]) {
-							[result setAlbumArtist:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPOSER"]]) {
-							[result setAlbumComposer:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"GENRE"]]) {
-							[result setAlbumGenre:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DATE"]]) {
-							[result setAlbumYear:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DESCRIPTION"]]) {
-							[result setAlbumComment:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TITLE"]]) {
-							[result setTrackTitle:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKNUMBER"]]) {
-							[result setTrackNumber:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKTOTAL"]]) {
-							[result setTrackTotal:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPILATION"]]) {
-							[result setCompilation:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCNUMBER"]]) {
-							[result setDiscNumber:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCTOTAL"]]) {
-							[result setDiscTotal:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ISRC"]]) {
-							[result setISRC:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"MCN"]]) {
-							[result setMCN:value];
-						}
-						
-						// Maintain backwards compability for the following tags
-						else if(NSOrderedSame == [key caseInsensitiveCompare:@"YEAR"] && 0 == [result albumYear]) {
-							[result setAlbumYear:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMMENT"] && nil == [result albumComment]) {
-							[result setAlbumComment:value];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"] && 0 == [result trackTotal]) {
-							[result setTrackTotal:[value intValue]];
-						}
-						else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCSINSET"] && 0 == [result discTotal]) {
-							[result setDiscTotal:[value intValue]];
-						}
+
+					key		= [[NSString alloc] initWithBytesNoCopy:fieldName length:strlen(fieldName) encoding:NSASCIIStringEncoding freeWhenDone:YES];
+					value	= [[NSString alloc] initWithBytesNoCopy:fieldValue length:strlen(fieldValue) encoding:NSUTF8StringEncoding freeWhenDone:YES];
+								
+					if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ALBUM"]]) {
+						[result setAlbumTitle:value];
 					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ARTIST"]]) {
+						[result setAlbumArtist:value];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPOSER"]]) {
+						[result setAlbumComposer:value];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"GENRE"]]) {
+						[result setAlbumGenre:value];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DATE"]]) {
+						[result setAlbumYear:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DESCRIPTION"]]) {
+						[result setAlbumComment:value];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TITLE"]]) {
+						[result setTrackTitle:value];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKNUMBER"]]) {
+						[result setTrackNumber:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKTOTAL"]]) {
+						[result setTrackTotal:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPILATION"]]) {
+						[result setCompilation:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCNUMBER"]]) {
+						[result setDiscNumber:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCTOTAL"]]) {
+						[result setDiscTotal:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ISRC"]]) {
+						[result setISRC:value];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"MCN"]]) {
+						[result setMCN:value];
+					}
+					
+					// Maintain backwards compability for the following tags
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"YEAR"] && 0 == [result albumYear]) {
+						[result setAlbumYear:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"COMMENT"] && nil == [result albumComment]) {
+						[result setAlbumComment:value];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"TOTALTRACKS"] && 0 == [result trackTotal]) {
+						[result setTrackTotal:[value intValue]];
+					}
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"DISCSINSET"] && 0 == [result discTotal]) {
+						[result setDiscTotal:[value intValue]];
+					}
+					
+					[key release];
+					[value release];
+					
+					fieldName	= NULL;
+					fieldValue	= NULL;
 				}
 				break;
 				
