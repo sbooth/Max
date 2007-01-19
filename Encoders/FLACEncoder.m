@@ -65,8 +65,9 @@
 	UInt32							bufferByteSize				= 0;
 	FLAC__bool						result;
 	FLAC__StreamEncoderInitStatus	encoderStatus;
-	FLAC__StreamMetadata			padding;
-	FLAC__StreamMetadata			*metadata [1];
+	FLAC__StreamMetadata			*seektable					= NULL;
+	FLAC__StreamMetadata			*padding					= NULL;
+	FLAC__StreamMetadata			*metadata [2];
 	SInt64							totalFrames, framesToRead;
 	UInt32							frameCount;
 	double							percentComplete;
@@ -163,13 +164,32 @@
 		result = FLAC__stream_encoder_set_max_lpc_order(_flac, _maxLPCOrder);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_max_lpc_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 
+		// Create a seektable
+		seektable = FLAC__metadata_object_new(FLAC__METADATA_TYPE_SEEKTABLE);
+		NSAssert(NULL != seektable, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+
+		// Append seekpoints (one every 30 seconds)
+		result = FLAC__metadata_object_seektable_template_append_spaced_points_by_samples(seektable, 30 * [[self decoder] pcmFormat].mSampleRate, totalFrames);
+		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+
+		// Sort the table
+		result = FLAC__metadata_object_seektable_template_sort(seektable, NO);
+		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+
+		metadata[0] = seektable;
+		
 		// Create the padding metadata block if desired
 		if(0 < _padding) {
-			padding.type		= FLAC__METADATA_TYPE_PADDING;
-			padding.is_last		= NO;
-			padding.length		= _padding;
-			metadata[0]			= &padding;
+			padding				= FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING);
+			NSAssert(NULL != padding, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+
+			padding->length		= _padding;			
+			metadata[1]			= padding;
 			
+			result = FLAC__stream_encoder_set_metadata(_flac, metadata, 2);
+			NSAssert1(YES == result, @"FLAC__stream_encoder_set_metadata failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
+		}
+		else {
 			result = FLAC__stream_encoder_set_metadata(_flac, metadata, 1);
 			NSAssert1(YES == result, @"FLAC__stream_encoder_set_metadata failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		}
@@ -248,6 +268,9 @@
 		if(NULL != _flac) {
 			FLAC__stream_encoder_delete(_flac);
 		}
+		
+		FLAC__metadata_object_delete(seektable);
+		FLAC__metadata_object_delete(padding);
 				
 		free(bufferList.mBuffers[0].mData);
 	}	
