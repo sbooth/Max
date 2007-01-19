@@ -227,20 +227,14 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 				 NSString					*key,
 				 NSString					*value)
 {
-	NSString									*string;
 	FLAC__StreamMetadata_VorbisComment_Entry	entry;
+	FLAC__bool									result;
 	
-	string			= [NSString stringWithFormat:@"%@=%@", key, value];
-	entry.entry		= (unsigned char *)strdup([string UTF8String]);
-	NSCAssert(NULL != entry.entry, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-	
-	entry.length	= strlen((const char *)entry.entry);
-	if(NO == FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO)) {
-		free(entry.entry);
-		@throw [NSException exceptionWithName:@"FLACException"
-									   reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_append_comment"]
-									 userInfo:nil];
-	}	
+	result			= FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, [key cStringUsingEncoding:NSASCIIStringEncoding], [value UTF8String]);
+	NSCAssert1(YES == result, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair");	
+
+	result = FLAC__metadata_object_vorbiscomment_append_comment(block, entry, NO);
+	NSCAssert1(YES == result, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FLAC__metadata_object_vorbiscomment_append_comment");	
 }
 
 OggStreamType 
