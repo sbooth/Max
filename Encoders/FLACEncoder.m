@@ -109,7 +109,7 @@
 				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
 				break;
 				
-				// 32-bit sample size not yet supported
+				// 32-bit sample size not yet supported by FLAC
 				/*
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
