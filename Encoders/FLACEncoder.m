@@ -269,8 +269,13 @@
 			FLAC__stream_encoder_delete(_flac);
 		}
 		
-		FLAC__metadata_object_delete(seektable);
-		FLAC__metadata_object_delete(padding);
+		if(NULL != seektable) {
+			FLAC__metadata_object_delete(seektable);			
+		}
+		
+		if(NULL != padding) {
+			FLAC__metadata_object_delete(padding);
+		}
 				
 		free(bufferList.mBuffers[0].mData);
 	}	
