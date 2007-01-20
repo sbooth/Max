@@ -278,7 +278,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Max 0.7</string>
+	<string>Max 0.7.1</string>
 	<key>CFBundleHelpBookFolder</key>
 	<string>Max Help</string>
 	<key>CFBundleHelpBookName</key>
