@@ -55,8 +55,8 @@
 		majorFormat			= [[[self settings] objectForKey:@"majorFormat"] intValue];
 				
 		// Set up generic defaults for format verification
-		info.channels		= 2;
-		info.samplerate		= 44100;
+		memset(&info, 0, sizeof(SF_INFO));
+		info.channels		= 1;
 				
 		// Query each available subtype to see if it is valid for this major format
 		for(i = 0; i < subtypeCount; ++i) {
