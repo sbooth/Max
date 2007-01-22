@@ -651,7 +651,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	
 	_framesPerOggPacket	= [[settings objectForKey:@"framesPerPacket"] intValue];
 	
-	_saveSettingsInComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveEncoderSettingsInComment"];
+	_saveSettingsInComment		= [[NSUserDefaults standardUserDefaults] boolForKey:@"saveSettingsInComment"];
 }
 
 @end
