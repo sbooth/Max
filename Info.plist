@@ -57,6 +57,10 @@
 			<string>MPEG-4 Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.mpeg-4-audio</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -71,6 +75,10 @@
 			<string>Ogg Multimedia</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.xiph.ogg</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -107,6 +115,10 @@
 			<string>FLAC Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>net.sourceforge.flac</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -143,6 +155,10 @@
 			<string>MP3 Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.mp3</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -213,6 +229,10 @@
 			<string>MPEG-4 Multimedia</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.mpeg-4</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -227,6 +247,10 @@
 			<string>AIFF Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aiff-audio</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -241,6 +265,11 @@
 			<string>WAVE Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.waveform-</string>
+				<string>audio</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -255,6 +284,11 @@
 			<string>Core Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.apple.coreaudio-</string>
+				<string>format</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
@@ -269,6 +303,10 @@
 			<string>AIFC Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aifc-audio</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSPersistentStoreTypeKey</key>
