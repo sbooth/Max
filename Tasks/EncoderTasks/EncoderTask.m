@@ -601,6 +601,7 @@ enum {
 	NSString			*albumComposer		= [metadata albumComposer];
 	NSString			*albumComment		= [metadata albumComment];
 	unsigned			trackNumber			= [metadata trackNumber];
+	unsigned			trackTotal			= [metadata trackTotal];
 	NSString			*trackArtist		= [metadata trackArtist];
 	NSString			*trackTitle			= [metadata trackTitle];
 	NSString			*trackGenre			= [metadata trackGenre];
@@ -692,6 +693,17 @@ enum {
 		}
 		else {
 			[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:[NSString stringWithFormat:@"%u", trackNumber] options:nil range:NSMakeRange(0, [customPath length])];
+		}
+	}
+	if(0 == trackTotal) {
+		[customPath replaceOccurrencesOfString:@"{trackTotal}" withString:@"" options:nil range:NSMakeRange(0, [customPath length])];
+	}
+	else {
+		if([[settings objectForKey:@"useTwoDigitTrackNumbers"] boolValue]) {
+			[customPath replaceOccurrencesOfString:@"{trackTotal}" withString:[NSString stringWithFormat:@"%02u", trackTotal] options:nil range:NSMakeRange(0, [customPath length])];
+		}
+		else {
+			[customPath replaceOccurrencesOfString:@"{trackTotal}" withString:[NSString stringWithFormat:@"%u", trackTotal] options:nil range:NSMakeRange(0, [customPath length])];
 		}
 	}
 	if(nil == trackArtist) {
