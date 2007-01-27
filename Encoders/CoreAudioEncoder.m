@@ -143,8 +143,33 @@
 			
 			err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ConverterConfig, size, &converterPropertySettings);
 			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty", UTCreateStringForOSType(err));
-		}					
+
+			// Magic cookie stuff
+			err =  AudioConverterGetPropertyInfo(converter, kAudioConverterCompressionMagicCookie, &size, NULL);
+			
+			// Not all formats require magic cookies
+			if(noErr == err && 0 < size) {
+				void		*magicCookie		= NULL;
+				UInt32		willAcceptCookie	= NO;
 				
+				magicCookie = calloc(1, size);
+				NSAssert(NULL != magicCookie, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+
+				err		= AudioConverterGetProperty(converter, kAudioConverterCompressionMagicCookie, &size, magicCookie);
+				NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioConverterGetProperty", UTCreateStringForOSType(err));
+
+				// Determine the if the output file will accept the cookie
+				err = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData, NULL, &willAcceptCookie);
+				
+				if(noErr == err && willAcceptCookie) {
+					err = AudioFileSetProperty(audioFile, kAudioFilePropertyMagicCookieData, size, magicCookie);
+					NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileSetProperty", UTCreateStringForOSType(err));
+				}
+				
+				free(magicCookie);
+			}
+		}					
+		
 		// Allocate buffer
 		bufferLen						= 10 * 1024;
 		bufferList.mNumberBuffers		= 1;
