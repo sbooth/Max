@@ -79,6 +79,9 @@
 		8CFD02E70B6E7AA50004A79C /* mp4array.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CFD01720B6E6DB70004A79C /* mp4array.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CFD02E80B6E7AAF0004A79C /* mp4util.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CFD01840B6E6DB70004A79C /* mp4util.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CFD02E90B6E7AB30004A79C /* mp4track.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CFD01820B6E6DB70004A79C /* mp4track.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CFD03050B6E7D4B0004A79C /* mpeg4ip.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CFD03040B6E7D4B0004A79C /* mpeg4ip.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CFD03090B6E7D680004A79C /* mpeg4ip_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CFD021C0B6E703F0004A79C /* mpeg4ip_version.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CFD03100B6E7D860004A79C /* mpeg4ip_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CFD021B0B6E703F0004A79C /* mpeg4ip_config.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -218,6 +221,7 @@
 		8CFD018E0B6E6DB70004A79C /* virtual_io.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = virtual_io.h; path = mp4v2/virtual_io.h; sourceTree = "<group>"; };
 		8CFD021B0B6E703F0004A79C /* mpeg4ip_config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mpeg4ip_config.h; path = mp4v2/mpeg4ip_config.h; sourceTree = "<group>"; };
 		8CFD021C0B6E703F0004A79C /* mpeg4ip_version.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mpeg4ip_version.h; path = mp4v2/mpeg4ip_version.h; sourceTree = "<group>"; };
+		8CFD03040B6E7D4B0004A79C /* mpeg4ip.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mpeg4ip.h; path = mp4v2/mpeg4ip.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* mp4v2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = mp4v2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -275,6 +279,7 @@
 		08FB77AEFE84172EC02AAC07 /* mp4v2 */ = {
 			isa = PBXGroup;
 			children = (
+				8CFD03040B6E7D4B0004A79C /* mpeg4ip.h */,
 				8CFD021B0B6E703F0004A79C /* mpeg4ip_config.h */,
 				8CFD021C0B6E703F0004A79C /* mpeg4ip_version.h */,
 				8CFD010F0B6E6DB70004A79C /* 3gp.cpp */,
@@ -450,6 +455,9 @@
 				8CFD02E70B6E7AA50004A79C /* mp4array.h in Headers */,
 				8CFD02E80B6E7AAF0004A79C /* mp4util.h in Headers */,
 				8CFD02E90B6E7AB30004A79C /* mp4track.h in Headers */,
+				8CFD03050B6E7D4B0004A79C /* mpeg4ip.h in Headers */,
+				8CFD03090B6E7D680004A79C /* mpeg4ip_version.h in Headers */,
+				8CFD03100B6E7D860004A79C /* mpeg4ip_config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
