@@ -52,7 +52,7 @@ addMPEG4AACGaplessInformationAtom(NSString *filename, SInt64 totalFrames)
 	// Set this atom so mp4v2 will flesh out the "ilst" atom (otherwise tagging will fail)
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 	versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
-	file->SetMetadataTool([versionString UTF8String]);
+	file->SetMetadataString("\251too", [versionString UTF8String]);
 	
 	// Add the incredibly annoying "----" atom, with the appropriate gapless info
 	dashAtom	= file->AddDescendantAtoms("", "moov.udta.meta.ilst.----");
