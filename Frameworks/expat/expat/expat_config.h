@@ -2,9 +2,9 @@
 /* expat_config.h.in.  Generated from configure.in by autoheader.  */
 
 /* 1234 = LIL_ENDIAN, 4321 = BIGENDIAN */
-#if defined(__BIG_ENDIAN__)
+#if __BIG_ENDIAN__
 #define BYTEORDER 4321
-#elif defined(__LITTLE_ENDIAN__)
+#elif __LITTLE_ENDIAN__
 #define BYTEORDER 1234
 #else
 #error "Target processor byte order unknown"
@@ -74,7 +74,9 @@
 #define STDC_HEADERS 1
 
 /* whether byteorder is bigendian */
+#if __BIG_ENDIAN__
 #define WORDS_BIGENDIAN 1
+#endif
 
 /* Define to specify how much context to retain around the current parse
    point. */
