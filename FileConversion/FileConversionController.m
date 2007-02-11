@@ -120,6 +120,9 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	tableColumn			= [_filesTableView tableColumnWithIdentifier:@"filename"];
 	dataCell			= [[ImageAndTextCell alloc] init];
 	
+	// TOD: Is NSLineBreakByTruncatingMiddle what users would expect?
+	[dataCell setLineBreakMode:NSLineBreakByTruncatingMiddle];
+	
 	[tableColumn setDataCell:dataCell];
 	[tableColumn bind:@"value" toObject:_filesController withKeyPath:@"arrangedObjects.displayName" options:nil];
 	[dataCell release];		
