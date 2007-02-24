@@ -290,7 +290,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 
 - (NSString *) settingsString
 {
-	return [NSString stringWithFormat:@"WavPack settings: %@%@%@%@%@", 
+	return [NSString stringWithFormat:@"WavPack settings: %@%@%@%@", 
 		(_flags & CONFIG_HIGH_FLAG ? @"high " : @""),
 		(_flags & CONFIG_FAST_FLAG ? @"fast " : @""),
 		(_flags & CONFIG_HYBRID_FLAG ? @"hybrid " : @""),
