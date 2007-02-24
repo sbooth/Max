@@ -97,7 +97,7 @@
 	NSAssert1(noErr == result, @"FSPathMakeRef failed: %@", UTCreateStringForOSType(result));
 	
 	result			= ExtAudioFileOpen(&ref, &_extAudioFile);
-	NSAssert1(noErr == result, @"ExtAudioFileWrapAudioFileID failed: %@", UTCreateStringForOSType(result));
+	NSAssert1(noErr == result, @"ExtAudioFileOpen failed: %@", UTCreateStringForOSType(result));
 	
 	// Query file type
 	dataSize		= sizeof(AudioStreamBasicDescription);
