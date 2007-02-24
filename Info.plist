@@ -117,7 +117,7 @@
 			<string>Viewer</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>net.sourceforge.flac</string>
+				<string>org.xiph.flac</string>
 			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
