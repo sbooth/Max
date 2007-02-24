@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Metadata</key>
+	<string>Metadatos</string>
+	<key>Not Specified</key>
+	<string>Sin especificar</string>
+	<key>Show or hide the artwork associated with the selected files</key>
+	<string>Mostrar u ocultar la carátula asociada con los archivos seleccionados</string>
+	<key>Show or hide the metadata associated with the selected files</key>
+	<string>Mostrar u ocultar los metadatos asociados con los archivos seleccionados</string>
+</dict>
+</plist>

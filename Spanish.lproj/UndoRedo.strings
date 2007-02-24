@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Album Art</key>
+	<string>Carátula del Album</string>
+	<key>Album Artist</key>
+	<string>Artista del Album</string>
+	<key>Album Comment</key>
+	<string>Comentario del Album</string>
+	<key>Album Composer</key>
+	<string>Compositor del Album</string>
+	<key>Album Genre</key>
+	<string>Género del Album</string>
+	<key>Album Title</key>
+	<string>Título del Album</string>
+	<key>Album Year</key>
+	<string>Año del Album</string>
+	<key>Compilation</key>
+	<string>Compilación</string>
+	<key>Disc Number</key>
+	<string>Disco Número</string>
+	<key>MusicBrainz</key>
+	<string>MusicBrainz</string>
+	<key>Total Discs</key>
+	<string>Total de Discos</string>
+	<key>Track Artist</key>
+	<string>Artista de la pista</string>
+	<key>Track Comment</key>
+	<string>Comentario de la Pista</string>
+	<key>Track Composer</key>
+	<string>Compositor de la Pista</string>
+	<key>Track Genre</key>
+	<string>Género de la Pista</string>
+	<key>Track Title</key>
+	<string>Título de la Pista</string>
+	<key>Track Year</key>
+	<string>Año de la Pista</string>
+</dict>
+</plist>

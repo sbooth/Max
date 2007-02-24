@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html><head>	<title>Max Help</title>	<meta name="generator" content="SubEthaEdit">	<meta name="AppleIcon" content="Max%20Help/images/max-icon.png">	<meta name="copyright" content="GPL">	<meta http-equiv="content-type" content="text/html; utf-8">
+	
+	<link href="index.css" rel="stylesheet" type="text/css" />
+	
+	<style type="text/css">
+	
+	ul {margin: 0px; padding: 0px; font-weight: bold;}
+	li { display: inline }
+	
+	</style>
+</head>
+
+<div id="wrap">
+
+<div id="title">
+          <div class="icon"></div>
+          
+          <h1><a href="index.html">Max Help</a>: Ogg Vorbis</h1>
+          <ul style="padding: 0px;"><li></li><li><a href="ripping.html">Ripping</a> | </li><li><a href="tagging.html">Tagging</a> | </li><li><a href="encoding.html">Encoding</a> | </li><li><a href="file-naming.html">File naming</a></li></ul>
+          
+</div>
+
+<div id="content">
+
+     <p>Ogg Vorbis, typically known simply as Ogg, is a <!--<a href="glossary.html#lossy">-->lossy<!--</a>--> format. Ogg is a <!--<a href="glossary.html#containter-format">-->container format<!--</a>-->, whereas Vorbis is the audio <!--<a href="glossary.html#codec">-->codec<!--</a>-->. To enable Max to generate Oggs, select the <strong>Ogg Vorbis</strong> checkbox under <strong>Formats</strong> in Max's preferences.</p>
+     
+     <h2>Configuring Ogg Vorbis Output</h2>
+     <p>Ogg configuration is located in the <strong>Ogg Vorbis</strong> section of the preferences.</p>
+     
+     <p>The lowest bitrate that Max can output for Ogg Vorbis without resampling the frequency is 48 kilobytes per second.</p> 
+     
+     <h3>Quality</h3>
+     
+     <em>This is the recommended way to encode Ogg Vorbis files.</em>
+     
+     <p>To use the <strong>Quality</strong> setting, set the <strong>Target</strong> to <strong>Quality</strong>, then choose the desired quality setting. The settings are rather subjective, but 0 is roughly equivalent to a 64 kilobytes per second average, 5 to 160 kbps, and 10 to 400 kbps.  Settings of 5-6 should produce CD-quality output.</p>
+     
+     <h3>Variable Bitrate</h3>
+     <p>There are two ways to generate an Ogg file with a <!--<a href="glossary.html#vorbis">-->variable bitrate<!--</a>-->. One way is to choose a <strong>Quality</strong> setting which will maintain quality but with lower filesizes in subsequent updates to the Ogg Vorbis encoder; the other is to choose a <strong>Bitrate</strong> that you would like to be the average of the bitrate variation.</p>
+          
+     <h3>Bitrate</h3>
+     <p>To set a specific variable bitrate average, set the <strong>Target</strong> to <strong>Bitrate</strong>, then choose the desired bitrate. Bitrates of 160 kilobytes per second and higher will result in CD-quality Oggs.</p>
+
+     <h3>Constant Bitrate</h3>
+     
+     <em>Generating constant bitrate Ogg Vorbis files is not recommended.</em>
+     
+     <p>To generate an Ogg with a <!--<a href="glossary.html#cbr">-->constant bitrate<!--</a>-->, set the <strong>Target</strong> to <strong>Bitrate</strong>, use the slider to choose the desired bitrate, then check <strong>Restrict encoder to constant bitrate</strong>.</p>
+     
+</div>
+
+</div>

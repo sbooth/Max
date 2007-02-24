@@ -1,0 +1,29 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            ACTIONS = {
+                insertFileNamingFormatSpecifier = id; 
+                saveFileNamingFormat = id; 
+                selectOutputDirectory = id; 
+                selectTemporaryDirectory = id; 
+            }; 
+            CLASS = OutputPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_fileNamingComboBox" = NSComboBox; 
+                "_formatSpecifierPopUpButton" = NSPopUpButton; 
+                "_outputDirectoryPopUpButton" = NSPopUpButton; 
+                "_temporaryDirectoryPopUpButton" = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>All encoding tasks completed</key>
+	<string>Todas las tareas de codificación completadas</string>
+	<key>All encoding tasks completed for %@</key>
+	<string>Todas las tareas de codificación completadas para %@</string>
+	<key>All ripping tasks completed</key>
+	<string>Todas las tareas de conversión completadas</string>
+	<key>All ripping tasks completed for %@</key>
+	<string>Todas las tareas de conversión completadas para %@</string>
+	<key>Clear</key>
+	<string>Borrar</string>
+	<key>Clear log contents</key>
+	<string>Borrar contenidos del registro</string>
+	<key>Disc encoding completed</key>
+	<string>Codificación de disco completada</string>
+	<key>Disc ripping completed</key>
+	<string>Conversión de disco completada</string>
+	<key>Duration: %@</key>
+	<string>Duración: %@</string>
+	<key>Encode completed</key>
+	<string>Codificación completada</string>
+	<key>Encode completed for %@ [%@]</key>
+	<string>Codificación completada para %1$@ [%2$@]</string>
+	<key>Encode started</key>
+	<string>Codificación iniciada</string>
+	<key>Encode started for %@ [%@]</key>
+	<string>Codificación iniciada para %1$@ [%2$@]</string>
+	<key>Encode stopped</key>
+	<string>Codificación detenida</string>
+	<key>Encode stopped for %@ [%@]</key>
+	<string>Codificación detenida para %1$@ [%2$@]</string>
+	<key>Encoding completed</key>
+	<string>Codificación completada</string>
+	<key>File format: %@</key>
+	<string>Formato de archivo: %@</string>
+	<key>Generating output</key>
+	<string>Generando salida</string>
+	<key>Max successfully launched</key>
+	<string>Max se ha iniciado con éxito</string>
+	<key>Mismatch for sector %i</key>
+	<string>Error en el sector %i</string>
+	<key>Mismatches for sectors %i - %i</key>
+	<string>Errores en los sectores %1$i - %2$i</string>
+	<key>Multisession disc detected</key>
+	<string>Disco multisesión detectado</string>
+	<key>Re-ripping sector %i</key>
+	<string>Reconvirtiendo sector %i</string>
+	<key>Re-ripping sectors %i - %i</key>
+	<string>Reconvirtiendo sectores %1$i - %2$i</string>
+	<key>Retry limit exceeded</key>
+	<string>Límite de reintentos excedido</string>
+	<key>Rip completed</key>
+	<string>Conversión completada</string>
+	<key>Rip completed for %@</key>
+	<string>Conversión completada para %@</string>
+	<key>Rip started</key>
+	<string>Conversión iniciada</string>
+	<key>Rip started for %@</key>
+	<string>Conversión iniciada para %@</string>
+	<key>Rip status: %s sector %ld (%ld)</key>
+	<string>Estado de conversión: %1$s sector %2$ld (%3$ld)</string>
+	<key>Rip stopped</key>
+	<string>Conversión detenida</string>
+	<key>Rip stopped for %@</key>
+	<string>Conversión detenida para %@</string>
+	<key>Ripping completed</key>
+	<string>Conversión completada</string>
+	<key>Ripping sectors %i - %i</key>
+	<string>Convirtiendo sectores %1$i - %2$i</string>
+	<key>Save</key>
+	<string>Guardar</string>
+	<key>Save log contents to disk</key>
+	<string>Guardar el contenido del registro en disco</string>
+	<key>Setting drive speed to maximum</key>
+	<string>Ajustando velocidad de la unidad al máximo</string>
+	<key>Setting drive speed to minimum</key>
+	<string>Ajustando velocidad de la unidad al mínimo</string>
+	<key>Unable to read from the disc.</key>
+	<string>Imposible leer desde el disco</string>
+	<key>Verifying rip integrity</key>
+	<string>Verificando integridad de la conversión</string>
+</dict>
+</plist>

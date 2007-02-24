@@ -1,0 +1,52 @@
+{
+    IBClasses = (
+        {CLASS = CompilationButton; LANGUAGE = ObjC; SUPERCLASS = NSButton; }, 
+        {
+            ACTIONS = {
+                addFiles = id; 
+                convert = id; 
+                downloadAlbumArt = id; 
+                removeFiles = id; 
+                selectAlbumArt = id; 
+                setupEncoders = id; 
+            }; 
+            CLASS = ConvertFilesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_artDrawer" = NSDrawer; 
+                "_encodersController" = NSArrayController; 
+                "_filesController" = FileArrayController; 
+                "_filesTableView" = NSTableView; 
+                "_metadataDrawer" = NSDrawer; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            CLASS = FileArrayController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_tableView" = FilesTableView; }; 
+            SUPERCLASS = NSArrayController; 
+        }, 
+        {
+            ACTIONS = {
+                editWithTag = id; 
+                openWith = id; 
+                openWithFinder = id; 
+                playWithCog = id; 
+                playWithPlay = id; 
+                revealInFinder = id; 
+            }; 
+            CLASS = FilesTableView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_filesController" = FileArrayController; }; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

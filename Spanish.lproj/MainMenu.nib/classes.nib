@@ -1,0 +1,50 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                encodeFile = id; 
+                openHomeURL = id; 
+                showAcknowledgments = id; 
+                showComponentVersions = id; 
+                showPreferences = id; 
+                toggleEncoderWindow = id; 
+                toggleLogWindow = id; 
+                toggleRipperWindow = id; 
+            }; 
+            CLASS = ApplicationController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                "" = id; 
+                downloadAlbumArt = id; 
+                ejectDisc = id; 
+                encode = id; 
+                queryMusicBrainz = id; 
+                selectAlbumArt = id; 
+                selectNextTrack = id; 
+                selectPreviousTrack = id; 
+                toggleAlbumArt = id; 
+                toggleTrackInformation = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            CLASS = ProgressBarCell; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {progressBar = NSProgressIndicator; }; 
+            SUPERCLASS = NSCell; 
+        }, 
+        {
+            ACTIONS = {checkForUpdates = id; }; 
+            CLASS = SUUpdater; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

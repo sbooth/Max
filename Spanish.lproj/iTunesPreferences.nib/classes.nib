@@ -1,0 +1,16 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {insertiTunesPlaylistFormatSpecifier = id; saveiTunesPlaylist = id; }; 
+            CLASS = iTunesPreferencesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_iTunesPlaylistComboBox" = NSComboBox; 
+                "_iTunesPlaylistSpecifierPopUpButton" = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

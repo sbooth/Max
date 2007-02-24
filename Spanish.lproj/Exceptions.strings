@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>A ripping or encoding operation is already in progress.</key>
+	<string>Una operación de conversión o codificación está ya en curso.</string>
+	<key>An error occurred during file conversion.</key>
+	<string>Ocurrió un error en la conversión del archivo</string>
+	<key>An error occurred on device %s.</key>
+	<string>Ocurrió un error en el dispositivo %s.</string>
+	<key>An error occurred while accessing the disc on device %@.</key>
+	<string>Ocurrió un error al acceder al disco en el dispositivo %@.</string>
+	<key>An error occurred while attempting to download album artwork.</key>
+	<string>Ocurrión un error al intentar descargar la carátula del album.</string>
+	<key>An error occurred while converting the file "%@".</key>
+	<string>Ocurrió un error durante la conversión del fichero "%@".</string>
+	<key>An error occurred while encoding the file "%@".</key>
+	<string>Ocurrión un error durante la conversión del fichero  "%@".</string>
+	<key>An error occurred while initializing the %@ class.</key>
+	<string>Ocurrió un error al inicializar la clase %@.</string>
+	<key>An error occurred while opening the document "%@".</key>
+	<string>Ocurrió un error al abrir el documento "%@".</string>
+	<key>An error occurred while opening the file "%@" for conversion.</key>
+	<string>Ocurrió un error al abrir el archivo "%@" para conversión.</string>
+	<key>An error occurred while ripping tracks from the disc "%@".</key>
+	<string>Ocurrió un error al convertir las pistas del disco "%@".</string>
+	<key>An error occurred while tagging the file "%@".</key>
+	<string>Ocurrió un error al etiquetar el archivo "%@".</string>
+	<key>Cue sheets are not supported for this output format.</key>
+	<string>Este formato de salida no soporta las colas.</string>
+	<key>Decoding error: possible corrupted stream.</key>
+	<string>Error de decodificación: posible flujo corrupto.</string>
+	<key>Decoding overflow: possible corrupted stream.</key>
+	<string>Desbordamiento de decodificación: posible flujo corrupto.</string>
+	<key>LAME encoding error.</key>
+	<string>Error de codificación LAME.</string>
+	<key>LAME only supports one or two channel input.</key>
+	<string>LAME sólo soporta entrada de uno o dos canales.</string>
+	<key>LAME was unable to flush the buffers.</key>
+	<string>LAME no ha podido vaciar los búfers.</string>
+	<key>Monkey's Audio compressor error.</key>
+	<string>Error del compresor Monkey's Audio.</string>
+	<key>Musepack decoding error.</key>
+	<string>Error de decodificación Musepack.</string>
+	<key>No matching discs were found.</key>
+	<string>No se encontraron discos coincidentes.</string>
+	<key>No tracks are selected for encoding.</key>
+	<string>No se han seleccionado pistas para codificar.</string>
+	<key>Speex only supports one or two channel input.</key>
+	<string>Speex sólo soporta entrada de uno o dos canales.</string>
+	<key>The Speex mode number %i was not recognized.</key>
+	<string>El modo Speex número %i no se ha reconocido.</string>
+	<key>The call to %@ failed (%@).</key>
+	<string>La llamada a %1$@ falló (%2$@).</string>
+	<key>The call to %@ failed.</key>
+	<string>La llamada a %@ falló.</string>
+	<key>The file does not appear to be a valid Musepack file.</key>
+	<string>El archivo no parece ser un archivo Musepack válido.</string>
+	<key>The file does not appear to be a valid Ogg (Vorbis) file.</key>
+	<string>El archivo no parece ser un archivo Ogg (Vorbis) válido.</string>
+	<key>The file's format was not recognized.</key>
+	<string>No se reconoce el formato de archivo.</string>
+	<key>The retry limit was exceeded.</key>
+	<string>Se ha excedido el límite de reintentos.</string>
+	<key>The skip tolerance was exceeded.</key>
+	<string>Se ha excedido la tolerancia de omisión.</string>
+	<key>This file was encoded with a different version of Speex.</key>
+	<string>Este archivo fue codificado con una versión diferente de Speex.</string>
+	<key>This file was encoded with a newer version of Speex.</key>
+	<string>Este archivo fue codificado con una versión más reciente de Speex.</string>
+	<key>This file was encoded with an older version of Speex.</key>
+	<string>Este archivo fue codificado con una versión más antigua de Speex.</string>
+	<key>Unable to access the disc.</key>
+	<string>Imposible acceder al disco.</string>
+	<key>Unable to allocate memory.</key>
+	<string>Imposible destinar memoria.</string>
+	<key>Unable to close the cue sheet.</key>
+	<string>Imposible cerrar la cola.</string>
+	<key>Unable to close the drive.</key>
+	<string>Imposible cerrar la unidad.</string>
+	<key>Unable to close the output file.</key>
+	<string>Imposible cerrar el archivo de salida.</string>
+	<key>Unable to close the temporary file.</key>
+	<string>Imposible cerrar el archivo temporal.</string>
+	<key>Unable to create a temporary file.</key>
+	<string>Imposible crear  un archivo temporal.</string>
+	<key>Unable to create directory.</key>
+	<string>Imposible crear directorio.</string>
+	<key>Unable to create the FLAC decoder.</key>
+	<string>Imposible crear el decodificador FLAC.</string>
+	<key>Unable to create the FLAC encoder.</key>
+	<string>Imposible crear el codificador FLAC.</string>
+	<key>Unable to create the Monkey's Audio compressor.</key>
+	<string>Imposible crear el compresor de Monkey's Audio.</string>
+	<key>Unable to create the Ogg FLAC encoder.</key>
+	<string>Imposible crear el codificador Ogg FLAC.</string>
+	<key>Unable to create the WavPack encoder.</key>
+	<string>Imposible crear el codificador WavPack.</string>
+	<key>Unable to create the application data directory.</key>
+	<string>Imposible crear el directorio de datos de la aplicación.</string>
+	<key>Unable to create the cue sheet.</key>
+	<string>Imposible crear la cola.</string>
+	<key>Unable to create the output file.</key>
+	<string>Imposible crear el archivo de salida.</string>
+	<key>Unable to decode Speex bitstream version %i.</key>
+	<string>Imposible decodificar el flujo de bits Speex versión %i.</string>
+	<key>Unable to delete the input file.</key>
+	<string>Imposible eliminar el archivo de entrada.</string>
+	<key>Unable to delete the output file.</key>
+	<string>Imposible eliminar el archivo de salida.</string>
+	<key>Unable to delete the temporary file.</key>
+	<string>Imposible eliminar el archivo temporal.</string>
+	<key>Unable to eject the disc.</key>
+	<string>Imposible expulsar el disco.</string>
+	<key>Unable to flush the drive's cache</key>
+	<string>Imposible vaciar la caché de la unidad.</string>
+	<key>Unable to get the drive's speed</key>
+	<string>Imposible obtener la velocidad de la unidad.</string>
+	<key>Unable to initialize the LAME encoder.</key>
+	<string>Imposible inicializar el codificador LAME.</string>
+	<key>Unable to initialize the Monkey's Audio compressor.</key>
+	<string>Imposible inicializar el compresor de Monkey's Audio.</string>
+	<key>Unable to initialize the Ogg (Vorbis) encoder.</key>
+	<string>Imposible inicializar el codificador Ogg (Vorbis).</string>
+	<key>Unable to initialize the WavPack encoder.</key>
+	<string>Imposible inicializar el codificador WavPack.</string>
+	<key>Unable to initialize the ogg stream.</key>
+	<string>Imposible inicializar el flujo ogg.</string>
+	<key>Unable to intialize the Musepack decoder.</key>
+	<string>Imposible inicializar el decodificador Musepack.</string>
+	<key>Unable to intialize the Speex decoder.</key>
+	<string>Imposible inicializar el decodificador Speex.</string>
+	<key>Unable to locate the input file.</key>
+	<string>Imposible localizar el fichero de entrada.</string>
+	<key>Unable to locate the output file.</key>
+	<string>Imposible localizar el fichero de salida.</string>
+	<key>Unable to open the drive for reading.</key>
+	<string>Imposible abrir la unidad para lectura.</string>
+	<key>Unable to open the input file.</key>
+	<string>Imposible abrir el fichero de entrada.</string>
+	<key>Unable to open the output file for tagging.</key>
+	<string>Imposible abrir el fichero de salida para etiquetado.</string>
+	<key>Unable to open the output file.</key>
+	<string>Imposible abrir el fichero de salida.</string>
+	<key>Unable to read from the disc.</key>
+	<string>Imposible leer desde el disco.</string>
+	<key>Unable to read from the input file.</key>
+	<string>Imposible leer desde el fichero de entrada.</string>
+	<key>Unable to read the disc's media catalog number (MCN)</key>
+	<string>Imposible leer el catálogo de medios del disco (MCN)</string>
+	<key>Unable to read the disc's table of contents.</key>
+	<string>Imposible leer la tabla de contenidos del disco.</string>
+	<key>Unable to read the international standard recording code (ISRC) for track %i</key>
+	<string>Imposible leer el código estandar internacional de grabación (ISRC) para la pista %i</string>
+	<key>Unable to seek in the input file.</key>
+	<string>Imposible buscar en el fichero de entrada.</string>
+	<key>Unable to set the drive's speed</key>
+	<string>Imposible ajustar la velocidad de la unidad</string>
+	<key>Unable to start the Monkey's Audio compressor.</key>
+	<string>Imposible iniciar el compresor de Monkey's Audio.</string>
+	<key>Unable to unmount the disc.</key>
+	<string>Imposible desmontar el disco.</string>
+	<key>Unable to write the APE tags.</key>
+	<string>Imposible escribir las etiquetas APE.</string>
+	<key>Unable to write to the cue sheet.</key>
+	<string>Imposible escribir en la cola.</string>
+	<key>Unable to write to the output file.</key>
+	<string>Imposible escribir en el fichero de salida.</string>
+	<key>Warning: the file %@ was lost.</key>
+	<string>Advertencia: el archivo %@ se ha perdido.</string>
+	<key>Your installation of Max appears to be incomplete.</key>
+	<string>Su instalación de Max parece estar incompleta.</string>
+</dict>
+</plist>

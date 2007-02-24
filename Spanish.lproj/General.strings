@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%u seconds</key>
+	<string>%u segundos</string>
+	<key>Built-In</key>
+	<string>Incorporado</string>
+	<key>Cancel</key>
+	<string>Cancelar</string>
+	<key>Core Audio</key>
+	<string>Core Audio</string>
+	<key>Do you want to quit while there are tasks in progress?</key>
+	<string>¿Quiere salir mientras hay tareas en curso?</string>
+	<key>Do you want to replace the existing file?</key>
+	<string>¿Quiere reemplazar el fichero existente?</string>
+	<key>FLAC</key>
+	<string>FLAC</string>
+	<key>MP3</key>
+	<string>MP3</string>
+	<key>Monkey's Audio</key>
+	<string>Monkey's Audio</string>
+	<key>Musepack</key>
+	<string>Musepack</string>
+	<key>No</key>
+	<string>No</string>
+	<key>No output formats are selected.</key>
+	<string>No se han seleccionado formatos de salida.</string>
+	<key>OK</key>
+	<string>OK</string>
+	<key>Ogg (FLAC)</key>
+	<string>Ogg (FLAC)</string>
+	<key>Ogg (Speex)</key>
+	<string>Ogg (Speex)</string>
+	<key>Ogg (Vorbis)</key>
+	<string>Ogg (Vorbis)</string>
+	<key>Please select one or more output formats.</key>
+	<string>Por favor seleccione uno o más formatos de salida.</string>
+	<key>Queued</key>
+	<string>Añadido a la cola</string>
+	<key>Re-ripping</key>
+	<string>Reconvirtiendo</string>
+	<key>Ripping</key>
+	<string>Convirtiendo</string>
+	<key>Saving</key>
+	<string>Guardando</string>
+	<key>Shorten</key>
+	<string>Reducir</string>
+	<key>Show Preferences</key>
+	<string>Mostrar Preferencias</string>
+	<key>The file "%@" exists.</key>
+	<string>El archivo "%@" existe.</string>
+	<key>The resulting files will be lost if you quit now.</key>
+	<string>Los archivos resultantes se perderán si sale ahora.</string>
+	<key>Unable to optimize file: %@</key>
+	<string>Imposible optimizar el archivo: %@</string>
+	<key>Unknown</key>
+	<string>Desconocido</string>
+	<key>Verifying</key>
+	<string>Verficando</string>
+	<key>WavPack</key>
+	<string>WavPack</string>
+	<key>Yes</key>
+	<string>Sí</string>
+	<key>libsndfile</key>
+	<string>libsndfile</string>
+</dict>
+</plist>

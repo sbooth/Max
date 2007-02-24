@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html><head>	<title>Max Help</title>	<meta name="generator" content="SubEthaEdit">	<meta name="AppleIcon" content="Max%20Help/images/max-icon.png">	<meta name="copyright" content="GPL">	<meta http-equiv="content-type" content="text/html; utf-8">
+	
+	<style type="text/css" media="screen">@import "index.css";</style>
+	
+	<style type="text/css">
+	
+	dt:after { content: ":\00A0"; }
+	
+     dt {
+          float: left;
+          font-weight: bold;
+          display: list-item;
+     }
+	
+	</style>
+	
+</head>
+
+<body>
+
+<div id="wrap" style="width: 400px;margin: auto;">
+
+<div id="title">
+          <div class="icon"></div> 
+          
+          <h1><a href="index.html">Max Help</a>: cdparanoia</h1>
+          <ul style="padding: 0px;"><li></li><li><a href="ripping.html">Ripping</a> | </li><li><a href="tagging.html">Tagging</a> | </li><li><a href="encoding.html">Encoding</a> | </li><li><a href="file-naming.html">File naming</a></li></ul>
+          
+</div>
+
+<div id="content">
+     <p>Max uses cdparanoia to rip CDs. cdparanoia is a meticulous ripping engine that can compensate for scratched CDs and poor CD drives to produce flawless rips. </p>
+     
+     <p>Configuration settings for cdparanoia can be found under <strong>Ripper</strong> in Max's preferences.</p>
+     
+     <h2>Logging</h2>
+     <p>cdparanoia's log will keep a detailed record of its ripping status. If <strong>Logging</strong> is enabled, the log window can be found under the Window menu.</p>
+     
+     <h2>Error Correction</h2>
+     <p>Error correction is what enables cdparanoia to rip pristine audio from scratched CDs and deficient CD drives. Enabling error correction is slower than ripping without it because cdparanoia verifies each file and attempts to correct any errors it finds.</p>
+     
+     <h3>Full paranoia</h3>
+     
+     <h3>Overlap checking</h3>
+     <p>Overlap checking is useful for old or defective CD drives that don't read the precise data block that cdparanoia requests. When cdparanoia collects those blocks into a sequence, then the resulting file will be defective. cdparanoia can use overlap checking to circumvent the CD drive by checking the blocks itself and properly aligning them in their proper sequence.</p>
+     
+     <h2>CD Skip Behavior</h2>
+     <p>If an error is found while ripping, cdparanoia will attempt to correct it.</p>
+     <p>If <strong>Never allow skipping</strong> is <em>selected</em>, then cdparanoia will never give up trying to correct the error. If the error is too substantial, then cdparanoia will effectively stall.</p>
+     
+     <p>If <strong>Never allow skipping</strong> is <em>deselected</em>, then you can assign the amount of times you would like cdparanoia to attempt to correct the error before giving up and moving on.</p>
+</div>
+
+</div>
+</body>
+</html>

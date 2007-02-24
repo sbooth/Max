@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Album Art</key>
+	<string>Carátula de Album</string>
+	<key>Compact Disc %@</key>
+	<string>Compact Disc %@</string>
+	<key>Compilations</key>
+	<string>Compilaciones</string>
+	<key>Do you want to eject the disc "%@" while ripping is in progress?</key>
+	<string>¿Desea expulsar el disco "%@" durante el proces de conversión?</string>
+	<key>Eject</key>
+	<string>Expulsar</string>
+	<key>Eject the disc</key>
+	<string>Expulsar el disco</string>
+	<key>Encode</key>
+	<string>Codificar</string>
+	<key>Encode the selected tracks</key>
+	<string>Codificar las pistas seleccionadas</string>
+	<key>Multiple Tracks</key>
+	<string>Varias pistas</string>
+	<key>Next</key>
+	<string>Siguiente</string>
+	<key>Previous</key>
+	<string>Anterior</string>
+	<key>Query</key>
+	<string>Consultar</string>
+	<key>Query MusicBrainz for album information</key>
+	<string>Consultar MusicBrainz para la información del album</string>
+	<key>Select the next track for editing</key>
+	<string>Seleccionar la pista siguiente para edición</string>
+	<key>Select the previous track for editing</key>
+	<string>Seleccionar la pista anterior para edición</string>
+	<key>Show or hide detailed track information</key>
+	<string>Mostrar u ocultar información de pista detallada</string>
+	<key>Show or hide the artwork associated with this album</key>
+	<string>Mostrar u ocultar la carátula asociada a este album</string>
+	<key>Tracks</key>
+	<string>Pistas</string>
+	<key>Unknown Album</key>
+	<string>Album desconocido</string>
+	<key>Unknown Artist</key>
+	<string>Artista desconocido</string>
+	<key>Unknown Track</key>
+	<string>Pista desconocida</string>
+	<key>Your incomplete rips will be lost.</key>
+	<string>Sus conversiones incompletas se perderán.</string>
+</dict>
+</plist>

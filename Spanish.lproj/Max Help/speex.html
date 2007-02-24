@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html><head>	<title>Max Help</title>	<meta name="generator" content="SubEthaEdit">	<meta name="AppleIcon" content="Max%20Help/images/max-icon.png">	<meta name="copyright" content="GPL">	<meta http-equiv="content-type" content="text/html; utf-8">
+	
+	<link href="index.css" rel="stylesheet" type="text/css" />
+	
+	<style type="text/css">
+	
+	div#title ul {margin: 0px; padding: 0px; font-weight: bold;}
+	div#title li { display: inline }
+	
+	</style>
+</head>
+
+<div id="wrap">
+
+<div id="title">
+          <div class="icon"></div>
+          
+          <h1><a href="index.html">Max Help</a>: Speex</h1>
+          <ul style="padding: 0px;"><li></li><li><a href="ripping.html">Ripping</a> | </li><li><a href="tagging.html">Tagging</a> | </li><li><a href="encoding.html">Encoding</a> | </li><li><a href="file-naming.html">File naming</a></li></ul>
+          
+</div>
+
+<div id="content">
+
+     <p>Speex is an open-source lossy speech codec designed specifically for VoIP and file-based compression. It is useful for compressing recordings of speeches or interviews. Speex is <em>not</em> a music codec.</p>
+     
+     <p>Max automatically places the Speex bitstream in an Ogg container.</p>
+     
+     <h2>Configuring Speex Output</h2>
+     <p>Speex configuration is located in the <strong>Speex</strong> section of the preferences.</p>
+     
+     <h3>Mode</h3>
+     
+     <p>Mode designates the sampling rate with which you wish to encode. Smaller sampling rates result in lower quality and smaller file sizes. For reference, CD quality is 41.1 kHz.</p>
+     
+     <dl>
+          <dt>Narrowband</dt>
+               <dd>This samples your file at 8 kHz, which is the same sampling rate used to transmit telephone calls.</dd>
+          <dt>Wideband</dt>
+               <dd>This samples your file at 16 kHz.</dd>
+          <dt>Ultra-wideband</dt>
+               <dd>This samples your file at 32 kHz.</dd>
+     </dl>
+     
+     <h3>Pre-encoding options</h3> 
+     
+     <dl>
+          <dt>Denoise input</dt>
+               <dd>Enabling this will remove or significantly lessen the hiss or hum in some recordings.</dd>
+          <dt>Apply adaptive gain control</dt>
+               <dd>Enabling this will adjust the volume to a constant level.</dd>
+     </dl>
+     
+     <h3>Encoder target</h3>
+     
+     <p>Keep in mind the mode (a.k.a sampling rate) when choosing an encoder target if you're concerned with file size or audio quality.</p>
+     
+     <dl>
+          <dt>Quality</dt>
+               <dd>Quality is a subjective measurement of a file's audio quality. A smaller quality setting results in lower quality and smaller file sizes.</dd>
+          <dt>Bitrate</dt>
+               <dd>Bitrates from 4kbps to 28kbps are available.</dd>
+     </dl>
+     
+     <h3>Complexity</h3>
+     
+     <p>Complexity is a measure of how meticulously Speex compresses the audio. A setting of 10 will take around 5 times longer to encode than a setting of 1, but is useful for encoding non-speech sounds like DMTF tones.</p>
+     
+     <p>A setting of between 2 and 4 is the best trade-off between encoding time and encoding quality.</p>
+     
+     <h3>Encoder options</h3>
+     
+     <dl>
+          <dt>Enable variable bitrate mode (VBR)</dt>
+               <dd>Select this to enable VBR. Selecting this will automatically enable <strong>voice activity detection (VAD)</strong> in the <strong>Other options</strong> box.</dd>
+          <dt>Enable VBR average bitrate mode</dt>
+               <dd>This will take the average bitrate of a variable bitrate encoding, and encode the file at that constant bitrate.</dd>
+     </dl>
+     
+     <h3>Other options</h3>
+     
+     <p>Enabling both of these can greatly reduce the file size for files where there is no one speaking for a periods of time.</p>
+     
+     <dl>
+          <dt>Enable voice activity detection</dt>
+               <dd>This option is implicitly activated in VBR encodings, but when used for CBR encodings, Speex will detect non-speech periods and encode them with just enough bits to reproduce the background noise. This is called comfort noise generation (CNG). CNG alleviates the problems of adding complete silence to non-speech periods such as the listener believing that the file has ended, the speech sounding "choppy" and even hard to understand, and the possibility of the sudden drop-out in sound being jarring to the listener.</dd>
+          <dt>Enable discontinuous transmission (DTX)</dt>
+               <dd>Enabling DTX discontinues the bitstream when being streamed over the internet if there is only background noise, such as when no one has been speaking for a while. This cuts down on overall bandwidth used, putting less strain on the Speex server. When writing to a file, DTX writes 250bps to such periods of non-speech.</dd>
+          <dt>Frames per Ogg packet</dt>
+               <dd>Max automatically places the Speex bitstream in an Ogg container. If encoding at a low bitrate, the Ogg container can create a significant overhead resulting in a significantly larger file relative to the size of the bitstream. Setting Max to put a higher number of frames in each Ogg packet can alleviate this problem.</dd>
+     </dl>
+     
+     <h2>References</h2>
+     
+     <ul>
+          <li><a href="http://en.wikipedia.org/wiki/Discontinuous_Transmission">Wikipedia: Discontinuous Transmission</a></li>
+          <li><a href="http://en.wikipedia.org/wiki/Comfort_noise">Wikipedia: Comfort Noise</a></li>
+          <li><a href="http://www.hydrogenaudio.org">Hydrogenaudio Forums</a></li>
+     </ul>
+</div>
+
+</div>

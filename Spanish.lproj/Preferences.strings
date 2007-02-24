@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>320 kbps constant bitrate (CBR)</key>
+	<string>320 kbps bitrate constante (CBR)</string>
+	<key>Adjust the parameters used for digital audio extraction</key>
+	<string>Ajustar los parámetros usados para la extracción de audio digital</string>
+	<key>Album Art</key>
+	<string>Carátula del Album</string>
+	<key>Control the general behavior of Max</key>
+	<string>Controlar el comportamiento general de Max</string>
+	<key>Custom encoder settings</key>
+	<string>Ajustes personalizados de codificación</string>
+	<key>Formats</key>
+	<string>Formatos</string>
+	<key>General</key>
+	<string>General</string>
+	<key>MusicBrainz</key>
+	<string>MusicBrainz</string>
+	<key>Output</key>
+	<string>Salida</string>
+	<key>Post-Processing</key>
+	<string>Post-Procesamiento</string>
+	<key>Ripper</key>
+	<string>Conversor</string>
+	<key>Select the encoders that Max will use to produce audio</key>
+	<string>Seleccione los codificadores que Max usará para producir audio</string>
+	<key>Select where output files will be saved and how they will be named</key>
+	<string>Seleccione dónde se guardarán los archivos de salida y cómo se nombrarán</string>
+	<key>Specify applications to open the encoded files</key>
+	<string>Especifique aplicaciones para abrir los archivos codificados</string>
+	<key>Specify custom tag names for FLAC, Ogg (Vorbis) and Monkey's Audio files</key>
+	<string>Especifique nombres de etiqeuta personalizados para archivos FLAC, Ogg (Vorbis) y Monkey's Audio</string>
+	<key>Specify the server used by MusicBrainz to retrieve disc information</key>
+	<string>Especifique el servidor usado por MusicBrainz para recuperar información del disco</string>
+	<key>Specify whether to add the encoded files to iTunes</key>
+	<string>Especifique si se añaden los archivos codificados a iTunes</string>
+	<key>Specify whether to save album art with the encoded files</key>
+	<string>Especifique si se guarda la carátula del album con los archivos codificados</string>
+	<key>Tagging</key>
+	<string>Etiquetado</string>
+	<key>iTunes</key>
+	<string>iTunes</string>
+	<key>~130 kbps variable bitrate (VBR)</key>
+	<string>~130 kbps bitrate variable (VBR)</string>
+	<key>~190 kbps variable bitrate (VBR)</key>
+	<string>~190 kbps bitrate variable (VBR)</string>
+</dict>
+</plist>
