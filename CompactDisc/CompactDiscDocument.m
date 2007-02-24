@@ -564,19 +564,19 @@
 
 #pragma mark Accessors
 
-- (CompactDisc *)	disc								{ return [[_disc retain] autorelease]; }
+- (CompactDisc *)	disc								{ return _disc; }
 - (BOOL)			discInDrive							{ return _discInDrive; }
 - (NSString *)		discID								{ return ([self discInDrive] ? [[self disc] discID] : _discID); }
 
-- (NSString *)		title								{ return [[_title retain] autorelease]; }
-- (NSString *)		artist								{ return [[_artist retain] autorelease]; }
+- (NSString *)		title								{ return _title; }
+- (NSString *)		artist								{ return _artist; }
 - (unsigned)		year								{ return _year; }
-- (NSString *)		genre								{ return [[_genre retain] autorelease]; }
-- (NSString *)		composer							{ return [[_composer retain] autorelease]; }
-- (NSString *)		comment								{ return [[_comment retain] autorelease]; }
+- (NSString *)		genre								{ return _genre; }
+- (NSString *)		composer							{ return _composer; }
+- (NSString *)		comment								{ return _comment; }
 
-- (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
-- (NSDate *)		albumArtDownloadDate				{ return [[_albumArtDownloadDate retain] autorelease]; }
+- (NSImage *)		albumArt							{ return _albumArt; }
+- (NSDate *)		albumArtDownloadDate				{ return _albumArtDownloadDate; }
 - (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
 - (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
 
@@ -584,7 +584,7 @@
 - (unsigned)		discTotal							{ return _discTotal; }
 - (BOOL)			compilation							{ return _compilation; }
 
-- (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
+- (NSString *)		MCN									{ return _MCN; }
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
 - (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
