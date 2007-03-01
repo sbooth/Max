@@ -607,6 +607,7 @@
 		
 		[self setDiscInDrive:YES];
 		
+		[self setDiscID:[_disc discID]];
 		[self setMCN:[_disc MCN]];
 		
 		if(0 == [self countOfTracks]) {
