@@ -92,8 +92,10 @@
 	result		= SELF_DECOMPRESSOR->GetData((char *)rawBuffer, [buffer freeSpaceAvailable] / blockSize, &samplesRead);
 	NSAssert(ERROR_SUCCESS == result, @"Monkey's Audio invalid checksum.");
 
-	// Convert data to big-endian
+	// Convert host-ordered data to big-endian
+#if __LITTLE_ENDIAN__
 	swab(rawBuffer, rawBuffer, samplesRead * blockSize);
+#endif
 	
 	[buffer wroteBytes:samplesRead * blockSize];
 }
