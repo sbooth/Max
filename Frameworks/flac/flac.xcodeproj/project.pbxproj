@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8CADD68C0B1E6D8500670EED /* bitbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CADD6780B1E6D8500670EED /* bitbuffer.c */; };
+		8C763AD30BA30B210012A09E /* bitreader.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C763AD10BA30B210012A09E /* bitreader.c */; };
+		8C763AD40BA30B210012A09E /* bitwriter.c in Sources */ = {isa = PBXBuildFile; fileRef = 8C763AD20BA30B210012A09E /* bitwriter.c */; };
 		8CADD68D0B1E6D8500670EED /* bitmath.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CADD6790B1E6D8500670EED /* bitmath.c */; };
 		8CADD68E0B1E6D8500670EED /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CADD67A0B1E6D8500670EED /* cpu.c */; };
 		8CADD68F0B1E6D8500670EED /* crc.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CADD67B0B1E6D8500670EED /* crc.c */; };
@@ -47,7 +48,8 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* flac_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flac_Prefix.pch; sourceTree = "<group>"; };
-		8CADD6780B1E6D8500670EED /* bitbuffer.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitbuffer.c; path = flac/src/libFLAC/bitbuffer.c; sourceTree = "<group>"; };
+		8C763AD10BA30B210012A09E /* bitreader.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitreader.c; path = flac/src/libFLAC/bitreader.c; sourceTree = "<group>"; };
+		8C763AD20BA30B210012A09E /* bitwriter.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitwriter.c; path = flac/src/libFLAC/bitwriter.c; sourceTree = "<group>"; };
 		8CADD6790B1E6D8500670EED /* bitmath.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = bitmath.c; path = flac/src/libFLAC/bitmath.c; sourceTree = "<group>"; };
 		8CADD67A0B1E6D8500670EED /* cpu.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = cpu.c; path = flac/src/libFLAC/cpu.c; sourceTree = "<group>"; };
 		8CADD67B0B1E6D8500670EED /* crc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = crc.c; path = flac/src/libFLAC/crc.c; sourceTree = "<group>"; };
@@ -137,6 +139,8 @@
 		08FB77AEFE84172EC02AAC07 /* libFLAC */ = {
 			isa = PBXGroup;
 			children = (
+				8C763AD10BA30B210012A09E /* bitreader.c */,
+				8C763AD20BA30B210012A09E /* bitwriter.c */,
 				8CADE1C20B1EAB1600670EED /* config.h */,
 				8CADD6BD0B1E6E5500670EED /* all.h */,
 				8CADD6BE0B1E6E5500670EED /* assert.h */,
@@ -147,7 +151,6 @@
 				8CADD6C30B1E6E5500670EED /* ordinals.h */,
 				8CADD6C40B1E6E5500670EED /* stream_decoder.h */,
 				8CADD6C50B1E6E5500670EED /* stream_encoder.h */,
-				8CADD6780B1E6D8500670EED /* bitbuffer.c */,
 				8CADD6790B1E6D8500670EED /* bitmath.c */,
 				8CADD67A0B1E6D8500670EED /* cpu.c */,
 				8CADD67B0B1E6D8500670EED /* crc.c */,
@@ -271,7 +274,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CADD68C0B1E6D8500670EED /* bitbuffer.c in Sources */,
 				8CADD68D0B1E6D8500670EED /* bitmath.c in Sources */,
 				8CADD68E0B1E6D8500670EED /* cpu.c in Sources */,
 				8CADD68F0B1E6D8500670EED /* crc.c in Sources */,
@@ -291,6 +293,8 @@
 				8CADD69D0B1E6D8500670EED /* stream_encoder_framing.c in Sources */,
 				8CADD69E0B1E6D8500670EED /* stream_encoder.c in Sources */,
 				8CADD69F0B1E6D8500670EED /* window.c in Sources */,
+				8C763AD30BA30B210012A09E /* bitreader.c in Sources */,
+				8C763AD40BA30B210012A09E /* bitwriter.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
