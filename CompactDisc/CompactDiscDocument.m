@@ -56,33 +56,32 @@
 
 - (id) init
 {
-	if((self = [super init])) {
-		
-		_tracks				= [[NSMutableArray alloc] init];		
-		
-		return self;
+	if((self = [super init])) {		
+		_tracks = [[NSMutableArray alloc] init];		
 	}
-	return nil;
+	return self;
 }
 
 - (void) dealloc
 {	
-	[_disc release];					_disc = nil;
+	[_disc release],					_disc = nil;
 
-	[_mbHelper release];				_mbHelper = nil;
+	[_discID release],					_discID = nil;
 
-	[_title release];					_title = nil;
-	[_artist release];					_artist = nil;
-	[_genre release];					_genre = nil;
-	[_composer release];				_composer = nil;
-	[_comment release];					_comment = nil;
+	[_mbHelper release],				_mbHelper = nil;
 
-	[_albumArt release];				_albumArt = nil;
-	[_albumArtDownloadDate release];	_albumArtDownloadDate = nil;
+	[_title release],					_title = nil;
+	[_artist release],					_artist = nil;
+	[_genre release],					_genre = nil;
+	[_composer release],				_composer = nil;
+	[_comment release],					_comment = nil;
 
-	[_MCN release];						_MCN = nil;
+	[_albumArt release],				_albumArt = nil;
+	[_albumArtDownloadDate release],	_albumArtDownloadDate = nil;
+
+	[_MCN release],						_MCN = nil;
 	
-	[_tracks release];					_tracks = nil;
+	[_tracks release],					_tracks = nil;
 	
 	[super dealloc];
 }
@@ -100,18 +99,24 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	BOOL result;
-	
-	switch([item tag]) {
-		default:								result = [super validateMenuItem:item];			break;
-		case kEncodeMenuItemTag:				result = [self encodeAllowed];					break;
-		case kQueryMusicBrainzMenuItemTag:		result = [self queryMusicBrainzAllowed];		break;
-		case kEjectDiscMenuItemTag:				result = [self ejectDiscAllowed];				break;
-		case kSelectNextTrackMenuItemTag:		result = [_trackController canSelectNext];		break;
-		case kSelectPreviousTrackMenuItemTag:	result = [_trackController canSelectPrevious];	break;
+	if([item action] == @selector(encode:)) {
+		return [self encodeAllowed];
 	}
-	
-	return result;
+	else if([item action] == @selector(queryMusicBrainz:)) {
+		return [self queryMusicBrainzAllowed];
+	}
+	else if([item action] == @selector(ejectDisc:)) {
+		return [self ejectDiscAllowed];
+	}
+	else if([item action] == @selector(selectNextTrack:)) {
+		return [_trackController canSelectNext];
+	}
+	else if([item action] == @selector(selectPreviousTrack:)) {
+		return [_trackController canSelectPrevious];
+	}
+	else {
+		return [super validateMenuItem:item];
+	}
 }
 
 - (void) makeWindowControllers 
@@ -148,15 +153,15 @@
 		
 		[result setValue:[self title] forKey:@"title"];
 		[result setValue:[self artist] forKey:@"artist"];
-		[result setObject:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
+		[result setValue:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
 		[result setValue:[self genre] forKey:@"genre"];
 		[result setValue:[self composer] forKey:@"composer"];
 		[result setValue:[self comment] forKey:@"comment"];
-		[result setObject:[NSNumber numberWithUnsignedInt:[self discNumber]] forKey:@"discNumber"];
-		[result setObject:[NSNumber numberWithUnsignedInt:[self discTotal]] forKey:@"discTotal"];
-		[result setObject:[NSNumber numberWithBool:[self compilation]] forKey:@"compilation"];
+		[result setValue:[NSNumber numberWithUnsignedInt:[self discNumber]] forKey:@"discNumber"];
+		[result setValue:[NSNumber numberWithUnsignedInt:[self discTotal]] forKey:@"discTotal"];
+		[result setValue:[NSNumber numberWithBool:[self compilation]] forKey:@"compilation"];
 		[result setValue:[self MCN] forKey:@"MCN"];
-		[result setObject:[self discID] forKey:@"discID"];
+		[result setValue:[self discID] forKey:@"discID"];
 		
 		if(nil != [self albumArt]) {
 			data = getPNGDataForImage([self albumArt]); 
@@ -168,7 +173,7 @@
 			[tracks addObject:[[self objectInTracksAtIndex:i] getDictionary]];
 		}
 		
-		[result setObject:tracks forKey:@"tracks"];
+		[result setValue:tracks forKey:@"tracks"];
 
 		data = [NSPropertyListSerialization dataFromPropertyList:result format:NSPropertyListXMLFormat_v1_0 errorDescription:&error];
 		if(nil != data) {
@@ -205,18 +210,19 @@
 				}
 			}
 			
-			[_title release];						_title = nil;
-			[_artist release];						_artist = nil;
-			[_genre release];						_genre = nil;
-			[_composer release];					_composer = nil;
-			[_comment release];						_comment = nil;
+			[_title release],						_title = nil;
+			[_artist release],						_artist = nil;
+			[_genre release],						_genre = nil;
+			[_composer release],					_composer = nil;
+			[_comment release],						_comment = nil;
 			
-			[_albumArt release];					_albumArt = nil;
-			[_albumArtDownloadDate release];		_albumArtDownloadDate = nil;
+			[_albumArt release],					_albumArt = nil;
+			[_albumArtDownloadDate release],		_albumArtDownloadDate = nil;
 			
-			[_MCN release];							_MCN = nil;
+			[_discID release],						_discID = nil;
+			[_MCN release],							_MCN = nil;
 			
-			_discID			= [dictionary valueForKey:@"discID"];
+			_discID			= [[dictionary valueForKey:@"discID"] retain];
 
 			_title			= [[dictionary valueForKey:@"title"] retain];
 			_artist			= [[dictionary valueForKey:@"artist"] retain];
@@ -606,7 +612,7 @@
 		}
 		
 		[self setDiscInDrive:YES];
-		
+
 		[self setDiscID:[_disc discID]];
 		[self setMCN:[_disc MCN]];
 		
