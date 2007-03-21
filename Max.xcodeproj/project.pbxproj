@@ -298,7 +298,6 @@
 		8C1A62280B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/ComponentVersions.nib; sourceTree = "<group>"; };
 		8C1A62290B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/CoreAudioSettingsSheet.nib; sourceTree = "<group>"; };
 		8C1A622A0B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/Credits.rtf; sourceTree = "<group>"; };
-		8C1A622B0B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
 		8C1A622C0B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Encoder.nib; sourceTree = "<group>"; };
 		8C1A622D0B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/FileConversion.nib; sourceTree = "<group>"; };
 		8C1A622E0B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/FLACSettingsSheet.nib; sourceTree = "<group>"; };
@@ -1903,7 +1902,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C781F5009E8DAB4001D85EF /* English */,
-				8C1A622B0B7E5DA4008A04AB /* Spanish */,
 			);
 			name = CueSheetDocument.nib;
 			sourceTree = "<group>";
