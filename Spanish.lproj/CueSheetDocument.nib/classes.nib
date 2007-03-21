@@ -1,7 +1,0 @@
-{
-    IBClasses = (
-        {CLASS = CueSheetDocument; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
-    ); 
-    IBVersion = 1; 
-}
