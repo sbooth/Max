@@ -171,7 +171,7 @@
 		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u/%u", trackNumber, trackTotal] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
-	else {
+	else if(0 != trackNumber) {
 		f.tag()->setTrack(trackNumber);
 	}
 		
