@@ -391,8 +391,8 @@ ByteVector String::data(Type t) const
       char c1 = *it >> 8;
       char c2 = *it & 0xff;
 
-      v.append(c2);
       v.append(c1);
+      v.append(c2);
     }
     break;
   }
@@ -434,8 +434,9 @@ String String::stripWhiteSpace() const
   wstring::const_iterator begin = d->data.begin();
   wstring::const_iterator end = d->data.end();
 
-  while(*begin == '\t' || *begin == '\n' || *begin == '\f' ||
-        *begin == '\r' || *begin == ' ' && begin != end)
+  while(begin != end &&
+        (*begin == '\t' || *begin == '\n' || *begin == '\f' ||
+         *begin == '\r' || *begin == ' '))
   {
     ++begin;
   }
@@ -443,7 +444,7 @@ String String::stripWhiteSpace() const
   if(begin == end)
     return null;
 
-  // There must be at least one non-whitespace charater here for us to have
+  // There must be at least one non-whitespace character here for us to have
   // gotten this far, so we should be safe not doing bounds checking.
 
   do {

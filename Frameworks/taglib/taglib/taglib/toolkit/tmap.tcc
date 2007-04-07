@@ -84,8 +84,7 @@ template <class Key, class T>
 Map<Key, T> &Map<Key, T>::insert(const Key &key, const T &value)
 {
   detach();
-  std::pair<Key, T> item(key, value);
-  d->map.insert(item);
+  d->map[key] = value;
   return *this;
 }
 
@@ -136,7 +135,7 @@ Map<Key, T> &Map<Key,T>::erase(const Key &key)
   detach();
   Iterator it = d->map.find(key);
   if(it != d->map.end())
-      d->map.erase(it);
+    d->map.erase(it);
   return *this;
 }
 
