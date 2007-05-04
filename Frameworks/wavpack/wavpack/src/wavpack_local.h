@@ -48,11 +48,19 @@ typedef unsigned int	uint;
 // allocate bit fields from the most significant bits, although I'm not sure
 // how common that is.
 
+#if __BIG_ENDIAN__
+typedef struct {
+    unsigned sign : 1;
+    unsigned exponent : 8;
+    unsigned mantissa : 23;
+} f32;
+#else
 typedef struct {
     unsigned mantissa : 23;
     unsigned exponent : 8;
     unsigned sign : 1;
 } f32;
+#endif
 
 #include <stdio.h>
 
