@@ -226,30 +226,14 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 					buffer8 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
-							byteOne				= buffer8[sample];
-							byteTwo				= buffer8[++sample];
-							byteThree			= buffer8[++sample];
+							// We need the sign bit off of the first byte
+							constructedSample	= (int32_t)buffer8[sample];
+							constructedSample	<<= 8;
+							constructedSample	|= (uint8_t)buffer8[++sample];
+							constructedSample	<<= 8;
+							constructedSample	|= (uint8_t)buffer8[++sample];
 							
-							// For simplicity's sake, rather than working with 24-bit numbers just promote them to 32 bits
-							constructedSample	= ((byteOne << 24) & 0xFF000000) | ((byteTwo << 16) & 0xFF0000) | ((byteThree << 8) & 0xFF00) | (byteThree & 0xFF);
-							constructedSample	= OSSwapBigToHostInt32(constructedSample);
-							normalizedSample	= constructedSample / 2147483648.f;
-							
-							// For some reason I keep gettings clicks when attempting to process the number in 24 bits
-							/*
-							constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);							
-							constructedSample	= OSSwapBigToHostInt32(constructedSample);
-							
-							if(8388608 < constructedSample) {
-								constructedSample = ~constructedSample;
-								constructedSample &= 0x7FFFFF;
-								constructedSample *= -1;
-							}
-
-							normalizedSample	= constructedSample / 8388608.f;
-							 */
-							
-							buffer[channel][wideSample] = normalizedSample;
+							buffer[channel][wideSample] = ((int32_t)OSSwapBigToHostInt32(constructedSample) / 8388608.);
 						}
 					}
 					break;

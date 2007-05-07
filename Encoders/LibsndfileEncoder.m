@@ -163,10 +163,12 @@
 					buffer8 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
-							byteOne				= buffer8[sample];
-							byteTwo				= buffer8[++sample];
-							byteThree			= buffer8[++sample];							
-							constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);
+							// We need the sign bit off of the first byte
+							constructedSample	= (int32_t)buffer8[sample];
+							constructedSample	<<= 8;
+							constructedSample	|= (uint8_t)buffer8[++sample];
+							constructedSample	<<= 8;
+							constructedSample	|= (uint8_t)buffer8[++sample];
 							
 							buf[(bufferList.mBuffers[0].mNumberChannels * wideSample) + channel] = (int32_t)OSSwapBigToHostInt32(constructedSample);
 							buf[(bufferList.mBuffers[0].mNumberChannels * wideSample) + channel] <<= 8;

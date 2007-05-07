@@ -409,17 +409,14 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 						
 					buffer8 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount && sample < bufferList.mBuffers[0].mDataByteSize; ++wideSample, ++sample) {
-
-						byteOne				= buffer8[sample];
-						byteTwo				= buffer8[++sample];
-						byteThree			= buffer8[++sample];
+						// We need the sign bit off of the first byte
+						constructedSample	= (int32_t)buffer8[sample];
+						constructedSample	<<= 8;
+						constructedSample	|= (uint8_t)buffer8[++sample];
+						constructedSample	<<= 8;
+						constructedSample	|= (uint8_t)buffer8[++sample];
 						
-						// For simplicity's sake, rather than working with 24-bit numbers just promote them to 32 bits
-						constructedSample	= ((byteOne << 24) & 0xFF000000) | ((byteTwo << 16) & 0xFF0000) | ((byteThree << 8) & 0xFF00) | (byteThree & 0xFF);
-						constructedSample	= OSSwapBigToHostInt32(constructedSample);
-						normalizedSample	= constructedSample / 2147483648.f;
-						
-						floatBuffer[wideSample] = normalizedSample;
+						floatBuffer[wideSample] = ((int32_t)OSSwapBigToHostInt32(constructedSample) / 8388608.);
 					}
 					break;
 
