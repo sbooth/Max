@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8CA82A3E0BF28A5600E98527 /* wavpackfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA82A3A0BF28A5600E98527 /* wavpackfile.cpp */; };
+		8CA82A400BF28A5600E98527 /* wavpackproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA82A3C0BF28A5600E98527 /* wavpackproperties.cpp */; };
+		8CA82A420BF28A6700E98527 /* wavpackfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA82A3B0BF28A5600E98527 /* wavpackfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CA82A430BF28A6800E98527 /* wavpackproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA82A3D0BF28A5600E98527 /* wavpackproperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA12DD0AC8A95C009E46CB /* apefooter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA125B0AC8A95C009E46CB /* apefooter.cpp */; };
 		8CEA12DE0AC8A95C009E46CB /* apefooter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA125C0AC8A95C009E46CB /* apefooter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA12DF0AC8A95C009E46CB /* apeitem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA125D0AC8A95C009E46CB /* apeitem.cpp */; };
@@ -125,6 +129,10 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* taglib_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = taglib_Prefix.pch; sourceTree = "<group>"; };
+		8CA82A3A0BF28A5600E98527 /* wavpackfile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wavpackfile.cpp; path = taglib/taglib/wavpack/wavpackfile.cpp; sourceTree = "<group>"; };
+		8CA82A3B0BF28A5600E98527 /* wavpackfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wavpackfile.h; path = taglib/taglib/wavpack/wavpackfile.h; sourceTree = "<group>"; };
+		8CA82A3C0BF28A5600E98527 /* wavpackproperties.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wavpackproperties.cpp; path = taglib/taglib/wavpack/wavpackproperties.cpp; sourceTree = "<group>"; };
+		8CA82A3D0BF28A5600E98527 /* wavpackproperties.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wavpackproperties.h; path = taglib/taglib/wavpack/wavpackproperties.h; sourceTree = "<group>"; };
 		8CEA125B0AC8A95C009E46CB /* apefooter.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = apefooter.cpp; sourceTree = "<group>"; };
 		8CEA125C0AC8A95C009E46CB /* apefooter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = apefooter.h; sourceTree = "<group>"; };
 		8CEA125D0AC8A95C009E46CB /* apeitem.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = apeitem.cpp; sourceTree = "<group>"; };
@@ -289,6 +297,7 @@
 				8CEA12C40AC8A95C009E46CB /* tag.cpp */,
 				8CEA12C50AC8A95C009E46CB /* tag.h */,
 				8CEA12C60AC8A95C009E46CB /* toolkit */,
+				8CA82A340BF289E600E98527 /* wavpack */,
 			);
 			name = taglib;
 			sourceTree = "<group>";
@@ -317,6 +326,17 @@
 				32DBCF5E0370ADEE00C91783 /* taglib_Prefix.pch */,
 			);
 			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		8CA82A340BF289E600E98527 /* wavpack */ = {
+			isa = PBXGroup;
+			children = (
+				8CA82A3A0BF28A5600E98527 /* wavpackfile.cpp */,
+				8CA82A3B0BF28A5600E98527 /* wavpackfile.h */,
+				8CA82A3C0BF28A5600E98527 /* wavpackproperties.cpp */,
+				8CA82A3D0BF28A5600E98527 /* wavpackproperties.h */,
+			);
+			name = wavpack;
 			sourceTree = "<group>";
 		};
 		8CEA12590AC8A95C009E46CB /* ape */ = {
@@ -552,6 +572,8 @@
 				8CEA134F0AC8A95C009E46CB /* tstring.h in Headers */,
 				8CEA13510AC8A95C009E46CB /* tstringlist.h in Headers */,
 				8CEA13530AC8A95C009E46CB /* unicode.h in Headers */,
+				8CA82A420BF28A6700E98527 /* wavpackfile.h in Headers */,
+				8CA82A430BF28A6800E98527 /* wavpackproperties.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,6 +676,8 @@
 				8CEA134E0AC8A95C009E46CB /* tstring.cpp in Sources */,
 				8CEA13500AC8A95C009E46CB /* tstringlist.cpp in Sources */,
 				8CEA13520AC8A95C009E46CB /* unicode.cpp in Sources */,
+				8CA82A3E0BF28A5600E98527 /* wavpackfile.cpp in Sources */,
+				8CA82A400BF28A5600E98527 /* wavpackproperties.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
