@@ -312,7 +312,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized LAME target" userInfo:nil];
 	}
 	
-	//lame_set_findReplayGain(_gfp, 1);			
+	if([[settings objectForKey:@"calculateReplayGain"] boolValue]) {
+		lame_set_findReplayGain(_gfp, 1);
+	}
 }
 
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
