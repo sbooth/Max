@@ -190,7 +190,7 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 		
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Tagging", @"Preferences", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Tagging", @"Preferences", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify custom tag names for FLAC, Ogg (Vorbis) and Monkey's Audio files", @"Preferences", @"")];
+		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Specify custom tag names for FLAC, Ogg Vorbis and Monkey's Audio files", @"Preferences", @"")];
 		[toolbarItem setImage: [NSImage imageNamed:@"TaggingToolbarImage"]];
 		
 		[toolbarItem setTarget:self];

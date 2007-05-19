@@ -38,13 +38,13 @@
 "No output formats are selected." = "Es sind keine Ausgabeformate ausgewählt.";
 
 /* No comment provided by engineer. */
-"Ogg (FLAC)" = "Ogg (FLAC)";
+"Ogg FLAC" = "Ogg FLAC";
 
 /* No comment provided by engineer. */
-"Ogg (Speex)" = "Ogg (Speex)";
+"Speex" = "Speex";
 
 /* No comment provided by engineer. */
-"Ogg (Vorbis)" = "Ogg (Vorbis)";
+"Ogg Vorbis" = "Ogg Vorbis";
 
 /* No comment provided by engineer. */
 "OK" = "OK";

@@ -77,7 +77,7 @@
 "The file does not appear to be a valid Musepack file." = "Die Datei scheint keine gültige Musepack Datei zu sein.";
 
 /* No comment provided by engineer. */
-"The file does not appear to be a valid Ogg (Vorbis) file." = "Die Datei scheint keine gültige Ogg (Vorbis) Datei zu sein.";
+"The file does not appear to be a valid Ogg Vorbis file." = "Die Datei scheint keine gültige Ogg Vorbis Datei zu sein.";
 
 /* No comment provided by engineer. */
 "The file's format was not recognized." = "Das Dateiformat wurde nicht erkannt.";
@@ -179,7 +179,7 @@
 "Unable to initialize the ogg stream." = "Kann den Ogg Datenstrom nicht initialisieren.";
 
 /* No comment provided by engineer. */
-"Unable to initialize the Ogg (Vorbis) encoder." = "Kann den Ogg (Vorbis) Enkoder nicht initialisieren.";
+"Unable to initialize the Ogg Vorbis encoder." = "Kann den Ogg Vorbis Enkoder nicht initialisieren.";
 
 /* No comment provided by engineer. */
 "Unable to initialize the WavPack encoder." = "Kann den WavPack Enkoder nicht initialisieren.";

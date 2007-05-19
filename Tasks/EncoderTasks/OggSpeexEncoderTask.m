@@ -33,6 +33,6 @@
 }
 
 - (NSString *)		fileExtension					{ return @"spx"; }
-- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Ogg (Speex)", @"General", @""); }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Speex", @"General", @""); }
 
 @end

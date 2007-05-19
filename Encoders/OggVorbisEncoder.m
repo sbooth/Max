@@ -149,11 +149,11 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		// Use quality-based VBR
 		if(VORBIS_MODE_QUALITY == _mode) {
 			result = vorbis_encode_init_vbr(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, _quality);
-			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg (Vorbis) encoder.", @"Exceptions", @""));
+			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @""));
 		}
 		else if(VORBIS_MODE_BITRATE == _mode) {
 			result = vorbis_encode_init(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1));
-			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg (Vorbis) encoder.", @"Exceptions", @""));
+			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @""));
 		}
 		else {
 			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];

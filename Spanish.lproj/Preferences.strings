@@ -30,8 +30,8 @@
 	<string>Seleccione dónde se guardarán los archivos de salida y cómo se nombrarán</string>
 	<key>Specify applications to open the encoded files</key>
 	<string>Especifique aplicaciones para abrir los archivos codificados</string>
-	<key>Specify custom tag names for FLAC, Ogg (Vorbis) and Monkey's Audio files</key>
-	<string>Especifique nombres de etiqeuta personalizados para archivos FLAC, Ogg (Vorbis) y Monkey's Audio</string>
+	<key>Specify custom tag names for FLAC, Ogg Vorbis and Monkey's Audio files</key>
+	<string>Especifique nombres de etiqeuta personalizados para archivos FLAC, Ogg Vorbis y Monkey's Audio</string>
 	<key>Specify the server used by MusicBrainz to retrieve disc information</key>
 	<string>Especifique el servidor usado por MusicBrainz para recuperar información del disco</string>
 	<key>Specify whether to add the encoded files to iTunes</key>

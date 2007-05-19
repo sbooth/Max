@@ -56,8 +56,8 @@
 	<string>La llamada a %@ falló.</string>
 	<key>The file does not appear to be a valid Musepack file.</key>
 	<string>El archivo no parece ser un archivo Musepack válido.</string>
-	<key>The file does not appear to be a valid Ogg (Vorbis) file.</key>
-	<string>El archivo no parece ser un archivo Ogg (Vorbis) válido.</string>
+	<key>The file does not appear to be a valid Ogg Vorbis file.</key>
+	<string>El archivo no parece ser un archivo Ogg Vorbis válido.</string>
 	<key>The file's format was not recognized.</key>
 	<string>No se reconoce el formato de archivo.</string>
 	<key>The retry limit was exceeded.</key>
@@ -120,8 +120,8 @@
 	<string>Imposible inicializar el codificador LAME.</string>
 	<key>Unable to initialize the Monkey's Audio compressor.</key>
 	<string>Imposible inicializar el compresor de Monkey's Audio.</string>
-	<key>Unable to initialize the Ogg (Vorbis) encoder.</key>
-	<string>Imposible inicializar el codificador Ogg (Vorbis).</string>
+	<key>Unable to initialize the Ogg Vorbis encoder.</key>
+	<string>Imposible inicializar el codificador Ogg Vorbis.</string>
 	<key>Unable to initialize the WavPack encoder.</key>
 	<string>Imposible inicializar el codificador WavPack.</string>
 	<key>Unable to initialize the ogg stream.</key>

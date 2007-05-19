@@ -28,12 +28,12 @@
 	<string>No se han seleccionado formatos de salida.</string>
 	<key>OK</key>
 	<string>OK</string>
-	<key>Ogg (FLAC)</key>
-	<string>Ogg (FLAC)</string>
-	<key>Ogg (Speex)</key>
-	<string>Ogg (Speex)</string>
-	<key>Ogg (Vorbis)</key>
-	<string>Ogg (Vorbis)</string>
+	<key>Ogg FLAC</key>
+	<string>Ogg FLAC</string>
+	<key>Speex</key>
+	<string>Speex</string>
+	<key>Ogg Vorbis</key>
+	<string>Ogg Vorbis</string>
 	<key>Please select one or more output formats.</key>
 	<string>Por favor seleccione uno o más formatos de salida.</string>
 	<key>Queued</key>

@@ -177,6 +177,6 @@
 }
 
 - (NSString *)		fileExtension					{ return @"oga"; }
-- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Ogg (FLAC)", @"General", @""); }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Ogg FLAC", @"General", @""); }
 
 @end
