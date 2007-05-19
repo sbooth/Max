@@ -231,3 +231,10 @@
 - (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @""); }
 
 @end
+
+@implementation MonkeysAudioEncoderTask (CueSheetAdditions)
+
+- (BOOL)			formatIsValidForCueSheet			{ return YES; }
+- (NSString *)		cueSheetFormatName					{ return @"APE"; }
+
+@end

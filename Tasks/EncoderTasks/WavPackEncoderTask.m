@@ -186,3 +186,10 @@
 - (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"WavPack", @"General", @""); }
 
 @end
+
+@implementation WavPackEncoderTask (CueSheetAdditions)
+
+- (BOOL)			formatIsValidForCueSheet			{ return YES; }
+- (NSString *)		cueSheetFormatName					{ return @"WavPack"; }
+
+@end

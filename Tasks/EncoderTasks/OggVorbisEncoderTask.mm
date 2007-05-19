@@ -177,6 +177,6 @@
 }
 
 - (NSString *)		fileExtension					{ return @"ogg"; }
-- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Ogg (Vorbis)", @"General", @""); }
+- (NSString *)		outputFormatName				{ return NSLocalizedStringFromTable(@"Ogg Vorbis", @"General", @""); }
 
 @end
