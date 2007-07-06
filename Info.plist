@@ -37,10 +37,28 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>oga</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Ogg Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.xiph.ogg</string>
+			</array>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>Binary</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>spx</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Ogg (Speex) Audio</string>
+			<string>Ogg Speex Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -72,7 +90,7 @@
 				<string>ogg</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Ogg Multimedia</string>
+			<string>Ogg Vorbis Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSItemContentTypes</key>
@@ -212,7 +230,7 @@
 				<string>oggflac</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Ogg (FLAC) Audio</string>
+			<string>Ogg FLAC Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
