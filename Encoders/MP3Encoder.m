@@ -145,8 +145,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @""));
 
 		// Open the output file
-		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		NSAssert(-1 != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
+		_out = fopen([filename fileSystemRepresentation], "w");
+		NSAssert(NULL != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		
 		// Iteratively get the PCM data and encode it
 		for(;;) {
@@ -193,9 +193,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		[self finishEncode];
 		
 		// Close the output file
-		result = close(_out);
-		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @""));
-		_out = -1;
+		result = fclose(_out);
+		NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @""));
+		_out = NULL;
 		
 		// Write the Xing VBR tag
 		file = fopen([filename fileSystemRepresentation], "r+");
@@ -217,7 +217,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		NSException *exception;
 				
 		// Close the output file if not already closed
-		if(-1 != _out && -1 == close(_out)) {
+		if(NULL != _out && EOF == fclose(_out)) {
 			exception = [NSException exceptionWithName:@"IOException"
 												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
@@ -334,7 +334,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	int32_t			constructedSample;
 	
 	int				result;
-	long			bytesWritten;
+	size_t			numWritten;
 	
 	unsigned		wideSample;
 	unsigned		sample, channel;
@@ -449,8 +449,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		
 		NSAssert(0 <= result, NSLocalizedStringFromTable(@"LAME encoding error.", @"Exceptions", @""));
 		
-		bytesWritten = write(_out, buffer, result);
-		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
+		numWritten = fwrite(buffer, sizeof(unsigned char), result, _out);
+		NSAssert(numWritten == result, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 	}
 	
 	@finally {
@@ -469,7 +469,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	int				bufSize;
 	
 	int				result;
-	ssize_t			bytesWritten;
+	size_t			numWritten;
 	
 	@try {
 		buf = NULL;
@@ -484,8 +484,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		NSAssert(-1 != result, NSLocalizedStringFromTable(@"LAME was unable to flush the buffers.", @"Exceptions", @""));
 		
 		// And write any frames it returns
-		bytesWritten = write(_out, buf, result);
-		NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
+		numWritten = fwrite(buf, sizeof(unsigned char), result, _out);
+		NSAssert(numWritten == result, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 	}
 	
 	@finally {

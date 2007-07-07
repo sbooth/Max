@@ -49,7 +49,7 @@ enum {
 
 @interface MP3Encoder : Encoder
 {	
-	int						_out;
+	FILE					*_out;
 	lame_global_flags		*_gfp;
 }
 
