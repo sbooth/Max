@@ -209,7 +209,7 @@
 "Unable to open the output file." = "Kan het uitvoer bestand niet openen.";
 
 /* No comment provided by engineer. */
-"Unable to read from the disc." = "Kan de drive niet openen voor schrijven.";
+"Unable to read from the disc." = "Kan de disk niet lezen.";
 
 /* No comment provided by engineer. */
 "Unable to read from the input file." = "Kan het invoer bestand niet lezen.";
