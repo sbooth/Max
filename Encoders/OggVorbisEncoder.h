@@ -30,7 +30,7 @@ enum {
 
 @interface OggVorbisEncoder : Encoder
 {	
-	int						_out;
+	FILE					*_out;
 	
 	int						_mode;
 	float					_quality;

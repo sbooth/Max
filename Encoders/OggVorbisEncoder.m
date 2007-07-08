@@ -65,9 +65,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 	unsigned					wideSample;
 	unsigned					sample, channel;
 	
-	int8_t						byteOne, byteTwo, byteThree;
 	int32_t						constructedSample;
-	float						normalizedSample;
 
 	BOOL						eos									= NO;
 
@@ -77,7 +75,8 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 	SInt64						totalFrames, framesToRead;
 	UInt32						frameCount;
 	
-	int							result, bytesWritten;
+	int							result;
+	size_t						numWritten;
 	
 	unsigned long				iterations							= 0;
 	
@@ -135,13 +134,12 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Open the output file
-		_out = open([filename fileSystemRepresentation], O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-		NSAssert(-1 != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
+		_out = fopen([filename fileSystemRepresentation], "w");
+		NSAssert(NULL != _out, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		
 		// Check if we should stop, and if so throw an exception
-		if([[self delegate] shouldStop]) {
+		if([[self delegate] shouldStop])
 			@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-		}
 		
 		// Setup the encoder
 		vorbis_info_init(&vi);
@@ -155,9 +153,8 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			result = vorbis_encode_init(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1));
 			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @""));
 		}
-		else {
+		else
 			@throw [NSException exceptionWithName:@"NSInternalInconsistencyException" reason:@"Unrecognized vorbis mode" userInfo:nil];
-		}
 		
 		vorbis_comment_init(&vc);
 		
@@ -176,15 +173,14 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		ogg_stream_packetin(&os, &header_code);
 		
 		for(;;) {
-			if(0 == ogg_stream_flush(&os, &og)) {
+			if(0 == ogg_stream_flush(&os, &og))
 				break;	
-			}
 			
-			bytesWritten = write(_out, og.header, og.header_len);
-			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
+			numWritten = fwrite(og.header, sizeof(unsigned char), og.header_len, _out);
+			NSAssert(numWritten == og.header_len, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 			
-			bytesWritten = write(_out, og.body, og.body_len);
-			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
+			numWritten = fwrite(og.body, sizeof(unsigned char), og.body_len, _out);
+			NSAssert(numWritten == og.body_len, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 		}
 		
 		// Iteratively get the PCM data and encode it
@@ -196,7 +192,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount = [[self decoder] readAudio:&bufferList frameCount:frameCount];
 			
 			// Expose the buffer to submit data
 			buffer = vorbis_analysis_buffer(&vd, frameCount);
@@ -207,18 +203,16 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				case 8:
 					buffer8 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample)
 							buffer[channel][wideSample] = buffer8[sample] / 128.f;
-						}
 					}
 					break;
 					
 				case 16:
 					buffer16 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample)
 							buffer[channel][wideSample] = ((int16_t)OSSwapBigToHostInt16(buffer16[sample])) / 32768.f;
-						}
 					}
 					break;
 					
@@ -241,9 +235,8 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 				case 32:
 					buffer32 = bufferList.mBuffers[0].mData;
 					for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample) {
+						for(channel = 0; channel < bufferList.mBuffers[0].mNumberChannels; ++channel, ++sample)
 							buffer[channel][wideSample] = ((int32_t)OSSwapBigToHostInt32(buffer32[sample])) / 2147483648.f;
-						}
 					}
 					break;
 					
@@ -262,9 +255,8 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([[self delegate] shouldStop]) {
+				if([[self delegate] shouldStop])
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-				}
 				
 				// Update UI
 				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
@@ -288,19 +280,17 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 					// Write out pages (if any)
 					while(NO == eos) {
 						
-						if(0 == ogg_stream_pageout(&os, &og)) {
+						if(0 == ogg_stream_pageout(&os, &og))
 							break;
-						}
 						
-						bytesWritten = write(_out, og.header, og.header_len);
-						NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
+						numWritten = fwrite(og.header, sizeof(unsigned char), og.header_len, _out);
+						NSAssert(numWritten == og.header_len, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 						
-						bytesWritten = write(_out, og.body, og.body_len);
-						NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
+						numWritten = fwrite(og.body, sizeof(unsigned char), og.body_len, _out);
+						NSAssert(numWritten == og.body_len, NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 						
-						if(ogg_page_eos(&og)) {
+						if(ogg_page_eos(&og))
 							eos = YES;
-						}
 					}
 				}
 			}
@@ -320,7 +310,7 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		NSException *exception;
 		
 		// Close the output file
-		if(-1 == close(_out)) {
+		if(EOF == fclose(_out)) {
 			exception = [NSException exceptionWithName:@"IOException"
 												reason:NSLocalizedStringFromTable(@"Unable to close the output file.", @"Exceptions", @"") 
 											  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
