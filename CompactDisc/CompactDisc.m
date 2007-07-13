@@ -22,8 +22,8 @@
 
 #import "Drive.h"
 #import "LogController.h"
-#import "MusicBrainzHelper.h"
 
+#include <discid/discid.h>
 #include <IOKit/storage/IOCDTypes.h>
 
 @implementation CompactDisc
@@ -46,9 +46,8 @@
 		drive = [[Drive alloc] initWithDeviceName:[self deviceName]];
 
 		// Is this is a multisession disc?
-		if([drive lastSession] - [drive firstSession] > 0) {
+		if([drive lastSession] - [drive firstSession] > 0)
 			[LogController logMessage:NSLocalizedStringFromTable(@"Multisession disc detected", @"Log", @"")];
-		}
 		
 		// Use first session for now
 		session			= 1;
@@ -82,16 +81,14 @@
 			[trackInfo setObject:[NSNumber numberWithBool:[track dataTrack]] forKey:@"dataTrack"];
 
 			ISRC = [drive readISRC:i];
-			if(nil != ISRC) {
+			if(nil != ISRC)
 				[trackInfo setObject:ISRC forKey:@"ISRC"];
-			}
 
 			[_tracks addObject:trackInfo];
 		}
 		
-		for(i = 0; i < [self countOfTracks]; ++i) {
+		for(i = 0; i < [self countOfTracks]; ++i)
 			discLength += [self lastSectorForTrack:i] - [self firstSectorForTrack:i] + 1;
-		}
 		_length = (unsigned) (60 * (discLength / (60 * 75))) + (unsigned)((discLength / 75) % 60);
 		
 		[drive release];
@@ -133,15 +130,27 @@
 
 - (NSString *) discID
 {
-	MusicBrainzHelper	*mb			= nil;
-	NSString			*discID		= nil;
+	NSString *musicBrainzDiscID = nil;
+	
+	DiscId *discID = discid_new();
+	if(NULL == discID)
+		return nil;
+	
+	// zero is lead out
+	int offsets[100];
+	offsets[0] = [self leadOut] + 150;
+	
+	unsigned i;
+	for(i = 0; i < [self countOfTracks]; ++i)
+		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
 
-	mb		= [[MusicBrainzHelper alloc] initWithCompactDisc:self];
-	discID	= [mb discID];
+	int result = discid_put(discID, 1, [self countOfTracks], offsets);
+	if(result)
+		musicBrainzDiscID = [NSString stringWithCString:discid_get_id(discID) encoding:NSASCIIStringEncoding];
+		
+	discid_free(discID);
 	
-	[mb release];
-	
-	return [[discID retain] autorelease];
+	return [[musicBrainzDiscID retain] autorelease];
 }
 
 - (unsigned)		length									{ return _length; }
