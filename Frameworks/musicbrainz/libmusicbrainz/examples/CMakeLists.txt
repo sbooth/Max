@@ -1,0 +1,8 @@
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../include)
+LINK_LIBRARIES(musicbrainz3 ${NEON_LIBRARIES})
+ADD_EXECUTABLE(cdlookup cdlookup.cpp)
+ADD_EXECUTABLE(findartist findartist.cpp)
+ADD_EXECUTABLE(findtrack findtrack.cpp)
+ADD_EXECUTABLE(getartist getartist.cpp)
+ADD_EXECUTABLE(getartist_c getartist_c.c)
+ADD_EXECUTABLE(getuser getuser.cpp)

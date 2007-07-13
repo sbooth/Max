@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5" type="Person">
+        <name>Tori Amos</name>
+        <sort-name>Amos, Tori</sort-name>
+        <life-span begin="1963-08-22"/>
+    </artist>
+</metadata>

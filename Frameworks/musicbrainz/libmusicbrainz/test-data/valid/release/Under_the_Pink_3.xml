@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <release id="290e10c5-7efc-4f60-ba2c-0dfc0208fbf5" type="Album Official">
+        <title>Under the Pink</title>
+        <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5">
+            <name>Tori Amos</name>
+        </artist>
+        <release-event-list>
+            <event date="1994-01-31" catalog-number="82567-2" barcode="07567825672">
+                <label id="50c384a2-0b44-401b-b893-8181173339c7">
+                    <name>Atlantic Records</name>
+                </label>
+            </event>
+        </release-event-list>
+    </release>
+</metadata>

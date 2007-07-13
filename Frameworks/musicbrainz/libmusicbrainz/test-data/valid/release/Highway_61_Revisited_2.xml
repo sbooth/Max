@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <release id="d61a2bd9-81ac-4023-bd22-1c884d4a176c" type="Album Official">
+        <title>Highway 61 Revisited</title>
+        <tag-list>
+	    <tag count="100">rock</tag>
+	    <tag count="40">blues rock</tag>
+	    <tag count="40">folk rock</tag>
+	    <tag count="4">dylan</tag>
+        </tag-list>
+    </release>
+</metadata>

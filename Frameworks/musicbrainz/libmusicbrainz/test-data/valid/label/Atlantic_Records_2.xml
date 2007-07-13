@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <label type="Distributor">
+        <name>Atlantic Records</name>
+        <sort-name>AR SortName</sort-name>
+        <label-code>121</label-code>
+        <disambiguation>fake</disambiguation>
+        <country>US</country>
+        <life-span begin="1947" end="2047"/>
+	<alias-list>
+	    <alias>Atlantic Rec.</alias>
+	</alias-list>
+    </label>
+</metadata>

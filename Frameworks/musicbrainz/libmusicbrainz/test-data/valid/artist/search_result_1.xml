@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#"
+          xmlns:ext="http://musicbrainz.org/ns/ext-1.0#">
+    <artist-list offset="0" count="47">
+        <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5" type="Person" ext:score="100">
+            <name>Tori Amos</name>
+            <sort-name>Amos, Tori</sort-name>
+            <life-span begin="1963-08-22"/>
+        </artist>
+        <artist id="896998e8-1f1f-4add-93ed-c8a951d0d4a1" type="Person" ext:score="44">
+            <name>Tori Spelling</name>
+            <sort-name>Spelling, Tori</sort-name>
+        </artist>
+        <artist id="986e37e5-50cf-4cc7-9791-dcc9b8daf830" ext:score="44">
+            <name>Lisa And Tori</name>
+            <sort-name>Lisa And Tori</sort-name>
+        </artist>
+    </artist-list>
+</metadata>

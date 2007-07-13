@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#"
+          xmlns:ext="http://musicbrainz.org/ns/ext-1.0#">
+    <label-list offset="0" count="2">
+        <label id="50c384a2-0b44-401b-b893-8181173339c7" type="OriginalProduction" ext:score="100">
+            <name>Atlantic Records</name>
+            <country>US</country>
+        </label>
+        <label id="c2ccaec8-0dfe-4dd5-a710-bddf5fd7c1a7" ext:score="46">
+            <name>DRO Atlantic</name>
+            <country>SP</country>
+        </label>
+    </label-list>
+</metadata>

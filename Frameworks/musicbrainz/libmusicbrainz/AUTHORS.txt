@@ -1,0 +1,108 @@
+Credits
+=======
+
+The following people have contributed to libmusicbrainz3:
+
+  Lukáš Lalinský <lalinsky at gmail dot com>
+    - Created the C++ implementation (based on python-musicbrainz2) and the
+      C bindings.
+    - CppUnit test suite. 
+  
+  Matthias Friedrich <matt at mafr dot de>
+    - Design and documentation for the original Python implementation.
+    - Autotools/libtool build system.
+
+    
+The following people have contributed to the original libmusicbrainz2:
+
+  Adam Wozniak <adam at mudlist dot eorbit dot net>
+   - original CD-ROM TOC code
+
+  Ben Wong <cdindex at wongs dot net>
+   - support for SGI Irix
+
+  Bert Vermeulen <bert at biot dot com>
+   - improved endian support
+
+  Johnny Tevessen <j dot tevessen at gmx dot net>
+   - brought in autoconf support
+
+  Jukka Poikolainen <jukka dot poikolainen at poikosoft dot com>
+   - brought in Win32 TOC code
+
+  Marc E E van Woerkom <van dot woerkom at netcologne dot de>
+   - support for FreeBSD, NetBSD, OpenBSD, Solaris and Win32/Cygwin
+
+  Mark A Mankins <raider at dnaco dot net>
+   - improved Netscape support 
+
+  Rick Bradey <roundeye at bellsouth dot net>
+   - support Linux 2 dot 2 kernel and -l command line option
+
+  Robert Kaye <rob at emusic dot com>
+   - hacked it together in the first place
+   - support for Win32/MS VC++
+   - coordination of the CD Index/MusicBrainz project
+   - move the CD Index over to MusicBrainz
+   - All the RDF/XML work in the client library
+
+  Stephen van Egmond <svanegmond at home dot com>
+   - support for BeOS
+
+  Winston Chang <winston at stdout dot org>
+   - support for Solaris
+
+  David W. Gray <david at thegray dot com>
+   - cmd.dsp and added support for exporting the C++ interface in Win32
+
+  Alexey Zakhlestine <indy at mgupp dot ru> 
+   - Supplied a patch compile this lib under BeOS
+
+  Brian Reichert <reichert at numachi dot com>
+   - Supplied a patch compile this lib under FreeBSD-4.3
+
+  Erik Gavert <erik at jsdata dot se>
+   - A small browser launch patch.
+
+  Patrick Mauritz <oxygene at studentenbude dot ath dot cx>
+   - A patch to allow building mb_client from a different directory. 
+
+  Chris Gray <cgray4 at cs dot mcgill dot ca>
+   - A patch to keep the trm stuff from crashing. 
+
+  Myers Carpenter <myers at maski dot org> 
+   - Added track duration queries to queries.h
+   - Added all the python and debian support
+
+  Matthias Friedrich <mfriedrich at users dot sourceforge dot net>
+   - Provided a patch for fixing NetBSD cdrom TOC code
+
+  Sander van Zoest <sander at vanZoest dot com>
+   - Wrote the perl bindings
+
+  Philippe Normand <sweafty at free dot fr>
+   - Supplied a couple of minor patches to the new build system
+
+  Andreas Rottmann <a dot rottmann at gmx dot at>
+   - Improve build system and debian support
+
+  Tim Van Holder <tim dot van dot holder at pandora dot be>
+   - Supplied a patch to fix some compile issues under cygwin
+
+  Clayton O'Neill <coneill at oneill dot net>
+   - Improved the mp3 sanity checking code in the lib/bitzi/mp3.c
+
+  Juergen Kreileder <jk at blackdown dot de>
+   - Supplied minimal patch for making sure that mb_client still works
+     when CDO_CHECK_TYPE is defined.
+
+  Martin Michlmayr <tbm at cyrius dot com>
+   - Supplied a number of patches that fixed minor issues with the reintegrated
+     python bindings
+
+  Ryan McCabe <ryan at numb dot org>
+   - Supplied a patch to fix pointer issues in comhttpsocket.cpp and
+     comsocket.cpp on 64-bit architectures. 
+  
+-- 
+$Id: AUTHORS.txt 9135 2007-05-12 11:09:24Z luks $

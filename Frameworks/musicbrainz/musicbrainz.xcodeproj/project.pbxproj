@@ -7,53 +7,65 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C98AC4B0C47275C004F7BF6 /* artist.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC310C47275C004F7BF6 /* artist.cpp */; };
+		8C98AC4C0C47275C004F7BF6 /* artistalias.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC320C47275C004F7BF6 /* artistalias.cpp */; };
+		8C98AC4D0C47275C004F7BF6 /* disc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC330C47275C004F7BF6 /* disc.cpp */; };
+		8C98AC4E0C47275C004F7BF6 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC340C47275C004F7BF6 /* entity.cpp */; };
+		8C98AC4F0C47275C004F7BF6 /* filters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC350C47275C004F7BF6 /* filters.cpp */; };
+		8C98AC500C47275C004F7BF6 /* includes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC360C47275C004F7BF6 /* includes.cpp */; };
+		8C98AC510C47275C004F7BF6 /* label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC370C47275C004F7BF6 /* label.cpp */; };
+		8C98AC520C47275C004F7BF6 /* mb_c.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC380C47275C004F7BF6 /* mb_c.cpp */; };
+		8C98AC530C47275C004F7BF6 /* mbxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC390C47275C004F7BF6 /* mbxmlparser.cpp */; };
+		8C98AC540C47275C004F7BF6 /* metadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC3A0C47275C004F7BF6 /* metadata.cpp */; };
+		8C98AC550C47275C004F7BF6 /* query.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC3B0C47275C004F7BF6 /* query.cpp */; };
+		8C98AC560C47275C004F7BF6 /* relation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC3C0C47275C004F7BF6 /* relation.cpp */; };
+		8C98AC570C47275C004F7BF6 /* release.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC3D0C47275C004F7BF6 /* release.cpp */; };
+		8C98AC580C47275C004F7BF6 /* releaseevent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC3E0C47275C004F7BF6 /* releaseevent.cpp */; };
+		8C98AC590C47275C004F7BF6 /* results.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC3F0C47275C004F7BF6 /* results.cpp */; };
+		8C98AC5A0C47275C004F7BF6 /* tag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC400C47275C004F7BF6 /* tag.cpp */; };
+		8C98AC5B0C47275C004F7BF6 /* track.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC410C47275C004F7BF6 /* track.cpp */; };
+		8C98AC5C0C47275C004F7BF6 /* user.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC420C47275C004F7BF6 /* user.cpp */; };
+		8C98AC5D0C47275C004F7BF6 /* utils_countrynames.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC430C47275C004F7BF6 /* utils_countrynames.h */; };
+		8C98AC5E0C47275C004F7BF6 /* utils_languagenames.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC440C47275C004F7BF6 /* utils_languagenames.h */; };
+		8C98AC5F0C47275C004F7BF6 /* utils_private.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC450C47275C004F7BF6 /* utils_private.cpp */; };
+		8C98AC600C47275C004F7BF6 /* utils_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC460C47275C004F7BF6 /* utils_private.h */; };
+		8C98AC610C47275C004F7BF6 /* utils_releasetypenames.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC470C47275C004F7BF6 /* utils_releasetypenames.h */; };
+		8C98AC620C47275C004F7BF6 /* utils_scriptnames.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC480C47275C004F7BF6 /* utils_scriptnames.h */; };
+		8C98AC630C47275C004F7BF6 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC490C47275C004F7BF6 /* utils.cpp */; };
+		8C98AC640C47275C004F7BF6 /* webservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC4A0C47275C004F7BF6 /* webservice.cpp */; };
+		8C98AC670C472768004F7BF6 /* xmlParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC650C472768004F7BF6 /* xmlParser.cpp */; };
+		8C98AC680C472768004F7BF6 /* xmlParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC660C472768004F7BF6 /* xmlParser.h */; };
+		8C98AC840C472778004F7BF6 /* artist.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC690C472778004F7BF6 /* artist.h */; };
+		8C98AC850C472778004F7BF6 /* artistalias.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6A0C472778004F7BF6 /* artistalias.h */; };
+		8C98AC860C472778004F7BF6 /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6B0C472778004F7BF6 /* defines.h */; };
+		8C98AC870C472778004F7BF6 /* disc.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6C0C472778004F7BF6 /* disc.h */; };
+		8C98AC880C472778004F7BF6 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6D0C472778004F7BF6 /* entity.h */; };
+		8C98AC890C472778004F7BF6 /* factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6E0C472778004F7BF6 /* factory.h */; };
+		8C98AC8A0C472778004F7BF6 /* filters.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6F0C472778004F7BF6 /* filters.h */; };
+		8C98AC8B0C472778004F7BF6 /* includes.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC700C472778004F7BF6 /* includes.h */; };
+		8C98AC8C0C472778004F7BF6 /* iwebservice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC710C472778004F7BF6 /* iwebservice.h */; };
+		8C98AC8D0C472778004F7BF6 /* label.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC720C472778004F7BF6 /* label.h */; };
+		8C98AC8E0C472778004F7BF6 /* labelalias.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC730C472778004F7BF6 /* labelalias.h */; };
+		8C98AC8F0C472778004F7BF6 /* lists.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC740C472778004F7BF6 /* lists.h */; };
+		8C98AC900C472778004F7BF6 /* mb_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC750C472778004F7BF6 /* mb_c.h */; };
+		8C98AC910C472778004F7BF6 /* mbxmlparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC760C472778004F7BF6 /* mbxmlparser.h */; };
+		8C98AC920C472778004F7BF6 /* metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC770C472778004F7BF6 /* metadata.h */; };
+		8C98AC930C472778004F7BF6 /* model.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC780C472778004F7BF6 /* model.h */; };
+		8C98AC940C472778004F7BF6 /* musicbrainz.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC790C472778004F7BF6 /* musicbrainz.h */; };
+		8C98AC950C472778004F7BF6 /* query.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7A0C472778004F7BF6 /* query.h */; };
+		8C98AC960C472778004F7BF6 /* relation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7B0C472778004F7BF6 /* relation.h */; };
+		8C98AC970C472778004F7BF6 /* release.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7C0C472778004F7BF6 /* release.h */; };
+		8C98AC980C472778004F7BF6 /* releaseevent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7D0C472778004F7BF6 /* releaseevent.h */; };
+		8C98AC990C472778004F7BF6 /* results.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7E0C472778004F7BF6 /* results.h */; };
+		8C98AC9A0C472778004F7BF6 /* tag.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7F0C472778004F7BF6 /* tag.h */; };
+		8C98AC9B0C472778004F7BF6 /* track.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC800C472778004F7BF6 /* track.h */; };
+		8C98AC9C0C472778004F7BF6 /* user.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC810C472778004F7BF6 /* user.h */; };
+		8C98AC9D0C472778004F7BF6 /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC820C472778004F7BF6 /* utils.h */; };
+		8C98AC9E0C472778004F7BF6 /* webservice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC830C472778004F7BF6 /* webservice.h */; };
+		8C98AD8F0C473AEF004F7BF6 /* neon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98AD8E0C473AEF004F7BF6 /* neon.framework */; };
+		8C98AD930C473B22004F7BF6 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AD920C473B22004F7BF6 /* config.h */; };
+		8C98ADA00C473B54004F7BF6 /* discid.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98AD9F0C473B54004F7BF6 /* discid.framework */; };
 		8CA99C450AD067B3000EF903 /* expat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99C440AD067B3000EF903 /* expat.framework */; };
-		8CA99C700AD067CD000EF903 /* apsmetadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C480AD067CD000EF903 /* apsmetadata.h */; };
-		8CA99C710AD067CD000EF903 /* apsutility.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C490AD067CD000EF903 /* apsutility.h */; };
-		8CA99C720AD067CD000EF903 /* audiosig.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C4A0AD067CD000EF903 /* audiosig.h */; };
-		8CA99C730AD067CD000EF903 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4B0AD067CD000EF903 /* base64.c */; };
-		8CA99C740AD067CD000EF903 /* base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C4C0AD067CD000EF903 /* base64.h */; };
-		8CA99C750AD067CD000EF903 /* browser.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4D0AD067CD000EF903 /* browser.c */; };
-		8CA99C760AD067CD000EF903 /* c_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4E0AD067CD000EF903 /* c_wrapper.cpp */; };
-		8CA99C770AD067CD000EF903 /* comhttpsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C4F0AD067CD000EF903 /* comhttpsocket.cpp */; };
-		8CA99C780AD067CD000EF903 /* comhttpsocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C500AD067CD000EF903 /* comhttpsocket.h */; };
-		8CA99C790AD067CD000EF903 /* comsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C510AD067CD000EF903 /* comsocket.cpp */; };
-		8CA99C7A0AD067CD000EF903 /* comsocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C520AD067CD000EF903 /* comsocket.h */; };
-		8CA99C7B0AD067CD000EF903 /* diskid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C530AD067CD000EF903 /* diskid.cpp */; };
-		8CA99C7C0AD067CD000EF903 /* diskid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C540AD067CD000EF903 /* diskid.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CA99C7D0AD067CD000EF903 /* haar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C550AD067CD000EF903 /* haar.cpp */; };
-		8CA99C7E0AD067CD000EF903 /* haar.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C560AD067CD000EF903 /* haar.h */; };
-		8CA99C7F0AD067CD000EF903 /* http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C570AD067CD000EF903 /* http.cpp */; };
-		8CA99C800AD067CD000EF903 /* http.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C580AD067CD000EF903 /* http.h */; };
-		8CA99C810AD067CD000EF903 /* mp3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C590AD067CD000EF903 /* mp3.cpp */; };
-		8CA99C820AD067CD000EF903 /* mp3.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C5A0AD067CD000EF903 /* mp3.h */; };
-		8CA99C830AD067CD000EF903 /* musicbrainz.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C5B0AD067CD000EF903 /* musicbrainz.cpp */; };
-		8CA99C840AD067CD000EF903 /* rdfextract.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C5C0AD067CD000EF903 /* rdfextract.cpp */; };
-		8CA99C850AD067CD000EF903 /* rdfextract.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C5D0AD067CD000EF903 /* rdfextract.h */; };
-		8CA99C860AD067CD000EF903 /* rdfparse.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C5E0AD067CD000EF903 /* rdfparse.c */; };
-		8CA99C870AD067CD000EF903 /* rdfparse.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C5F0AD067CD000EF903 /* rdfparse.h */; };
-		8CA99C880AD067CD000EF903 /* sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C600AD067CD000EF903 /* sha1.c */; };
-		8CA99C890AD067CD000EF903 /* sha1.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C610AD067CD000EF903 /* sha1.h */; };
-		8CA99C8A0AD067CD000EF903 /* sigclient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C620AD067CD000EF903 /* sigclient.cpp */; };
-		8CA99C8B0AD067CD000EF903 /* sigclient.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C630AD067CD000EF903 /* sigclient.h */; };
-		8CA99C8C0AD067CD000EF903 /* sigcomplex.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C640AD067CD000EF903 /* sigcomplex.h */; };
-		8CA99C8D0AD067CD000EF903 /* sigfft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C650AD067CD000EF903 /* sigfft.cpp */; };
-		8CA99C8E0AD067CD000EF903 /* sigfft.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C660AD067CD000EF903 /* sigfft.h */; };
-		8CA99C8F0AD067CD000EF903 /* signature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C670AD067CD000EF903 /* signature.cpp */; };
-		8CA99C900AD067CD000EF903 /* sigxdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C680AD067CD000EF903 /* sigxdr.cpp */; };
-		8CA99C910AD067CD000EF903 /* sigxdr.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C690AD067CD000EF903 /* sigxdr.h */; };
-		8CA99C920AD067CD000EF903 /* trm.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6A0AD067CD000EF903 /* trm.h */; };
-		8CA99C930AD067CD000EF903 /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6B0AD067CD000EF903 /* types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CA99C940AD067CD000EF903 /* uuid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA99C6C0AD067CD000EF903 /* uuid.cpp */; };
-		8CA99C950AD067CD000EF903 /* uuid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99C6D0AD067CD000EF903 /* uuid.h */; };
-		8CA99CAA0AD0687B000EF903 /* browser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA50AD0687B000EF903 /* browser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CA99CAB0AD0687B000EF903 /* errors.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA60AD0687B000EF903 /* errors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CA99CAC0AD0687B000EF903 /* mb_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA70AD0687B000EF903 /* mb_c.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CA99CAD0AD0687B000EF903 /* musicbrainz.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA80AD0687B000EF903 /* musicbrainz.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CA99CAE0AD0687B000EF903 /* queries.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CA90AD0687B000EF903 /* queries.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8CA99CB50AD068FF000EF903 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA99CB40AD068FF000EF903 /* config.h */; };
-		8CE25B130AD3725F009E1323 /* mb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CE25B110AD3725F009E1323 /* mb.cpp */; };
-		8CE25B1B0AD37295009E1323 /* mb.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CE25B120AD3725F009E1323 /* mb.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -75,57 +87,67 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* musicbrainz_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = musicbrainz_Prefix.pch; sourceTree = "<group>"; };
+		8C98AC310C47275C004F7BF6 /* artist.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = artist.cpp; path = libmusicbrainz/src/artist.cpp; sourceTree = "<group>"; };
+		8C98AC320C47275C004F7BF6 /* artistalias.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = artistalias.cpp; path = libmusicbrainz/src/artistalias.cpp; sourceTree = "<group>"; };
+		8C98AC330C47275C004F7BF6 /* disc.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = disc.cpp; path = libmusicbrainz/src/disc.cpp; sourceTree = "<group>"; };
+		8C98AC340C47275C004F7BF6 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = entity.cpp; path = libmusicbrainz/src/entity.cpp; sourceTree = "<group>"; };
+		8C98AC350C47275C004F7BF6 /* filters.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = filters.cpp; path = libmusicbrainz/src/filters.cpp; sourceTree = "<group>"; };
+		8C98AC360C47275C004F7BF6 /* includes.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = includes.cpp; path = libmusicbrainz/src/includes.cpp; sourceTree = "<group>"; };
+		8C98AC370C47275C004F7BF6 /* label.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = label.cpp; path = libmusicbrainz/src/label.cpp; sourceTree = "<group>"; };
+		8C98AC380C47275C004F7BF6 /* mb_c.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mb_c.cpp; path = libmusicbrainz/src/mb_c.cpp; sourceTree = "<group>"; };
+		8C98AC390C47275C004F7BF6 /* mbxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mbxmlparser.cpp; path = libmusicbrainz/src/mbxmlparser.cpp; sourceTree = "<group>"; };
+		8C98AC3A0C47275C004F7BF6 /* metadata.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = metadata.cpp; path = libmusicbrainz/src/metadata.cpp; sourceTree = "<group>"; };
+		8C98AC3B0C47275C004F7BF6 /* query.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = query.cpp; path = libmusicbrainz/src/query.cpp; sourceTree = "<group>"; };
+		8C98AC3C0C47275C004F7BF6 /* relation.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = relation.cpp; path = libmusicbrainz/src/relation.cpp; sourceTree = "<group>"; };
+		8C98AC3D0C47275C004F7BF6 /* release.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = release.cpp; path = libmusicbrainz/src/release.cpp; sourceTree = "<group>"; };
+		8C98AC3E0C47275C004F7BF6 /* releaseevent.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = releaseevent.cpp; path = libmusicbrainz/src/releaseevent.cpp; sourceTree = "<group>"; };
+		8C98AC3F0C47275C004F7BF6 /* results.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = results.cpp; path = libmusicbrainz/src/results.cpp; sourceTree = "<group>"; };
+		8C98AC400C47275C004F7BF6 /* tag.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = tag.cpp; path = libmusicbrainz/src/tag.cpp; sourceTree = "<group>"; };
+		8C98AC410C47275C004F7BF6 /* track.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = track.cpp; path = libmusicbrainz/src/track.cpp; sourceTree = "<group>"; };
+		8C98AC420C47275C004F7BF6 /* user.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = user.cpp; path = libmusicbrainz/src/user.cpp; sourceTree = "<group>"; };
+		8C98AC430C47275C004F7BF6 /* utils_countrynames.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils_countrynames.h; path = libmusicbrainz/src/utils_countrynames.h; sourceTree = "<group>"; };
+		8C98AC440C47275C004F7BF6 /* utils_languagenames.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils_languagenames.h; path = libmusicbrainz/src/utils_languagenames.h; sourceTree = "<group>"; };
+		8C98AC450C47275C004F7BF6 /* utils_private.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utils_private.cpp; path = libmusicbrainz/src/utils_private.cpp; sourceTree = "<group>"; };
+		8C98AC460C47275C004F7BF6 /* utils_private.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils_private.h; path = libmusicbrainz/src/utils_private.h; sourceTree = "<group>"; };
+		8C98AC470C47275C004F7BF6 /* utils_releasetypenames.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils_releasetypenames.h; path = libmusicbrainz/src/utils_releasetypenames.h; sourceTree = "<group>"; };
+		8C98AC480C47275C004F7BF6 /* utils_scriptnames.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils_scriptnames.h; path = libmusicbrainz/src/utils_scriptnames.h; sourceTree = "<group>"; };
+		8C98AC490C47275C004F7BF6 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cpp; path = libmusicbrainz/src/utils.cpp; sourceTree = "<group>"; };
+		8C98AC4A0C47275C004F7BF6 /* webservice.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = webservice.cpp; path = libmusicbrainz/src/webservice.cpp; sourceTree = "<group>"; };
+		8C98AC650C472768004F7BF6 /* xmlParser.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = xmlParser.cpp; path = libmusicbrainz/src/xmlParser/xmlParser.cpp; sourceTree = "<group>"; };
+		8C98AC660C472768004F7BF6 /* xmlParser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = xmlParser.h; path = libmusicbrainz/src/xmlParser/xmlParser.h; sourceTree = "<group>"; };
+		8C98AC690C472778004F7BF6 /* artist.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = artist.h; path = libmusicbrainz/include/musicbrainz3/artist.h; sourceTree = "<group>"; };
+		8C98AC6A0C472778004F7BF6 /* artistalias.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = artistalias.h; path = libmusicbrainz/include/musicbrainz3/artistalias.h; sourceTree = "<group>"; };
+		8C98AC6B0C472778004F7BF6 /* defines.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = defines.h; path = libmusicbrainz/include/musicbrainz3/defines.h; sourceTree = "<group>"; };
+		8C98AC6C0C472778004F7BF6 /* disc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = disc.h; path = libmusicbrainz/include/musicbrainz3/disc.h; sourceTree = "<group>"; };
+		8C98AC6D0C472778004F7BF6 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = entity.h; path = libmusicbrainz/include/musicbrainz3/entity.h; sourceTree = "<group>"; };
+		8C98AC6E0C472778004F7BF6 /* factory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = factory.h; path = libmusicbrainz/include/musicbrainz3/factory.h; sourceTree = "<group>"; };
+		8C98AC6F0C472778004F7BF6 /* filters.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = filters.h; path = libmusicbrainz/include/musicbrainz3/filters.h; sourceTree = "<group>"; };
+		8C98AC700C472778004F7BF6 /* includes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = includes.h; path = libmusicbrainz/include/musicbrainz3/includes.h; sourceTree = "<group>"; };
+		8C98AC710C472778004F7BF6 /* iwebservice.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = iwebservice.h; path = libmusicbrainz/include/musicbrainz3/iwebservice.h; sourceTree = "<group>"; };
+		8C98AC720C472778004F7BF6 /* label.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = label.h; path = libmusicbrainz/include/musicbrainz3/label.h; sourceTree = "<group>"; };
+		8C98AC730C472778004F7BF6 /* labelalias.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = labelalias.h; path = libmusicbrainz/include/musicbrainz3/labelalias.h; sourceTree = "<group>"; };
+		8C98AC740C472778004F7BF6 /* lists.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lists.h; path = libmusicbrainz/include/musicbrainz3/lists.h; sourceTree = "<group>"; };
+		8C98AC750C472778004F7BF6 /* mb_c.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb_c.h; path = libmusicbrainz/include/musicbrainz3/mb_c.h; sourceTree = "<group>"; };
+		8C98AC760C472778004F7BF6 /* mbxmlparser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mbxmlparser.h; path = libmusicbrainz/include/musicbrainz3/mbxmlparser.h; sourceTree = "<group>"; };
+		8C98AC770C472778004F7BF6 /* metadata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = metadata.h; path = libmusicbrainz/include/musicbrainz3/metadata.h; sourceTree = "<group>"; };
+		8C98AC780C472778004F7BF6 /* model.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = model.h; path = libmusicbrainz/include/musicbrainz3/model.h; sourceTree = "<group>"; };
+		8C98AC790C472778004F7BF6 /* musicbrainz.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = musicbrainz.h; path = libmusicbrainz/include/musicbrainz3/musicbrainz.h; sourceTree = "<group>"; };
+		8C98AC7A0C472778004F7BF6 /* query.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = query.h; path = libmusicbrainz/include/musicbrainz3/query.h; sourceTree = "<group>"; };
+		8C98AC7B0C472778004F7BF6 /* relation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = relation.h; path = libmusicbrainz/include/musicbrainz3/relation.h; sourceTree = "<group>"; };
+		8C98AC7C0C472778004F7BF6 /* release.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = release.h; path = libmusicbrainz/include/musicbrainz3/release.h; sourceTree = "<group>"; };
+		8C98AC7D0C472778004F7BF6 /* releaseevent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = releaseevent.h; path = libmusicbrainz/include/musicbrainz3/releaseevent.h; sourceTree = "<group>"; };
+		8C98AC7E0C472778004F7BF6 /* results.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = results.h; path = libmusicbrainz/include/musicbrainz3/results.h; sourceTree = "<group>"; };
+		8C98AC7F0C472778004F7BF6 /* tag.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = tag.h; path = libmusicbrainz/include/musicbrainz3/tag.h; sourceTree = "<group>"; };
+		8C98AC800C472778004F7BF6 /* track.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = track.h; path = libmusicbrainz/include/musicbrainz3/track.h; sourceTree = "<group>"; };
+		8C98AC810C472778004F7BF6 /* user.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = user.h; path = libmusicbrainz/include/musicbrainz3/user.h; sourceTree = "<group>"; };
+		8C98AC820C472778004F7BF6 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = utils.h; path = libmusicbrainz/include/musicbrainz3/utils.h; sourceTree = "<group>"; };
+		8C98AC830C472778004F7BF6 /* webservice.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = webservice.h; path = libmusicbrainz/include/musicbrainz3/webservice.h; sourceTree = "<group>"; };
+		8C98AD8E0C473AEF004F7BF6 /* neon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = neon.framework; path = ../neon/build/Release/neon.framework; sourceTree = SOURCE_ROOT; };
+		8C98AD920C473B22004F7BF6 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = libmusicbrainz/config.h; sourceTree = "<group>"; };
+		8C98AD9F0C473B54004F7BF6 /* discid.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = discid.framework; path = ../discid/build/Release/discid.framework; sourceTree = SOURCE_ROOT; };
 		8CA99C440AD067B3000EF903 /* expat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = expat.framework; path = ../expat/build/Release/expat.framework; sourceTree = SOURCE_ROOT; };
-		8CA99C480AD067CD000EF903 /* apsmetadata.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = apsmetadata.h; path = libmusicbrainz/lib/apsmetadata.h; sourceTree = "<group>"; };
-		8CA99C490AD067CD000EF903 /* apsutility.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = apsutility.h; path = libmusicbrainz/lib/apsutility.h; sourceTree = "<group>"; };
-		8CA99C4A0AD067CD000EF903 /* audiosig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = audiosig.h; path = libmusicbrainz/lib/audiosig.h; sourceTree = "<group>"; };
-		8CA99C4B0AD067CD000EF903 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = base64.c; path = libmusicbrainz/lib/base64.c; sourceTree = "<group>"; };
-		8CA99C4C0AD067CD000EF903 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = base64.h; path = libmusicbrainz/lib/base64.h; sourceTree = "<group>"; };
-		8CA99C4D0AD067CD000EF903 /* browser.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = browser.c; path = libmusicbrainz/lib/browser.c; sourceTree = "<group>"; };
-		8CA99C4E0AD067CD000EF903 /* c_wrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = c_wrapper.cpp; path = libmusicbrainz/lib/c_wrapper.cpp; sourceTree = "<group>"; };
-		8CA99C4F0AD067CD000EF903 /* comhttpsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = comhttpsocket.cpp; path = libmusicbrainz/lib/comhttpsocket.cpp; sourceTree = "<group>"; };
-		8CA99C500AD067CD000EF903 /* comhttpsocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = comhttpsocket.h; path = libmusicbrainz/lib/comhttpsocket.h; sourceTree = "<group>"; };
-		8CA99C510AD067CD000EF903 /* comsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = comsocket.cpp; path = libmusicbrainz/lib/comsocket.cpp; sourceTree = "<group>"; };
-		8CA99C520AD067CD000EF903 /* comsocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = comsocket.h; path = libmusicbrainz/lib/comsocket.h; sourceTree = "<group>"; };
-		8CA99C530AD067CD000EF903 /* diskid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = diskid.cpp; path = libmusicbrainz/lib/diskid.cpp; sourceTree = "<group>"; };
-		8CA99C540AD067CD000EF903 /* diskid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = diskid.h; path = libmusicbrainz/lib/diskid.h; sourceTree = "<group>"; };
-		8CA99C550AD067CD000EF903 /* haar.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = haar.cpp; path = libmusicbrainz/lib/haar.cpp; sourceTree = "<group>"; };
-		8CA99C560AD067CD000EF903 /* haar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = haar.h; path = libmusicbrainz/lib/haar.h; sourceTree = "<group>"; };
-		8CA99C570AD067CD000EF903 /* http.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = http.cpp; path = libmusicbrainz/lib/http.cpp; sourceTree = "<group>"; };
-		8CA99C580AD067CD000EF903 /* http.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = http.h; path = libmusicbrainz/lib/http.h; sourceTree = "<group>"; };
-		8CA99C590AD067CD000EF903 /* mp3.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mp3.cpp; path = libmusicbrainz/lib/mp3.cpp; sourceTree = "<group>"; };
-		8CA99C5A0AD067CD000EF903 /* mp3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mp3.h; path = libmusicbrainz/lib/mp3.h; sourceTree = "<group>"; };
-		8CA99C5B0AD067CD000EF903 /* musicbrainz.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = musicbrainz.cpp; path = libmusicbrainz/lib/musicbrainz.cpp; sourceTree = "<group>"; };
-		8CA99C5C0AD067CD000EF903 /* rdfextract.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = rdfextract.cpp; path = libmusicbrainz/lib/rdfextract.cpp; sourceTree = "<group>"; };
-		8CA99C5D0AD067CD000EF903 /* rdfextract.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rdfextract.h; path = libmusicbrainz/lib/rdfextract.h; sourceTree = "<group>"; };
-		8CA99C5E0AD067CD000EF903 /* rdfparse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = rdfparse.c; path = libmusicbrainz/lib/rdfparse.c; sourceTree = "<group>"; };
-		8CA99C5F0AD067CD000EF903 /* rdfparse.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = rdfparse.h; path = libmusicbrainz/lib/rdfparse.h; sourceTree = "<group>"; };
-		8CA99C600AD067CD000EF903 /* sha1.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sha1.c; path = libmusicbrainz/lib/sha1.c; sourceTree = "<group>"; };
-		8CA99C610AD067CD000EF903 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = libmusicbrainz/lib/sha1.h; sourceTree = "<group>"; };
-		8CA99C620AD067CD000EF903 /* sigclient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sigclient.cpp; path = libmusicbrainz/lib/sigclient.cpp; sourceTree = "<group>"; };
-		8CA99C630AD067CD000EF903 /* sigclient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigclient.h; path = libmusicbrainz/lib/sigclient.h; sourceTree = "<group>"; };
-		8CA99C640AD067CD000EF903 /* sigcomplex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigcomplex.h; path = libmusicbrainz/lib/sigcomplex.h; sourceTree = "<group>"; };
-		8CA99C650AD067CD000EF903 /* sigfft.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sigfft.cpp; path = libmusicbrainz/lib/sigfft.cpp; sourceTree = "<group>"; };
-		8CA99C660AD067CD000EF903 /* sigfft.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigfft.h; path = libmusicbrainz/lib/sigfft.h; sourceTree = "<group>"; };
-		8CA99C670AD067CD000EF903 /* signature.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = signature.cpp; path = libmusicbrainz/lib/signature.cpp; sourceTree = "<group>"; };
-		8CA99C680AD067CD000EF903 /* sigxdr.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sigxdr.cpp; path = libmusicbrainz/lib/sigxdr.cpp; sourceTree = "<group>"; };
-		8CA99C690AD067CD000EF903 /* sigxdr.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sigxdr.h; path = libmusicbrainz/lib/sigxdr.h; sourceTree = "<group>"; };
-		8CA99C6A0AD067CD000EF903 /* trm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = trm.h; path = libmusicbrainz/lib/trm.h; sourceTree = "<group>"; };
-		8CA99C6B0AD067CD000EF903 /* types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = types.h; path = libmusicbrainz/lib/types.h; sourceTree = "<group>"; };
-		8CA99C6C0AD067CD000EF903 /* uuid.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = uuid.cpp; path = libmusicbrainz/lib/uuid.cpp; sourceTree = "<group>"; };
-		8CA99C6D0AD067CD000EF903 /* uuid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = uuid.h; path = libmusicbrainz/lib/uuid.h; sourceTree = "<group>"; };
-		8CA99C6E0AD067CD000EF903 /* wincomsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wincomsocket.cpp; path = libmusicbrainz/lib/wincomsocket.cpp; sourceTree = "<group>"; };
-		8CA99C6F0AD067CD000EF903 /* wincomsocket.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wincomsocket.h; path = libmusicbrainz/lib/wincomsocket.h; sourceTree = "<group>"; };
-		8CA99CA50AD0687B000EF903 /* browser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = browser.h; path = libmusicbrainz/include/musicbrainz/browser.h; sourceTree = "<group>"; };
-		8CA99CA60AD0687B000EF903 /* errors.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = errors.h; path = libmusicbrainz/include/musicbrainz/errors.h; sourceTree = "<group>"; };
-		8CA99CA70AD0687B000EF903 /* mb_c.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb_c.h; path = libmusicbrainz/include/musicbrainz/mb_c.h; sourceTree = "<group>"; };
-		8CA99CA80AD0687B000EF903 /* musicbrainz.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = musicbrainz.h; path = libmusicbrainz/include/musicbrainz/musicbrainz.h; sourceTree = "<group>"; };
-		8CA99CA90AD0687B000EF903 /* queries.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = queries.h; path = libmusicbrainz/include/musicbrainz/queries.h; sourceTree = "<group>"; };
-		8CA99CB40AD068FF000EF903 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = libmusicbrainz/config.h; sourceTree = "<group>"; };
-		8CE25B110AD3725F009E1323 /* mb.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = mb.cpp; path = libmusicbrainz/lib/mb.cpp; sourceTree = "<group>"; };
-		8CE25B120AD3725F009E1323 /* mb.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mb.h; path = libmusicbrainz/lib/mb.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8DC2EF5B0486A6940098B216 /* musicbrainz.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = musicbrainz.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DC2EF5B0486A6940098B216 /* musicbrainz3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = musicbrainz3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
@@ -135,6 +157,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CA99C450AD067B3000EF903 /* expat.framework in Frameworks */,
+				8C98AD8F0C473AEF004F7BF6 /* neon.framework in Frameworks */,
+				8C98ADA00C473B54004F7BF6 /* discid.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,7 +168,7 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8DC2EF5B0486A6940098B216 /* musicbrainz.framework */,
+				8DC2EF5B0486A6940098B216 /* musicbrainz3.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -164,6 +188,8 @@
 		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8C98AD9F0C473B54004F7BF6 /* discid.framework */,
+				8C98AD8E0C473AEF004F7BF6 /* neon.framework */,
 				8CA99C440AD067B3000EF903 /* expat.framework */,
 				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
 				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
@@ -183,54 +209,62 @@
 		08FB77AEFE84172EC02AAC07 /* Library Source */ = {
 			isa = PBXGroup;
 			children = (
-				8CE25B110AD3725F009E1323 /* mb.cpp */,
-				8CE25B120AD3725F009E1323 /* mb.h */,
-				8CA99CB40AD068FF000EF903 /* config.h */,
-				8CA99CA50AD0687B000EF903 /* browser.h */,
-				8CA99CA60AD0687B000EF903 /* errors.h */,
-				8CA99CA70AD0687B000EF903 /* mb_c.h */,
-				8CA99CA80AD0687B000EF903 /* musicbrainz.h */,
-				8CA99CA90AD0687B000EF903 /* queries.h */,
-				8CA99C480AD067CD000EF903 /* apsmetadata.h */,
-				8CA99C490AD067CD000EF903 /* apsutility.h */,
-				8CA99C4A0AD067CD000EF903 /* audiosig.h */,
-				8CA99C4B0AD067CD000EF903 /* base64.c */,
-				8CA99C4C0AD067CD000EF903 /* base64.h */,
-				8CA99C4D0AD067CD000EF903 /* browser.c */,
-				8CA99C4E0AD067CD000EF903 /* c_wrapper.cpp */,
-				8CA99C4F0AD067CD000EF903 /* comhttpsocket.cpp */,
-				8CA99C500AD067CD000EF903 /* comhttpsocket.h */,
-				8CA99C510AD067CD000EF903 /* comsocket.cpp */,
-				8CA99C520AD067CD000EF903 /* comsocket.h */,
-				8CA99C530AD067CD000EF903 /* diskid.cpp */,
-				8CA99C540AD067CD000EF903 /* diskid.h */,
-				8CA99C550AD067CD000EF903 /* haar.cpp */,
-				8CA99C560AD067CD000EF903 /* haar.h */,
-				8CA99C570AD067CD000EF903 /* http.cpp */,
-				8CA99C580AD067CD000EF903 /* http.h */,
-				8CA99C590AD067CD000EF903 /* mp3.cpp */,
-				8CA99C5A0AD067CD000EF903 /* mp3.h */,
-				8CA99C5B0AD067CD000EF903 /* musicbrainz.cpp */,
-				8CA99C5C0AD067CD000EF903 /* rdfextract.cpp */,
-				8CA99C5D0AD067CD000EF903 /* rdfextract.h */,
-				8CA99C5E0AD067CD000EF903 /* rdfparse.c */,
-				8CA99C5F0AD067CD000EF903 /* rdfparse.h */,
-				8CA99C600AD067CD000EF903 /* sha1.c */,
-				8CA99C610AD067CD000EF903 /* sha1.h */,
-				8CA99C620AD067CD000EF903 /* sigclient.cpp */,
-				8CA99C630AD067CD000EF903 /* sigclient.h */,
-				8CA99C640AD067CD000EF903 /* sigcomplex.h */,
-				8CA99C650AD067CD000EF903 /* sigfft.cpp */,
-				8CA99C660AD067CD000EF903 /* sigfft.h */,
-				8CA99C670AD067CD000EF903 /* signature.cpp */,
-				8CA99C680AD067CD000EF903 /* sigxdr.cpp */,
-				8CA99C690AD067CD000EF903 /* sigxdr.h */,
-				8CA99C6A0AD067CD000EF903 /* trm.h */,
-				8CA99C6B0AD067CD000EF903 /* types.h */,
-				8CA99C6C0AD067CD000EF903 /* uuid.cpp */,
-				8CA99C6D0AD067CD000EF903 /* uuid.h */,
-				8CA99C6E0AD067CD000EF903 /* wincomsocket.cpp */,
-				8CA99C6F0AD067CD000EF903 /* wincomsocket.h */,
+				8C98AD920C473B22004F7BF6 /* config.h */,
+				8C98AC690C472778004F7BF6 /* artist.h */,
+				8C98AC6A0C472778004F7BF6 /* artistalias.h */,
+				8C98AC6B0C472778004F7BF6 /* defines.h */,
+				8C98AC6C0C472778004F7BF6 /* disc.h */,
+				8C98AC6D0C472778004F7BF6 /* entity.h */,
+				8C98AC6E0C472778004F7BF6 /* factory.h */,
+				8C98AC6F0C472778004F7BF6 /* filters.h */,
+				8C98AC700C472778004F7BF6 /* includes.h */,
+				8C98AC710C472778004F7BF6 /* iwebservice.h */,
+				8C98AC720C472778004F7BF6 /* label.h */,
+				8C98AC730C472778004F7BF6 /* labelalias.h */,
+				8C98AC740C472778004F7BF6 /* lists.h */,
+				8C98AC750C472778004F7BF6 /* mb_c.h */,
+				8C98AC760C472778004F7BF6 /* mbxmlparser.h */,
+				8C98AC770C472778004F7BF6 /* metadata.h */,
+				8C98AC780C472778004F7BF6 /* model.h */,
+				8C98AC790C472778004F7BF6 /* musicbrainz.h */,
+				8C98AC7A0C472778004F7BF6 /* query.h */,
+				8C98AC7B0C472778004F7BF6 /* relation.h */,
+				8C98AC7C0C472778004F7BF6 /* release.h */,
+				8C98AC7D0C472778004F7BF6 /* releaseevent.h */,
+				8C98AC7E0C472778004F7BF6 /* results.h */,
+				8C98AC7F0C472778004F7BF6 /* tag.h */,
+				8C98AC800C472778004F7BF6 /* track.h */,
+				8C98AC810C472778004F7BF6 /* user.h */,
+				8C98AC820C472778004F7BF6 /* utils.h */,
+				8C98AC830C472778004F7BF6 /* webservice.h */,
+				8C98AC650C472768004F7BF6 /* xmlParser.cpp */,
+				8C98AC660C472768004F7BF6 /* xmlParser.h */,
+				8C98AC310C47275C004F7BF6 /* artist.cpp */,
+				8C98AC320C47275C004F7BF6 /* artistalias.cpp */,
+				8C98AC330C47275C004F7BF6 /* disc.cpp */,
+				8C98AC340C47275C004F7BF6 /* entity.cpp */,
+				8C98AC350C47275C004F7BF6 /* filters.cpp */,
+				8C98AC360C47275C004F7BF6 /* includes.cpp */,
+				8C98AC370C47275C004F7BF6 /* label.cpp */,
+				8C98AC380C47275C004F7BF6 /* mb_c.cpp */,
+				8C98AC390C47275C004F7BF6 /* mbxmlparser.cpp */,
+				8C98AC3A0C47275C004F7BF6 /* metadata.cpp */,
+				8C98AC3B0C47275C004F7BF6 /* query.cpp */,
+				8C98AC3C0C47275C004F7BF6 /* relation.cpp */,
+				8C98AC3D0C47275C004F7BF6 /* release.cpp */,
+				8C98AC3E0C47275C004F7BF6 /* releaseevent.cpp */,
+				8C98AC3F0C47275C004F7BF6 /* results.cpp */,
+				8C98AC400C47275C004F7BF6 /* tag.cpp */,
+				8C98AC410C47275C004F7BF6 /* track.cpp */,
+				8C98AC420C47275C004F7BF6 /* user.cpp */,
+				8C98AC430C47275C004F7BF6 /* utils_countrynames.h */,
+				8C98AC440C47275C004F7BF6 /* utils_languagenames.h */,
+				8C98AC450C47275C004F7BF6 /* utils_private.cpp */,
+				8C98AC460C47275C004F7BF6 /* utils_private.h */,
+				8C98AC470C47275C004F7BF6 /* utils_releasetypenames.h */,
+				8C98AC480C47275C004F7BF6 /* utils_scriptnames.h */,
+				8C98AC490C47275C004F7BF6 /* utils.cpp */,
+				8C98AC4A0C47275C004F7BF6 /* webservice.cpp */,
 			);
 			name = "Library Source";
 			sourceTree = "<group>";
@@ -268,33 +302,40 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CA99C700AD067CD000EF903 /* apsmetadata.h in Headers */,
-				8CA99C710AD067CD000EF903 /* apsutility.h in Headers */,
-				8CA99C720AD067CD000EF903 /* audiosig.h in Headers */,
-				8CA99C740AD067CD000EF903 /* base64.h in Headers */,
-				8CA99C780AD067CD000EF903 /* comhttpsocket.h in Headers */,
-				8CA99C7A0AD067CD000EF903 /* comsocket.h in Headers */,
-				8CA99C7C0AD067CD000EF903 /* diskid.h in Headers */,
-				8CA99C7E0AD067CD000EF903 /* haar.h in Headers */,
-				8CA99C800AD067CD000EF903 /* http.h in Headers */,
-				8CA99C820AD067CD000EF903 /* mp3.h in Headers */,
-				8CA99C850AD067CD000EF903 /* rdfextract.h in Headers */,
-				8CA99C870AD067CD000EF903 /* rdfparse.h in Headers */,
-				8CA99C890AD067CD000EF903 /* sha1.h in Headers */,
-				8CA99C8B0AD067CD000EF903 /* sigclient.h in Headers */,
-				8CA99C8C0AD067CD000EF903 /* sigcomplex.h in Headers */,
-				8CA99C8E0AD067CD000EF903 /* sigfft.h in Headers */,
-				8CA99C910AD067CD000EF903 /* sigxdr.h in Headers */,
-				8CA99C920AD067CD000EF903 /* trm.h in Headers */,
-				8CA99C930AD067CD000EF903 /* types.h in Headers */,
-				8CA99C950AD067CD000EF903 /* uuid.h in Headers */,
-				8CA99CAA0AD0687B000EF903 /* browser.h in Headers */,
-				8CA99CAB0AD0687B000EF903 /* errors.h in Headers */,
-				8CA99CAC0AD0687B000EF903 /* mb_c.h in Headers */,
-				8CA99CAD0AD0687B000EF903 /* musicbrainz.h in Headers */,
-				8CA99CAE0AD0687B000EF903 /* queries.h in Headers */,
-				8CA99CB50AD068FF000EF903 /* config.h in Headers */,
-				8CE25B1B0AD37295009E1323 /* mb.h in Headers */,
+				8C98AC5D0C47275C004F7BF6 /* utils_countrynames.h in Headers */,
+				8C98AC5E0C47275C004F7BF6 /* utils_languagenames.h in Headers */,
+				8C98AC600C47275C004F7BF6 /* utils_private.h in Headers */,
+				8C98AC610C47275C004F7BF6 /* utils_releasetypenames.h in Headers */,
+				8C98AC620C47275C004F7BF6 /* utils_scriptnames.h in Headers */,
+				8C98AC680C472768004F7BF6 /* xmlParser.h in Headers */,
+				8C98AC840C472778004F7BF6 /* artist.h in Headers */,
+				8C98AC850C472778004F7BF6 /* artistalias.h in Headers */,
+				8C98AC860C472778004F7BF6 /* defines.h in Headers */,
+				8C98AC870C472778004F7BF6 /* disc.h in Headers */,
+				8C98AC880C472778004F7BF6 /* entity.h in Headers */,
+				8C98AC890C472778004F7BF6 /* factory.h in Headers */,
+				8C98AC8A0C472778004F7BF6 /* filters.h in Headers */,
+				8C98AC8B0C472778004F7BF6 /* includes.h in Headers */,
+				8C98AC8C0C472778004F7BF6 /* iwebservice.h in Headers */,
+				8C98AC8D0C472778004F7BF6 /* label.h in Headers */,
+				8C98AC8E0C472778004F7BF6 /* labelalias.h in Headers */,
+				8C98AC8F0C472778004F7BF6 /* lists.h in Headers */,
+				8C98AC900C472778004F7BF6 /* mb_c.h in Headers */,
+				8C98AC910C472778004F7BF6 /* mbxmlparser.h in Headers */,
+				8C98AC920C472778004F7BF6 /* metadata.h in Headers */,
+				8C98AC930C472778004F7BF6 /* model.h in Headers */,
+				8C98AC940C472778004F7BF6 /* musicbrainz.h in Headers */,
+				8C98AC950C472778004F7BF6 /* query.h in Headers */,
+				8C98AC960C472778004F7BF6 /* relation.h in Headers */,
+				8C98AC970C472778004F7BF6 /* release.h in Headers */,
+				8C98AC980C472778004F7BF6 /* releaseevent.h in Headers */,
+				8C98AC990C472778004F7BF6 /* results.h in Headers */,
+				8C98AC9A0C472778004F7BF6 /* tag.h in Headers */,
+				8C98AC9B0C472778004F7BF6 /* track.h in Headers */,
+				8C98AC9C0C472778004F7BF6 /* user.h in Headers */,
+				8C98AC9D0C472778004F7BF6 /* utils.h in Headers */,
+				8C98AC9E0C472778004F7BF6 /* webservice.h in Headers */,
+				8C98AD930C473B22004F7BF6 /* config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,7 +359,7 @@
 			name = musicbrainz.framework;
 			productInstallPath = "$(HOME)/Library/Frameworks";
 			productName = musicbrainz;
-			productReference = 8DC2EF5B0486A6940098B216 /* musicbrainz.framework */;
+			productReference = 8DC2EF5B0486A6940098B216 /* musicbrainz3.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -353,25 +394,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CA99C730AD067CD000EF903 /* base64.c in Sources */,
-				8CA99C750AD067CD000EF903 /* browser.c in Sources */,
-				8CA99C760AD067CD000EF903 /* c_wrapper.cpp in Sources */,
-				8CA99C770AD067CD000EF903 /* comhttpsocket.cpp in Sources */,
-				8CA99C790AD067CD000EF903 /* comsocket.cpp in Sources */,
-				8CA99C7B0AD067CD000EF903 /* diskid.cpp in Sources */,
-				8CA99C7D0AD067CD000EF903 /* haar.cpp in Sources */,
-				8CA99C7F0AD067CD000EF903 /* http.cpp in Sources */,
-				8CA99C810AD067CD000EF903 /* mp3.cpp in Sources */,
-				8CA99C830AD067CD000EF903 /* musicbrainz.cpp in Sources */,
-				8CA99C840AD067CD000EF903 /* rdfextract.cpp in Sources */,
-				8CA99C860AD067CD000EF903 /* rdfparse.c in Sources */,
-				8CA99C880AD067CD000EF903 /* sha1.c in Sources */,
-				8CA99C8A0AD067CD000EF903 /* sigclient.cpp in Sources */,
-				8CA99C8D0AD067CD000EF903 /* sigfft.cpp in Sources */,
-				8CA99C8F0AD067CD000EF903 /* signature.cpp in Sources */,
-				8CA99C900AD067CD000EF903 /* sigxdr.cpp in Sources */,
-				8CA99C940AD067CD000EF903 /* uuid.cpp in Sources */,
-				8CE25B130AD3725F009E1323 /* mb.cpp in Sources */,
+				8C98AC4B0C47275C004F7BF6 /* artist.cpp in Sources */,
+				8C98AC4C0C47275C004F7BF6 /* artistalias.cpp in Sources */,
+				8C98AC4D0C47275C004F7BF6 /* disc.cpp in Sources */,
+				8C98AC4E0C47275C004F7BF6 /* entity.cpp in Sources */,
+				8C98AC4F0C47275C004F7BF6 /* filters.cpp in Sources */,
+				8C98AC500C47275C004F7BF6 /* includes.cpp in Sources */,
+				8C98AC510C47275C004F7BF6 /* label.cpp in Sources */,
+				8C98AC520C47275C004F7BF6 /* mb_c.cpp in Sources */,
+				8C98AC530C47275C004F7BF6 /* mbxmlparser.cpp in Sources */,
+				8C98AC540C47275C004F7BF6 /* metadata.cpp in Sources */,
+				8C98AC550C47275C004F7BF6 /* query.cpp in Sources */,
+				8C98AC560C47275C004F7BF6 /* relation.cpp in Sources */,
+				8C98AC570C47275C004F7BF6 /* release.cpp in Sources */,
+				8C98AC580C47275C004F7BF6 /* releaseevent.cpp in Sources */,
+				8C98AC590C47275C004F7BF6 /* results.cpp in Sources */,
+				8C98AC5A0C47275C004F7BF6 /* tag.cpp in Sources */,
+				8C98AC5B0C47275C004F7BF6 /* track.cpp in Sources */,
+				8C98AC5C0C47275C004F7BF6 /* user.cpp in Sources */,
+				8C98AC5F0C47275C004F7BF6 /* utils_private.cpp in Sources */,
+				8C98AC630C47275C004F7BF6 /* utils.cpp in Sources */,
+				8C98AC640C47275C004F7BF6 /* webservice.cpp in Sources */,
+				8C98AC670C472768004F7BF6 /* xmlParser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,20 +442,24 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../expat/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../neon/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/../discid/build/Release\"";
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = musicbrainz_Prefix.pch;
+				GCC_PREFIX_HEADER = musicbrainz3_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				PRODUCT_NAME = musicbrainz;
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../expat/build/Release/expat.framework/Headers\"";
+				PRODUCT_NAME = musicbrainz3;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../expat/build/Release/expat.framework/Headers\" $(SRCROOT)/libmusicbrainz/include \"$(SRCROOT)/../neon/build/Release/neon.framework/Headers\"";
 				WRAPPER_EXTENSION = framework;
 				ZERO_LINK = YES;
 			};
@@ -429,18 +477,22 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../expat/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/../neon/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/../discid/build/Release\"";
 				FRAMEWORK_VERSION = A;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = musicbrainz_Prefix.pch;
+				GCC_PREFIX_HEADER = musicbrainz3_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = HAVE_CONFIG_H;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				PRODUCT_NAME = musicbrainz;
-				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../expat/build/Release/expat.framework/Headers\"";
+				PRODUCT_NAME = musicbrainz3;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../expat/build/Release/expat.framework/Headers\" $(SRCROOT)/libmusicbrainz/include \"$(SRCROOT)/../neon/build/Release/neon.framework/Headers\"";
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;

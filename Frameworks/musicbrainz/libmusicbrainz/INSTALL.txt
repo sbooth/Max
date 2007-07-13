@@ -1,0 +1,51 @@
+================================================
+ Installation of the MusicBrainz Client Library
+================================================
+
+The instructions in this file should help you to build and install the
+MusicBrainz client library from source on your system.
+
+Dependencies
+============
+
+Before you start, make sure you have installed following libraries:
+
+ * Neon -- HTTP client library
+   http://www.webdav.org/neon/
+
+ * libdiscid -- library for calculating MusicBrainz discids
+   http://musicbrainz.org/doc/libdiscid
+    
+ * (optional) CppUnit -- C++ unit testing framework
+   http://cppunit.sourceforge.net/cppunit-wiki
+ 
+Building
+========
+
+Once you have installed all dependencies, you can compile the
+library:
+    
+   cmake .
+   make
+  
+To build and run the test suite use:
+  
+   make check
+    
+And to install the built library run (as root):
+  
+   make install
+
+CMake Options
+=============
+
+By default, the library will be installed to /usr/local. You can change this
+using the CMAKE_INSTALL_PREFIX option, for example:
+
+   cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .
+
+For overview of all available options use:
+
+   cmake -L .
+
+or use a GUI. See http://www.cmake.org/HTML/RunningCMake.html for more details.

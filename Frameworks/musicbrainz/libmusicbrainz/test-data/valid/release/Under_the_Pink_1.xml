@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <release id="290e10c5-7efc-4f60-ba2c-0dfc0208fbf5" type="Album Official">
+        <title>Under the Pink</title>
+        <text-representation language="ENG" script="Latn"/>
+        <asin>B000002IXU</asin>
+        <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5">
+            <name>Tori Amos</name>
+        </artist>
+        <release-event-list>
+            <event date="1994-01-28"/>
+        </release-event-list>
+        <disc-list count="4"/>
+        <track-list count="12"/>
+    </release>
+</metadata>

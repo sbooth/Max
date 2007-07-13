@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- namespace error -->
+
+<mmd:metadata xmlns:mmd="http://musicbrainz.org/ns/mmd-1.0#">
+
+    <mmd:artist-list>
+	<xy:artist id="UUID"/>   <!-- undeclared namespace -->
+
+    </mmd:artist-list>
+
+</mmd:metadata>

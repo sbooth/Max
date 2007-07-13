@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <track id="d6118046-407d-4e06-a1ba-49c399a4c42f">
+	<title>Silent All These Years</title>
+	<duration>253466</duration>
+	<artist id="c0b2500e-0cef-4130-869d-732b23ed9df5" type="Person">
+		<name>Tori Amos</name>
+		<sort-name>Amos, Tori</sort-name>
+	</artist>
+	<relation-list target-type="Track">
+	    <relation type="Cover"
+		      direction="backward"
+		      target="31e1c0c4-967f-435e-b09a-35ee079ee234">
+                <track id="31e1c0c4-967f-435e-b09a-35ee079ee234">
+                    <title>Silent All These Years</title>
+		    <artist id="5bcd4eaa-fae7-465f-9f03-d005b959ed02"/>
+		</track>
+	    </relation>
+	</relation-list>
+    </track>
+</metadata>

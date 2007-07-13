@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <release id="02232360-337e-4a3f-ad20-6cdd4c34288c" type="Album Official">
+        <title>Little Earthquakes</title>
+	<text-representation language="ENG" script="Latn"/>
+        <asin>B000002IT2</asin>
+        <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5" type="Person">
+            <name>Tori Amos</name>
+            <sort-name>Amos, Tori</sort-name>
+            <life-span begin="1963-08-22"/>
+        </artist>
+        <release-event-list>
+            <event date="1992-01-13" country="GB"/>
+            <event date="1992-01-17" country="DE"/>
+            <event date="1992-02-25" country="US"/>
+        </release-event-list>
+        <disc-list>
+            <disc id="ILKp3.bZmvoMO7wSrq1cw7WatfA-"/>
+            <disc id="ejdrdtX1ZyvCb0g6vfJejVaLIK8-"/>
+            <disc id="Y96eDQZbF4Z26Y5.Sxdbh3wGypo-"/>
+        </disc-list>
+        <track-list count="12"/>
+    </release>
+</metadata>

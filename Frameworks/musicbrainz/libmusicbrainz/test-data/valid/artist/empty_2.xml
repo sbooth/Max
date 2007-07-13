@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- valid, but empty document -->
+
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+
+  <artist-list>
+
+  </artist-list>
+
+</metadata>

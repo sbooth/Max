@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <label id="50c384a2-0b44-401b-b893-8181173339c7" type="OriginalProduction">
+        <name>Atlantic Records</name>
+	<tag-list>
+	    <tag>american</tag>
+	    <tag>jazz</tag>
+	    <tag>blues</tag>
+	</tag-list>
+    </label>
+</metadata>

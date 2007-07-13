@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://musicbrainz.org/ns/mmd-1.0#">
+    <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5" type="Person">
+        <name>Tori Amos</name>
+        <sort-name>Amos, Tori</sort-name>
+        <life-span begin="1963-08-22"/>
+        <release-list>
+            <release id="a7ccb022-f437-4492-8eee-8f85d85cdb96" type="Album Official">
+                <title>Strange Little Girls</title>
+                <asin>B00005NKYQ</asin>
+                <release-event-list>
+                    <event date="2001-09-14" country="BE"/>
+                    <event date="2001-09-14" country="FI"/>
+                    <event date="2001-09-14" country="IE"/>
+                    <event date="2001-09-14" country="IT"/>
+                    <event date="2001-09-14" country="NL"/>
+                    <event date="2001-09-17" country="AU"/>
+                    <event date="2001-09-17" country="DE"/>
+                    <event date="2001-09-17" country="GB"/>
+                    <event date="2001-09-18" country="CA"/>
+                    <event date="2001-09-18" country="SE"/>
+                    <event date="2001-09-18" country="US"/>
+                    <event date="2001-09-27" country="JP"/>
+                </release-event-list>
+                <disc-list count="3"/>
+            </release>
+            <release id="9cbf7040-dbdc-403c-940f-7562d9712514" type="Album Official">
+                <title>To Venus and Back (disc 1: Orbiting)</title>
+                <asin>B00001IVJS</asin>
+                <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5"/>
+                <release-event-list>
+                    <event date="1999-09-20" country="DE"/>
+                    <event date="1999-09-20" country="GB"/>
+                    <event date="1999-09-21" country="US"/>
+                </release-event-list>
+                <disc-list count="2"/>
+            </release>
+            <release id="290e10c5-7efc-4f60-ba2c-0dfc0208fbf5" type="Album Official">
+                <title>Under the Pink</title>
+                <asin>B000002IXU</asin>
+                <artist id="c0b2500e-0cef-4130-869d-732b23ed9df5"/>
+                <release-event-list>
+                    <event date="1994-01-28" country="DE"/>
+                    <event date="1994-01-31" country="GB"/>
+                    <event date="1994-02-01" country="US"/>
+                    <event date="1994-02-25" country="JP"/>
+                    <event date="1994-11" country="AU"/>
+                </release-event-list>
+                <disc-list count="4"/>
+            </release>
+        </release-list>
+    </artist>
+</metadata>
