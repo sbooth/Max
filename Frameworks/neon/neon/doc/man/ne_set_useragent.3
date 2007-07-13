@@ -1,0 +1,81 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_SET_USERAGENT" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_set_useragent, ne_set_persist, ne_set_read_timeout, ne_get_scheme, ne_get_server_hostport \- common properties for HTTP sessions
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_session.h>\fR
+.HP 22
+\fBvoid\ \fBne_set_useragent\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIproduct\fR\fR\fB);\fR
+.HP 20
+\fBvoid\ \fBne_set_persist\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBint\ \fR\fB\fIflag\fR\fR\fB);\fR
+.HP 25
+\fBvoid\ \fBne_set_read_timeout\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBint\ \fR\fB\fItimeout\fR\fR\fB);\fR
+.HP 26
+\fBconst\ char\ *\fBne_get_scheme\fR\fR\fB(\fR\fBne_sesssion\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.HP 35
+\fBconst\ char\ *\fBne_get_server_hostport\fR\fR\fB(\fR\fBne_sesssion\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The
+User\-Agent
+request header is used to identify the software which generated the request for statistical or debugging purposes. neon does not send a
+User\-Agent
+header unless a call is made to the
+\fBne_set_useragent\fR.
+\fBne_set_useragent\fR
+must be passed a product string conforming to RFC2616's product token grammar; of the form
+"Product/Version".
+.PP
+By default neon will use a persistent connection whenever possible. For specific applications, or for debugging purposes, it is sometimes useful to disable persistent connections. The
+\fBne_set_persist\fR
+function will disable persistent connections if passed a
+\fIflag\fR
+parameter of
+0, and will enable them otherwise.
+.PP
+When neon reads from a socket, by default the read operation will time out after 60 seconds, and the request will fail giving an
+\fBNE_TIMEOUT\fR
+error. To configure this timeout interval, call
+\fBne_set_read_timeout\fR
+giving the desired number of seconds as the
+\fItimeout\fR
+parameter.
+.PP
+The scheme used to initially create the session will be returned by
+\fBne_get_scheme\fR.
+.PP
+The hostport pair with which the session is associated will be returned by the
+\fBne_get_server_hostport\fR; for example
+www.example.com:8080. Note that the
+:port
+will be omitted if the default port for the scheme is used.
+.SH "EXAMPLES"
+.PP
+Set a user\-agent string:
+.sp
+.nf
+ne_session *sess = ne_session_create(...);
+ne_set_useragent(sess, "MyApplication/2.1");
+.fi
+.PP
+Disable use of persistent connections:
+.sp
+.nf
+ne_session *sess = ne_session_create(...);
+ne_set_persist(sess, 0);
+.fi
+.PP
+Set a 30 second read timeout:
+.sp
+.nf
+ne_session *sess = ne_session_create(...);
+ne_set_read_timeout(sess, 30);
+.fi

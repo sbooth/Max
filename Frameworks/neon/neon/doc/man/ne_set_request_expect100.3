@@ -1,0 +1,38 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_SET_REQUEST_EXPEC" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_set_request_expect100 \- function to enable Expect: 100\-continue support
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_request.h>\fR
+.HP 30
+\fBvoid\ \fBne_set_request_expect100\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIrequest\fR\fR\fB, \fR\fBint\ \fR\fB\fIflag\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+An extension introduced in the HTTP/1.1 specification was the use of the
+Expect: 100\-continue
+header. This header allows an HTTP client to be informed of the expected response status before the request message body is sent: a useful optimisation for situations where a large message body is to be sent. The
+\fBne_set_request_expect100\fR
+function can be used to enable this feature by passing the
+\fIflag\fR
+parameter as any non\-zero integer.
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+\fBWarning\fR
+.PP
+Unfortunately, if this header is sent to a server which is not fully compliant with the HTTP/1.1 specification, a deadlock occurs resulting in a temporarily "hung" connection. neon will recover gracefully from this situation, but only after a 15 second timeout. It is highly recommended that this option is not enabled unless it is known that the server in use correctly implements
+Expect: 100\-continue
+support.
+.SH "SEE ALSO"
+.PP
+ne_request_create.

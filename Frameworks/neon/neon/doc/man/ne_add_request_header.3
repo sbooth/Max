@@ -1,0 +1,40 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_ADD_REQUEST_HEADE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_add_request_header, ne_print_request_header \- add headers to a request
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_request.h>\fR
+.HP 27
+\fBvoid\ \fBne_add_request_header\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIrequest\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIname\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIvalue\fR\fR\fB);\fR
+.HP 29
+\fBvoid\ \fBne_print_request_header\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIrequest\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIname\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIformat\fR\fR\fB, \fR\fB...\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The functions
+\fBne_add_request_header\fR
+and
+\fBne_print_request_header\fR
+can be used to add headers to a request, before it is sent.
+.PP
+\fBne_add_request_header\fR
+simply adds a header of given
+\fIname\fR, with given
+\fIvalue\fR.
+.PP
+\fBne_print_request_header\fR
+adds a header of given
+\fIname\fR, taking the value from the
+\fBprintf\fR\-like
+\fIformat\fR
+string parameter and subsequent variable\-length argument list.
+.SH "SEE ALSO"
+.PP
+ne_request_create

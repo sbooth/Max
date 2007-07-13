@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'neon' target in the 'neon' project.
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif

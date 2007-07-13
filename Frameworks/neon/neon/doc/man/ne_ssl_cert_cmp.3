@@ -1,0 +1,27 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_SSL_CERT_CMP" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_ssl_cert_cmp, ne_ssl_cert_free \- functions to operate on certificate objects
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_header.h>\fR
+.HP 20
+\fBint\ \fBne_ssl_cert_cmp\fR\fR\fB(\fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIc1\fR\fR\fB, \fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIc2\fR\fR\fB);\fR
+.HP 22
+\fBvoid\ \fBne_ssl_cert_free\fR\fR\fB(\fR\fBne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The
+\fBne_ssl_cert_cmp\fR
+function can be used to compare two certificate objects; it returns zero if they refer to the same certificate, and non\-zero otherwise.
+.PP
+The
+\fBne_ssl_cert_free\fR
+function can be used to destroy a certificate object when it is no longer needed.

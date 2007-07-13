@@ -1,0 +1,43 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_BUFFER_CLEAR" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_buffer_clear, ne_buffer_grow, ne_buffer_altered \- general purpose of group of functions
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_string.h>\fR
+.HP 21
+\fBvoid\ \fBne_buffer_clear\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB);\fR
+.HP 23
+\fBvoid\ \fBne_buffer_altered\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB);\fR
+.HP 20
+\fBvoid\ \fBne_buffer_grow\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The
+\fBne_buffer_clear\fR
+function sets the string stored in
+\fIbuf\fR
+to be the empty string ("").
+.PP
+The
+\fBne_buffer_altered\fR
+function must be used after the string stored in the buffer
+\fIbuf\fR
+is modified by directly rather than using
+ne_buffer_append,
+ne_buffer_zappend
+or
+ne_buffer_concat.
+.PP
+The
+\fBne_buffer_grow\fR
+function ensures that at least
+\fIsize\fR
+bytes are allocated for the string; this can be used if a large amount of data is going to be appended to the buffer and may result in more efficient memory allocation.

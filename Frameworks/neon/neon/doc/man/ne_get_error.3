@@ -1,0 +1,47 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_GET_ERROR" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_get_error, ne_set_error \- error handling for HTTP sessions
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_session.h>\fR
+.HP 25
+\fBconst\ char\ *\fBne_get_error\fR\fR\fB(\fR\fBne_sesssion\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.HP 18
+\fBvoid\ \fBne_set_error\fR\fR\fB(\fR\fBne_sesssion\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIformat\fR\fR\fB, \fR\fB...\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The session error string is used to store any human\-readable error information associated with any errors which occur whilst using the HTTP session.
+.PP
+The
+\fBne_get_error\fR
+function returns the current session error string. This string persists only until it is changed by a subsequent operation on the session.
+.PP
+The
+\fBne_set_error\fR
+function can be used to set a new session error string, using a
+\fBprintf\fR\-style format string interface.
+.SH "EXAMPLES"
+.PP
+Retrieve the current error string:
+.sp
+.nf
+ne_session *sess = ne_session_create(...);
+...
+printf("Error was: %s\\n", ne_get_error(sess));
+.fi
+.PP
+Set a new error string:
+.sp
+.nf
+ne_session *sess = ne_session_create(...);
+...
+ne_set_error(sess, "Response missing header %s", "somestring");
+.fi

@@ -1,0 +1,36 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_SHAVE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_shave \- trim whitespace from a string
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_string.h>\fR
+.HP 15
+\fBchar\ *\fBne_shave\fR\fR\fB(\fR\fBchar\ *\fR\fB\fIstr\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIwhitespace\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+\fBne_shave\fR
+returns a portion of
+\fIstr\fR
+with any leading or trailing characters in the
+\fIwhitespace\fR
+array removed.
+\fIstr\fR
+may be modified. Note that the return value may not be equal to
+\fIstr\fR.
+.SH "EXAMPLES"
+.PP
+The following code segment will output
+"fish":
+.sp
+.nf
+char s[] = ".!.fish!.!";
+puts(ne_shave(s, ".!"));
+.fi

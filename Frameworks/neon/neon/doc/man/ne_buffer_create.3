@@ -1,0 +1,35 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_BUFFER_CREATE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_buffer_create, ne_buffer_ncreate \- general purpose of group of functions
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_alloc.h>\fR
+.HP 28
+\fBne_buffer\ *\fBne_buffer_create\fR\fR\fB(\fR\fBvoid);\fR
+.HP 29
+\fBne_buffer\ *\fBne_buffer_ncreate\fR\fR\fB(\fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+\fBne_buffer_create\fR
+creates a new buffer object, with an implementation\-defined initial size.
+\fBne_buffer_ncreate\fR
+creates an
+\fBne_buffer\fR
+where the minimum initial size is given in the
+\fIsize\fR
+parameter. The buffer created will contain the empty string ("").
+.SH "RETURN VALUE"
+.PP
+Both functions return a pointer to a new buffer object, and never
+NULL.
+.SH "SEE ALSO"
+.PP
+ne_buffer

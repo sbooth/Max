@@ -1,0 +1,53 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_BUFFER" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_buffer \- string buffer handling
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_string.h>
+
+typedef struct {
+    char *data;
+    size_t used;
+    size_t length;
+} \fR\fB\fBne_buffer\fR\fR\fB;\fR
+.SH "DESCRIPTION"
+.PP
+The
+\fBne_buffer\fR
+type represents an expandable memory buffer for holding
+NUL\-terminated strings. The
+data
+field points to the beginnning of the string, the length of which is given by the
+used
+field. The current size of memory allocated is given by the
+length
+field. It is not recommended that the fields of a buffer are manipulated directly. The
+data
+pointer may change when the buffer is modified.
+.PP
+A buffer is created using
+ne_buffer_create
+or
+ne_buffer_ncreate, and destroyed using
+ne_buffer_destroy
+or
+ne_buffer_finish. The functions
+ne_buffer_append,
+ne_buffer_zappend
+and
+ne_buffer_concat
+are used to append data to a buffer.
+.PP
+If the string referenced by the
+data
+pointer is modified directly (rather than using one of the functions listed above),
+\fBne_buffer_altered\fR
+must be called.

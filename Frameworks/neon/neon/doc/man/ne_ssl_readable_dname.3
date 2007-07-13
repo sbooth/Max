@@ -1,0 +1,46 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_SSL_DNAME" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_ssl_readable_dname, ne_ssl_dname_cmp \- SSL distinguished name handling
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_ssl.h>\fR
+.HP 34
+\fBconst\ char\ *\fBne_ssl_readable_dname\fR\fR\fB(\fR\fBconst\ ne_ssl_dname\ *\fR\fB\fIdname\fR\fR\fB);\fR
+.HP 21
+\fBint\ \fBne_ssl_dname_cmp\fR\fR\fB(\fR\fBconst\ ne_ssl_dname\ *\fR\fB\fIdn1\fR\fR\fB, \fR\fBconst\ ne_ssl_dname\ *\fR\fB\fIdn2\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The
+\fBne_ssl_readable_dname\fR
+function creates a single\-line, human\-readable string out of an
+\fBne_ssl_dname\fR
+object. The returned string is
+\fBmalloc\fR()\-allocated, and must be
+\fBfree\fR()d by the caller.
+.PP
+The
+\fBne_ssl_dname_cmp\fR
+function compares two distinguished names, and returns zero if they are equal, or non\-zero otherwise.
+.SH "RETURN VALUE"
+.PP
+\fBne_ssl_readable_dname\fR
+returns a
+\fBmalloc\fR\-allocated string, and never
+NULL.
+.SH "EXAMPLES"
+.PP
+See
+ne_ssl_cert_subject
+for an example use of
+\fBne_ssl_readable_dname\fR.
+.SH "SEE ALSO"
+.PP
+ne_ssl_cert_subject

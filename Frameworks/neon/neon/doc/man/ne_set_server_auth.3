@@ -1,0 +1,86 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_SET_SERVER_AUTH" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_set_server_auth, ne_set_proxy_auth, ne_forget_auth \- register authentication callbacks
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_auth.h>\fR
+.HP 29
+\fBtypedef\ int\ (*\fBne_auth_creds\fR)\fR\fB(\fR\fBvoid\ *\fR\fB\fIuserdata\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIrealm\fR\fR\fB, \fR\fBint\ \fR\fB\fIattempt\fR\fR\fB, \fR\fBchar\ *\fR\fB\fIusername\fR\fR\fB, \fR\fBchar\ *\fR\fB\fIpassword\fR\fR\fB);\fR
+.HP 24
+\fBvoid\ \fBne_set_server_auth\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBne_auth_creds\ \fR\fB\fIcallback\fR\fR\fB, \fR\fBvoid\ *\fR\fB\fIuserdata\fR\fR\fB);\fR
+.HP 23
+\fBvoid\ \fBne_set_proxy_auth\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBne_auth_creds\ \fR\fB\fIcallback\fR\fR\fB, \fR\fBvoid\ *\fR\fB\fIuserdata\fR\fR\fB);\fR
+.HP 20
+\fBvoid\ \fBne_forget_auth\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The
+\fBne_auth_creds\fR
+function type defines a callback which is invoked when a server or proxy server requires user authentication for a particular request. The
+\fIrealm\fR
+string is supplied by the server.The
+\fIattempt\fR
+is a counter giving the number of times the request has been retried with different authentication credentials. The first time the callback is invoked for a particular request,
+\fIattempt\fR
+will be zero.
+.PP
+To retry the request using new authentication credentials, the callback should return zero, and the
+\fIusername\fR
+and
+\fIpassword\fR
+buffers must contain
+NUL\-terminated strings. The
+NE_ABUFSIZ
+constant gives the size of these buffers.
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+\fBTip\fR
+.PP
+If you only wish to allow the user one attempt to enter credentials, use the value of the
+\fIattempt\fR
+parameter as the return value of the callback.
+.PP
+To abort the request, the callback should return a non\-zero value; in which case the contents of the
+\fIusername\fR
+and
+\fIpassword\fR
+buffers are ignored.
+.PP
+The
+\fBne_forget_auth\fR
+function can be used to discard the cached authentication credentials.
+.SH "EXAMPLES"
+.sp
+.nf
+/* Function which prompts for a line of user input: */
+extern char *prompt_for(const char *prompt);
+
+static int
+my_auth(void *userdata, const char *realm, int attempts,
+        char *username, char *password)
+{
+   strncpy(username, prompt_for("Username: "), NE_ABUFSIZ);
+   strncpy(password, prompt_for("Password: "), NE_ABUFSIZ);
+   return attempts;
+}
+
+int main(...)
+{
+   ne_session *sess = ne_session_create(...);
+
+   ne_set_server_auth(sess, my_auth, NULL);
+
+   /* ... */
+}
+.fi

@@ -1,0 +1,47 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_SSL_TRUST_CERT" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_ssl_trust_cert, ne_ssl_trust_default_ca \- functions to indicate that certificates are trusted
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_session.h>\fR
+.HP 23
+\fBvoid\ \fBne_ssl_trust_cert\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.HP 29
+\fBvoid\ \fBne_ssl_trust_default_ca\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+To indicate that a given certificate is trusted by the user, the certificate object can be passed to
+\fBne_ssl_trust_cert\fR. The certificate object is duplicated internally and can subsequently be destroyed.
+.PP
+The SSL library in use by neon may include a default set of CA certificates; calling the
+\fBne_ssl_trust_default_ca\fR
+function will indicate that these CAs are trusted by the user.
+.SH "EXAMPLES"
+.PP
+Load the CA certificate stored in
+\fI/path/to/cacert.pem\fR:
+.sp
+.nf
+ne_session *sess = ne_session_create(...);
+ne_ssl_certificate *cert = ne_ssl_cert_read("/path/to/cacert.pem");
+
+if (cert) {
+   ne_ssl_trust_cert(sess, cert);
+   ne_ssl_cert_free(cert);
+} else {
+   printf("Could not load CA cert: %s\\n", ne_get_error(sess));
+}
+.fi
+.SH "SEE ALSO"
+.PP
+ne_ssl_cert_read,
+ne_ssl_cert_import,
+ne_ssl_cert_free

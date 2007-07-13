@@ -1,0 +1,57 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_BUFFER_DESTROY" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_buffer_destroy, ne_buffer_finish \- destroy a buffer object
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_string.h>\fR
+.HP 23
+\fBvoid\ \fBne_buffer_destroy\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB);\fR
+.HP 23
+\fBchar\ *\fBne_buffer_finish\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+\fBne_buffer_destroy\fR
+frees all memory associated with the buffer.
+\fBne_buffer_finish\fR
+frees the buffer structure, but not the actual string stored in the buffer, which is returned and must be
+\fBfree\fR()d by the caller.
+.PP
+Any use of the buffer object after calling either of these functions gives undefined behaviour.
+.SH "RETURN VALUE"
+.PP
+\fBne_buffer_finish\fR
+returns the
+\fBmalloc\fR\-allocated string stored in the buffer.
+.SH "EXAMPLES"
+.PP
+An example use of
+\fBne_buffer_finish\fR; the
+\fBduplicate\fR
+function returns a string made up of
+\fIn\fR
+copies of
+\fIstr\fR:
+.sp
+.nf
+static char *duplicate(int n, const char *str)
+{
+  ne_buffer *buf = ne_buffer_create();
+  while (n\-\-) {
+    ne_buffer_zappend(buf, str);
+  }
+  return ne_buffer_finish(buf);
+}
+.fi
+.SH "SEE ALSO"
+.PP
+ne_buffer,
+ne_buffer_create,
+ne_buffer_zappend

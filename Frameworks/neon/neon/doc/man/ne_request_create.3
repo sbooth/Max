@@ -1,0 +1,123 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_REQUEST_CREATE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_request_create, ne_request_dispatch, ne_request_destroy \- low\-level HTTP request handling
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_request.h>\fR
+.HP 30
+\fBne_request\ *\fBne_request_create\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fImethod\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIpath\fR\fR\fB);\fR
+.HP 24
+\fBint\ \fBne_request_dispatch\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIreq\fR\fR\fB);\fR
+.HP 24
+\fBvoid\ \fBne_request_destroy\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIreq\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+An HTTP request, represented by the
+\fBne_request\fR
+type, specifies that some operation is to be performed on some resource. The
+\fBne_request_create\fR
+function creates a request object, specifying the operation in the
+\fImethod\fR
+parameter. The location of the resource is determined by the server in use for the session given by the
+\fIsess\fR
+parameter, combined with the
+\fIpath\fR
+parameter.
+.PP
+The
+\fIpath\fR
+string used must conform to the
+abs_path
+definition given in RFC2396, with an optional "?query" part, and must be URI\-escaped by the caller (for instance, using
+\fBne_path_escape\fR). If the string comes from an untrusted source, failure to perform URI\-escaping results in a security vulnerability.
+.PP
+To dispatch a request, and process the response, the
+\fBne_request_dispatch\fR
+function can be used. An alternative is to use the (more complex, but more flexible) combination of the
+\fBne_begin_request\fR,
+\fBne_end_request\fR, and
+\fBne_read_response_block\fR
+functions; see
+\fBne_begin_request\fR.
+.PP
+To add extra headers in the request, the functions
+ne_add_request_header
+and
+ne_print_request_header
+can be used. To include a message body with the request, one of the functions
+\fBne_set_request_body_buffer\fR,
+ne_set_request_body_fd, or
+\fBne_set_request_body_provider\fR
+can be used.
+.PP
+The return value of
+\fBne_request_dispatch\fR
+indicates merely whether the request was sent and the response read successfully. To discover the result of the operation,
+ne_get_status, along with any processing of the response headers and message body.
+.PP
+A request can only be dispatched once: calling
+\fBne_request_dispatch\fR
+more than once on a single
+\fBne_request\fR
+object produces undefined behaviour. Once all processing associated with the request object is complete, use the
+\fBne_request_destroy\fR
+function to destroy the resources associated with it. Any subsequent use of the request object produces undefined behaviour.
+.SH "RETURN VALUE"
+.PP
+The
+\fBne_request_create\fR
+function returns a pointer to a request object (and never
+NULL).
+.PP
+The
+\fBne_request_dispatch\fR
+function returns zero if the request was dispatched successfully, and a non\-zero error code otherwise.
+.SH "ERRORS"
+.TP
+\fBNE_ERROR\fR
+Request failed (see session error string)
+.TP
+\fBNE_LOOKUP\fR
+The DNS lookup for the server (or proxy server) failed.
+.TP
+\fBNE_AUTH\fR
+Authentication failed on the server.
+.TP
+\fBNE_PROXYAUTH\fR
+Authentication failed on the proxy server.
+.TP
+\fBNE_CONNECT\fR
+A connection to the server could not be established.
+.TP
+\fBNE_TIMEOUT\fR
+A timeout occurred while waiting for the server to respond.
+.SH "EXAMPLE"
+.PP
+An example of applying a
+MKCOL
+operation to the resource at the location
+http://www.example.com/foo/bar/:
+.sp
+.nf
+ne_session *sess = ne_session_create("http", "www.example.com", 80);
+ne_request *req = ne_request_create(sess, "MKCOL", "/foo/bar/");
+if (ne_request_dispatch(req)) {
+   printf("Request failed: %s\\n", ne_get_error(sess));
+}
+ne_request_destroy(req);
+.fi
+.SH "SEE ALSO"
+.PP
+ne_get_error,
+ne_set_error,
+ne_get_status,
+ne_add_request_header,
+ne_set_request_body_buffer.

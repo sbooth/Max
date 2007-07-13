@@ -1,0 +1,46 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_MALLOC" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_malloc, ne_calloc, ne_realloc, ne_strdup, ne_strndup, ne_oom_callback \- memory allocation wrappers
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_alloc.h>\fR
+.HP 16
+\fBvoid\ *\fBne_malloc\fR\fR\fB(\fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.HP 16
+\fBvoid\ *\fBne_calloc\fR\fR\fB(\fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.HP 17
+\fBvoid\ *\fBne_realloc\fR\fR\fB(\fR\fBvoid\ *\fR\fB\fIsize\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIlen\fR\fR\fB);\fR
+.HP 16
+\fBchar\ *\fBne_strdup\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIs\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.HP 17
+\fBchar\ *\fBne_strndup\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIs\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.HP 21
+\fBvoid\ \fBne_oom_callback\fR\fR\fB(\fR\fBvoid\ (*\fR\fB\fIcallback\fR\fR\fB)(void)\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The functions
+\fBne_malloc\fR,
+\fBne_calloc\fR,
+\fBne_realloc\fR,
+\fBne_strdup\fR
+and
+\fBne_strdnup\fR
+provide wrappers for the equivalent functions in the standard C library. The wrappers provide the extra guarantee that if the C library equivalent returns
+NULL
+when no memory is available, an optional callback will be called, and the library will then call
+\fBabort\fR().
+.PP
+\fBne_oom_callback\fR
+registers a callback which will be invoked if an out of memory error is detected.
+.SH "NOTES"
+.PP
+If the operating system uses optimistic memory allocation, the C library memory allocation routines will not return
+NULL, so it is not possible to gracefully handle memory allocation failures.

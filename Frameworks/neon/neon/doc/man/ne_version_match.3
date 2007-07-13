@@ -1,0 +1,40 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_VERSION_MATCH" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_version_match, ne_version_string \- library versioning
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_utils.h>\fR
+.HP 21
+\fBint\ \fBne_version_match\fR\fR\fB(\fR\fBint\ \fR\fB\fImajor\fR\fR\fB, \fR\fBint\ \fR\fB\fIminor\fR\fR\fB);\fR
+.HP 30
+\fBconst\ char\ *\fBne_version_string\fR\fR\fB(\fR\fBvoid);\fR
+.SH "DESCRIPTION"
+.PP
+The
+\fBne_version_match\fR
+function returns non\-zero if the library version is not of major version
+\fImajor\fR, or the minor version is less than
+\fIminor\fR. For neon versions 0.x, every minor version is assumed to be incompatible with every other minor version.
+.PP
+The
+\fBne_version_string\fR
+function returns a string giving the library version.
+.SH "EXAMPLES"
+.PP
+To require neon 1.x, version 1.2 or later:
+.sp
+.nf
+if (ne_version_match(1, 2)) {
+    printf("Library version out of date: 1.2 required, found %s.",
+           ne_version_string());
+    exit(1);
+}
+.fi

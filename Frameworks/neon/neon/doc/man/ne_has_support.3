@@ -1,0 +1,49 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_HAS_SUPPORT" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_has_support \- determine feature support status
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_utils.h>\fR
+.HP 19
+\fBint\ \fBne_has_support\fR\fR\fB(\fR\fBint\ \fR\fB\fIfeature\fR\fR\fB);\fR
+.SH "DESCRIPTION"
+.PP
+The
+\fBne_has_support\fR
+function can be used to determine whether a particular optional feature, given by the feature code
+\fIfeature\fR, is supported. The following feature codes are available:
+.TP
+\fBNE_FEATURE_SSL\fR
+Indicates support for SSL/TLS
+.TP
+\fBNE_FEATURE_ZLIB\fR
+Indicates support for compressed responses
+.TP
+\fBNE_FEATURE_IPV6\fR
+Indicates support for IPv6
+.TP
+\fBNE_FEATURE_LFS\fR
+Indicates support for large files
+.TP
+\fBNE_FEATURE_SOCKS\fR
+Indicates support for SOCKSv5
+.TP
+\fBNE_FEATURE_TS_SSL\fR
+Indicates support for thread\-safe SSL initialization \(em see
+ne_sock_init
+.SH "RETURN VALUE"
+.PP
+\fBne_has_support\fR
+returns non\-zero if the given feature is supported, or zero otherwise.
+.SH "SEE ALSO"
+.PP
+ne_version_match(3),
+ne_sock_init(3)

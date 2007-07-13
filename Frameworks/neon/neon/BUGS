@@ -1,0 +1,23 @@
+
+Known problems/bugs in neon                                      -*- text -*-
+---------------------------
+
+* 2818 requires that a on rejection of the SSL server cert, a "bad certificate"
+ message should be sent - this is not being done currently (and can probably
+ only be done with OpenSSL by actually doing cert verification in the verify
+ callback)
+
+* ne_lock_discover does not handle multiple (shared) locks on
+  a single resource.
+
+* SSL session caching issues; only cache for clean shutdowns, and
+ only cache on shutdown, since the SSL_SESSION may change during
+ an ne_session?
+
+* It would be nice to fail with a friendly error message if a client
+cert is requested by the srever but one is not provided.  Currently,
+returning -1 from the provide_client_cert function would allow that
+(as it forces the SSL handshake to fail), but that would prevent
+opportunistic use of client certificates, of the "SSLVerifyClient
+optional" variety.
+

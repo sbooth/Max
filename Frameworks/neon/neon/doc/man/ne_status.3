@@ -1,0 +1,53 @@
+.\" ** You probably do not want to edit this file directly **
+.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
+.\" Instead of manually editing it, you probably should edit the DocBook XML
+.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
+.TH "NE_STATUS" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+ne_status \- HTTP status structure
+.SH "SYNOPSIS"
+.PP
+\fB#include <ne_utils.h>
+
+typedef struct {
+    int major_version, minor_version;
+    int code, klass;
+    const char *reason_phrase;
+} \fR\fB\fBne_status\fR\fR\fB;\fR
+.SH "DESCRIPTION"
+.PP
+An
+\fBne_status\fR
+type represents an HTTP response status; used in response messages giving a result of request. The
+major_version
+and
+minor_version
+fields give the HTTP version supported by the server issuing the response. The
+code
+field gives the status code of the result (lying between 100 and 999 inclusive), and the
+klass
+field gives the class[2], which is equal to the most significant digit of the status.
+.PP
+There are five classes of HTTP status code defined by RFC2616:
+.TP
+1xx
+Informational response.
+.TP
+2xx
+Success: the operation was successful
+.TP
+3xx
+Redirection
+.TP
+4xx
+Client error: the request made was incorrect in some manner.
+.TP
+5xx
+Server error
+.SH "SEE ALSO"
+.PP
+ne_get_status.
