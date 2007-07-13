@@ -230,7 +230,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = discid_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = discid;
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/libdiscid/include";
 				WRAPPER_EXTENSION = framework;
@@ -253,7 +253,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = discid_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = discid;
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/libdiscid/include";
 				WRAPPER_EXTENSION = framework;
