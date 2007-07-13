@@ -1,8 +1,0 @@
-Please refer to the online documentation for information on how to
-use this client library:
-
-        Online HOWTO: http://musicbrainz.org/client_howto.html
-         Online Docs: http://musicbrainz.org/docs/mb_client/index.html
-     Query Reference: http://users.musicbrainz.org/~luks/docs/mb_client-2.1.3/queries_8h.html
-  Function Reference: http://users.musicbrainz.org/~luks/docs/mb_client-2.1.3/mb__c_8h.html
-  

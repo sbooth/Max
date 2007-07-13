@@ -1,6 +1,0 @@
-# $Id: MANIFEST.SKIP 608 2003-03-01 02:20:07Z sander $
-Makefile
-blib
-pm_to_blib
-CVS
-MANIFEST.SKIP
