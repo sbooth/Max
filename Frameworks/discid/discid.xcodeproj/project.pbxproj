@@ -234,7 +234,7 @@
 				PRODUCT_NAME = discid;
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/libdiscid/include";
 				WRAPPER_EXTENSION = framework;
-				ZERO_LINK = YES;
+				ZERO_LINK = NO;
 			};
 			name = Debug;
 		};
@@ -257,6 +257,7 @@
 				PRODUCT_NAME = discid;
 				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/libdiscid/include";
 				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
