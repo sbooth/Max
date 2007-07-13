@@ -1,0 +1,16 @@
+LIBRARY discid
+EXPORTS
+    discid_new
+    discid_free
+    discid_read
+    discid_put
+    discid_get_error_msg
+    discid_get_id
+    discid_get_freedb_id
+    discid_get_submission_url
+    discid_get_default_device
+    discid_get_first_track_num
+    discid_get_last_track_num
+    discid_get_sectors
+    discid_get_track_offset
+    discid_get_track_length

@@ -1,0 +1,21 @@
+This library is a C port of the DiscID-related code from libmusicbrainz-2
+written by Robert Kaye et al.
+
+The following people have contributed to libdiscid:
+
+   Matthias Friedrich <matt at mafr dot de>
+    - Created the library interface and documented it.
+    - Wrote the operating system independent parts of libdiscid.
+    - Ported the DiscID and linux code.
+
+   Lukáš Lalinský <lalinsky at gmail dot com>
+    - Ported the win32 code and added a Makefile for MSVC.
+    - Added FreeDB support and a test program.
+    - Several other useful changes.
+
+   Robert Kaye <rob at eorbit dot net>
+    - Invented and originally implemented the DiscID algorithm.
+    - Ported the darwin code.
+
+-- 
+$Id$
