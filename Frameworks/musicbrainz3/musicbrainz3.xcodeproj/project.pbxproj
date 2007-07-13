@@ -35,33 +35,33 @@
 		8C98AC640C47275C004F7BF6 /* webservice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC4A0C47275C004F7BF6 /* webservice.cpp */; };
 		8C98AC670C472768004F7BF6 /* xmlParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C98AC650C472768004F7BF6 /* xmlParser.cpp */; };
 		8C98AC680C472768004F7BF6 /* xmlParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC660C472768004F7BF6 /* xmlParser.h */; };
-		8C98AC840C472778004F7BF6 /* artist.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC690C472778004F7BF6 /* artist.h */; };
-		8C98AC850C472778004F7BF6 /* artistalias.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6A0C472778004F7BF6 /* artistalias.h */; };
-		8C98AC860C472778004F7BF6 /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6B0C472778004F7BF6 /* defines.h */; };
-		8C98AC870C472778004F7BF6 /* disc.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6C0C472778004F7BF6 /* disc.h */; };
-		8C98AC880C472778004F7BF6 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6D0C472778004F7BF6 /* entity.h */; };
-		8C98AC890C472778004F7BF6 /* factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6E0C472778004F7BF6 /* factory.h */; };
-		8C98AC8A0C472778004F7BF6 /* filters.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6F0C472778004F7BF6 /* filters.h */; };
-		8C98AC8B0C472778004F7BF6 /* includes.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC700C472778004F7BF6 /* includes.h */; };
-		8C98AC8C0C472778004F7BF6 /* iwebservice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC710C472778004F7BF6 /* iwebservice.h */; };
-		8C98AC8D0C472778004F7BF6 /* label.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC720C472778004F7BF6 /* label.h */; };
-		8C98AC8E0C472778004F7BF6 /* labelalias.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC730C472778004F7BF6 /* labelalias.h */; };
-		8C98AC8F0C472778004F7BF6 /* lists.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC740C472778004F7BF6 /* lists.h */; };
-		8C98AC900C472778004F7BF6 /* mb_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC750C472778004F7BF6 /* mb_c.h */; };
-		8C98AC910C472778004F7BF6 /* mbxmlparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC760C472778004F7BF6 /* mbxmlparser.h */; };
-		8C98AC920C472778004F7BF6 /* metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC770C472778004F7BF6 /* metadata.h */; };
-		8C98AC930C472778004F7BF6 /* model.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC780C472778004F7BF6 /* model.h */; };
-		8C98AC940C472778004F7BF6 /* musicbrainz.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC790C472778004F7BF6 /* musicbrainz.h */; };
-		8C98AC950C472778004F7BF6 /* query.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7A0C472778004F7BF6 /* query.h */; };
-		8C98AC960C472778004F7BF6 /* relation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7B0C472778004F7BF6 /* relation.h */; };
-		8C98AC970C472778004F7BF6 /* release.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7C0C472778004F7BF6 /* release.h */; };
-		8C98AC980C472778004F7BF6 /* releaseevent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7D0C472778004F7BF6 /* releaseevent.h */; };
-		8C98AC990C472778004F7BF6 /* results.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7E0C472778004F7BF6 /* results.h */; };
-		8C98AC9A0C472778004F7BF6 /* tag.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7F0C472778004F7BF6 /* tag.h */; };
-		8C98AC9B0C472778004F7BF6 /* track.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC800C472778004F7BF6 /* track.h */; };
-		8C98AC9C0C472778004F7BF6 /* user.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC810C472778004F7BF6 /* user.h */; };
-		8C98AC9D0C472778004F7BF6 /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC820C472778004F7BF6 /* utils.h */; };
-		8C98AC9E0C472778004F7BF6 /* webservice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC830C472778004F7BF6 /* webservice.h */; };
+		8C98AC840C472778004F7BF6 /* artist.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC690C472778004F7BF6 /* artist.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC850C472778004F7BF6 /* artistalias.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6A0C472778004F7BF6 /* artistalias.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC860C472778004F7BF6 /* defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6B0C472778004F7BF6 /* defines.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC870C472778004F7BF6 /* disc.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6C0C472778004F7BF6 /* disc.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC880C472778004F7BF6 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6D0C472778004F7BF6 /* entity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC890C472778004F7BF6 /* factory.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6E0C472778004F7BF6 /* factory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC8A0C472778004F7BF6 /* filters.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC6F0C472778004F7BF6 /* filters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC8B0C472778004F7BF6 /* includes.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC700C472778004F7BF6 /* includes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC8C0C472778004F7BF6 /* iwebservice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC710C472778004F7BF6 /* iwebservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC8D0C472778004F7BF6 /* label.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC720C472778004F7BF6 /* label.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC8E0C472778004F7BF6 /* labelalias.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC730C472778004F7BF6 /* labelalias.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC8F0C472778004F7BF6 /* lists.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC740C472778004F7BF6 /* lists.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC900C472778004F7BF6 /* mb_c.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC750C472778004F7BF6 /* mb_c.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC910C472778004F7BF6 /* mbxmlparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC760C472778004F7BF6 /* mbxmlparser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC920C472778004F7BF6 /* metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC770C472778004F7BF6 /* metadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC930C472778004F7BF6 /* model.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC780C472778004F7BF6 /* model.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC940C472778004F7BF6 /* musicbrainz.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC790C472778004F7BF6 /* musicbrainz.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC950C472778004F7BF6 /* query.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7A0C472778004F7BF6 /* query.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC960C472778004F7BF6 /* relation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7B0C472778004F7BF6 /* relation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC970C472778004F7BF6 /* release.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7C0C472778004F7BF6 /* release.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC980C472778004F7BF6 /* releaseevent.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7D0C472778004F7BF6 /* releaseevent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC990C472778004F7BF6 /* results.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7E0C472778004F7BF6 /* results.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC9A0C472778004F7BF6 /* tag.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC7F0C472778004F7BF6 /* tag.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC9B0C472778004F7BF6 /* track.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC800C472778004F7BF6 /* track.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC9C0C472778004F7BF6 /* user.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC810C472778004F7BF6 /* user.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC9D0C472778004F7BF6 /* utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC820C472778004F7BF6 /* utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98AC9E0C472778004F7BF6 /* webservice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC830C472778004F7BF6 /* webservice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C98AD8F0C473AEF004F7BF6 /* neon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98AD8E0C473AEF004F7BF6 /* neon.framework */; };
 		8C98AD930C473B22004F7BF6 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AD920C473B22004F7BF6 /* config.h */; };
 		8C98ADA00C473B54004F7BF6 /* discid.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98AD9F0C473B54004F7BF6 /* discid.framework */; };
@@ -367,7 +367,7 @@
 /* Begin PBXProject section */
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "musicbrainz" */;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "musicbrainz3" */;
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* musicbrainz */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
@@ -529,7 +529,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "musicbrainz" */ = {
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "musicbrainz3" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB91B208733DA50010E9CD /* Debug */,
