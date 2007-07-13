@@ -15,6 +15,8 @@
 		8C98AC030C4706DD004F7BF6 /* sha1.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98ABFD0C4706DD004F7BF6 /* sha1.h */; };
 		8C98AC080C47072E004F7BF6 /* discid_private.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC060C47072E004F7BF6 /* discid_private.h */; };
 		8C98AC090C47072E004F7BF6 /* discid.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98AC070C47072E004F7BF6 /* discid.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C98B90B0C47CD5E004F7BF6 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98B90A0C47CD5E004F7BF6 /* IOKit.framework */; };
+		8C98B9110C47CD94004F7BF6 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C98B9100C47CD94004F7BF6 /* config.h */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +34,8 @@
 		8C98ABFD0C4706DD004F7BF6 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sha1.h; path = libdiscid/src/sha1.h; sourceTree = "<group>"; };
 		8C98AC060C47072E004F7BF6 /* discid_private.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = discid_private.h; path = libdiscid/include/discid/discid_private.h; sourceTree = "<group>"; };
 		8C98AC070C47072E004F7BF6 /* discid.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = discid.h; path = libdiscid/include/discid/discid.h; sourceTree = "<group>"; };
+		8C98B90A0C47CD5E004F7BF6 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		8C98B9100C47CD94004F7BF6 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = libdiscid/config.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* discid.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = discid.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -42,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C98B90B0C47CD5E004F7BF6 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +76,7 @@
 		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8C98B90A0C47CD5E004F7BF6 /* IOKit.framework */,
 				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
 				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
 			);
@@ -89,6 +95,7 @@
 		08FB77AEFE84172EC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				8C98B9100C47CD94004F7BF6 /* config.h */,
 				8C98AC060C47072E004F7BF6 /* discid_private.h */,
 				8C98AC070C47072E004F7BF6 /* discid.h */,
 				8C98ABF80C4706DD004F7BF6 /* base64.c */,
@@ -138,6 +145,7 @@
 				8C98AC030C4706DD004F7BF6 /* sha1.h in Headers */,
 				8C98AC080C47072E004F7BF6 /* discid_private.h in Headers */,
 				8C98AC090C47072E004F7BF6 /* discid.h in Headers */,
+				8C98B9110C47CD94004F7BF6 /* config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +237,10 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = discid_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					HAVE_CONFIG_H,
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = discid;
@@ -252,6 +264,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = discid_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					HAVE_CONFIG_H,
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = discid;
