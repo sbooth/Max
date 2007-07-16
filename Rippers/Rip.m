@@ -144,7 +144,7 @@
 
 - (NSData *)			dataForSector:(unsigned)sector
 {
-	return [self dataForSectorRange:[SectorRange rangeWithSector:sector]];
+	return [self dataForSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
 
 - (NSData *)			dataForSectorRange:(SectorRange *)range
@@ -180,7 +180,7 @@
 
 - (void)				getBytes:(void *)buffer forSector:(unsigned)sector
 {
-	[self getBytes:buffer forSectorRange:[SectorRange rangeWithSector:sector]];
+	[self getBytes:buffer forSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
 
 - (void)				getBytes:(void *)buffer forSectorRange:(SectorRange *)range
@@ -221,7 +221,7 @@
 
 - (void)				setData:(NSData *)data forSector:(unsigned)sector
 {
-	[self setData:data forSectorRange:[SectorRange rangeWithSector:sector]];
+	[self setData:data forSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
 
 - (void)				setData:(NSData *)data forSectorRange:(SectorRange *)range
@@ -235,7 +235,7 @@
 
 - (void)				setBytes:(const void *)buffer forSector:(unsigned)sector
 {
-	[self setBytes:buffer forSectorRange:[SectorRange rangeWithSector:sector]];
+	[self setBytes:buffer forSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
 
 - (void)				setBytes:(const void *)buffer forSectorRange:(SectorRange *)range

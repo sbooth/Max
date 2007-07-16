@@ -59,7 +59,7 @@
 			}
 			
 			[track setRipInProgress:YES];
-			[_sectors addObject:[SectorRange rangeWithFirstSector:[track firstSector] lastSector:[track lastSector]]];
+			[_sectors addObject:[SectorRange sectorRangeWithFirstSector:[track firstSector] lastSector:[track lastSector]]];
 		}
 		
 		return self;

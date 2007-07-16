@@ -329,7 +329,7 @@
 				// Set up the parameters for this read
 				startSector		= [range firstSector] + [range length] - sectorsRemaining;
 				sectorCount		= sectorsRemaining > bufferLen ? bufferLen : sectorsRemaining;
-				readRange		= [SectorRange rangeWithFirstSector:startSector sectorCount:sectorCount];
+				readRange		= [SectorRange sectorRangeWithFirstSector:startSector sectorCount:sectorCount];
 
 				// Extract the audio from the disc
 				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];				
@@ -580,7 +580,7 @@
 				}
 				
 				// Now just re-rip the block
-				blockRange = [SectorRange rangeWithFirstSector:[range sectorForIndex:i] lastSector:[range sectorForIndex:blockEnd]];
+				blockRange = [SectorRange sectorRangeWithFirstSector:[range sectorForIndex:i] lastSector:[range sectorForIndex:blockEnd]];
 
 				// Clear the drive's cache
 				[_drive clearCache:blockRange];
@@ -605,7 +605,7 @@
 					// Set up the parameters for this read
 					startSector		= [blockRange firstSector] + [blockRange length] - sectorsRemaining;
 					sectorCount		= sectorsRemaining > bufferLen ? bufferLen : sectorsRemaining;
-					readRange		= [SectorRange rangeWithFirstSector:startSector sectorCount:sectorCount];
+					readRange		= [SectorRange sectorRangeWithFirstSector:startSector sectorCount:sectorCount];
 					
 					// Extract the audio from the disc
 					if(1 == [readRange length]) {
@@ -701,7 +701,7 @@
 			// Set up the parameters for this read
 			startSector		= [range firstSector] + [range length] - sectorsRemaining;
 			sectorCount		= sectorsRemaining > bufferLen ? bufferLen : sectorsRemaining;
-			readRange		= [SectorRange rangeWithFirstSector:startSector sectorCount:sectorCount];
+			readRange		= [SectorRange sectorRangeWithFirstSector:startSector sectorCount:sectorCount];
 			
 			// Grab the master rip's data
 			[masterRip getBytes:buffer forSectorRange:readRange];

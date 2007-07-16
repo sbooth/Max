@@ -178,7 +178,7 @@
 			// Set up the parameters for this read
 			startSector		= [range firstSector] + [range length] - sectorsRemaining;
 			sectorCount		= sectorsRemaining > bufferLen ? bufferLen : sectorsRemaining;
-			readRange		= [SectorRange rangeWithFirstSector:startSector sectorCount:sectorCount];
+			readRange		= [SectorRange sectorRangeWithFirstSector:startSector sectorCount:sectorCount];
 			
 			// Extract the audio from the disc
 			sectorsRead		= [_drive readAudio:buffer sectorRange:readRange];

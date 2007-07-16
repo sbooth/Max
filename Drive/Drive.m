@@ -62,20 +62,18 @@
 		[self openDevice];
 		
 		[self readTOC];
-		
-		return self;
 	}
-	
-	return nil;
+
+	return self;
 }
 
 - (void) dealloc
 {
 	[self closeDevice];
 	
-	[_deviceName release];		_deviceName = nil;
-	[_sessions release];		_sessions = nil;
-	[_tracks release];			_tracks = nil;
+	[_deviceName release],		_deviceName = nil;
+	[_sessions release],		_sessions = nil;
+	[_tracks release],			_tracks = nil;
 	
 	[super dealloc];
 }
@@ -86,8 +84,7 @@
 - (void) openDevice
 {
 	if(NO == [self deviceOpen]) {
-//		NSLog(@"Opening device %@", [self deviceName]);
-		_fd				= opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
+		_fd = opendev((char *)[[self deviceName] fileSystemRepresentation], O_RDONLY | O_NONBLOCK, 0, NULL);
 		NSAssert(-1 != _fd, NSLocalizedStringFromTable(@"Unable to open the drive for reading.", @"Exceptions", @""));
 	}
 }
@@ -95,14 +92,10 @@
 - (void) closeDevice
 {
 	if([self deviceOpen]) {
-//		NSLog(@"Closing device %@", [self deviceName]);
-		
 		if(-1 == close(_fd)) {
-			NSException *exception;
-			
-			exception =  [NSException exceptionWithName:@"IOException"
-												 reason:NSLocalizedStringFromTable(@"Unable to close the drive.", @"Exceptions", @"")					
-											   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
+			NSException *exception = [NSException exceptionWithName:@"IOException"
+															 reason:NSLocalizedStringFromTable(@"Unable to close the drive.", @"Exceptions", @"")					
+														   userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSNumber numberWithInt:errno], [NSString stringWithCString:strerror(errno) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
 			
 			[self logMessage:[exception description]];
 		}
@@ -120,7 +113,7 @@
 // Disc track information
 - (unsigned)			sessionContainingSector:(unsigned)sector
 {
-	return [self sessionContainingSectorRange:[SectorRange rangeWithSector:sector]];
+	return [self sessionContainingSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
 
 - (unsigned)			sessionContainingSectorRange:(SectorRange *)sectorRange
@@ -135,11 +128,10 @@
 		sessionFirstSector		= [self firstSectorForTrack:[self firstTrackForSession:session]];
 		sessionLastSector		= [self lastSectorForTrack:[self lastTrackForSession:session]];
 		
-		sessionSectorRange		= [SectorRange rangeWithFirstSector:sessionFirstSector lastSector:sessionLastSector];
+		sessionSectorRange		= [SectorRange sectorRangeWithFirstSector:sessionFirstSector lastSector:sessionLastSector];
 		
-		if([sessionSectorRange containsSectorRange:sectorRange]) {
+		if([sessionSectorRange containsSectorRange:sectorRange])
 			return session;
-		}		
 	}
 	
 	return NSNotFound;
@@ -156,9 +148,8 @@
 	
 	for(i = 0; i < [self countOfSessions]; ++i) {
 		session = [self objectInSessionsAtIndex:i];
-		if([session number] == number) {
+		if([session number] == number)
 			return session;
-		}
 	}
 	
 	return nil;
@@ -179,9 +170,8 @@
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
 		track = [self objectInTracksAtIndex:i];
-		if([track number] == number) {
+		if([track number] == number)
 			return track;
-		}
 	}
 	
 	return nil;
@@ -194,9 +184,8 @@
 	TrackDescriptor		*thisTrack		= [self trackNumber:number];
 	TrackDescriptor		*nextTrack		= [self trackNumber:number + 1];
 	
-	if(nil == thisTrack) {
+	if(nil == thisTrack)
 		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:[NSString stringWithFormat:@"Track %u doesn't exist", number] userInfo:nil];
-	}
 	
 	return ([self lastTrackForSession:[thisTrack session]] == number ? [self lastSectorForSession:[thisTrack session]] : [nextTrack firstSector] - 1);
 }
@@ -205,18 +194,16 @@
 {
 	uint16_t	speed	= 0;
 	
-	if(-1 == ioctl([self fileDescriptor], DKIOCCDGETSPEED, &speed)) {
+	if(-1 == ioctl([self fileDescriptor], DKIOCCDGETSPEED, &speed))
 		[self logMessage:NSLocalizedStringFromTable(@"Unable to get the drive's speed", @"Exceptions", @"")];
-	}
 	
 	return speed;
 }
 
 - (void)			setSpeed:(uint16_t)speed
 {
-	if(-1 == ioctl([self fileDescriptor], DKIOCCDSETSPEED, &speed)) {
+	if(-1 == ioctl([self fileDescriptor], DKIOCCDSETSPEED, &speed))
 		[self logMessage:NSLocalizedStringFromTable(@"Unable to set the drive's speed", @"Exceptions", @"")];
-	}
 }
 
 - (void)			clearCache:(SectorRange *)range
@@ -532,13 +519,11 @@
 				  (0x20 == desc->p.second) ? "CD-ROM XA disc with first track in Mode 2" : "Unknown");*/
 		}
 		// Last track
-		else if(0xA1 == desc->point && 1 == desc->adr) {
+		else if(0xA1 == desc->point && 1 == desc->adr)
 			[[self sessionNumber:desc->session] setLastTrack:desc->p.minute];
-		}
 		// Lead-out
-		else if(0xA2 == desc->point && 1 == desc->adr) {
+		else if(0xA2 == desc->point && 1 == desc->adr)
 			[[self sessionNumber:desc->session] setLeadOut:CDConvertMSFToLBA(desc->p)];
-		}
 /*		else if(0xB0 == desc->point && 5 == desc->adr) {
 			NSLog(@"Next possible track start: %02d:%02d.%02d\n",
 				  (int)desc->address.minute, (int)desc->address.second, (int)desc->address.frame);

@@ -26,9 +26,9 @@
 	unsigned	_lastSector;
 }
 
-+ (id)				rangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector;
-+ (id)				rangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount;
-+ (id)				rangeWithSector:(unsigned)sector;
++ (id)				sectorRangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector;
++ (id)				sectorRangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount;
++ (id)				sectorRangeWithSector:(unsigned)sector;
 
 - (unsigned)		firstSector;
 - (void)			setFirstSector:(unsigned)sector;

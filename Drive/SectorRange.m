@@ -24,7 +24,7 @@
 
 @implementation SectorRange
 
-+ (id) rangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector
++ (id) sectorRangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector
 {
 	NSParameterAssert(lastSector >= firstSector);
 	
@@ -36,7 +36,7 @@
 	return [range autorelease];
 }
 
-+ (id) rangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount
++ (id) sectorRangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount
 {
 	NSParameterAssert(0 < sectorCount);
 
@@ -48,7 +48,7 @@
 	return [range autorelease];
 }
 
-+ (id)				rangeWithSector:(unsigned)sector
++ (id) sectorRangeWithSector:(unsigned)sector
 {
 	SectorRange *range = [[SectorRange alloc] init];
 	
