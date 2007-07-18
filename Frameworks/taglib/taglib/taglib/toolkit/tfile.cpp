@@ -24,8 +24,22 @@
 #include "tdebug.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
-#include <unistd.h>
+#ifdef _WIN32
+# include <io.h>
+# define ftruncate _chsize
+#else
+ #include <unistd.h>
+#endif
+#include <stdlib.h>
+
+#ifndef R_OK
+# define R_OK 4
+#endif
+#ifndef W_OK
+# define W_OK 2
+#endif
 
 using namespace TagLib;
 
@@ -246,7 +260,7 @@ long File::rfind(const ByteVector &pattern, long fromOffset, const ByteVector &b
   }
   else {
     seek(fromOffset + -1 * int(d->bufferSize), Beginning);
-    bufferOffset = tell();    
+    bufferOffset = tell();
   }
 
   // See the notes in find() for an explanation of this algorithm.
@@ -311,6 +325,7 @@ void File::insert(const ByteVector &data, ulong start, ulong replace)
   // that aren't yet in memory, so this is necessary.
 
   ulong bufferLength = bufferSize();
+
   while(data.size() - replace > bufferLength)
     bufferLength += bufferSize();
 
@@ -338,10 +353,14 @@ void File::insert(const ByteVector &data, ulong start, ulong replace)
 
   buffer = aboutToOverwrite;
 
+  // In case we've already reached the end of file...
+
+  buffer.resize(bytesRead);
+
   // Ok, here's the main loop.  We want to loop until the read fails, which
   // means that we hit the end of the file.
 
-  while(bytesRead != 0) {
+  while(!buffer.isEmpty()) {
 
     // Seek to the current read position and read the data that we're about
     // to overwrite.  Appropriately increment the readPosition.
@@ -361,8 +380,8 @@ void File::insert(const ByteVector &data, ulong start, ulong replace)
     // writePosition.
 
     seek(writePosition);
-    fwrite(buffer.data(), sizeof(char), bufferLength, d->file);
-    writePosition += bufferLength;
+    fwrite(buffer.data(), sizeof(char), buffer.size(), d->file);
+    writePosition += buffer.size();
 
     // Make the current buffer the data that we read in the beginning.
 
@@ -388,12 +407,11 @@ void File::removeBlock(ulong start, ulong length)
 
   ByteVector buffer(static_cast<uint>(bufferLength));
 
-  ulong bytesRead = true;
+  ulong bytesRead = 1;
 
   while(bytesRead != 0) {
     seek(readPosition);
     bytesRead = fread(buffer.data(), sizeof(char), bufferLength, d->file);
-    buffer.resize(bytesRead);
     readPosition += bytesRead;
 
     // Check to see if we just read the last block.  We need to call clear()
@@ -421,12 +439,12 @@ bool File::isReadable(const char *file)
 
 bool File::isOpen() const
 {
-  return d->file;
+  return (d->file != NULL);
 }
 
 bool File::isValid() const
 {
-  return d->file && d->valid;
+  return isOpen() && d->valid;
 }
 
 void File::seek(long offset, Position p)

@@ -24,6 +24,8 @@
 #include <tstring.h>
 #include <tdebug.h>
 
+#include <string.h>
+
 #include "tbytevector.h"
 
 // This is a bit ugly to keep writing over and over again.
@@ -98,7 +100,7 @@ namespace TagLib {
     if(pattern.size() == 1) {
       char p = pattern[0];
       for(uint i = offset; i < v.size(); i++) {
-        if(v[i] == p && i % byteAlign == 0)
+        if(v[i] == p && (i - offset) % byteAlign == 0)
           return i;
       }
       return -1;
@@ -121,7 +123,7 @@ namespace TagLib {
         --iPattern;
       }
 
-      if(-1 == iPattern && (iBuffer + 1) % byteAlign == 0)
+      if(-1 == iPattern && (iBuffer + 1 - offset) % byteAlign == 0)
         return iBuffer + 1;
     }
 
@@ -432,6 +434,9 @@ int ByteVector::endsWithPartialMatch(const ByteVector &pattern) const
 
 ByteVector &ByteVector::append(const ByteVector &v)
 {
+  if(v.d->size == 0)
+    return *this; // Simply return if appending nothing.
+
   detach();
 
   uint originalSize = d->size;
@@ -597,16 +602,12 @@ ByteVector &ByteVector::operator=(const ByteVector &v)
 
 ByteVector &ByteVector::operator=(char c)
 {
-  if(d->deref())
-    delete d;
   *this = ByteVector(c);
   return *this;
 }
 
 ByteVector &ByteVector::operator=(const char *data)
 {
-  if(d->deref())
-    delete d;
   *this = ByteVector(data);
   return *this;
 }

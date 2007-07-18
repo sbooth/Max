@@ -27,7 +27,6 @@
 #include "vorbisfile.h"
 #include "flacfile.h"
 #include "mpcfile.h"
-#include "wavpackfile.h"
 
 using namespace TagLib;
 
@@ -110,7 +109,6 @@ StringList FileRef::defaultFileExtensions()
   l.append("flac");
   l.append("mp3");
   l.append("mpc");
-  l.append("wv");
 
   return l;
 }
@@ -172,9 +170,7 @@ File *FileRef::create(const char *fileName, bool readAudioProperties,
     if(s.substr(s.size() - 5, 5).upper() == ".FLAC")
       return new FLAC::File(fileName, readAudioProperties, audioPropertiesStyle);
     if(s.substr(s.size() - 4, 4).upper() == ".MPC")
-		return new MPC::File(fileName, readAudioProperties, audioPropertiesStyle);
-    if(s.substr(s.size() - 3, 3).upper() == ".WV")
-		return new WavPack::File(fileName, readAudioProperties, audioPropertiesStyle);
+      return new MPC::File(fileName, readAudioProperties, audioPropertiesStyle);
   }  
 
   return 0;

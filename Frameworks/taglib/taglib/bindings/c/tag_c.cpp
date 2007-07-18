@@ -28,8 +28,8 @@
 #include <flacfile.h>
 #include <oggflacfile.h>
 #include <mpcfile.h>
-#include <wavpackfile.h>
 #include <tag.h>
+#include <string.h>
 #include <id3v2framefactory.h>
 
 using namespace TagLib;
@@ -70,8 +70,6 @@ TagLib_File *taglib_file_new_type(const char *filename, TagLib_File_Type type)
     return reinterpret_cast<TagLib_File *>(new MPC::File(filename));
   case TagLib_File_OggFlac:
     return reinterpret_cast<TagLib_File *>(new Ogg::FLAC::File(filename));
-  case TagLib_File_WavPack:
-    return reinterpret_cast<TagLib_File *>(new WavPack::File(filename));
   }
 
   return 0;

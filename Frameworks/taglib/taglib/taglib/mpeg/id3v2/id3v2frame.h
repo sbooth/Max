@@ -179,6 +179,15 @@ namespace TagLib {
        */
       ByteVector fieldData(const ByteVector &frameData) const;
 
+      /*!
+       * Reads a String of type \a encodiong from the ByteVector \a data.  If \a
+       * position is passed in it is used both as the starting point and is
+       * updated to replect the position just after the string that has been read.
+       * This is useful for reading strings sequentially.
+       */
+      String readStringField(const ByteVector &data, String::Type encoding,
+                             int *positon = 0);
+
     private:
       Frame(const Frame &);
       Frame &operator=(const Frame &);
@@ -353,12 +362,14 @@ namespace TagLib {
        */
       bool encryption() const;
 
+#ifndef DO_NOT_DOCUMENT
+      bool unsycronisation() const;
+#endif
+
       /*!
        * Returns true if unsyncronisation is enabled for this frame.
-       *
-       * \note This flag is currently ignored internally in TagLib.
        */
-      bool unsycronisation() const;
+      bool unsynchronisation() const;
 
       /*!
        * Returns true if the flag for a data length indicator is set.

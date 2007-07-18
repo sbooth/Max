@@ -12,9 +12,10 @@ include(CheckTypeSize)
 include(CheckCXXSourceCompiles)
 
 #check for libz using the cmake supplied FindZLIB.cmake
+FIND_PACKAGE(ZLIB REQUIRED)
 
 IF(ZLIB_FOUND)
-	SET(HAVE_LIBZ 1)
+	SET(HAVE_ZLIB 1)
 ELSE(ZLIB_FOUND)
-	SET(HAVE_LIBZ 0)
+	SET(HAVE_ZLIB 0)
 ENDIF(ZLIB_FOUND)

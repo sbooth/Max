@@ -188,7 +188,7 @@ void Ogg::XiphComment::addField(const String &key, const String &value, bool rep
   if(replace)
     removeField(key.upper());
 
-  if(!value.isEmpty())
+  if(!key.isEmpty() && !value.isEmpty())
     d->fieldListMap[key.upper()].append(value);
 }
 
