@@ -235,10 +235,12 @@ STRIP_NON_ASM = sh $(top_srcdir)/strip_non_asm_libtool_args.sh
 
 noinst_LTLIBRARIES = libFLAC-asm.la
 libFLAC_asm_la_SOURCES = \
+	bitreader_asm.nasm \
 	cpu_asm.nasm \
 	fixed_asm.nasm \
 	lpc_asm.nasm \
-	nasm.h
+	nasm.h \
+	stream_encoder_asm.nasm
 
 subdir = src/libFLAC/ia32
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -249,7 +251,8 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 
 libFLAC_asm_la_LDFLAGS =
 libFLAC_asm_la_LIBADD =
-am_libFLAC_asm_la_OBJECTS = cpu_asm.lo fixed_asm.lo lpc_asm.lo
+am_libFLAC_asm_la_OBJECTS = bitreader_asm.lo cpu_asm.lo fixed_asm.lo \
+	lpc_asm.lo stream_encoder_asm.lo
 libFLAC_asm_la_OBJECTS = $(am_libFLAC_asm_la_OBJECTS)
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)

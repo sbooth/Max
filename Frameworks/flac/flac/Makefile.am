@@ -30,7 +30,7 @@
 
 AUTOMAKE_OPTIONS = foreign 1.7
 
-SUBDIRS = doc include m4 man src test build flac.pbproj obj
+SUBDIRS = doc include m4 man src test build obj
 
 DISTCLEANFILES = libtool-disable-static
 
@@ -40,6 +40,7 @@ EXTRA_DIST = \
 	COPYING.LGPL \
 	COPYING.Xiph \
 	FLAC.dsw \
+	FLAC.sln \
 	Makefile.lite \
 	all.dsp \
 	all_dynamic.dsp \

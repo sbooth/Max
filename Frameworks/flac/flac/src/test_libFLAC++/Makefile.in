@@ -218,7 +218,8 @@ target_alias = @target_alias@
 
 EXTRA_DIST = \
 	Makefile.lite \
-	test_libFLAC++.dsp
+	test_libFLAC++.dsp \
+	test_libFLAC++.vcproj
 
 
 noinst_PROGRAMS = test_libFLAC++

@@ -41,7 +41,7 @@
 00032 <span class="preprocessor">#ifndef FLAC__METADATA_H</span>
 00033 <span class="preprocessor"></span><span class="preprocessor">#define FLAC__METADATA_H</span>
 00034 <span class="preprocessor"></span>
-00035 <span class="preprocessor">#include "export.h"</span>
+00035 <span class="preprocessor">#include "<a class="code" href="export_8h.html">export.h</a>"</span>
 00036 <span class="preprocessor">#include "<a class="code" href="callback_8h.html">callback.h</a>"</span>
 00037 <span class="preprocessor">#include "<a class="code" href="format_8h.html">format.h</a>"</span>
 00038 
@@ -62,7 +62,7 @@
 00177 
 00195 FLAC_API FLAC__bool <a class="code" href="group__flac__metadata__level0.html#ga2">FLAC__metadata_get_cuesheet</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> **cuesheet);
 00196 
-00235 FLAC_API FLAC__bool <a class="code" href="group__flac__metadata__level0.html#ga3">FLAC__metadata_get_picture</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> **picture, <a class="code" href="group__flac__format.html#ga110">FLAC__StreamMetadata_Picture_Type</a> type, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime_type, <span class="keyword">const</span> FLAC__byte *description, <span class="keywordtype">unsigned</span> max_width, <span class="keywordtype">unsigned</span> max_height, <span class="keywordtype">unsigned</span> max_depth, <span class="keywordtype">unsigned</span> max_colors);
+00235 FLAC_API FLAC__bool <a class="code" href="group__flac__metadata__level0.html#ga3">FLAC__metadata_get_picture</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> **picture, <a class="code" href="group__flac__format.html#ga114">FLAC__StreamMetadata_Picture_Type</a> type, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime_type, <span class="keyword">const</span> FLAC__byte *description, <span class="keywordtype">unsigned</span> max_width, <span class="keywordtype">unsigned</span> max_height, <span class="keywordtype">unsigned</span> max_depth, <span class="keywordtype">unsigned</span> max_colors);
 00236 
 00237 <span class="comment">/* \} */</span>
 00238 
@@ -104,7 +104,7 @@
 00431 
 00444 FLAC_API FLAC__bool <a class="code" href="group__flac__metadata__level1.html#ga8">FLAC__metadata_simple_iterator_prev</a>(FLAC__Metadata_SimpleIterator *iterator);
 00445 
-00459 FLAC_API <a class="code" href="group__flac__format.html#ga109">FLAC__MetadataType</a> <a class="code" href="group__flac__metadata__level1.html#ga9">FLAC__metadata_simple_iterator_get_block_type</a>(<span class="keyword">const</span> FLAC__Metadata_SimpleIterator *iterator);
+00459 FLAC_API <a class="code" href="group__flac__format.html#ga113">FLAC__MetadataType</a> <a class="code" href="group__flac__metadata__level1.html#ga9">FLAC__metadata_simple_iterator_get_block_type</a>(<span class="keyword">const</span> FLAC__Metadata_SimpleIterator *iterator);
 00460 
 00476 FLAC_API <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *<a class="code" href="group__flac__metadata__level1.html#ga10">FLAC__metadata_simple_iterator_get_block</a>(FLAC__Metadata_SimpleIterator *iterator);
 00477 
@@ -187,7 +187,7 @@
 01054 
 01067 FLAC_API FLAC__bool <a class="code" href="group__flac__metadata__level2.html#ga20">FLAC__metadata_iterator_prev</a>(FLAC__Metadata_Iterator *iterator);
 01068 
-01079 FLAC_API <a class="code" href="group__flac__format.html#ga109">FLAC__MetadataType</a> <a class="code" href="group__flac__metadata__level2.html#ga21">FLAC__metadata_iterator_get_block_type</a>(<span class="keyword">const</span> FLAC__Metadata_Iterator *iterator);
+01079 FLAC_API <a class="code" href="group__flac__format.html#ga113">FLAC__MetadataType</a> <a class="code" href="group__flac__metadata__level2.html#ga21">FLAC__metadata_iterator_get_block_type</a>(<span class="keyword">const</span> FLAC__Metadata_Iterator *iterator);
 01080 
 01100 FLAC_API <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *<a class="code" href="group__flac__metadata__level2.html#ga22">FLAC__metadata_iterator_get_block</a>(FLAC__Metadata_Iterator *iterator);
 01101 
@@ -202,7 +202,7 @@
 01174 <span class="comment">/* \} */</span>
 01175 
 01176 
-01242 FLAC_API <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *<a class="code" href="group__flac__metadata__object.html#ga0">FLAC__metadata_object_new</a>(<a class="code" href="group__flac__format.html#ga109">FLAC__MetadataType</a> type);
+01242 FLAC_API <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *<a class="code" href="group__flac__metadata__object.html#ga0">FLAC__metadata_object_new</a>(<a class="code" href="group__flac__format.html#ga113">FLAC__MetadataType</a> type);
 01243 
 01256 FLAC_API <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *<a class="code" href="group__flac__metadata__object.html#ga1">FLAC__metadata_object_clone</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *object);
 01257 

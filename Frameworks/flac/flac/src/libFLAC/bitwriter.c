@@ -35,7 +35,7 @@
 
 #include <stdlib.h> /* for malloc() */
 #include <string.h> /* for memcpy(), memset() */
-#if defined(_MSC_VER) && _MSC_VER <= 1200
+#ifdef _MSC_VER
 #include <winsock.h> /* for ntohl() */
 #elif defined FLAC__SYS_DARWIN
 #include <machine/endian.h> /* for ntohl() */
@@ -540,7 +540,7 @@ FLAC__bool FLAC__bitwriter_write_rice_signed_block(FLAC__BitWriter *bw, const FL
 	const FLAC__uint32 mask1 = FLAC__WORD_ALL_ONES << parameter; /* we val|=mask1 to set the stop bit above it... */
 	const FLAC__uint32 mask2 = FLAC__WORD_ALL_ONES >> (31-parameter); /* ...then mask off the bits above the stop bit with val&=mask2*/
 	FLAC__uint32 uval;
-	register unsigned left;
+	unsigned left;
 	const unsigned lsbits = 1 + parameter;
 	unsigned msbits;
 
@@ -552,62 +552,99 @@ FLAC__bool FLAC__bitwriter_write_rice_signed_block(FLAC__BitWriter *bw, const FL
 
 	while(nvals) {
 		/* fold signed to unsigned; actual formula is: negative(v)? -2v-1 : 2v */
-        uval = (*vals<<1) ^ (*vals>>31);
+		uval = (*vals<<1) ^ (*vals>>31);
 
 		msbits = uval >> parameter;
 
-		/* slightly pessimistic size check but faster than "<= bw->words + (bw->bits+msbits+lsbits+FLAC__BITS_PER_WORD-1)/FLAC__BITS_PER_WORD" */
-		/* OPT: pessimism may cause flurry of false calls to grow_ which eat up all savings before it */
-		if(bw->capacity <= bw->words + bw->bits + msbits + lsbits && !bitwriter_grow_(bw, msbits+lsbits))
-			return false;
-
-		if(msbits) {
-			/* first part gets to word alignment */
-			if(bw->bits) {
-				left = min(FLAC__BITS_PER_WORD - bw->bits, msbits);
-				bw->accum <<= left;
-				msbits -= left;
-				bw->bits += left;
-				if(bw->bits == FLAC__BITS_PER_WORD) {
-					bw->buffer[bw->words++] = SWAP_BE_WORD_TO_HOST(bw->accum);
-					bw->bits = 0;
-				}
-				else
-					goto break1;
-			}
-			/* do whole words */
-			while(msbits >= FLAC__BITS_PER_WORD) {
-				bw->buffer[bw->words++] = 0;
-				msbits -= FLAC__BITS_PER_WORD;
-			}
-			/* do any leftovers */
-			if(msbits > 0) {
-				bw->accum = 0;
-				bw->bits = msbits;
-			}
-		}
-break1:
-		uval |= mask1; /* set stop bit */
-		uval &= mask2; /* mask off unused top bits */
-
-		left = FLAC__BITS_PER_WORD - bw->bits;
-		if(lsbits < left) {
+#if 0 /* OPT: can remove this special case if it doesn't make up for the extra compare (doesn't make a statistically significant difference with msvc or gcc/x86) */
+		if(bw->bits && bw->bits + msbits + lsbits <= FLAC__BITS_PER_WORD) { /* i.e. if the whole thing fits in the current bwword */
+			/* ^^^ if bw->bits is 0 then we may have filled the buffer and have no free bwword to work in */
+			bw->bits = bw->bits + msbits + lsbits;
+			uval |= mask1; /* set stop bit */
+			uval &= mask2; /* mask off unused top bits */
+			/* NOT: bw->accum <<= msbits + lsbits because msbits+lsbits could be 32, then the shift would be a NOP */
+			bw->accum <<= msbits;
 			bw->accum <<= lsbits;
 			bw->accum |= uval;
-			bw->bits += lsbits;
+			if(bw->bits == FLAC__BITS_PER_WORD) {
+				bw->buffer[bw->words++] = SWAP_BE_WORD_TO_HOST(bw->accum);
+				bw->bits = 0;
+				/* burying the capacity check down here means we have to grow the buffer a little if there are more vals to do */
+				if(bw->capacity <= bw->words && nvals > 1 && !bitwriter_grow_(bw, 1)) {
+					FLAC__ASSERT(bw->capacity == bw->words);
+					return false;
+				}
+			}
 		}
 		else {
-			/* if bw->bits == 0, left==FLAC__BITS_PER_WORD which will always
-			 * be > lsbits (because of previous assertions) so it would have
-			 * triggered the (lsbits<left) case above.
-			 */
-			FLAC__ASSERT(bw->bits);
-			FLAC__ASSERT(left < FLAC__BITS_PER_WORD);
-			bw->accum <<= left;
-			bw->accum |= uval >> (bw->bits = lsbits - left);
-			bw->buffer[bw->words++] = SWAP_BE_WORD_TO_HOST(bw->accum);
-			bw->accum = uval;
+#elif 1 /*@@@@@@ OPT: try this version with MSVC6 to see if better, not much difference for gcc-4 */
+		if(bw->bits && bw->bits + msbits + lsbits < FLAC__BITS_PER_WORD) { /* i.e. if the whole thing fits in the current bwword */
+			/* ^^^ if bw->bits is 0 then we may have filled the buffer and have no free bwword to work in */
+			bw->bits = bw->bits + msbits + lsbits;
+			uval |= mask1; /* set stop bit */
+			uval &= mask2; /* mask off unused top bits */
+			bw->accum <<= msbits + lsbits;
+			bw->accum |= uval;
 		}
+		else {
+#endif
+			/* slightly pessimistic size check but faster than "<= bw->words + (bw->bits+msbits+lsbits+FLAC__BITS_PER_WORD-1)/FLAC__BITS_PER_WORD" */
+			/* OPT: pessimism may cause flurry of false calls to grow_ which eat up all savings before it */
+			if(bw->capacity <= bw->words + bw->bits + msbits + 1/*lsbits always fit in 1 bwword*/ && !bitwriter_grow_(bw, msbits+lsbits))
+				return false;
+
+			if(msbits) {
+				/* first part gets to word alignment */
+				if(bw->bits) {
+					left = FLAC__BITS_PER_WORD - bw->bits;
+					if(msbits < left) {
+						bw->accum <<= msbits;
+						bw->bits += msbits;
+						goto break1;
+					}
+					else {
+						bw->accum <<= left;
+						msbits -= left;
+						bw->buffer[bw->words++] = SWAP_BE_WORD_TO_HOST(bw->accum);
+						bw->bits = 0;
+					}
+				}
+				/* do whole words */
+				while(msbits >= FLAC__BITS_PER_WORD) {
+					bw->buffer[bw->words++] = 0;
+					msbits -= FLAC__BITS_PER_WORD;
+				}
+				/* do any leftovers */
+				if(msbits > 0) {
+					bw->accum = 0;
+					bw->bits = msbits;
+				}
+			}
+break1:
+			uval |= mask1; /* set stop bit */
+			uval &= mask2; /* mask off unused top bits */
+
+			left = FLAC__BITS_PER_WORD - bw->bits;
+			if(lsbits < left) {
+				bw->accum <<= lsbits;
+				bw->accum |= uval;
+				bw->bits += lsbits;
+			}
+			else {
+				/* if bw->bits == 0, left==FLAC__BITS_PER_WORD which will always
+				 * be > lsbits (because of previous assertions) so it would have
+				 * triggered the (lsbits<left) case above.
+				 */
+				FLAC__ASSERT(bw->bits);
+				FLAC__ASSERT(left < FLAC__BITS_PER_WORD);
+				bw->accum <<= left;
+				bw->accum |= uval >> (bw->bits = lsbits - left);
+				bw->buffer[bw->words++] = SWAP_BE_WORD_TO_HOST(bw->accum);
+				bw->accum = uval;
+			}
+#if 1
+		}
+#endif
 		vals++;
 		nvals--;
 	}

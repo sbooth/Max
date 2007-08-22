@@ -41,7 +41,7 @@
 00032 <span class="preprocessor">#ifndef FLACPP__METADATA_H</span>
 00033 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP__METADATA_H</span>
 00034 <span class="preprocessor"></span>
-00035 <span class="preprocessor">#include "export.h"</span>
+00035 <span class="preprocessor">#include "<a class="code" href="+_2export_8h.html">export.h</a>"</span>
 00036 
 00037 <span class="preprocessor">#include "<a class="code" href="metadata_8h.html">FLAC/metadata.h</a>"</span>
 00038 
@@ -100,7 +100,7 @@
 00176 
 00183             <span class="keywordtype">bool</span> get_is_last() <span class="keyword">const</span>;
 00184 
-00190 <a class="code" href="group__flac__format.html#ga109">			::FLAC__MetadataType</a> get_type() <span class="keyword">const</span>;
+00190 <a class="code" href="group__flac__format.html#ga113">			::FLAC__MetadataType</a> get_type() <span class="keyword">const</span>;
 00191 
 00201             <span class="keywordtype">unsigned</span> get_length() <span class="keyword">const</span>;
 00202 
@@ -538,8 +538,8 @@
 <a name="l00842"></a><a class="code" href="classFLAC_1_1Metadata_1_1Picture.html#FLAC_1_1Metadata_1_1Picturea13">00842</a>             <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> Picture &amp;object)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="group__flacpp__metadata__object.html#ga4">Prototype::operator!=</a>(object); }
 00843             <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> &amp;object)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="group__flacpp__metadata__object.html#ga4">Prototype::operator!=</a>(object); }
 00844             <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *object)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="group__flacpp__metadata__object.html#ga4">Prototype::operator!=</a>(object); }
-00846 <a class="code" href="group__flac__format.html#ga110"></a>
-00847 <a class="code" href="group__flac__format.html#ga110">			::FLAC__StreamMetadata_Picture_Type</a> get_type() <span class="keyword">const</span>;
+00846 <a class="code" href="group__flac__format.html#ga114"></a>
+00847 <a class="code" href="group__flac__format.html#ga114">			::FLAC__StreamMetadata_Picture_Type</a> get_type() <span class="keyword">const</span>;
 00848             <span class="keyword">const</span> <span class="keywordtype">char</span> *get_mime_type() <span class="keyword">const</span>; <span class="comment">// NUL-terminated printable ASCII string</span>
 00849             <span class="keyword">const</span> FLAC__byte *get_description() <span class="keyword">const</span>; <span class="comment">// NUL-terminated UTF-8 string</span>
 00850             FLAC__uint32 get_width() <span class="keyword">const</span>;
@@ -549,7 +549,7 @@
 00854             FLAC__uint32 get_data_length() <span class="keyword">const</span>;
 00855             <span class="keyword">const</span> FLAC__byte *get_data() <span class="keyword">const</span>;
 00856 
-00857             <span class="keywordtype">void</span> set_type(::<a class="code" href="group__flac__format.html#ga110">FLAC__StreamMetadata_Picture_Type</a> type);
+00857             <span class="keywordtype">void</span> set_type(::<a class="code" href="group__flac__format.html#ga114">FLAC__StreamMetadata_Picture_Type</a> type);
 00858 
 00860             <span class="keywordtype">bool</span> set_mime_type(<span class="keyword">const</span> <span class="keywordtype">char</span> *string); <span class="comment">// NUL-terminated printable ASCII string</span>
 00861 
@@ -610,8 +610,8 @@
 00953         FLACPP_API <span class="keywordtype">bool</span> <a class="code" href="group__flacpp__metadata__level0.html#ga3">get_cuesheet</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, CueSheet *&amp;cuesheet); 
 00954         FLACPP_API <span class="keywordtype">bool</span> <a class="code" href="group__flacpp__metadata__level0.html#ga3">get_cuesheet</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, CueSheet &amp;cuesheet); 
 00955 
-00956         FLACPP_API <span class="keywordtype">bool</span> <a class="code" href="group__flacpp__metadata__level0.html#ga5">get_picture</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, Picture *&amp;picture, ::<a class="code" href="group__flac__format.html#ga110">FLAC__StreamMetadata_Picture_Type</a> type, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime_type, <span class="keyword">const</span> FLAC__byte *description, <span class="keywordtype">unsigned</span> max_width, <span class="keywordtype">unsigned</span> max_height, <span class="keywordtype">unsigned</span> max_depth, <span class="keywordtype">unsigned</span> max_colors); 
-00957         FLACPP_API <span class="keywordtype">bool</span> <a class="code" href="group__flacpp__metadata__level0.html#ga5">get_picture</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, Picture &amp;picture, ::<a class="code" href="group__flac__format.html#ga110">FLAC__StreamMetadata_Picture_Type</a> type, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime_type, <span class="keyword">const</span> FLAC__byte *description, <span class="keywordtype">unsigned</span> max_width, <span class="keywordtype">unsigned</span> max_height, <span class="keywordtype">unsigned</span> max_depth, <span class="keywordtype">unsigned</span> max_colors); 
+00956         FLACPP_API <span class="keywordtype">bool</span> <a class="code" href="group__flacpp__metadata__level0.html#ga5">get_picture</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, Picture *&amp;picture, ::<a class="code" href="group__flac__format.html#ga114">FLAC__StreamMetadata_Picture_Type</a> type, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime_type, <span class="keyword">const</span> FLAC__byte *description, <span class="keywordtype">unsigned</span> max_width, <span class="keywordtype">unsigned</span> max_height, <span class="keywordtype">unsigned</span> max_depth, <span class="keywordtype">unsigned</span> max_colors); 
+00957         FLACPP_API <span class="keywordtype">bool</span> <a class="code" href="group__flacpp__metadata__level0.html#ga5">get_picture</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, Picture &amp;picture, ::<a class="code" href="group__flac__format.html#ga114">FLAC__StreamMetadata_Picture_Type</a> type, <span class="keyword">const</span> <span class="keywordtype">char</span> *mime_type, <span class="keyword">const</span> FLAC__byte *description, <span class="keywordtype">unsigned</span> max_width, <span class="keywordtype">unsigned</span> max_height, <span class="keywordtype">unsigned</span> max_depth, <span class="keywordtype">unsigned</span> max_colors); 
 00958 
 00959         <span class="comment">/* \} */</span>
 00960 
@@ -639,8 +639,8 @@
 01018 
 01019             <span class="keywordtype">bool</span> next();                                                        
 01020             <span class="keywordtype">bool</span> prev();                                                        
-01021 <a class="code" href="group__flac__format.html#ga109"></a>
-01022 <a class="code" href="group__flac__format.html#ga109">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;                        
+01021 <a class="code" href="group__flac__format.html#ga113"></a>
+01022 <a class="code" href="group__flac__format.html#ga113">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;                        
 01023             Prototype *get_block();                                             
 01024             <span class="keywordtype">bool</span> set_block(Prototype *block, <span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>);          
 01025             <span class="keywordtype">bool</span> insert_block_after(Prototype *block, <span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>); 
@@ -703,8 +703,8 @@
 01131 
 01132             <span class="keywordtype">bool</span> next();                                   
 01133             <span class="keywordtype">bool</span> prev();                                   
-01134 <a class="code" href="group__flac__format.html#ga109"></a>
-01135 <a class="code" href="group__flac__format.html#ga109">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;   
+01134 <a class="code" href="group__flac__format.html#ga113"></a>
+01135 <a class="code" href="group__flac__format.html#ga113">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;   
 01136             Prototype *get_block();                        
 01137             <span class="keywordtype">bool</span> set_block(Prototype *block);              
 01138             <span class="keywordtype">bool</span> delete_block(<span class="keywordtype">bool</span> replace_with_padding);  

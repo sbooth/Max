@@ -218,7 +218,8 @@ target_alias = @target_alias@
 
 EXTRA_DIST = \
 	Makefile.lite \
-	test_seeking.dsp
+	test_seeking.dsp \
+	test_seeking.vcproj
 
 
 AM_CFLAGS = @OGG_CFLAGS@

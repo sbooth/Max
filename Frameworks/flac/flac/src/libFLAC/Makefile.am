@@ -83,7 +83,9 @@ EXTRA_DIST = \
 	Makefile.lite \
 	flac.pc.in \
 	libFLAC_dynamic.dsp \
+	libFLAC_dynamic.vcproj \
 	libFLAC_static.dsp \
+	libFLAC_static.vcproj \
 	libFLAC.m4
 
 if FLaC__HAS_OGG
@@ -94,7 +96,7 @@ extra_ogg_sources = \
 	ogg_mapping.c
 endif
 # see 'http://www.gnu.org/software/libtool/manual.html#Libtool-versioning' for numbering convention
-libFLAC_la_LDFLAGS = -version-info 8:1:0 -lm $(LOCAL_EXTRA_LDFLAGS)
+libFLAC_la_LDFLAGS = -version-info 9:0:1 -lm $(LOCAL_EXTRA_LDFLAGS)
 libFLAC_la_SOURCES = \
 	bitmath.c \
 	bitreader.c \

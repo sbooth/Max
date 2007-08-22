@@ -7,7 +7,7 @@
 <div class="qindex"><a class="qindex" href="index.html">Main&nbsp;Page</a> | <a class="qindex" href="modules.html">Modules</a> | <a class="qindex" href="hierarchy.html">Class&nbsp;Hierarchy</a> | <a class="qindex" href="classes.html">Alphabetical&nbsp;List</a> | <a class="qindex" href="annotated.html">Class&nbsp;List</a> | <a class="qindex" href="dirs.html">Directories</a> | <a class="qindex" href="files.html">File&nbsp;List</a> | <a class="qindex" href="functions.html">Class&nbsp;Members</a> | <a class="qindex" href="globals.html">File&nbsp;Members</a></div>
 <div class="nav">
 <a class="el" href="dir_000000.html">include</a>&nbsp;/&nbsp;<a class="el" href="dir_000001.html">FLAC++</a></div>
-<h1>export.h</h1><div class="fragment"><pre class="fragment">00001 <span class="comment">/* libFLAC++ - Free Lossless Audio Codec library</span>
+<h1>export.h</h1><a href="+_2export_8h.html">Go to the documentation of this file.</a><div class="fragment"><pre class="fragment">00001 <span class="comment">/* libFLAC++ - Free Lossless Audio Codec library</span>
 00002 <span class="comment"> * Copyright (C) 2002,2003,2004,2005,2006,2007  Josh Coalson</span>
 00003 <span class="comment"> *</span>
 00004 <span class="comment"> * Redistribution and use in source and binary forms, with or without</span>
@@ -41,27 +41,29 @@
 00032 <span class="preprocessor">#ifndef FLACPP__EXPORT_H</span>
 00033 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP__EXPORT_H</span>
 00034 <span class="preprocessor"></span>
-00035 <span class="preprocessor">#if defined(FLAC__NO_DLL) || !defined(_MSC_VER)</span>
-00036 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API</span>
-00037 <span class="preprocessor"></span>
-00038 <span class="preprocessor">#else</span>
-00039 <span class="preprocessor"></span>
-00040 <span class="preprocessor">#ifdef FLACPP_API_EXPORTS</span>
-00041 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API  _declspec(dllexport)</span>
-00042 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00043 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API  _declspec(dllimport)</span>
-00044 <span class="preprocessor"></span>
-00045 <span class="preprocessor">#endif</span>
-00046 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00047 <span class="preprocessor"></span>
-00048 <span class="comment">/* These #defines will mirror the libtool-based library version number, see</span>
-00049 <span class="comment"> * http://www.gnu.org/software/libtool/manual.html#Libtool-versioning</span>
-00050 <span class="comment"> */</span>
-00051 <span class="preprocessor">#define FLACPP_API_VERSION_CURRENT 6</span>
-00052 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API_VERSION_REVISION 1</span>
-00053 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API_VERSION_AGE 0</span>
-00054 <span class="preprocessor"></span>
-00055 <span class="preprocessor">#endif</span>
+00058 <span class="preprocessor">#if defined(FLAC__NO_DLL) || !defined(_MSC_VER)</span>
+00059 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API</span>
+00060 <span class="preprocessor"></span>
+00061 <span class="preprocessor">#else</span>
+00062 <span class="preprocessor"></span>
+00063 <span class="preprocessor">#ifdef FLACPP_API_EXPORTS</span>
+00064 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API  _declspec(dllexport)</span>
+00065 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00066 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API  _declspec(dllimport)</span>
+00067 <span class="preprocessor"></span>
+00068 <span class="preprocessor">#endif</span>
+00069 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00070 <span class="preprocessor"></span>
+00071 <span class="comment">/* These #defines will mirror the libtool-based library version number, see</span>
+00072 <span class="comment"> * http://www.gnu.org/software/libtool/manual.html#Libtool-versioning</span>
+00073 <span class="comment"> */</span>
+00074 <span class="preprocessor">#define FLACPP_API_VERSION_CURRENT 7</span>
+00075 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API_VERSION_REVISION 0</span>
+00076 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP_API_VERSION_AGE 1</span>
+00077 <span class="preprocessor"></span>
+00078 <span class="comment">/* \} */</span>
+00079 
+00080 <span class="preprocessor">#endif</span>
 </pre></div>
 <hr size="1">
 <div class="copyright">

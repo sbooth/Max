@@ -215,7 +215,8 @@ libgrabbag_la_SOURCES = \
 
 EXTRA_DIST = \
 	Makefile.lite \
-	grabbag_static.dsp
+	grabbag_static.dsp \
+	grabbag_static.vcproj
 
 subdir = src/share/grabbag
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4

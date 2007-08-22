@@ -41,7 +41,7 @@
 00032 <span class="preprocessor">#ifndef FLACPP__DECODER_H</span>
 00033 <span class="preprocessor"></span><span class="preprocessor">#define FLACPP__DECODER_H</span>
 00034 <span class="preprocessor"></span>
-00035 <span class="preprocessor">#include "export.h"</span>
+00035 <span class="preprocessor">#include "<a class="code" href="+_2export_8h.html">export.h</a>"</span>
 00036 
 00037 <span class="preprocessor">#include &lt;string&gt;</span>
 00038 <span class="preprocessor">#include "<a class="code" href="stream__decoder_8h.html">FLAC/stream_decoder.h</a>"</span>
@@ -72,10 +72,10 @@
 00123 
 00124             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_ogg_serial_number(<span class="keywordtype">long</span> value);                        
 00125             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_md5_checking(<span class="keywordtype">bool</span> value);                             
-00126             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_respond(::<a class="code" href="group__flac__format.html#ga109">FLAC__MetadataType</a> type);          
+00126             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_respond(::<a class="code" href="group__flac__format.html#ga113">FLAC__MetadataType</a> type);          
 00127             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_respond_application(<span class="keyword">const</span> FLAC__byte <span class="keywordtype">id</span>[4]); 
 00128             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_respond_all();                               
-00129             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_ignore(::<a class="code" href="group__flac__format.html#ga109">FLAC__MetadataType</a> type);           
+00129             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_ignore(::<a class="code" href="group__flac__format.html#ga113">FLAC__MetadataType</a> type);           
 00130             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_ignore_application(<span class="keyword">const</span> FLAC__byte <span class="keywordtype">id</span>[4]);  
 00131             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> set_metadata_ignore_all();                                
 00132 
@@ -84,86 +84,87 @@
 00135             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> get_md5_checking() <span class="keyword">const</span>;                            
 00136             <span class="keyword">virtual</span> FLAC__uint64 get_total_samples() <span class="keyword">const</span>;                   
 00137             <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> get_channels() <span class="keyword">const</span>;                            
-00138             <a class="code" href="group__flac__format.html#ga107">virtual ::FLAC__ChannelAssignment</a> get_channel_assignment() <span class="keyword">const</span>; 
+00138             <a class="code" href="group__flac__format.html#ga111">virtual ::FLAC__ChannelAssignment</a> get_channel_assignment() <span class="keyword">const</span>; 
 00139             <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> get_bits_per_sample() <span class="keyword">const</span>;                     
 00140             <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> get_sample_rate() <span class="keyword">const</span>;                         
 00141             <span class="keyword">virtual</span> <span class="keywordtype">unsigned</span> get_blocksize() <span class="keyword">const</span>;                           
-00142 
-00143             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init();      
-00144             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg();  
-00145 
-00146             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> finish(); 
-00147 
-00148             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> flush(); 
-00149             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> reset(); 
-00150 
-00151             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_single();                
-00152             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_until_end_of_metadata(); 
-00153             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_until_end_of_stream();   
-00154             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> skip_single_frame();             
-00155 
-00156             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> seek_absolute(FLAC__uint64 sample); 
-00157         <span class="keyword">protected</span>:
-00159             <a class="code" href="group__flac__stream__decoder.html#ga52">virtual ::FLAC__StreamDecoderReadStatus</a> read_callback(FLAC__byte buffer[], size_t *bytes) = 0;
-00160 
-00162             <a class="code" href="group__flac__stream__decoder.html#ga53">virtual ::FLAC__StreamDecoderSeekStatus</a> seek_callback(FLAC__uint64 absolute_byte_offset);
-00163 
-00165             <a class="code" href="group__flac__stream__decoder.html#ga54">virtual ::FLAC__StreamDecoderTellStatus</a> tell_callback(FLAC__uint64 *absolute_byte_offset);
-00166 
-00168             <a class="code" href="group__flac__stream__decoder.html#ga55">virtual ::FLAC__StreamDecoderLengthStatus</a> length_callback(FLAC__uint64 *stream_length);
-00169 
-00171             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> eof_callback();
-00172 
-00174             <a class="code" href="group__flac__stream__decoder.html#ga56">virtual ::FLAC__StreamDecoderWriteStatus</a> write_callback(<span class="keyword">const</span> ::<a class="code" href="structFLAC____Frame.html">FLAC__Frame</a> *frame, <span class="keyword">const</span> FLAC__int32 * <span class="keyword">const</span> buffer[]) = 0;
-00175 
-00177             <span class="keyword">virtual</span> <span class="keywordtype">void</span> metadata_callback(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *metadata);
-00178 
-00180             <span class="keyword">virtual</span> <span class="keywordtype">void</span> error_callback(::<a class="code" href="group__flac__stream__decoder.html#ga57">FLAC__StreamDecoderErrorStatus</a> status) = 0;
-00181 
-00182 <span class="preprocessor">#if (defined _MSC_VER) || (defined __BORLANDC__) || (defined __GNUG__ &amp;&amp; (__GNUG__ &lt; 2 || (__GNUG__ == 2 &amp;&amp; __GNUC_MINOR__ &lt; 96))) || (defined __SUNPRO_CC)</span>
-00183 <span class="preprocessor"></span>            <span class="comment">// lame hack: some MSVC/GCC versions can't see a protected decoder_ from nested State::resolved_as_cstring()</span>
-00184             <span class="keyword">friend</span> State;
-00185 <span class="preprocessor">#endif</span>
-00186 <span class="preprocessor"></span>            ::FLAC__StreamDecoder *decoder_;
-00187 
-00188             <a class="code" href="group__flac__stream__decoder.html#ga52">static ::FLAC__StreamDecoderReadStatus</a> read_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__byte buffer[], size_t *bytes, <span class="keywordtype">void</span> *client_data);
-00189             <a class="code" href="group__flac__stream__decoder.html#ga53">static ::FLAC__StreamDecoderSeekStatus</a> seek_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__uint64 absolute_byte_offset, <span class="keywordtype">void</span> *client_data);
-00190             <a class="code" href="group__flac__stream__decoder.html#ga54">static ::FLAC__StreamDecoderTellStatus</a> tell_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__uint64 *absolute_byte_offset, <span class="keywordtype">void</span> *client_data);
-00191             <a class="code" href="group__flac__stream__decoder.html#ga55">static ::FLAC__StreamDecoderLengthStatus</a> length_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__uint64 *stream_length, <span class="keywordtype">void</span> *client_data);
-00192             <span class="keyword">static</span> FLAC__bool eof_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keywordtype">void</span> *client_data);
-00193             <a class="code" href="group__flac__stream__decoder.html#ga56">static ::FLAC__StreamDecoderWriteStatus</a> write_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keyword">const</span> ::<a class="code" href="structFLAC____Frame.html">FLAC__Frame</a> *frame, <span class="keyword">const</span> FLAC__int32 * <span class="keyword">const</span> buffer[], <span class="keywordtype">void</span> *client_data);
-00194             <span class="keyword">static</span> <span class="keywordtype">void</span> metadata_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *metadata, <span class="keywordtype">void</span> *client_data);
-00195             <span class="keyword">static</span> <span class="keywordtype">void</span> error_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, ::<a class="code" href="group__flac__stream__decoder.html#ga57">FLAC__StreamDecoderErrorStatus</a> status, <span class="keywordtype">void</span> *client_data);
-00196         <span class="keyword">private</span>:
-00197             <span class="comment">// Private and undefined so you can't use them:</span>
-00198             Stream(<span class="keyword">const</span> Stream &amp;);
-00199             <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> Stream &amp;);
-00200         };
-00201 
-<a name="l00221"></a><a class="code" href="classFLAC_1_1Decoder_1_1File.html">00221</a>         <span class="keyword">class </span>FLACPP_API File: <span class="keyword">public</span> Stream {
-00222         <span class="keyword">public</span>:
-00223             File();
-00224             <span class="keyword">virtual</span> ~File();
-00225 
-00226             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init(FILE *file);                      
-00227             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);            
-00228             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init(<span class="keyword">const</span> std::string &amp;filename);     
-00229             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg(FILE *file);                  
-00230             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);        
-00231             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg(<span class="keyword">const</span> std::string &amp;filename); 
-00232         <span class="keyword">protected</span>:
-00233             <span class="comment">// this is a dummy implementation to satisfy the pure virtual in Stream that is actually supplied internally by the C layer</span>
-00234             <a class="code" href="group__flac__stream__decoder.html#ga52">virtual ::FLAC__StreamDecoderReadStatus</a> read_callback(FLAC__byte buffer[], size_t *bytes);
-00235         <span class="keyword">private</span>:
-00236             <span class="comment">// Private and undefined so you can't use them:</span>
-00237             File(<span class="keyword">const</span> File &amp;);
-00238             <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> File &amp;);
-00239         };
-00240 
-00241     }
-00242 }
-00243 
-00244 <span class="preprocessor">#endif</span>
+00142             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> get_decode_position(FLAC__uint64 *position) <span class="keyword">const</span>;   
+00143 
+00144             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init();      
+00145             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg();  
+00146 
+00147             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> finish(); 
+00148 
+00149             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> flush(); 
+00150             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> reset(); 
+00151 
+00152             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_single();                
+00153             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_until_end_of_metadata(); 
+00154             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_until_end_of_stream();   
+00155             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> skip_single_frame();             
+00156 
+00157             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> seek_absolute(FLAC__uint64 sample); 
+00158         <span class="keyword">protected</span>:
+00160             <a class="code" href="group__flac__stream__decoder.html#ga52">virtual ::FLAC__StreamDecoderReadStatus</a> read_callback(FLAC__byte buffer[], size_t *bytes) = 0;
+00161 
+00163             <a class="code" href="group__flac__stream__decoder.html#ga53">virtual ::FLAC__StreamDecoderSeekStatus</a> seek_callback(FLAC__uint64 absolute_byte_offset);
+00164 
+00166             <a class="code" href="group__flac__stream__decoder.html#ga54">virtual ::FLAC__StreamDecoderTellStatus</a> tell_callback(FLAC__uint64 *absolute_byte_offset);
+00167 
+00169             <a class="code" href="group__flac__stream__decoder.html#ga55">virtual ::FLAC__StreamDecoderLengthStatus</a> length_callback(FLAC__uint64 *stream_length);
+00170 
+00172             <span class="keyword">virtual</span> <span class="keywordtype">bool</span> eof_callback();
+00173 
+00175             <a class="code" href="group__flac__stream__decoder.html#ga56">virtual ::FLAC__StreamDecoderWriteStatus</a> write_callback(<span class="keyword">const</span> ::<a class="code" href="structFLAC____Frame.html">FLAC__Frame</a> *frame, <span class="keyword">const</span> FLAC__int32 * <span class="keyword">const</span> buffer[]) = 0;
+00176 
+00178             <span class="keyword">virtual</span> <span class="keywordtype">void</span> metadata_callback(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *metadata);
+00179 
+00181             <span class="keyword">virtual</span> <span class="keywordtype">void</span> error_callback(::<a class="code" href="group__flac__stream__decoder.html#ga57">FLAC__StreamDecoderErrorStatus</a> status) = 0;
+00182 
+00183 <span class="preprocessor">#if (defined _MSC_VER) || (defined __BORLANDC__) || (defined __GNUG__ &amp;&amp; (__GNUG__ &lt; 2 || (__GNUG__ == 2 &amp;&amp; __GNUC_MINOR__ &lt; 96))) || (defined __SUNPRO_CC)</span>
+00184 <span class="preprocessor"></span>            <span class="comment">// lame hack: some MSVC/GCC versions can't see a protected decoder_ from nested State::resolved_as_cstring()</span>
+00185             <span class="keyword">friend</span> State;
+00186 <span class="preprocessor">#endif</span>
+00187 <span class="preprocessor"></span>            ::FLAC__StreamDecoder *decoder_;
+00188 
+00189             <a class="code" href="group__flac__stream__decoder.html#ga52">static ::FLAC__StreamDecoderReadStatus</a> read_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__byte buffer[], size_t *bytes, <span class="keywordtype">void</span> *client_data);
+00190             <a class="code" href="group__flac__stream__decoder.html#ga53">static ::FLAC__StreamDecoderSeekStatus</a> seek_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__uint64 absolute_byte_offset, <span class="keywordtype">void</span> *client_data);
+00191             <a class="code" href="group__flac__stream__decoder.html#ga54">static ::FLAC__StreamDecoderTellStatus</a> tell_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__uint64 *absolute_byte_offset, <span class="keywordtype">void</span> *client_data);
+00192             <a class="code" href="group__flac__stream__decoder.html#ga55">static ::FLAC__StreamDecoderLengthStatus</a> length_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__uint64 *stream_length, <span class="keywordtype">void</span> *client_data);
+00193             <span class="keyword">static</span> FLAC__bool eof_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keywordtype">void</span> *client_data);
+00194             <a class="code" href="group__flac__stream__decoder.html#ga56">static ::FLAC__StreamDecoderWriteStatus</a> write_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keyword">const</span> ::<a class="code" href="structFLAC____Frame.html">FLAC__Frame</a> *frame, <span class="keyword">const</span> FLAC__int32 * <span class="keyword">const</span> buffer[], <span class="keywordtype">void</span> *client_data);
+00195             <span class="keyword">static</span> <span class="keywordtype">void</span> metadata_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *metadata, <span class="keywordtype">void</span> *client_data);
+00196             <span class="keyword">static</span> <span class="keywordtype">void</span> error_callback_(<span class="keyword">const</span> ::<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, ::<a class="code" href="group__flac__stream__decoder.html#ga57">FLAC__StreamDecoderErrorStatus</a> status, <span class="keywordtype">void</span> *client_data);
+00197         <span class="keyword">private</span>:
+00198             <span class="comment">// Private and undefined so you can't use them:</span>
+00199             Stream(<span class="keyword">const</span> Stream &amp;);
+00200             <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> Stream &amp;);
+00201         };
+00202 
+<a name="l00222"></a><a class="code" href="classFLAC_1_1Decoder_1_1File.html">00222</a>         <span class="keyword">class </span>FLACPP_API File: <span class="keyword">public</span> Stream {
+00223         <span class="keyword">public</span>:
+00224             File();
+00225             <span class="keyword">virtual</span> ~File();
+00226 
+00227             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init(FILE *file);                      
+00228             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);            
+00229             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init(<span class="keyword">const</span> std::string &amp;filename);     
+00230             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg(FILE *file);                  
+00231             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename);        
+00232             <a class="code" href="group__flac__stream__decoder.html#ga51">virtual ::FLAC__StreamDecoderInitStatus</a> init_ogg(<span class="keyword">const</span> std::string &amp;filename); 
+00233         <span class="keyword">protected</span>:
+00234             <span class="comment">// this is a dummy implementation to satisfy the pure virtual in Stream that is actually supplied internally by the C layer</span>
+00235             <a class="code" href="group__flac__stream__decoder.html#ga52">virtual ::FLAC__StreamDecoderReadStatus</a> read_callback(FLAC__byte buffer[], size_t *bytes);
+00236         <span class="keyword">private</span>:
+00237             <span class="comment">// Private and undefined so you can't use them:</span>
+00238             File(<span class="keyword">const</span> File &amp;);
+00239             <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> File &amp;);
+00240         };
+00241 
+00242     }
+00243 }
+00244 
+00245 <span class="preprocessor">#endif</span>
 </pre></div>
 <hr size="1">
 <div class="copyright">

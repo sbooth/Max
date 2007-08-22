@@ -218,6 +218,7 @@ target_alias = @target_alias@
 
 EXTRA_DIST = \
 	flac_mac.dsp \
+	flac_mac.vcproj \
 	main.c
 
 subdir = src/monkeys_audio_utilities/flac_mac

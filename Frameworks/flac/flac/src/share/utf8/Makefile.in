@@ -213,7 +213,8 @@ EXTRA_DIST = \
 	makemap.c \
 	charset_test.c \
 	charsetmap.h \
-	utf8_static.dsp
+	utf8_static.dsp \
+	utf8_static.vcproj
 
 subdir = src/share/utf8
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4

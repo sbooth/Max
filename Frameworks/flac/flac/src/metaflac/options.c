@@ -235,7 +235,7 @@ FLAC__bool parse_options(int argc, char *argv[], CommandLineOptions *options)
 
 	/*
 	 * We need to create an OP__ADD_SEEKPOINT operation if there is
-	 * not one already,  and --import-cuesheet-from was specified but
+	 * not one already, and --import-cuesheet-from was specified but
 	 * --no-cued-seekpoints was not:
 	 */
 	if(options->cued_seekpoints) {
@@ -469,7 +469,7 @@ FLAC__bool parse_option(int option_index, const char *option_argument, CommandLi
 	}
 	else if(0 == strcmp(opt, "set-total-samples")) {
 		op = append_shorthand_operation(options, OP__SET_TOTAL_SAMPLES);
-		if(!parse_uint64(option_argument, &(op->argument.streaminfo_uint64.value)) || op->argument.streaminfo_uint64.value >= (1u<<FLAC__STREAM_METADATA_STREAMINFO_TOTAL_SAMPLES_LEN)) {
+		if(!parse_uint64(option_argument, &(op->argument.streaminfo_uint64.value)) || op->argument.streaminfo_uint64.value >= (((FLAC__uint64)1)<<FLAC__STREAM_METADATA_STREAMINFO_TOTAL_SAMPLES_LEN)) {
 			fprintf(stderr, "ERROR (--%s): value must be a %u-bit unsigned integer\n", opt, FLAC__STREAM_METADATA_STREAMINFO_TOTAL_SAMPLES_LEN);
 			ok = false;
 		}

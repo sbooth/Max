@@ -71,6 +71,10 @@
 #include "private/stream_encoder_framing.h"
 #include "private/window.h"
 
+#ifndef FLaC__INLINE
+#define FLaC__INLINE
+#endif
+
 #ifdef min
 #undef min
 #endif
@@ -161,9 +165,6 @@ static FLAC__bool process_subframe_(
 	const FLAC__FrameHeader *frame_header,
 	unsigned subframe_bps,
 	const FLAC__int32 integer_signal[],
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-	const FLAC__real real_signal[],
-#endif
 	FLAC__Subframe *subframe[2],
 	FLAC__EntropyCodingMethod_PartitionedRiceContents *partitioned_rice_contents[2],
 	FLAC__int32 *residual[2],
@@ -245,6 +246,7 @@ static unsigned find_best_partition_order_(
 	unsigned rice_parameter,
 	unsigned min_partition_order,
 	unsigned max_partition_order,
+	unsigned bps,
 	FLAC__bool do_escape_coding,
 	unsigned rice_parameter_search_dist,
 	FLAC__EntropyCodingMethod_PartitionedRice *best_partitioned_rice
@@ -256,7 +258,8 @@ static void precompute_partition_info_sums_(
 	unsigned residual_samples,
 	unsigned predictor_order,
 	unsigned min_partition_order,
-	unsigned max_partition_order
+	unsigned max_partition_order,
+	unsigned bps
 );
 
 static void precompute_partition_info_escapes_(
@@ -326,10 +329,10 @@ typedef struct FLAC__StreamEncoderPrivate {
 	FLAC__int32 *integer_signal[FLAC__MAX_CHANNELS];  /* the integer version of the input signal */
 	FLAC__int32 *integer_signal_mid_side[2];          /* the integer version of the mid-side input signal (stereo only) */
 #ifndef FLAC__INTEGER_ONLY_LIBRARY
-	FLAC__real *real_signal[FLAC__MAX_CHANNELS];      /* the floating-point version of the input signal */
-	FLAC__real *real_signal_mid_side[2];              /* the floating-point version of the mid-side input signal (stereo only) */
+	FLAC__real *real_signal[FLAC__MAX_CHANNELS];      /* (@@@ currently unused) the floating-point version of the input signal */
+	FLAC__real *real_signal_mid_side[2];              /* (@@@ currently unused) the floating-point version of the mid-side input signal (stereo only) */
 	FLAC__real *window[FLAC__MAX_APODIZATION_FUNCTIONS]; /* the pre-computed floating-point window for each apodization function */
-	FLAC__real *windowed_signal;                      /* the real_signal[] * current window[] */
+	FLAC__real *windowed_signal;                      /* the integer_signal[] * current window[] */
 #endif
 	unsigned subframe_bps[FLAC__MAX_CHANNELS];        /* the effective bits per sample of the input signal (stream bps - wasted bits) */
 	unsigned subframe_bps_mid_side[2];                /* the effective bits per sample of the mid-side input signal (stream bps - wasted bits + 0/1) */
@@ -357,7 +360,7 @@ typedef struct FLAC__StreamEncoderPrivate {
 	FLAC__StreamMetadata_SeekTable *seek_table;       /* pointer into encoder->protected_->metadata_ where the seek table is */
 	unsigned current_sample_number;
 	unsigned current_frame_number;
-	struct FLAC__MD5Context md5context;
+	FLAC__MD5Context md5context;
 	FLAC__CPUInfo cpuinfo;
 #ifndef FLAC__INTEGER_ONLY_LIBRARY
 	unsigned (*local_fixed_compute_best_predictor)(const FLAC__int32 data[], unsigned data_len, FLAC__float residual_bits_per_sample[FLAC__MAX_FIXED_ORDER+1]);
@@ -396,8 +399,8 @@ typedef struct FLAC__StreamEncoderPrivate {
 	FLAC__int32 *integer_signal_unaligned[FLAC__MAX_CHANNELS];
 	FLAC__int32 *integer_signal_mid_side_unaligned[2];
 #ifndef FLAC__INTEGER_ONLY_LIBRARY
-	FLAC__real *real_signal_unaligned[FLAC__MAX_CHANNELS];
-	FLAC__real *real_signal_mid_side_unaligned[2];
+	FLAC__real *real_signal_unaligned[FLAC__MAX_CHANNELS]; /* (@@@ currently unused) */
+	FLAC__real *real_signal_mid_side_unaligned[2]; /* (@@@ currently unused) */
 	FLAC__real *window_unaligned[FLAC__MAX_APODIZATION_FUNCTIONS];
 	FLAC__real *windowed_signal_unaligned;
 #endif
@@ -735,16 +738,7 @@ static FLAC__StreamEncoderInitStatus init_stream_internal_(
 			encoder->protected_->blocksize != 16384
 		)
 			return FLAC__STREAM_ENCODER_INIT_STATUS_NOT_STREAMABLE;
-		if(
-			encoder->protected_->sample_rate != 8000 &&
-			encoder->protected_->sample_rate != 16000 &&
-			encoder->protected_->sample_rate != 22050 &&
-			encoder->protected_->sample_rate != 24000 &&
-			encoder->protected_->sample_rate != 32000 &&
-			encoder->protected_->sample_rate != 44100 &&
-			encoder->protected_->sample_rate != 48000 &&
-			encoder->protected_->sample_rate != 96000
-		)
+		if(!FLAC__format_sample_rate_is_subset(encoder->protected_->sample_rate))
 			return FLAC__STREAM_ENCODER_INIT_STATUS_NOT_STREAMABLE;
 		if(
 			encoder->protected_->bits_per_sample != 8 &&
@@ -923,7 +917,6 @@ static FLAC__StreamEncoderInitStatus init_stream_internal_(
 #  ifdef FLAC__CPU_IA32
 		FLAC__ASSERT(encoder->private_->cpuinfo.type == FLAC__CPUINFO_TYPE_IA32);
 #   ifdef FLAC__HAS_NASM
-#    ifdef FLAC__SSE_OS
 		if(encoder->private_->cpuinfo.data.ia32.sse) {
 			if(encoder->protected_->max_lpc_order < 4)
 				encoder->private_->local_lpc_compute_autocorrelation = FLAC__lpc_compute_autocorrelation_asm_ia32_sse_lag_4;
@@ -934,9 +927,7 @@ static FLAC__StreamEncoderInitStatus init_stream_internal_(
 			else
 				encoder->private_->local_lpc_compute_autocorrelation = FLAC__lpc_compute_autocorrelation_asm_ia32;
 		}
-		else
-#    endif /* FLAC__SSE_OS */
-		if(encoder->private_->cpuinfo.data.ia32._3dnow)
+		else if(encoder->private_->cpuinfo.data.ia32._3dnow)
 			encoder->private_->local_lpc_compute_autocorrelation = FLAC__lpc_compute_autocorrelation_asm_ia32_3dnow;
 		else
 			encoder->private_->local_lpc_compute_autocorrelation = FLAC__lpc_compute_autocorrelation_asm_ia32;
@@ -1067,7 +1058,8 @@ static FLAC__StreamEncoderInitStatus init_stream_internal_(
 	encoder->private_->streaminfo.data.stream_info.bits_per_sample = encoder->protected_->bits_per_sample;
 	encoder->private_->streaminfo.data.stream_info.total_samples = encoder->protected_->total_samples_estimate; /* we will replace this later with the real total */
 	memset(encoder->private_->streaminfo.data.stream_info.md5sum, 0, 16); /* we don't know this yet; have to fill it in later */
-	FLAC__MD5Init(&encoder->private_->md5context);
+	if(encoder->protected_->do_md5)
+		FLAC__MD5Init(&encoder->private_->md5context);
 	if(!FLAC__add_metadata_block(&encoder->private_->streaminfo, encoder->private_->frame)) {
 		encoder->protected_->state = FLAC__STREAM_ENCODER_FRAMING_ERROR;
 		return FLAC__STREAM_ENCODER_INIT_STATUS_ENCODER_ERROR;
@@ -1336,7 +1328,8 @@ FLAC_API FLAC__bool FLAC__stream_encoder_finish(FLAC__StreamEncoder *encoder)
 		}
 	}
 
-	FLAC__MD5Final(encoder->private_->streaminfo.data.stream_info.md5sum, &encoder->private_->md5context);
+	if(encoder->protected_->do_md5)
+		FLAC__MD5Final(encoder->private_->streaminfo.data.stream_info.md5sum, &encoder->private_->md5context);
 
 	if(!encoder->private_->is_being_deleted) {
 		if(encoder->protected_->state == FLAC__STREAM_ENCODER_OK) {
@@ -1424,6 +1417,17 @@ FLAC_API FLAC__bool FLAC__stream_encoder_set_streamable_subset(FLAC__StreamEncod
 	return true;
 }
 
+FLAC_API FLAC__bool FLAC__stream_encoder_set_do_md5(FLAC__StreamEncoder *encoder, FLAC__bool value)
+{
+	FLAC__ASSERT(0 != encoder);
+	FLAC__ASSERT(0 != encoder->private_);
+	FLAC__ASSERT(0 != encoder->protected_);
+	if(encoder->protected_->state != FLAC__STREAM_ENCODER_UNINITIALIZED)
+		return false;
+	encoder->protected_->do_md5 = value;
+	return true;
+}
+
 FLAC_API FLAC__bool FLAC__stream_encoder_set_channels(FLAC__StreamEncoder *encoder, unsigned value)
 {
 	FLAC__ASSERT(0 != encoder);
@@ -1469,6 +1473,7 @@ FLAC_API FLAC__bool FLAC__stream_encoder_set_compression_level(FLAC__StreamEncod
 		value = sizeof(compression_levels_)/sizeof(compression_levels_[0]) - 1;
 	ok &= FLAC__stream_encoder_set_do_mid_side_stereo          (encoder, compression_levels_[value].do_mid_side_stereo);
 	ok &= FLAC__stream_encoder_set_loose_mid_side_stereo       (encoder, compression_levels_[value].loose_mid_side_stereo);
+#ifndef FLAC__INTEGER_ONLY_LIBRARY
 #if 0
 	/* was: */
 	ok &= FLAC__stream_encoder_set_apodization                 (encoder, compression_levels_[value].apodization);
@@ -1477,6 +1482,7 @@ FLAC_API FLAC__bool FLAC__stream_encoder_set_compression_level(FLAC__StreamEncod
 	encoder->protected_->num_apodizations = 1;
 	encoder->protected_->apodizations[0].type = FLAC__APODIZATION_TUKEY;
 	encoder->protected_->apodizations[0].parameters.tukey.p = 0.5;
+#endif
 #endif
 	ok &= FLAC__stream_encoder_set_max_lpc_order               (encoder, compression_levels_[value].max_lpc_order);
 	ok &= FLAC__stream_encoder_set_qlp_coeff_precision         (encoder, compression_levels_[value].qlp_coeff_precision);
@@ -1836,6 +1842,14 @@ FLAC_API FLAC__bool FLAC__stream_encoder_get_streamable_subset(const FLAC__Strea
 	return encoder->protected_->streamable_subset;
 }
 
+FLAC_API FLAC__bool FLAC__stream_encoder_get_do_md5(const FLAC__StreamEncoder *encoder)
+{
+	FLAC__ASSERT(0 != encoder);
+	FLAC__ASSERT(0 != encoder->private_);
+	FLAC__ASSERT(0 != encoder->protected_);
+	return encoder->protected_->do_md5;
+}
+
 FLAC_API unsigned FLAC__stream_encoder_get_channels(const FLAC__StreamEncoder *encoder)
 {
 	FLAC__ASSERT(0 != encoder);
@@ -1958,8 +1972,7 @@ FLAC_API FLAC__uint64 FLAC__stream_encoder_get_total_samples_estimate(const FLAC
 
 FLAC_API FLAC__bool FLAC__stream_encoder_process(FLAC__StreamEncoder *encoder, const FLAC__int32 * const buffer[], unsigned samples)
 {
-	unsigned i, j, channel;
-	FLAC__int32 x, mid, side;
+	unsigned i, j = 0, channel;
 	const unsigned channels = encoder->protected_->channels, blocksize = encoder->protected_->blocksize;
 
 	FLAC__ASSERT(0 != encoder);
@@ -1967,173 +1980,44 @@ FLAC_API FLAC__bool FLAC__stream_encoder_process(FLAC__StreamEncoder *encoder, c
 	FLAC__ASSERT(0 != encoder->protected_);
 	FLAC__ASSERT(encoder->protected_->state == FLAC__STREAM_ENCODER_OK);
 
-	j = 0;
-	/*
-	 * we have several flavors of the same basic loop, optimized for
-	 * different conditions:
-	 */
-	if(encoder->protected_->max_lpc_order > 0) {
-		if(encoder->protected_->do_mid_side_stereo && channels == 2) {
-			/*
-			 * stereo coding: unroll channel loop
-			 * with LPC: calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
+	do {
+		const unsigned n = min(blocksize+OVERREAD_-encoder->private_->current_sample_number, samples-j);
 
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					x = mid = side = buffer[0][j];
-					encoder->private_->integer_signal[0][i] = x;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal[0][i] = (FLAC__real)x;
-#endif
-					x = buffer[1][j];
-					encoder->private_->integer_signal[1][i] = x;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal[1][i] = (FLAC__real)x;
-#endif
-					mid += x;
-					side -= x;
-					mid >>= 1; /* NOTE: not the same as 'mid = (buffer[0][j] + buffer[1][j]) / 2' ! */
-					encoder->private_->integer_signal_mid_side[1][i] = side;
-					encoder->private_->integer_signal_mid_side[0][i] = mid;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal_mid_side[1][i] = (FLAC__real)side;
-					encoder->private_->real_signal_mid_side[0][i] = (FLAC__real)mid;
-#endif
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					encoder->private_->integer_signal[0][0] = encoder->private_->integer_signal[0][i];
-					encoder->private_->integer_signal[1][0] = encoder->private_->integer_signal[1][i];
-					encoder->private_->integer_signal_mid_side[0][0] = encoder->private_->integer_signal_mid_side[0][i];
-					encoder->private_->integer_signal_mid_side[1][0] = encoder->private_->integer_signal_mid_side[1][i];
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal[0][0] = encoder->private_->real_signal[0][i];
-					encoder->private_->real_signal[1][0] = encoder->private_->real_signal[1][i];
-					encoder->private_->real_signal_mid_side[0][0] = encoder->private_->real_signal_mid_side[0][i];
-					encoder->private_->real_signal_mid_side[1][0] = encoder->private_->real_signal_mid_side[1][i];
-#endif
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
-		}
-		else {
-			/*
-			 * independent channel coding: buffer each channel in inner loop
-			 * with LPC: calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
+		if(encoder->protected_->verify)
+			append_to_verify_fifo_(&encoder->private_->verify.input_fifo, buffer, j, channels, n);
 
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					for(channel = 0; channel < channels; channel++) {
-						x = buffer[channel][j];
-						encoder->private_->integer_signal[channel][i] = x;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-						encoder->private_->real_signal[channel][i] = (FLAC__real)x;
-#endif
-					}
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					for(channel = 0; channel < channels; channel++) {
-						encoder->private_->integer_signal[channel][0] = encoder->private_->integer_signal[channel][i];
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-						encoder->private_->real_signal[channel][0] = encoder->private_->real_signal[channel][i];
-#endif
-					}
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
-		}
-	}
-	else {
-		if(encoder->protected_->do_mid_side_stereo && channels == 2) {
-			/*
-			 * stereo coding: unroll channel loop
-			 * without LPC: no need to calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
+		for(channel = 0; channel < channels; channel++)
+			memcpy(&encoder->private_->integer_signal[channel][encoder->private_->current_sample_number], &buffer[channel][j], sizeof(buffer[channel][0]) * n);
 
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					encoder->private_->integer_signal[0][i] = mid = side = buffer[0][j];
-					x = buffer[1][j];
-					encoder->private_->integer_signal[1][i] = x;
-					mid += x;
-					side -= x;
-					mid >>= 1; /* NOTE: not the same as 'mid = (buffer[0][j] + buffer[1][j]) / 2' ! */
-					encoder->private_->integer_signal_mid_side[1][i] = side;
-					encoder->private_->integer_signal_mid_side[0][i] = mid;
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					encoder->private_->integer_signal[0][0] = encoder->private_->integer_signal[0][i];
-					encoder->private_->integer_signal[1][0] = encoder->private_->integer_signal[1][i];
-					encoder->private_->integer_signal_mid_side[0][0] = encoder->private_->integer_signal_mid_side[0][i];
-					encoder->private_->integer_signal_mid_side[1][0] = encoder->private_->integer_signal_mid_side[1][i];
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
+		if(encoder->protected_->do_mid_side_stereo) {
+			FLAC__ASSERT(channels == 2);
+			/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
+			for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
+				encoder->private_->integer_signal_mid_side[1][i] = buffer[0][j] - buffer[1][j];
+				encoder->private_->integer_signal_mid_side[0][i] = (buffer[0][j] + buffer[1][j]) >> 1; /* NOTE: not the same as 'mid = (buffer[0][j] + buffer[1][j]) / 2' ! */
+			}
 		}
-		else {
-			/*
-			 * independent channel coding: buffer each channel in inner loop
-			 * without LPC: no need to calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
+		else
+			j += n;
 
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					for(channel = 0; channel < channels; channel++)
-						encoder->private_->integer_signal[channel][i] = buffer[channel][j];
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					for(channel = 0; channel < channels; channel++)
-						encoder->private_->integer_signal[channel][0] = encoder->private_->integer_signal[channel][i];
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
+		encoder->private_->current_sample_number += n;
+
+		/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
+		if(encoder->private_->current_sample_number > blocksize) {
+			FLAC__ASSERT(encoder->private_->current_sample_number == blocksize+OVERREAD_);
+			FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
+			if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
+				return false;
+			/* move unprocessed overread samples to beginnings of arrays */
+			for(channel = 0; channel < channels; channel++)
+				encoder->private_->integer_signal[channel][0] = encoder->private_->integer_signal[channel][blocksize];
+			if(encoder->protected_->do_mid_side_stereo) {
+				encoder->private_->integer_signal_mid_side[0][0] = encoder->private_->integer_signal_mid_side[0][blocksize];
+				encoder->private_->integer_signal_mid_side[1][0] = encoder->private_->integer_signal_mid_side[1][blocksize];
+			}
+			encoder->private_->current_sample_number = 1;
 		}
-	}
+	} while(j < samples);
 
 	return true;
 }
@@ -2154,167 +2038,67 @@ FLAC_API FLAC__bool FLAC__stream_encoder_process_interleaved(FLAC__StreamEncoder
 	 * we have several flavors of the same basic loop, optimized for
 	 * different conditions:
 	 */
-	if(encoder->protected_->max_lpc_order > 0) {
-		if(encoder->protected_->do_mid_side_stereo && channels == 2) {
-			/*
-			 * stereo coding: unroll channel loop
-			 * with LPC: calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_interleaved_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
+	if(encoder->protected_->do_mid_side_stereo && channels == 2) {
+		/*
+		 * stereo coding: unroll channel loop
+		 */
+		do {
+			if(encoder->protected_->verify)
+				append_to_verify_fifo_interleaved_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+OVERREAD_-encoder->private_->current_sample_number, samples-j));
 
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					x = mid = side = buffer[k++];
-					encoder->private_->integer_signal[0][i] = x;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal[0][i] = (FLAC__real)x;
-#endif
-					x = buffer[k++];
-					encoder->private_->integer_signal[1][i] = x;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal[1][i] = (FLAC__real)x;
-#endif
-					mid += x;
-					side -= x;
-					mid >>= 1; /* NOTE: not the same as 'mid = (left + right) / 2' ! */
-					encoder->private_->integer_signal_mid_side[1][i] = side;
-					encoder->private_->integer_signal_mid_side[0][i] = mid;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal_mid_side[1][i] = (FLAC__real)side;
-					encoder->private_->real_signal_mid_side[0][i] = (FLAC__real)mid;
-#endif
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					encoder->private_->integer_signal[0][0] = encoder->private_->integer_signal[0][i];
-					encoder->private_->integer_signal[1][0] = encoder->private_->integer_signal[1][i];
-					encoder->private_->integer_signal_mid_side[0][0] = encoder->private_->integer_signal_mid_side[0][i];
-					encoder->private_->integer_signal_mid_side[1][0] = encoder->private_->integer_signal_mid_side[1][i];
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal[0][0] = encoder->private_->real_signal[0][i];
-					encoder->private_->real_signal[1][0] = encoder->private_->real_signal[1][i];
-					encoder->private_->real_signal_mid_side[0][0] = encoder->private_->real_signal_mid_side[0][i];
-					encoder->private_->real_signal_mid_side[1][0] = encoder->private_->real_signal_mid_side[1][i];
-#endif
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
-		}
-		else {
-			/*
-			 * independent channel coding: buffer each channel in inner loop
-			 * with LPC: calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_interleaved_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
-
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					for(channel = 0; channel < channels; channel++) {
-						x = buffer[k++];
-						encoder->private_->integer_signal[channel][i] = x;
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-						encoder->private_->real_signal[channel][i] = (FLAC__real)x;
-#endif
-					}
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					for(channel = 0; channel < channels; channel++) {
-						encoder->private_->integer_signal[channel][0] = encoder->private_->integer_signal[channel][i];
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-						encoder->private_->real_signal[channel][0] = encoder->private_->real_signal[channel][i];
-#endif
-					}
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
-		}
+			/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
+			for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
+				encoder->private_->integer_signal[0][i] = mid = side = buffer[k++];
+				x = buffer[k++];
+				encoder->private_->integer_signal[1][i] = x;
+				mid += x;
+				side -= x;
+				mid >>= 1; /* NOTE: not the same as 'mid = (left + right) / 2' ! */
+				encoder->private_->integer_signal_mid_side[1][i] = side;
+				encoder->private_->integer_signal_mid_side[0][i] = mid;
+			}
+			encoder->private_->current_sample_number = i;
+			/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
+			if(i > blocksize) {
+				if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
+					return false;
+				/* move unprocessed overread samples to beginnings of arrays */
+				FLAC__ASSERT(i == blocksize+OVERREAD_);
+				FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
+				encoder->private_->integer_signal[0][0] = encoder->private_->integer_signal[0][blocksize];
+				encoder->private_->integer_signal[1][0] = encoder->private_->integer_signal[1][blocksize];
+				encoder->private_->integer_signal_mid_side[0][0] = encoder->private_->integer_signal_mid_side[0][blocksize];
+				encoder->private_->integer_signal_mid_side[1][0] = encoder->private_->integer_signal_mid_side[1][blocksize];
+				encoder->private_->current_sample_number = 1;
+			}
+		} while(j < samples);
 	}
 	else {
-		if(encoder->protected_->do_mid_side_stereo && channels == 2) {
-			/*
-			 * stereo coding: unroll channel loop
-			 * without LPC: no need to calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_interleaved_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
+		/*
+		 * independent channel coding: buffer each channel in inner loop
+		 */
+		do {
+			if(encoder->protected_->verify)
+				append_to_verify_fifo_interleaved_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+OVERREAD_-encoder->private_->current_sample_number, samples-j));
 
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					encoder->private_->integer_signal[0][i] = mid = side = buffer[k++];
-					x = buffer[k++];
-					encoder->private_->integer_signal[1][i] = x;
-					mid += x;
-					side -= x;
-					mid >>= 1; /* NOTE: not the same as 'mid = (left + right) / 2' ! */
-					encoder->private_->integer_signal_mid_side[1][i] = side;
-					encoder->private_->integer_signal_mid_side[0][i] = mid;
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					encoder->private_->integer_signal[0][0] = encoder->private_->integer_signal[0][i];
-					encoder->private_->integer_signal[1][0] = encoder->private_->integer_signal[1][i];
-					encoder->private_->integer_signal_mid_side[0][0] = encoder->private_->integer_signal_mid_side[0][i];
-					encoder->private_->integer_signal_mid_side[1][0] = encoder->private_->integer_signal_mid_side[1][i];
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
-		}
-		else {
-			/*
-			 * independent channel coding: buffer each channel in inner loop
-			 * without LPC: no need to calculate floating point version of signal
-			 */
-			do {
-				if(encoder->protected_->verify)
-					append_to_verify_fifo_interleaved_(&encoder->private_->verify.input_fifo, buffer, j, channels, min(blocksize+1-encoder->private_->current_sample_number, samples-j));
-
-				/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
-				for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
-					for(channel = 0; channel < channels; channel++)
-						encoder->private_->integer_signal[channel][i] = buffer[k++];
-					encoder->private_->current_sample_number++;
-				}
-				/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
-				if(i > blocksize) {
-					if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
-						return false;
-					/* move unprocessed overread samples to beginnings of arrays */
-					FLAC__ASSERT(i == blocksize+OVERREAD_);
-					FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
-					i--;
-					for(channel = 0; channel < channels; channel++)
-						encoder->private_->integer_signal[channel][0] = encoder->private_->integer_signal[channel][i];
-					encoder->private_->current_sample_number = 1;
-				}
-			} while(j < samples);
-		}
+			/* "i <= blocksize" to overread 1 sample; see comment in OVERREAD_ decl */
+			for(i = encoder->private_->current_sample_number; i <= blocksize && j < samples; i++, j++) {
+				for(channel = 0; channel < channels; channel++)
+					encoder->private_->integer_signal[channel][i] = buffer[k++];
+			}
+			encoder->private_->current_sample_number = i;
+			/* we only process if we have a full block + 1 extra sample; final block is always handled by FLAC__stream_encoder_finish() */
+			if(i > blocksize) {
+				if(!process_frame_(encoder, /*is_fractional_block=*/false, /*is_last_block=*/false))
+					return false;
+				/* move unprocessed overread samples to beginnings of arrays */
+				FLAC__ASSERT(i == blocksize+OVERREAD_);
+				FLAC__ASSERT(OVERREAD_ == 1); /* assert we only overread 1 sample which simplifies the rest of the code below */
+				for(channel = 0; channel < channels; channel++)
+					encoder->private_->integer_signal[channel][0] = encoder->private_->integer_signal[channel][blocksize];
+				encoder->private_->current_sample_number = 1;
+			}
+		} while(j < samples);
 	}
 
 	return true;
@@ -2336,6 +2120,7 @@ void set_defaults_(FLAC__StreamEncoder *encoder)
 	encoder->protected_->verify = false;
 #endif
 	encoder->protected_->streamable_subset = true;
+	encoder->protected_->do_md5 = true;
 	encoder->protected_->do_mid_side_stereo = false;
 	encoder->protected_->loose_mid_side_stereo = false;
 	encoder->protected_->channels = 2;
@@ -2486,8 +2271,10 @@ FLAC__bool resize_buffers_(FLAC__StreamEncoder *encoder, unsigned new_blocksize)
 		memset(encoder->private_->integer_signal[i], 0, sizeof(FLAC__int32)*4);
 		encoder->private_->integer_signal[i] += 4;
 #ifndef FLAC__INTEGER_ONLY_LIBRARY
+#if 0 /* @@@ currently unused */
 		if(encoder->protected_->max_lpc_order > 0)
 			ok = ok && FLAC__memory_alloc_aligned_real_array(new_blocksize+OVERREAD_, &encoder->private_->real_signal_unaligned[i], &encoder->private_->real_signal[i]);
+#endif
 #endif
 	}
 	for(i = 0; ok && i < 2; i++) {
@@ -2495,8 +2282,10 @@ FLAC__bool resize_buffers_(FLAC__StreamEncoder *encoder, unsigned new_blocksize)
 		memset(encoder->private_->integer_signal_mid_side[i], 0, sizeof(FLAC__int32)*4);
 		encoder->private_->integer_signal_mid_side[i] += 4;
 #ifndef FLAC__INTEGER_ONLY_LIBRARY
+#if 0 /* @@@ currently unused */
 		if(encoder->protected_->max_lpc_order > 0)
 			ok = ok && FLAC__memory_alloc_aligned_real_array(new_blocksize+OVERREAD_, &encoder->private_->real_signal_mid_side_unaligned[i], &encoder->private_->real_signal_mid_side[i]);
+#endif
 #endif
 	}
 #ifndef FLAC__INTEGER_ONLY_LIBRARY
@@ -3080,7 +2869,7 @@ FLAC__bool process_frame_(FLAC__StreamEncoder *encoder, FLAC__bool is_fractional
 	/*
 	 * Accumulate raw signal to the MD5 signature
 	 */
-	if(!FLAC__MD5Accumulate(&encoder->private_->md5context, (const FLAC__int32 * const *)encoder->private_->integer_signal, encoder->protected_->channels, encoder->protected_->blocksize, (encoder->protected_->bits_per_sample+7) / 8)) {
+	if(encoder->protected_->do_md5 && !FLAC__MD5Accumulate(&encoder->private_->md5context, (const FLAC__int32 * const *)encoder->private_->integer_signal, encoder->protected_->channels, encoder->protected_->blocksize, (encoder->protected_->bits_per_sample+7) / 8)) {
 		encoder->protected_->state = FLAC__STREAM_ENCODER_MEMORY_ALLOCATION_ERROR;
 		return false;
 	}
@@ -3218,9 +3007,6 @@ FLAC__bool process_subframes_(FLAC__StreamEncoder *encoder, FLAC__bool is_fracti
 					&frame_header,
 					encoder->private_->subframe_bps[channel],
 					encoder->private_->integer_signal[channel],
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal[channel],
-#endif
 					encoder->private_->subframe_workspace_ptr[channel],
 					encoder->private_->partitioned_rice_contents_workspace_ptr[channel],
 					encoder->private_->residual_workspace[channel],
@@ -3247,9 +3033,6 @@ FLAC__bool process_subframes_(FLAC__StreamEncoder *encoder, FLAC__bool is_fracti
 					&frame_header,
 					encoder->private_->subframe_bps_mid_side[channel],
 					encoder->private_->integer_signal_mid_side[channel],
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-					encoder->private_->real_signal_mid_side[channel],
-#endif
 					encoder->private_->subframe_workspace_ptr_mid_side[channel],
 					encoder->private_->partitioned_rice_contents_workspace_ptr_mid_side[channel],
 					encoder->private_->residual_workspace_mid_side[channel],
@@ -3388,9 +3171,6 @@ FLAC__bool process_subframe_(
 	const FLAC__FrameHeader *frame_header,
 	unsigned subframe_bps,
 	const FLAC__int32 integer_signal[],
-#ifndef FLAC__INTEGER_ONLY_LIBRARY
-	const FLAC__real real_signal[],
-#endif
 	FLAC__Subframe *subframe[2],
 	FLAC__EntropyCodingMethod_PartitionedRiceContents *partitioned_rice_contents[2],
 	FLAC__int32 *residual[2],
@@ -3517,7 +3297,7 @@ FLAC__bool process_subframe_(
 				if(max_lpc_order > 0) {
 					unsigned a;
 					for (a = 0; a < encoder->protected_->num_apodizations; a++) {
-						FLAC__lpc_window_data(real_signal, encoder->private_->window[a], encoder->private_->windowed_signal, frame_header->blocksize);
+						FLAC__lpc_window_data(integer_signal, encoder->private_->window[a], encoder->private_->windowed_signal, frame_header->blocksize);
 						encoder->private_->local_lpc_compute_autocorrelation(encoder->private_->windowed_signal, frame_header->blocksize, max_lpc_order+1, autoc);
 						/* if autoc[0] == 0.0, the signal is constant and we usually won't get here, but it can happen */
 						if(autoc[0] != 0.0) {
@@ -3749,6 +3529,7 @@ unsigned evaluate_fixed_subframe_(
 			rice_parameter,
 			min_partition_order,
 			max_partition_order,
+			subframe_bps,
 			do_escape_coding,
 			rice_parameter_search_dist,
 			&subframe->data.fixed.entropy_coding_method.data.partitioned_rice
@@ -3829,6 +3610,7 @@ unsigned evaluate_lpc_subframe_(
 			rice_parameter,
 			min_partition_order,
 			max_partition_order,
+			subframe_bps,
 			do_escape_coding,
 			rice_parameter_search_dist,
 			&subframe->data.lpc.entropy_coding_method.data.partitioned_rice
@@ -3886,6 +3668,7 @@ unsigned find_best_partition_order_(
 	unsigned rice_parameter,
 	unsigned min_partition_order,
 	unsigned max_partition_order,
+	unsigned bps,
 	FLAC__bool do_escape_coding,
 	unsigned rice_parameter_search_dist,
 	FLAC__EntropyCodingMethod_PartitionedRice *best_partitioned_rice
@@ -3898,7 +3681,7 @@ unsigned find_best_partition_order_(
 	max_partition_order = FLAC__format_get_max_rice_partition_order_from_blocksize_limited_max_and_predictor_order(max_partition_order, blocksize, predictor_order);
 	min_partition_order = min(min_partition_order, max_partition_order);
 
-	precompute_partition_info_sums_(residual, abs_residual_partition_sums, residual_samples, predictor_order, min_partition_order, max_partition_order);
+	precompute_partition_info_sums_(residual, abs_residual_partition_sums, residual_samples, predictor_order, min_partition_order, max_partition_order, bps);
 
 	if(do_escape_coding)
 		precompute_partition_info_escapes_(residual, raw_bits_per_partition, residual_samples, predictor_order, min_partition_order, max_partition_order);
@@ -3952,62 +3735,83 @@ unsigned find_best_partition_order_(
 	return best_residual_bits;
 }
 
+#if defined(FLAC__CPU_IA32) && !defined FLAC__NO_ASM && defined FLAC__HAS_NASM
+extern void precompute_partition_info_sums_32bit_asm_ia32_(
+	const FLAC__int32 residual[],
+	FLAC__uint64 abs_residual_partition_sums[],
+	unsigned blocksize,
+	unsigned predictor_order,
+	unsigned min_partition_order,
+	unsigned max_partition_order
+);
+#endif
+
 void precompute_partition_info_sums_(
 	const FLAC__int32 residual[],
 	FLAC__uint64 abs_residual_partition_sums[],
 	unsigned residual_samples,
 	unsigned predictor_order,
 	unsigned min_partition_order,
-	unsigned max_partition_order
+	unsigned max_partition_order,
+	unsigned bps
 )
 {
-	int partition_order;
-	unsigned from_partition, to_partition = 0;
-	const unsigned blocksize = residual_samples + predictor_order;
+	const unsigned default_partition_samples = (residual_samples + predictor_order) >> max_partition_order;
+	unsigned partitions = 1u << max_partition_order;
+
+	FLAC__ASSERT(default_partition_samples > predictor_order);
+
+#if defined(FLAC__CPU_IA32) && !defined FLAC__NO_ASM && defined FLAC__HAS_NASM
+	/* slightly pessimistic but still catches all common cases */
+	/* WATCHOUT: "+ bps" is an assumption that the average residual magnitude will not be more than "bps" bits */
+	if(FLAC__bitmath_ilog2(default_partition_samples) + bps < 32) {
+		precompute_partition_info_sums_32bit_asm_ia32_(residual, abs_residual_partition_sums, residual_samples + predictor_order, predictor_order, min_partition_order, max_partition_order);
+		return;
+	}
+#endif
 
 	/* first do max_partition_order */
-	for(partition_order = (int)max_partition_order; partition_order >= 0; partition_order--) {
-		FLAC__uint64 abs_residual_partition_sum; /* OPT: can reasonably be FLAC__uint32 for bps <= 17 and maybe higher */
-		unsigned partition, partition_sample, partition_samples, residual_sample;
-		const unsigned partitions = 1u << partition_order;
-		const unsigned default_partition_samples = blocksize >> partition_order;
+	{
+		unsigned partition, residual_sample, end = (unsigned)(-(int)predictor_order);
+		/* slightly pessimistic but still catches all common cases */
+		/* WATCHOUT: "+ bps" is an assumption that the average residual magnitude will not be more than "bps" bits */
+		if(FLAC__bitmath_ilog2(default_partition_samples) + bps < 32) {
+			FLAC__uint32 abs_residual_partition_sum;
 
-		FLAC__ASSERT(default_partition_samples > predictor_order);
-
-		for(partition = residual_sample = 0; partition < partitions; partition++) {
-			partition_samples = default_partition_samples;
-			if(partition == 0)
-				partition_samples -= predictor_order;
-			abs_residual_partition_sum = 0;
-			for(partition_sample = 0; partition_sample < partition_samples; partition_sample++, residual_sample++) {
-#if defined _MSC_VER && _MSC_VER <= 1200
-				/* OPT: abs() may be faster for some compilers */
-				abs_residual_partition_sum += abs(residual[residual_sample]); /* abs(INT_MIN) is undefined, but if the residual is INT_MIN we have bigger problems */
-#else
-				const FLAC__int32 r = residual[residual_sample];
-				if(r < 0)
-					abs_residual_partition_sum -= r;
-				else
-					abs_residual_partition_sum += r;
-#endif
+			for(partition = residual_sample = 0; partition < partitions; partition++) {
+				end += default_partition_samples;
+				abs_residual_partition_sum = 0;
+				for( ; residual_sample < end; residual_sample++)
+					abs_residual_partition_sum += abs(residual[residual_sample]); /* abs(INT_MIN) is undefined, but if the residual is INT_MIN we have bigger problems */
+				abs_residual_partition_sums[partition] = abs_residual_partition_sum;
 			}
-			abs_residual_partition_sums[partition] = abs_residual_partition_sum;
 		}
-		to_partition = partitions;
-		break;
+		else { /* have to pessimistically use 64 bits for accumulator */
+			FLAC__uint64 abs_residual_partition_sum;
+
+			for(partition = residual_sample = 0; partition < partitions; partition++) {
+				end += default_partition_samples;
+				abs_residual_partition_sum = 0;
+				for( ; residual_sample < end; residual_sample++)
+					abs_residual_partition_sum += abs(residual[residual_sample]); /* abs(INT_MIN) is undefined, but if the residual is INT_MIN we have bigger problems */
+				abs_residual_partition_sums[partition] = abs_residual_partition_sum;
+			}
+		}
 	}
 
 	/* now merge partitions for lower orders */
-	for(from_partition = 0, --partition_order; partition_order >= (int)min_partition_order; partition_order--) {
-		FLAC__uint64 s;
-		unsigned i;
-		const unsigned partitions = 1u << partition_order;
-		for(i = 0; i < partitions; i++) {
-			s = abs_residual_partition_sums[from_partition];
-			from_partition++;
-			abs_residual_partition_sums[to_partition] = s + abs_residual_partition_sums[from_partition];
-			from_partition++;
-			to_partition++;
+	{
+		unsigned from_partition = 0, to_partition = partitions;
+		int partition_order;
+		for(partition_order = (int)max_partition_order - 1; partition_order >= (int)min_partition_order; partition_order--) {
+			unsigned i;
+			partitions >>= 1;
+			for(i = 0; i < partitions; i++) {
+				abs_residual_partition_sums[to_partition++] =
+					abs_residual_partition_sums[from_partition  ] +
+					abs_residual_partition_sums[from_partition+1];
+				from_partition += 2;
+			}
 		}
 	}
 }
@@ -4042,6 +3846,7 @@ void precompute_partition_info_escapes_(
 			rmax = 0;
 			for(partition_sample = 0; partition_sample < partition_samples; partition_sample++) {
 				r = residual[residual_sample++];
+				/* OPT: maybe faster: rmax |= r ^ (r>>31) */
 				if(r < 0)
 					rmax |= ~r;
 				else
@@ -4070,7 +3875,7 @@ void precompute_partition_info_escapes_(
 }
 
 #ifdef EXACT_RICE_BITS_CALCULATION
-static __inline unsigned count_rice_bits_in_partition_(
+static FLaC__INLINE unsigned count_rice_bits_in_partition_(
 	const unsigned rice_parameter,
 	const unsigned partition_samples,
 	const FLAC__int32 *residual
@@ -4085,7 +3890,7 @@ static __inline unsigned count_rice_bits_in_partition_(
 	return partition_bits;
 }
 #else
-static __inline unsigned count_rice_bits_in_partition_(
+static FLaC__INLINE unsigned count_rice_bits_in_partition_(
 	const unsigned rice_parameter,
 	const unsigned partition_samples,
 	const FLAC__uint64 abs_residual_partition_sum
@@ -4101,7 +3906,7 @@ static __inline unsigned count_rice_bits_in_partition_(
 		)
 		- (partition_samples >> 1)
 		/* -(partition_samples>>1) to subtract out extra contributions to the abs_residual_partition_sum.
-		 * The actual number of bits used is closer to the sum for all i in the partition of  abs(residual[i])>>(rice_parameter-1)
+		 * The actual number of bits used is closer to the sum(for all i in the partition) of  abs(residual[i])>>(rice_parameter-1)
 		 * By using the abs_residual_partition sum, we also add in bits in the LSBs that would normally be shifted out.
 		 * So the subtraction term tries to guess how many extra bits were contributed.
 		 * If the LSBs are randomly distributed, this should average to 0.5 extra bits per sample.
@@ -4143,7 +3948,7 @@ FLAC__bool set_partitioned_rice_(
 	raw_bits = partitioned_rice_contents->raw_bits;
 
 	if(partition_order == 0) {
-		best_partition_bits = 0xffffffff;
+		best_partition_bits = (unsigned)(-1);
 #ifdef ENABLE_RICE_PARAMETER_SEARCH
 		if(rice_parameter_search_dist) {
 			if(suggested_rice_parameter < rice_parameter_search_dist)
@@ -4219,7 +4024,7 @@ FLAC__bool set_partitioned_rice_(
 				rice_parameter = FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_ESCAPE_PARAMETER - 1;
 			}
 
-			best_partition_bits = 0xffffffff;
+			best_partition_bits = (unsigned)(-1);
 #ifdef ENABLE_RICE_PARAMETER_SEARCH
 			if(rice_parameter_search_dist) {
 				if(rice_parameter < rice_parameter_search_dist)

@@ -13,21 +13,23 @@
   </compound>
   <compound kind="file">
     <name>decoder.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
     <filename>decoder_8h</filename>
+    <includes id="+_2export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="stream__decoder_8h" name="stream_decoder.h" local="yes" imported="no">FLAC/stream_decoder.h</includes>
   </compound>
   <compound kind="file">
     <name>encoder.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
     <filename>encoder_8h</filename>
+    <includes id="+_2export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="stream__encoder_8h" name="stream_encoder.h" local="yes" imported="no">FLAC/stream_encoder.h</includes>
     <includes id="decoder_8h" name="decoder.h" local="yes" imported="no">decoder.h</includes>
     <includes id="+_2metadata_8h" name="metadata.h" local="yes" imported="no">metadata.h</includes>
   </compound>
   <compound kind="file">
     <name>callback.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
     <filename>callback_8h</filename>
     <member kind="typedef">
       <type>void *</type>
@@ -81,7 +83,7 @@
   </compound>
   <compound kind="file">
     <name>export.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
     <filename>export_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -120,434 +122,479 @@
     </member>
   </compound>
   <compound kind="file">
+    <name>export.h</name>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
+    <filename>+_2export_8h</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API_VERSION_CURRENT</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API_VERSION_REVISION</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API_VERSION_AGE</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga3</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
     <name>format.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
     <filename>format_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_METADATA_TYPE_CODE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga85</anchor>
+      <anchor>ga89</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MIN_BLOCK_SIZE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga86</anchor>
+      <anchor>ga90</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_BLOCK_SIZE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga87</anchor>
+      <anchor>ga91</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__SUBSET_MAX_BLOCK_SIZE_48000HZ</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga88</anchor>
+      <anchor>ga92</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_CHANNELS</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga89</anchor>
+      <anchor>ga93</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MIN_BITS_PER_SAMPLE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga90</anchor>
+      <anchor>ga94</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_BITS_PER_SAMPLE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga91</anchor>
+      <anchor>ga95</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__REFERENCE_CODEC_MAX_BITS_PER_SAMPLE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga92</anchor>
+      <anchor>ga96</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_SAMPLE_RATE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga93</anchor>
+      <anchor>ga97</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_LPC_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga94</anchor>
+      <anchor>ga98</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__SUBSET_MAX_LPC_ORDER_48000HZ</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga95</anchor>
+      <anchor>ga99</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MIN_QLP_COEFF_PRECISION</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga96</anchor>
+      <anchor>ga100</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_QLP_COEFF_PRECISION</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga97</anchor>
+      <anchor>ga101</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_FIXED_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga98</anchor>
+      <anchor>ga102</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_RICE_PARTITION_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga99</anchor>
+      <anchor>ga103</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__SUBSET_MAX_RICE_PARTITION_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga100</anchor>
+      <anchor>ga104</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_SYNC_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga101</anchor>
+      <anchor>ga105</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_METADATA_STREAMINFO_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga102</anchor>
+      <anchor>ga106</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_METADATA_SEEKPOINT_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga103</anchor>
+      <anchor>ga107</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_METADATA_HEADER_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga104</anchor>
+      <anchor>ga108</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
       <name>FLAC__EntropyCodingMethodType</name>
-      <anchor>ga105</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE</name>
-      <anchor>gga105a97</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__SubframeType</name>
-      <anchor>ga106</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_CONSTANT</name>
-      <anchor>gga106a98</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_VERBATIM</name>
-      <anchor>gga106a99</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_FIXED</name>
-      <anchor>gga106a100</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_LPC</name>
-      <anchor>gga106a101</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__ChannelAssignment</name>
-      <anchor>ga107</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_INDEPENDENT</name>
-      <anchor>gga107a102</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_LEFT_SIDE</name>
-      <anchor>gga107a103</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_RIGHT_SIDE</name>
-      <anchor>gga107a104</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_MID_SIDE</name>
-      <anchor>gga107a105</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__FrameNumberType</name>
-      <anchor>ga108</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__FRAME_NUMBER_TYPE_FRAME_NUMBER</name>
-      <anchor>gga108a106</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__FRAME_NUMBER_TYPE_SAMPLE_NUMBER</name>
-      <anchor>gga108a107</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__MetadataType</name>
       <anchor>ga109</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_STREAMINFO</name>
-      <anchor>gga109a108</anchor>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE</name>
+      <anchor>gga109a100</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_PADDING</name>
-      <anchor>gga109a109</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_APPLICATION</name>
-      <anchor>gga109a110</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_SEEKTABLE</name>
-      <anchor>gga109a111</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_VORBIS_COMMENT</name>
-      <anchor>gga109a112</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_CUESHEET</name>
-      <anchor>gga109a113</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_PICTURE</name>
-      <anchor>gga109a114</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_UNDEFINED</name>
-      <anchor>gga109a115</anchor>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2</name>
+      <anchor>gga109a101</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
-      <name>FLAC__StreamMetadata_Picture_Type</name>
+      <name>FLAC__SubframeType</name>
       <anchor>ga110</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_CONSTANT</name>
+      <anchor>gga110a102</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_VERBATIM</name>
+      <anchor>gga110a103</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_FIXED</name>
+      <anchor>gga110a104</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_LPC</name>
+      <anchor>gga110a105</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__ChannelAssignment</name>
+      <anchor>ga111</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_INDEPENDENT</name>
+      <anchor>gga111a106</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_LEFT_SIDE</name>
+      <anchor>gga111a107</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_RIGHT_SIDE</name>
+      <anchor>gga111a108</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_MID_SIDE</name>
+      <anchor>gga111a109</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__FrameNumberType</name>
+      <anchor>ga112</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__FRAME_NUMBER_TYPE_FRAME_NUMBER</name>
+      <anchor>gga112a110</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__FRAME_NUMBER_TYPE_SAMPLE_NUMBER</name>
+      <anchor>gga112a111</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__MetadataType</name>
+      <anchor>ga113</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_STREAMINFO</name>
+      <anchor>gga113a112</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_PADDING</name>
+      <anchor>gga113a113</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_APPLICATION</name>
+      <anchor>gga113a114</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_SEEKTABLE</name>
+      <anchor>gga113a115</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_VORBIS_COMMENT</name>
+      <anchor>gga113a116</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_CUESHEET</name>
+      <anchor>gga113a117</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_PICTURE</name>
+      <anchor>gga113a118</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_UNDEFINED</name>
+      <anchor>gga113a119</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__StreamMetadata_Picture_Type</name>
+      <anchor>ga114</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_OTHER</name>
-      <anchor>gga110a116</anchor>
+      <anchor>gga114a120</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FILE_ICON_STANDARD</name>
-      <anchor>gga110a117</anchor>
+      <anchor>gga114a121</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FILE_ICON</name>
-      <anchor>gga110a118</anchor>
+      <anchor>gga114a122</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER</name>
-      <anchor>gga110a119</anchor>
+      <anchor>gga114a123</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_BACK_COVER</name>
-      <anchor>gga110a120</anchor>
+      <anchor>gga114a124</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEAFLET_PAGE</name>
-      <anchor>gga110a121</anchor>
+      <anchor>gga114a125</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_MEDIA</name>
-      <anchor>gga110a122</anchor>
+      <anchor>gga114a126</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEAD_ARTIST</name>
-      <anchor>gga110a123</anchor>
+      <anchor>gga114a127</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_ARTIST</name>
-      <anchor>gga110a124</anchor>
+      <anchor>gga114a128</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_CONDUCTOR</name>
-      <anchor>gga110a125</anchor>
+      <anchor>gga114a129</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_BAND</name>
-      <anchor>gga110a126</anchor>
+      <anchor>gga114a130</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_COMPOSER</name>
-      <anchor>gga110a127</anchor>
+      <anchor>gga114a131</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LYRICIST</name>
-      <anchor>gga110a128</anchor>
+      <anchor>gga114a132</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_RECORDING_LOCATION</name>
-      <anchor>gga110a129</anchor>
+      <anchor>gga114a133</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_DURING_RECORDING</name>
-      <anchor>gga110a130</anchor>
+      <anchor>gga114a134</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_DURING_PERFORMANCE</name>
-      <anchor>gga110a131</anchor>
+      <anchor>gga114a135</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_VIDEO_SCREEN_CAPTURE</name>
-      <anchor>gga110a132</anchor>
+      <anchor>gga114a136</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FISH</name>
-      <anchor>gga110a133</anchor>
+      <anchor>gga114a137</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_ILLUSTRATION</name>
-      <anchor>gga110a134</anchor>
+      <anchor>gga114a138</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_BAND_LOGOTYPE</name>
-      <anchor>gga110a135</anchor>
+      <anchor>gga114a139</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_PUBLISHER_LOGOTYPE</name>
-      <anchor>gga110a136</anchor>
+      <anchor>gga114a140</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_sample_rate_is_valid</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga77</anchor>
+      <anchor>ga80</anchor>
+      <arglist>(unsigned sample_rate)</arglist>
+    </member>
+    <member kind="function">
+      <type>FLAC__bool</type>
+      <name>FLAC__format_sample_rate_is_subset</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga81</anchor>
       <arglist>(unsigned sample_rate)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_vorbiscomment_entry_name_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga78</anchor>
+      <anchor>ga82</anchor>
       <arglist>(const char *name)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_vorbiscomment_entry_value_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga79</anchor>
+      <anchor>ga83</anchor>
       <arglist>(const FLAC__byte *value, unsigned length)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_vorbiscomment_entry_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga80</anchor>
+      <anchor>ga84</anchor>
       <arglist>(const FLAC__byte *entry, unsigned length)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_seektable_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga81</anchor>
+      <anchor>ga85</anchor>
       <arglist>(const FLAC__StreamMetadata_SeekTable *seek_table)</arglist>
     </member>
     <member kind="function">
       <type>unsigned</type>
       <name>FLAC__format_seektable_sort</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga82</anchor>
+      <anchor>ga86</anchor>
       <arglist>(FLAC__StreamMetadata_SeekTable *seek_table)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_cuesheet_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga83</anchor>
+      <anchor>ga87</anchor>
       <arglist>(const FLAC__StreamMetadata_CueSheet *cue_sheet, FLAC__bool check_cd_da_subset, const char **violation)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_picture_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga84</anchor>
+      <anchor>ga88</anchor>
       <arglist>(const FLAC__StreamMetadata_Picture *picture, const char **violation)</arglist>
     </member>
     <member kind="variable">
@@ -608,491 +655,512 @@
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_RAW_LEN</name>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2_PARAMETER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga8</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_ESCAPE_PARAMETER</name>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_RAW_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga9</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__ENTROPY_CODING_METHOD_TYPE_LEN</name>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_ESCAPE_PARAMETER</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga10</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2_ESCAPE_PARAMETER</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga11</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__ENTROPY_CODING_METHOD_TYPE_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga12</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const char *const</type>
       <name>FLAC__SubframeTypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga11</anchor>
+      <anchor>ga13</anchor>
       <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_LPC_QLP_COEFF_PRECISION_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga12</anchor>
+      <anchor>ga14</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_LPC_QLP_SHIFT_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga13</anchor>
+      <anchor>ga15</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_ZERO_PAD_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga14</anchor>
+      <anchor>ga16</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga15</anchor>
+      <anchor>ga17</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_WASTED_BITS_FLAG_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga16</anchor>
+      <anchor>ga18</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_CONSTANT_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga17</anchor>
+      <anchor>ga19</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_VERBATIM_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga18</anchor>
+      <anchor>ga20</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_FIXED_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga19</anchor>
+      <anchor>ga21</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_LPC_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga20</anchor>
+      <anchor>ga22</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const char *const</type>
       <name>FLAC__ChannelAssignmentString</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga21</anchor>
+      <anchor>ga23</anchor>
       <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const char *const</type>
       <name>FLAC__FrameNumberTypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga22</anchor>
+      <anchor>ga24</anchor>
       <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__FRAME_HEADER_SYNC</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga23</anchor>
+      <anchor>ga25</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__FRAME_HEADER_SYNC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga24</anchor>
+      <anchor>ga26</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__FRAME_HEADER_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga25</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_BLOCK_SIZE_LEN</name>
-      <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga26</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_SAMPLE_RATE_LEN</name>
-      <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga27</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_CHANNEL_ASSIGNMENT_LEN</name>
+      <name>FLAC__FRAME_HEADER_BLOCKING_STRATEGY_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga28</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_BITS_PER_SAMPLE_LEN</name>
+      <name>FLAC__FRAME_HEADER_BLOCK_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga29</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_ZERO_PAD_LEN</name>
+      <name>FLAC__FRAME_HEADER_SAMPLE_RATE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga30</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_CRC_LEN</name>
+      <name>FLAC__FRAME_HEADER_CHANNEL_ASSIGNMENT_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga31</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_FOOTER_CRC_LEN</name>
+      <name>FLAC__FRAME_HEADER_BITS_PER_SAMPLE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga32</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const char *const</type>
-      <name>FLAC__MetadataTypeString</name>
+      <type>const unsigned</type>
+      <name>FLAC__FRAME_HEADER_ZERO_PAD_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga33</anchor>
-      <arglist>[]</arglist>
+      <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_BLOCK_SIZE_LEN</name>
+      <name>FLAC__FRAME_HEADER_CRC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga34</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_BLOCK_SIZE_LEN</name>
+      <name>FLAC__FRAME_FOOTER_CRC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga35</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_FRAME_SIZE_LEN</name>
+      <type>const char *const</type>
+      <name>FLAC__MetadataTypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga36</anchor>
-      <arglist></arglist>
+      <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_FRAME_SIZE_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_BLOCK_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga37</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_SAMPLE_RATE_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_BLOCK_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga38</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_CHANNELS_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_FRAME_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga39</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_BITS_PER_SAMPLE_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_FRAME_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga40</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_TOTAL_SAMPLES_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_SAMPLE_RATE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga41</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MD5SUM_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_CHANNELS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga42</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_APPLICATION_ID_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_BITS_PER_SAMPLE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga43</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_SAMPLE_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_TOTAL_SAMPLES_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga44</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_STREAM_OFFSET_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MD5SUM_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga45</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_FRAME_SAMPLES_LEN</name>
+      <name>FLAC__STREAM_METADATA_APPLICATION_ID_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga46</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const FLAC__uint64</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_PLACEHOLDER</name>
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_SAMPLE_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga47</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_ENTRY_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_STREAM_OFFSET_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga48</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_NUM_COMMENTS_LEN</name>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_FRAME_SAMPLES_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga49</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_OFFSET_LEN</name>
+      <type>const FLAC__uint64</type>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_PLACEHOLDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga50</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_ENTRY_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga51</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_RESERVED_LEN</name>
+      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_NUM_COMMENTS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga52</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_OFFSET_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_OFFSET_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga53</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga54</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_ISRC_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga55</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_TYPE_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_OFFSET_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga56</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_PRE_EMPHASIS_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga57</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_RESERVED_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_ISRC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga58</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUM_INDICES_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_TYPE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga59</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_MEDIA_CATALOG_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_PRE_EMPHASIS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga60</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_LEAD_IN_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga61</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_IS_CD_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUM_INDICES_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga62</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_RESERVED_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_MEDIA_CATALOG_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga63</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_NUM_TRACKS_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_LEAD_IN_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga64</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const char *const</type>
-      <name>FLAC__StreamMetadata_Picture_TypeString</name>
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_CUESHEET_IS_CD_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga65</anchor>
-      <arglist>[]</arglist>
+      <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga66</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_MIME_TYPE_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_NUM_TRACKS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga67</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_DESCRIPTION_LENGTH_LEN</name>
+      <type>const char *const</type>
+      <name>FLAC__StreamMetadata_Picture_TypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga68</anchor>
-      <arglist></arglist>
+      <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_WIDTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga69</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_HEIGHT_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_MIME_TYPE_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga70</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_DEPTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_DESCRIPTION_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga71</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_COLORS_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_WIDTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga72</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_DATA_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_HEIGHT_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga73</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_IS_LAST_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_DEPTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga74</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_TYPE_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_COLORS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga75</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_DATA_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga76</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_IS_LAST_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga77</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_TYPE_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga78</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_LENGTH_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga79</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="file">
     <name>metadata.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
     <filename>metadata_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="callback_8h" name="callback.h" local="yes" imported="no">callback.h</includes>
@@ -1892,8 +1960,9 @@
   </compound>
   <compound kind="file">
     <name>metadata.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
     <filename>+_2metadata_8h</filename>
+    <includes id="+_2export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="metadata_8h" name="metadata.h" local="yes" imported="no">FLAC/metadata.h</includes>
     <member kind="function">
       <type>Prototype *</type>
@@ -1954,7 +2023,7 @@
   </compound>
   <compound kind="file">
     <name>stream_decoder.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
     <filename>stream__decoder_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="format_8h" name="format.h" local="yes" imported="no">format.h</includes>
@@ -2521,7 +2590,7 @@
   </compound>
   <compound kind="file">
     <name>stream_encoder.h</name>
-    <path>/home/jcoalson/flac/build/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
     <filename>stream__encoder_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="format_8h" name="format.h" local="yes" imported="no">format.h</includes>
@@ -4071,6 +4140,7 @@
     <filename>group__porting.html</filename>
     <subgroup>porting_1_1_2_to_1_1_3</subgroup>
     <subgroup>porting_1_1_3_to_1_1_4</subgroup>
+    <subgroup>porting_1_1_4_to_1_2_0</subgroup>
   </compound>
   <compound kind="group">
     <name>porting_1_1_2_to_1_1_3</name>
@@ -4081,6 +4151,11 @@
     <name>porting_1_1_3_to_1_1_4</name>
     <title>Porting from FLAC 1.1.3 to 1.1.4</title>
     <filename>group__porting__1__1__3__to__1__1__4.html</filename>
+  </compound>
+  <compound kind="group">
+    <name>porting_1_1_4_to_1_2_0</name>
+    <title>Porting from FLAC 1.1.4 to 1.2.0</title>
+    <filename>group__porting__1__1__4__to__1__2__0.html</filename>
   </compound>
   <compound kind="group">
     <name>flac</name>
@@ -4220,426 +4295,438 @@
       <type>#define</type>
       <name>FLAC__MAX_METADATA_TYPE_CODE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga85</anchor>
+      <anchor>ga89</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MIN_BLOCK_SIZE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga86</anchor>
+      <anchor>ga90</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_BLOCK_SIZE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga87</anchor>
+      <anchor>ga91</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__SUBSET_MAX_BLOCK_SIZE_48000HZ</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga88</anchor>
+      <anchor>ga92</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_CHANNELS</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga89</anchor>
+      <anchor>ga93</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MIN_BITS_PER_SAMPLE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga90</anchor>
+      <anchor>ga94</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_BITS_PER_SAMPLE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga91</anchor>
+      <anchor>ga95</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__REFERENCE_CODEC_MAX_BITS_PER_SAMPLE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga92</anchor>
+      <anchor>ga96</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_SAMPLE_RATE</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga93</anchor>
+      <anchor>ga97</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_LPC_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga94</anchor>
+      <anchor>ga98</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__SUBSET_MAX_LPC_ORDER_48000HZ</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga95</anchor>
+      <anchor>ga99</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MIN_QLP_COEFF_PRECISION</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga96</anchor>
+      <anchor>ga100</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_QLP_COEFF_PRECISION</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga97</anchor>
+      <anchor>ga101</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_FIXED_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga98</anchor>
+      <anchor>ga102</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__MAX_RICE_PARTITION_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga99</anchor>
+      <anchor>ga103</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__SUBSET_MAX_RICE_PARTITION_ORDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga100</anchor>
+      <anchor>ga104</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_SYNC_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga101</anchor>
+      <anchor>ga105</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_METADATA_STREAMINFO_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga102</anchor>
+      <anchor>ga106</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_METADATA_SEEKPOINT_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga103</anchor>
+      <anchor>ga107</anchor>
       <arglist></arglist>
     </member>
     <member kind="define">
       <type>#define</type>
       <name>FLAC__STREAM_METADATA_HEADER_LENGTH</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga104</anchor>
+      <anchor>ga108</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
       <name>FLAC__EntropyCodingMethodType</name>
-      <anchor>ga105</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE</name>
-      <anchor>gga105a97</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__SubframeType</name>
-      <anchor>ga106</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_CONSTANT</name>
-      <anchor>gga106a98</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_VERBATIM</name>
-      <anchor>gga106a99</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_FIXED</name>
-      <anchor>gga106a100</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__SUBFRAME_TYPE_LPC</name>
-      <anchor>gga106a101</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__ChannelAssignment</name>
-      <anchor>ga107</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_INDEPENDENT</name>
-      <anchor>gga107a102</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_LEFT_SIDE</name>
-      <anchor>gga107a103</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_RIGHT_SIDE</name>
-      <anchor>gga107a104</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__CHANNEL_ASSIGNMENT_MID_SIDE</name>
-      <anchor>gga107a105</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__FrameNumberType</name>
-      <anchor>ga108</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__FRAME_NUMBER_TYPE_FRAME_NUMBER</name>
-      <anchor>gga108a106</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__FRAME_NUMBER_TYPE_SAMPLE_NUMBER</name>
-      <anchor>gga108a107</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumeration">
-      <name>FLAC__MetadataType</name>
       <anchor>ga109</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_STREAMINFO</name>
-      <anchor>gga109a108</anchor>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE</name>
+      <anchor>gga109a100</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_PADDING</name>
-      <anchor>gga109a109</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_APPLICATION</name>
-      <anchor>gga109a110</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_SEEKTABLE</name>
-      <anchor>gga109a111</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_VORBIS_COMMENT</name>
-      <anchor>gga109a112</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_CUESHEET</name>
-      <anchor>gga109a113</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_PICTURE</name>
-      <anchor>gga109a114</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="enumvalue">
-      <name>FLAC__METADATA_TYPE_UNDEFINED</name>
-      <anchor>gga109a115</anchor>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2</name>
+      <anchor>gga109a101</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
-      <name>FLAC__StreamMetadata_Picture_Type</name>
+      <name>FLAC__SubframeType</name>
       <anchor>ga110</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_CONSTANT</name>
+      <anchor>gga110a102</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_VERBATIM</name>
+      <anchor>gga110a103</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_FIXED</name>
+      <anchor>gga110a104</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__SUBFRAME_TYPE_LPC</name>
+      <anchor>gga110a105</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__ChannelAssignment</name>
+      <anchor>ga111</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_INDEPENDENT</name>
+      <anchor>gga111a106</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_LEFT_SIDE</name>
+      <anchor>gga111a107</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_RIGHT_SIDE</name>
+      <anchor>gga111a108</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__CHANNEL_ASSIGNMENT_MID_SIDE</name>
+      <anchor>gga111a109</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__FrameNumberType</name>
+      <anchor>ga112</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__FRAME_NUMBER_TYPE_FRAME_NUMBER</name>
+      <anchor>gga112a110</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__FRAME_NUMBER_TYPE_SAMPLE_NUMBER</name>
+      <anchor>gga112a111</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__MetadataType</name>
+      <anchor>ga113</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_STREAMINFO</name>
+      <anchor>gga113a112</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_PADDING</name>
+      <anchor>gga113a113</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_APPLICATION</name>
+      <anchor>gga113a114</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_SEEKTABLE</name>
+      <anchor>gga113a115</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_VORBIS_COMMENT</name>
+      <anchor>gga113a116</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_CUESHEET</name>
+      <anchor>gga113a117</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_PICTURE</name>
+      <anchor>gga113a118</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
+      <name>FLAC__METADATA_TYPE_UNDEFINED</name>
+      <anchor>gga113a119</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumeration">
+      <name>FLAC__StreamMetadata_Picture_Type</name>
+      <anchor>ga114</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_OTHER</name>
-      <anchor>gga110a116</anchor>
+      <anchor>gga114a120</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FILE_ICON_STANDARD</name>
-      <anchor>gga110a117</anchor>
+      <anchor>gga114a121</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FILE_ICON</name>
-      <anchor>gga110a118</anchor>
+      <anchor>gga114a122</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER</name>
-      <anchor>gga110a119</anchor>
+      <anchor>gga114a123</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_BACK_COVER</name>
-      <anchor>gga110a120</anchor>
+      <anchor>gga114a124</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEAFLET_PAGE</name>
-      <anchor>gga110a121</anchor>
+      <anchor>gga114a125</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_MEDIA</name>
-      <anchor>gga110a122</anchor>
+      <anchor>gga114a126</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEAD_ARTIST</name>
-      <anchor>gga110a123</anchor>
+      <anchor>gga114a127</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_ARTIST</name>
-      <anchor>gga110a124</anchor>
+      <anchor>gga114a128</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_CONDUCTOR</name>
-      <anchor>gga110a125</anchor>
+      <anchor>gga114a129</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_BAND</name>
-      <anchor>gga110a126</anchor>
+      <anchor>gga114a130</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_COMPOSER</name>
-      <anchor>gga110a127</anchor>
+      <anchor>gga114a131</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LYRICIST</name>
-      <anchor>gga110a128</anchor>
+      <anchor>gga114a132</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_RECORDING_LOCATION</name>
-      <anchor>gga110a129</anchor>
+      <anchor>gga114a133</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_DURING_RECORDING</name>
-      <anchor>gga110a130</anchor>
+      <anchor>gga114a134</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_DURING_PERFORMANCE</name>
-      <anchor>gga110a131</anchor>
+      <anchor>gga114a135</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_VIDEO_SCREEN_CAPTURE</name>
-      <anchor>gga110a132</anchor>
+      <anchor>gga114a136</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_FISH</name>
-      <anchor>gga110a133</anchor>
+      <anchor>gga114a137</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_ILLUSTRATION</name>
-      <anchor>gga110a134</anchor>
+      <anchor>gga114a138</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_BAND_LOGOTYPE</name>
-      <anchor>gga110a135</anchor>
+      <anchor>gga114a139</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__STREAM_METADATA_PICTURE_TYPE_PUBLISHER_LOGOTYPE</name>
-      <anchor>gga110a136</anchor>
+      <anchor>gga114a140</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_sample_rate_is_valid</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga77</anchor>
+      <anchor>ga80</anchor>
+      <arglist>(unsigned sample_rate)</arglist>
+    </member>
+    <member kind="function">
+      <type>FLAC__bool</type>
+      <name>FLAC__format_sample_rate_is_subset</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga81</anchor>
       <arglist>(unsigned sample_rate)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_vorbiscomment_entry_name_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga78</anchor>
+      <anchor>ga82</anchor>
       <arglist>(const char *name)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_vorbiscomment_entry_value_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga79</anchor>
+      <anchor>ga83</anchor>
       <arglist>(const FLAC__byte *value, unsigned length)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_vorbiscomment_entry_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga80</anchor>
+      <anchor>ga84</anchor>
       <arglist>(const FLAC__byte *entry, unsigned length)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_seektable_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga81</anchor>
+      <anchor>ga85</anchor>
       <arglist>(const FLAC__StreamMetadata_SeekTable *seek_table)</arglist>
     </member>
     <member kind="function">
       <type>unsigned</type>
       <name>FLAC__format_seektable_sort</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga82</anchor>
+      <anchor>ga86</anchor>
       <arglist>(FLAC__StreamMetadata_SeekTable *seek_table)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_cuesheet_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga83</anchor>
+      <anchor>ga87</anchor>
       <arglist>(const FLAC__StreamMetadata_CueSheet *cue_sheet, FLAC__bool check_cd_da_subset, const char **violation)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__format_picture_is_legal</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga84</anchor>
+      <anchor>ga88</anchor>
       <arglist>(const FLAC__StreamMetadata_Picture *picture, const char **violation)</arglist>
     </member>
     <member kind="variable">
@@ -4700,485 +4787,506 @@
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_RAW_LEN</name>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2_PARAMETER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga8</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_ESCAPE_PARAMETER</name>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_RAW_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga9</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__ENTROPY_CODING_METHOD_TYPE_LEN</name>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE_ESCAPE_PARAMETER</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga10</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__ENTROPY_CODING_METHOD_PARTITIONED_RICE2_ESCAPE_PARAMETER</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga11</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__ENTROPY_CODING_METHOD_TYPE_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga12</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const char *const</type>
       <name>FLAC__SubframeTypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga11</anchor>
+      <anchor>ga13</anchor>
       <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_LPC_QLP_COEFF_PRECISION_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga12</anchor>
+      <anchor>ga14</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_LPC_QLP_SHIFT_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga13</anchor>
+      <anchor>ga15</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_ZERO_PAD_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga14</anchor>
+      <anchor>ga16</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga15</anchor>
+      <anchor>ga17</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_WASTED_BITS_FLAG_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga16</anchor>
+      <anchor>ga18</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_CONSTANT_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga17</anchor>
+      <anchor>ga19</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_VERBATIM_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga18</anchor>
+      <anchor>ga20</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_FIXED_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga19</anchor>
+      <anchor>ga21</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__SUBFRAME_TYPE_LPC_BYTE_ALIGNED_MASK</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga20</anchor>
+      <anchor>ga22</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const char *const</type>
       <name>FLAC__ChannelAssignmentString</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga21</anchor>
+      <anchor>ga23</anchor>
       <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const char *const</type>
       <name>FLAC__FrameNumberTypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga22</anchor>
+      <anchor>ga24</anchor>
       <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__FRAME_HEADER_SYNC</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga23</anchor>
+      <anchor>ga25</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__FRAME_HEADER_SYNC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga24</anchor>
+      <anchor>ga26</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
       <name>FLAC__FRAME_HEADER_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga25</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_BLOCK_SIZE_LEN</name>
-      <anchorfile>group__flac__format.html</anchorfile>
-      <anchor>ga26</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_SAMPLE_RATE_LEN</name>
-      <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga27</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_CHANNEL_ASSIGNMENT_LEN</name>
+      <name>FLAC__FRAME_HEADER_BLOCKING_STRATEGY_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga28</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_BITS_PER_SAMPLE_LEN</name>
+      <name>FLAC__FRAME_HEADER_BLOCK_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga29</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_ZERO_PAD_LEN</name>
+      <name>FLAC__FRAME_HEADER_SAMPLE_RATE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga30</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_HEADER_CRC_LEN</name>
+      <name>FLAC__FRAME_HEADER_CHANNEL_ASSIGNMENT_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga31</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__FRAME_FOOTER_CRC_LEN</name>
+      <name>FLAC__FRAME_HEADER_BITS_PER_SAMPLE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga32</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const char *const</type>
-      <name>FLAC__MetadataTypeString</name>
+      <type>const unsigned</type>
+      <name>FLAC__FRAME_HEADER_ZERO_PAD_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga33</anchor>
-      <arglist>[]</arglist>
+      <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_BLOCK_SIZE_LEN</name>
+      <name>FLAC__FRAME_HEADER_CRC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga34</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_BLOCK_SIZE_LEN</name>
+      <name>FLAC__FRAME_FOOTER_CRC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga35</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_FRAME_SIZE_LEN</name>
+      <type>const char *const</type>
+      <name>FLAC__MetadataTypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga36</anchor>
-      <arglist></arglist>
+      <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_FRAME_SIZE_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_BLOCK_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga37</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_SAMPLE_RATE_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_BLOCK_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga38</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_CHANNELS_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MIN_FRAME_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga39</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_BITS_PER_SAMPLE_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MAX_FRAME_SIZE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga40</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_TOTAL_SAMPLES_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_SAMPLE_RATE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga41</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_STREAMINFO_MD5SUM_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_CHANNELS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga42</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_APPLICATION_ID_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_BITS_PER_SAMPLE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga43</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_SAMPLE_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_TOTAL_SAMPLES_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga44</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_STREAM_OFFSET_LEN</name>
+      <name>FLAC__STREAM_METADATA_STREAMINFO_MD5SUM_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga45</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_FRAME_SAMPLES_LEN</name>
+      <name>FLAC__STREAM_METADATA_APPLICATION_ID_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga46</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const FLAC__uint64</type>
-      <name>FLAC__STREAM_METADATA_SEEKPOINT_PLACEHOLDER</name>
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_SAMPLE_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga47</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_ENTRY_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_STREAM_OFFSET_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga48</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_NUM_COMMENTS_LEN</name>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_FRAME_SAMPLES_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga49</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_OFFSET_LEN</name>
+      <type>const FLAC__uint64</type>
+      <name>FLAC__STREAM_METADATA_SEEKPOINT_PLACEHOLDER</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga50</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_ENTRY_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga51</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_RESERVED_LEN</name>
+      <name>FLAC__STREAM_METADATA_VORBIS_COMMENT_NUM_COMMENTS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga52</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_OFFSET_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_OFFSET_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga53</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga54</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_ISRC_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_INDEX_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga55</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_TYPE_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_OFFSET_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga56</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_PRE_EMPHASIS_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga57</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_RESERVED_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_ISRC_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga58</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUM_INDICES_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_TYPE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga59</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_MEDIA_CATALOG_NUMBER_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_PRE_EMPHASIS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga60</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_LEAD_IN_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga61</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_IS_CD_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_TRACK_NUM_INDICES_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga62</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_RESERVED_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_MEDIA_CATALOG_NUMBER_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga63</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_CUESHEET_NUM_TRACKS_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_LEAD_IN_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga64</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const char *const</type>
-      <name>FLAC__StreamMetadata_Picture_TypeString</name>
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_CUESHEET_IS_CD_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga65</anchor>
-      <arglist>[]</arglist>
+      <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_RESERVED_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga66</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_MIME_TYPE_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_CUESHEET_NUM_TRACKS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga67</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
-      <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_DESCRIPTION_LENGTH_LEN</name>
+      <type>const char *const</type>
+      <name>FLAC__StreamMetadata_Picture_TypeString</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga68</anchor>
-      <arglist></arglist>
+      <arglist>[]</arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_WIDTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_TYPE_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga69</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_HEIGHT_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_MIME_TYPE_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga70</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_DEPTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_DESCRIPTION_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga71</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_COLORS_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_WIDTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga72</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_PICTURE_DATA_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_HEIGHT_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga73</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_IS_LAST_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_DEPTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga74</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_TYPE_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_COLORS_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga75</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>const unsigned</type>
-      <name>FLAC__STREAM_METADATA_LENGTH_LEN</name>
+      <name>FLAC__STREAM_METADATA_PICTURE_DATA_LENGTH_LEN</name>
       <anchorfile>group__flac__format.html</anchorfile>
       <anchor>ga76</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_IS_LAST_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga77</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_TYPE_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga78</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>const unsigned</type>
+      <name>FLAC__STREAM_METADATA_LENGTH_LEN</name>
+      <anchorfile>group__flac__format.html</anchorfile>
+      <anchor>ga79</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -7253,6 +7361,7 @@
     <filename>group__flacpp.html</filename>
     <subgroup>flacpp_decoder</subgroup>
     <subgroup>flacpp_encoder</subgroup>
+    <subgroup>flacpp_export</subgroup>
     <subgroup>flacpp_metadata</subgroup>
   </compound>
   <compound kind="group">
@@ -7268,6 +7377,39 @@
     <filename>group__flacpp__encoder.html</filename>
     <class kind="class">FLAC::Encoder::Stream</class>
     <class kind="class">FLAC::Encoder::File</class>
+  </compound>
+  <compound kind="group">
+    <name>flacpp_export</name>
+    <title>FLAC++/export.h: export symbols</title>
+    <filename>group__flacpp__export.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API_VERSION_CURRENT</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga1</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API_VERSION_REVISION</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga2</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="define">
+      <type>#define</type>
+      <name>FLACPP_API_VERSION_AGE</name>
+      <anchorfile>group__flacpp__export.html</anchorfile>
+      <anchor>ga3</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="group">
     <name>flacpp_metadata</name>
@@ -7424,7 +7566,7 @@
   </compound>
   <compound kind="dir">
     <name>include/FLAC/</name>
-    <path>/home/jcoalson/flac/build/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
     <filename>dir_000002.html</filename>
     <file>all.h</file>
     <file>assert.h</file>
@@ -7438,7 +7580,7 @@
   </compound>
   <compound kind="dir">
     <name>include/FLAC++/</name>
-    <path>/home/jcoalson/flac/build/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
     <filename>dir_000001.html</filename>
     <file>all.h</file>
     <file>decoder.h</file>
@@ -7448,7 +7590,7 @@
   </compound>
   <compound kind="dir">
     <name>include/</name>
-    <path>/home/jcoalson/flac/build/include/</path>
+    <path>/home/jcoalson/flac/build-1.2.0/include/</path>
     <filename>dir_000000.html</filename>
     <dir>include/FLAC/</dir>
     <dir>include/FLAC++/</dir>
@@ -7582,74 +7724,81 @@
       <anchor>FLAC_1_1Decoder_1_1Streama19</anchor>
       <arglist>() const </arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual bool</type>
+      <name>get_decode_position</name>
+      <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
+      <anchor>FLAC_1_1Decoder_1_1Streama20</anchor>
+      <arglist>(FLAC__uint64 *position) const </arglist>
+    </member>
     <member kind="function">
       <type>virtual ::FLAC__StreamDecoderInitStatus</type>
       <name>init</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama20</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama21</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual ::FLAC__StreamDecoderInitStatus</type>
       <name>init_ogg</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama21</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama22</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>finish</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama22</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama23</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>flush</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama23</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama24</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>reset</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama24</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama25</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>process_single</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama25</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama26</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>process_until_end_of_metadata</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama26</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama27</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>process_until_end_of_stream</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama27</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama28</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>skip_single_frame</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama28</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama29</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>seek_absolute</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama29</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama30</anchor>
       <arglist>(FLAC__uint64 sample)</arglist>
     </member>
     <member kind="function" protection="protected" virtualness="pure">
@@ -7984,74 +8133,81 @@
       <anchor>FLAC_1_1Decoder_1_1Streama19</anchor>
       <arglist>() const </arglist>
     </member>
+    <member kind="function" virtualness="virtual">
+      <type>virtual bool</type>
+      <name>get_decode_position</name>
+      <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
+      <anchor>FLAC_1_1Decoder_1_1Streama20</anchor>
+      <arglist>(FLAC__uint64 *position) const </arglist>
+    </member>
     <member kind="function">
       <type>virtual ::FLAC__StreamDecoderInitStatus</type>
       <name>init</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama20</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama21</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual ::FLAC__StreamDecoderInitStatus</type>
       <name>init_ogg</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama21</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama22</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>finish</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama22</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama23</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>flush</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama23</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama24</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>reset</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama24</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama25</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>process_single</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama25</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama26</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>process_until_end_of_metadata</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama26</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama27</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>process_until_end_of_stream</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama27</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama28</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>skip_single_frame</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama28</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama29</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>seek_absolute</name>
       <anchorfile>classFLAC_1_1Decoder_1_1Stream.html</anchorfile>
-      <anchor>FLAC_1_1Decoder_1_1Streama29</anchor>
+      <anchor>FLAC_1_1Decoder_1_1Streama30</anchor>
       <arglist>(FLAC__uint64 sample)</arglist>
     </member>
     <member kind="function" protection="protected">

@@ -113,6 +113,9 @@
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME ""
 
+/* The size of a `void*', as computed by sizeof. */
+#define SIZEOF_VOIDP 4
+
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
@@ -120,7 +123,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "1.1.4"
+#define VERSION "1.2.0"
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */

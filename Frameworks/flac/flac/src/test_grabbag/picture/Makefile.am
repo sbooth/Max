@@ -1,4 +1,4 @@
-#  test_picture - Simple tester for cuesheet routines in grabbag
+#  test_picture - Simple tester for picture routines in grabbag
 #  Copyright (C) 2006,2007  Josh Coalson
 #
 #  This program is free software; you can redistribute it and/or
@@ -17,7 +17,8 @@
 
 EXTRA_DIST = \
 	Makefile.lite \
-	test_picture.dsp
+	test_picture.dsp \
+	test_picture.vcproj
 
 noinst_PROGRAMS = test_picture
 test_picture_SOURCES = \

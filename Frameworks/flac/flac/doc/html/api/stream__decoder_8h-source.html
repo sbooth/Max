@@ -42,7 +42,7 @@
 00033 <span class="preprocessor"></span><span class="preprocessor">#define FLAC__STREAM_DECODER_H</span>
 00034 <span class="preprocessor"></span>
 00035 <span class="preprocessor">#include &lt;stdio.h&gt;</span> <span class="comment">/* for FILE */</span>
-00036 <span class="preprocessor">#include "export.h"</span>
+00036 <span class="preprocessor">#include "<a class="code" href="export_8h.html">export.h</a>"</span>
 00037 <span class="preprocessor">#include "<a class="code" href="format_8h.html">format.h</a>"</span>
 00038 
 00039 <span class="preprocessor">#ifdef __cplusplus</span>
@@ -191,13 +191,13 @@
 00776 
 00797 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga19">FLAC__stream_decoder_set_md5_checking</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, FLAC__bool value);
 00798 
-00811 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga20">FLAC__stream_decoder_set_metadata_respond</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <a class="code" href="group__flac__format.html#ga109">FLAC__MetadataType</a> type);
+00811 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga20">FLAC__stream_decoder_set_metadata_respond</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <a class="code" href="group__flac__format.html#ga113">FLAC__MetadataType</a> type);
 00812 
 00826 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga21">FLAC__stream_decoder_set_metadata_respond_application</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keyword">const</span> FLAC__byte <span class="keywordtype">id</span>[4]);
 00827 
 00838 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga22">FLAC__stream_decoder_set_metadata_respond_all</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder);
 00839 
-00852 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga23">FLAC__stream_decoder_set_metadata_ignore</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <a class="code" href="group__flac__format.html#ga109">FLAC__MetadataType</a> type);
+00852 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga23">FLAC__stream_decoder_set_metadata_ignore</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <a class="code" href="group__flac__format.html#ga113">FLAC__MetadataType</a> type);
 00853 
 00867 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__decoder.html#ga24">FLAC__stream_decoder_set_metadata_ignore_application</a>(<a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder, <span class="keyword">const</span> FLAC__byte <span class="keywordtype">id</span>[4]);
 00868 
@@ -213,7 +213,7 @@
 00926 
 00937 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__decoder.html#ga30">FLAC__stream_decoder_get_channels</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder);
 00938 
-00949 FLAC_API <a class="code" href="group__flac__format.html#ga107">FLAC__ChannelAssignment</a> <a class="code" href="group__flac__stream__decoder.html#ga31">FLAC__stream_decoder_get_channel_assignment</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder);
+00949 FLAC_API <a class="code" href="group__flac__format.html#ga111">FLAC__ChannelAssignment</a> <a class="code" href="group__flac__stream__decoder.html#ga31">FLAC__stream_decoder_get_channel_assignment</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder);
 00950 
 00961 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__decoder.html#ga32">FLAC__stream_decoder_get_bits_per_sample</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamDecoder.html">FLAC__StreamDecoder</a> *decoder);
 00962 

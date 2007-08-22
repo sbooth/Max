@@ -37,7 +37,9 @@ STRIP_NON_ASM = sh $(top_srcdir)/strip_non_asm_libtool_args.sh
 
 noinst_LTLIBRARIES = libFLAC-asm.la
 libFLAC_asm_la_SOURCES = \
+	bitreader_asm.nasm \
 	cpu_asm.nasm \
 	fixed_asm.nasm \
 	lpc_asm.nasm \
-	nasm.h
+	nasm.h \
+	stream_encoder_asm.nasm
