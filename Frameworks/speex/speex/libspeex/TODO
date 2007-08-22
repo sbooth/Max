@@ -1,0 +1,31 @@
+get()
+- interpolate if really necessary
+
+adjust()
+- if drop   -> need to get() again
+- if interp -> need to skip the next get()? (or just remember for next time)
+
+double-check potential overflows (make explicit run-time checks?)
+explicit checks to make sure we *never* divide by zero or have infinite loops
+Reset AEC if really gone bad
+MCRA update only when st->ps isn't too high?
+Verify that the PSHR operators don't cause overflows on intermediate results.
+
+enforce limit on: 
+- st->ps, st->noise, ...
+
+*use the sign-bit counter on Blackfin (for log2 and sqrt)
+*optimise MIN/MAX on Blackfin (or let the compiler do it?)
+Use ASHIFT on Blackfin
+
+-> What did it mean?
+increase resolution on st->ps ???
+increase resolution on st->old_ps ?
+look into the details of tot_noise (why again?)
+fix the PSHR stuff properly (done?)
+
+Future work:
+Implement IMCRA
+Fix AGC, VAD
+use min(aec_input, aec_output) as preprocessor input?
+gain floor average in the amplitude domain?

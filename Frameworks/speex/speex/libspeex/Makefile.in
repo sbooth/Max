@@ -46,7 +46,7 @@ noinst_PROGRAMS = testenc$(EXEEXT) testenc_wb$(EXEEXT) \
 	testenc_uwb$(EXEEXT) testdenoise$(EXEEXT) testecho$(EXEEXT)
 subdir = libspeex
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in
+	$(srcdir)/Makefile.in TODO
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.ac
@@ -68,24 +68,24 @@ am_libspeex_la_OBJECTS = nb_celp.lo sb_celp.lo lpc.lo ltp.lo lsp.lo \
 	misc.lo speex_header.lo speex_callbacks.lo math_approx.lo \
 	stereo.lo preprocess.lo smallft.lo lbr_48k_tables.lo jitter.lo \
 	mdf.lo vorbis_psy.lo fftwrap.lo kiss_fft.lo kiss_fftr.lo \
-	window.lo
+	window.lo filterbank.lo resample.lo
 libspeex_la_OBJECTS = $(am_libspeex_la_OBJECTS)
 PROGRAMS = $(noinst_PROGRAMS)
 am_testdenoise_OBJECTS = testdenoise.$(OBJEXT)
 testdenoise_OBJECTS = $(am_testdenoise_OBJECTS)
-testdenoise_DEPENDENCIES = $(top_builddir)/libspeex/libspeex.la
+testdenoise_DEPENDENCIES = libspeex.la
 am_testecho_OBJECTS = testecho.$(OBJEXT)
 testecho_OBJECTS = $(am_testecho_OBJECTS)
-testecho_DEPENDENCIES = $(top_builddir)/libspeex/libspeex.la
+testecho_DEPENDENCIES = libspeex.la
 am_testenc_OBJECTS = testenc.$(OBJEXT)
 testenc_OBJECTS = $(am_testenc_OBJECTS)
-testenc_DEPENDENCIES = $(top_builddir)/libspeex/libspeex.la
+testenc_DEPENDENCIES = libspeex.la
 am_testenc_uwb_OBJECTS = testenc_uwb.$(OBJEXT)
 testenc_uwb_OBJECTS = $(am_testenc_uwb_OBJECTS)
-testenc_uwb_DEPENDENCIES = $(top_builddir)/libspeex/libspeex.la
+testenc_uwb_DEPENDENCIES = libspeex.la
 am_testenc_wb_OBJECTS = testenc_wb.$(OBJEXT)
 testenc_wb_OBJECTS = $(am_testenc_wb_OBJECTS)
-testenc_wb_DEPENDENCIES = $(top_builddir)/libspeex/libspeex.la
+testenc_wb_DEPENDENCIES = libspeex.la
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -96,8 +96,8 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/exc_5_256_table.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/exc_5_64_table.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/exc_8_128_table.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/fftwrap.Plo ./$(DEPDIR)/filters.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/gain_table.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/fftwrap.Plo ./$(DEPDIR)/filterbank.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/filters.Plo ./$(DEPDIR)/gain_table.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/gain_table_lbr.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/hexc_10_32_table.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/hexc_table.Plo \
@@ -110,8 +110,9 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/mdf.Plo ./$(DEPDIR)/misc.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/modes.Plo ./$(DEPDIR)/nb_celp.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/preprocess.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/quant_lsp.Plo ./$(DEPDIR)/sb_celp.Plo \
-@AMDEP_TRUE@	./$(DEPDIR)/smallft.Plo ./$(DEPDIR)/speex.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/quant_lsp.Plo ./$(DEPDIR)/resample.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/sb_celp.Plo ./$(DEPDIR)/smallft.Plo \
+@AMDEP_TRUE@	./$(DEPDIR)/speex.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/speex_callbacks.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/speex_header.Plo \
 @AMDEP_TRUE@	./$(DEPDIR)/stereo.Plo ./$(DEPDIR)/testdenoise.Po \
@@ -167,6 +168,7 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+GREP = @GREP@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -202,12 +204,9 @@ SPEEX_LT_REVISION = @SPEEX_LT_REVISION@
 SPEEX_VERSION = @SPEEX_VERSION@
 STRIP = @STRIP@
 VERSION = @VERSION@
-ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
-ac_ct_RANLIB = @ac_ct_RANLIB@
-ac_ct_STRIP = @ac_ct_STRIP@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
@@ -222,29 +221,36 @@ build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
 datadir = @datadir@
+datarootdir = @datarootdir@
+docdir = @docdir@
+dvidir = @dvidir@
 exec_prefix = @exec_prefix@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
 host_os = @host_os@
 host_vendor = @host_vendor@
+htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
+localedir = @localedir@
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
+pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
+psdir = @psdir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 src = @src@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-EXTRA_DIST = testenc.c testenc_wb.c testenc_uwb.c testdenoise.c testecho.c
+EXTRA_DIST = echo_diagnostic.m
 INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_builddir) @OGG_CFLAGS@
 lib_LTLIBRARIES = libspeex.la
 
@@ -256,7 +262,7 @@ libspeex_la_SOURCES = nb_celp.c 	sb_celp.c 	lpc.c 	ltp.c 	lsp.c 	quant_lsp.c \
 				exc_10_16_table.c 	exc_20_32_table.c 	hexc_10_32_table.c 	misc.c 	speex_header.c \
 				speex_callbacks.c 	math_approx.c 	stereo.c 	preprocess.c 	smallft.c 	lbr_48k_tables.c \
 				jitter.c 	mdf.c vorbis_psy.c fftwrap.c kiss_fft.c _kiss_fft_guts.h kiss_fft.h \
-	kiss_fftr.c kiss_fftr.h window.c
+	kiss_fftr.c kiss_fftr.h window.c filterbank.c resample.c
 
 noinst_HEADERS = lsp.h 	nb_celp.h 	lpc.h 	lpc_bfin.h 	ltp.h 	quant_lsp.h \
 				cb_search.h 	filters.h 	stack_alloc.h 	vq.h 	vq_sse.h 	vq_arm4.h 	vq_bfin.h \
@@ -264,19 +270,19 @@ noinst_HEADERS = lsp.h 	nb_celp.h 	lpc.h 	lpc_bfin.h 	ltp.h 	quant_lsp.h \
 				ltp_bfin.h 	filters_sse.h 	filters_arm4.h 	filters_bfin.h 	math_approx.h \
 				smallft.h 	arch.h 	fixed_arm4.h 	fixed_arm5e.h 	fixed_bfin.h 	fixed_debug.h \
 				fixed_generic.h 	cb_search_sse.h 	cb_search_arm4.h 	cb_search_bfin.h vorbis_psy.h \
-		fftwrap.h pseudofloat.h lsp_bfin.h quant_lsp_bfin.h
+		fftwrap.h pseudofloat.h lsp_bfin.h quant_lsp_bfin.h filterbank.h
 
 libspeex_la_LDFLAGS = -no-undefined -version-info @SPEEX_LT_CURRENT@:@SPEEX_LT_REVISION@:@SPEEX_LT_AGE@
 testenc_SOURCES = testenc.c
-testenc_LDADD = $(top_builddir)/libspeex/libspeex.la
+testenc_LDADD = libspeex.la
 testenc_wb_SOURCES = testenc_wb.c
-testenc_wb_LDADD = $(top_builddir)/libspeex/libspeex.la
+testenc_wb_LDADD = libspeex.la
 testenc_uwb_SOURCES = testenc_uwb.c
-testenc_uwb_LDADD = $(top_builddir)/libspeex/libspeex.la
+testenc_uwb_LDADD = libspeex.la
 testdenoise_SOURCES = testdenoise.c
-testdenoise_LDADD = $(top_builddir)/libspeex/libspeex.la
+testdenoise_LDADD = libspeex.la
 testecho_SOURCES = testecho.c
-testecho_LDADD = $(top_builddir)/libspeex/libspeex.la
+testecho_LDADD = libspeex.la
 all: all-am
 
 .SUFFIXES:
@@ -377,6 +383,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exc_5_64_table.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exc_8_128_table.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fftwrap.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filterbank.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/filters.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gain_table.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gain_table_lbr.Plo@am__quote@
@@ -398,6 +405,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/nb_celp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/preprocess.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/quant_lsp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resample.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sb_celp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/smallft.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speex.Plo@am__quote@

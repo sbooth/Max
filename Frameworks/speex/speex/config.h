@@ -1,147 +1,150 @@
+/* config.h.  Generated from config.h.in by configure.  */
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Make use of ARM4 assembly optimizations */
-#undef ARM4_ASM
+/* #undef ARM4_ASM */
 
 /* Make use of ARM5E assembly optimizations */
-#undef ARM5E_ASM
+/* #undef ARM5E_ASM */
 
 /* Make use of Blackfin assembly optimizations */
-#undef BFIN_ASM
+/* #undef BFIN_ASM */
 
 /* Disable wideband codec */
-#undef DISABLE_WIDEBAND
+/* #undef DISABLE_WIDEBAND */
 
 /* Enable valgrind extra checks */
-#undef ENABLE_VALGRIND
+/* #undef ENABLE_VALGRIND */
 
 /* Enable support for Epic 4.8 kbps mode */
-#undef EPIC_48K
+/* #undef EPIC_48K */
 
 /* Debug fixed-point implementation */
-#undef FIXED_DEBUG
+/* #undef FIXED_DEBUG */
 
 /* Compile as fixed-point */
-#undef FIXED_POINT
+/* #undef FIXED_POINT */
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#undef HAVE_DLFCN_H
+#define HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the `getopt_long' function. */
-#undef HAVE_GETOPT_LONG
+#define HAVE_GETOPT_LONG 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-#undef HAVE_INTTYPES_H
+#define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `m' library (-lm). */
-#undef HAVE_LIBM
+#define HAVE_LIBM 1
 
 /* Define to 1 if you have the `winmm' library (-lwinmm). */
-#undef HAVE_LIBWINMM
+/* #undef HAVE_LIBWINMM */
 
 /* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
+#define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
-#undef HAVE_STDINT_H
+#define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-#undef HAVE_STDLIB_H
+#define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#undef HAVE_STRINGS_H
+#define HAVE_STRINGS_H 1
 
 /* Define to 1 if you have the <string.h> header file. */
-#undef HAVE_STRING_H
+#define HAVE_STRING_H 1
 
 /* Define to 1 if you have the <sys/audioio.h> header file. */
-#undef HAVE_SYS_AUDIOIO_H
+/* #undef HAVE_SYS_AUDIOIO_H */
 
 /* Define to 1 if you have the <sys/soundcard.h> header file. */
-#undef HAVE_SYS_SOUNDCARD_H
+/* #undef HAVE_SYS_SOUNDCARD_H */
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-#undef HAVE_SYS_STAT_H
+#define HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-#undef HAVE_SYS_TYPES_H
+#define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#undef HAVE_UNISTD_H
+#define HAVE_UNISTD_H 1
 
 /* Define to the address where bug reports for this package should be sent. */
-#undef PACKAGE_BUGREPORT
+#define PACKAGE_BUGREPORT ""
 
 /* Define to the full name of this package. */
-#undef PACKAGE_NAME
+#define PACKAGE_NAME ""
 
 /* Define to the full name and version of this package. */
-#undef PACKAGE_STRING
+#define PACKAGE_STRING ""
 
 /* Define to the one symbol short name of this package. */
-#undef PACKAGE_TARNAME
+#define PACKAGE_TARNAME ""
 
 /* Define to the version of this package. */
-#undef PACKAGE_VERSION
+#define PACKAGE_VERSION ""
 
 /* Reduce precision to 16 bits (EXPERIMENTAL) */
-#undef PRECISION16
+/* #undef PRECISION16 */
 
 /* The size of `int', as computed by sizeof. */
-#undef SIZEOF_INT
+#define SIZEOF_INT 4
 
 /* The size of `long', as computed by sizeof. */
-#undef SIZEOF_LONG
+#define SIZEOF_LONG 4
 
 /* The size of `short', as computed by sizeof. */
-#undef SIZEOF_SHORT
+#define SIZEOF_SHORT 2
 
 /* Version extra */
-#undef SPEEX_EXTRA_VERSION
+#define SPEEX_EXTRA_VERSION "-svn"
 
 /* Version major */
-#undef SPEEX_MAJOR_VERSION
+#define SPEEX_MAJOR_VERSION 1
 
 /* Version micro */
-#undef SPEEX_MICRO_VERSION
+#define SPEEX_MICRO_VERSION 14
 
 /* Version minor */
-#undef SPEEX_MINOR_VERSION
+#define SPEEX_MINOR_VERSION 1
 
 /* Complete version string */
-#undef SPEEX_VERSION
+#define SPEEX_VERSION "1.2beta2"
 
 /* Define to 1 if you have the ANSI C header files. */
-#undef STDC_HEADERS
+#define STDC_HEADERS 1
 
 /* Enable support for TI C55X DSP */
-#undef TI_C55X
+/* #undef TI_C55X */
 
 /* Make use of alloca */
-#undef USE_ALLOCA
+/* #undef USE_ALLOCA */
 
 /* Use C99 variable-size arrays */
-#undef VAR_ARRAYS
+#define VAR_ARRAYS 
 
 /* Enable Vorbis-style psychoacoustics (EXPERIMENTAL) */
-#undef VORBIS_PSYCHO
+/* #undef VORBIS_PSYCHO */
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
-#undef WORDS_BIGENDIAN
+#if __BIG_ENDIAN__
+#define WORDS_BIGENDIAN 1
+#endif
 
 /* Enable SSE support */
-#undef _USE_SSE
+/* #undef _USE_SSE */
 
 /* Define to empty if `const' does not conform to ANSI C. */
-#undef const
+/* #undef const */
 
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
-#undef inline
+/* #undef inline */
 #endif
 
 /* Define to equivalent of C99 restrict keyword, or to nothing if this is not
    supported. Do not define if restrict is supported directly. */
-#undef restrict
+#define restrict __restrict
