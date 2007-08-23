@@ -56,6 +56,10 @@
 		8CEA0B770AC79F21009E46CB /* speex_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA0B6E0AC79F21009E46CB /* speex_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA0B780AC79F21009E46CB /* speex.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEA0B6F0AC79F21009E46CB /* speex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CEA0B7F0AC79FDD009E46CB /* vbr.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CEA0B300AC79EF6009E46CB /* vbr.c */; };
+		8CF0D4190C7CD92400728E39 /* filterbank.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0D4160C7CD92400728E39 /* filterbank.c */; };
+		8CF0D41A0C7CD92400728E39 /* resample.c in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0D4170C7CD92400728E39 /* resample.c */; };
+		8CF0D41C0C7CD95D00728E39 /* speex_resampler.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CF0D41B0C7CD95D00728E39 /* speex_resampler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CF0D4410C7CDA8B00728E39 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CF0D4400C7CDA8B00728E39 /* config.h */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -119,6 +123,11 @@
 		8CEA0B6D0AC79F21009E46CB /* speex_stereo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = speex_stereo.h; path = speex/include/speex/speex_stereo.h; sourceTree = "<group>"; };
 		8CEA0B6E0AC79F21009E46CB /* speex_types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = speex_types.h; path = speex/include/speex/speex_types.h; sourceTree = "<group>"; };
 		8CEA0B6F0AC79F21009E46CB /* speex.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = speex.h; path = speex/include/speex/speex.h; sourceTree = "<group>"; };
+		8CF0D4150C7CD92400728E39 /* echo_diagnostic.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = echo_diagnostic.m; path = speex/libspeex/echo_diagnostic.m; sourceTree = "<group>"; };
+		8CF0D4160C7CD92400728E39 /* filterbank.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = filterbank.c; path = speex/libspeex/filterbank.c; sourceTree = "<group>"; };
+		8CF0D4170C7CD92400728E39 /* resample.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = resample.c; path = speex/libspeex/resample.c; sourceTree = "<group>"; };
+		8CF0D41B0C7CD95D00728E39 /* speex_resampler.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = speex_resampler.h; path = speex/include/speex/speex_resampler.h; sourceTree = "<group>"; };
+		8CF0D4400C7CDA8B00728E39 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = config.h; path = speex/config.h; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* speex.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = speex.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -176,6 +185,11 @@
 		08FB77AEFE84172EC02AAC07 /* speex */ = {
 			isa = PBXGroup;
 			children = (
+				8CF0D4400C7CDA8B00728E39 /* config.h */,
+				8CF0D41B0C7CD95D00728E39 /* speex_resampler.h */,
+				8CF0D4150C7CD92400728E39 /* echo_diagnostic.m */,
+				8CF0D4160C7CD92400728E39 /* filterbank.c */,
+				8CF0D4170C7CD92400728E39 /* resample.c */,
 				8CEA0B670AC79F21009E46CB /* speex_bits.h */,
 				8CEA0B680AC79F21009E46CB /* speex_callbacks.h */,
 				8CEA0B690AC79F21009E46CB /* speex_echo.h */,
@@ -276,6 +290,8 @@
 				8CEA0B760AC79F21009E46CB /* speex_stereo.h in Headers */,
 				8CEA0B770AC79F21009E46CB /* speex_types.h in Headers */,
 				8CEA0B780AC79F21009E46CB /* speex.h in Headers */,
+				8CF0D41C0C7CD95D00728E39 /* speex_resampler.h in Headers */,
+				8CF0D4410C7CDA8B00728E39 /* config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,6 +389,8 @@
 				8CEA0B5F0AC79EF6009E46CB /* vq.c in Sources */,
 				8CEA0B600AC79EF6009E46CB /* window.c in Sources */,
 				8CEA0B7F0AC79FDD009E46CB /* vbr.c in Sources */,
+				8CF0D4190C7CD92400728E39 /* filterbank.c in Sources */,
+				8CF0D41A0C7CD92400728E39 /* resample.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +423,7 @@
 				GCC_PREFIX_HEADER = speex_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__MACOSX__,
-					"WORDS_BIGENDIAN=BIG_ENDIAN",
+					HAVE_CONFIG_H,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
@@ -432,7 +450,7 @@
 				GCC_PREFIX_HEADER = speex_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__MACOSX__,
-					"WORDS_BIGENDIAN=BIG_ENDIAN",
+					HAVE_CONFIG_H,
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
