@@ -1,0 +1,115 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(lib/mainprint.cpp)
+AM_CONFIG_HEADER(config.h)
+VERSION="0.9.3"
+AM_INIT_AUTOMAKE(libofa, "$VERSION")
+
+AM_MAINTAINER_MODE
+
+dnl Canonicalize host.
+AC_CANONICAL_HOST
+case "${host_cpu}-${host_os}" in
+  *-beos*)    os=beos; LIBS='-lbe -lroot' ;;
+  *-cygwin*)  os=cygwin ;;
+  *-freebsd*) os=freebsd ;;
+  *-darwin*)  os=darwin ;;
+  *-linux*)   os=linux ;;
+  *-netbsd*)  os=netbsd ;;
+  *-openbsd*) os=openbsd ;;
+  *-os2_emx*) os=os2 ;;
+  *-solaris*) os=solaris; LIBS='-lsocket -lnsl' ;;
+  *-qnx*)     os=qnx; LIBS='-lsocket' ;;
+  *)          AC_MSG_RESULT([WARNING: unknown system]) ;;
+esac
+AM_CONDITIONAL(DARWIN, test x$os = xdarwin)
+AM_CONDITIONAL(FREEBSD, test x$os = xfreebsd)
+
+dnl Checks for programs.
+AC_PREREQ(2.52)
+AC_PROG_AWK
+AC_PROG_CC
+AC_LIBLTDL_CONVENIENCE
+AM_PROG_LIBTOOL
+AC_SUBST(LIBTOOL_DEPS)  
+AC_PROG_CXX
+AC_PROG_INSTALL
+PREFIX="${prefix}"
+AC_SUBST(PREFIX)
+AC_C_BIGENDIAN
+AC_CHECK_SIZEOF(long)
+
+if test "$GCC" = yes; then
+  dnlCFLAGS="$CFLAGS -Wall -O2"
+  CFLAGS="$CFLAGS -Wall -g"
+fi
+if test "$GXX" = yes; then
+  CXXFLAGS="$CXXFLAGS -Wall -g"
+fi
+
+dnl Checks for libraries.
+
+dnl libexpat check
+AC_CHECK_LIB(expat, XML_ExpatVersion,
+	[EXPAT_LIBS="-lexpat"], [
+	echo "*"
+	echo "*  expat is needed to build this library. It is either not"
+	echo "*  installed on your system or it is too old."
+	echo "*  Please download it from http://expat.sourceforge.net."
+	echo "*"
+	AC_MSG_ERROR("Cannot build. Stop.")], -lexpat)
+AC_SUBST(EXPAT_LIBS)
+
+dnl libcurl check
+AC_CHECK_LIB(curl, curl_global_init,
+	[CURL_LIBS="-lcurl"], [
+	echo "*"
+	echo "*  libcurl is needed to build this library. It is either not"
+	echo "*  installed on your system or it is too old."
+	echo "*  Please download it http://curl.haxx.se/"
+	echo "*"
+	AC_MSG_ERROR("Cannot build. Stop.")], -lcurl)
+AC_SUBST(CURL_LIBS)
+
+dnl Support libfftw2 and vSDP and MKL (intel)
+dnl  FFTW for FFTW v2. FFTW3 for FFTW v3. VDSP for vDSP. MKL for MKL
+dnl TODO: PREANSI for win32
+
+if test x$os = xdarwin; then
+    AC_MSG_NOTICE([Using vDSP on OS X])
+    LIBS="$LIBS -framework Accelerate"
+    FFT_WRAPPER="fftlibvdsp_op.cpp"
+    AM_CONDITIONAL(FFTW3, false)
+    AM_CONDITIONAL(VDSP, true)
+    AC_DEFINE_UNQUOTED(VDSP, 1, Use vDSP)
+else
+    AC_MSG_NOTICE([Using libfftw3])
+    AC_CHECK_LIB(fftw3, fftw_malloc,
+            [
+             LIBS="$LIBS -lfftw3"
+             FFT_WRAPPER="fftlibw3_op.cpp"
+             AM_CONDITIONAL(FFTW3, true)
+             AM_CONDITIONAL(VDSP, false)
+             AC_DEFINE_UNQUOTED(FFTW3, 1, Use libfftw3)
+            ], [
+            echo "*"
+            echo "*  libfft3 is needed to build this library."
+            echo "*"
+            AC_MSG_ERROR("Cannot build. Stop.")])
+fi
+
+AC_SUBST(FFT_WRAPPER)
+
+dnl Checks for header files.
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_SUBST(CFLAGS)
+AC_OUTPUT([
+Makefile 
+include/Makefile 
+include/ofa1/Makefile 
+lib/Makefile 
+lib/JAMA/Makefile 
+lib/AFLIB/Makefile 
+examples/Makefile 
+libofa.pc], 
+echo timestamp > stamp-h)

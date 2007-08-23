@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libofa
+Description: The Open Fingerprint Architecture Library
+URL: http://www.musicdns.org/
+Version: @VERSION@
+Requires: fftw3
+Libs: -L${libdir} -lofa -lexpat -lm
+Cflags: -I${includedir}

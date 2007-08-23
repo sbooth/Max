@@ -1,0 +1,33 @@
+README for the Open Fingerprint Architecture library "LIBOFA"
+Copyright (C) 2006, MusicIP Corporation
+605 E. Huntington Dr. Suite 201, Monrovia CA 91016 USA
+Ph +1-626-359-9702  Fax +1-626-359-9827
+
+This program is available as either free software or open source
+software.  You can redistribute it and/or modify it under the terms of
+the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, OR under the terms of the
+Adaptive Public License, as published by the Open Source Initiative
+(OSI).
+
+You must choose one or the other. 
+Your redistribution of any applications or code will be bound by the
+terms of conditions of the license you choose.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+***INFORMAL NOTICES***
+The APL license requires "modest attribution."  If you choose this
+license, any programs using this library (or derivative works from
+this library as defined by the APL) must display the
+connected_by_musicIP graphic during execution. If the graphic file has
+not been included in the source code files you received, it can be
+found at
+
+http://www.musicip.com/connected_by_musicip.png    or
+http://www.musicip.com/connected_by_musicip.gif
+
+This library is by design compatible with the MusicDNS web service.
+Non-commercial access to the service is available at www.musicdns.org.

@@ -1,0 +1,13 @@
+People who have contributed to libofa:
+
+Frode Holm (frode (at) musicip (dot) com)
+Stephen Pope (stp (at) create (dot) ucsb (dot) edu)
+Wendell Hicken (whicken (at) musicip (dot) com)
+  - Initial code 
+
+Robert Kaye (rob (at) eorbit (dot) net)
+  - Autoconf/libtool wrapping
+
+Eric Sandeen (sandeen (at) sgi (dot) com)
+  - Sent in a small patch to avoid a | vs || ambiguity
+  
