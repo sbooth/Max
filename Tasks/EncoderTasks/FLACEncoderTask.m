@@ -225,9 +225,8 @@
 			
 			// Seek to the picture block if it exists
 			while(FLAC__METADATA_TYPE_PICTURE != FLAC__metadata_iterator_get_block_type(iterator)) {
-				if(NO == FLAC__metadata_iterator_next(iterator)) {
+				if(NO == FLAC__metadata_iterator_next(iterator))
 					break; // Already at end
-				}
 			}
 			
 			// If there isn't a picture block add one
@@ -240,9 +239,8 @@
 				result = FLAC__metadata_iterator_insert_block_after(iterator, block);
 				NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
 			}
-			else {
+			else
 				block = FLAC__metadata_iterator_get_block(iterator);
-			}
 			
 			NSImage				*image						= [metadata albumArt];
 			NSEnumerator		*enumerator					= nil;
@@ -308,6 +306,7 @@
 @implementation FLACEncoderTask (CueSheetAdditions)
 
 - (BOOL)			formatIsValidForCueSheet			{ return YES; }
+- (NSString *)		cueSheetFormatName					{ return @"FLAC"; }
 
 - (void) generateCueSheet
 {
@@ -325,9 +324,8 @@
 	unsigned									f						= 0;
 	
 	
-	if(nil == [[self taskInfo] inputTracks]) {
+	if(nil == [[self taskInfo] inputTracks])
 		return;
-	}
 	
 	@try  {
 		chain = FLAC__metadata_chain_new();
@@ -345,9 +343,8 @@
 		
 		// Seek to the cuesheet block if it exists
 		while(FLAC__METADATA_TYPE_CUESHEET != FLAC__metadata_iterator_get_block_type(iterator)) {
-			if(NO == FLAC__metadata_iterator_next(iterator)) {
+			if(NO == FLAC__metadata_iterator_next(iterator))
 				break; // Already at end
-			}
 		}
 		
 		// If there isn't a cuesheet block add one
@@ -389,9 +386,8 @@
 			track->pre_emphasis	= [currentTrack preEmphasis];
 			
 			isrc = [currentTrack ISRC];
-			if(nil != isrc) {
+			if(nil != isrc)
 				strncpy(track->isrc, [isrc UTF8String], sizeof(track->isrc));
-			}
 			
 			// 44.1 kHz
 			track->offset = (((60 * m) + s) * 44100) + (f * 588);
@@ -423,6 +419,7 @@
 		NSAssert(NULL != track, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		track->number		= 0xAA;
+		track->offset		= (((60 * m) + s) * 44100) + (f * 588);
 		track->type			= 1;
 		track->num_indices	= 0;
 		track->indices		= NULL;

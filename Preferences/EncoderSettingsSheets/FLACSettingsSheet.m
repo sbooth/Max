@@ -28,27 +28,37 @@
 	NSArray		*keys		= nil;
 	
 	objects = [NSArray arrayWithObjects:
-		[NSNumber numberWithInt:6],
-		[NSNumber numberWithInt:8192],
 		[NSNumber numberWithBool:NO],
+		[NSNumber numberWithInt:6],
+		[NSNumber numberWithInt:8192],		
 		[NSNumber numberWithBool:YES],
 		[NSNumber numberWithBool:NO],
-		[NSNumber numberWithInt:0],
-		[NSNumber numberWithInt:0],
-		[NSNumber numberWithInt:4],
+		@"tukey(0.5)",
 		[NSNumber numberWithInt:8],
+		[NSNumber numberWithInt:0],
+		[NSNumber numberWithBool:NO],
+		/* false */
+		[NSNumber numberWithBool:NO],
+		[NSNumber numberWithInt:0],
+		[NSNumber numberWithInt:5],
+		/* 0 */
 		nil];
 	
 	keys = [NSArray arrayWithObjects:
+		@"verifyEncoding", 
 		@"compressionLevel", 
 		@"padding", 
-		@"exhaustiveModelSearch",
 		@"enableMidSide", 
 		@"enableLooseMidSide", 
+		@"apodization",
+		@"maxLPCOrder",
 		@"QLPCoeffPrecision", 
+		@"enableQLPCoeffPrecisionSearch", 
+		/* escapeCoding is deprecated */
+		@"exhaustiveModelSearch",
 		@"minPartitionOrder", 
 		@"maxPartitionOrder", 
-		@"maxLPCOrder",
+		/* riceParameterSearchDist is deprecated */
 		nil];
 	
 	
@@ -68,93 +78,129 @@
 	// All compression ratio stuff "borrowed" from FLAC's main.c
 	switch([sender selectedTag]) {
 		case FLAC_COMPRESSION_LEVEL_0:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableLooseMidSide"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:2]		forKey:@"minPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:2]		forKey:@"maxPartitionOrder"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"maxLPCOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"maxPartitionOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_1:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableLooseMidSide"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:2]		forKey:@"minPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:2]		forKey:@"maxPartitionOrder"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"maxLPCOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"maxPartitionOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_2:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableLooseMidSide"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"maxLPCOrder"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"maxPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"maxLPCOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_3:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableLooseMidSide"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"minPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"maxPartitionOrder"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:6]		forKey:@"maxLPCOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:4]		forKey:@"maxPartitionOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_4:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableLooseMidSide"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"minPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"maxPartitionOrder"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:8]		forKey:@"maxLPCOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:4]		forKey:@"maxPartitionOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_5:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableLooseMidSide"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"minPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:3]		forKey:@"maxPartitionOrder"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:8]		forKey:@"maxLPCOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:5]		forKey:@"maxPartitionOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_6:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableLooseMidSide"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:4]		forKey:@"maxPartitionOrder"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:8]		forKey:@"maxLPCOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"exhaustiveModelSearch"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:6]		forKey:@"maxPartitionOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_7:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableLooseMidSide"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:8]		forKey:@"maxLPCOrder"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:6]		forKey:@"maxPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:8]		forKey:@"maxLPCOrder"];
+			/* riceParameterSearchDist */
 			break;
 			
 		case FLAC_COMPRESSION_LEVEL_8:
-			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"enableMidSide"];
 			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableLooseMidSide"];
+			[[_settingsController selection] setValue:@"tukey(0.5)"						forKey:@"apodization"];
+			[[_settingsController selection] setValue:[NSNumber numberWithInt:12]		forKey:@"maxLPCOrder"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"QLPCoeffPrecision"];
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:NO]		forKey:@"enableQLPCoeffPrecisionSearch"];
+			/* escapeCoding */
+			[[_settingsController selection] setValue:[NSNumber numberWithBool:YES]		forKey:@"exhaustiveModelSearch"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:0]		forKey:@"minPartitionOrder"];
 			[[_settingsController selection] setValue:[NSNumber numberWithInt:6]		forKey:@"maxPartitionOrder"];
-			[[_settingsController selection] setValue:[NSNumber numberWithInt:12]		forKey:@"maxLPCOrder"];
+			/* riceParameterSearchDist */
 			break;
 	}
 }

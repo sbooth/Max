@@ -40,20 +40,20 @@
 - (id) initWithFilename:(NSString *)filename
 {	
 	if((self = [super initWithFilename:filename])) {
-		
-		_padding				= 8192;
-		_exhaustiveModelSearch	= NO;
-		_enableMidSide			= YES;
-		_enableLooseMidSide		= NO;
-		_QLPCoeffPrecision		= 0;
-		_minPartitionOrder		= 0;
-		_maxPartitionOrder		= 4;
-		_maxLPCOrder			= 8;
-		
-		return self;	
+		_padding							= 8192;
+		_verifyEncoding						= NO;
+		_enableMidSide						= YES;
+		_enableLooseMidSide					= NO;
+		_apodization						= @"tukey(0.5)";
+		_maxLPCOrder						= 8;
+		_QLPCoeffPrecision					= 0;
+		_enableQLPCoeffPrecisionSearch		= NO;
+		_exhaustiveModelSearch				= NO;
+		_minPartitionOrder					= 0;
+		_maxPartitionOrder					= 4;
 	}
 	
-	return nil;
+	return self;
 }
 
 - (oneway void) encodeToFile:(NSString *)filename
@@ -143,26 +143,32 @@
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_channels failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 			
 		// Encoder parameters
-		result = FLAC__stream_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch);
-		NSAssert1(YES == result, @"FLAC__stream_encoder_set_do_exhaustive_model_search failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
-
 		result = FLAC__stream_encoder_set_do_mid_side_stereo(_flac, _enableMidSide);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_do_mid_side_stereo failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
-
+		
 		result = FLAC__stream_encoder_set_loose_mid_side_stereo(_flac, _enableLooseMidSide);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_loose_mid_side_stereo failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
-
+		
+		result = FLAC__stream_encoder_set_apodization(_flac, [_apodization cStringUsingEncoding:NSASCIIStringEncoding]);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_apodization failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
+		
+		result = FLAC__stream_encoder_set_max_lpc_order(_flac, _maxLPCOrder);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_max_lpc_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
+		
 		result = FLAC__stream_encoder_set_qlp_coeff_precision(_flac, _QLPCoeffPrecision);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_qlp_coeff_precision failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
+		
+		result = FLAC__stream_encoder_set_do_qlp_coeff_prec_search(_flac, _enableQLPCoeffPrecisionSearch);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_do_qlp_coeff_prec_search failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
+		
+		result = FLAC__stream_encoder_set_do_exhaustive_model_search(_flac, _exhaustiveModelSearch);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_do_exhaustive_model_search failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 
 		result = FLAC__stream_encoder_set_min_residual_partition_order(_flac, _minPartitionOrder);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_min_residual_partition_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 
 		result = FLAC__stream_encoder_set_max_residual_partition_order(_flac, _maxPartitionOrder);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_max_residual_partition_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
-
-		result = FLAC__stream_encoder_set_max_lpc_order(_flac, _maxLPCOrder);
-		NSAssert1(YES == result, @"FLAC__stream_encoder_set_max_lpc_order failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 
 		// Create a seektable
 		seektable = FLAC__metadata_object_new(FLAC__METADATA_TYPE_SEEKTABLE);
@@ -180,7 +186,7 @@
 		
 		// Create the padding metadata block if desired
 		if(0 < _padding) {
-			padding				= FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING);
+			padding = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING);
 			NSAssert(NULL != padding, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 			padding->length		= _padding;			
@@ -193,10 +199,9 @@
 			result = FLAC__stream_encoder_set_metadata(_flac, metadata, 1);
 			NSAssert1(YES == result, @"FLAC__stream_encoder_set_metadata failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		}
-		
-		// Make this an option in the future
-//		result = FLAC__stream_encoder_set_verify(_flac, YES);
-//		NSAssert1(YES == result, @"FLAC__stream_encoder_set_verify failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
+
+		result = FLAC__stream_encoder_set_verify(_flac, _verifyEncoding);
+		NSAssert1(YES == result, @"FLAC__stream_encoder_set_verify failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 
 		// Initialize the FLAC encoder
 		result = FLAC__stream_encoder_set_total_samples_estimate(_flac, totalFrames);
@@ -286,8 +291,8 @@
 
 - (NSString *) settingsString
 {
-	return [NSString stringWithFormat:@"FLAC settings: exhaustiveModelSearch:%i midSideStereo:%i looseMidSideStereo:%i QLPCoeffPrecision:%i, minResidualPartitionOrder:%i, maxResidualPartitionOrder:%i, maxLPCOrder:%i", 
-		_exhaustiveModelSearch, _enableMidSide, _enableLooseMidSide, _QLPCoeffPrecision, _minPartitionOrder, _maxPartitionOrder, _maxLPCOrder];
+	return [NSString stringWithFormat:@"FLAC settings: exhaustiveModelSearch:%i midSideStereo:%i looseMidSideStereo:%i QLPCoeffPrecision:%i, ,enableQLPCoeffPrecisionSearch:%i, minResidualPartitionOrder:%i, maxResidualPartitionOrder:%i, maxLPCOrder:%i, apodization:%@", 
+		_exhaustiveModelSearch, _enableMidSide, _enableLooseMidSide, _QLPCoeffPrecision, _enableQLPCoeffPrecisionSearch, _minPartitionOrder, _maxPartitionOrder, _maxLPCOrder, _apodization];
 }
 
 @end
@@ -298,14 +303,16 @@
 {
 	NSDictionary *settings	= [[self delegate] encoderSettings];
 	
-	_exhaustiveModelSearch	= [[settings objectForKey:@"exhaustiveModelSearch"] boolValue];
+	_padding				= [[settings objectForKey:@"padding"] unsignedIntValue];
 	_enableMidSide			= [[settings objectForKey:@"enableMidSide"] boolValue];
 	_enableLooseMidSide		= [[settings objectForKey:@"looseEnableMidSide"] boolValue];
+	_apodization			= [[settings objectForKey:@"apodization"] retain];
+	_maxLPCOrder			= [[settings objectForKey:@"maxLPCOrder"] intValue];
 	_QLPCoeffPrecision		= [[settings objectForKey:@"QLPCoeffPrecision"] intValue];
+	_enableQLPCoeffPrecisionSearch = [[settings objectForKey:@"enableQLPCoeffPrecisionSearch"] boolValue];
+	_exhaustiveModelSearch	= [[settings objectForKey:@"exhaustiveModelSearch"] boolValue];
 	_minPartitionOrder		= [[settings objectForKey:@"minPartitionOrder"] intValue];
 	_maxPartitionOrder		= [[settings objectForKey:@"maxPartitionOrder"] intValue];
-	_maxLPCOrder			= [[settings objectForKey:@"maxLPCOrder"] intValue];
-	_padding				= [[settings objectForKey:@"padding"] unsignedIntValue];
 }
 
 - (void) encodeChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount

@@ -31,10 +31,13 @@
 	BOOL					_enableMidSide;
 	BOOL					_enableLooseMidSide;
 	int						_QLPCoeffPrecision;
+	BOOL					_enableQLPCoeffPrecisionSearch;
 	int						_minPartitionOrder;
 	int						_maxPartitionOrder;
 	int						_maxLPCOrder;
-	unsigned				_padding;	
+	NSString				*_apodization;
+	unsigned				_padding;
+	BOOL					_verifyEncoding;
 }
 
 @end
