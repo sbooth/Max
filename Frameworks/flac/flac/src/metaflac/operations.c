@@ -25,10 +25,12 @@
 #include "utils.h"
 #include "FLAC/assert.h"
 #include "FLAC/metadata.h"
+#include "share/alloc.h"
 #include "share/grabbag.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "operations_shorthand.h"
 
 static void show_version(void);
 static FLAC__bool do_major_operation(const CommandLineOptions *options);
@@ -116,7 +118,7 @@ FLAC__bool do_major_operation_on_file(const char *filename, const CommandLineOpt
 		die("out of memory allocating chain");
 
 	/*@@@@ lame way of guessing the file type */
-	if(strlen(filename) >= 4 && 0 == strcmp(filename+strlen(filename)-4, ".ogg"))
+	if(strlen(filename) >= 4 && (0 == strcmp(filename+strlen(filename)-4, ".oga") || 0 == strcmp(filename+strlen(filename)-4, ".ogg")))
 		is_ogg = true;
 
 	if(! (is_ogg? FLAC__metadata_chain_read_ogg(chain, filename) : FLAC__metadata_chain_read(chain, filename)) ) {
@@ -445,8 +447,8 @@ FLAC__bool do_shorthand_operation__add_replay_gain(char **filenames, unsigned nu
 	}
 
 	if(
-		0 == (title_gains = (float*)malloc(sizeof(float) * num_files)) ||
-		0 == (title_peaks = (float*)malloc(sizeof(float) * num_files))
+		0 == (title_gains = (float*)safe_malloc_mul_2op_(sizeof(float), /*times*/num_files)) ||
+		0 == (title_peaks = (float*)safe_malloc_mul_2op_(sizeof(float), /*times*/num_files))
 	)
 		die("out of memory allocating space for title gains/peaks");
 

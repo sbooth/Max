@@ -52,6 +52,7 @@
 		<a name="toc"><font size="+1"><b><u>Table of Contents</u></b></font></a>
 		<ul>
 			<li><a href="#usage">General Usage</a></li>
+			<li><a href="#tutorial">Tutorial</a></li>
 			<li><a href="#general_options">General Options</a></li>
 			<li><a href="#analysis_options">Analysis Options</a></li>
 			<li><a href="#decoding_options">Decoding Options</a></li>
@@ -64,9 +65,11 @@
 		<br />
 		<span class="commandname">flac</span> is the command-line file encoder/decoder.  The encoder currently supports as input RIFF WAVE, AIFF, FLAC or Ogg FLAC format, or raw interleaved samples.  The decoder currently can output to RIFF WAVE or AIFF format, or raw interleaved samples.  <span class="commandname">flac</span> only supports linear PCM samples (in other words, no A-LAW, uLAW, etc.), and the input must be between 4 and 24 bits per sample.  This is not a limitation of the FLAC format, just the reference encoder/decoder.<br />
 		<br />
-		<span class="commandname">flac</span> assumes that files ending in ".wav" or that have the RIFF WAVE header present are WAVE files, files ending in ".aif" or ".aiff" or have the AIFF header present are AIFF files, and files ending in ".flac" or have the FLAC header present are FLAC files.  This assumption may be overridden with a command-line option.  It also assumes that files ending in ".ogg" of have the Ogg FLAC header present are Ogg FLAC files.  Other than this, <span class="commandname">flac</span> makes no assumptions about file extensions, though the convention is that FLAC files have the extension ".flac" (or ".fla" on ancient "8.3" file systems like FAT-16).<br />
+		<span class="commandname">flac</span> assumes that files ending in ".wav" or that have the RIFF WAVE header present are WAVE files, files ending in ".aif" or ".aiff" or have the AIFF header present are AIFF files, and files ending in ".flac" or have the FLAC header present are FLAC files.  This assumption may be overridden with a command-line option.  It also assumes that files ending in ".oga" or ".ogg" or have the Ogg FLAC header present are Ogg FLAC files.  Other than this, <span class="commandname">flac</span> makes no assumptions about file extensions, though the convention is that FLAC files have the extension ".flac" (or ".fla" on ancient "8.3" file systems like FAT-16).<br />
 		<br />
 		Before going into the full command-line description, a few other things help to sort it out: 1) <span class="commandname">flac</span> encodes by default, so you must use <b>-d</b> to decode; 2) the options <span class="argument">-0</span> .. <span class="argument">-8</span> (or <span class="argument">--fast</span> and <span class="argument">--best</span>) that control the compression level actually are just synonyms for different groups of specific encoding options (described later) and you can get the same effect by using the same options; 3) <span class="commandname">flac</span> behaves similarly to gzip in the way it handles input and output files.<br />
+		<br />
+		Skip to the <a href="#tutorial">tutorial</a> below for examples of some common tasks.<br />
 		<br />
 		<span class="commandname">flac</span> will be invoked one of four ways, depending on whether you are encoding, decoding, testing, or analyzing:
 		<ul>
@@ -120,6 +123,56 @@
 		<span class="commandname">flac</span> can also re-encode FLAC files.  In other words, you can specify a FLAC or Ogg FLAC file as an input to the encoder and it will decoder it and re-encode it according to the options you specify.  It will also preserve all the metadata unless you override it with other options (e.g. specifying new tags, seekpoints, cuesheet, padding, etc.).<br />
 		<br />
 		<span class="commandname">flac</span> has been tuned so that the default settings yield a good speed vs. compression tradeoff for many kinds of input.  However, if you are looking to maximize the compression rate or speed, or want to use the full power of FLAC's metadata system, see <a href="documentation_format_overview.html">About the FLAC Format</a>.<br />
+		<br />
+
+		<a name="tutorial"><font size="+1"><b><u>Tutorial</u></b></font></a><br />
+		<br />
+		Some common <b>encoding</b> tasks using <span class="commandname">flac</span>:<br />
+		<br />
+		<tt><b>flac abc.wav</b></tt><br />
+		Encode <tt>abc.wav</tt> to <tt>abc.flac</tt> using the default compression setting.  <tt>abc.wav</tt> is not deleted.<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_delete_input_file">--delete-input-file</a> abc.wav</b></tt><br />
+		Like above, except <tt>abc.wav</tt> is deleted if there were no errors.<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_delete_input_file">--delete-input-file</a> <a href="#flac_options_warnings_as_errors">-w</a> abc.wav</b></tt><br />
+		Like above, except <tt>abc.wav</tt> is deleted if there were no errors or warnings.<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_best">--best</a> abc.wav</b></tt><br />
+		Encode <tt>abc.wav</tt> to <tt>abc.flac</tt> using the highest compression setting.<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_verify">--verify</a> abc.wav</b></tt><br />
+		Encode <tt>abc.wav</tt> to <tt>abc.flac</tt> and internally decode <tt>abc.flac</tt> to make sure it matches <tt>abc.wav</tt>.<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_output_name">-o</a> my.flac abc.wav</b></tt><br />
+		Encode <tt>abc.wav</tt> to <tt>my.flac</tt>.<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_tag">-T</a> "TITLE=Bohemian Rhapsody" -T "ARTIST=Queen" abc.wav</b></tt><br />
+		Encode <tt>abc.wav</tt> and add some tags at the same time to <tt>abc.flac</tt>.<br />
+		<br />
+		<tt><b>flac *.wav</b></tt><br />
+		Encode all .wav files in the current directory.  NOTE: <a href="faq.html#tools__wildcards_on_windows">Wildcards on Windows</a><br />
+		<br />
+		<tt><b>flac abc.aiff</b></tt><br />
+		Encode <tt>abc.aiff</tt> to <tt>abc.flac</tt>.<br />
+		<br />
+		<tt><b>flac abc.flac <a href="#flac_options_force">--force</a></b></tt><br />
+		This one's a little tricky: notice that <span class="commandname">flac</span> is in encode mode by default (you have to specify <span class="argument">-d</span> to decode) so this command actually recompresses <tt>abc.flac</tt> back to <tt>abc.flac</tt>.  <span class="argument"><a href="#flac_options_force">--force</a></span> is needed to make sure you really want to overwrite <tt>abc.flac</tt> with a new version.  Why would you want to do this?  It allows you to recompress an existing FLAC file with (usually) higher compression options or a newer version of FLAC and preserve all the metadata like tags too.<br />
+		<br />
+
+		Some common <b>decoding</b> tasks using <span class="commandname">flac</span>:<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_decode">-d</a> abc.flac</b></tt><br />
+		Decode <tt>abc.flac</tt> to <tt>abc.wav</tt>.  <tt>abc.flac</tt> is not deleted.  NOTE: Without <span class="argument"><a href="#flac_options_decode">-d</a></span> it means re-encode <tt>abc.flac</tt> to <tt>abc.flac</tt> (see above).<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_decode">-d</a> <a href="#flac_options_force_aiff_format">--force-aiff-format</a> abc.flac</b></tt><br />
+		<tt><b>flac <a href="#flac_options_decode">-d</a> <a href="#flac_options_output_name">-o</a> abc.aiff abc.flac</b></tt><br />
+		Two different ways of decoding <tt>abc.flac</tt> to <tt>abc.aiff</tt> (AIFF format).  <tt>abc.flac</tt> is not deleted.<br />
+		<br />
+		<tt><b>flac <a href="#flac_options_decode">-d</a> <a href="#flac_options_decode_through_errors">-F</a> abc.flac</b></tt><br />
+		Decode <tt>abc.flac</tt> to <tt>abc.wav</tt> and don't abort if errors are found (useful for recovering as much as possible from corrupted files).<br />
+		<br />
+		<span class="commandname">flac</span> has many other useful options, described below.<br />
 		<br />
 
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EEEED4"><tr><td>
@@ -212,6 +265,15 @@
 			</tr>
 			<tr>
 				<td nowrap="nowrap" align="right" valign="top" bgcolor="#F4F4CC">
+					<a name="flac_options_no_utf8_convert" />
+					<span class="argument">--no-utf8-convert</span>
+				</td>
+				<td>
+					Do not convert tags from local charset to UTF-8.  This is useful for scripts, and setting tags in situations where the locale is wrong.  This option must appear before any tag options!
+				</td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap" align="right" valign="top" bgcolor="#F4F4CC">
 					<a name="flac_options_warnings_as_errors" />
 					<span class="argument">-w</span>, <span class="argument">--warnings-as-errors</span>
 				</td>
@@ -257,6 +319,25 @@
 			</tr>
 			<tr>
 				<td nowrap="nowrap" align="right" valign="top" bgcolor="#F4F4CC">
+					<a name="flac_options_keep_foreign_metadata" />
+					<span class="argument">--keep-foreign-metadata</span>
+				</td>
+				<td>
+					If encoding, save WAVE or AIFF non-audio chunks in FLAC metadata.  If decoding, restore any saved non-audio chunks from FLAC metadata when writing the decoded file.  Foreign metadata cannot be transcoded, e.g. WAVE chunks saved in a FLAC file cannot be restored when decoding to AIFF.  Input and output must be regular files (not stdin or stdout).<br />
+<!--
+					<br />
+					Using this option for both encoding then decoding in most cases will yield the exact same WAVE file as the original, metadata and all.  Because there are multiple ways to represent the same data in WAVE and AIFF, there are currently a few corner cases where the restoration process may not match exactly (but could with some improvement).  The cases are:<br />
+					<ul>
+						<li>The original WAVE had more than 2 channels and needed remapping to FLAC order</li>
+						<li>The original WAVE is not spec compliant, e.g. 20 bps in WAVEFORMATEX; restored file will still be a compliant WAVEFORMATEXTENSIBLE</li>
+						<li>Other wierd corner cases where the "fmt" chunk is not exactly identical due to there being multiple ways to represent the same thing</li>
+						<li>The original WAIV is in AIFF-C form with compression type "sowt" or "NONE"; currently the restored file will always be in AIFF (uncompressed) form</li>
+					</ul>
+-->
+				</td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap" align="right" valign="top" bgcolor="#F4F4CC">
 					<a name="flac_options_skip" />
 					<span class="argument">--skip={#|mm:ss.ss}</span>
 				</td>
@@ -292,9 +373,9 @@
 					<span class="argument">--ogg</span>
 				</td>
 				<td>
-					When encoding, generate Ogg FLAC output instead of native FLAC.  Ogg FLAC streams are FLAC streams wrapped in an Ogg transport layer.  The resulting file should have an '.ogg' extension and will still be decodable by <span class="commandname">flac</span>.<br />
+					When encoding, generate Ogg FLAC output instead of native FLAC.  Ogg FLAC streams are FLAC streams wrapped in an Ogg transport layer.  The resulting file should have an '.oga' extension and will still be decodable by <span class="commandname">flac</span>.<br />
 					<br />
-					When decoding, force the input to be treated as Ogg FLAC.  This is useful when piping input from stdin or when the filename does not end in '.ogg'.<br />
+					When decoding, force the input to be treated as Ogg FLAC.  This is useful when piping input from stdin or when the filename does not end in '.oga' or '.ogg'.<br />
 					<br />
 					<b>NOTE:</b> Ogg FLAC files created prior to <span class="commandname">flac</span> 1.1.1 used an ad-hoc mapping and do not support seeking.  They should be decoded and re-encoded with <span class="commandname">flac</span> 1.1.1 or later.
 				</td>
@@ -960,6 +1041,7 @@
 		<a href="#flac_options_help" /><span class="argument">-h</span></a><br />
 		<a href="#flac_options_help" /><span class="argument">--help</span></a><br />
 		<a href="#flac_options_input_size" /><span class="argument">--input-size</span></a><br />
+		<a href="#flac_options_keep_foreign_metadata" /><span class="argument">--keep-foreign-metadata</span></a><br />
 		<a href="#flac_options_max_lpc_order" /><span class="argument">-l</span></a><br />
 		<a href="#flac_options_lax" /><span class="argument">--lax</span></a><br />
 		<a href="#flac_options_adaptive_mid_side" /><span class="argument">-M</span></a><br />
@@ -983,6 +1065,7 @@
 		<a href="#negative_options" /><span class="argument">--no-silent</span></a><br />
 		<a href="#negative_options" /><span class="argument">--no-verify</span></a><br />
 		<a href="#negative_options" /><span class="argument">--no-warnings-as-errors</span></a><br />
+		<a href="#flac_options_no_utf8_convert" /><span class="argument">--no-utf8-convert</span></a><br />
 		<a href="#flac_options_output_name" /><span class="argument">-o</span></a><br />
 		<a href="#flac_options_ogg" /><span class="argument">--ogg</span></a><br />
 		<a href="#flac_options_output_name" /><span class="argument">--output-name</span></a><br />

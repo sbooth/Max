@@ -620,11 +620,11 @@
 00997         <span class="keyword">public</span>:
 <a name="l01000"></a><a class="code" href="classFLAC_1_1Metadata_1_1SimpleIterator_1_1Status.html">01000</a>             <span class="keyword">class </span>FLACPP_API Status {
 01001             <span class="keyword">public</span>:
-01002                 <span class="keyword">inline</span> Status(::<a class="code" href="group__flac__metadata__level1.html#ga14">FLAC__Metadata_SimpleIteratorStatus</a> status): status_(status) { }
-01003                 <span class="keyword">inline</span> <a class="code" href="group__flac__metadata__level1.html#ga14">operator ::FLAC__Metadata_SimpleIteratorStatus</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> status_; }
+01002                 <span class="keyword">inline</span> Status(::<a class="code" href="group__flac__metadata__level1.html#ga18">FLAC__Metadata_SimpleIteratorStatus</a> status): status_(status) { }
+01003                 <span class="keyword">inline</span> <a class="code" href="group__flac__metadata__level1.html#ga18">operator ::FLAC__Metadata_SimpleIteratorStatus</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> status_; }
 01004                 <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *as_cstring()<span class="keyword"> const </span>{ <a class="code" href="group__flac__metadata__level1.html#ga1">return ::FLAC__Metadata_SimpleIteratorStatusString</a>[status_]; }
-01005             <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level1.html#ga14"></a>
-01006 <a class="code" href="group__flac__metadata__level1.html#ga14">				::FLAC__Metadata_SimpleIteratorStatus</a> status_;
+01005             <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level1.html#ga18"></a>
+01006 <a class="code" href="group__flac__metadata__level1.html#ga18">				::FLAC__Metadata_SimpleIteratorStatus</a> status_;
 01007             };
 01008 
 01009             SimpleIterator();
@@ -639,89 +639,93 @@
 01018 
 01019             <span class="keywordtype">bool</span> next();                                                        
 01020             <span class="keywordtype">bool</span> prev();                                                        
-01021 <a class="code" href="group__flac__format.html#ga113"></a>
-01022 <a class="code" href="group__flac__format.html#ga113">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;                        
-01023             Prototype *get_block();                                             
-01024             <span class="keywordtype">bool</span> set_block(Prototype *block, <span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>);          
-01025             <span class="keywordtype">bool</span> insert_block_after(Prototype *block, <span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>); 
-01026             <span class="keywordtype">bool</span> delete_block(<span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>);                         
-01027 
-01028         <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level1.html#ga0"></a>
-01029 <a class="code" href="group__flac__metadata__level1.html#ga0">			::FLAC__Metadata_SimpleIterator</a> *iterator_;
-01030             <span class="keywordtype">void</span> clear();
-01031         };
-01032 
-01033         <span class="comment">/* \} */</span>
-01034 
-01035 
-<a name="l01078"></a><a class="code" href="classFLAC_1_1Metadata_1_1Chain.html">01078</a>         <span class="keyword">class </span>FLACPP_API Chain {
-01079         <span class="keyword">public</span>:
-<a name="l01082"></a><a class="code" href="classFLAC_1_1Metadata_1_1Chain_1_1Status.html">01082</a>             <span class="keyword">class </span>FLACPP_API Status {
-01083             <span class="keyword">public</span>:
-01084                 <span class="keyword">inline</span> Status(::<a class="code" href="group__flac__metadata__level2.html#ga27">FLAC__Metadata_ChainStatus</a> status): status_(status) { }
-01085                 <span class="keyword">inline</span> <a class="code" href="group__flac__metadata__level2.html#ga27">operator ::FLAC__Metadata_ChainStatus</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> status_; }
-01086                 <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *as_cstring()<span class="keyword"> const </span>{ <a class="code" href="group__flac__metadata__level2.html#ga2">return ::FLAC__Metadata_ChainStatusString</a>[status_]; }
-01087             <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level2.html#ga27"></a>
-01088 <a class="code" href="group__flac__metadata__level2.html#ga27">				::FLAC__Metadata_ChainStatus</a> status_;
-01089             };
-01090 
-01091             Chain();
-01092             <span class="keyword">virtual</span> ~Chain();
-01093 
-01094             <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classFLAC_1_1Metadata_1_1Iterator.html">Iterator</a>;
-01095 
-01096             <span class="keywordtype">bool</span> is_valid() <span class="keyword">const</span>; 
+01021             <span class="keywordtype">bool</span> is_last() <span class="keyword">const</span>;                                               
+01022 
+01023             off_t get_block_offset() <span class="keyword">const</span>;                                     
+01024 <a class="code" href="group__flac__format.html#ga113">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;                        
+01025             <span class="keywordtype">unsigned</span> get_block_length() <span class="keyword">const</span>;                                  
+01026             <span class="keywordtype">bool</span> get_application_id(FLAC__byte *<span class="keywordtype">id</span>);                            
+01027             Prototype *get_block();                                             
+01028             <span class="keywordtype">bool</span> set_block(Prototype *block, <span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>);          
+01029             <span class="keywordtype">bool</span> insert_block_after(Prototype *block, <span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>); 
+01030             <span class="keywordtype">bool</span> delete_block(<span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>);                         
+01031 
+01032         <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level1.html#ga0"></a>
+01033 <a class="code" href="group__flac__metadata__level1.html#ga0">			::FLAC__Metadata_SimpleIterator</a> *iterator_;
+01034             <span class="keywordtype">void</span> clear();
+01035         };
+01036 
+01037         <span class="comment">/* \} */</span>
+01038 
+01039 
+<a name="l01082"></a><a class="code" href="classFLAC_1_1Metadata_1_1Chain.html">01082</a>         <span class="keyword">class </span>FLACPP_API Chain {
+01083         <span class="keyword">public</span>:
+<a name="l01086"></a><a class="code" href="classFLAC_1_1Metadata_1_1Chain_1_1Status.html">01086</a>             <span class="keyword">class </span>FLACPP_API Status {
+01087             <span class="keyword">public</span>:
+01088                 <span class="keyword">inline</span> Status(::<a class="code" href="group__flac__metadata__level2.html#ga27">FLAC__Metadata_ChainStatus</a> status): status_(status) { }
+01089                 <span class="keyword">inline</span> <a class="code" href="group__flac__metadata__level2.html#ga27">operator ::FLAC__Metadata_ChainStatus</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> status_; }
+01090                 <span class="keyword">inline</span> <span class="keyword">const</span> <span class="keywordtype">char</span> *as_cstring()<span class="keyword"> const </span>{ <a class="code" href="group__flac__metadata__level2.html#ga2">return ::FLAC__Metadata_ChainStatusString</a>[status_]; }
+01091             <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level2.html#ga27"></a>
+01092 <a class="code" href="group__flac__metadata__level2.html#ga27">				::FLAC__Metadata_ChainStatus</a> status_;
+01093             };
+01094 
+01095             Chain();
+01096             <span class="keyword">virtual</span> ~Chain();
 01097 
-01098             Status status();                                                
+01098             <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classFLAC_1_1Metadata_1_1Iterator.html">Iterator</a>;
 01099 
-01100             <span class="keywordtype">bool</span> read(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <span class="keywordtype">bool</span> is_ogg = <span class="keyword">false</span>);                                
-01101             <span class="keywordtype">bool</span> read(<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> handle, <a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> callbacks, <span class="keywordtype">bool</span> is_ogg = <span class="keyword">false</span>);  
-01102 
-01103             <span class="keywordtype">bool</span> check_if_tempfile_needed(<span class="keywordtype">bool</span> use_padding);                
-01104 
-01105             <span class="keywordtype">bool</span> write(<span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>, <span class="keywordtype">bool</span> preserve_file_stats = <span class="keyword">false</span>); 
-01106             <span class="keywordtype">bool</span> write(<span class="keywordtype">bool</span> use_padding, ::<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> handle, ::<a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> callbacks); 
-01107             <span class="keywordtype">bool</span> write(<span class="keywordtype">bool</span> use_padding, ::<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> handle, ::<a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> callbacks, ::<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> temp_handle, ::<a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> temp_callbacks); 
+01100             <span class="keywordtype">bool</span> is_valid() <span class="keyword">const</span>; 
+01101 
+01102             Status status();                                                
+01103 
+01104             <span class="keywordtype">bool</span> read(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <span class="keywordtype">bool</span> is_ogg = <span class="keyword">false</span>);                                
+01105             <span class="keywordtype">bool</span> read(<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> handle, <a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> callbacks, <span class="keywordtype">bool</span> is_ogg = <span class="keyword">false</span>);  
+01106 
+01107             <span class="keywordtype">bool</span> check_if_tempfile_needed(<span class="keywordtype">bool</span> use_padding);                
 01108 
-01109             <span class="keywordtype">void</span> merge_padding();                                           
-01110             <span class="keywordtype">void</span> sort_padding();                                            
-01111 
-01112         <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level2.html#ga0"></a>
-01113 <a class="code" href="group__flac__metadata__level2.html#ga0">			::FLAC__Metadata_Chain</a> *chain_;
-01114             <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear();
-01115         };
-01116 
-<a name="l01122"></a><a class="code" href="classFLAC_1_1Metadata_1_1Iterator.html">01122</a>         <span class="keyword">class </span>FLACPP_API Iterator {
-01123         <span class="keyword">public</span>:
-01124             Iterator();
-01125             <span class="keyword">virtual</span> ~Iterator();
-01126 
-01127             <span class="keywordtype">bool</span> is_valid() <span class="keyword">const</span>; 
-01128 
-01129 
-01130             <span class="keywordtype">void</span> init(Chain &amp;chain);                       
-01131 
-01132             <span class="keywordtype">bool</span> next();                                   
-01133             <span class="keywordtype">bool</span> prev();                                   
-01134 <a class="code" href="group__flac__format.html#ga113"></a>
-01135 <a class="code" href="group__flac__format.html#ga113">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;   
-01136             Prototype *get_block();                        
-01137             <span class="keywordtype">bool</span> set_block(Prototype *block);              
-01138             <span class="keywordtype">bool</span> delete_block(<span class="keywordtype">bool</span> replace_with_padding);  
-01139             <span class="keywordtype">bool</span> insert_block_before(Prototype *block);    
-01140             <span class="keywordtype">bool</span> insert_block_after(Prototype *block);     
-01141 
-01142         <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level2.html#ga1"></a>
-01143 <a class="code" href="group__flac__metadata__level2.html#ga1">			::FLAC__Metadata_Iterator</a> *iterator_;
-01144             <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear();
-01145         };
-01146 
-01147         <span class="comment">/* \} */</span>
-01148 
-01149     }
-01150 }
-01151 
-01152 <span class="preprocessor">#endif</span>
+01109             <span class="keywordtype">bool</span> write(<span class="keywordtype">bool</span> use_padding = <span class="keyword">true</span>, <span class="keywordtype">bool</span> preserve_file_stats = <span class="keyword">false</span>); 
+01110             <span class="keywordtype">bool</span> write(<span class="keywordtype">bool</span> use_padding, ::<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> handle, ::<a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> callbacks); 
+01111             <span class="keywordtype">bool</span> write(<span class="keywordtype">bool</span> use_padding, ::<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> handle, ::<a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> callbacks, ::<a class="code" href="group__flac__callbacks.html#ga0">FLAC__IOHandle</a> temp_handle, ::<a class="code" href="structFLAC____IOCallbacks.html">FLAC__IOCallbacks</a> temp_callbacks); 
+01112 
+01113             <span class="keywordtype">void</span> merge_padding();                                           
+01114             <span class="keywordtype">void</span> sort_padding();                                            
+01115 
+01116         <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level2.html#ga0"></a>
+01117 <a class="code" href="group__flac__metadata__level2.html#ga0">			::FLAC__Metadata_Chain</a> *chain_;
+01118             <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear();
+01119         };
+01120 
+<a name="l01126"></a><a class="code" href="classFLAC_1_1Metadata_1_1Iterator.html">01126</a>         <span class="keyword">class </span>FLACPP_API Iterator {
+01127         <span class="keyword">public</span>:
+01128             Iterator();
+01129             <span class="keyword">virtual</span> ~Iterator();
+01130 
+01131             <span class="keywordtype">bool</span> is_valid() <span class="keyword">const</span>; 
+01132 
+01133 
+01134             <span class="keywordtype">void</span> init(Chain &amp;chain);                       
+01135 
+01136             <span class="keywordtype">bool</span> next();                                   
+01137             <span class="keywordtype">bool</span> prev();                                   
+01138 <a class="code" href="group__flac__format.html#ga113"></a>
+01139 <a class="code" href="group__flac__format.html#ga113">			::FLAC__MetadataType</a> get_block_type() <span class="keyword">const</span>;   
+01140             Prototype *get_block();                        
+01141             <span class="keywordtype">bool</span> set_block(Prototype *block);              
+01142             <span class="keywordtype">bool</span> delete_block(<span class="keywordtype">bool</span> replace_with_padding);  
+01143             <span class="keywordtype">bool</span> insert_block_before(Prototype *block);    
+01144             <span class="keywordtype">bool</span> insert_block_after(Prototype *block);     
+01145 
+01146         <span class="keyword">protected</span>:<a class="code" href="group__flac__metadata__level2.html#ga1"></a>
+01147 <a class="code" href="group__flac__metadata__level2.html#ga1">			::FLAC__Metadata_Iterator</a> *iterator_;
+01148             <span class="keyword">virtual</span> <span class="keywordtype">void</span> clear();
+01149         };
+01150 
+01151         <span class="comment">/* \} */</span>
+01152 
+01153     }
+01154 }
+01155 
+01156 <span class="preprocessor">#endif</span>
 </pre></div>
 <hr size="1">
 <div class="copyright">

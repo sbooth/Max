@@ -130,6 +130,8 @@ FLaC__USE_3DNOW_FALSE = @FLaC__USE_3DNOW_FALSE@
 FLaC__USE_3DNOW_TRUE = @FLaC__USE_3DNOW_TRUE@
 FLaC__USE_ALTIVEC_FALSE = @FLaC__USE_ALTIVEC_FALSE@
 FLaC__USE_ALTIVEC_TRUE = @FLaC__USE_ALTIVEC_TRUE@
+FLaC__WITH_CPPLIBS_FALSE = @FLaC__WITH_CPPLIBS_FALSE@
+FLaC__WITH_CPPLIBS_TRUE = @FLaC__WITH_CPPLIBS_TRUE@
 GAS = @GAS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -147,6 +149,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MINGW_WINSOCK_LIBS = @MINGW_WINSOCK_LIBS@
 NASM = @NASM@
 OBJEXT = @OBJEXT@
 OBJ_FORMAT = @OBJ_FORMAT@
@@ -218,9 +221,10 @@ target_alias = @target_alias@
 
 @FLaC__HAS_XMMS_TRUE@XMMS_DIRS = plugin_common plugin_xmms
 
+@FLaC__WITH_CPPLIBS_TRUE@CPPLIBS_DIRS = libFLAC++ test_libFLAC++
+
 SUBDIRS = \
 	libFLAC \
-	libFLAC++ \
 	share \
 	flac \
 	metaflac \
@@ -230,9 +234,9 @@ SUBDIRS = \
 	test_grabbag \
 	test_libs_common \
 	test_libFLAC \
-	test_libFLAC++ \
 	test_seeking \
-	test_streams
+	test_streams \
+	$(CPPLIBS_DIRS)
 
 
 EXTRA_DIST = \
@@ -251,10 +255,10 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	installdirs-recursive install-recursive uninstall-recursive \
 	check-recursive installcheck-recursive
 DIST_COMMON = $(srcdir)/Makefile.in Makefile.am
-DIST_SUBDIRS = libFLAC libFLAC++ share flac metaflac \
-	monkeys_audio_utilities plugin_common plugin_xmms \
-	plugin_winamp2 test_grabbag test_libs_common test_libFLAC \
-	test_libFLAC++ test_seeking test_streams
+DIST_SUBDIRS = libFLAC share flac metaflac monkeys_audio_utilities \
+	plugin_common plugin_xmms plugin_winamp2 test_grabbag \
+	test_libs_common test_libFLAC test_seeking test_streams \
+	libFLAC++ test_libFLAC++
 all: all-recursive
 
 .SUFFIXES:

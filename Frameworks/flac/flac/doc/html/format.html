@@ -120,6 +120,11 @@
 																	<li><a href="#rice_partition">RICE_PARTITION</a></li>
 																</ul>
 															</li>
+															<li><a href="#partitioned_rice2">RESIDUAL_CODING_METHOD_PARTITIONED_RICE2</a>
+																<ul>
+																	<li><a href="#rice2_partition">RICE2_PARTITION</a></li>
+																</ul>
+															</li>
 														</ul>
 													</li>
 												</ul>
@@ -177,7 +182,7 @@
 		<br />
 		<a name="definitions"><font size="+1"><b><u>Definitions</u></b></font></a><br />
 		<br />
-		Many terms like "block" and "frame" are used to mean different things in differenct encoding schemes.  For example, a frame in MP3 corresponds to many samples across several channels, whereas an S/PDIF frame represents just one sample for each channel.  The definitions we use for FLAC follow.  Note that when we talk about blocks and subblocks we are refering to the raw unencoded audio data that is the input to the encoder, and when we talk about frames and subframes, we are refering to the FLAC-encoded data.
+		Many terms like "block" and "frame" are used to mean different things in differenct encoding schemes.  For example, a frame in MP3 corresponds to many samples across several channels, whereas an S/PDIF frame represents just one sample for each channel.  The definitions we use for FLAC follow.  Note that when we talk about blocks and subblocks we are referring to the raw unencoded audio data that is the input to the encoder, and when we talk about frames and subframes, we are referring to the FLAC-encoded data.
 		<ul>
 			<li>
 				<b>Block</b>: One or more audio samples that span several channels.
@@ -205,7 +210,7 @@
 		<br />
 		<a name="interchannel"><font size="+1"><b><u>Interchannel Decorrelation</u></b></font></a><br />
 		<br />
-		In stereo streams, in many cases there is an exploitable amount of correlation between the left and right channels.  FLAC allows the frames of stereo streams to have different channel assignments, and an encoder may choose to use the best representation on a frame-by-frame basis.
+		In stereo streams, many times there is an exploitable amount of correlation between the left and right channels.  FLAC allows the frames of stereo streams to have different channel assignments, and an encoder may choose to use the best representation on a frame-by-frame basis.
 		<ul>
 			<li>
 				<b>Independent</b>.  The left and right channels are coded independently.
@@ -236,12 +241,12 @@
 				<b>Fixed linear predictor</b>.  FLAC uses a class of computationally-efficient fixed linear predictors (for a good description, see <a href="http://www.hpl.hp.com/techreports/1999/HPL-1999-144.pdf">audiopak</a> and <a href="http://svr-www.eng.cam.ac.uk/~ajr/GroupPubs/Robinson94-tr156/index.html">shorten</a>).  FLAC adds a fourth-order predictor to the zero-to-third-order predictors used by Shorten.  Since the predictors are fixed, the predictor order is the only parameter that needs to be stored in the compressed stream.  The error signal is then passed to the residual coder.
 			</li>
 			<li>
-				<b>FIR Linear prediction</b>.  For more accurate modeling (at a cost of slower encoding), FLAC supports up to 32nd order FIR linear prediction (again, for info on linear prediction, see <a href="http://www.hpl.hp.com/techreports/1999/HPL-1999-144.pdf">audiopak</a> and <a href="http://svr-www.eng.cam.ac.uk/~ajr/GroupPubs/Robinson94-tr156/index.html">shorten</a>).  The reference encoder uses the Levinson-Durbin method for calculating the LPC coefficients from the autocorrelation coefficients, and the coefficients are quantized before computing the residual.  Whereas encoders such as Shorten used a fixed quantization for the entire input, FLAC allows the quantized coefficient precision to vary from subframe to subframe.  The FLAC reference encoder estimates the optimal precision to use based on the block size and dynamic range of the original signal.
+				<b>FIR Linear prediction</b>.  For more accurate modeling (at a cost of slower encoding), FLAC supports up to 32nd order FIR linear prediction (again, for information on linear prediction, see <a href="http://www.hpl.hp.com/techreports/1999/HPL-1999-144.pdf">audiopak</a> and <a href="http://svr-www.eng.cam.ac.uk/~ajr/GroupPubs/Robinson94-tr156/index.html">shorten</a>).  The reference encoder uses the Levinson-Durbin method for calculating the LPC coefficients from the autocorrelation coefficients, and the coefficients are quantized before computing the residual.  Whereas encoders such as Shorten used a fixed quantization for the entire input, FLAC allows the quantized coefficient precision to vary from subframe to subframe.  The FLAC reference encoder estimates the optimal precision to use based on the block size and dynamic range of the original signal.
 			</li>
 		</ul>
 		<a name="residualcoding"><font size="+1"><b><u>Residual Coding</u></b></font></a><br />
 		<br />
-		FLAC currently defines two similar methods for the coding of the error signal from the prediction stage.  The error signal is coded using Rice codes in one of two ways: 1) the encoder estimates a single rice parameter based on the variance of the residual and Rice codes the entire residual using this parameter; 2) the residual is partitioned into several equal-length regions of contiguous samples, and each region is coded with its own Rice parameter based on the region's mean.  (Note that the first method is a special case of the second method with one partition, except the Rice parameter is based on the residual variance instead of the mean.)<br />
+		FLAC currently defines two similar methods for the coding of the error signal from the prediction stage.  The error signal is coded using Rice codes in one of two ways: 1) the encoder estimates a single Rice parameter based on the variance of the residual and Rice codes the entire residual using this parameter; 2) the residual is partitioned into several equal-length regions of contiguous samples, and each region is coded with its own Rice parameter based on the region's mean.  (Note that the first method is a special case of the second method with one partition, except the Rice parameter is based on the residual variance instead of the mean.)<br />
 		<br />
 		The FLAC format has reserved space for other coding methods.  Some possiblities for volunteers would be to explore better context-modeling of the Rice parameter, or Huffman coding.  See <a href="http://www.hpl.hp.com/techreports/98/HPL-98-193.html">LOCO-I</a> and <a href="http://www.cs.tut.fi/~albert/Dev/pucrunch/packing.html">pucrunch</a> for descriptions of several universal codes.<br />
 		<br />
@@ -263,13 +268,13 @@
 					<li><a name="def_APPLICATION"><b>APPLICATION</b></a>: This block is for use by third-party applications.  The only mandatory field is a 32-bit identifier.  This ID is granted upon request to an application by the FLAC maintainers.  The remainder is of the block is defined by the registered application.  Visit the <a href="id.html">registration page</a> if you would like to register an ID for your application with FLAC.</li>
 					<li><a name="def_PADDING"><b>PADDING</b></a>: This block allows for an arbitrary amount of padding.  The contents of a PADDING block have no meaning.  This block is useful when it is known that metadata will be edited after encoding; the user can instruct the encoder to reserve a PADDING block of sufficient size so that when metadata is added, it will simply overwrite the padding (which is relatively quick) instead of having to insert it into the right place in the existing file (which would normally require rewriting the entire file).</li>
 					<li><a name="def_SEEKTABLE"><b>SEEKTABLE</b></a>: This is an optional block for storing seek points.  It is possible to seek to any given sample in a FLAC stream without a seek table, but the delay can be unpredictable since the bitrate may vary widely within a stream.  By adding seek points to a stream, this delay can be significantly reduced.  Each seek point takes 18 bytes, so 1% resolution within a stream adds less than 2k.  There can be only one SEEKTABLE in a stream, but the table can have any number of seek points.  There is also a special 'placeholder' seekpoint which will be ignored by decoders but which can be used to reserve space for future seek point insertion.</li>
-					<li><a name="def_VORBIS_COMMENT"><b>VORBIS_COMMENT</b></a>: This block is for storing a list of human-readable name/value pairs.  Values are encoded using UTF-8.  It is an implementation of the <a href="http://xiph.org/vorbis/doc/v-comment.html">Vorbis comment specification</a>.  This is the only officially supported tagging mechanism in FLAC.  There may be only one VORBIS_COMMENT block in a stream.  In some external documentation, Vorbis comments are called FLAC tags to lessen confusion.</li>
+					<li><a name="def_VORBIS_COMMENT"><b>VORBIS_COMMENT</b></a>: This block is for storing a list of human-readable name/value pairs.  Values are encoded using UTF-8.  It is an implementation of the <a href="http://xiph.org/vorbis/doc/v-comment.html">Vorbis comment specification</a> (without the framing bit).  This is the only officially supported tagging mechanism in FLAC.  There may be only one VORBIS_COMMENT block in a stream.  In some external documentation, Vorbis comments are called FLAC tags to lessen confusion.</li>
 					<li><a name="def_CUESHEET"><b>CUESHEET</b></a>: This block is for storing various information that can be used in a cue sheet.  It supports track and index points, compatible with Red Book CD digital audio discs, as well as other CD-DA metadata such as media catalog number and track ISRCs.  The CUESHEET block is especially useful for backing up CD-DA discs, but it can be used as a general purpose cueing mechanism for playback.</li>
 					<li><a name="def_PICTURE"><b>PICTURE</b></a>: This block is for storing pictures associated with the file, most commonly cover art from CDs.  There may be more than one PICTURE block in a file.  The picture format is similar to the <a href="http://www.id3.org/id3v2.4.0-frames.txt">APIC frame in ID3v2</a>.  The PICTURE block has a type, MIME type, and UTF-8 description like ID3v2, and supports external linking via URL (though this is discouraged).  The differences are that there is no uniqueness constraint on the description field, and the MIME type is mandatory.  The FLAC PICTURE block also includes the resolution, color depth, and palette size so that the client can search for a suitable picture without having to scan them all.</li>
 				</ul>
 			</li>
 			<li>
-				The audio data is composed of one or more audio frames.  Each frame consists of a frame header, which contains a sync code, info about the frame like the block size, sample rate, number of channels, et cetera, and an 8-bit CRC.  The frame header also contains either the sample number of the first sample in the frame (for variable-blocksize streams), or the frame number (for fixed-blocksize streams).  This allows for fast, sample-accurate seeking to be performed.  Following the frame header are encoded subframes, one for each channel, and finally, the frame is zero-padded to a byte boundary.  Each subframe has its own header that specifies how the subframe is encoded.
+				The audio data is composed of one or more audio frames.  Each frame consists of a frame header, which contains a sync code, information about the frame like the block size, sample rate, number of channels, et cetera, and an 8-bit CRC.  The frame header also contains either the sample number of the first sample in the frame (for variable-blocksize streams), or the frame number (for fixed-blocksize streams).  This allows for fast, sample-accurate seeking to be performed.  Following the frame header are encoded subframes, one for each channel, and finally, the frame is zero-padded to a byte boundary.  Each subframe has its own header that specifies how the subframe is encoded.
 			</li>
 			<li>
 				Since a decoder may start decoding in the middle of a stream, there must be a method to determine the start of a frame.  A 14-bit sync code begins each frame.  The sync code will not appear anywhere else in the frame header.  However, since it may appear in the subframes, the decoder has two other ways of ensuring a correct sync.  The first is to check that the rest of the frame header contains no invalid data.  Even this is not foolproof since valid header patterns can still occur within the subframes.  The decoder's final check is to generate an 8-bit CRC of the frame header and compare this to the CRC stored at the end of the frame header.
@@ -281,13 +286,13 @@
 				Individual subframes (one for each channel) are coded separately within a frame, and appear serially in the stream.  In other words, the encoded audio data is NOT channel-interleaved.  This reduces decoder complexity at the cost of requiring larger decode buffers.  Each subframe has its own header specifying the attributes of the subframe, like prediction method and order, residual coding parameters, etc.  The header is followed by the encoded audio data for that channel.
 			</li>
 			<li>
-				<a name="subset">FLAC</a> specifies a subset of itself as the Subset format.  The purpose of this is to ensure that any streams encoded according to the Subset are truly "streamable", meaning that a decoder that cannot seek within the stream can still pick up in the middle of the stream and start decoding.  It also makes hardware decoder implementations more practical by limiting the encoding parameters such that decoder buffer sizes and other resource requirements can be easily determined.  "flac" generates Subset streams by default unless the "--lax" command-line option is used.  The Subset makes the following limitations on what may be used in the stream:
+				<a name="subset">FLAC</a> specifies a subset of itself as the Subset format.  The purpose of this is to ensure that any streams encoded according to the Subset are truly "streamable", meaning that a decoder that cannot seek within the stream can still pick up in the middle of the stream and start decoding.  It also makes hardware decoder implementations more practical by limiting the encoding parameters such that decoder buffer sizes and other resource requirements can be easily determined.  <span class="commandname">flac</span> generates Subset streams by default unless the "--lax" command-line option is used.  The Subset makes the following limitations on what may be used in the stream:
 				<ul>
 				<li>
-					The blocksize bits in the <a href="#frame_header">frame header</a> must be 0001-0101 or 1000-1110, specifying a fixed-blocksize stream (the exception being the last block as described in the table) and a few allowable blocksizes.  This also means that the STREAMINFO metadata block must specify equal mininum and maximum blocksizes.  If the sample rate is &lt;= 48000Hz, the blocksize must be &lt;=4608, i.e. blocksize bits 0001-0101 or 1000-1100.
+					The blocksize bits in the <a href="#frame_header">frame header</a> must be 0001-1110.  The blocksize must be &lt;=16384; if the sample rate is &lt;= 48000Hz, the blocksize must be &lt;=4608.
 				</li>
 				<li>
-					The sample rate bits in the <a href="#frame_header">frame header</a> must be 0001-1011.
+					The sample rate bits in the <a href="#frame_header">frame header</a> must be 0001-1110.
 				</li>
 				<li>
 					The bits-per-sample bits in the <a href="#frame_header">frame header</a> must be 001-111.
@@ -736,7 +741,7 @@
 				&lt;n&gt;
 			</td>
 			<td>
-				Also known as FLAC tags, the contents of a vorbis comment packet as specified <a href="http://www.xiph.org/vorbis/doc/v-comment.html">here</a>, including the vendor string.  Note that the vorbis comment spec allows for on the order of 2 ^ 64 bytes of data where as the FLAC metadata block is limited to 2 ^ 24 bytes.  Given the stated purpose of vorbis comments, i.e. human-readable textual information, this limit is unlikely to be restrictive.  Also note that the 32-bit field lengths are little-endian coded according to the vorbis spec, as opposed to the usual big-endian coding of fixed-length integers in the rest of FLAC.
+				Also known as FLAC tags, the contents of a vorbis comment packet as specified <a href="http://www.xiph.org/vorbis/doc/v-comment.html">here</a> (without the framing bit).  Note that the vorbis comment spec allows for on the order of 2 ^ 64 bytes of data where as the FLAC metadata block is limited to 2 ^ 24 bytes.  Given the stated purpose of vorbis comments, i.e. human-readable textual information, this limit is unlikely to be restrictive.  Also note that the 32-bit field lengths are little-endian coded according to the vorbis spec, as opposed to the usual big-endian coding of fixed-length integers in the rest of FLAC.
 			</td>
 		</tr>
 	</table>
@@ -790,7 +795,7 @@
 				&lt;8&gt;
 			</td>
 			<td>
-				The number of tracks.  For CD-DA, this number must be no more than 100 (99 regular tracks and one leadout track).
+				The number of tracks.  Must be at least 1 (because of the requisite lead-out track).  For CD-DA, this number must be no more than 100 (99 regular tracks and one lead-out track).
 			</td>
 		</tr>
 		<tr>
@@ -798,7 +803,7 @@
 				<a href="#cuesheet_track"><i>CUESHEET_TRACK</i></a>+
 			</td>
 			<td>
-				One or more tracks.  A CUESHEET block is required to have a lead-out track; it is always the last track in the CUESHEET.  For CD-DA, the lead-out track number must be 170 as specified by the Red Book.
+				One or more tracks.  A CUESHEET block is required to have a lead-out track; it is always the last track in the CUESHEET.  For CD-DA, the lead-out track number must be 170 as specified by the Red Book, otherwise is must be 255.
 			</td>
 		</tr>
 	</table>
@@ -828,7 +833,7 @@
 				&lt;8&gt;
 			</td>
 			<td>
-				Track number.  A track number of 0 is not allowed to avoid conflicting with the CD-DA spec, which reserves this for the lead-in. For CD-DA the number must be 1-99, or 170 for the lead-out.  It is not required but encouraged to start with track 1 and increase sequentially.  Track numbers must be unique within a CUESHEET.
+				Track number.  A track number of 0 is not allowed to avoid conflicting with the CD-DA spec, which reserves this for the lead-in.  For CD-DA the number must be 1-99, or 170 for the lead-out; for non-CD-DA, the track number must for 255 for the lead-out.  It is not required but encouraged to start with track 1 and increase sequentially.  Track numbers must be unique within a CUESHEET.
 			</td>
 		</tr>
 		<tr>
@@ -1113,16 +1118,32 @@
 		</tr>
 		<tr>
 			<td align="right" valign="top" bgcolor="#F4F4CC">
-				&lt;2&gt;
+				&lt;1&gt;
 			</td>
 			<td>
 				Reserved:<br />
 				<ul>
 				<li>
-					<tt>00</tt> : mandatory value
+					<tt>0</tt> : mandatory value
 				</li>
 				<li>
-					<tt>01-11</tt> : reserved for future use
+					<tt>1</tt> : reserved for future use
+				</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" valign="top" bgcolor="#F4F4CC">
+				&lt;1&gt;
+			</td>
+			<td>
+				Blocking strategy:<br />
+				<ul>
+				<li>
+					<tt>0</tt> : fixed-blocksize stream; frame header encodes the frame number
+				</li>
+				<li>
+					<tt>1</tt> : variable-blocksize stream; frame header encodes the sample number
 				</li>
 				</ul>
 			</td>
@@ -1135,7 +1156,7 @@
 				Block size in inter-channel samples:<br />
 				<ul>
 				<li>
-					<tt>0000</tt> : get from STREAMINFO metadata block
+					<tt>0000</tt> : reserved
 				</li>
 				<li>
 					<tt>0001</tt> : 192 samples
@@ -1166,7 +1187,13 @@
 					<tt>0000</tt> : get from STREAMINFO metadata block
 				</li>
 				<li>
-					<tt>0001-0011</tt> : reserved
+					<tt>0001</tt> : 88.2kHz
+				</li>
+				<li>
+					<tt>0010</tt> : 176.4kHz
+				</li>
+				<li>
+					<tt>0011</tt> : 192kHz
 				</li>
 				<li>
 					<tt>0100</tt> : 8kHz
@@ -1281,7 +1308,15 @@
 				&lt;1&gt;
 			</td>
 			<td>
-				Zero bit padding, to prevent sync-fooling string of 1s
+				Reserved:<br />
+				<ul>
+				<li>
+					<tt>0</tt> : mandatory value
+				</li>
+				<li>
+					<tt>1</tt> : reserved for future use
+				</li>
+				</ul>
 			</td>
 		</tr>
 		<tr>
@@ -1328,7 +1363,10 @@
 				<font size="+1">NOTES</font><br />
 				<ul>
 				<li>
-					The blocksize bits 0000-0101 and 1000-1111 may only be used if the blocksize is fixed throughout the entire stream.  Blocksize bits 0110-0111 may be used in any case but the decoder will have to pessimistically guess that it is a variable-blocksize stream unless it has STREAMINFO metadata and the min_blocksize and max_blocksize values in it match.  There is only one special case: the encoder may use blocksize bits 0110-0111 on the last frame of a fixed-blocksize stream, as long as the blocksize is not greater than the stream blocksize.
+					The "blocking strategy" bit must be the same throughout the entire stream.
+				</li>
+				<li>
+					The "blocking strategy" bit determines how to calculate the sample number of the first sample in the frame.  If the bit is <tt>0</tt> (fixed-blocksize), the frame header encodes the frame number as above, and the frame's starting sample number will be the frame number times the blocksize.  If it is <tt>1</tt> (variable-blocksize), the frame header encodes the frame's starting sample number itself.  (In the case of a fixed-blocksize stream, only the last block may be shorter than the stream blocksize; its starting sample number will be calculated as the frame number times the previous frame's blocksize, or zero if it is the first frame).
 				</li>
 				<li>
 					The "UTF-8" coding used for the sample/frame number is the same variable length code used to store compressed UCS-2, extended to handle larger input.
@@ -1607,32 +1645,24 @@
 				Residual coding method:<br />
 				<ul>
 				<li>
-					<tt>00</tt> : partitioned rice coding
+					<tt>00</tt> : partitioned Rice coding with 4-bit Rice parameter; RESIDUAL_CODING_METHOD_PARTITIONED_RICE follows
 				</li>
 				<li>
-					<tt>01-11</tt> : reserved
+					<tt>01</tt> : partitioned Rice coding with 5-bit Rice parameter; RESIDUAL_CODING_METHOD_PARTITIONED_RICE2 follows
+				</li>
+				<li>
+					<tt>10-11</tt> : reserved
 				</li>
 				</ul>
 			</td>
 		</tr>
 		<tr>
 			<td align="right" valign="top" bgcolor="#F4F4CC">
-				<a href="#partitioned_rice"><i>RESIDUAL_CODING_METHOD_PARTITIONED_RICE</i></a>
+				<a href="#partitioned_rice"><i>RESIDUAL_CODING_METHOD_PARTITIONED_RICE</i></a>&nbsp;||<br />
+				<a href="#partitioned_rice2"><i>RESIDUAL_CODING_METHOD_PARTITIONED_RICE2</i></a>
 			</td>
 			<td>
 				&nbsp;
-			</td>
-		</tr>
-		<tr>
-			<td>
-			</td>
-			<td bgcolor="#F4F4CC">
-				<font size="+1">NOTES</font><br />
-				<ul>
-				<li>
-					Currently, FLAC specifies only one entropy coding method.
-				</li>
-				</ul>
 			</td>
 		</tr>
 	</table>
@@ -1691,6 +1721,85 @@
 				</li>
 				<li>
 					<tt>1111</tt> : Escape code, meaning the partition is in unencoded binary form using n bits per sample; n follows as a 5-bit number.
+				</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" valign="top" bgcolor="#F4F4CC">
+				&lt;?&gt;
+			</td>
+			<td>
+				Encoded residual.  The number of samples (n) in the partition is determined as follows:<br />
+				<ul>
+				<li>
+					if the partition order is zero, n = frame's blocksize - predictor order
+				</li>
+				<li>
+					else if this is not the first partition of the subframe, n = (frame's blocksize / (2^partition order))
+				</li>
+				<li>
+					else n = (frame's blocksize / (2^partition order)) - predictor order
+				</li>
+				</ul>
+			</td>
+		</tr>
+	</table>
+	</td></tr></table>
+</div>
+
+<br />
+
+<div class="box">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EEEED4"><tr><td>
+	<table width="100%" border="1" bgcolor="#EEEED4">
+		<tr>
+			<td colspan="2" bgcolor="#D3D4C5">
+				<a name="partitioned_rice2"><font size="+1"><b>RESIDUAL_CODING_METHOD_PARTITIONED_RICE2</b></font></a>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" valign="top" bgcolor="#F4F4CC">
+				&lt;4&gt;
+			</td>
+			<td>
+				Partition order.
+			</td>
+		</tr>
+		<tr>
+			<td align="right" valign="top" bgcolor="#F4F4CC">
+				<a href="#rice2_partition"><i>RICE2_PARTITION</i></a>+
+			</td>
+			<td>
+				There will be 2^order partitions.
+			</td>
+		</tr>
+	</table>
+	</td></tr></table>
+</div>
+
+<br />
+
+<div class="box">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EEEED4"><tr><td>
+	<table width="100%" border="1" bgcolor="#EEEED4">
+		<tr>
+			<td colspan="2" bgcolor="#D3D4C5">
+				<a name="rice2_partition"><font size="+1"><b>RICE2_PARTITION</b></font></a>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" valign="top" bgcolor="#F4F4CC">
+				&lt;5(+5)&gt;
+			</td>
+			<td>
+				Encoding parameter:<br />
+				<ul>
+				<li>
+					<tt>0000-11110</tt> : Rice parameter.
+				</li>
+				<li>
+					<tt>11111</tt> : Escape code, meaning the partition is in unencoded binary form using n bits per sample; n follows as a 5-bit number.
 				</li>
 				</ul>
 			</td>

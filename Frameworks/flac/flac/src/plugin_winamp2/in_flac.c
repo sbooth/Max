@@ -24,12 +24,13 @@
 #include <limits.h> /* for INT_MAX */
 #include <stdio.h>
 
+#include "share/alloc.h"
 #include "winamp2/in2.h"
 #include "configure.h"
 #include "infobox.h"
 #include "tagz.h"
 
-#define PLUGIN_VERSION          "1.2.0"
+#define PLUGIN_VERSION          "1.2.1"
 
 static In_Module mod_;                      /* the input module (declared near the bottom of this file) */
 static char lastfn_[MAX_PATH];              /* currently playing file (used for getting info on the current file) */
@@ -279,7 +280,7 @@ static T_CHAR *get_tag(const T_CHAR *tag, void *param)
 	if (!tag)
 		return 0;
 	/* Vorbis comment names must be ASCII, so convert 'tag' first */
-	tagname = malloc(wcslen(tag)+1);
+	tagname = safe_malloc_add_2op_(wcslen(tag), /*+*/1);
 	for(p=tagname;*tag;) {
 		if(*tag > 0x7d) {
 			free(tagname);

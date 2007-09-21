@@ -130,6 +130,8 @@ FLaC__USE_3DNOW_FALSE = @FLaC__USE_3DNOW_FALSE@
 FLaC__USE_3DNOW_TRUE = @FLaC__USE_3DNOW_TRUE@
 FLaC__USE_ALTIVEC_FALSE = @FLaC__USE_ALTIVEC_FALSE@
 FLaC__USE_ALTIVEC_TRUE = @FLaC__USE_ALTIVEC_TRUE@
+FLaC__WITH_CPPLIBS_FALSE = @FLaC__WITH_CPPLIBS_FALSE@
+FLaC__WITH_CPPLIBS_TRUE = @FLaC__WITH_CPPLIBS_TRUE@
 GAS = @GAS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -147,6 +149,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MINGW_WINSOCK_LIBS = @MINGW_WINSOCK_LIBS@
 NASM = @NASM@
 OBJEXT = @OBJEXT@
 OBJ_FORMAT = @OBJ_FORMAT@
@@ -216,7 +219,9 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 
-SUBDIRS = FLAC FLAC++ share test_libs_common
+@FLaC__WITH_CPPLIBS_TRUE@CPPLIBS_DIRS = FLAC++
+
+SUBDIRS = FLAC $(CPPLIBS_DIRS) share test_libs_common
 subdir = include
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -230,7 +235,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	installdirs-recursive install-recursive uninstall-recursive \
 	check-recursive installcheck-recursive
 DIST_COMMON = $(srcdir)/Makefile.in Makefile.am
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = FLAC FLAC++ share test_libs_common
 all: all-recursive
 
 .SUFFIXES:
@@ -405,7 +410,7 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	list='$(SUBDIRS)'; for subdir in $$list; do \
+	list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
 	  if test "$$subdir" = .; then :; else \
 	    test -d $(distdir)/$$subdir \
 	    || mkdir $(distdir)/$$subdir \

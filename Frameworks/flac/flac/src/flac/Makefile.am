@@ -21,13 +21,18 @@ AM_CFLAGS = @OGG_CFLAGS@
 
 EXTRA_DIST = \
 	Makefile.lite \
+	Makefile.lite.iffscan \
 	flac.dsp \
-	flac.vcproj
+	flac.vcproj \
+	iffscan.c \
+	iffscan.dsp \
+	iffscan.vcproj
 
 flac_SOURCES = \
 	analyze.c \
 	decode.c \
 	encode.c \
+	foreign_metadata.c \
 	main.c \
 	local_string_utils.c \
 	utils.c \
@@ -35,6 +40,7 @@ flac_SOURCES = \
 	analyze.h \
 	decode.h \
 	encode.h \
+	foreign_metadata.h \
 	local_string_utils.h \
 	utils.h \
 	vorbiscomment.h
@@ -48,4 +54,5 @@ flac_LDADD = \
 	$(top_builddir)/src/libFLAC/libFLAC.la \
 	@OGG_LIBS@ \
 	@LIBICONV@ \
+	@MINGW_WINSOCK_LIBS@ \
 	-lm

@@ -463,7 +463,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE am__leading_dot MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ACLOCAL_AMFLAGS CCAS CCASFLAGS FLaC__CPU_IA32_TRUE FLaC__CPU_IA32_FALSE FLaC__CPU_PPC_TRUE FLaC__CPU_PPC_FALSE FLaC__CPU_SPARC_TRUE FLaC__CPU_SPARC_FALSE OBJ_FORMAT FLaC__SYS_DARWIN_TRUE FLaC__SYS_DARWIN_FALSE FLaC__SYS_LINUX_TRUE FLaC__SYS_LINUX_FALSE FLaC__NO_ASM_TRUE FLaC__NO_ASM_FALSE DEBUG_TRUE DEBUG_FALSE FLaC__SSE_OS_TRUE FLaC__SSE_OS_FALSE FLaC__USE_3DNOW_TRUE FLaC__USE_3DNOW_FALSE FLaC__USE_ALTIVEC_TRUE FLaC__USE_ALTIVEC_FALSE FLAC__TEST_LEVEL FLAC__TEST_WITH_VALGRIND DOXYGEN FLaC__HAS_DOXYGEN_TRUE FLaC__HAS_DOXYGEN_FALSE FLaC__INSTALL_XMMS_PLUGIN_LOCALLY_TRUE FLaC__INSTALL_XMMS_PLUGIN_LOCALLY_FALSE XMMS_CONFIG XMMS_CFLAGS XMMS_LIBS XMMS_VERSION XMMS_DATA_DIR XMMS_PLUGIN_DIR XMMS_VISUALIZATION_PLUGIN_DIR XMMS_INPUT_PLUGIN_DIR XMMS_OUTPUT_PLUGIN_DIR XMMS_GENERAL_PLUGIN_DIR XMMS_EFFECT_PLUGIN_DIR FLaC__HAS_XMMS_TRUE FLaC__HAS_XMMS_FALSE OGG_CFLAGS OGG_LIBS FLaC__HAS_OGG_TRUE FLaC__HAS_OGG_FALSE LIBICONV LTLIBICONV DOCBOOK_TO_MAN FLaC__HAS_DOCBOOK_TO_MAN_TRUE FLaC__HAS_DOCBOOK_TO_MAN_FALSE NASM FLaC__HAS_NASM_TRUE FLaC__HAS_NASM_FALSE AS GAS FLaC__HAS_AS_TRUE FLaC__HAS_AS_FALSE FLaC__HAS_GAS_TRUE FLaC__HAS_GAS_FALSE FLaC__HAS_AS__TEMPORARILY_DISABLED_TRUE FLaC__HAS_AS__TEMPORARILY_DISABLED_FALSE FLaC__HAS_GAS__TEMPORARILY_DISABLED_TRUE FLaC__HAS_GAS__TEMPORARILY_DISABLED_FALSE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE am__leading_dot MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT build build_cpu build_vendor build_os host host_cpu host_vendor host_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ACLOCAL_AMFLAGS CCAS CCASFLAGS FLaC__CPU_IA32_TRUE FLaC__CPU_IA32_FALSE FLaC__CPU_PPC_TRUE FLaC__CPU_PPC_FALSE FLaC__CPU_SPARC_TRUE FLaC__CPU_SPARC_FALSE OBJ_FORMAT MINGW_WINSOCK_LIBS FLaC__SYS_DARWIN_TRUE FLaC__SYS_DARWIN_FALSE FLaC__SYS_LINUX_TRUE FLaC__SYS_LINUX_FALSE FLaC__NO_ASM_TRUE FLaC__NO_ASM_FALSE DEBUG_TRUE DEBUG_FALSE FLaC__SSE_OS_TRUE FLaC__SSE_OS_FALSE FLaC__USE_3DNOW_TRUE FLaC__USE_3DNOW_FALSE FLaC__USE_ALTIVEC_TRUE FLaC__USE_ALTIVEC_FALSE FLAC__TEST_LEVEL FLAC__TEST_WITH_VALGRIND DOXYGEN FLaC__HAS_DOXYGEN_TRUE FLaC__HAS_DOXYGEN_FALSE FLaC__INSTALL_XMMS_PLUGIN_LOCALLY_TRUE FLaC__INSTALL_XMMS_PLUGIN_LOCALLY_FALSE XMMS_CONFIG XMMS_CFLAGS XMMS_LIBS XMMS_VERSION XMMS_DATA_DIR XMMS_PLUGIN_DIR XMMS_VISUALIZATION_PLUGIN_DIR XMMS_INPUT_PLUGIN_DIR XMMS_OUTPUT_PLUGIN_DIR XMMS_GENERAL_PLUGIN_DIR XMMS_EFFECT_PLUGIN_DIR FLaC__HAS_XMMS_TRUE FLaC__HAS_XMMS_FALSE FLaC__WITH_CPPLIBS_TRUE FLaC__WITH_CPPLIBS_FALSE OGG_CFLAGS OGG_LIBS FLaC__HAS_OGG_TRUE FLaC__HAS_OGG_FALSE LIBICONV LTLIBICONV DOCBOOK_TO_MAN FLaC__HAS_DOCBOOK_TO_MAN_TRUE FLaC__HAS_DOCBOOK_TO_MAN_FALSE NASM FLaC__HAS_NASM_TRUE FLaC__HAS_NASM_FALSE AS GAS FLaC__HAS_AS_TRUE FLaC__HAS_AS_FALSE FLaC__HAS_GAS_TRUE FLaC__HAS_GAS_FALSE FLaC__HAS_AS__TEMPORARILY_DISABLED_TRUE FLaC__HAS_AS__TEMPORARILY_DISABLED_FALSE FLaC__HAS_GAS__TEMPORARILY_DISABLED_TRUE FLaC__HAS_GAS__TEMPORARILY_DISABLED_FALSE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1053,6 +1053,7 @@ Optional Features:
                           Install XMMS plugin to ~/.xmms/Plugins instead of
                           system location
   --disable-xmms-plugin   Do not build XMMS plugin
+  --disable-cpplibs       Do not build libFLAC++
   --disable-ogg           Disable ogg support (default: test for libogg)
   --disable-oggtest       Do not try to compile and run a test Ogg program
   --disable-rpath         do not hardcode runtime library paths
@@ -1801,7 +1802,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=flac
- VERSION=1.2.0
+ VERSION=1.2.1
 
 
 cat >>confdefs.h <<_ACEOF
@@ -3661,7 +3662,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 3664 "configure"' > conftest.$ac_ext
+  echo '#line 3665 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5233,7 +5234,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5236:" \
+echo "$as_me:5237:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6331,11 +6332,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6334: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6335: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6338: \$? = $ac_status" >&5
+   echo "$as_me:6339: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6593,11 +6594,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6596: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6597: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6600: \$? = $ac_status" >&5
+   echo "$as_me:6601: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -6655,11 +6656,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6658: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6659: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6662: \$? = $ac_status" >&5
+   echo "$as_me:6663: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8040,7 +8041,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 8043 "configure"' > conftest.$ac_ext
+    echo '#line 8044 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8911,7 +8912,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8914 "configure"
+#line 8915 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9009,7 +9010,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9012 "configure"
+#line 9013 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11257,11 +11258,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11260: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11261: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11264: \$? = $ac_status" >&5
+   echo "$as_me:11265: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -11319,11 +11320,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11322: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11323: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11326: \$? = $ac_status" >&5
+   echo "$as_me:11327: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11834,7 +11835,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 11837 "configure"' > conftest.$ac_ext
+    echo '#line 11838 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -12705,7 +12706,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12708 "configure"
+#line 12709 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12803,7 +12804,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12806 "configure"
+#line 12807 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13688,11 +13689,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13691: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13692: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13695: \$? = $ac_status" >&5
+   echo "$as_me:13696: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13750,11 +13751,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13753: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13754: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13757: \$? = $ac_status" >&5
+   echo "$as_me:13758: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15115,7 +15116,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 15118 "configure"' > conftest.$ac_ext
+    echo '#line 15119 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -15888,11 +15889,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15891: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15892: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15895: \$? = $ac_status" >&5
+   echo "$as_me:15896: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16150,11 +16151,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16153: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16154: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16157: \$? = $ac_status" >&5
+   echo "$as_me:16158: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16212,11 +16213,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16215: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16216: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16219: \$? = $ac_status" >&5
+   echo "$as_me:16220: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17597,7 +17598,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 17600 "configure"' > conftest.$ac_ext
+    echo '#line 17601 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -18468,7 +18469,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18471 "configure"
+#line 18472 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18566,7 +18567,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18569 "configure"
+#line 18570 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -21534,12 +21535,21 @@ else
   FLaC__CPU_SPARC_FALSE=
 fi
 
+
 case "$host" in
 	i386-*-openbsd3.[0-3]) OBJ_FORMAT=aoutb ;;
 	*-*-cygwin|*mingw*) OBJ_FORMAT=win32 ;;
 	*-*-darwin*) OBJ_FORMAT=macho ;;
 	*) OBJ_FORMAT=elf ;;
 esac
+
+
+# only needed because of ntohl() usage, can get rid of after that's gone:
+case "$host" in
+	*-*-cygwin|*mingw*) MINGW_WINSOCK_LIBS=-lwsock32 ;;
+	*) MINGW_WINSOCK_LIBS= ;;
+esac
+
 
 case "$host" in
 	*-pc-linux-gnu)
@@ -22123,6 +22133,30 @@ if test -n "$XMMS_INPUT_PLUGIN_DIR"; then
 else
   FLaC__HAS_XMMS_TRUE='#'
   FLaC__HAS_XMMS_FALSE=
+fi
+
+
+# Check whether --enable-cpplibs or --disable-cpplibs was given.
+if test "${enable_cpplibs+set}" = set; then
+  enableval="$enable_cpplibs"
+  case "${enableval}" in
+	yes) disable_cpplibs=false ;;
+	no)  disable_cpplibs=true ;;
+	*)   { { echo "$as_me:$LINENO: error: bad value ${enableval} for --enable-cpplibs" >&5
+echo "$as_me: error: bad value ${enableval} for --enable-cpplibs" >&2;}
+   { (exit 1); exit 1; }; } ;;
+esac
+else
+  disable_cpplibs=false
+fi;
+
+
+if test "x$disable_cpplibs" != xtrue; then
+  FLaC__WITH_CPPLIBS_TRUE=
+  FLaC__WITH_CPPLIBS_FALSE='#'
+else
+  FLaC__WITH_CPPLIBS_TRUE='#'
+  FLaC__WITH_CPPLIBS_FALSE=
 fi
 
 
@@ -23448,17 +23482,17 @@ _ACEOF
 
 fi
 
-OUR_CFLAGS_HEAD='-I$(top_builddir) -I$(srcdir)/include -I$(top_srcdir)/include'
+CPPFLAGS='-I$(top_builddir) -I$(srcdir)/include -I$(top_srcdir)/include'" $CPPFLAGS"
 if test "x$debug" = xtrue; then
-	OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -g -DDEBUG"
+	CPPFLAGS="-DDEBUG $CPPFLAGS"
+	CFLAGS="-g $CFLAGS"
 else
-	OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -DNDEBUG"
+	CPPFLAGS="-DNDEBUG $CPPFLAGS"
 	if test "x$GCC" = xyes; then
-		OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -O3 -funroll-loops -finline-functions -Wall -W -Winline -DFLaC__INLINE=__inline__"
+		CPPFLAGS="-DFLaC__INLINE=__inline__ $CPPFLAGS"
+		CFLAGS="-O3 -funroll-loops -finline-functions -Wall -W -Winline $CFLAGS"
 	fi
 fi
-CFLAGS="$OUR_CFLAGS_HEAD $CFLAGS"
-CXXFLAGS="$OUR_CFLAGS_HEAD $CXXFLAGS"
 
 #@@@
 
@@ -23482,7 +23516,7 @@ else
 fi
 
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ac_config_files="$ac_config_files Makefile src/Makefile src/libFLAC/Makefile src/libFLAC/flac.pc src/libFLAC/ia32/Makefile src/libFLAC/ppc/Makefile src/libFLAC/ppc/as/Makefile src/libFLAC/ppc/gas/Makefile src/libFLAC/include/Makefile src/libFLAC/include/private/Makefile src/libFLAC/include/protected/Makefile src/libFLAC++/Makefile src/libFLAC++/flac++.pc src/flac/Makefile src/metaflac/Makefile src/monkeys_audio_utilities/Makefile src/monkeys_audio_utilities/flac_mac/Makefile src/monkeys_audio_utilities/flac_ren/Makefile src/plugin_common/Makefile src/plugin_winamp2/Makefile src/plugin_winamp2/include/Makefile src/plugin_winamp2/include/winamp2/Makefile src/plugin_xmms/Makefile src/share/Makefile src/share/getopt/Makefile src/share/grabbag/Makefile src/share/replaygain_analysis/Makefile src/share/replaygain_synthesis/Makefile src/share/replaygain_synthesis/include/Makefile src/share/replaygain_synthesis/include/private/Makefile src/share/utf8/Makefile src/test_grabbag/Makefile src/test_grabbag/cuesheet/Makefile src/test_grabbag/picture/Makefile src/test_libs_common/Makefile src/test_libFLAC/Makefile src/test_libFLAC++/Makefile src/test_seeking/Makefile src/test_streams/Makefile include/Makefile include/FLAC/Makefile include/FLAC++/Makefile include/share/Makefile include/share/grabbag/Makefile include/test_libs_common/Makefile doc/Makefile doc/html/Makefile doc/html/images/Makefile doc/html/images/hw/Makefile doc/html/ru/Makefile m4/Makefile man/Makefile test/Makefile test/cuesheets/Makefile test/flac-to-flac-metadata-test-files/Makefile test/metaflac-test-files/Makefile test/pictures/Makefile build/Makefile obj/Makefile obj/debug/Makefile obj/debug/bin/Makefile obj/debug/lib/Makefile obj/release/Makefile obj/release/bin/Makefile obj/release/lib/Makefile"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile src/Makefile src/libFLAC/Makefile src/libFLAC/flac.pc src/libFLAC/ia32/Makefile src/libFLAC/ppc/Makefile src/libFLAC/ppc/as/Makefile src/libFLAC/ppc/gas/Makefile src/libFLAC/include/Makefile src/libFLAC/include/private/Makefile src/libFLAC/include/protected/Makefile src/libFLAC++/Makefile src/libFLAC++/flac++.pc src/flac/Makefile src/metaflac/Makefile src/monkeys_audio_utilities/Makefile src/monkeys_audio_utilities/flac_mac/Makefile src/monkeys_audio_utilities/flac_ren/Makefile src/plugin_common/Makefile src/plugin_winamp2/Makefile src/plugin_winamp2/include/Makefile src/plugin_winamp2/include/winamp2/Makefile src/plugin_xmms/Makefile src/share/Makefile src/share/getopt/Makefile src/share/grabbag/Makefile src/share/replaygain_analysis/Makefile src/share/replaygain_synthesis/Makefile src/share/replaygain_synthesis/include/Makefile src/share/replaygain_synthesis/include/private/Makefile src/share/utf8/Makefile src/test_grabbag/Makefile src/test_grabbag/cuesheet/Makefile src/test_grabbag/picture/Makefile src/test_libs_common/Makefile src/test_libFLAC/Makefile src/test_libFLAC++/Makefile src/test_seeking/Makefile src/test_streams/Makefile examples/Makefile examples/c/Makefile examples/c/decode/Makefile examples/c/decode/file/Makefile examples/c/encode/Makefile examples/c/encode/file/Makefile examples/cpp/Makefile examples/cpp/decode/Makefile examples/cpp/decode/file/Makefile examples/cpp/encode/Makefile examples/cpp/encode/file/Makefile include/Makefile include/FLAC/Makefile include/FLAC++/Makefile include/share/Makefile include/share/grabbag/Makefile include/test_libs_common/Makefile doc/Makefile doc/html/Makefile doc/html/images/Makefile doc/html/images/hw/Makefile doc/html/ru/Makefile m4/Makefile man/Makefile test/Makefile test/cuesheets/Makefile test/flac-to-flac-metadata-test-files/Makefile test/metaflac-test-files/Makefile test/pictures/Makefile build/Makefile obj/Makefile obj/debug/Makefile obj/debug/bin/Makefile obj/debug/lib/Makefile obj/release/Makefile obj/release/bin/Makefile obj/release/lib/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -23698,6 +23732,13 @@ if test -z "${FLaC__HAS_XMMS_TRUE}" && test -z "${FLaC__HAS_XMMS_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"FLaC__HAS_XMMS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"FLaC__HAS_XMMS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${FLaC__WITH_CPPLIBS_TRUE}" && test -z "${FLaC__WITH_CPPLIBS_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"FLaC__WITH_CPPLIBS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"FLaC__WITH_CPPLIBS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -24233,6 +24274,17 @@ do
   "src/test_libFLAC++/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/test_libFLAC++/Makefile" ;;
   "src/test_seeking/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/test_seeking/Makefile" ;;
   "src/test_streams/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/test_streams/Makefile" ;;
+  "examples/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
+  "examples/c/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/c/Makefile" ;;
+  "examples/c/decode/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/c/decode/Makefile" ;;
+  "examples/c/decode/file/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/c/decode/file/Makefile" ;;
+  "examples/c/encode/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/c/encode/Makefile" ;;
+  "examples/c/encode/file/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/c/encode/file/Makefile" ;;
+  "examples/cpp/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/cpp/Makefile" ;;
+  "examples/cpp/decode/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/cpp/decode/Makefile" ;;
+  "examples/cpp/decode/file/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/cpp/decode/file/Makefile" ;;
+  "examples/cpp/encode/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/cpp/encode/Makefile" ;;
+  "examples/cpp/encode/file/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/cpp/encode/file/Makefile" ;;
   "include/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
   "include/FLAC/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/FLAC/Makefile" ;;
   "include/FLAC++/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/FLAC++/Makefile" ;;
@@ -24421,6 +24473,7 @@ s,@FLaC__CPU_PPC_FALSE@,$FLaC__CPU_PPC_FALSE,;t t
 s,@FLaC__CPU_SPARC_TRUE@,$FLaC__CPU_SPARC_TRUE,;t t
 s,@FLaC__CPU_SPARC_FALSE@,$FLaC__CPU_SPARC_FALSE,;t t
 s,@OBJ_FORMAT@,$OBJ_FORMAT,;t t
+s,@MINGW_WINSOCK_LIBS@,$MINGW_WINSOCK_LIBS,;t t
 s,@FLaC__SYS_DARWIN_TRUE@,$FLaC__SYS_DARWIN_TRUE,;t t
 s,@FLaC__SYS_DARWIN_FALSE@,$FLaC__SYS_DARWIN_FALSE,;t t
 s,@FLaC__SYS_LINUX_TRUE@,$FLaC__SYS_LINUX_TRUE,;t t
@@ -24455,6 +24508,8 @@ s,@XMMS_GENERAL_PLUGIN_DIR@,$XMMS_GENERAL_PLUGIN_DIR,;t t
 s,@XMMS_EFFECT_PLUGIN_DIR@,$XMMS_EFFECT_PLUGIN_DIR,;t t
 s,@FLaC__HAS_XMMS_TRUE@,$FLaC__HAS_XMMS_TRUE,;t t
 s,@FLaC__HAS_XMMS_FALSE@,$FLaC__HAS_XMMS_FALSE,;t t
+s,@FLaC__WITH_CPPLIBS_TRUE@,$FLaC__WITH_CPPLIBS_TRUE,;t t
+s,@FLaC__WITH_CPPLIBS_FALSE@,$FLaC__WITH_CPPLIBS_FALSE,;t t
 s,@OGG_CFLAGS@,$OGG_CFLAGS,;t t
 s,@OGG_LIBS@,$OGG_LIBS,;t t
 s,@FLaC__HAS_OGG_TRUE@,$FLaC__HAS_OGG_TRUE,;t t

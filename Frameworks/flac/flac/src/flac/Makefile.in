@@ -130,6 +130,8 @@ FLaC__USE_3DNOW_FALSE = @FLaC__USE_3DNOW_FALSE@
 FLaC__USE_3DNOW_TRUE = @FLaC__USE_3DNOW_TRUE@
 FLaC__USE_ALTIVEC_FALSE = @FLaC__USE_ALTIVEC_FALSE@
 FLaC__USE_ALTIVEC_TRUE = @FLaC__USE_ALTIVEC_TRUE@
+FLaC__WITH_CPPLIBS_FALSE = @FLaC__WITH_CPPLIBS_FALSE@
+FLaC__WITH_CPPLIBS_TRUE = @FLaC__WITH_CPPLIBS_TRUE@
 GAS = @GAS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -147,6 +149,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MINGW_WINSOCK_LIBS = @MINGW_WINSOCK_LIBS@
 NASM = @NASM@
 OBJEXT = @OBJEXT@
 OBJ_FORMAT = @OBJ_FORMAT@
@@ -222,14 +225,19 @@ AM_CFLAGS = @OGG_CFLAGS@
 
 EXTRA_DIST = \
 	Makefile.lite \
+	Makefile.lite.iffscan \
 	flac.dsp \
-	flac.vcproj
+	flac.vcproj \
+	iffscan.c \
+	iffscan.dsp \
+	iffscan.vcproj
 
 
 flac_SOURCES = \
 	analyze.c \
 	decode.c \
 	encode.c \
+	foreign_metadata.c \
 	main.c \
 	local_string_utils.c \
 	utils.c \
@@ -237,6 +245,7 @@ flac_SOURCES = \
 	analyze.h \
 	decode.h \
 	encode.h \
+	foreign_metadata.h \
 	local_string_utils.h \
 	utils.h \
 	vorbiscomment.h
@@ -251,6 +260,7 @@ flac_LDADD = \
 	$(top_builddir)/src/libFLAC/libFLAC.la \
 	@OGG_LIBS@ \
 	@LIBICONV@ \
+	@MINGW_WINSOCK_LIBS@ \
 	-lm
 
 subdir = src/flac
@@ -262,7 +272,8 @@ bin_PROGRAMS = flac$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
 am_flac_OBJECTS = analyze.$(OBJEXT) decode.$(OBJEXT) encode.$(OBJEXT) \
-	main.$(OBJEXT) local_string_utils.$(OBJEXT) utils.$(OBJEXT) \
+	foreign_metadata.$(OBJEXT) main.$(OBJEXT) \
+	local_string_utils.$(OBJEXT) utils.$(OBJEXT) \
 	vorbiscomment.$(OBJEXT)
 flac_OBJECTS = $(am_flac_OBJECTS)
 flac_DEPENDENCIES = $(top_builddir)/src/share/grabbag/libgrabbag.la \
@@ -278,6 +289,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/analyze.Po ./$(DEPDIR)/decode.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/encode.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/foreign_metadata.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/local_string_utils.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/main.Po ./$(DEPDIR)/utils.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/vorbiscomment.Po
@@ -343,6 +355,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/analyze.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/foreign_metadata.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/local_string_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utils.Po@am__quote@

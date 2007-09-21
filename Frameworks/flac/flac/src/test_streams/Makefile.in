@@ -130,6 +130,8 @@ FLaC__USE_3DNOW_FALSE = @FLaC__USE_3DNOW_FALSE@
 FLaC__USE_3DNOW_TRUE = @FLaC__USE_3DNOW_TRUE@
 FLaC__USE_ALTIVEC_FALSE = @FLaC__USE_ALTIVEC_FALSE@
 FLaC__USE_ALTIVEC_TRUE = @FLaC__USE_ALTIVEC_TRUE@
+FLaC__WITH_CPPLIBS_FALSE = @FLaC__WITH_CPPLIBS_FALSE@
+FLaC__WITH_CPPLIBS_TRUE = @FLaC__WITH_CPPLIBS_TRUE@
 GAS = @GAS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -147,6 +149,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MINGW_WINSOCK_LIBS = @MINGW_WINSOCK_LIBS@
 NASM = @NASM@
 OBJEXT = @OBJEXT@
 OBJ_FORMAT = @OBJ_FORMAT@
@@ -227,8 +230,6 @@ test_streams_SOURCES = \
 	main.c
 
 test_streams_LDADD = -lm
-
-CLEANFILES = $(wildcard *.raw)
 subdir = src/test_streams
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -435,7 +436,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)

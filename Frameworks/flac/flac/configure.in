@@ -19,7 +19,7 @@
 # instead of FLAC__ since autoconf triggers off 'AC_' in strings
 
 AC_INIT(src/flac/main.c)
-AM_INIT_AUTOMAKE(flac, 1.2.0)
+AM_INIT_AUTOMAKE(flac, 1.2.1)
 
 # Don't automagically regenerate autoconf/automake generated files unless
 # explicitly requested.  Eases autobuilding -mdz
@@ -74,6 +74,7 @@ esac
 AM_CONDITIONAL(FLaC__CPU_IA32, test "x$cpu_ia32" = xtrue)
 AM_CONDITIONAL(FLaC__CPU_PPC, test "x$cpu_ppc" = xtrue)
 AM_CONDITIONAL(FLaC__CPU_SPARC, test "x$cpu_sparc" = xtrue)
+
 case "$host" in
 	i386-*-openbsd3.[[0-3]]) OBJ_FORMAT=aoutb ;;
 	*-*-cygwin|*mingw*) OBJ_FORMAT=win32 ;;
@@ -81,6 +82,14 @@ case "$host" in
 	*) OBJ_FORMAT=elf ;;
 esac
 AC_SUBST(OBJ_FORMAT)
+
+# only needed because of ntohl() usage, can get rid of after that's gone:
+case "$host" in
+	*-*-cygwin|*mingw*) MINGW_WINSOCK_LIBS=-lwsock32 ;;
+	*) MINGW_WINSOCK_LIBS= ;;
+esac
+AC_SUBST(MINGW_WINSOCK_LIBS)
+
 case "$host" in
 	*-pc-linux-gnu)
 		sys_linux=true
@@ -221,6 +230,16 @@ if test "x$enable_xmms_plugin" != xfalse ; then
 fi
 AM_CONDITIONAL(FLaC__HAS_XMMS, test -n "$XMMS_INPUT_PLUGIN_DIR")
 
+dnl build FLAC++ or not
+AC_ARG_ENABLE([cpplibs],
+AC_HELP_STRING([--disable-cpplibs], [Do not build libFLAC++]),
+[case "${enableval}" in
+	yes) disable_cpplibs=false ;;
+	no)  disable_cpplibs=true ;;
+	*)   AC_MSG_ERROR(bad value ${enableval} for --enable-cpplibs) ;;
+esac], [disable_cpplibs=false])
+AM_CONDITIONAL(FLaC__WITH_CPPLIBS, [test "x$disable_cpplibs" != xtrue])
+
 dnl check for ogg library
 AC_ARG_ENABLE([ogg],
 	AC_HELP_STRING([--disable-ogg], [Disable ogg support (default: test for libogg)]),
@@ -274,17 +293,17 @@ AC_DEFINE(FLAC__HAS_GAS)
 AH_TEMPLATE(FLAC__HAS_GAS, [define if you are compiling for PowerPC and have the 'gas' assembler])
 fi
 
-OUR_CFLAGS_HEAD='-I$(top_builddir) -I$(srcdir)/include -I$(top_srcdir)/include'
+CPPFLAGS='-I$(top_builddir) -I$(srcdir)/include -I$(top_srcdir)/include'" $CPPFLAGS"
 if test "x$debug" = xtrue; then
-	OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -g -DDEBUG"
+	CPPFLAGS="-DDEBUG $CPPFLAGS"
+	CFLAGS="-g $CFLAGS"
 else
-	OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -DNDEBUG"
+	CPPFLAGS="-DNDEBUG $CPPFLAGS"
 	if test "x$GCC" = xyes; then
-		OUR_CFLAGS_HEAD="$OUR_CFLAGS_HEAD -O3 -funroll-loops -finline-functions -Wall -W -Winline -DFLaC__INLINE=__inline__"
+		CPPFLAGS="-DFLaC__INLINE=__inline__ $CPPFLAGS"
+		CFLAGS="-O3 -funroll-loops -finline-functions -Wall -W -Winline $CFLAGS"
 	fi
 fi
-CFLAGS="$OUR_CFLAGS_HEAD $CFLAGS"
-CXXFLAGS="$OUR_CFLAGS_HEAD $CXXFLAGS"
 
 #@@@
 AM_CONDITIONAL(FLaC__HAS_AS__TEMPORARILY_DISABLED, test "yes" = "no")
@@ -330,6 +349,17 @@ AC_CONFIG_FILES([ \
 	src/test_libFLAC++/Makefile \
 	src/test_seeking/Makefile \
 	src/test_streams/Makefile \
+	examples/Makefile \
+	examples/c/Makefile \
+	examples/c/decode/Makefile \
+	examples/c/decode/file/Makefile \
+	examples/c/encode/Makefile \
+	examples/c/encode/file/Makefile \
+	examples/cpp/Makefile \
+	examples/cpp/decode/Makefile \
+	examples/cpp/decode/file/Makefile \
+	examples/cpp/encode/Makefile \
+	examples/cpp/encode/file/Makefile \
 	include/Makefile \
 	include/FLAC/Makefile \
 	include/FLAC++/Makefile \

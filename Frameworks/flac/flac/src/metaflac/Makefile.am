@@ -36,6 +36,7 @@ metaflac_SOURCES = \
 	usage.c \
 	utils.c \
 	operations.h \
+	operations_shorthand.h \
 	options.h \
 	usage.h \
 	utils.h
@@ -49,4 +50,5 @@ metaflac_LDADD = \
 	$(top_builddir)/src/libFLAC/libFLAC.la \
 	@OGG_LIBS@ \
 	@LIBICONV@ \
+	@MINGW_WINSOCK_LIBS@ \
 	-lm

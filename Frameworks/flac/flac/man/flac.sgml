@@ -51,6 +51,7 @@
 	<arg><replaceable>infile.aiff</replaceable></arg>
 	<arg><replaceable>infile.raw</replaceable></arg>
 	<arg><replaceable>infile.flac</replaceable></arg>
+	<arg><replaceable>infile.oga</replaceable></arg>
 	<arg><replaceable>infile.ogg</replaceable></arg>
 	<arg>-</arg>
       </group>
@@ -65,6 +66,7 @@
       <arg choice=opt><replaceable>OPTIONS</replaceable></arg>
       <group rep=repeat>
 	<arg><replaceable>infile.flac</replaceable></arg>
+	<arg><replaceable>infile.oga</replaceable></arg>
 	<arg><replaceable>infile.ogg</replaceable></arg>
 	<arg>-</arg>
       </group>
@@ -158,6 +160,14 @@
 	</varlistentry>
 
 	<varlistentry>
+	  <term><option>--no-utf8-convert</option>
+	  </term>
+	  <listitem>
+	    <para>Do not convert tags from local charset to UTF-8.  This is useful for scripts, and setting tags in situations where the locale is wrong.  This option must appear before any tag options!</para>
+	  </listitem>
+	</varlistentry>
+
+	<varlistentry>
 	  <term><option>-w</option>, <option>--warnings-as-errors</option>
 	  </term>
 	  <listitem>
@@ -196,6 +206,14 @@
 	</varlistentry>
 
 	<varlistentry>
+	  <term><option>--keep-foreign-metadata</option>
+	  </term>
+	  <listitem>
+	    <para>If encoding, save WAVE or AIFF non-audio chunks in FLAC metadata.  If decoding, restore any saved non-audio chunks from FLAC metadata when writing the decoded file.  Foreign metadata cannot be transcoded, e.g. WAVE chunks saved in a FLAC file cannot be restored when decoding to AIFF.  Input and output must be regular files (not stdin or stdout).</para>
+	  </listitem>
+	</varlistentry>
+
+	<varlistentry>
 	  <term><option>--skip</option>={<replaceable>#</replaceable>|<replaceable>mm:ss.ss</replaceable>}</term>
 	  <listitem>
 	    <para>Skip over the first number of samples of the input.  This works for both encoding and decoding, but not testing.  The alternative form mm:ss.ss can be used to specify minutes, seconds, and fractions of a second.</para>
@@ -213,8 +231,8 @@
 	  <term><option>--ogg</option></term>
 
 	  <listitem>
-	    <para>When encoding, generate Ogg FLAC output instead of native FLAC.  Ogg FLAC streams are FLAC streams wrapped in an Ogg transport layer.  The resulting file should have an '.ogg' extension and will still be decodable by flac.</para>
-	    <para>When decoding, force the input to be treated as Ogg FLAC.  This is useful when piping input from stdin or when the filename does not end in '.ogg'.</para>
+	    <para>When encoding, generate Ogg FLAC output instead of native FLAC.  Ogg FLAC streams are FLAC streams wrapped in an Ogg transport layer.  The resulting file should have an '.oga' extension and will still be decodable by flac.</para>
+	    <para>When decoding, force the input to be treated as Ogg FLAC.  This is useful when piping input from stdin or when the filename does not end in '.oga' or '.ogg'.</para>
 	  </listitem>
 	</varlistentry>
 

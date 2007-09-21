@@ -12,6 +12,7 @@ This module provides functions for creating and manipulating FLAC metadata block
 <p>
 See the detailed documentation for each interface in the <a class="el" href="group__flac__metadata.html">metadata </a> module. 
 <p>
+<code>#include &lt;sys/types.h&gt;</code><br>
 <code>#include "<a class="el" href="export_8h-source.html">export.h</a>"</code><br>
 <code>#include "<a class="el" href="callback_8h-source.html">callback.h</a>"</code><br>
 <code>#include "<a class="el" href="format_8h-source.html">format.h</a>"</code><br>
@@ -27,23 +28,23 @@ See the detailed documentation for each interface in the <a class="el" href="gro
 <tr><td class="memItemLeft" nowrap align="right" valign="top">typedef <a class="el" href="group__flac__metadata__level2.html#ga1">FLAC__Metadata_Iterator</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level2.html#ga1">FLAC__Metadata_Iterator</a></td></tr>
 
 <tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga14">FLAC__Metadata_SimpleIteratorStatus</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga14a5">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_OK</a> =  0, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a6">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ILLEGAL_INPUT</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a7">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ERROR_OPENING_FILE</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a8">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_A_FLAC_FILE</a>, 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga18">FLAC__Metadata_SimpleIteratorStatus</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga18a5">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_OK</a> =  0, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a6">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ILLEGAL_INPUT</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a7">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ERROR_OPENING_FILE</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a8">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_A_FLAC_FILE</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga14a9">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_WRITABLE</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a10">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_BAD_METADATA</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a11">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_READ_ERROR</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a12">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_SEEK_ERROR</a>, 
+&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga18a9">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_WRITABLE</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a10">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_BAD_METADATA</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a11">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_READ_ERROR</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a12">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_SEEK_ERROR</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga14a13">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_WRITE_ERROR</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a14">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_RENAME_ERROR</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a15">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_UNLINK_ERROR</a>, 
-<a class="el" href="group__flac__metadata__level1.html#gga14a16">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_MEMORY_ALLOCATION_ERROR</a>, 
+&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga18a13">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_WRITE_ERROR</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a14">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_RENAME_ERROR</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a15">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_UNLINK_ERROR</a>, 
+<a class="el" href="group__flac__metadata__level1.html#gga18a16">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_MEMORY_ALLOCATION_ERROR</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga14a17">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_INTERNAL_ERROR</a>
+&nbsp;&nbsp;<a class="el" href="group__flac__metadata__level1.html#gga18a17">FLAC__METADATA_SIMPLE_ITERATOR_STATUS_INTERNAL_ERROR</a>
 <br>
  }</td></tr>
 
@@ -83,7 +84,7 @@ See the detailed documentation for each interface in the <a class="el" href="gro
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga3">FLAC__metadata_simple_iterator_delete</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="group__flac__metadata__level1.html#ga14">FLAC__Metadata_SimpleIteratorStatus</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga4">FLAC__metadata_simple_iterator_status</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="group__flac__metadata__level1.html#ga18">FLAC__Metadata_SimpleIteratorStatus</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga4">FLAC__metadata_simple_iterator_status</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga5">FLAC__metadata_simple_iterator_init</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, const char *filename, FLAC__bool read_only, FLAC__bool preserve_file_stats)</td></tr>
 
@@ -93,15 +94,23 @@ See the detailed documentation for each interface in the <a class="el" href="gro
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga8">FLAC__metadata_simple_iterator_prev</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="group__flac__format.html#ga113">FLAC__MetadataType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga9">FLAC__metadata_simple_iterator_get_block_type</a> (const <a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga9">FLAC__metadata_simple_iterator_is_last</a> (const <a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga10">FLAC__metadata_simple_iterator_get_block</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">off_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga10">FLAC__metadata_simple_iterator_get_block_offset</a> (const <a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga11">FLAC__metadata_simple_iterator_set_block</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, <a class="el" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *block, FLAC__bool use_padding)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="group__flac__format.html#ga113">FLAC__MetadataType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga11">FLAC__metadata_simple_iterator_get_block_type</a> (const <a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga12">FLAC__metadata_simple_iterator_insert_block_after</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, <a class="el" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *block, FLAC__bool use_padding)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga12">FLAC__metadata_simple_iterator_get_block_length</a> (const <a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga13">FLAC__metadata_simple_iterator_delete_block</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, FLAC__bool use_padding)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga13">FLAC__metadata_simple_iterator_get_application_id</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, FLAC__byte *id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga14">FLAC__metadata_simple_iterator_get_block</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga15">FLAC__metadata_simple_iterator_set_block</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, <a class="el" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *block, FLAC__bool use_padding)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga16">FLAC__metadata_simple_iterator_insert_block_after</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, <a class="el" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> *block, FLAC__bool use_padding)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">FLAC__bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level1.html#ga17">FLAC__metadata_simple_iterator_delete_block</a> (<a class="el" href="group__flac__metadata__level1.html#ga0">FLAC__Metadata_SimpleIterator</a> *iterator, FLAC__bool use_padding)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="group__flac__metadata__level2.html#ga0">FLAC__Metadata_Chain</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__flac__metadata__level2.html#ga3">FLAC__metadata_chain_new</a> (void)</td></tr>
 

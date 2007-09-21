@@ -130,6 +130,8 @@ FLaC__USE_3DNOW_FALSE = @FLaC__USE_3DNOW_FALSE@
 FLaC__USE_3DNOW_TRUE = @FLaC__USE_3DNOW_TRUE@
 FLaC__USE_ALTIVEC_FALSE = @FLaC__USE_ALTIVEC_FALSE@
 FLaC__USE_ALTIVEC_TRUE = @FLaC__USE_ALTIVEC_TRUE@
+FLaC__WITH_CPPLIBS_FALSE = @FLaC__WITH_CPPLIBS_FALSE@
+FLaC__WITH_CPPLIBS_TRUE = @FLaC__WITH_CPPLIBS_TRUE@
 GAS = @GAS@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -147,6 +149,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MINGW_WINSOCK_LIBS = @MINGW_WINSOCK_LIBS@
 NASM = @NASM@
 OBJEXT = @OBJEXT@
 OBJ_FORMAT = @OBJ_FORMAT@
@@ -216,13 +219,15 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 
+@FLaC__WITH_CPPLIBS_TRUE@CPPLIBS_TESTS = test_libFLAC++.sh
+
 TESTS_ENVIRONMENT = FLAC__TEST_LEVEL=@FLAC__TEST_LEVEL@ FLAC__TEST_WITH_VALRGIND=@FLAC__TEST_WITH_VALGRIND@
 
 SUBDIRS = cuesheets flac-to-flac-metadata-test-files metaflac-test-files pictures
 
 TESTS = \
 	./test_libFLAC.sh \
-	./test_libFLAC++.sh \
+	$(CPPLIBS_TESTS) \
 	./test_grabbag.sh \
 	./test_flac.sh \
 	./test_metaflac.sh \
@@ -237,26 +242,13 @@ EXTRA_DIST = \
 	metaflac.flac.ok \
 	picture.ok \
 	test_libFLAC.sh \
-	test_libFLAC++.sh \
+	$(CPPLIBS_TESTS) \
 	test_flac.sh \
 	test_metaflac.sh \
 	test_grabbag.sh \
 	test_seeking.sh \
 	test_streams.sh \
 	test_bins.sh
-
-
-CLEANFILES = \
-	$(wildcard *.raw) \
-	$(wildcard *.flac) \
-	$(wildcard *.ogg) \
-	$(wildcard *.cmp) \
-	$(wildcard *.aiff) \
-	$(wildcard *.wav) \
-	$(wildcard *.diff) \
-	$(wildcard *.log) \
-	$(wildcard *.cue) \
-	core
 
 subdir = test
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -556,7 +548,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f $(CONFIG_CLEAN_FILES)
@@ -566,7 +557,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-local mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f Makefile
@@ -612,22 +603,25 @@ uninstall-am: uninstall-info-am
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am check check-TESTS \
-	check-am clean clean-generic clean-libtool clean-recursive \
-	ctags ctags-recursive distclean distclean-generic \
-	distclean-libtool distclean-recursive distclean-tags distdir \
-	dvi dvi-am dvi-recursive info info-am info-recursive install \
-	install-am install-data install-data-am install-data-recursive \
-	install-exec install-exec-am install-exec-recursive \
-	install-info install-info-am install-info-recursive install-man \
-	install-recursive install-strip installcheck installcheck-am \
-	installdirs installdirs-am installdirs-recursive \
-	maintainer-clean maintainer-clean-generic \
-	maintainer-clean-recursive mostlyclean mostlyclean-generic \
-	mostlyclean-libtool mostlyclean-recursive pdf pdf-am \
-	pdf-recursive ps ps-am ps-recursive tags tags-recursive \
-	uninstall uninstall-am uninstall-info-am \
+	check-am clean clean-generic clean-libtool clean-local \
+	clean-recursive ctags ctags-recursive distclean \
+	distclean-generic distclean-libtool distclean-recursive \
+	distclean-tags distdir dvi dvi-am dvi-recursive info info-am \
+	info-recursive install install-am install-data install-data-am \
+	install-data-recursive install-exec install-exec-am \
+	install-exec-recursive install-info install-info-am \
+	install-info-recursive install-man install-recursive \
+	install-strip installcheck installcheck-am installdirs \
+	installdirs-am installdirs-recursive maintainer-clean \
+	maintainer-clean-generic maintainer-clean-recursive mostlyclean \
+	mostlyclean-generic mostlyclean-libtool mostlyclean-recursive \
+	pdf pdf-am pdf-recursive ps ps-am ps-recursive tags \
+	tags-recursive uninstall uninstall-am uninstall-info-am \
 	uninstall-info-recursive uninstall-recursive
 
+
+clean-local:
+	-rm -f *.raw *.flac *.oga *.ogg *.cmp *.aiff *.wav *.diff *.log *.cue core
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

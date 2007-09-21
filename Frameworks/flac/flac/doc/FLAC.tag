@@ -13,14 +13,14 @@
   </compound>
   <compound kind="file">
     <name>decoder.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC++/</path>
     <filename>decoder_8h</filename>
     <includes id="+_2export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="stream__decoder_8h" name="stream_decoder.h" local="yes" imported="no">FLAC/stream_decoder.h</includes>
   </compound>
   <compound kind="file">
     <name>encoder.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC++/</path>
     <filename>encoder_8h</filename>
     <includes id="+_2export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="stream__encoder_8h" name="stream_encoder.h" local="yes" imported="no">FLAC/stream_encoder.h</includes>
@@ -29,7 +29,7 @@
   </compound>
   <compound kind="file">
     <name>callback.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC/</path>
     <filename>callback_8h</filename>
     <member kind="typedef">
       <type>void *</type>
@@ -83,7 +83,7 @@
   </compound>
   <compound kind="file">
     <name>export.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC/</path>
     <filename>export_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -123,7 +123,7 @@
   </compound>
   <compound kind="file">
     <name>export.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC++/</path>
     <filename>+_2export_8h</filename>
     <member kind="define">
       <type>#define</type>
@@ -156,7 +156,7 @@
   </compound>
   <compound kind="file">
     <name>format.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC/</path>
     <filename>format_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <member kind="define">
@@ -1160,7 +1160,7 @@
   </compound>
   <compound kind="file">
     <name>metadata.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC/</path>
     <filename>metadata_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="callback_8h" name="callback.h" local="yes" imported="no">callback.h</includes>
@@ -1188,72 +1188,72 @@
     </member>
     <member kind="enumeration">
       <name>FLAC__Metadata_SimpleIteratorStatus</name>
-      <anchor>ga14</anchor>
+      <anchor>ga18</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_OK</name>
-      <anchor>gga14a5</anchor>
+      <anchor>gga18a5</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ILLEGAL_INPUT</name>
-      <anchor>gga14a6</anchor>
+      <anchor>gga18a6</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ERROR_OPENING_FILE</name>
-      <anchor>gga14a7</anchor>
+      <anchor>gga18a7</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_A_FLAC_FILE</name>
-      <anchor>gga14a8</anchor>
+      <anchor>gga18a8</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_WRITABLE</name>
-      <anchor>gga14a9</anchor>
+      <anchor>gga18a9</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_BAD_METADATA</name>
-      <anchor>gga14a10</anchor>
+      <anchor>gga18a10</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_READ_ERROR</name>
-      <anchor>gga14a11</anchor>
+      <anchor>gga18a11</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_SEEK_ERROR</name>
-      <anchor>gga14a12</anchor>
+      <anchor>gga18a12</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_WRITE_ERROR</name>
-      <anchor>gga14a13</anchor>
+      <anchor>gga18a13</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_RENAME_ERROR</name>
-      <anchor>gga14a14</anchor>
+      <anchor>gga18a14</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_UNLINK_ERROR</name>
-      <anchor>gga14a15</anchor>
+      <anchor>gga18a15</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_MEMORY_ALLOCATION_ERROR</name>
-      <anchor>gga14a16</anchor>
+      <anchor>gga18a16</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_INTERNAL_ERROR</name>
-      <anchor>gga14a17</anchor>
+      <anchor>gga18a17</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumeration">
@@ -1419,38 +1419,66 @@
       <arglist>(FLAC__Metadata_SimpleIterator *iterator)</arglist>
     </member>
     <member kind="function">
-      <type>FLAC__MetadataType</type>
-      <name>FLAC__metadata_simple_iterator_get_block_type</name>
+      <type>FLAC__bool</type>
+      <name>FLAC__metadata_simple_iterator_is_last</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
       <anchor>ga9</anchor>
       <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
     </member>
     <member kind="function">
+      <type>off_t</type>
+      <name>FLAC__metadata_simple_iterator_get_block_offset</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga10</anchor>
+      <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
+    </member>
+    <member kind="function">
+      <type>FLAC__MetadataType</type>
+      <name>FLAC__metadata_simple_iterator_get_block_type</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga11</anchor>
+      <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
+    </member>
+    <member kind="function">
+      <type>unsigned</type>
+      <name>FLAC__metadata_simple_iterator_get_block_length</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga12</anchor>
+      <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
+    </member>
+    <member kind="function">
+      <type>FLAC__bool</type>
+      <name>FLAC__metadata_simple_iterator_get_application_id</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga13</anchor>
+      <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__byte *id)</arglist>
+    </member>
+    <member kind="function">
       <type>FLAC__StreamMetadata *</type>
       <name>FLAC__metadata_simple_iterator_get_block</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga10</anchor>
+      <anchor>ga14</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__metadata_simple_iterator_set_block</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga11</anchor>
+      <anchor>ga15</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__StreamMetadata *block, FLAC__bool use_padding)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__metadata_simple_iterator_insert_block_after</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga12</anchor>
+      <anchor>ga16</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__StreamMetadata *block, FLAC__bool use_padding)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__metadata_simple_iterator_delete_block</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga13</anchor>
+      <anchor>ga17</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__bool use_padding)</arglist>
     </member>
     <member kind="function">
@@ -1960,7 +1988,7 @@
   </compound>
   <compound kind="file">
     <name>metadata.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC++/</path>
     <filename>+_2metadata_8h</filename>
     <includes id="+_2export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="metadata_8h" name="metadata.h" local="yes" imported="no">FLAC/metadata.h</includes>
@@ -2023,7 +2051,7 @@
   </compound>
   <compound kind="file">
     <name>stream_decoder.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC/</path>
     <filename>stream__decoder_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="format_8h" name="format.h" local="yes" imported="no">format.h</includes>
@@ -2590,7 +2618,7 @@
   </compound>
   <compound kind="file">
     <name>stream_encoder.h</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC/</path>
     <filename>stream__encoder_8h</filename>
     <includes id="export_8h" name="export.h" local="yes" imported="no">export.h</includes>
     <includes id="format_8h" name="format.h" local="yes" imported="no">format.h</includes>
@@ -5345,72 +5373,72 @@
     </member>
     <member kind="enumeration">
       <name>FLAC__Metadata_SimpleIteratorStatus</name>
-      <anchor>ga14</anchor>
+      <anchor>ga18</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_OK</name>
-      <anchor>gga14a5</anchor>
+      <anchor>gga18a5</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ILLEGAL_INPUT</name>
-      <anchor>gga14a6</anchor>
+      <anchor>gga18a6</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_ERROR_OPENING_FILE</name>
-      <anchor>gga14a7</anchor>
+      <anchor>gga18a7</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_A_FLAC_FILE</name>
-      <anchor>gga14a8</anchor>
+      <anchor>gga18a8</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_NOT_WRITABLE</name>
-      <anchor>gga14a9</anchor>
+      <anchor>gga18a9</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_BAD_METADATA</name>
-      <anchor>gga14a10</anchor>
+      <anchor>gga18a10</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_READ_ERROR</name>
-      <anchor>gga14a11</anchor>
+      <anchor>gga18a11</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_SEEK_ERROR</name>
-      <anchor>gga14a12</anchor>
+      <anchor>gga18a12</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_WRITE_ERROR</name>
-      <anchor>gga14a13</anchor>
+      <anchor>gga18a13</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_RENAME_ERROR</name>
-      <anchor>gga14a14</anchor>
+      <anchor>gga18a14</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_UNLINK_ERROR</name>
-      <anchor>gga14a15</anchor>
+      <anchor>gga18a15</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_MEMORY_ALLOCATION_ERROR</name>
-      <anchor>gga14a16</anchor>
+      <anchor>gga18a16</anchor>
       <arglist></arglist>
     </member>
     <member kind="enumvalue">
       <name>FLAC__METADATA_SIMPLE_ITERATOR_STATUS_INTERNAL_ERROR</name>
-      <anchor>gga14a17</anchor>
+      <anchor>gga18a17</anchor>
       <arglist></arglist>
     </member>
     <member kind="function">
@@ -5463,38 +5491,66 @@
       <arglist>(FLAC__Metadata_SimpleIterator *iterator)</arglist>
     </member>
     <member kind="function">
-      <type>FLAC__MetadataType</type>
-      <name>FLAC__metadata_simple_iterator_get_block_type</name>
+      <type>FLAC__bool</type>
+      <name>FLAC__metadata_simple_iterator_is_last</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
       <anchor>ga9</anchor>
       <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
     </member>
     <member kind="function">
+      <type>off_t</type>
+      <name>FLAC__metadata_simple_iterator_get_block_offset</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga10</anchor>
+      <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
+    </member>
+    <member kind="function">
+      <type>FLAC__MetadataType</type>
+      <name>FLAC__metadata_simple_iterator_get_block_type</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga11</anchor>
+      <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
+    </member>
+    <member kind="function">
+      <type>unsigned</type>
+      <name>FLAC__metadata_simple_iterator_get_block_length</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga12</anchor>
+      <arglist>(const FLAC__Metadata_SimpleIterator *iterator)</arglist>
+    </member>
+    <member kind="function">
+      <type>FLAC__bool</type>
+      <name>FLAC__metadata_simple_iterator_get_application_id</name>
+      <anchorfile>group__flac__metadata__level1.html</anchorfile>
+      <anchor>ga13</anchor>
+      <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__byte *id)</arglist>
+    </member>
+    <member kind="function">
       <type>FLAC__StreamMetadata *</type>
       <name>FLAC__metadata_simple_iterator_get_block</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga10</anchor>
+      <anchor>ga14</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__metadata_simple_iterator_set_block</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga11</anchor>
+      <anchor>ga15</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__StreamMetadata *block, FLAC__bool use_padding)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__metadata_simple_iterator_insert_block_after</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga12</anchor>
+      <anchor>ga16</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__StreamMetadata *block, FLAC__bool use_padding)</arglist>
     </member>
     <member kind="function">
       <type>FLAC__bool</type>
       <name>FLAC__metadata_simple_iterator_delete_block</name>
       <anchorfile>group__flac__metadata__level1.html</anchorfile>
-      <anchor>ga13</anchor>
+      <anchor>ga17</anchor>
       <arglist>(FLAC__Metadata_SimpleIterator *iterator, FLAC__bool use_padding)</arglist>
     </member>
     <member kind="variable">
@@ -7566,7 +7622,7 @@
   </compound>
   <compound kind="dir">
     <name>include/FLAC/</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC/</path>
     <filename>dir_000002.html</filename>
     <file>all.h</file>
     <file>assert.h</file>
@@ -7580,7 +7636,7 @@
   </compound>
   <compound kind="dir">
     <name>include/FLAC++/</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/FLAC++/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/FLAC++/</path>
     <filename>dir_000001.html</filename>
     <file>all.h</file>
     <file>decoder.h</file>
@@ -7590,7 +7646,7 @@
   </compound>
   <compound kind="dir">
     <name>include/</name>
-    <path>/home/jcoalson/flac/build-1.2.0/include/</path>
+    <path>/home/jcoalson/flac/build-1.2.1/include/</path>
     <filename>dir_000000.html</filename>
     <dir>include/FLAC/</dir>
     <dir>include/FLAC++/</dir>
@@ -11874,38 +11930,66 @@
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>::FLAC__MetadataType</type>
-      <name>get_block_type</name>
+      <type>bool</type>
+      <name>is_last</name>
       <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
       <anchor>FLAC_1_1Metadata_1_1SimpleIteratora8</anchor>
       <arglist>() const </arglist>
     </member>
     <member kind="function">
+      <type>off_t</type>
+      <name>get_block_offset</name>
+      <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora9</anchor>
+      <arglist>() const </arglist>
+    </member>
+    <member kind="function">
+      <type>::FLAC__MetadataType</type>
+      <name>get_block_type</name>
+      <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora10</anchor>
+      <arglist>() const </arglist>
+    </member>
+    <member kind="function">
+      <type>unsigned</type>
+      <name>get_block_length</name>
+      <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora11</anchor>
+      <arglist>() const </arglist>
+    </member>
+    <member kind="function">
+      <type>bool</type>
+      <name>get_application_id</name>
+      <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora12</anchor>
+      <arglist>(FLAC__byte *id)</arglist>
+    </member>
+    <member kind="function">
       <type>Prototype *</type>
       <name>get_block</name>
       <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
-      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora9</anchor>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora13</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>set_block</name>
       <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
-      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora10</anchor>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora14</anchor>
       <arglist>(Prototype *block, bool use_padding=true)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>insert_block_after</name>
       <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
-      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora11</anchor>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora15</anchor>
       <arglist>(Prototype *block, bool use_padding=true)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>delete_block</name>
       <anchorfile>classFLAC_1_1Metadata_1_1SimpleIterator.html</anchorfile>
-      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora12</anchor>
+      <anchor>FLAC_1_1Metadata_1_1SimpleIteratora16</anchor>
       <arglist>(bool use_padding=true)</arglist>
     </member>
     <member kind="function" protection="protected">

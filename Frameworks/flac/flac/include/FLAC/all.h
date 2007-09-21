@@ -111,6 +111,9 @@
  * individual functions.  You can see different views of the individual
  * functions through the links in top bar across this page.
  *
+ * If you prefer a more hands-on approach, you can jump right to some
+ * <A HREF="../documentation_example_code.html">example code</A>.
+ *
  * \section porting_guide Porting Guide
  *
  * Starting with FLAC 1.1.3 a \link porting Porting Guide \endlink
@@ -141,6 +144,11 @@
  * encoder, and no metadata interface, you can remove the stream encoder
  * and the metadata interface, which will greatly reduce the size of the
  * library.
+ *
+ * Also, there are several places in the libFLAC code with comments marked
+ * with "OPT:" where a #define can be changed to enable code that might be
+ * faster on a specific platform.  Experimenting with these can yield faster
+ * binaries.
  */
 
 /** \defgroup porting Porting Guide for New Versions

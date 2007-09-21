@@ -15,13 +15,17 @@
 #  restrictive of those mentioned above.  See the file COPYING.Xiph in this
 #  distribution.
 
+if FLaC__WITH_CPPLIBS
+CPPLIBS_TESTS = test_libFLAC++.sh
+endif
+
 TESTS_ENVIRONMENT = FLAC__TEST_LEVEL=@FLAC__TEST_LEVEL@ FLAC__TEST_WITH_VALRGIND=@FLAC__TEST_WITH_VALGRIND@
 
 SUBDIRS = cuesheets flac-to-flac-metadata-test-files metaflac-test-files pictures
 
 TESTS = \
 	./test_libFLAC.sh \
-	./test_libFLAC++.sh \
+	$(CPPLIBS_TESTS) \
 	./test_grabbag.sh \
 	./test_flac.sh \
 	./test_metaflac.sh \
@@ -35,7 +39,7 @@ EXTRA_DIST = \
 	metaflac.flac.ok \
 	picture.ok \
 	test_libFLAC.sh \
-	test_libFLAC++.sh \
+	$(CPPLIBS_TESTS) \
 	test_flac.sh \
 	test_metaflac.sh \
 	test_grabbag.sh \
@@ -43,14 +47,5 @@ EXTRA_DIST = \
 	test_streams.sh \
 	test_bins.sh
 
-CLEANFILES = \
-	$(wildcard *.raw) \
-	$(wildcard *.flac) \
-	$(wildcard *.ogg) \
-	$(wildcard *.cmp) \
-	$(wildcard *.aiff) \
-	$(wildcard *.wav) \
-	$(wildcard *.diff) \
-	$(wildcard *.log) \
-	$(wildcard *.cue) \
-	core
+clean-local:
+	-rm -f *.raw *.flac *.oga *.ogg *.cmp *.aiff *.wav *.diff *.log *.cue core

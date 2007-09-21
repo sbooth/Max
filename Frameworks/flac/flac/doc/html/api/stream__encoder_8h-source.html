@@ -191,96 +191,95 @@
 00894 
 00909 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga23">FLAC__stream_encoder_set_loose_mid_side_stereo</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__bool value);
 00910 
-00911 <span class="comment">/* @@@@add to unit tests*/</span>
-00955 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga24">FLAC__stream_encoder_set_apodization</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> <span class="keywordtype">char</span> *specification);
-00956 
-00967 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga25">FLAC__stream_encoder_set_max_lpc_order</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
-00968 
-00985 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga26">FLAC__stream_encoder_set_qlp_coeff_precision</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
-00986 
-00999 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga27">FLAC__stream_encoder_set_do_qlp_coeff_prec_search</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__bool value);
-01000 
-01011 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga28">FLAC__stream_encoder_set_do_escape_coding</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__bool value);
-01012 
-01025 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga29">FLAC__stream_encoder_set_do_exhaustive_model_search</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__bool value);
-01026 
-01048 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga30">FLAC__stream_encoder_set_min_residual_partition_order</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
-01049 
-01071 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga31">FLAC__stream_encoder_set_max_residual_partition_order</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
-01072 
-01083 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga32">FLAC__stream_encoder_set_rice_parameter_search_dist</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
-01084 
-01099 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga33">FLAC__stream_encoder_set_total_samples_estimate</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__uint64 value);
-01100 
-01182 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga34">FLAC__stream_encoder_set_metadata</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> **metadata, <span class="keywordtype">unsigned</span> num_blocks);
-01183 
-01192 FLAC_API FLAC__StreamEncoderState <a class="code" href="group__flac__stream__encoder.html#ga35">FLAC__stream_encoder_get_state</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01193 
-01204 FLAC_API <a class="code" href="group__flac__stream__decoder.html#ga50">FLAC__StreamDecoderState</a> <a class="code" href="group__flac__stream__encoder.html#ga36">FLAC__stream_encoder_get_verify_decoder_state</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01205 
-01217 FLAC_API <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="group__flac__stream__encoder.html#ga37">FLAC__stream_encoder_get_resolved_state_string</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01218 
-01236 FLAC_API <span class="keywordtype">void</span> <a class="code" href="group__flac__stream__encoder.html#ga38">FLAC__stream_encoder_get_verify_decoder_error_stats</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__uint64 *absolute_sample, <span class="keywordtype">unsigned</span> *frame_number, <span class="keywordtype">unsigned</span> *channel, <span class="keywordtype">unsigned</span> *sample, FLAC__int32 *expected, FLAC__int32 *got);
-01237 
-01246 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga39">FLAC__stream_encoder_get_verify</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01247 
-01256 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga40">FLAC__stream_encoder_get_streamable_subset</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01257 
-01266 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga41">FLAC__stream_encoder_get_channels</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01267 
-01276 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga42">FLAC__stream_encoder_get_bits_per_sample</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01277 
-01286 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga43">FLAC__stream_encoder_get_sample_rate</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01287 
-01296 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga44">FLAC__stream_encoder_get_blocksize</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01297 
-01306 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga45">FLAC__stream_encoder_get_do_mid_side_stereo</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01307 
-01316 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga46">FLAC__stream_encoder_get_loose_mid_side_stereo</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01317 
-01326 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga47">FLAC__stream_encoder_get_max_lpc_order</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01327 
-01336 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga48">FLAC__stream_encoder_get_qlp_coeff_precision</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01337 
-01346 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga49">FLAC__stream_encoder_get_do_qlp_coeff_prec_search</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01347 
-01356 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga50">FLAC__stream_encoder_get_do_escape_coding</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01357 
-01366 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga51">FLAC__stream_encoder_get_do_exhaustive_model_search</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01367 
-01376 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga52">FLAC__stream_encoder_get_min_residual_partition_order</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01377 
-01386 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga53">FLAC__stream_encoder_get_max_residual_partition_order</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01387 
-01396 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga54">FLAC__stream_encoder_get_rice_parameter_search_dist</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01397 
-01409 FLAC_API FLAC__uint64 <a class="code" href="group__flac__stream__encoder.html#ga55">FLAC__stream_encoder_get_total_samples_estimate</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01410 
-01472 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga56">FLAC__stream_encoder_init_stream</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <a class="code" href="group__flac__stream__encoder.html#ga7">FLAC__StreamEncoderWriteCallback</a> write_callback, <a class="code" href="group__flac__stream__encoder.html#ga8">FLAC__StreamEncoderSeekCallback</a> seek_callback, <a class="code" href="group__flac__stream__encoder.html#ga9">FLAC__StreamEncoderTellCallback</a> tell_callback, <a class="code" href="group__flac__stream__encoder.html#ga10">FLAC__StreamEncoderMetadataCallback</a> metadata_callback, <span class="keywordtype">void</span> *client_data);
-01473 
-01540 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga57">FLAC__stream_encoder_init_ogg_stream</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <a class="code" href="group__flac__stream__encoder.html#ga6">FLAC__StreamEncoderReadCallback</a> read_callback, <a class="code" href="group__flac__stream__encoder.html#ga7">FLAC__StreamEncoderWriteCallback</a> write_callback, <a class="code" href="group__flac__stream__encoder.html#ga8">FLAC__StreamEncoderSeekCallback</a> seek_callback, <a class="code" href="group__flac__stream__encoder.html#ga9">FLAC__StreamEncoderTellCallback</a> tell_callback, <a class="code" href="group__flac__stream__encoder.html#ga10">FLAC__StreamEncoderMetadataCallback</a> metadata_callback, <span class="keywordtype">void</span> *client_data);
-01541 
-01575 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga58">FLAC__stream_encoder_init_FILE</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FILE *file, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
-01576 
-01610 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga59">FLAC__stream_encoder_init_ogg_FILE</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FILE *file, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
-01611 
-01642 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga60">FLAC__stream_encoder_init_file</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
-01643 
-01674 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga61">FLAC__stream_encoder_init_ogg_file</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
-01675 
-01702 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga62">FLAC__stream_encoder_finish</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
-01703 
-01729 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga63">FLAC__stream_encoder_process</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> FLAC__int32 * <span class="keyword">const</span> buffer[], <span class="keywordtype">unsigned</span> samples);
-01730 
-01761 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga64">FLAC__stream_encoder_process_interleaved</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> FLAC__int32 buffer[], <span class="keywordtype">unsigned</span> samples);
-01762 
-01763 <span class="comment">/* \} */</span>
-01764 
-01765 <span class="preprocessor">#ifdef __cplusplus</span>
-01766 <span class="preprocessor"></span>}
-01767 <span class="preprocessor">#endif</span>
-01768 <span class="preprocessor"></span>
-01769 <span class="preprocessor">#endif</span>
+00954 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga24">FLAC__stream_encoder_set_apodization</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> <span class="keywordtype">char</span> *specification);
+00955 
+00966 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga25">FLAC__stream_encoder_set_max_lpc_order</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
+00967 
+00984 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga26">FLAC__stream_encoder_set_qlp_coeff_precision</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
+00985 
+00998 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga27">FLAC__stream_encoder_set_do_qlp_coeff_prec_search</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__bool value);
+00999 
+01010 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga28">FLAC__stream_encoder_set_do_escape_coding</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__bool value);
+01011 
+01024 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga29">FLAC__stream_encoder_set_do_exhaustive_model_search</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__bool value);
+01025 
+01047 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga30">FLAC__stream_encoder_set_min_residual_partition_order</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
+01048 
+01070 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga31">FLAC__stream_encoder_set_max_residual_partition_order</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
+01071 
+01082 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga32">FLAC__stream_encoder_set_rice_parameter_search_dist</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keywordtype">unsigned</span> value);
+01083 
+01098 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga33">FLAC__stream_encoder_set_total_samples_estimate</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__uint64 value);
+01099 
+01181 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga34">FLAC__stream_encoder_set_metadata</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <a class="code" href="structFLAC____StreamMetadata.html">FLAC__StreamMetadata</a> **metadata, <span class="keywordtype">unsigned</span> num_blocks);
+01182 
+01191 FLAC_API FLAC__StreamEncoderState <a class="code" href="group__flac__stream__encoder.html#ga35">FLAC__stream_encoder_get_state</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01192 
+01203 FLAC_API <a class="code" href="group__flac__stream__decoder.html#ga50">FLAC__StreamDecoderState</a> <a class="code" href="group__flac__stream__encoder.html#ga36">FLAC__stream_encoder_get_verify_decoder_state</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01204 
+01216 FLAC_API <span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="group__flac__stream__encoder.html#ga37">FLAC__stream_encoder_get_resolved_state_string</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01217 
+01235 FLAC_API <span class="keywordtype">void</span> <a class="code" href="group__flac__stream__encoder.html#ga38">FLAC__stream_encoder_get_verify_decoder_error_stats</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FLAC__uint64 *absolute_sample, <span class="keywordtype">unsigned</span> *frame_number, <span class="keywordtype">unsigned</span> *channel, <span class="keywordtype">unsigned</span> *sample, FLAC__int32 *expected, FLAC__int32 *got);
+01236 
+01245 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga39">FLAC__stream_encoder_get_verify</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01246 
+01255 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga40">FLAC__stream_encoder_get_streamable_subset</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01256 
+01265 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga41">FLAC__stream_encoder_get_channels</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01266 
+01275 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga42">FLAC__stream_encoder_get_bits_per_sample</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01276 
+01285 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga43">FLAC__stream_encoder_get_sample_rate</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01286 
+01295 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga44">FLAC__stream_encoder_get_blocksize</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01296 
+01305 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga45">FLAC__stream_encoder_get_do_mid_side_stereo</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01306 
+01315 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga46">FLAC__stream_encoder_get_loose_mid_side_stereo</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01316 
+01325 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga47">FLAC__stream_encoder_get_max_lpc_order</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01326 
+01335 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga48">FLAC__stream_encoder_get_qlp_coeff_precision</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01336 
+01345 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga49">FLAC__stream_encoder_get_do_qlp_coeff_prec_search</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01346 
+01355 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga50">FLAC__stream_encoder_get_do_escape_coding</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01356 
+01365 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga51">FLAC__stream_encoder_get_do_exhaustive_model_search</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01366 
+01375 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga52">FLAC__stream_encoder_get_min_residual_partition_order</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01376 
+01385 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga53">FLAC__stream_encoder_get_max_residual_partition_order</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01386 
+01395 FLAC_API <span class="keywordtype">unsigned</span> <a class="code" href="group__flac__stream__encoder.html#ga54">FLAC__stream_encoder_get_rice_parameter_search_dist</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01396 
+01408 FLAC_API FLAC__uint64 <a class="code" href="group__flac__stream__encoder.html#ga55">FLAC__stream_encoder_get_total_samples_estimate</a>(<span class="keyword">const</span> <a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01409 
+01471 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga56">FLAC__stream_encoder_init_stream</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <a class="code" href="group__flac__stream__encoder.html#ga7">FLAC__StreamEncoderWriteCallback</a> write_callback, <a class="code" href="group__flac__stream__encoder.html#ga8">FLAC__StreamEncoderSeekCallback</a> seek_callback, <a class="code" href="group__flac__stream__encoder.html#ga9">FLAC__StreamEncoderTellCallback</a> tell_callback, <a class="code" href="group__flac__stream__encoder.html#ga10">FLAC__StreamEncoderMetadataCallback</a> metadata_callback, <span class="keywordtype">void</span> *client_data);
+01472 
+01539 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga57">FLAC__stream_encoder_init_ogg_stream</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <a class="code" href="group__flac__stream__encoder.html#ga6">FLAC__StreamEncoderReadCallback</a> read_callback, <a class="code" href="group__flac__stream__encoder.html#ga7">FLAC__StreamEncoderWriteCallback</a> write_callback, <a class="code" href="group__flac__stream__encoder.html#ga8">FLAC__StreamEncoderSeekCallback</a> seek_callback, <a class="code" href="group__flac__stream__encoder.html#ga9">FLAC__StreamEncoderTellCallback</a> tell_callback, <a class="code" href="group__flac__stream__encoder.html#ga10">FLAC__StreamEncoderMetadataCallback</a> metadata_callback, <span class="keywordtype">void</span> *client_data);
+01540 
+01574 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga58">FLAC__stream_encoder_init_FILE</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FILE *file, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
+01575 
+01609 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga59">FLAC__stream_encoder_init_ogg_FILE</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, FILE *file, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
+01610 
+01641 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga60">FLAC__stream_encoder_init_file</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
+01642 
+01673 FLAC_API FLAC__StreamEncoderInitStatus <a class="code" href="group__flac__stream__encoder.html#ga61">FLAC__stream_encoder_init_ogg_file</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> <span class="keywordtype">char</span> *filename, <a class="code" href="group__flac__stream__encoder.html#ga11">FLAC__StreamEncoderProgressCallback</a> progress_callback, <span class="keywordtype">void</span> *client_data);
+01674 
+01701 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga62">FLAC__stream_encoder_finish</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder);
+01702 
+01728 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga63">FLAC__stream_encoder_process</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> FLAC__int32 * <span class="keyword">const</span> buffer[], <span class="keywordtype">unsigned</span> samples);
+01729 
+01760 FLAC_API FLAC__bool <a class="code" href="group__flac__stream__encoder.html#ga64">FLAC__stream_encoder_process_interleaved</a>(<a class="code" href="structFLAC____StreamEncoder.html">FLAC__StreamEncoder</a> *encoder, <span class="keyword">const</span> FLAC__int32 buffer[], <span class="keywordtype">unsigned</span> samples);
+01761 
+01762 <span class="comment">/* \} */</span>
+01763 
+01764 <span class="preprocessor">#ifdef __cplusplus</span>
+01765 <span class="preprocessor"></span>}
+01766 <span class="preprocessor">#endif</span>
+01767 <span class="preprocessor"></span>
+01768 <span class="preprocessor">#endif</span>
 </pre></div>
 <hr size="1">
 <div class="copyright">

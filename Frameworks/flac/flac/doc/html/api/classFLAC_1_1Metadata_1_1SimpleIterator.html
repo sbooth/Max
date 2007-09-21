@@ -30,15 +30,23 @@ This class is a wrapper around the FLAC__metadata_simple_iterator structures and
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora7">prev</a> ()</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">::<a class="el" href="group__flac__format.html#ga113">FLAC__MetadataType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora8">get_block_type</a> () const </td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora8">is_last</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classFLAC_1_1Metadata_1_1Prototype.html">Prototype</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora9">get_block</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">off_t&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora9">get_block_offset</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora10">set_block</a> (<a class="el" href="classFLAC_1_1Metadata_1_1Prototype.html">Prototype</a> *block, bool use_padding=true)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">::<a class="el" href="group__flac__format.html#ga113">FLAC__MetadataType</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora10">get_block_type</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora11">insert_block_after</a> (<a class="el" href="classFLAC_1_1Metadata_1_1Prototype.html">Prototype</a> *block, bool use_padding=true)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">unsigned&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora11">get_block_length</a> () const </td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora12">delete_block</a> (bool use_padding=true)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora12">get_application_id</a> (FLAC__byte *id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="classFLAC_1_1Metadata_1_1Prototype.html">Prototype</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora13">get_block</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora14">set_block</a> (<a class="el" href="classFLAC_1_1Metadata_1_1Prototype.html">Prototype</a> *block, bool use_padding=true)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora15">insert_block_after</a> (<a class="el" href="classFLAC_1_1Metadata_1_1Prototype.html">Prototype</a> *block, bool use_padding=true)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFLAC_1_1Metadata_1_1SimpleIterator.html#FLAC_1_1Metadata_1_1SimpleIteratora16">delete_block</a> (bool use_padding=true)</td></tr>
 
 <tr><td colspan="2"><br><h2>Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratorb0" doxytag="FLAC::Metadata::SimpleIterator::clear"></a>
@@ -243,7 +251,65 @@ See <a class="el" href="group__flac__metadata__level1.html#ga8">FLAC__metadata_s
     </td>
   </tr>
 </table>
-<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora8" doxytag="FLAC::Metadata::SimpleIterator::get_block_type"></a><p>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora8" doxytag="FLAC::Metadata::SimpleIterator::is_last"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool FLAC::Metadata::SimpleIterator::is_last           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+See <a class="el" href="group__flac__metadata__level1.html#ga9">FLAC__metadata_simple_iterator_is_last()</a>. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora9" doxytag="FLAC::Metadata::SimpleIterator::get_block_offset"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">off_t FLAC::Metadata::SimpleIterator::get_block_offset           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+See <a class="el" href="group__flac__metadata__level1.html#ga10">FLAC__metadata_simple_iterator_get_block_offset()</a>. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora10" doxytag="FLAC::Metadata::SimpleIterator::get_block_type"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -267,12 +333,71 @@ See <a class="el" href="group__flac__metadata__level1.html#ga8">FLAC__metadata_s
     <td>
 
 <p>
-See <a class="el" href="group__flac__metadata__level1.html#ga9">FLAC__metadata_simple_iterator_get_block_type()</a>. 
+See <a class="el" href="group__flac__metadata__level1.html#ga11">FLAC__metadata_simple_iterator_get_block_type()</a>. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora9" doxytag="FLAC::Metadata::SimpleIterator::get_block"></a><p>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora11" doxytag="FLAC::Metadata::SimpleIterator::get_block_length"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">unsigned FLAC::Metadata::SimpleIterator::get_block_length           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap> const</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+See <a class="el" href="group__flac__metadata__level1.html#ga12">FLAC__metadata_simple_iterator_get_block_length()</a>. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora12" doxytag="FLAC::Metadata::SimpleIterator::get_application_id"></a><p>
+<table class="mdTable" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top">bool FLAC::Metadata::SimpleIterator::get_application_id           </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">FLAC__byte *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>id</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing="5" cellpadding="0" border="0">
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+See <a class="el" href="group__flac__metadata__level1.html#ga13">FLAC__metadata_simple_iterator_get_application_id()</a>. 
+<p>
+    </td>
+  </tr>
+</table>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora13" doxytag="FLAC::Metadata::SimpleIterator::get_block"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -296,12 +421,12 @@ See <a class="el" href="group__flac__metadata__level1.html#ga9">FLAC__metadata_s
     <td>
 
 <p>
-See <a class="el" href="group__flac__metadata__level1.html#ga10">FLAC__metadata_simple_iterator_get_block()</a>. 
+See <a class="el" href="group__flac__metadata__level1.html#ga14">FLAC__metadata_simple_iterator_get_block()</a>. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora10" doxytag="FLAC::Metadata::SimpleIterator::set_block"></a><p>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora14" doxytag="FLAC::Metadata::SimpleIterator::set_block"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -335,12 +460,12 @@ See <a class="el" href="group__flac__metadata__level1.html#ga10">FLAC__metadata_
     <td>
 
 <p>
-See <a class="el" href="group__flac__metadata__level1.html#ga11">FLAC__metadata_simple_iterator_set_block()</a>. 
+See <a class="el" href="group__flac__metadata__level1.html#ga15">FLAC__metadata_simple_iterator_set_block()</a>. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora11" doxytag="FLAC::Metadata::SimpleIterator::insert_block_after"></a><p>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora15" doxytag="FLAC::Metadata::SimpleIterator::insert_block_after"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -374,12 +499,12 @@ See <a class="el" href="group__flac__metadata__level1.html#ga11">FLAC__metadata_
     <td>
 
 <p>
-See <a class="el" href="group__flac__metadata__level1.html#ga12">FLAC__metadata_simple_iterator_insert_block_after()</a>. 
+See <a class="el" href="group__flac__metadata__level1.html#ga16">FLAC__metadata_simple_iterator_insert_block_after()</a>. 
 <p>
     </td>
   </tr>
 </table>
-<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora12" doxytag="FLAC::Metadata::SimpleIterator::delete_block"></a><p>
+<a class="anchor" name="FLAC_1_1Metadata_1_1SimpleIteratora16" doxytag="FLAC::Metadata::SimpleIterator::delete_block"></a><p>
 <table class="mdTable" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -404,7 +529,7 @@ See <a class="el" href="group__flac__metadata__level1.html#ga12">FLAC__metadata_
     <td>
 
 <p>
-See <a class="el" href="group__flac__metadata__level1.html#ga13">FLAC__metadata_simple_iterator_delete_block()</a>. 
+See <a class="el" href="group__flac__metadata__level1.html#ga17">FLAC__metadata_simple_iterator_delete_block()</a>. 
 <p>
     </td>
   </tr>
