@@ -38,6 +38,9 @@
 #ifndef _mpcdec_internal_h
 #define _mpcdec_internal_h
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 enum {
     MPC_DECODER_SYNTH_DELAY = 481
