@@ -21,8 +21,27 @@ ADD_LIBRARY(tag_c SHARED ${tag_c_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(tag_c  tag )
 
+# On Solaris we need to explicitly add the C++ standard and runtime
+# libraries to the libs used by this library, to link them to apps
+# using these bindings.
+CHECK_LIBRARY_EXISTS(Crun __RTTI___ "" HAVE_CRUN_LIB)
+IF(HAVE_CRUN_LIB)
+  # Which libraries to link depends critically on which
+  # STL version is going to be used by your application
+  # and which runtime is in use. While Crun is pretty much
+  # the only game in town, the three available STLs -- Cstd,
+  # stlport4 and stdcxx -- make this a mess. We really only
+  # support stdcxx, but won't force the issue here.
+  #
+  TARGET_LINK_LIBRARIES(tag_c Crun)
+ENDIF(HAVE_CRUN_LIB)
+
 SET_TARGET_PROPERTIES(tag_c PROPERTIES VERSION 0.0.0 SOVERSION 0 )
-INSTALL(TARGETS tag_c DESTINATION ${LIB_INSTALL_DIR} )
+INSTALL(TARGETS tag_c
+	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+	RUNTIME DESTINATION bin
+	ARCHIVE DESTINATION  ${LIB_INSTALL_DIR}
+)
 
 
 ########### install files ###############

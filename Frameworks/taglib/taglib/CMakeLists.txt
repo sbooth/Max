@@ -22,12 +22,22 @@ endif (CMAKE_COMPILER_IS_GNUCXX)
 if(MSVC)
   add_definitions( -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE )
 endif(MSVC)
+if (WIN32)
+  set(CMAKE_DEBUG_POSTFIX "d")
+endif (WIN32)
+
+SET(TAGLIB_LIB_MAJOR_VERSION "1")
+SET(TAGLIB_LIB_MINOR_VERSION "4")
+SET(TAGLIB_LIB_PATCH_VERSION "0")
+
+SET(TAGLIB_LIB_VERSION_STRING "${TAGLIB_LIB_MAJOR_VERSION}.${TAGLIB_LIB_MINOR_VERSION}.${TAGLIB_LIB_PATCH_VERSION}")
+
 
 include(ConfigureChecks.cmake)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/taglib-config.cmake ${CMAKE_CURRENT_BINARY_DIR}/taglib-config )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/taglib.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/taglib.pc )
-#For the future rename it as config-taglib.h
+
 configure_file(config-taglib.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 ADD_SUBDIRECTORY( taglib ) 
@@ -36,8 +46,10 @@ ADD_SUBDIRECTORY(tests)
 ADD_SUBDIRECTORY(examples)
 
 ADD_SUBDIRECTORY(bindings)
+if(NOT WIN32)
+  INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/taglib.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
+endif(NOT WIN32)
 
-INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/taglib.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 INSTALL( PROGRAMS  ${CMAKE_CURRENT_BINARY_DIR}/taglib-config DESTINATION ${BIN_INSTALL_DIR})
 
 

@@ -24,6 +24,7 @@
 
 #include <tstringlist.h>
 
+#include "taglib_export.h"
 #include "audioproperties.h"
 
 namespace TagLib {
@@ -52,10 +53,10 @@ namespace TagLib {
    * \see addFileTypeResolver()
    */
 
-  class FileRef
+  class TAGLIB_EXPORT FileRef
   {
   public:
-    
+
   //! A class for pluggable file type resolution.
 
   /*!
@@ -88,6 +89,9 @@ namespace TagLib {
     class FileTypeResolver
     {
     public:
+      // do not fix compiler warning about missing virtual destructor
+      // since this would not be binary compatible
+      // let Scott fix it whenever he thinks BIC changes can next be applied
       /*!
        * This method must be overridden to provide an additional file type
        * resolver.  If the resolver is able to determine the file type it should

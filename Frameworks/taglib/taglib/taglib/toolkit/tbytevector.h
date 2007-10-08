@@ -23,8 +23,10 @@
 #define TAGLIB_BYTEVECTOR_H
 
 #include "taglib.h"
+#include "taglib_export.h"
 
 #include <vector>
+#include <ostream>
 
 namespace TagLib {
 
@@ -36,7 +38,7 @@ namespace TagLib {
    * useful for finding tag related paterns in a data array.
    */
 
-  class ByteVector
+  class TAGLIB_EXPORT ByteVector
   {
   public:
 #ifndef DO_NOT_DOCUMENT

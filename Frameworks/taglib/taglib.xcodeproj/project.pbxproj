@@ -129,6 +129,7 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* taglib_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = taglib_Prefix.pch; sourceTree = "<group>"; };
+		8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = taglib_export.h; path = taglib/taglib/taglib_export.h; sourceTree = "<group>"; };
 		8CA82A3A0BF28A5600E98527 /* wavpackfile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wavpackfile.cpp; path = taglib/taglib/wavpack/wavpackfile.cpp; sourceTree = "<group>"; };
 		8CA82A3B0BF28A5600E98527 /* wavpackfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wavpackfile.h; path = taglib/taglib/wavpack/wavpackfile.h; sourceTree = "<group>"; };
 		8CA82A3C0BF28A5600E98527 /* wavpackproperties.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wavpackproperties.cpp; path = taglib/taglib/wavpack/wavpackproperties.cpp; sourceTree = "<group>"; };
@@ -285,6 +286,7 @@
 		08FB77AEFE84172EC02AAC07 /* taglib */ = {
 			isa = PBXGroup;
 			children = (
+				8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */,
 				8CEA12590AC8A95C009E46CB /* ape */,
 				8CEA12630AC8A95C009E46CB /* audioproperties.cpp */,
 				8CEA12640AC8A95C009E46CB /* audioproperties.h */,

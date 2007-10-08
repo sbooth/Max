@@ -24,6 +24,7 @@
 
 #include "tag.h"
 #include "tbytevector.h"
+#include "taglib_export.h"
 
 namespace TagLib {
 
@@ -55,6 +56,12 @@ namespace TagLib {
     class StringHandler
     {
     public:
+      // do not fix compiler warning about missing virtual destructor
+      // since this would not be binary compatible
+      // let Scott fix it whenever he thinks BIC changes can next be applied
+      /*!
+       * Destroys this StringHandler instance.
+       */
       /*!
        * Decode a string from \a data.  The default implementation assumes that
        * \a data is an ISO-8859-1 (Latin1) character array.
@@ -92,7 +99,7 @@ namespace TagLib {
      * truncation happens automatically when the tag is rendered.
      */
 
-    class Tag : public TagLib::Tag
+    class TAGLIB_EXPORT Tag : public TagLib::Tag
     {
     public:
       /*!
