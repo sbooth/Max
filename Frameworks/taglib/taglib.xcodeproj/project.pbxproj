@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C85D1290CBB27F5002802E1 /* taglib_export.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA82A3E0BF28A5600E98527 /* wavpackfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA82A3A0BF28A5600E98527 /* wavpackfile.cpp */; };
 		8CA82A400BF28A5600E98527 /* wavpackproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA82A3C0BF28A5600E98527 /* wavpackproperties.cpp */; };
 		8CA82A420BF28A6700E98527 /* wavpackfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA82A3B0BF28A5600E98527 /* wavpackfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -576,6 +577,7 @@
 				8CEA13530AC8A95C009E46CB /* unicode.h in Headers */,
 				8CA82A420BF28A6700E98527 /* wavpackfile.h in Headers */,
 				8CA82A430BF28A6800E98527 /* wavpackproperties.h in Headers */,
+				8C85D1290CBB27F5002802E1 /* taglib_export.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
