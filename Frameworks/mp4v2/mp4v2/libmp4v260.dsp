@@ -134,6 +134,10 @@ SOURCE=.\atom_ftyp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\atom_gmin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\atom_hdlr.cpp
 # End Source File
 # Begin Source File
@@ -227,6 +231,10 @@ SOURCE=.\atom_stsz.cpp
 # Begin Source File
 
 SOURCE=.\atom_stz2.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\atom_text.cpp
 # End Source File
 # Begin Source File
 

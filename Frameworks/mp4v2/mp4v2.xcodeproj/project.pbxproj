@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C3968A80CC14AC5004EFC92 /* atom_gmin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C3968A60CC14AC5004EFC92 /* atom_gmin.cpp */; };
+		8C3968A90CC14AC5004EFC92 /* atom_text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C3968A70CC14AC5004EFC92 /* atom_text.cpp */; };
 		8CFD018F0B6E6DB70004A79C /* 3gp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD010F0B6E6DB70004A79C /* 3gp.cpp */; };
 		8CFD01900B6E6DB70004A79C /* atom_amr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD01100B6E6DB70004A79C /* atom_amr.cpp */; };
 		8CFD01910B6E6DB70004A79C /* atom_avc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD01110B6E6DB70004A79C /* atom_avc1.cpp */; };
@@ -26,7 +28,6 @@
 		8CFD01B10B6E6DB70004A79C /* atom_mdat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD01310B6E6DB70004A79C /* atom_mdat.cpp */; };
 		8CFD01B20B6E6DB70004A79C /* atom_mdhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD01320B6E6DB70004A79C /* atom_mdhd.cpp */; };
 		8CFD01B40B6E6DB70004A79C /* atom_meta.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD01340B6E6DB70004A79C /* atom_meta.cpp */; };
-		8CFD01B90B6E6DB70004A79C /* atom_mp4a.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD01390B6E6DB70004A79C /* atom_mp4a.cpp */; };
 		8CFD01BA0B6E6DB70004A79C /* atom_mp4s.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD013A0B6E6DB70004A79C /* atom_mp4s.cpp */; };
 		8CFD01BB0B6E6DB70004A79C /* atom_mp4v.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD013B0B6E6DB70004A79C /* atom_mp4v.cpp */; };
 		8CFD01BD0B6E6DB70004A79C /* atom_mvhd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD013D0B6E6DB70004A79C /* atom_mvhd.cpp */; };
@@ -91,6 +92,8 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* mp4v2_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mp4v2_Prefix.pch; sourceTree = "<group>"; };
+		8C3968A60CC14AC5004EFC92 /* atom_gmin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = atom_gmin.cpp; path = mp4v2/atom_gmin.cpp; sourceTree = "<group>"; };
+		8C3968A70CC14AC5004EFC92 /* atom_text.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = atom_text.cpp; path = mp4v2/atom_text.cpp; sourceTree = "<group>"; };
 		8CFD010F0B6E6DB70004A79C /* 3gp.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = 3gp.cpp; path = mp4v2/3gp.cpp; sourceTree = "<group>"; };
 		8CFD01100B6E6DB70004A79C /* atom_amr.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = atom_amr.cpp; path = mp4v2/atom_amr.cpp; sourceTree = "<group>"; };
 		8CFD01110B6E6DB70004A79C /* atom_avc1.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = atom_avc1.cpp; path = mp4v2/atom_avc1.cpp; sourceTree = "<group>"; };
@@ -279,6 +282,8 @@
 		08FB77AEFE84172EC02AAC07 /* mp4v2 */ = {
 			isa = PBXGroup;
 			children = (
+				8C3968A60CC14AC5004EFC92 /* atom_gmin.cpp */,
+				8C3968A70CC14AC5004EFC92 /* atom_text.cpp */,
 				8CFD03040B6E7D4B0004A79C /* mpeg4ip.h */,
 				8CFD021B0B6E703F0004A79C /* mpeg4ip_config.h */,
 				8CFD021C0B6E703F0004A79C /* mpeg4ip_version.h */,
@@ -534,7 +539,6 @@
 				8CFD01B10B6E6DB70004A79C /* atom_mdat.cpp in Sources */,
 				8CFD01B20B6E6DB70004A79C /* atom_mdhd.cpp in Sources */,
 				8CFD01B40B6E6DB70004A79C /* atom_meta.cpp in Sources */,
-				8CFD01B90B6E6DB70004A79C /* atom_mp4a.cpp in Sources */,
 				8CFD01BA0B6E6DB70004A79C /* atom_mp4s.cpp in Sources */,
 				8CFD01BB0B6E6DB70004A79C /* atom_mp4v.cpp in Sources */,
 				8CFD01BD0B6E6DB70004A79C /* atom_mvhd.cpp in Sources */,
@@ -579,6 +583,8 @@
 				8CFD02090B6E6DB70004A79C /* qosqualifiers.cpp in Sources */,
 				8CFD020B0B6E6DB70004A79C /* rtphint.cpp in Sources */,
 				8CFD020D0B6E6DB70004A79C /* virtual_io.cpp in Sources */,
+				8C3968A80CC14AC5004EFC92 /* atom_gmin.cpp in Sources */,
+				8C3968A90CC14AC5004EFC92 /* atom_text.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

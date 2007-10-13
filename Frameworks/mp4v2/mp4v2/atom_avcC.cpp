@@ -208,6 +208,7 @@ void MP4AvcCAtom::Clone(MP4AvcCAtom *dstAtom)
 	i32 = i16;
 	// copy bytes to local buffer 
 	tmp = (u_int8_t *)MP4Malloc(i32);
+	ASSERT(tmp != NULL);
 	spPB->CopyValue(tmp, 0);	
 	// set element count
 	dpPB->SetCount(1);
@@ -248,6 +249,7 @@ void MP4AvcCAtom::Clone(MP4AvcCAtom *dstAtom)
 	i32 = i16;
 	// copy bytes to local buffer 
 	tmp = (u_int8_t *)MP4Malloc(i32);
+	ASSERT(tmp != NULL);
 	spPB->CopyValue(tmp, 0);	
 	// set element count
 	dpPB->SetCount(1);

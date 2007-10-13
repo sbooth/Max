@@ -61,15 +61,17 @@ void MP4TkhdAtom::AddProperties(u_int8_t version)
 	pProp->SetFixed16Format();
 	AddProperty(pProp); /* 8 */
 
-	AddReserved("reserved3", 38); /* 9 */
+	AddReserved("reserved3", 2); /* 9 */
+
+	AddProperty(new MP4BytesProperty("matrix", 36)); /* 10 */
 
 	pProp = new MP4Float32Property("width");
 	pProp->SetFixed32Format();
-	AddProperty(pProp); /* 10 */
+	AddProperty(pProp); /* 11 */
 
 	pProp = new MP4Float32Property("height");
 	pProp->SetFixed32Format();
-	AddProperty(pProp); /* 11 */
+	AddProperty(pProp); /* 12 */
 }
 
 void MP4TkhdAtom::Generate() 
@@ -90,9 +92,14 @@ void MP4TkhdAtom::Generate()
 		((MP4Integer32Property*)m_pProperties[3])->SetValue(now);
 	}
 
-	// property reserved3 has non-zero fixed values
-	static u_int8_t reserved3[38] = {
-		0x00, 0x00, 
+	// property "matrix" has non-zero fixed values
+	// this default identity matrix indicates no transformation, i.e.
+	// 1, 0, 0
+	// 0, 1, 0
+	// 0, 0, 1
+	// see http://developer.apple.com/documentation/QuickTime/QTFF/QTFFChap4/chapter_5_section_4.html
+
+	static u_int8_t matrix[36] = {
 		0x00, 0x01, 0x00, 0x00, 
 		0x00, 0x00, 0x00, 0x00, 
 		0x00, 0x00, 0x00, 0x00, 
@@ -103,10 +110,9 @@ void MP4TkhdAtom::Generate()
 		0x00, 0x00, 0x00, 0x00, 
 		0x40, 0x00, 0x00, 0x00, 
 	};
-	m_pProperties[9]->SetReadOnly(false);
-	((MP4BytesProperty*)m_pProperties[9])->
-		SetValue(reserved3, sizeof(reserved3));
-	m_pProperties[9]->SetReadOnly(true);
+
+	((MP4BytesProperty*)m_pProperties[10])->
+		SetValue(matrix, sizeof(matrix));
 }
 
 void MP4TkhdAtom::Read() 

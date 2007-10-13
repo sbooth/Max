@@ -42,6 +42,20 @@ const u_int8_t MP4ExtProfileLevelDescrTag 	= 0x13;
 const u_int8_t MP4ExtDescrTagsStart			= 0x80; 
 const u_int8_t MP4ExtDescrTagsEnd			= 0xFE; 
 
+class MP4BaseDescriptor : public MP4Descriptor {
+ public:
+  MP4BaseDescriptor(u_int8_t tag);
+};
+
+class MP4BytesDescriptor : public MP4Descriptor {
+ public:
+  MP4BytesDescriptor(u_int8_t tag);
+  void Read(MP4File* pFile);
+ protected:
+  uint m_size_offset; // size to adjust the size for the bytes property
+  uint m_bytes_index; // index into properties for bytes property
+};
+
 class MP4IODescriptor : public MP4Descriptor {
 public:
 	MP4IODescriptor();
@@ -58,15 +72,6 @@ protected:
 	void Mutate();
 };
 
-class MP4ESIDIncDescriptor : public MP4Descriptor {
-public:
-	MP4ESIDIncDescriptor();
-};
-
-class MP4ESIDRefDescriptor : public MP4Descriptor {
-public:
-	MP4ESIDRefDescriptor();
-};
 
 class MP4ESDescriptor : public MP4Descriptor {
 public:
@@ -81,11 +86,6 @@ public:
 	void Generate();
 };
 
-class MP4DecSpecificDescriptor : public MP4Descriptor {
-public:
-	MP4DecSpecificDescriptor();
-	void Read(MP4File* pFile);
-};
 
 class MP4SLConfigDescriptor : public MP4Descriptor {
 public:
@@ -107,39 +107,6 @@ public:
 	void Read(MP4File* pFile);
 protected:
 	void Mutate();
-};
-
-class MP4SupplContentIdDescriptor : public MP4Descriptor {
-public:
-	MP4SupplContentIdDescriptor();
-};
-
-class MP4IPMPPtrDescriptor : public MP4Descriptor {
-public:
-	MP4IPMPPtrDescriptor();
-};
-
-class MP4IPMPDescriptor : public MP4Descriptor {
-public:
-	MP4IPMPDescriptor();
-	void Read(MP4File* pFile);
-};
-
-class MP4RegistrationDescriptor : public MP4Descriptor {
-public:
-	MP4RegistrationDescriptor();
-	void Read(MP4File* pFile);
-};
-
-class MP4ExtProfileLevelDescriptor : public MP4Descriptor {
-public:
-	MP4ExtProfileLevelDescriptor();
-};
-
-class MP4ExtensionDescriptor : public MP4Descriptor {
-public:
-	MP4ExtensionDescriptor();
-	void Read(MP4File* pFile);
 };
 
 // associated values in descriptors

@@ -21,6 +21,7 @@ libmp4v2_la_SOURCES = \
 	atom_encv.cpp \
 	atom_free.cpp \
 	atom_ftyp.cpp \
+	atom_gmin.cpp \
 	atom_hdlr.cpp \
 	atom_hinf.cpp \
 	atom_hnti.cpp \
@@ -46,6 +47,7 @@ libmp4v2_la_SOURCES = \
 	atom_stsd.cpp \
 	atom_stsz.cpp \
 	atom_stz2.cpp \
+	atom_text.cpp \
 	atom_tfhd.cpp \
 	atom_tkhd.cpp \
 	atom_treftype.cpp \
@@ -92,4 +94,5 @@ libmp4v2_la_SOURCES = \
 EXTRA_DIST = API_CHANGES \
 	INTERNALS \
 	libmp4v260.dsp \
+	libmp4v2.vcproj \
 	TODO 

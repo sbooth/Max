@@ -34,7 +34,7 @@ public:
 	void Read(MP4File* pFile, u_int32_t index = 0) {
 	  MP4Free(m_values[index]);
 	  m_values[index] = (char*)MP4Calloc(m_fixedLength + 1);
-	  pFile->ReadBytes((u_int8_t*)m_values[index], m_fixedLength);
+	  (void)pFile->ReadBytes((u_int8_t*)m_values[index], m_fixedLength);
   }
 	
   /*! \brief Write property to file.

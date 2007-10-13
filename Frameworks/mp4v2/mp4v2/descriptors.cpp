@@ -21,6 +21,105 @@
 
 #include "mp4common.h"
 
+MP4BaseDescriptor::MP4BaseDescriptor (u_int8_t tag) : MP4Descriptor(tag)
+{
+  switch (tag) {
+  case MP4ESIDIncDescrTag:
+    AddProperty( /* 0 */
+		new MP4Integer32Property("id"));
+    break;
+  case MP4ESIDRefDescrTag:
+    AddProperty( /* 0 */
+		new MP4Integer16Property("refIndex"));
+    break;
+  case MP4IPIPtrDescrTag:
+    AddProperty( /* 0 */
+		new MP4Integer16Property("IPIESId"));
+    break;
+  case MP4SupplContentIdDescrTag:
+    AddProperty( /* 0 */
+		new MP4BytesProperty("languageCode", 3));
+    AddProperty( /* 1 */
+		new MP4StringProperty("title", Counted));
+    AddProperty( /* 2 */
+		new MP4StringProperty("value", Counted));
+    break;
+  case MP4IPMPPtrDescrTag:
+    AddProperty( /* 0 */
+		new MP4Integer8Property("IPMPDescriptorId"));
+    break;
+  case MP4ExtProfileLevelDescrTag:
+    AddProperty( /* 0 */
+		new MP4Integer8Property("profileLevelIndicationIndex"));
+    AddProperty( /* 1 */
+		new MP4Integer8Property("ODProfileLevelIndication"));
+    AddProperty( /* 2 */
+		new MP4Integer8Property("sceneProfileLevelIndication"));
+    AddProperty( /* 3 */
+		new MP4Integer8Property("audioProfileLevelIndication"));
+    AddProperty( /* 4 */
+		new MP4Integer8Property("visualProfileLevelIndication"));
+    AddProperty( /* 5 */
+		new MP4Integer8Property("graphicsProfileLevelIndication"));
+    AddProperty( /* 6 */
+		new MP4Integer8Property("MPEGJProfileLevelIndication"));
+    break;
+  default:
+    MP4Printf("error in base descriptor - tag %u", tag);
+    break;
+
+  }
+}
+
+MP4BytesDescriptor::MP4BytesDescriptor (u_int8_t tag) : MP4Descriptor(tag)
+{
+  m_size_offset = 0;
+  m_bytes_index = 0;
+  if (tag >= MP4ExtDescrTagsStart && tag <= MP4ExtDescrTagsEnd) {
+    AddProperty( /* 0 */
+		new MP4BytesProperty("data"));
+  } else {
+    switch (tag) {
+    case MP4DecSpecificDescrTag:
+      AddProperty( /* 0 */
+		  new MP4BytesProperty("info"));
+      // no change to m_size
+      break;
+    case MP4IPMPDescrTag:
+      AddProperty( /* 0 */
+		  new MP4Integer8Property("IPMPDescriptorId"));
+      AddProperty( /* 1 */
+		  new MP4Integer16Property("IPMPSType"));
+      AddProperty( /* 2 */
+		  new MP4BytesProperty("IPMPData"));
+      /* note: if IPMPSType == 0, IPMPData is an URL */
+      m_size_offset = 3;
+      m_bytes_index = 2;
+      break;
+    case MP4RegistrationDescrTag:
+      AddProperty( /* 0 */
+		  new MP4Integer32Property("formatIdentifier"));
+      AddProperty( /* 1 */
+		  new MP4BytesProperty("additionalIdentificationInfo"));
+      m_size_offset = 4;
+      m_bytes_index = 1;
+      break;
+    default:
+      MP4Printf("error in bytes descriptor - tag %u", tag);
+      break;
+    }
+  }
+}
+
+void MP4BytesDescriptor::Read(MP4File *pFile)
+{
+  ReadHeader(pFile);
+  
+  /* byte properties need to know how long they are before reading */
+  ((MP4BytesProperty*)m_pProperties[m_bytes_index])->SetValueSize(m_size - m_size_offset);
+
+  ReadProperties(pFile);
+}
 MP4IODescriptor::MP4IODescriptor()
 	: MP4Descriptor(MP4FileIODescrTag)
 {
@@ -123,20 +222,6 @@ void MP4ODescriptor::Mutate()
 	}
 }
 
-MP4ESIDIncDescriptor::MP4ESIDIncDescriptor()
-	: MP4Descriptor(MP4ESIDIncDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4Integer32Property("id"));
-}
-
-MP4ESIDRefDescriptor::MP4ESIDRefDescriptor()
-	: MP4Descriptor(MP4ESIDRefDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4Integer16Property("refIndex"));
-}
-
 MP4ESDescriptor::MP4ESDescriptor()
 	: MP4Descriptor(MP4ESDescrTag)
 {
@@ -231,23 +316,6 @@ MP4DecConfigDescriptor::MP4DecConfigDescriptor()
 void MP4DecConfigDescriptor::Generate()
 {
 	((MP4BitfieldProperty*)m_pProperties[3])->SetValue(1);
-}
-
-MP4DecSpecificDescriptor::MP4DecSpecificDescriptor()
-	: MP4Descriptor(MP4DecSpecificDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4BytesProperty("info"));
-}
-
-void MP4DecSpecificDescriptor::Read(MP4File* pFile)
-{
-	ReadHeader(pFile);
-
-	/* byte properties need to know how long they are before reading */
-	((MP4BytesProperty*)m_pProperties[0])->SetValueSize(m_size);
-
-	ReadProperties(pFile);
 }
 
 MP4SLConfigDescriptor::MP4SLConfigDescriptor()
@@ -401,13 +469,6 @@ void MP4SLConfigDescriptor::Mutate()
 	}
 }
 
-MP4IPIPtrDescriptor::MP4IPIPtrDescriptor()
-	: MP4Descriptor(MP4IPIPtrDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4Integer16Property("IPIESId"));
-}
-
 MP4ContentIdDescriptor::MP4ContentIdDescriptor()
 	: MP4Descriptor(MP4ContentIdDescrTag)
 {
@@ -485,101 +546,6 @@ void MP4ContentIdDescriptor::Mutate()
 
 }
 
-MP4SupplContentIdDescriptor::MP4SupplContentIdDescriptor()
-	: MP4Descriptor(MP4SupplContentIdDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4BytesProperty("languageCode", 3));
-	AddProperty( /* 1 */
-		new MP4StringProperty("title", Counted));
-	AddProperty( /* 2 */
-		new MP4StringProperty("value", Counted));
-}
-
-MP4IPMPPtrDescriptor::MP4IPMPPtrDescriptor()
-	: MP4Descriptor(MP4IPMPPtrDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4Integer8Property("IPMPDescriptorId"));
-}
-
-MP4IPMPDescriptor::MP4IPMPDescriptor()
-	: MP4Descriptor(MP4IPMPDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4Integer8Property("IPMPDescriptorId"));
-	AddProperty( /* 1 */
-		new MP4Integer16Property("IPMPSType"));
-	AddProperty( /* 2 */
-		new MP4BytesProperty("IPMPData"));
-	/* note: if IPMPSType == 0, IPMPData is an URL */
-}
-
-void MP4IPMPDescriptor::Read(MP4File* pFile)
-{
-	ReadHeader(pFile);
-
-	/* byte properties need to know how long they are before reading */
-	((MP4BytesProperty*)m_pProperties[2])->SetValueSize(m_size - 3);
-
-	ReadProperties(pFile);
-}
-
-MP4RegistrationDescriptor::MP4RegistrationDescriptor()
-	: MP4Descriptor(MP4RegistrationDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4Integer32Property("formatIdentifier"));
-	AddProperty( /* 1 */
-		new MP4BytesProperty("additionalIdentificationInfo"));
-}
-
-void MP4RegistrationDescriptor::Read(MP4File* pFile)
-{
-	ReadHeader(pFile);
-
-	/* byte properties need to know how long they are before reading */
-	((MP4BytesProperty*)m_pProperties[1])->SetValueSize(m_size - 4);
-
-	ReadProperties(pFile);
-}
-
-MP4ExtProfileLevelDescriptor::MP4ExtProfileLevelDescriptor()
-	: MP4Descriptor(MP4ExtProfileLevelDescrTag)
-{
-	AddProperty( /* 0 */
-		new MP4Integer8Property("profileLevelIndicationIndex"));
-	AddProperty( /* 1 */
-		new MP4Integer8Property("ODProfileLevelIndication"));
-	AddProperty( /* 2 */
-		new MP4Integer8Property("sceneProfileLevelIndication"));
-	AddProperty( /* 3 */
-		new MP4Integer8Property("audioProfileLevelIndication"));
-	AddProperty( /* 4 */
-		new MP4Integer8Property("visualProfileLevelIndication"));
-	AddProperty( /* 5 */
-		new MP4Integer8Property("graphicsProfileLevelIndication"));
-	AddProperty( /* 6 */
-		new MP4Integer8Property("MPEGJProfileLevelIndication"));
-}
-
-MP4ExtensionDescriptor::MP4ExtensionDescriptor()
-	: MP4Descriptor()
-{
-	AddProperty( /* 0 */
-		new MP4BytesProperty("data"));
-}
-
-void MP4ExtensionDescriptor::Read(MP4File* pFile)
-{
-	ReadHeader(pFile);
-
-	/* byte properties need to know how long they are before reading */
-	((MP4BytesProperty*)m_pProperties[0])->SetValueSize(m_size);
-
-	ReadProperties(pFile);
-}
-
 MP4Descriptor* MP4DescriptorProperty::CreateDescriptor(u_int8_t tag) 
 {
 	MP4Descriptor* pDescriptor = NULL;
@@ -592,7 +558,9 @@ MP4Descriptor* MP4DescriptorProperty::CreateDescriptor(u_int8_t tag)
 		pDescriptor = new MP4DecConfigDescriptor();
 		break;
 	case MP4DecSpecificDescrTag:
-		pDescriptor = new MP4DecSpecificDescriptor();
+	case MP4IPMPDescrTag:
+	case MP4RegistrationDescrTag:
+		pDescriptor = new MP4BytesDescriptor(tag);
 		break;
 	case MP4SLConfigDescrTag:
 		pDescriptor = new MP4SLConfigDescriptor();
@@ -600,29 +568,16 @@ MP4Descriptor* MP4DescriptorProperty::CreateDescriptor(u_int8_t tag)
 	case MP4ContentIdDescrTag:
 		pDescriptor = new MP4ContentIdDescriptor();
 		break;
-	case MP4SupplContentIdDescrTag:
-		pDescriptor = new MP4SupplContentIdDescriptor();
-		break;
+	case MP4ESIDIncDescrTag:
+	case MP4ESIDRefDescrTag:
 	case MP4IPIPtrDescrTag:
-		pDescriptor = new MP4IPIPtrDescriptor();
-		break;
+	case MP4SupplContentIdDescrTag:
 	case MP4IPMPPtrDescrTag:
-		pDescriptor = new MP4IPMPPtrDescriptor();
-		break;
-	case MP4IPMPDescrTag:
-		pDescriptor = new MP4IPMPDescriptor();
+	case MP4ExtProfileLevelDescrTag:
+	        pDescriptor = new MP4BaseDescriptor(tag);
 		break;
 	case MP4QosDescrTag:
-		pDescriptor = new MP4QosDescriptor();
-		break;
-	case MP4RegistrationDescrTag:
-		pDescriptor = new MP4RegistrationDescriptor();
-		break;
-	case MP4ESIDIncDescrTag:
-		pDescriptor = new MP4ESIDIncDescriptor();
-		break;
-	case MP4ESIDRefDescrTag:
-		pDescriptor = new MP4ESIDRefDescriptor();
+		pDescriptor = new MP4QosDescriptorBase(MP4QosDescrTag);
 		break;
 	case MP4IODescrTag:
 	case MP4FileIODescrTag:
@@ -634,9 +589,6 @@ MP4Descriptor* MP4DescriptorProperty::CreateDescriptor(u_int8_t tag)
 		pDescriptor = new MP4ODescriptor();
 		pDescriptor->SetTag(tag);
 		break;
-	case MP4ExtProfileLevelDescrTag:
-		pDescriptor = new MP4ExtProfileLevelDescriptor();
-		break;
 	}
 
 	if (pDescriptor == NULL) {
@@ -645,8 +597,7 @@ MP4Descriptor* MP4DescriptorProperty::CreateDescriptor(u_int8_t tag)
 		}
 
 		if (tag >= MP4ExtDescrTagsStart && tag <= MP4ExtDescrTagsEnd) {
-			pDescriptor = new MP4ExtensionDescriptor();
-			pDescriptor->SetTag(tag);
+			pDescriptor = new MP4BytesDescriptor(tag);
 		}
 	}
 

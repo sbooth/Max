@@ -24,12 +24,14 @@
 
 const u_int8_t MP4QosDescrTag			 	= 0x0C; 
 
+#if 0
 class MP4QosDescriptor : public MP4Descriptor {
 public:
 	MP4QosDescriptor();
 };
 
 typedef MP4Descriptor MP4QosQualifier;
+#endif
 
 const u_int8_t MP4QosTagsStart				= 0x01; 
 const u_int8_t MP4MaxDelayQosTag			= 0x01; 
@@ -41,6 +43,7 @@ const u_int8_t MP4AvgAUSizeQosTag			= 0x42;
 const u_int8_t MP4MaxAURateQosTag			= 0x43; 
 const u_int8_t MP4QosTagsEnd				= 0xFF; 
 
+#if 0
 class MP4MaxDelayQosQualifier : public MP4QosQualifier {
 public:
 	MP4MaxDelayQosQualifier();
@@ -75,8 +78,14 @@ class MP4MaxAURateQosQualifier : public MP4QosQualifier {
 public:
 	MP4MaxAURateQosQualifier();
 };
+#else
+class MP4QosDescriptorBase : public MP4Descriptor {
+ public:
+  MP4QosDescriptorBase(uint8_t tag);
+};
 
-class MP4UnknownQosQualifier : public MP4QosQualifier {
+#endif
+class MP4UnknownQosQualifier : public MP4Descriptor {
 public:
 	MP4UnknownQosQualifier();
 	void Read(MP4File* pFile);

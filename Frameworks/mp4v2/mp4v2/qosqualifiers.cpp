@@ -20,7 +20,51 @@
  */
 
 #include "mp4common.h"
+#if 1
+MP4QosDescriptorBase::MP4QosDescriptorBase (u_int8_t tag)
+  : MP4Descriptor(tag)
+{
+  switch (tag) {
+  case MP4QosDescrTag:
+	AddProperty( /* 0 */
+		new MP4Integer8Property("predefined"));
+	AddProperty( /* 1 */
+		new MP4QosQualifierProperty("qualifiers",
+					    MP4QosTagsStart, 
+					    MP4QosTagsEnd, Optional, Many));
+	break;
+  case MP4MaxDelayQosTag:
+	AddProperty( /* 0 */
+		new MP4Integer32Property("maxDelay"));
+	break;
+  case MP4PrefMaxDelayQosTag:
+	AddProperty( /* 0 */
+		new MP4Integer32Property("prefMaxDelay"));
+	break;
+  case MP4LossProbQosTag:
+	AddProperty( /* 0 */
+		new MP4Float32Property("lossProb"));
+	break;
+  case MP4MaxGapLossQosTag:
+	AddProperty( /* 0 */
+		new MP4Integer32Property("maxGapLoss"));
+	break;
+  case MP4MaxAUSizeQosTag:
+	AddProperty( /* 0 */
+		new MP4Integer32Property("maxAUSize"));
+	break;
+  case MP4AvgAUSizeQosTag:
+	AddProperty( /* 0 */
+		    new MP4Integer32Property("avgAUSize"));
+	break;
+  case MP4MaxAURateQosTag:
+	AddProperty( /* 0 */
+		new MP4Integer32Property("maxAURate"));
+	break;
+  }
+}
 
+#else
 MP4QosDescriptor::MP4QosDescriptor()
 	: MP4Descriptor(MP4QosDescrTag)
 {
@@ -79,9 +123,9 @@ MP4MaxAURateQosQualifier::MP4MaxAURateQosQualifier()
 	AddProperty( /* 0 */
 		new MP4Integer32Property("maxAURate"));
 }
-
+#endif
 MP4UnknownQosQualifier::MP4UnknownQosQualifier()
-	: MP4QosQualifier()
+	: MP4Descriptor()
 {
 	AddProperty( /* 0 */
 		new MP4BytesProperty("data"));
@@ -100,8 +144,8 @@ void MP4UnknownQosQualifier::Read(MP4File* pFile)
 MP4Descriptor* MP4QosQualifierProperty::CreateDescriptor(u_int8_t tag) 
 {
 	MP4Descriptor* pDescriptor = NULL;
-
 	switch (tag) {
+#if 0
 	case MP4MaxDelayQosTag:
 		pDescriptor = new MP4MaxDelayQosQualifier();
 		break;
@@ -123,6 +167,17 @@ MP4Descriptor* MP4QosQualifierProperty::CreateDescriptor(u_int8_t tag)
 	case MP4MaxAURateQosTag:
 		pDescriptor = new MP4MaxAURateQosQualifier();
 		break;
+#else
+	case MP4MaxDelayQosTag:
+	case MP4PrefMaxDelayQosTag:
+	case MP4LossProbQosTag:
+	case MP4MaxGapLossQosTag:
+	case MP4MaxAUSizeQosTag:
+	case MP4AvgAUSizeQosTag:
+	case MP4MaxAURateQosTag:
+	  pDescriptor = new MP4QosDescriptorBase(tag);
+	  break;
+#endif
 	default:
 		pDescriptor = new MP4UnknownQosQualifier();
 		pDescriptor->SetTag(tag);

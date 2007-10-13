@@ -93,7 +93,7 @@ public:
 	u_int32_t	GetMaxBitrate();	// in bps
 
 	MP4Duration GetFixedSampleDuration();
-	bool		SetFixedSampleDuration(MP4Duration duration);
+	void		SetFixedSampleDuration(MP4Duration duration);
 
 	void		GetSampleTimes(MP4SampleId sampleId,
 					MP4Timestamp* pStartTime, MP4Duration* pDuration);
@@ -237,6 +237,11 @@ protected:
 	MP4Integer32Property* m_pSttsCountProperty;
 	MP4Integer32Property* m_pSttsSampleCountProperty;
 	MP4Integer32Property* m_pSttsSampleDeltaProperty;
+
+	// for improve sequental timestamp index access
+	u_int32_t	m_cachedSttsIndex;
+	MP4SampleId	m_cachedSttsSid;
+	MP4Timestamp	m_cachedSttsElapsed;
 
 	MP4Integer32Property* m_pCttsCountProperty;
 	MP4Integer32Property* m_pCttsSampleCountProperty;

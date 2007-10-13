@@ -74,31 +74,33 @@ void MP4File::MakeFtypAtom(char* majorBrand, u_int32_t minorVersion, char** supp
 	if (majorBrand == NULL)
 	  return;
 	MP4StringProperty* pMajorBrandProperty;
-	ftypAtom->FindProperty(
-		"ftyp.majorBrand",
-		(MP4Property**)&pMajorBrandProperty);
+	if (!ftypAtom->FindProperty(
+				   "ftyp.majorBrand",
+				   (MP4Property**)&pMajorBrandProperty))
+	  return;
 
 	pMajorBrandProperty->SetValue(majorBrand);
 
 
 	MP4Integer32Property* pMinorVersionProperty;
-	ftypAtom->FindProperty(
-		"ftype.minorVersion",
-		(MP4Property**)&pMinorVersionProperty);
+	if (!ftypAtom->FindProperty(
+				   "ftype.minorVersion",
+				   (MP4Property**)&pMinorVersionProperty))
+	  return;
 
 	pMinorVersionProperty->SetValue(minorVersion);
 
 	MP4Integer32Property* pCompatibleBrandsCountProperty;
-	ftypAtom->FindProperty(
+	if (!ftypAtom->FindProperty(
 		"ftyp.compatibleBrandsCount",
-		(MP4Property**)&pCompatibleBrandsCountProperty);
+		(MP4Property**)&pCompatibleBrandsCountProperty)) return;
 
 	currentSupportedBrandsCount = pCompatibleBrandsCountProperty->GetValue();
 
 	MP4TableProperty* pCompatibleBrandsProperty;
-	ftypAtom->FindProperty(
+	if (!ftypAtom->FindProperty(
 		"ftyp.compatibleBrands",
-		(MP4Property**)&pCompatibleBrandsProperty);
+		(MP4Property**)&pCompatibleBrandsProperty)) return;
 
 	MP4StringProperty* pBrandProperty = (MP4StringProperty*)
 		pCompatibleBrandsProperty->GetProperty(0);

@@ -85,6 +85,7 @@ void MP4RootAtom::FinishOptimalWrite()
 		}
 	}
 	ASSERT(i < size);
+	ASSERT(pMoovAtom != NULL);
 
 	// rewrite moov so that updated chunkOffsets are written to disk
 	m_pFile->SetPosition(pMoovAtom->GetStart());

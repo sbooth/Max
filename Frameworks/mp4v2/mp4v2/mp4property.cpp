@@ -407,7 +407,7 @@ void MP4StringProperty::Dump(FILE* pFile, u_int8_t indent,
 	Indent(pFile, indent);
 	char indexd[32];
 	if (index != 0) {
-	  sprintf(indexd, "[%u]", index);
+	  snprintf(indexd, 32, "[%u]", index);
 	} else indexd[0] = '\0';
 
 	if (m_useUnicode) {

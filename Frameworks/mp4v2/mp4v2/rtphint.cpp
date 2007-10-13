@@ -73,7 +73,7 @@ void MP4RtpHintTrack::InitRefTrack()
 {
 	if (m_pRefTrack == NULL) {
 		MP4Integer32Property* pRefTrackIdProperty = NULL;
-		m_pTrakAtom->FindProperty(
+		(void)m_pTrakAtom->FindProperty(
 			"trak.tref.hint.entries[0].trackId",
 			(MP4Property**)&pRefTrackIdProperty);
 		ASSERT(pRefTrackIdProperty);
@@ -85,12 +85,12 @@ void MP4RtpHintTrack::InitRefTrack()
 void MP4RtpHintTrack::InitRtpStart() 
 {
 	struct timeval tv;
-	gettimeofday(&tv, NULL);
+	(void)gettimeofday(&tv, NULL);
 	srandom((tv.tv_usec << 12) | (tv.tv_sec & 0xFFF));
 
 	ASSERT(m_pTrakAtom);
 
-	m_pTrakAtom->FindProperty(
+	(void)m_pTrakAtom->FindProperty(
 		"trak.udta.hnti.rtp .snro.offset",
 		(MP4Property**)&m_pSnroProperty);
 
@@ -100,7 +100,7 @@ void MP4RtpHintTrack::InitRtpStart()
 		m_rtpSequenceStart = random();
 	}
 
-	m_pTrakAtom->FindProperty(
+	(void)m_pTrakAtom->FindProperty(
 		"trak.udta.hnti.rtp .tsro.offset",
 		(MP4Property**)&m_pTsroProperty);
 
@@ -274,7 +274,7 @@ void MP4RtpHintTrack::SetRtpTimestampStart(MP4Timestamp start)
 
 		ASSERT(pTsroAtom);
 
-		pTsroAtom->FindProperty("offset",
+		(void)pTsroAtom->FindProperty("offset",
 			(MP4Property**)&m_pTsroProperty);
 
 		ASSERT(m_pTsroProperty);
@@ -289,19 +289,19 @@ void MP4RtpHintTrack::InitPayload()
 	ASSERT(m_pTrakAtom);
 
 	if (m_pRtpMapProperty == NULL) {
-		m_pTrakAtom->FindProperty(
+	  (void)m_pTrakAtom->FindProperty(
 			"trak.udta.hinf.payt.rtpMap",
 			(MP4Property**)&m_pRtpMapProperty);
 	}
 
 	if (m_pPayloadNumberProperty == NULL) {
-		m_pTrakAtom->FindProperty(
+	  (void)m_pTrakAtom->FindProperty(
 			"trak.udta.hinf.payt.payloadNumber",
 			(MP4Property**)&m_pPayloadNumberProperty);
 	}
 
 	if (m_pMaxPacketSizeProperty == NULL) {
-		m_pTrakAtom->FindProperty(
+	  (void)m_pTrakAtom->FindProperty(
 			"trak.mdia.minf.stbl.stsd.rtp .maxPacketSize",
 			(MP4Property**)&m_pMaxPacketSizeProperty);
 	}
@@ -395,7 +395,7 @@ void MP4RtpHintTrack::SetPayload(
 	}
 
 	char* rtpMapBuf = (char*)MP4Malloc(len);
-	sprintf(rtpMapBuf, "%s/%u%c%s", 
+	snprintf(rtpMapBuf, len, "%s/%u%c%s", 
 		payloadName, 
 		GetTimeScale(),
 		encoding_parms != NULL ? '/' : '\0',
@@ -421,27 +421,28 @@ void MP4RtpHintTrack::SetPayload(
 		sdpMediaType = "application";
 	}
 
-	char* sdpBuf = (char*)MP4Malloc(
-		strlen(sdpMediaType) + strlen(rtpMapBuf) + 256);
+	uint32_t maxlen = 
+	  strlen(sdpMediaType) + strlen(rtpMapBuf) + 256;
+	char* sdpBuf = (char*)MP4Malloc(maxlen);
 	uint32_t buflen;
-	buflen = sprintf(sdpBuf, 
+	buflen = snprintf(sdpBuf, maxlen,
 			 "m=%s 0 RTP/AVP %u\015\012"
 			 "a=control:trackID=%u\015\012",
 			 sdpMediaType, payloadNumber,
 			 m_trackId);
 	if (include_rtp_map) {
-	  buflen += sprintf(sdpBuf + buflen, 
+	  buflen += snprintf(sdpBuf + buflen, maxlen - buflen, 
 			    "a=rtpmap:%u %s\015\012",
 			    payloadNumber, rtpMapBuf);
 	}
 	if (include_mpeg4_esid) {
-	  sprintf(sdpBuf + buflen, 
+	  snprintf(sdpBuf + buflen, maxlen - buflen,
 		  "a=mpeg4-esid:%u\015\012",
 		  m_pRefTrack->GetId());
 	}
 
 	MP4StringProperty* pSdpProperty = NULL;
-	m_pTrakAtom->FindProperty("trak.udta.hnti.sdp .sdpText",
+	(void)m_pTrakAtom->FindProperty("trak.udta.hnti.sdp .sdpText",
 		(MP4Property**)&pSdpProperty);
 	ASSERT(pSdpProperty);
 	pSdpProperty->SetValue(sdpBuf);
@@ -675,26 +676,26 @@ void MP4RtpHintTrack::InitStats()
 
 	ASSERT(pHinfAtom);
 
-	pHinfAtom->FindProperty("hinf.trpy.bytes", (MP4Property**)&m_pTrpy); 
-	pHinfAtom->FindProperty("hinf.nump.packets", (MP4Property**)&m_pNump); 
-	pHinfAtom->FindProperty("hinf.tpyl.bytes", (MP4Property**)&m_pTpyl); 
-	pHinfAtom->FindProperty("hinf.maxr.bytes", (MP4Property**)&m_pMaxr); 
-	pHinfAtom->FindProperty("hinf.dmed.bytes", (MP4Property**)&m_pDmed); 
-	pHinfAtom->FindProperty("hinf.dimm.bytes", (MP4Property**)&m_pDimm); 
-	pHinfAtom->FindProperty("hinf.pmax.bytes", (MP4Property**)&m_pPmax); 
-	pHinfAtom->FindProperty("hinf.dmax.milliSecs", (MP4Property**)&m_pDmax); 
+	(void)pHinfAtom->FindProperty("hinf.trpy.bytes", (MP4Property**)&m_pTrpy); 
+	(void)pHinfAtom->FindProperty("hinf.nump.packets", (MP4Property**)&m_pNump); 
+	(void)pHinfAtom->FindProperty("hinf.tpyl.bytes", (MP4Property**)&m_pTpyl); 
+	(void)pHinfAtom->FindProperty("hinf.maxr.bytes", (MP4Property**)&m_pMaxr); 
+	(void)pHinfAtom->FindProperty("hinf.dmed.bytes", (MP4Property**)&m_pDmed); 
+	(void)pHinfAtom->FindProperty("hinf.dimm.bytes", (MP4Property**)&m_pDimm); 
+	(void)pHinfAtom->FindProperty("hinf.pmax.bytes", (MP4Property**)&m_pPmax); 
+	(void)pHinfAtom->FindProperty("hinf.dmax.milliSecs", (MP4Property**)&m_pDmax); 
 
 	MP4Atom* pHmhdAtom = m_pTrakAtom->FindAtom("trak.mdia.minf.hmhd");
 
 	ASSERT(pHmhdAtom);
 
-	pHmhdAtom->FindProperty("hmhd.maxPduSize", (MP4Property**)&m_pMaxPdu); 
-	pHmhdAtom->FindProperty("hmhd.avgPduSize", (MP4Property**)&m_pAvgPdu); 
-	pHmhdAtom->FindProperty("hmhd.maxBitRate", (MP4Property**)&m_pMaxBitRate); 
-	pHmhdAtom->FindProperty("hmhd.avgBitRate", (MP4Property**)&m_pAvgBitRate); 
+	(void)pHmhdAtom->FindProperty("hmhd.maxPduSize", (MP4Property**)&m_pMaxPdu); 
+	(void)pHmhdAtom->FindProperty("hmhd.avgPduSize", (MP4Property**)&m_pAvgPdu); 
+	(void)pHmhdAtom->FindProperty("hmhd.maxBitRate", (MP4Property**)&m_pMaxBitRate); 
+	(void)pHmhdAtom->FindProperty("hmhd.avgBitRate", (MP4Property**)&m_pAvgBitRate); 
 
 	MP4Integer32Property* pMaxrPeriod = NULL;
-	pHinfAtom->FindProperty("hinf.maxr.granularity",
+	(void)pHinfAtom->FindProperty("hinf.maxr.granularity",
 		 (MP4Property**)&pMaxrPeriod); 
 	if (pMaxrPeriod) {
 		pMaxrPeriod->SetValue(1000);	// 1 second
@@ -1095,7 +1096,7 @@ MP4Track* MP4RtpData::FindTrackFromRefIndex(u_int8_t refIndex)
 		ASSERT(pTrakAtom);
 
 		MP4Integer32Property* pTrackIdProperty = NULL;
-		pTrakAtom->FindProperty(
+		(void)pTrakAtom->FindProperty(
 			"trak.tref.hint.entries",
 			(MP4Property**)&pTrackIdProperty);
 		ASSERT(pTrackIdProperty);
@@ -1319,7 +1320,7 @@ void MP4RtpSampleDescriptionData::GetData(u_int8_t* pDest)
 		pSampleTrack->GetTrakAtom();
 
 	char sdName[64];
-	sprintf(sdName, "trak.mdia.minf.stbl.stsd.*[%u]", sampleDescrIndex);
+	snprintf(sdName, 64, "trak.mdia.minf.stbl.stsd.*[%u]", sampleDescrIndex);
 
 	MP4Atom* pSdAtom =
 		pTrakAtom->FindAtom(sdName);

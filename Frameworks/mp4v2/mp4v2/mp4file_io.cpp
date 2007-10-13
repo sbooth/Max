@@ -84,11 +84,11 @@ u_int64_t MP4File::GetSize()
 	return m_fileSize;
 }
 
-u_int32_t MP4File::ReadBytes(u_int8_t* pBytes, u_int32_t numBytes, FILE* pFile)
+void MP4File::ReadBytes(u_int8_t* pBytes, u_int32_t numBytes, FILE* pFile)
 {
 	// handle degenerate cases
 	if (numBytes == 0) {
-		return 0;
+		return;
 	}
 
 	ASSERT(pBytes);
@@ -120,15 +120,14 @@ u_int32_t MP4File::ReadBytes(u_int8_t* pBytes, u_int32_t numBytes, FILE* pFile)
 		memcpy(pBytes, &m_memoryBuffer[m_memoryBufferPosition], numBytes);
 		m_memoryBufferPosition += numBytes;
 	}
-	return numBytes;
+	return;
 }
 
-u_int32_t MP4File::PeekBytes(u_int8_t* pBytes, u_int32_t numBytes, FILE* pFile)
+void MP4File::PeekBytes(u_int8_t* pBytes, u_int32_t numBytes, FILE* pFile)
 {
 	u_int64_t pos = GetPosition(pFile);
 	ReadBytes(pBytes, numBytes, pFile);
 	SetPosition(pos, pFile);
-	return numBytes;
 }
 
 void MP4File::EnableMemoryBuffer(u_int8_t* pBytes, u_int64_t numBytes) 
@@ -215,6 +214,7 @@ u_int64_t MP4File::ReadUInt(u_int8_t size)
 	}
 }
 
+#if 0
 void MP4File::WriteUInt(u_int64_t value, u_int8_t size)
 {
 	switch (size) {
@@ -232,6 +232,7 @@ void MP4File::WriteUInt(u_int64_t value, u_int8_t size)
 		ASSERT(false);
 	}
 }
+#endif
 
 u_int8_t MP4File::ReadUInt8()
 {
@@ -392,6 +393,7 @@ char* MP4File::ReadString()
 	do {
 		if (length == alloced) {
 			data = (char*)MP4Realloc(data, alloced * 2);
+			if (data == NULL) return NULL;
 			alloced *= 2;
 		}
 		ReadBytes((u_int8_t*)&data[length], 1);
@@ -417,10 +419,15 @@ char* MP4File::ReadCountedString(u_int8_t charSize, bool allowExpandedCount)
 	u_int32_t charLength;
 	if (allowExpandedCount) {
 		u_int8_t b;
+		uint ix = 0;
 		charLength = 0;
 		do {
 			b = ReadUInt8();
 			charLength += b;
+			ix++;
+			if (ix > 25) 
+			  throw new MP4Error(ERANGE, 
+					     "Counted string too long 25 * 255");
 		} while (b == 255);
 	} else {
 		charLength = ReadUInt8();

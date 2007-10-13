@@ -76,6 +76,19 @@ static void ParseH264 (uint8_t *bptr, uint32_t blen,
   }
 }
 
+static void ParseMpeg2 (uint8_t *bptr, uint32_t blen, bool dump_off)
+{
+  int offset;
+  int frame_type;
+
+  offset = MP4AV_Mpeg3FindPictHdr(bptr, blen, &frame_type);
+  if (offset >= 0) {
+    printf(" %c temp ref %u", frame_type == 1 ? 'I' : (frame_type == 2 ? 'P' : 'B'),
+	   MP4AV_Mpeg3PictHdrTempRef(bptr + offset));
+  } else {
+    printf("offset %d", offset);
+  }
+}
 static void ParseMpeg4 (uint8_t *bptr, uint32_t blen, bool dump_off)
 {
   uint8_t *fptr = bptr;
@@ -115,6 +128,7 @@ static void ParseMpeg4 (uint8_t *bptr, uint32_t blen, bool dump_off)
     blen--;
   }
 }
+
 static void DumpTrack (MP4FileHandle mp4file, MP4TrackId tid, 
 		       bool dump_off, bool dump_rend)
 {
@@ -123,7 +137,7 @@ static void DumpTrack (MP4FileHandle mp4file, MP4TrackId tid,
   uint8_t *buffer;
   uint32_t max_frame_size;
   uint32_t timescale;
-  uint64_t msectime;
+  uint64_t msectime, rendmsectime;
   const char *media_data_name;
   uint32_t len_size = 0;
   uint8_t video_type = 0;
@@ -170,10 +184,22 @@ static void DumpTrack (MP4FileHandle mp4file, MP4TrackId tid,
     printf("sampleId %6d, size %5u time "U64"("U64")",
 	  sid,  MP4GetSampleSize(mp4file, tid, sid), 
 	   sampleTime, msectime);
-    if (dump_rend) printf(" %6"U64F, sampleRenderingOffset);
+    if (dump_rend) {
+      rendmsectime = sampleRenderingOffset;
+      rendmsectime *= TO_U64(1000);
+      rendmsectime /= timescale;
+      printf(" "U64","U64"("U64","U64") ", sampleRenderingOffset, 
+	     sampleTime + sampleRenderingOffset,
+	     rendmsectime,
+	     msectime + rendmsectime);
+    }
     if (strcasecmp(media_data_name, "mp4v") == 0) {
       if (MP4_IS_MPEG4_VIDEO_TYPE(video_type))
 	ParseMpeg4(temp, this_frame_size, dump_off);
+      else if (MP4_IS_MPEG1_VIDEO_TYPE(video_type) ||
+	       MP4_IS_MPEG2_VIDEO_TYPE(video_type)) {
+	ParseMpeg2(temp, this_frame_size, dump_off);
+      }
     } else if (strcasecmp(media_data_name, "avc1") == 0) {
       ParseH264(temp, this_frame_size, len_size, dump_off);
     }

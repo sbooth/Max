@@ -24,26 +24,17 @@
 #include <assert.h>
 
 #ifndef ASSERT
-#ifdef NDEBUG
-#define ASSERT(expr)
-#else
 #define ASSERT(expr) \
 	if (!(expr)) { \
-		fflush(stdout); \
-		assert((expr)); \
+		throw new MP4Error("assert failure", __STRING((expr))); \
 	}
 #endif
-#endif
-#ifdef NDEBUG
-#define WARNING(expr)
-#else
 #define WARNING(expr) \
 	if (expr) { \
 		fflush(stdout); \
 		fprintf(stderr, "Warning (%s) in %s at line %u\n", \
 			__STRING(expr), __FILE__, __LINE__); \
 	}
-#endif
 
 #define VERBOSE(exprverbosity, verbosity, expr)	\
 	if (((exprverbosity) & (verbosity)) == (exprverbosity)) { expr; }
@@ -212,24 +203,12 @@ inline void* MP4Realloc(void* p, u_int32_t newSize) {
 }
 
 inline u_int32_t STRTOINT32(const char* s) {
-#ifdef WORDS_BIGENDIAN
-  return (*(u_int32_t *)s);
-#else
-  return htonl(*(uint32_t *)s);
-#endif
-#if 0
-	return (s[0] << 24) | (s[1] << 16) | (s[2] << 8) | s[3];
-#endif
+  return ntohl(*(uint32_t *)s);
 }
 
 inline void INT32TOSTR(u_int32_t i, char* s) {
-#ifdef WORDS_BIGENDIAN
-  *(uint32_t *)s = i;
+  *(uint32_t *)s = htonl(i);
   s[4] = 0;
-#else
-	s[0] = ((i >> 24) & 0xFF); s[1] = ((i >> 16) & 0xFF); 
-	s[2] = ((i >> 8) & 0xFF); s[3] = (i & 0xFF); s[4] = 0;
-#endif
 }
 
 inline MP4Timestamp MP4GetAbsTimestamp() {

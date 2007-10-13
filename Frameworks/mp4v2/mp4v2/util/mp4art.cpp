@@ -123,6 +123,7 @@ int main(int argc, char** argv)
 	const char* ending = check_image_header(art); 
 	if (argc != optind + 1) {
 	  strcpy(filename, argv[optind + 1]);
+	  optind++;
 	} else {
 	  strip_filename(mp4FileName, filename);
 	}
@@ -150,6 +151,7 @@ int main(int argc, char** argv)
       } else {
 	fprintf(stderr, "art not available for %s\n", mp4FileName);
       }
+      optind++;
     }
   }
 
