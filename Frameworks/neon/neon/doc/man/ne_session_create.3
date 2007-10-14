@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SESSION_CREATE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_session_create
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SESSION_CREATE" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,16 +13,20 @@
 .SH "NAME"
 ne_session_create, ne_close_connection, ne_session_proxy, ne_session_destroy \- set up HTTP sessions
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_session.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_session.h>
+.fi
+.ft
 .HP 30
-\fBne_session\ *\fBne_session_create\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIscheme\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIhostname\fR\fR\fB, \fR\fBunsigned\ int\ \fR\fB\fIport\fR\fR\fB);\fR
+.BI "ne_session *ne_session_create(const\ char\ *" "scheme" ", const\ char\ *" "hostname" ", unsigned\ int\ " "port" ");"
 .HP 22
-\fBvoid\ \fBne_session_proxy\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIhostname\fR\fR\fB, \fR\fBunsigned\ int\ \fR\fB\fIport\fR\fR\fB);\fR
+.BI "void ne_session_proxy(ne_session\ *" "session" ", const\ char\ *" "hostname" ", unsigned\ int\ " "port" ");"
 .HP 25
-\fBvoid\ \fBne_close_connection\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.BI "void ne_close_connection(ne_session\ *" "session" ");"
 .HP 24
-\fBvoid\ \fBne_session_destroy\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.BI "void ne_session_destroy(ne_session\ *" "session" ");"
 .SH "DESCRIPTION"
 .PP
 An
@@ -78,14 +85,24 @@ NULL).
 .PP
 Create and destroy a session:
 .sp
+.RS 4
 .nf
 ne_session *sess;
 sess = ne_session_create("http", "host.example.com", 80);
 /* ... use sess ... */
 ne_session_destroy(sess);
 .fi
+.RE
 .SH "SEE ALSO"
 .PP
 ne_ssl_set_verify,
 ne_ssl_trust_cert,
 ne_sock_init
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

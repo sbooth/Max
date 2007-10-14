@@ -16,6 +16,9 @@
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 /* #undef HAVE_BIND_TEXTDOMAIN_CODESET */
 
+/* Define to 1 if you have the `CRYPTO_set_idptr_callback' function. */
+/* #undef HAVE_CRYPTO_SET_IDPTR_CALLBACK */
+
 /* Define to 1 if you have the declaration of `h_errno', and to 0 if you
    don't. */
 /* #undef HAVE_DECL_H_ERRNO */
@@ -37,17 +40,32 @@
 /* Define if you have expat */
 #define HAVE_EXPAT 1
 
+/* Define to 1 if you have the `fcntl' function. */
+#define HAVE_FCNTL 1
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#define HAVE_FCNTL_H 1
+
 /* Define to 1 if you have the `fstat64' function. */
 /* #undef HAVE_FSTAT64 */
 
 /* Define to 1 if you have the `gai_strerror' function. */
 #define HAVE_GAI_STRERROR 1
 
+/* Define to 1 if you have the `getnameinfo' function. */
+#define HAVE_GETNAMEINFO 1
+
+/* Define to 1 if you have the `getsockopt' function. */
+#define HAVE_GETSOCKOPT 1
+
 /* Define if GnuTLS support is enabled */
 /* #undef HAVE_GNUTLS */
 
 /* Define to 1 if you have the `gnutls_session_get_data2' function. */
 /* #undef HAVE_GNUTLS_SESSION_GET_DATA2 */
+
+/* Define to 1 if you have the `gnutls_x509_dn_get_rdn_ava' function. */
+/* #undef HAVE_GNUTLS_X509_DN_GET_RDN_AVA */
 
 /* Define if GSSAPI support is enabled */
 #define HAVE_GSSAPI 1
@@ -66,6 +84,12 @@
 
 /* Define to 1 if you have the `hstrerror' function. */
 /* #undef HAVE_HSTRERROR */
+
+/* Define to 1 if you have the `iconv' function. */
+/* #undef HAVE_ICONV */
+
+/* Define to 1 if you have the <iconv.h> header file. */
+#define HAVE_ICONV_H 1
 
 /* Define to 1 if you have the `inet_ntop' function. */
 #define HAVE_INET_NTOP 1
@@ -150,6 +174,9 @@
 
 /* Define to 1 if you have the `snprintf' function. */
 #define HAVE_SNPRINTF 1
+
+/* Define to 1 if the system has the type `socklen_t'. */
+#define HAVE_SOCKLEN_T 1
 
 /* Define to 1 if you have the <socks.h> header file. */
 /* #undef HAVE_SOCKS_H */
@@ -236,10 +263,13 @@
 #define NEON_IS_LIBRARY 1
 
 /* Define to be the neon version string */
-#define NEON_VERSION "0.26.3"
+#define NEON_VERSION "0.27.2"
 
 /* Define to enable debugging */
 #define NE_DEBUGGING 1
+
+/* Define to be printf format string for ne_off_t */
+#define NE_FMT_NE_OFF_T NE_FMT_OFF_T
 
 /* Define to be printf format string for off64_t */
 /* #undef NE_FMT_OFF64_T */
@@ -255,6 +285,9 @@
 
 /* Define to be printf format string for time_t */
 #define NE_FMT_TIME_T "ld"
+
+/* Define to be printf format string for XML_Size */
+#define NE_FMT_XML_SIZE "ld"
 
 /* Defined if DAV is supported */
 #define NE_HAVE_DAV 1
@@ -290,10 +323,10 @@
 #define NE_VERSION_MAJOR (0)
 
 /* Define to be neon library minor version */
-#define NE_VERSION_MINOR (26)
+#define NE_VERSION_MINOR (27)
 
 /* Define to be neon library patch version */
-#define NE_VERSION_PATCH (3)
+#define NE_VERSION_PATCH (2)
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "neon@webdav.org"
@@ -302,13 +335,13 @@
 #define PACKAGE_NAME "neon"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "neon 0.26.3"
+#define PACKAGE_STRING "neon 0.27.2"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "neon"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.26.3"
+#define PACKAGE_VERSION "0.27.2"
 
 /* The size of a `int', as computed by sizeof. */
 #define SIZEOF_INT 4
@@ -334,6 +367,9 @@
 /* The size of a `time_t', as computed by sizeof. */
 #define SIZEOF_TIME_T 4
 
+/* The size of a `XML_Size', as computed by sizeof. */
+#define SIZEOF_XML_SIZE 4
+
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
@@ -353,10 +389,6 @@
    first (like Motorola and SPARC, unlike Intel and VAX). */
 #if __BIG_ENDIAN__
 #define WORDS_BIGENDIAN 1
-#elif __LITTLE_ENDIAN__
-#define WORDS_BIGENDIAN 0
-#else
-#error "Target processor byte order unknown"
 #endif
 
 /* Always defined to enable GNU extensions */

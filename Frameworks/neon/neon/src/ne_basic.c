@@ -1,6 +1,6 @@
 /* 
    Basic HTTP and WebDAV methods
-   Copyright (C) 1999-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 1999-2007, Joe Orton <joe@manyfish.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -103,11 +103,7 @@ int ne_put(ne_session *sess, const char *uri, int fd)
     ne_lock_using_parent(req, uri);
 #endif
 
-#ifdef NE_LFS
-    ne_set_request_body_fd64(req, fd, 0, st.st_size);
-#else
     ne_set_request_body_fd(req, fd, 0, st.st_size);
-#endif
 	
     ret = ne_request_dispatch(req);
     
@@ -185,7 +181,7 @@ static int get_range_common(ne_session *sess, const char *uri,
     }
     else if (ret == NE_OK) {
 	if (status->klass == 2 && status->code != 206) {
-	    ne_set_error(sess, _("Resource does not support ranged GETs."));
+	    ne_set_error(sess, _("Resource does not support ranged GET requests"));
 	    ret = NE_ERROR;
 	}
 	else if (status->klass != 2) {
@@ -204,37 +200,17 @@ int ne_get_range(ne_session *sess, const char *uri,
     char brange[64];
 
     if (range->end == -1) {
-        ne_snprintf(brange, sizeof brange, "bytes=%" NE_FMT_OFF_T "-", 
+        ne_snprintf(brange, sizeof brange, "bytes=%" FMT_NE_OFF_T "-", 
                     range->start);
     }
     else {
 	ne_snprintf(brange, sizeof brange,
-                    "bytes=%" NE_FMT_OFF_T "-%" NE_FMT_OFF_T,
+                    "bytes=%" FMT_NE_OFF_T "-%" FMT_NE_OFF_T,
                     range->start, range->end);
     }
 
     return get_range_common(sess, uri, brange, fd);
 }
-
-#ifdef NE_LFS
-int ne_get_range64(ne_session *sess, const char *uri, 
-                   ne_content_range64 *range, int fd)
-{
-    char brange[64];
-
-    if (range->end == -1) {
-        ne_snprintf(brange, sizeof brange, "bytes=%" NE_FMT_OFF64_T "-", 
-                    range->start);
-    }
-    else {
-	ne_snprintf(brange, sizeof brange,
-                    "bytes=%" NE_FMT_OFF64_T "-%" NE_FMT_OFF64_T,
-                    range->start, range->end);
-    }
-
-    return get_range_common(sess, uri, brange, fd);
-}
-#endif
 
 /* Get to given fd */
 int ne_get(ne_session *sess, const char *uri, int fd)
@@ -404,9 +380,14 @@ static int copy_or_move(ne_session *sess, int is_move, int overwrite,
     ne_lock_using_parent(req, dest);
 #endif
 
-    ne_print_request_header(req, "Destination", "%s://%s%s", 
-			      ne_get_scheme(sess), 
-			      ne_get_server_hostport(sess), dest);
+    if (ne_get_session_flag(sess, NE_SESSFLAG_RFC4918)) {
+        ne_add_request_header(req, "Destination", dest);
+    }
+    else {
+        ne_print_request_header(req, "Destination", "%s://%s%s", 
+                                ne_get_scheme(sess), 
+                                ne_get_server_hostport(sess), dest);
+    }
     
     ne_add_request_header(req, "Overwrite", overwrite?"T":"F");
 

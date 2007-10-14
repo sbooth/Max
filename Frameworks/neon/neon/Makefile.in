@@ -182,7 +182,7 @@ install-nls-no:
 install-nls-yes:
 	@for f in $(LINGUAS); do \
 	 $(INSTALL) -d $(DESTDIR)$(localedir)/$$f/LC_MESSAGES; \
-	 $(INSTALL_DATA) po/$$f.gmo $(DESTDIR)$(localedir)/$$f/LC_MESSAGES/neon.mo; \
+	 $(INSTALL_DATA) $(srcdir)/po/$$f.gmo $(DESTDIR)$(localedir)/$$f/LC_MESSAGES/neon.mo; \
 	done
 
 ChangeLog:

@@ -1,6 +1,6 @@
 /* 
    neon test suite
-   Copyright (C) 2002-2004, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2002-2007, Joe Orton <joe@manyfish.co.uk>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -37,17 +37,40 @@
 
 #define ABORT (-42) /* magic code for abort handlers */
 
+#define EVAL_DEFAULT "eval-xmlns-default"
+#define EVAL_SPECIFIC "eval-xmlns-specific-"
+
+struct context {
+    ne_buffer *buf;
+    ne_xml_parser *parser;
+};
+
 /* A set of SAX handlers which serialize SAX events back into a 
  * pseudo-XML-like string. */
 static int startelm(void *userdata, int state,
                     const char *nspace, const char *name,
 		    const char **atts)
 {
-    ne_buffer *buf = userdata;
+    struct context *ctx = userdata;
+    ne_buffer *buf = ctx->buf;
     int n;
 
     if (strcmp(name, "decline") == 0)
         return NE_XML_DECLINE;
+
+    if (strcmp(name, EVAL_DEFAULT) == 0) {
+        const char *val = ne_xml_resolve_nspace(ctx->parser, NULL, 0);
+
+        ne_buffer_concat(ctx->buf, EVAL_DEFAULT "=[", val, "]", NULL);
+        return NE_XML_DECLINE;
+    }
+    else if (strncmp(name, EVAL_SPECIFIC, strlen(EVAL_SPECIFIC)) == 0) {
+        const char *which = name + strlen(EVAL_SPECIFIC);
+        const char *r = ne_xml_resolve_nspace(ctx->parser, which, strlen(which));
+        
+        ne_buffer_concat(ctx->buf, name, "=[", r, "]", NULL);
+        return NE_XML_DECLINE;
+    }
 
     ne_buffer_concat(buf, "<", "{", nspace, "}", name, NULL);
     for (n = 0; atts && atts[n] != NULL; n+=2) {
@@ -60,16 +83,16 @@ static int startelm(void *userdata, int state,
 
 static int chardata(void *userdata, int state, const char *cdata, size_t len)
 {
-    ne_buffer *buf = userdata;
-    ne_buffer_append(buf, cdata, len);
+    struct context *ctx = userdata;
+    ne_buffer_append(ctx->buf, cdata, len);
     return strncmp(cdata, "!ABORT!", len) == 0 ? ABORT : NE_XML_DECLINE;
 }
 
 static int endelm(void *userdata, int state,
                   const char *nspace, const char *name)
 {
-    ne_buffer *buf = userdata;
-    ne_buffer_concat(buf, "</{", nspace, "}", name, ">", NULL);
+    struct context *ctx = userdata;
+    ne_buffer_concat(ctx->buf, "</{", nspace, "}", name, ">", NULL);
     return 0;
 }
 
@@ -100,6 +123,7 @@ static int startelm_state(void *userdata, int parent,
                           const char *nspace, const char *name,
                           const char **atts)
 {
+    struct context *ctx = userdata;
     int n;
 
     if (strcmp(nspace, "state") != 0)
@@ -113,7 +137,7 @@ static int startelm_state(void *userdata, int parent,
                 char err[50];
                 sprintf(err, "parent state of %s was %d not %d", name, parent, 
                     expected);
-                ne_buffer_zappend(userdata, err);
+                ne_buffer_zappend(ctx->buf, err);
             }
         }
     }
@@ -125,32 +149,36 @@ static int endelm_state(void *userdata, int state,
                         const char *nspace, const char *name)
 {
     int expected = atoi(name + 1);
-    ne_buffer *buf = userdata;
+    struct context *ctx = userdata;
     
     if (state != expected)
-        ne_buffer_concat(buf, "wrong state in endelm of ", name, NULL);
+        ne_buffer_concat(ctx->buf, "wrong state in endelm of ", name, NULL);
     
     return 0;
 }
 
 /* A set of SAX handlers which verify that abort handling is working
  * correctly. */
-static int startelm_abort(void *buf, int parent,
+static int startelm_abort(void *userdata, int parent,
                           const char *nspace, const char *name,
                           const char **atts)
 {
+    struct context *ctx = userdata;
+
     if (strcmp(name, "abort-start") == 0) {
-        ne_buffer_zappend(buf, "ABORT");
+        ne_buffer_zappend(ctx->buf, "ABORT");
         return ABORT;
     } else
-        return startelm(buf, parent, nspace, name, atts);
+        return startelm(ctx, parent, nspace, name, atts);
 }
 
-static int endelm_abort(void *buf, int state,
+static int endelm_abort(void *userdata, int state,
                         const char *nspace, const char *name)
 {
+    struct context *ctx = userdata;
+
     if (strcmp(name, "abort-end") == 0) {
-        ne_buffer_zappend(buf, "ABORT");
+        ne_buffer_zappend(ctx->buf, "ABORT");
         return ABORT;
     } else
         return 0;
@@ -165,18 +193,24 @@ enum match_type {
     match_chunked /* parse the document one byte at a time */
 };
 
-static int parse_match(const char *doc, const char *result, enum match_type t)
+static int parse_match(const char *doc, const char *result, 
+                       enum match_type t)
 {
+    const char *origdoc = doc;
     ne_xml_parser *p = ne_xml_create();
     ne_buffer *buf = ne_buffer_create();
     int ret;
+    struct context ctx;
+    
+    ctx.buf = buf;
+    ctx.parser = p;
 
     if (t == match_invalid)
-        ne_xml_push_handler(p, startelm_abort, chardata, endelm_abort, buf);
+        ne_xml_push_handler(p, startelm_abort, chardata, endelm_abort, &ctx);
     if (t != match_encoding && t != match_nohands) {
-        ne_xml_push_handler(p, startelm_state, NULL, endelm_state, buf);
-        ne_xml_push_handler(p, startelm, chardata, endelm, buf);
-        ne_xml_push_handler(p, startelm_xform, chardata, endelm_xform, buf);
+        ne_xml_push_handler(p, startelm_state, NULL, endelm_state, &ctx);
+        ne_xml_push_handler(p, startelm, chardata, endelm, &ctx);
+        ne_xml_push_handler(p, startelm_xform, chardata, endelm_xform, &ctx);
     }
 
     if (t == match_chunked) {
@@ -192,21 +226,26 @@ static int parse_match(const char *doc, const char *result, enum match_type t)
     }
 
     ONV(ret != ne_xml_failed(p), 
-        ("ne_xml_failed gave %d not %d", ne_xml_failed(p), ret));
+        ("'%s': ne_xml_failed gave %d not %d", origdoc, ne_xml_failed(p), ret));
 
     if (t == match_invalid)
         ONV(ret != ABORT, 
-            ("parse got %d not abort failure: %s", ret, buf->data));
+            ("for '%s': parse got %d not abort failure: %s", origdoc, ret, 
+             buf->data));
     else
-        ONV(ret, ("parse failed: %s", ne_xml_get_error(p)));
+        ONV(ret, ("for '%s': parse failed: %s", origdoc, ne_xml_get_error(p)));
     
     if (t == match_encoding) {
         const char *enc = ne_xml_doc_encoding(p);
-        ONV(strcmp(enc, result), ("encoding was `%s' not `%s'", enc, result));
-    } else if (t == match_valid)
+        ONV(strcmp(enc, result), 
+            ("for '%s': encoding was `%s' not `%s'", origdoc, enc, result));
+    }
+    else if (t == match_valid || t == match_chunked) {
         ONV(strcmp(result, buf->data),
-            ("result mismatch: %s not %s", buf->data, result));
-        
+            ("for '%s': result mismatch: %s not %s", origdoc, buf->data, 
+             result));
+    }
+
     ne_xml_destroy(p);
     ne_buffer_destroy(buf);
 
@@ -280,6 +319,15 @@ static int matches(void)
         /* tests for nested SAX handlers */
         { PFX "<hello xmlns='two'><decline/></hello>",
           "<{two}hello xmlns='two'>" E("two", "xform") "</{two}hello>"},
+
+        /* test for nspace resolution. */
+        { PFX "<hello xmlns='fish'><" EVAL_DEFAULT "/></hello>",
+          "<{fish}hello xmlns='fish'>" EVAL_DEFAULT "=[fish]" "</{fish}hello>" },
+        { PFX "<hello><" EVAL_DEFAULT "/></hello>",
+          "<{}hello>" EVAL_DEFAULT "=[]</{}hello>" },
+
+        { PFX "<hello xmlns:foo='bar'><" EVAL_SPECIFIC "foo/></hello>",
+          "<{}hello xmlns:foo='bar'>" EVAL_SPECIFIC "foo=[bar]</{}hello>" },
 
         /* tests for state handling */
         { PFX "<a55 xmlns='state'/>", "" },
@@ -375,7 +423,7 @@ static int fail_parse(void)
         PFX "<foo::fish xmlns:foo='bar'/>",
 #endif
 
-#if 0
+        /* These are tests of XML parser itself really... */
         /* 2-byte encoding of '.': */
         PFX "<foo>" "\x2F\xC0\xAE\x2E\x2F" "</foo>",
         /* 3-byte encoding of '.': */
@@ -386,7 +434,6 @@ static int fail_parse(void)
         PFX "<foo>" "\x2F\xF8\x80\x80\x80\xAE\x2E\x2F" "</foo>",
         /* 6-byte encoding of '.': */
         PFX "<foo>" "\x2F\xFC\x80\x80\x80\x80\xAE\x2E\x2F" "</foo>",
-#endif
         /* two-byte encoding of '<' must not be parsed as a '<': */
         PFX "\xC0\xBC" "foo></foo>",
 

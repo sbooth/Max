@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_I18N_INIT" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_i18n_init
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_I18N_INIT" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,10 +13,14 @@
 .SH "NAME"
 ne_i18n_init \- functions to initialize internationalization support
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_i18n.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_i18n.h>
+.fi
+.ft
 .HP 18
-\fBvoid\ \fBne_i18n_init\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIencoding\fR\fR\fB);\fR
+.BI "void ne_i18n_init(const\ char\ *" "encoding" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -24,14 +31,14 @@ parameter, if non\-NULL, specifies the character encoding required for generated
 NULL, the appropriate character encoding for the process locale will be used.
 .PP
 This call is only strictly necessary if either:
-.TP 3
-1.
-neon has been installed into a different prefix than the
+.RS 4
+\h'-04' 1.\h'+02'neon has been installed into a different prefix than the
 gettext
 implementation on which it depends for i18n purposes, or
-.TP
-2.
-the caller requires that translated messages are in a particular character encoding.
+.RE
+.RS 4
+\h'-04' 2.\h'+02'the caller requires that translated messages are in a particular character encoding.
+.RE
 .PP
 If
 \fBne_i18n_init\fR
@@ -43,3 +50,11 @@ with a different encoding parameter.
 .SH "SEE ALSO"
 .PP
 ne_sock_init
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

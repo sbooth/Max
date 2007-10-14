@@ -100,7 +100,7 @@ int ne_options(ne_session *sess, const char *path,
  * at 'end'.  'total' is the number of bytes in the range.
  */
 typedef struct {
-    off_t start, end, total;
+    ne_off_t start, end, total;
 } ne_content_range;
 
 /* Partial GET. range->start must be >= 0. range->total is ignored.
@@ -119,18 +119,6 @@ typedef struct {
  *      ne_get_range(sess, path, &range, myfile); */
 int ne_get_range(ne_session *sess, const char *path, 
 		 ne_content_range *range, int fd);
-
-#ifdef NE_LFS
-typedef struct {
-    off64_t start, end, total;
-} ne_content_range64;
-
-/* Alternative version of ne_get_range for LFS systems; takes 64-bit
- * range offsets in *range but is otherwise identical to
- * ne_get_range. */
-int ne_get_range64(ne_session *sess, const char *path, 
-                   ne_content_range64 *range, int fd);
-#endif
 
 /* Post using buffer as request-body: stream response into f */
 int ne_post(ne_session *sess, const char *path, int fd, const char *buffer);

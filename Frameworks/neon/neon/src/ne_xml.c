@@ -1,6 +1,6 @@
 /* 
    Wrapper interface to XML parser
-   Copyright (C) 1999-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 1999-2007, Joe Orton <joe@manyfish.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -426,6 +426,22 @@ static const char *resolve_nspace(const struct element *elm,
     return NULL;
 }
 
+const char *ne_xml_resolve_nspace(ne_xml_parser *parser, 
+                                  const char *prefix, size_t length)
+{
+    if (prefix) {
+        return resolve_nspace(parser->current, prefix, length);
+    }
+    else {
+        struct element *e = parser->current;
+
+        while (e->default_ns == NULL)
+            e = e->parent;
+
+        return e->default_ns;
+    }
+}
+
 ne_xml_parser *ne_xml_create(void) 
 {
     ne_xml_parser *p = ne_calloc(sizeof *p);
@@ -531,7 +547,7 @@ int ne_xml_parse(ne_xml_parser *p, const char *block, size_t len)
     NE_DEBUG(NE_DBG_XMLPARSE, "XML: XML_Parse returned %d\n", ret);
     if (ret == 0 && p->failure == 0) {
 	ne_snprintf(p->error, ERR_SIZE,
-		    "XML parse error at line %d: %s", 
+		    "XML parse error at line %" NE_FMT_XML_SIZE ": %s", 
 		    XML_GetCurrentLineNumber(p->parser),
 		    XML_ErrorString(XML_GetErrorCode(p->parser)));
 	p->failure = 1;
@@ -543,7 +559,7 @@ int ne_xml_parse(ne_xml_parser *p, const char *block, size_t len)
     /* Parse errors are normally caught by the sax_error() callback,
      * which clears p->valid. */
     if (p->parser->errNo && p->failure == 0) {
-	ne_snprintf(p->error, ERR_SIZE, "XML parse error at line %d.", 
+	ne_snprintf(p->error, ERR_SIZE, "XML parse error at line %d", 
 		    ne_xml_currentline(p));
 	p->failure = 1;
         NE_DEBUG(NE_DBG_XMLPARSE, "XML: Parse error: %s\n", p->error);
@@ -606,7 +622,7 @@ static void sax_error(void *ctx, const char *msg, ...)
 
     if (p->failure == 0) {
         ne_snprintf(p->error, ERR_SIZE, 
-                    _("XML parse error at line %d: %s."),
+                    _("XML parse error at line %d: %s"),
                     p->parser->input->line, buf);
         p->failure = 1;
     }

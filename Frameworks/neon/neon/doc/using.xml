@@ -94,14 +94,14 @@
         
         <para>There is some confusion in this specification about the
         use of the <quote>identity</quote>
-        <firstterm>transfer-coding</firstterm>.  &neon; treats the
-        presence of <emphasis>any</emphasis>
-        <literal>Transfer-Encoding</literal> response header as an
-        indication that the response message uses the
-        <quote>chunked</quote> transfer-coding.  This was the
-        suggested resolution <ulink
-        url="http://lists.w3.org/Archives/Public/ietf-http-wg-old/2001SepDec/0018.html">proposed
-        by Larry Masinter</ulink>.</para></sect2>
+        <firstterm>transfer-coding</firstterm>.  &neon; ignores the
+        <literal>Transfer-Encoding</literal> response header if it
+        contains only the (now deprecated) <quote>identity</quote>
+        token, and will determine the response message length as if
+        the header was not present.  &neon; will give an error if a
+        response includes a <literal>Transfer-Encoding</literal>
+        header with a value other than <quote>identity</quote> or
+        <quote>chunked</quote>.</para></sect2>
 
         <sect2>
         <title>RFC 2617, HTTP Authentication: Basic and Digest Access Authentication</title>

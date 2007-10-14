@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SET_REQUEST_BODY_" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_set_request_body_buffer
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SET_REQUEST_BODY_" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,14 +13,18 @@
 .SH "NAME"
 ne_set_request_body_buffer, ne_set_request_body_fd, ne_set_request_body_fd64 \- include a message body with a request
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_request.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_request.h>
+.fi
+.ft
 .HP 32
-\fBvoid\ \fBne_set_request_body_buffer\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIreq\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIbuf\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIcount\fR\fR\fB);\fR
+.BI "void ne_set_request_body_buffer(ne_request\ *" "req" ", const\ char\ *" "buf" ", size_t\ " "count" ");"
 .HP 27
-\fBint\ \fBne_set_request_body_fd\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIreq\fR\fR\fB, \fR\fBint\ \fR\fB\fIfd\fR\fR\fB, \fR\fBoff_t\ \fR\fB\fIbegin\fR\fR\fB, \fR\fBoff_t\ \fR\fB\fIlength\fR\fR\fB);\fR
+.BI "int ne_set_request_body_fd(ne_request\ *" "req" ", int\ " "fd" ", off_t\ " "begin" ", off_t\ " "length" ");"
 .HP 29
-\fBint\ \fBne_set_request_body_fd64\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIreq\fR\fR\fB, \fR\fBint\ \fR\fB\fIfd\fR\fR\fB, \fR\fBoff64_t\ \fR\fB\fIbegin\fR\fR\fB, \fR\fBoff64_t\ \fR\fB\fIlength\fR\fR\fB);\fR
+.BI "int ne_set_request_body_fd64(ne_request\ *" "req" ", int\ " "fd" ", off64_t\ " "begin" ", off64_t\ " "length" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -65,3 +72,11 @@ are copied internally.
 .SH "SEE ALSO"
 .PP
 ne_request_create
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

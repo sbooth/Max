@@ -1,3 +1,53 @@
+Changes in release 0.27.2:
+* Fix crash in GSSAPI Negotiate response header verification (regression
+  since 0.26.x)
+
+Changes in release 0.27.1:
+* Fix regression in response progress counter for notifier/progress callbacks
+* Fix interface description for ne_set_notifier() callback; sr.total
+  is set to -1 not 0 for an indeterminate response length
+
+Changes in release 0.27.0:
+* New interfaces:
+ - ne_session.h: ne_fill_proxy_uri() retrieves configured proxy,
+   ne_hook_post_headers() adds a hook after response headers are read,
+   ne_set_connect_timeout() sets session connection timeout,
+   NE_SESSFLAG_RFC4918, NE_SESSFLAG_CONNAUTH flags added
+ - ne_socket.h: ne_sock_connect_timeout() sets connection timeout,
+   ne_iaddr_reverse() performs reverse DNS lookup
+ - ne_string.h: ne_buffer_snprintf() prints to a buffer object
+ - ne_xml.h: ne_xml_resolve_nspace() resolves namespace prefixes
+* Interface changes:
+ - ne_set_notifier() replaces ne_set_status(); finer-grained and type-safe
+   connection status information now provided; obsoletes ne_set_progress()
+ - ne_xml_dispatch_request() now only invokes the XML parser for 
+   response entities with an XML content-type, following RFC 3023 rules
+ - ne_acl_set() now takes a "const" entries array
+ - LFS compatibility functions *64 removed: all functions taking an
+   off_t now take an ne_off_t which is off64_t for LFS builds
+* GnuTLS support now mostly feature-complete with OpenSSL support:
+ - greatly improved SSL distinguished name handling with GnuTLS >= 1.7.8
+* Other changes:
+ - descriptive error messages for authentication failures
+ - SSPI support uses canonical DNS server name (Yves Martin)
+ - fixes for handling of "stale" parameter in Digest authentication
+ - added support for URIs in SSL server certificate subjectAltName field
+ - fix compiler warnings with expat 2.x
+ - fix handling of "Transfer-Encoding: identity" responses from privoxy
+
+Changes in release 0.26.4:
+* Fix Negotiate Authentication-Info response header verification with GSSAPI
+* Fix multiple handlers with ne_add_{server,proxy}_auth (Werner Baumann)
+* Fix SSPI build with some versions of MinGW (Gisle Vanem)
+* Fix for SSPI segfault in response header verification (Mike DiCuccio)
+* Fix error strings for CONNECT SSL proxy tunnel request failure
+* Fix install-nls for VPATH builds (Hans Meine)
+* Fix use of unencrypted client certs with GnuTLS
+* Fix ne_lock* If: header insertion to use CRLF-terminated headers
+* Fix test suite failures on QNX by working around send() length limit
+* Fix handling of POSIX strerror_r failure case in ne_strerror
+* Fix alignment issues in test suite MD5 code
+
 Changes in release 0.26.3:
 * Fix buffer under-read in URI parser (Laszlo Boszormenyi, CVE-2007-0157)
 * Fix regression in handling of "attempt" argument passed to auth callbacks;

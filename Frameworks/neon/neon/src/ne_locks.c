@@ -141,7 +141,7 @@ static void lk_pre_send(ne_request *r, void *userdata, ne_buffer *req)
 			     item->lock->token, ">)", NULL);
 	    ne_free(uri);
 	}
-	ne_buffer_czappend(req, "\n");
+	ne_buffer_czappend(req, "\r\n");
     }
 }
 

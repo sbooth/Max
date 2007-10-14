@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SSL_TRUST_CERT" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_ssl_trust_cert
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SSL_TRUST_CERT" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,12 +13,16 @@
 .SH "NAME"
 ne_ssl_trust_cert, ne_ssl_trust_default_ca \- functions to indicate that certificates are trusted
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_session.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_session.h>
+.fi
+.ft
 .HP 23
-\fBvoid\ \fBne_ssl_trust_cert\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.BI "void ne_ssl_trust_cert(ne_session\ *" "session" ", const\ ne_ssl_certificate\ *" "cert" ");"
 .HP 29
-\fBvoid\ \fBne_ssl_trust_default_ca\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.BI "void ne_ssl_trust_default_ca(ne_session\ *" "session" ");"
 .SH "DESCRIPTION"
 .PP
 To indicate that a given certificate is trusted by the user, the certificate object can be passed to
@@ -29,6 +36,7 @@ function will indicate that these CAs are trusted by the user.
 Load the CA certificate stored in
 \fI/path/to/cacert.pem\fR:
 .sp
+.RS 4
 .nf
 ne_session *sess = ne_session_create(...);
 ne_ssl_certificate *cert = ne_ssl_cert_read("/path/to/cacert.pem");
@@ -37,11 +45,20 @@ if (cert) {
    ne_ssl_trust_cert(sess, cert);
    ne_ssl_cert_free(cert);
 } else {
-   printf("Could not load CA cert: %s\\n", ne_get_error(sess));
+   printf("Could not load CA cert: %s\en", ne_get_error(sess));
 }
 .fi
+.RE
 .SH "SEE ALSO"
 .PP
 ne_ssl_cert_read,
 ne_ssl_cert_import,
 ne_ssl_cert_free
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

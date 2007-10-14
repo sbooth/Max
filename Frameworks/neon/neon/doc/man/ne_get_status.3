@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_GET_STATUS" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_get_status
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_GET_STATUS" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,10 +13,14 @@
 .SH "NAME"
 ne_get_status \- retrieve HTTP response status for request
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_request.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_request.h>
+.fi
+.ft
 .HP 31
-\fBconst\ ne_status\ *\fBne_get_status\fR\fR\fB(\fR\fBconst\ ne_request\ *\fR\fB\fIrequest\fR\fR\fB);\fR
+.BI "const ne_status *ne_get_status(const\ ne_request\ *" "request" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -35,11 +42,21 @@ Display the response status code of applying the
 HEAD
 method to some resource.
 .sp
+.RS 4
 .nf
 ne_request *req = ne_request_create(sess, "HEAD", "/foo/bar");
 if (ne_request_dispatch(req))
    /* handle errors... */
 else
-   printf("Response status code was %d\\n", ne_get_status(req)\->code);
+   printf("Response status code was %d\en", ne_get_status(req)\->code);
 ne_request_destroy(req);
 .fi
+.RE
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

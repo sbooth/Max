@@ -93,63 +93,69 @@ typedef enum {
     ne_iaddr_ipv6
 } ne_iaddr_type;
 
-/* Create a network address from raw byte representation (in network
- * byte order) of given type.  'raw' must be four bytes for an IPv4
- * address, 16 bytes for an IPv6 address.  May return NULL if address
- * type is not supported. */
+/* Create a network address object from raw byte representation (in
+ * network byte order) of given type.  'raw' must be four bytes for an
+ * IPv4 address, 16 bytes for an IPv6 address.  May return NULL if
+ * address type is not supported. */
 ne_inet_addr *ne_iaddr_make(ne_iaddr_type type, const unsigned char *raw);
 
-/* Compare two network addresses i1 and i2; return non-zero if they
- * are not equal. */
+/* Compare two network address objects i1 and i2; returns zero if they
+ * are equivalent or non-zero otherwise.  */
 int ne_iaddr_cmp(const ne_inet_addr *i1, const ne_inet_addr *i2);
 
-/* Returns the type of the given network address. */
+/* Return the type of the given network address object. */
 ne_iaddr_type ne_iaddr_typeof(const ne_inet_addr *ia);
 
-/* Prints the string representation of network address 'ia' into the
- * 'buffer', which is of size 'bufsiz'.  Returns 'buffer'. */
+/* Print the string representation of network address 'ia' into the
+ * buffer 'buffer', which is of length 'bufsiz'.  Returns 'buffer'. */
 char *ne_iaddr_print(const ne_inet_addr *ia, char *buffer, size_t bufsiz);
 
-/* Free a network address created using ne_iaddr_make. */
+/* Perform the reverse name lookup on network address 'ia', placing
+ * the returned name in the 'buf' buffer (of length 'bufsiz') if
+ * successful.  Returns zero on success, or non-zero on error. */
+int ne_iaddr_reverse(const ne_inet_addr *ia, char *buf, size_t bufsiz);
+
+/* Destroy a network address object created using ne_iaddr_make. */
 void ne_iaddr_free(ne_inet_addr *addr);
 
-/* Create a TCP socket; returns NULL on error. */
+/* Create a socket object; returns NULL on error. */
 ne_socket *ne_sock_create(void);
 
 /* Connect the socket to server at address 'addr' on port 'port'.
- * Returns non-zero if a connection could not be established. */
+ * Returns zero on success, NE_SOCK_TIMEOUT if a timeout occurs when a
+ * non-zero connect timeout is configured (and is supported), or
+ * NE_SOCK_ERROR on failure.  */
 int ne_sock_connect(ne_socket *sock, const ne_inet_addr *addr, 
                     unsigned int port);
 
-/* ne_sock_read reads up to 'count' bytes into 'buffer'.
- * Returns:
+/* Read up to 'count' bytes from socket into 'buffer'.  Returns:
  *   NE_SOCK_* on error,
- *   >0 length of data read into buffer.
+ *   >0 length of data read into buffer (may be less than 'count')
  */
 ssize_t ne_sock_read(ne_socket *sock, char *buffer, size_t count);
 
-/* ne_sock_peek reads up to 'count' bytes into 'buffer', but the data
- * will still be returned on a subsequent call to ne_sock_read or 
- * ne_sock_peek.
- * Returns:
+/* Read up to 'count' bytes into 'buffer', leaving the data available
+ * in the socket buffer to be returned by a subsequent call to
+ * ne_sock_read or ne_sock_peek. Returns:
  *   NE_SOCK_* on error,
  *   >0 length of data read into buffer.
  */
 ssize_t ne_sock_peek(ne_socket *sock, char *buffer, size_t count);
 
 /* Block for up to 'n' seconds until data becomes available for reading
- * on the socket. Returns:
+ * from the socket. Returns:
  *  NE_SOCK_* on error,
- *  NE_SOCK_TIMEOUT if no data arrives in 'n' seconds.
+ *  NE_SOCK_TIMEOUT if no data arrives in 'n' seconds,
  *  0 if data arrived on the socket.
  */
 int ne_sock_block(ne_socket *sock, int n);
 
-/* Writes 'count' bytes of 'data' to the socket.
- * Returns 0 on success, NE_SOCK_* on error. */
+/* Write 'count' bytes of 'data' to the socket.  Guarantees to either
+ * write all the bytes or to fail.  Returns 0 on success, or NE_SOCK_*
+ * on error. */
 int ne_sock_fullwrite(ne_socket *sock, const char *data, size_t count); 
 
-/* Reads an LF-terminated line into 'buffer', and NUL-terminate it.
+/* Read an LF-terminated line into 'buffer', and NUL-terminate it.
  * At most 'len' bytes are read (including the NUL terminator).
  * Returns:
  * NE_SOCK_* on error,
@@ -157,25 +163,33 @@ int ne_sock_fullwrite(ne_socket *sock, const char *data, size_t count);
  */
 ssize_t ne_sock_readline(ne_socket *sock, char *buffer, size_t len);
 
-/* Read exactly 'len' bytes into buffer; returns 0 on success,
- * NE_SOCK_* on error. */
+/* Read exactly 'len' bytes into buffer, or fail; returns 0 on
+ * success, NE_SOCK_* on error. */
 ssize_t ne_sock_fullread(ne_socket *sock, char *buffer, size_t len);
 
-/* Accept a connection on listening socket 'fd'. */
+/* Accepts a connection from listening socket 'fd' and places the
+ * socket in 'sock'.  Returns zero on success or -1 on failure. */
 int ne_sock_accept(ne_socket *sock, int fd);
 
 /* Returns the file descriptor used for socket 'sock'. */
 int ne_sock_fd(const ne_socket *sock);
 
-/* Close the socket, and destroy the socket object. Returns non-zero
- * on error. */
+/* Close the socket and destroy the socket object.  Returns zero on
+ * success, or an errno value if close() failed. */
 int ne_sock_close(ne_socket *sock);
 
 /* Return current error string for socket. */
 const char *ne_sock_error(const ne_socket *sock);
 
-/* Set read timeout for socket. */
+/* Set read timeout for socket, in seconds; must be a non-zero
+ * positive integer. */
 void ne_sock_read_timeout(ne_socket *sock, int timeout);
+
+/* Set connect timeout for socket, in seconds; must be a positive
+ * integer.  If a timeout of 'zero' is used then then no explicit
+ * timeout handling will be used for ne_sock_connect(), and the
+ * connect call will only timeout as dictated by the TCP stack. */
+void ne_sock_connect_timeout(ne_socket *sock, int timeout);
 
 /* Negotiate an SSL connection on socket as an SSL server, using given
  * SSL context. */

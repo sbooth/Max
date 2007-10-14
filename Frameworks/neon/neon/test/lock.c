@@ -226,6 +226,7 @@ static int lock_timeout(void)
     struct ne_lock *lock = ne_lock_create();
 
     resp = ne_concat("HTTP/1.1 200 OK\r\n" "Server: neon-test-server\r\n"
+		     "Content-type: application/xml" EOL
 		     "Lock-Token: <opaquelocktoken:foo>" EOL
 		     "Connection: close\r\n\r\n", rbody, NULL);
 
@@ -472,6 +473,7 @@ static int lock_shared(void)
     rbody = multi_lock_response(resplocks);
     
     resp = ne_concat("HTTP/1.1 200 OK\r\n" "Server: neon-test-server\r\n"
+		     "Content-type: application/xml" EOL
 		     "Lock-Token: <opaquelocktoken:beta>" EOL
 		     "Connection: close\r\n\r\n", rbody, NULL);
     ne_free(rbody);

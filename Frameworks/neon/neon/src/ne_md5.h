@@ -19,10 +19,14 @@
    write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.  */
 
-#ifndef NEON_MD5_H
-#define NEON_MD5_H 1
+#ifndef NE_MD5_H
+#define NE_MD5_H 1
 
 #include <stdio.h>
+
+#include "ne_defs.h"
+
+NE_BEGIN_DECLS
 
 /*
  * The following three functions are build up the low level used in
@@ -89,4 +93,6 @@ char *ne_md5_finish_ascii(struct ne_md5_ctx *ctx, char buffer[33]);
 void ne_md5_to_ascii(const unsigned char md5_buf[16], char *buffer);
 void ne_ascii_to_md5(const char *buffer, unsigned char md5_buf[16]);
 
-#endif /* NEON_MD5_H */
+NE_END_DECLS
+
+#endif /* NE_MD5_H */

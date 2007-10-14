@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SSL_DNAME" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_ssl_dname
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SSL_DNAME" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,12 +13,16 @@
 .SH "NAME"
 ne_ssl_readable_dname, ne_ssl_dname_cmp \- SSL distinguished name handling
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_ssl.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_ssl.h>
+.fi
+.ft
 .HP 34
-\fBconst\ char\ *\fBne_ssl_readable_dname\fR\fR\fB(\fR\fBconst\ ne_ssl_dname\ *\fR\fB\fIdname\fR\fR\fB);\fR
+.BI "const char *ne_ssl_readable_dname(const\ ne_ssl_dname\ *" "dname" ");"
 .HP 21
-\fBint\ \fBne_ssl_dname_cmp\fR\fR\fB(\fR\fBconst\ ne_ssl_dname\ *\fR\fB\fIdn1\fR\fR\fB, \fR\fBconst\ ne_ssl_dname\ *\fR\fB\fIdn2\fR\fR\fB);\fR
+.BI "int ne_ssl_dname_cmp(const\ ne_ssl_dname\ *" "dn1" ", const\ ne_ssl_dname\ *" "dn2" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -44,3 +51,11 @@ for an example use of
 .SH "SEE ALSO"
 .PP
 ne_ssl_cert_subject
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

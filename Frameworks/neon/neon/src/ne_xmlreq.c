@@ -1,6 +1,6 @@
 /* 
    XML/HTTP response handling
-   Copyright (C) 2004-2005, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2004-2006, Joe Orton <joe@manyfish.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +21,13 @@
 
 #include "config.h"
 
-#include "ne_xmlreq.h"
+#include <string.h>
+#include <stdlib.h>
+
 #include "ne_internal.h"
+#include "ne_xmlreq.h"
+#include "ne_basic.h"
+#include "ne_string.h"
 
 /* Handle an XML response parse error, setting session error string
  * and closing the connection. */
@@ -57,15 +62,41 @@ int ne_xml_parse_response(ne_request *req, ne_xml_parser *parser)
     }    
 }
 
+/* Returns non-zero if given content-type is an XML media type,
+ * following the RFC 3023 rules. */
+static int media_type_is_xml(const ne_content_type *ctype)
+{
+    size_t stlen;
+
+    return 
+        (ne_strcasecmp(ctype->type, "text") == 0
+         && ne_strcasecmp(ctype->subtype, "xml") == 0)
+        || (ne_strcasecmp(ctype->type, "application") == 0
+            && ne_strcasecmp(ctype->subtype, "xml") == 0)
+        || ((stlen = strlen(ctype->subtype)) > 4
+            && ne_strcasecmp(ctype->subtype + stlen - 4, "+xml") == 0);
+}
+
 int ne_xml_dispatch_request(ne_request *req, ne_xml_parser *parser)
 {
     int ret;
 
     do {
+        int parseit = 0;
+
         ret = ne_begin_request(req);
         if (ret) break;
+        
+        if (ne_get_status(req)->klass == 2) {
+            ne_content_type ctype;
+            
+            if (ne_get_content_type(req, &ctype) == 0) {
+                parseit = media_type_is_xml(&ctype);
+                ne_free(ctype.value);
+            }
+        }
 
-        if (ne_get_status(req)->klass == 2)
+        if (parseit)
             ret = ne_xml_parse_response(req, parser);
         else
             ret = ne_discard_response(req);

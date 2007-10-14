@@ -1,6 +1,6 @@
 /* 
    Socket handling tests
-   Copyright (C) 2002-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2002-2007, Joe Orton <joe@manyfish.co.uk>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -313,6 +313,25 @@ static int addr_compare(void)
 
     ne_iaddr_free(ia1);
     ne_iaddr_free(ia2);
+    return OK;
+}
+
+static int addr_reverse(void)
+{
+    ne_inet_addr *ia = ne_iaddr_make(ne_iaddr_ipv4, raw_127);
+    char buf[128];
+
+    ONN("ne_iaddr_make returned NULL", ia == NULL);
+
+    ONN("reverse lookup for 127.0.0.1 failed",
+        ne_iaddr_reverse(ia, buf, sizeof buf) != 0);
+
+    ONV(!(strcmp(buf, "localhost.localdomain") == 0
+          || strcmp(buf, "localhost") == 0),
+        ("reverse lookup for 127.0.0.1 got %s", buf));
+
+    ne_iaddr_free(ia);
+
     return OK;
 }
 
@@ -704,9 +723,34 @@ static int to_end(ne_socket *sock)
 	 
 #define TO_BEGIN ne_socket *sock; CALL(to_begin(&sock))
 #define TO_OP(x) do { int to_ret = (x); \
-ONV(to_ret != NE_SOCK_TIMEOUT, ("operation did not timeout: %d", to_ret)); \
+        ONV(to_ret != NE_SOCK_TIMEOUT, ("operation did not timeout: got %d (%s)", to_ret, ne_sock_error(sock))); \
 } while (0)
 #define TO_FINISH return to_end(sock)
+
+#ifndef TEST_CONNECT_TIMEOUT
+#define TEST_CONNECT_TIMEOUT 0
+#endif
+#if TEST_CONNECT_TIMEOUT
+
+/* No obvious way to reliably test a connect() timeout.  But
+ * www.example.com seems to drop packets on ports other than 80 so
+ * that actually works pretty well.  Disabled by default. */
+static int connect_timeout(void)
+{
+    static const unsigned char example_dot_com[] = "\xC0\x00\x22\xA6";
+    ne_socket *sock = ne_sock_create();
+    ne_inet_addr *ia = ne_iaddr_make(ne_iaddr_ipv4, example_dot_com);
+
+    ne_sock_connect_timeout(sock, 1);
+
+    TO_OP(ne_sock_connect(sock, ia, 8080));
+
+    ne_iaddr_free(ia);
+    ne_sock_close(sock);
+
+    return OK;
+}
+#endif
 
 static int peek_timeout(void)
 {
@@ -874,6 +918,7 @@ static int ssl_truncate(void)
 /* use W Richard Stevens' SO_LINGER trick to elicit a TCP RST */
 static int serve_reset(ne_socket *sock, void *ud)
 {
+    minisleep();
     reset_socket(sock);
     exit(0);
     return 0;
@@ -1018,6 +1063,7 @@ ne_test tests[] = {
     T(addr_make_v4),
     T(addr_make_v6),
     T(addr_compare),
+    T(addr_reverse),
     T(just_connect),
     T(addr_connect),
     T(read_close),
@@ -1046,6 +1092,9 @@ ne_test tests[] = {
 #else
     T(write_reset),
     T(read_reset),
+#endif
+#if TEST_CONNECT_TIMEOUT
+    T(connect_timeout),
 #endif
     T(read_timeout),
     T(peek_timeout),

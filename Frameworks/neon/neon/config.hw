@@ -25,9 +25,9 @@
 
 #ifdef WIN32
 
-#define NEON_VERSION "0.26.3"
+#define NEON_VERSION "0.27.2"
 #define NE_VERSION_MAJOR (0)
-#define NE_VERSION_MINOR (26)
+#define NE_VERSION_MINOR (27)
 
 #define HAVE_ERRNO_H
 #define HAVE_LIMITS_H
@@ -45,6 +45,11 @@
 #define NE_FMT_SIZE_T "u"
 #define NE_FMT_SSIZE_T "d"
 #define NE_FMT_OFF_T "ld"
+#define NE_FMT_NE_OFF_T NE_FMT_OFF_T
+
+#ifndef NE_FMT_XML_SIZE
+#define NE_FMT_XML_SIZE "d"
+#endif
 
 /* needs adjusting for Win64... */
 #define SIZEOF_INT 4

@@ -79,6 +79,35 @@
   </refsect2>
 
   <refsect2>
+    <title>Functions using global state</title>
+
+    <para>Any function call in &neon; may modify the
+    <literal>errno</literal> global variable as a side-effect.  Except
+    where explicitly documented, the value of <literal>errno</literal>
+    is unspecified after any &neon; function call.</para>
+
+    <para>Other than in the use of <literal>errno</literal>, the only
+    functions which use or modify process-global state in &neon; are
+    as follows:
+
+    <itemizedlist>
+      <listitem><simpara><xref linkend="ne_sock_init"/>, <xref
+      linkend="ne_i18n_init"/>, and <xref linkend="ne_sock_exit"/>, as
+      described above</simpara></listitem>
+
+      <listitem><simpara><function>ne_debug_init</function> and
+      <function>ne_debug</function>, if enabled at compile time; for
+      debugging output</simpara></listitem>
+
+      <listitem><simpara><xref linkend="ne_oom_callback"/> for
+      installing a process-global callback to be invoked on
+      <function>malloc</function> failure</simpara></listitem>
+
+    </itemizedlist></para>
+
+  </refsect2>      
+
+  <refsect2>
     <title>Namespaces</title>
 
     <para>To avoid possible collisions between names used for symbols
@@ -110,6 +139,12 @@
       </varlistentry>
 
       <varlistentry>
+        <term>gnutls_, gcry_, gpg_</term>
+        <listitem><simpara>Namespaces used by the GnuTLS library (and
+        dependencies thereof)</simpara></listitem>
+      </varlistentry>        
+
+      <varlistentry>
 	<term>XML_, Xml[A-Z]</term> <listitem><simpara>Namespaces
 	used by the expat library.</simpara></listitem>
       </varlistentry>
@@ -119,6 +154,23 @@
 	<listitem><simpara>Namespaces used by the libxml2 library; a
 	relatively small number of symbols are used without these
 	prefixes.</simpara></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>inflate, deflate, crc32, compress, uncompres, adler32,
+        zlib</term>
+	<listitem><simpara>Namespaces used by the zlib library; a
+	relatively small number of symbols are used without these
+	prefixes.</simpara></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>krb5, gss, GSS, asn1, decode_krb5, encode_krb5, profile,
+        mit</term>
+
+        <listitem><simpara>Some of the prefixes used by the MIT GSSAPI
+        library and dependencies thereof; a number of symbols lie
+        outside these prefixes.</simpara></listitem>
       </varlistentry>
 
     </variablelist>

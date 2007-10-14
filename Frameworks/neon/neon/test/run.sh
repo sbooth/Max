@@ -12,13 +12,14 @@ MALLOC_CHECK_=2
 MALLOC_PERTURB_=`expr $RANDOM % 255 2>/dev/null`
 export MALLOC_CHECK_ MALLOC_PERTURB_
 
+RETVAL=0
+
 for f in $*; do
     if ${HARNESS} ./$f ${SRCDIR}; then
 	:
     else
-	echo FAILURE
-	[ -z "$CARRYON" ] && exit 1
+	RETVAL=$?
     fi
 done
 
-exit 0
+exit $RETVAL

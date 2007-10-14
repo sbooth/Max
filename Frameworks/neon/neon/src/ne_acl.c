@@ -1,6 +1,6 @@
 /*
    Access control
-   Copyright (C) 2001, 2005, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2001-2006, Joe Orton <joe@manyfish.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@
 
 #define EOL "\r\n"
 
-static ne_buffer *acl_body(ne_acl_entry *right, int count)
+static ne_buffer *acl_body(const ne_acl_entry *right, int count)
 {
     ne_buffer *body = ne_buffer_create();
     int m;
@@ -107,7 +107,7 @@ static ne_buffer *acl_body(ne_acl_entry *right, int count)
 }
 
 int ne_acl_set(ne_session *sess, const char *uri,
-	       ne_acl_entry *entries, int numentries)
+	       const ne_acl_entry *entries, int numentries)
 {
     int ret;
     ne_request *req = ne_request_create(sess, "ACL", uri);

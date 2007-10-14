@@ -1,6 +1,7 @@
 /* 
    Microsoft SSPI based authentication routines
    Copyright (C) 2004-2005, Vladimir Berezniker @ http://public.xdi.org/=vmpn
+   Copyright (C) 2007, Yves Martin  <ymartin59@free.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,11 +24,16 @@
 
 #include "ne_utils.h"
 #include "ne_string.h"
+#include "ne_socket.h"
 #include "ne_sspi.h"
 
 #ifdef HAVE_SSPI
 
 #define SEC_SUCCESS(Status) ((Status) >= 0)
+
+#ifndef SECURITY_ENTRYPOINT   /* Missing in MingW 3.7 */
+#define SECURITY_ENTRYPOINT "InitSecurityInterfaceA"
+#endif
 
 struct SSPIContextStruct {
     CtxtHandle context;
@@ -278,7 +284,7 @@ static int base64ToBuffer(const char *token, SecBufferDesc * secBufferDesc)
 
     buffer->BufferType = SECBUFFER_TOKEN;
     buffer->cbBuffer =
-        ne_unbase64(token, &((unsigned char *) buffer->pvBuffer));
+        ne_unbase64(token, (unsigned char **) &buffer->pvBuffer);
 
     if (buffer->cbBuffer == 0) {
         NE_DEBUG(NE_DBG_HTTPAUTH,
@@ -326,12 +332,50 @@ static int freeBuffer(SecBufferDesc * secBufferDesc)
 }
 
 /*
+ * Canonicalize a server host name if possible.
+ * The returned pointer must be freed after usage.
+ */
+static char *canonical_hostname(const char *serverName)
+{
+    char *hostname;
+    ne_sock_addr *addresses;
+    
+    /* DNS resolution.  It would be useful to be able to use the
+     * AI_CANONNAME flag where getaddrinfo() is available, but the
+     * reverse-lookup is sufficient and simpler. */
+    addresses = ne_addr_resolve(serverName, 0);
+    if (ne_addr_result(addresses)) {
+        /* Lookup failed */
+        char buf[256];
+        NE_DEBUG(NE_DBG_HTTPAUTH,
+                 "sspi: Could not resolve IP address for `%s': %s\n",
+                 serverName, ne_addr_error(addresses, buf, sizeof buf));
+        hostname = ne_strdup(serverName);
+    } else {
+        char hostbuffer[256];
+        const ne_inet_addr *address = ne_addr_first(addresses);
+
+        if (ne_iaddr_reverse(address, hostbuffer, sizeof hostbuffer) == 0) {
+            hostname = ne_strdup(hostbuffer);
+        } else {
+            NE_DEBUG(NE_DBG_HTTPAUTH, "sspi: Could not resolve host name"
+                     "from IP address for `%s'\n", serverName);
+            hostname = ne_strdup(serverName);
+        }
+    }
+
+    ne_addr_destroy(addresses);
+    return hostname;
+}
+
+/*
  * Create a context to authenticate to specified server, using either
  * ntlm or negotiate.
  */
 int ne_sspi_create_context(void **context, char *serverName, int ntlm)
 {
     SSPIContext *sspiContext;
+    char *canonicalName;
 
     if (initialized <= 0) {
         return -1;
@@ -346,7 +390,12 @@ int ne_sspi_create_context(void **context, char *serverName, int ntlm)
         sspiContext->maxTokenSize = ntlmMaxTokenSize;
     } else {
         sspiContext->mechanism = "Negotiate";
-        sspiContext->serverName = ne_concat("HTTP/", serverName, NULL);
+        /* Canonicalize to conform to GSSAPI behavior */
+        canonicalName = canonical_hostname(serverName);
+        sspiContext->serverName = ne_concat("HTTP/", canonicalName, NULL);
+        ne_free(canonicalName);
+        NE_DEBUG(NE_DBG_HTTPAUTH, "sspi: Created context with SPN '%s'\n",
+                 sspiContext->serverName);
         sspiContext->maxTokenSize = negotiateMaxTokenSize;
     }
 

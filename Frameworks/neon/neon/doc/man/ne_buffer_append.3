@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_BUFFER_APPEND" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_buffer_append
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_BUFFER_APPEND" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,14 +13,18 @@
 .SH "NAME"
 ne_buffer_append, ne_buffer_zappend, ne_buffer_concat \- append data to a string buffer
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_string.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_string.h>
+.fi
+.ft
 .HP 22
-\fBvoid\ \fBne_buffer_append\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIstring\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIlen\fR\fR\fB);\fR
+.BI "void ne_buffer_append(ne_buffer\ *" "buf" ", const\ char\ *" "string" ", size_t\ " "len" ");"
 .HP 23
-\fBvoid\ \fBne_buffer_zappend\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIstring\fR\fR\fB);\fR
+.BI "void ne_buffer_zappend(ne_buffer\ *" "buf" ", const\ char\ *" "string" ");"
 .HP 22
-\fBvoid\ \fBne_buffer_concat\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIstr\fR\fR\fB, \fR\fB...\fR\fB);\fR
+.BI "void ne_buffer_concat(ne_buffer\ *" "buf" ", const\ char\ *" "str" ", ...);"
 .SH "DESCRIPTION"
 .PP
 The
@@ -53,6 +60,7 @@ are modified.
 .PP
 The following code will output "Hello, world. And goodbye.".
 .sp
+.RS 4
 .nf
 ne_buffer *buf = ne_buffer_create();
 ne_buffer_zappend(buf, "Hello");
@@ -60,8 +68,17 @@ ne_buffer_concat(buf, ", world. ", "And ", "goodbye.", NULL);
 puts(buf\->data);
 ne_buffer_destroy(buf);
 .fi
+.RE
 .SH "SEE ALSO"
 .PP
 ne_buffer,
 ne_buffer_create,
 ne_buffer_destroy
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

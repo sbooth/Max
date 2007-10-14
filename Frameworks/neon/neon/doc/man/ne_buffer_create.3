@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_BUFFER_CREATE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_buffer_create
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_BUFFER_CREATE" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,12 +13,16 @@
 .SH "NAME"
 ne_buffer_create, ne_buffer_ncreate \- general purpose of group of functions
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_alloc.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_alloc.h>
+.fi
+.ft
 .HP 28
-\fBne_buffer\ *\fBne_buffer_create\fR\fR\fB(\fR\fBvoid);\fR
+.BI "ne_buffer *ne_buffer_create(void);"
 .HP 29
-\fBne_buffer\ *\fBne_buffer_ncreate\fR\fR\fB(\fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.BI "ne_buffer *ne_buffer_ncreate(size_t\ " "size" ");"
 .SH "DESCRIPTION"
 .PP
 \fBne_buffer_create\fR
@@ -33,3 +40,11 @@ NULL.
 .SH "SEE ALSO"
 .PP
 ne_buffer
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

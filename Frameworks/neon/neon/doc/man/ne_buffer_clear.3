@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_BUFFER_CLEAR" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_buffer_clear
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_BUFFER_CLEAR" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,14 +13,18 @@
 .SH "NAME"
 ne_buffer_clear, ne_buffer_grow, ne_buffer_altered \- general purpose of group of functions
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_string.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_string.h>
+.fi
+.ft
 .HP 21
-\fBvoid\ \fBne_buffer_clear\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB);\fR
+.BI "void ne_buffer_clear(ne_buffer\ *" "buf" ");"
 .HP 23
-\fBvoid\ \fBne_buffer_altered\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB);\fR
+.BI "void ne_buffer_altered(ne_buffer\ *" "buf" ");"
 .HP 20
-\fBvoid\ \fBne_buffer_grow\fR\fR\fB(\fR\fBne_buffer\ *\fR\fB\fIbuf\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIsize\fR\fR\fB);\fR
+.BI "void ne_buffer_grow(ne_buffer\ *" "buf" ", size_t\ " "size" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -41,3 +48,11 @@ The
 function ensures that at least
 \fIsize\fR
 bytes are allocated for the string; this can be used if a large amount of data is going to be appended to the buffer and may result in more efficient memory allocation.
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

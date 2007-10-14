@@ -1,6 +1,6 @@
 /*
    neon SSL/TLS support using GNU TLS
-   Copyright (C) 2002-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2002-2007, Joe Orton <joe@manyfish.co.uk>
    Copyright (C) 2004, Aleix Conchillo Flaque <aleix@member.fsf.org>
 
    This library is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include <gnutls/gnutls.h>
 #include <gnutls/pkcs12.h>
@@ -42,6 +43,10 @@
 #include <pthread.h>
 #include <gcrypt.h>
 GCRY_THREAD_OPTION_PTHREAD_IMPL;
+#endif
+
+#ifdef HAVE_ICONV
+#include <iconv.h>
 #endif
 
 #include "ne_ssl.h"
@@ -93,6 +98,132 @@ static int oid_find_highest_index(gnutls_x509_crt cert, int subject, const char 
     return idx - 1;
 }
 
+#ifdef HAVE_GNUTLS_X509_DN_GET_RDN_AVA
+/* New-style RDN handling introduced in GnuTLS 1.7.x. */
+
+#ifdef HAVE_ICONV
+static void convert_dirstring(ne_buffer *buf, const char *charset, 
+                              gnutls_datum *data)
+{
+    iconv_t id = iconv_open("UTF-8", charset);
+    size_t inlen = data->size, outlen = buf->length - buf->used;
+    char *inbuf = (char *)data->data;
+    char *outbuf = buf->data + buf->used - 1;
+    
+    if (id == (iconv_t)-1) {
+        char err[128], err2[128];
+
+        ne_snprintf(err, sizeof err, "[unprintable in %s: %s]",
+                    charset, ne_strerror(errno, err2, sizeof err2));
+        ne_buffer_zappend(buf, err);
+        return;
+    }
+    
+    ne_buffer_grow(buf, buf->used + 64);
+    
+    while (inlen && outlen 
+           && iconv(id, &inbuf, &inlen, &outbuf, &outlen) == 0)
+        ;
+    
+    iconv_close(id);
+    buf->used += buf->length - buf->used - outlen;
+    buf->data[buf->used - 1] = '\0';
+}
+#endif
+
+/* From section 11.13 of the Dubuisson ASN.1 bible: */
+#define TAG_UTF8 (12)
+#define TAG_PRINTABLE (19)
+#define TAG_T61 (20)
+#define TAG_IA5 (22)
+#define TAG_VISIBLE (26)
+#define TAG_UNIVERSAL (28)
+#define TAG_BMP (30)
+
+static void append_dirstring(ne_buffer *buf, gnutls_datum *data, unsigned long tag)
+{
+    switch (tag) {
+    case TAG_UTF8:
+    case TAG_IA5:
+    case TAG_PRINTABLE:
+    case TAG_VISIBLE:
+        ne_buffer_append(buf, (char *)data->data, data->size);
+        break;
+#ifdef HAVE_ICONV
+    case TAG_T61:
+        convert_dirstring(buf, "ISO-8859-1", data);
+        break;
+    case TAG_BMP:
+        convert_dirstring(buf, "UCS-2BE", data);
+        break;
+#endif
+    default: {
+        char tmp[128];
+        ne_snprintf(tmp, sizeof tmp, _("[unprintable:#%lu]"), tag);
+        ne_buffer_zappend(buf, tmp);
+    } break;
+    }
+}
+
+/* OIDs to not include in readable DNs by default: */
+#define OID_emailAddress "1.2.840.113549.1.9.1"
+#define OID_commonName "2.5.4.3"
+
+#define CMPOID(a,o) ((a)->oid.size == sizeof(o)                        \
+                     && memcmp((a)->oid.data, o, strlen(o)) == 0)
+
+char *ne_ssl_readable_dname(const ne_ssl_dname *name)
+{
+    gnutls_x509_dn_t dn;
+    int ret, rdn = 0, flag = 0;
+    ne_buffer *buf;
+    gnutls_x509_ava_st val;
+
+    if (name->subject)
+        ret = gnutls_x509_crt_get_subject(name->cert, &dn);
+    else
+        ret = gnutls_x509_crt_get_issuer(name->cert, &dn);
+    
+    if (ret)
+        return ne_strdup(_("[unprintable]"));
+
+    buf = ne_buffer_create();
+    
+    /* Find the highest rdn... */
+    while (gnutls_x509_dn_get_rdn_ava(dn, rdn++, 0, &val) == 0)
+        ;        
+
+    /* ..then iterate back to the first: */
+    while (--rdn >= 0) {
+        int ava = 0;
+
+        /* Iterate through all AVAs for multivalued AVAs; better than
+         * ne_openssl can do! */
+        do {
+            ret = gnutls_x509_dn_get_rdn_ava(dn, rdn, ava, &val);
+
+            /* If the *only* attribute to append is the common name or
+             * email address, use it; otherwise skip those
+             * attributes. */
+            if (ret == 0 && val.value.size > 0
+                && ((!CMPOID(&val, OID_emailAddress)
+                     && !CMPOID(&val, OID_commonName))
+                    || (buf->used == 1 && rdn == 0))) {
+                flag = 1;
+                if (buf->used > 1) ne_buffer_append(buf, ", ", 2);
+
+                append_dirstring(buf, &val.value, val.value_tag);
+            }
+            
+            ava++;
+        } while (ret == 0);
+    }
+
+    return ne_buffer_finish(buf);
+}
+
+#else /* !HAVE_GNUTLS_X509_DN_GET_RDN_AVA */
+
 /* Appends the value of RDN with given oid from certitifcate x5
  * subject (if subject is non-zero), or issuer DN to buffer 'buf': */
 static void append_rdn(ne_buffer *buf, gnutls_x509_crt x5, int subject, const char *oid)
@@ -142,6 +273,7 @@ char *ne_ssl_readable_dname(const ne_ssl_dname *name)
 
     return ne_buffer_finish(buf);
 }
+#endif /* HAVE_GNUTLS_X509_DN_GET_RDN_AVA */
 
 int ne_ssl_dname_cmp(const ne_ssl_dname *dn1, const ne_ssl_dname *dn2)
 {
@@ -220,7 +352,7 @@ static int match_hostname(char *cn, const char *hostname)
  * If 'identity' is non-NULL, store the malloc-allocated identity in
  * *identity.  If 'server' is non-NULL, it must be the network address
  * of the server in use, and identity must be NULL. */
-static int check_identity(const char *hostname, gnutls_x509_crt cert,
+static int check_identity(const ne_uri *server, gnutls_x509_crt cert,
                           char **identity)
 {
     char name[255];
@@ -228,6 +360,9 @@ static int check_identity(const char *hostname, gnutls_x509_crt cert,
     int ret, seq = 0;
     int match = 0, found = 0;
     size_t len;
+    const char *hostname;
+    
+    hostname = server ? server->host : "";
 
     do {
         len = sizeof name;
@@ -261,6 +396,30 @@ static int check_identity(const char *hostname, gnutls_x509_crt cert,
                          len);
             }
         } break;
+        case GNUTLS_SAN_URI: {
+            ne_uri uri;
+            
+            if (ne_uri_parse(name, &uri) == 0 && uri.host && uri.scheme) {
+                ne_uri tmp;
+                
+                if (identity && !found) *identity = ne_strdup(name);
+                found = 1;
+                
+                if (server) {
+                    /* For comparison purposes, all that matters is
+                     * host, scheme and port; ignore the rest. */
+                    memset(&tmp, 0, sizeof tmp);
+                    tmp.host = uri.host;
+                    tmp.scheme = uri.scheme;
+                    tmp.port = uri.port;
+                    
+                    match = ne_uri_cmp(server, &tmp) == 0;
+                }
+            }
+            
+            ne_uri_free(&uri);
+        } break;
+
         default:
             break;
         }
@@ -301,7 +460,7 @@ static ne_ssl_certificate *populate_cert(ne_ssl_certificate *cert,
     cert->issuer = NULL;
     cert->subject = x5;
     cert->identity = NULL;
-    check_identity("", x5, &cert->identity);
+    check_identity(NULL, x5, &cert->identity);
     return cert;
 }
 
@@ -507,6 +666,7 @@ static int check_certificate(ne_session *sess, gnutls_session sock,
 {
     time_t before, after, now = time(NULL);
     int ret, failures = 0;
+    ne_uri server;
 
     before = gnutls_x509_crt_get_activation_time(chain->subject);
     after = gnutls_x509_crt_get_expiration_time(chain->subject);
@@ -516,7 +676,11 @@ static int check_certificate(ne_session *sess, gnutls_session sock,
     else if (now > after)
         failures |= NE_SSL_EXPIRED;
 
-    ret = check_identity(sess->server.hostname, chain->subject, NULL);
+    memset(&server, 0, sizeof server);
+    ne_fill_server_uri(sess, &server);
+    ret = check_identity(&server, chain->subject, NULL);
+    ne_uri_free(&server);
+
     if (ret < 0) {
         ne_set_error(sess, _("Server certificate was missing commonName "
                              "attribute in subject name"));
@@ -666,14 +830,14 @@ static int pkcs12_parse(gnutls_pkcs12 p12, gnutls_x509_privkey *pkey,
         ret = gnutls_pkcs12_get_bag(p12, i, bag);
         if (ret < 0) continue;
 
-        gnutls_pkcs12_bag_decrypt(bag, password == NULL ? "" : password);
+        gnutls_pkcs12_bag_decrypt(bag, password);
 
         for (j = 0; ret == 0 && j < gnutls_pkcs12_bag_get_count(bag); ++j) {
             gnutls_pkcs12_bag_type type;
             gnutls_datum data;
 
             if (friendly_name && *friendly_name == NULL) {
-                char *name;
+                char *name = NULL;
                 gnutls_pkcs12_bag_get_friendly_name(bag, j, &name);
                 if (name) {
                     if (name[0] == '.') name++; /* weird GnuTLS bug? */
@@ -750,9 +914,12 @@ ne_ssl_client_cert *ne_ssl_clicert_read(const char *filename)
         return NULL;
     }
 
-    ret = pkcs12_parse(p12, &pkey, &cert, &friendly_name, NULL);
-
     if (gnutls_pkcs12_verify_mac(p12, "") == 0) {
+        if (pkcs12_parse(p12, &pkey, &cert, &friendly_name, "") != 0) {
+            gnutls_pkcs12_deinit(p12);
+            return NULL;
+        }
+
         cc = ne_calloc(sizeof *cc);
         cc->pkey = pkey;
         cc->decrypted = 1;
@@ -762,15 +929,11 @@ ne_ssl_client_cert *ne_ssl_clicert_read(const char *filename)
         cc->p12 = NULL;
         return cc;
     } else {
-        if (ret == 0) {
-            cc = ne_calloc(sizeof *cc);
-            cc->friendly_name = friendly_name;
-            cc->p12 = p12;
-            return cc;
-        } else {
-            gnutls_pkcs12_deinit(p12);
-            return NULL;
-        }
+        /* TODO: calling pkcs12_parse() here to find the friendly_name
+         * seems to break horribly.  */
+        cc = ne_calloc(sizeof *cc);
+        cc->p12 = p12;
+        return cc;
     }
 }
 
@@ -964,9 +1127,10 @@ int ne__ssl_init(void)
 void ne__ssl_exit(void)
 {
     /* No way to unregister the thread callbacks.  Doomed. */
-#if 0
+#if LIBGNUTLS_VERSION_MAJOR > 1 || LIBGNUTLS_VERSION_MINOR > 3 \
+    || (LIBGNUTLS_VERSION_MINOR == 3 && LIBGNUTLS_VERSION_PATCH >= 3)
     /* It's safe to call gnutls_global_deinit() here only with
-     * gnutls >= 1.3, since older versions don't refcount and
+     * gnutls >= 1.3., since older versions don't refcount and
      * doing so would prevent any other use of gnutls within
      * the process. */
     gnutls_global_deinit();

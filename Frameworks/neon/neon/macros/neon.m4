@@ -1,4 +1,4 @@
-# Copyright (C) 1998-2006 Joe Orton <joe@manyfish.co.uk>    -*- autoconf -*-
+# Copyright (C) 1998-2007 Joe Orton <joe@manyfish.co.uk>    -*- autoconf -*-
 # Copyright (C) 2004 Aleix Conchillo Flaque <aleix@member.fsf.org>
 #
 # This file is free software; you may copy and/or distribute it with
@@ -136,8 +136,8 @@ AC_DEFUN([NE_VERSIONS_BUNDLED], [
 
 # Define the current versions.
 NE_VERSION_MAJOR=0
-NE_VERSION_MINOR=26
-NE_VERSION_PATCH=3
+NE_VERSION_MINOR=27
+NE_VERSION_PATCH=2
 NE_VERSION_TAG=
 
 # libtool library interface versioning.  Release policy dictates that
@@ -494,7 +494,14 @@ else
          [LFS support omitted: 64-bit support functions not found])
      fi], [NE_DISABLE_SUPPORT(LFS, [LFS support omitted: off64_t type not found])])
    CPPFLAGS=$ne_save_CPPFLAGS
-fi])
+fi
+if test "$NE_FLAG_LFS" = "yes"; then
+   AC_DEFINE_UNQUOTED([NE_FMT_NE_OFF_T], [NE_FMT_OFF64_T], 
+                      [Define to be printf format string for ne_off_t])
+else
+   AC_DEFINE_UNQUOTED([NE_FMT_NE_OFF_T], [NE_FMT_OFF_T])
+fi
+])
 
 dnl NEON_FORMAT(TYPE[, HEADERS[, [SPECIFIER]])
 dnl
@@ -507,7 +514,8 @@ AC_DEFUN([NEON_FORMAT], [
 
 AC_REQUIRE([NEON_FORMAT_PREP])
 
-AC_CHECK_SIZEOF($1, [$2])
+AC_CHECK_SIZEOF($1,, [AC_INCLUDES_DEFAULT
+$2])
 
 dnl Work out which specifier character to use
 m4_ifdef([ne_spec], [m4_undefine([ne_spec])])
@@ -569,7 +577,7 @@ AC_REQUIRE([AC_FUNC_STRERROR_R])
 
 AC_CHECK_HEADERS([sys/time.h limits.h sys/select.h arpa/inet.h libintl.h \
 	signal.h sys/socket.h netinet/in.h netinet/tcp.h netdb.h sys/poll.h \
-	sys/limits.h],,,
+	sys/limits.h fcntl.h iconv.h],,,
 [AC_INCLUDES_DEFAULT
 /* netinet/tcp.h requires netinet/in.h on some platforms. */
 #ifdef HAVE_NETINET_IN_H
@@ -593,7 +601,7 @@ NE_LARGEFILE
 
 AC_REPLACE_FUNCS(strcasecmp)
 
-AC_CHECK_FUNCS(signal setvbuf setsockopt stpcpy poll)
+AC_CHECK_FUNCS(signal setvbuf setsockopt stpcpy poll fcntl getsockopt)
 
 if test "x${ac_cv_func_poll}${ac_cv_header_sys_poll_h}y" = "xyesyesy"; then
   AC_DEFINE([NE_USE_POLL], 1, [Define if poll() should be used])
@@ -623,7 +631,7 @@ NE_SEARCH_LIBS(getaddrinfo, nsl,,
       AC_MSG_NOTICE([getaddrinfo support disabled on HP-UX 11.0x/11.1x]) ;;
    *)
      ne_enable_gai=yes
-     NE_CHECK_FUNCS(gai_strerror inet_ntop,,[ne_enable_gai=no; break]) ;;
+     NE_CHECK_FUNCS(gai_strerror getnameinfo inet_ntop,,[ne_enable_gai=no; break]) ;;
    esac
 ])
 
@@ -659,6 +667,15 @@ else
 #endif
 ])
 fi
+
+AC_CHECK_TYPES(socklen_t,,,[
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
+# include <sys/socket.h>
+#endif
+])
 
 AC_CHECK_MEMBERS([struct tm.tm_gmtoff, struct tm.__tm_gmtoff],,,
   [#include <time.h>])
@@ -871,6 +888,7 @@ yes|openssl)
    if test "$ne_cv_lib_ssl097" = "yes"; then
       AC_MSG_NOTICE([OpenSSL >= 0.9.7; EGD support not needed in neon])
       NE_ENABLE_SUPPORT(SSL, [SSL support enabled, using OpenSSL (0.9.7 or later)])
+      NE_CHECK_FUNCS(CRYPTO_set_idptr_callback)
    else
       # Fail if OpenSSL is older than 0.9.6
       NE_CHECK_OPENSSLVER(ne_cv_lib_ssl096, 0.9.6, 0x00906000L)
@@ -912,9 +930,8 @@ gnutls)
    ne_gnutls_ver=`$GNUTLS_CONFIG --version`
    case $ne_gnutls_ver in
    1.0.?|1.0.1?|1.0.20|1.0.21) 
-      AC_MSG_ERROR([GNU TLS version $ne_gnutls_ver is too old -- 1.0.22 or later required]) ;;
-   1.*) ;;
-   *) AC_MSG_ERROR([GNU TLS version $ne_gnutls_ver is not supported]) ;;
+      AC_MSG_ERROR([GNU TLS version $ne_gnutls_ver is too old -- 1.0.22 or later required]) 
+      ;;
    esac
 
    CPPFLAGS="$CPPFLAGS `$GNUTLS_CONFIG --cflags`"
@@ -927,8 +944,13 @@ gnutls)
    NEON_LIBS="$NEON_LIBS `$GNUTLS_CONFIG --libs`"
    AC_DEFINE([HAVE_GNUTLS], 1, [Define if GnuTLS support is enabled])
 
-   # Check for functions in later releases.
-   NE_CHECK_FUNCS(gnutls_session_get_data2)
+   # Check for functions in later releases
+   NE_CHECK_FUNCS(gnutls_session_get_data2 gnutls_x509_dn_get_rdn_ava)
+
+   # Check for iconv support if using the new RDN access functions:
+   if test ${ac_cv_func_gnutls_x509_dn_get_rdn_ava}X${ac_cv_header_iconv_h} = yesXyes; then
+      AC_CHECK_FUNCS(iconv)
+   fi
    ;;
 *) # Default to off; only create crypto-enabled binaries if requested.
    NE_DISABLE_SUPPORT(SSL, [SSL support is not enabled])

@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_BUFFER" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_buffer
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_BUFFER" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,14 +13,18 @@
 .SH "NAME"
 ne_buffer \- string buffer handling
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_string.h>
+.sp
+.ft B
+.nf
+#include <ne_string.h>
 
 typedef struct {
     char *data;
     size_t used;
     size_t length;
-} \fR\fB\fBne_buffer\fR\fR\fB;\fR
+} ne_buffer;
+.fi
+.ft
 .SH "DESCRIPTION"
 .PP
 The
@@ -51,3 +58,11 @@ data
 pointer is modified directly (rather than using one of the functions listed above),
 \fBne_buffer_altered\fR
 must be called.
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

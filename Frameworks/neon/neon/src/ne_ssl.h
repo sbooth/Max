@@ -117,8 +117,8 @@ void ne_ssl_cert_free(ne_ssl_certificate *cert);
 typedef struct ne_ssl_client_cert_s ne_ssl_client_cert;
 
 /* Read a client certificate and private key from a PKCS12 file;
- * returns NULL if the file could not be parsed.  If the client cert
- * is encrypted, it must be decrypted before use. */
+ * returns NULL if the file could not be parsed, or otherwise
+ * returning a client certificate object. */
 ne_ssl_client_cert *ne_ssl_clicert_read(const char *filename);
 
 /* Returns the "friendly name" given for the client cert, or NULL if
@@ -139,7 +139,7 @@ int ne_ssl_clicert_decrypt(ne_ssl_client_cert *ccert, const char *password);
  * returns NULL). */
 const ne_ssl_certificate *ne_ssl_clicert_owner(const ne_ssl_client_cert *ccert);
 
-/* Deallocate memory associated with a client certificate. */
+/* Destroy a client certificate object. */
 void ne_ssl_clicert_free(ne_ssl_client_cert *ccert);
 
 

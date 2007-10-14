@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_REQUEST_CREATE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_request_create
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_REQUEST_CREATE" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,14 +13,18 @@
 .SH "NAME"
 ne_request_create, ne_request_dispatch, ne_request_destroy \- low\-level HTTP request handling
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_request.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_request.h>
+.fi
+.ft
 .HP 30
-\fBne_request\ *\fBne_request_create\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fImethod\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIpath\fR\fR\fB);\fR
+.BI "ne_request *ne_request_create(ne_session\ *" "session" ", const\ char\ *" "method" ", const\ char\ *" "path" ");"
 .HP 24
-\fBint\ \fBne_request_dispatch\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIreq\fR\fR\fB);\fR
+.BI "int ne_request_dispatch(ne_request\ *" "req" ");"
 .HP 24
-\fBvoid\ \fBne_request_destroy\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIreq\fR\fR\fB);\fR
+.BI "void ne_request_destroy(ne_request\ *" "req" ");"
 .SH "DESCRIPTION"
 .PP
 An HTTP request, represented by the
@@ -81,24 +88,36 @@ The
 \fBne_request_dispatch\fR
 function returns zero if the request was dispatched successfully, and a non\-zero error code otherwise.
 .SH "ERRORS"
-.TP
+.PP
 \fBNE_ERROR\fR
+.RS 4
 Request failed (see session error string)
-.TP
+.RE
+.PP
 \fBNE_LOOKUP\fR
+.RS 4
 The DNS lookup for the server (or proxy server) failed.
-.TP
+.RE
+.PP
 \fBNE_AUTH\fR
+.RS 4
 Authentication failed on the server.
-.TP
+.RE
+.PP
 \fBNE_PROXYAUTH\fR
+.RS 4
 Authentication failed on the proxy server.
-.TP
+.RE
+.PP
 \fBNE_CONNECT\fR
+.RS 4
 A connection to the server could not be established.
-.TP
+.RE
+.PP
 \fBNE_TIMEOUT\fR
+.RS 4
 A timeout occurred while waiting for the server to respond.
+.RE
 .SH "EXAMPLE"
 .PP
 An example of applying a
@@ -106,14 +125,16 @@ MKCOL
 operation to the resource at the location
 http://www.example.com/foo/bar/:
 .sp
+.RS 4
 .nf
 ne_session *sess = ne_session_create("http", "www.example.com", 80);
 ne_request *req = ne_request_create(sess, "MKCOL", "/foo/bar/");
 if (ne_request_dispatch(req)) {
-   printf("Request failed: %s\\n", ne_get_error(sess));
+   printf("Request failed: %s\en", ne_get_error(sess));
 }
 ne_request_destroy(req);
 .fi
+.RE
 .SH "SEE ALSO"
 .PP
 ne_get_error,
@@ -121,3 +142,11 @@ ne_set_error,
 ne_get_status,
 ne_add_request_header,
 ne_set_request_body_buffer.
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

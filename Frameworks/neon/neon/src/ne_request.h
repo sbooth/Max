@@ -57,14 +57,7 @@ void ne_set_request_body_buffer(ne_request *req, const char *buffer,
 /* The request body will be taken from 'length' bytes read from the
  * file descriptor 'fd', starting from file offset 'offset'. */
 void ne_set_request_body_fd(ne_request *req, int fd,
-                            off_t offset, off_t length);
-
-#ifdef NE_LFS
-/* Alternate version of ne_set_request_body_fd taking off64_t 
- * offset type for systems supporting _LARGEFILE64_SOURCE. */
-void ne_set_request_body_fd64(ne_request *req, int fd,
-                              off64_t offset, off64_t length);
-#endif
+                            ne_off_t offset, ne_off_t length);
 
 /* "Pull"-based request body provider: a callback which is invoked to
  * provide blocks of request body on demand.
@@ -86,15 +79,8 @@ typedef ssize_t (*ne_provide_body)(void *userdata,
  * request body, a block at a time.  The total size of the request
  * body is 'length'; the callback must ensure that it returns no more
  * than 'length' bytes in total. */
-void ne_set_request_body_provider(ne_request *req, off_t length,
+void ne_set_request_body_provider(ne_request *req, ne_off_t length,
 				  ne_provide_body provider, void *userdata);
-
-#ifdef NE_LFS
-/* Duplicate version of ne_set_request_body_provider, taking an off64_t
- * offset. */
-void ne_set_request_body_provider64(ne_request *req, off64_t length,
-                                    ne_provide_body provider, void *userdata);
-#endif
 
 /* Handling response bodies; two callbacks must be provided:
  *
@@ -248,18 +234,30 @@ typedef void (*ne_free_hooks)(void *cookie);
 
 /* Hook called when a request is created; passed the request method,
  * and the string used as the Request-URI (note that this may be a
- * absolute URI if a proxy is in use, an absolute path, a "*",
- * etc). */
+ * absolute URI if a proxy is in use, an absolute path, a "*", etc).
+ * A create_request hook is called exactly once per request. */
 typedef void (*ne_create_request_fn)(ne_request *req, void *userdata,
 				     const char *method, const char *requri);
 void ne_hook_create_request(ne_session *sess, 
 			    ne_create_request_fn fn, void *userdata);
 
 /* Hook called before the request is sent.  'header' is the raw HTTP
- * header before the trailing CRLF is added: add in more here. */
+ * header before the trailing CRLF is added; more headers can be added
+ * here.  A pre_send hook may be called >1 time per request if the
+ * request is retried due to a post_send hook returning NE_RETRY. */
 typedef void (*ne_pre_send_fn)(ne_request *req, void *userdata, 
 			       ne_buffer *header);
 void ne_hook_pre_send(ne_session *sess, ne_pre_send_fn fn, void *userdata);
+
+/* Hook called directly after the response headers have been read, but
+ * before the resposnse body has been read.  'status' is the response
+ * status-code.  A post_header hook may be called >1 time per request
+ * if the request is retried due to a post_send hook returning
+ * NE_RETRY. */
+typedef void (*ne_post_headers_fn)(ne_request *req, void *userdata,
+                                   const ne_status *status);
+void ne_hook_post_headers(ne_session *sess, 
+                          ne_post_headers_fn fn, void *userdata);
 
 /* Hook called after the request is dispatched (request sent, and
  * the entire response read).  If an error occurred reading the response,
@@ -294,6 +292,7 @@ void ne_hook_destroy_session(ne_session *sess,
 void ne_unhook_create_request(ne_session *sess, 
                               ne_create_request_fn fn, void *userdata);
 void ne_unhook_pre_send(ne_session *sess, ne_pre_send_fn fn, void *userdata);
+void ne_unhook_post_headers(ne_session *sess, ne_post_headers_fn fn, void *userdata);
 void ne_unhook_post_send(ne_session *sess, ne_post_send_fn fn, void *userdata);
 void ne_unhook_destroy_request(ne_session *sess,
                                ne_destroy_req_fn fn, void *userdata);

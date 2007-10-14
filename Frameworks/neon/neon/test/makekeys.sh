@@ -76,6 +76,12 @@ ${REQ} -new -key ${srcdir}/server.key -out altname5.csr
 csr_fields "Bad ipAddress altname Dept" nowhere.example.com | \
 ${REQ} -new -key ${srcdir}/server.key -out altname6.csr
 
+csr_fields "Bad ipAddress altname Dept" nowhere.example.com | \
+${REQ} -new -key ${srcdir}/server.key -out altname7.csr
+
+csr_fields "Bad ipAddress altname Dept" nowhere.example.com | \
+${REQ} -new -key ${srcdir}/server.key -out altname8.csr
+
 csr_fields "Self-Signed" | \
 ${MKCERT} -key ${srcdir}/server.key -out ssigned.pem
 
@@ -144,7 +150,7 @@ for f in server client twocn caseless cnfirst missingcn justmail twoou wildcard;
   ${CA} -days 900 -in ${f}.csr -out ${f}.cert
 done
 
-for n in 1 2 3 4 5 6; do
+for n in 1 2 3 4 5 6 7 8; do
  ${CA} -extensions altExt${n} -days 900 \
      -in altname${n}.csr -out altname${n}.cert
 done

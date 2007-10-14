@@ -1,6 +1,6 @@
 /* 
    String handling tests
-   Copyright (C) 2001-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2001-2007, Joe Orton <joe@manyfish.co.uk>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #endif
 
 #include "ne_string.h"
+#include "ne_utils.h"
 
 #include "tests.h"
 
@@ -328,7 +329,12 @@ static int str_errors(void)
 
     /* Test truncated error string is still NUL-terminated. */
     ne_strerror(ENOENT, actual, 6);
+    NE_DEBUG(NE_DBG_HTTP, "error: %s\n", actual);
     ONN("truncated string had wrong length", strlen(actual) != 5);
+
+    ne_strerror(-1, actual, 6);
+    ONN("truncated string for bad error had wrong length", 
+        strlen(actual) != 5);
 
     return OK;
 }
@@ -588,6 +594,22 @@ static int casencmp(void)
     return OK;
 }
 
+static int buf_print(void)
+{
+    ne_buffer *buf = ne_buffer_create();
+
+    ne_buffer_czappend(buf, "foo-");
+    ne_buffer_snprintf(buf, 20, "bar-%s-asda", "norman");
+    ne_buffer_czappend(buf, "-bloo");
+    ONN("snprintf return value", ne_buffer_snprintf(buf, 2, "---") != 1);
+    
+    ONCMP(buf->data, "foo-bar-norman-asda-bloo-");
+
+    ne_buffer_destroy(buf);
+    
+    return OK;
+}
+
 
 ne_test tests[] = {
     T(simple),
@@ -615,6 +637,7 @@ ne_test tests[] = {
     T(printing),
     T(casecmp),
     T(casencmp),
+    T(buf_print),
     T(NULL)
 };
 

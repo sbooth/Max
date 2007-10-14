@@ -101,7 +101,8 @@ static int status_lines(void)
 }
 
 /* Write MD5 of 'len' bytes of 'str' to 'digest' */
-static unsigned char *digest_md5(const char *data, size_t len, unsigned char digest[16])
+static unsigned char *digest_md5(const char *data, size_t len,
+                                 unsigned int digest[4])
 {
     struct ne_md5_ctx *ctx;
 
@@ -117,12 +118,12 @@ static unsigned char *digest_md5(const char *data, size_t len, unsigned char dig
     ne_md5_finish_ctx(ctx, digest);
     ne_md5_destroy_ctx(ctx);
 
-    return digest;
+    return (unsigned char *)digest;
 }
 
 static int md5(void)
 {
-    unsigned char buf[17] = {0}, buf2[17] = {0};
+    unsigned int buf[4], buf2[4] = {0};
     char ascii[33] = {0};
     char zzzs[500];
 
@@ -138,7 +139,7 @@ static int md5(void)
     ne_md5_to_ascii(digest_md5(zzzs, sizeof zzzs, buf), ascii);
     ONN("MD5(\"z\"x512)", strcmp(ascii, "8b9323bd72250ea7f1b2b3fb5046391a"));
 
-    ne_ascii_to_md5(ascii, buf2);
+    ne_ascii_to_md5(ascii, (unsigned char *)buf2);
     ON(memcmp(buf, buf2, 16));
     
     return OK;

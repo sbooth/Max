@@ -33,7 +33,6 @@
 
 #include "tests.h"
 
-/* should be in a 'session.c'? */
 static int fill_uri(void)
 {
     ne_uri uri = {0};
@@ -50,6 +49,30 @@ static int fill_uri(void)
 
     return OK;
 }
+
+static int fill_proxy_uri(void)
+{
+    ne_uri uri = {0};
+    ne_session *sess = ne_session_create("http", "localhost", 7777);
+
+    ne_fill_proxy_uri(sess, &uri);
+    
+    ONN("no proxy host should be set", uri.host != NULL);
+    ONN("no proxy port should be set", uri.port != 0);
+    
+    ne_session_proxy(sess, "www.example.com", 345);
+
+    ne_fill_proxy_uri(sess, &uri);
+
+    ONCMP("www.example.com", uri.host, "fill_proxy_uri", "host");
+    ONN("proxy port mis-match", uri.port != 345);
+
+    ne_session_destroy(sess);
+    ne_uri_free(&uri);
+
+    return OK;
+}
+
 
 static int match_hostport(const char *scheme, const char *hostname, int port,
 			  const char *hostport)
@@ -166,6 +189,7 @@ static int flags(void)
 
 ne_test tests[] = {
     T(fill_uri),
+    T(fill_proxy_uri),
     T(hostports),
     T(errors),
     T(privates),

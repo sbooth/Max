@@ -1,6 +1,6 @@
 /* 
    String utility functions
-   Copyright (C) 1999-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 1999-2007, Joe Orton <joe@manyfish.co.uk>
    strcasecmp/strncasecmp implementations are:
    Copyright (C) 1991, 1992, 1995, 1996, 1997 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
@@ -206,6 +206,21 @@ void ne_buffer_append(ne_buffer *buf, const char *data, size_t len)
     buf->data[buf->used - 1] = '\0';
 }
 
+size_t ne_buffer_snprintf(ne_buffer *buf, size_t max, const char *fmt, ...)
+{
+    va_list ap;
+    size_t ret;
+
+    ne_buffer_grow(buf, buf->used + max);
+
+    va_start(ap, fmt);
+    ret = ne_vsnprintf(buf->data + buf->used - 1, max, fmt, ap);
+    va_end(ap);
+    buf->used += ret;
+
+    return ret;    
+}
+
 ne_buffer *ne_buffer_create(void) 
 {
     return ne_buffer_ncreate(512);
@@ -349,7 +364,12 @@ char *ne_strerror(int errnum, char *buf, size_t buflen)
     if (ret != buf)
 	ne_strnzcpy(buf, ret, buflen);
 #else /* POSIX-style strerror_r: */
-    strerror_r(errnum, buf, buflen);
+    char tmp[256];
+
+    if (strerror_r(errnum, tmp, sizeof tmp) == 0)
+        ne_strnzcpy(buf, tmp, buflen);
+    else
+        ne_snprintf(buf, buflen, "Unknown error %d", errnum);
 #endif
 #else /* no strerror_r: */
     ne_strnzcpy(buf, strerror(errnum), buflen);

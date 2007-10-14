@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_ADDR_RESOLVE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_addr_resolve
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_ADDR_RESOLVE" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,20 +13,24 @@
 .SH "NAME"
 ne_addr_resolve, ne_addr_result, ne_addr_first, ne_addr_next, ne_addr_error, ne_addr_destroy \- functions to resolve hostnames to addresses
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_socket.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_socket.h>
+.fi
+.ft
 .HP 30
-\fBne_sock_addr\ *\fBne_addr_resolve\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIhostname\fR\fR\fB, \fR\fBint\ \fR\fB\fIflags\fR\fR\fB);\fR
+.BI "ne_sock_addr *ne_addr_resolve(const\ char\ *" "hostname" ", int\ " "flags" ");"
 .HP 19
-\fBint\ \fBne_addr_result\fR\fR\fB(\fR\fBconst\ ne_sock_addr\ *\fR\fB\fIaddr\fR\fR\fB);\fR
+.BI "int ne_addr_result(const\ ne_sock_addr\ *" "addr" ");"
 .HP 34
-\fBconst\ ne_inet_addr\ *\fBne_addr_first\fR\fR\fB(\fR\fBne_sock_addr\ *\fR\fB\fIaddr\fR\fR\fB);\fR
+.BI "const ne_inet_addr *ne_addr_first(ne_sock_addr\ *" "addr" ");"
 .HP 33
-\fBconst\ ne_inet_addr\ *\fBne_addr_next\fR\fR\fB(\fR\fBne_sock_addr\ *\fR\fB\fIaddr\fR\fR\fB);\fR
+.BI "const ne_inet_addr *ne_addr_next(ne_sock_addr\ *" "addr" ");"
 .HP 20
-\fBchar\ *\fBne_addr_error\fR\fR\fB(\fR\fBconst\ ne_sock_addr\ *\fR\fB\fIaddr\fR\fR\fB, \fR\fBchar\ *\fR\fB\fIbuffer\fR\fR\fB, \fR\fBsize_t\ \fR\fB\fIbufsiz\fR\fR\fB);\fR
+.BI "char *ne_addr_error(const\ ne_sock_addr\ *" "addr" ", char\ *" "buffer" ", size_t\ " "bufsiz" ");"
 .HP 21
-\fBvoid\ \fBne_addr_destroy\fR\fR\fB(\fR\fBne_sock_addr\ *\fR\fB\fIaddr\fR\fR\fB);\fR
+.BI "void ne_addr_destroy(ne_sock_addr\ *" "addr" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -88,13 +95,14 @@ parameter .
 The code below prints out the set of addresses associated with the hostname
 www.google.com.
 .sp
+.RS 4
 .nf
 ne_sock_addr *addr;
 char buf[256];
 
 addr = ne_addr_resolve("www.google.com", 0);
 if (ne_addr_result(addr)) {
-    printf("Could not resolve www.google.com: %s\\n",
+    printf("Could not resolve www.google.com: %s\en",
            ne_addr_error(addr, buf, sizeof buf));
 } else {
     const ne_inet_addr *ia;
@@ -102,10 +110,19 @@ if (ne_addr_result(addr)) {
     for (ia = ne_addr_first(addr); ia != NULL; ia = ne_addr_next(addr)) {
         printf(" %s", ne_iaddr_print(ia, buf, sizeof buf));
     }
-    putchar('\\n');
+    putchar('\en');
 }
 ne_addr_destroy(addr);
 .fi
+.RE
 .SH "SEE ALSO"
 .PP
 ne_iaddr_print
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

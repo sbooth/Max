@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SSL_CLIENT_CERT" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_ssl_client_cert
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SSL_CLIENT_CERT" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,20 +13,24 @@
 .SH "NAME"
 ne_ssl_clicert_read, ne_ssl_clicert_name, ne_ssl_clicert_encrypted, ne_ssl_clicert_decrypt, ne_ssl_clicert_owner, ne_ssl_clicert_free \- SSL client certificate handling
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_ssl.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_ssl.h>
+.fi
+.ft
 .HP 40
-\fBne_ssl_client_cert\ *\fBne_ssl_clicert_read\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIfilename\fR\fR\fB);\fR
+.BI "ne_ssl_client_cert *ne_ssl_clicert_read(const\ char\ *" "filename" ");"
 .HP 32
-\fBconst\ char\ *\fBne_ssl_clicert_name\fR\fR\fB(\fR\fBconst\ ne_ssl_client_cert\ *\fR\fB\fIccert\fR\fR\fB);\fR
+.BI "const char *ne_ssl_clicert_name(const\ ne_ssl_client_cert\ *" "ccert" ");"
 .HP 29
-\fBint\ \fBne_ssl_clicert_encrypted\fR\fR\fB(\fR\fBconst\ ne_ssl_client_cert\ *\fR\fB\fIccert\fR\fR\fB);\fR
+.BI "int ne_ssl_clicert_encrypted(const\ ne_ssl_client_cert\ *" "ccert" ");"
 .HP 27
-\fBint\ \fBne_ssl_clicert_decrypt\fR\fR\fB(\fR\fBne_ssl_client_cert\ *\fR\fB\fIccert\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIpassword\fR\fR\fB);\fR
+.BI "int ne_ssl_clicert_decrypt(ne_ssl_client_cert\ *" "ccert" ", const\ char\ *" "password" ");"
 .HP 47
-\fBconst\ ne_ssl_certificate\ *\fBne_ssl_clicert_owner\fR\fR\fB(\fR\fBconst\ ne_ssl_client_cert\ *\fR\fB\fIccert\fR\fR\fB);\fR
+.BI "const ne_ssl_certificate *ne_ssl_clicert_owner(const\ ne_ssl_client_cert\ *" "ccert" ");"
 .HP 25
-\fBvoid\ \fBne_ssl_clicert_free\fR\fR\fB(\fR\fBne_ssl_client_cert\ *\fR\fB\fIccert\fR\fR\fB);\fR
+.BI "void ne_ssl_clicert_free(ne_ssl_client_cert\ *" "ccert" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -87,6 +94,7 @@ returns a certificate object.
 .PP
 The following code reads a client certificate and decrypts it if necessary, then loads it into an HTTP session.
 .sp
+.RS 4
 .nf
 ne_ssl_client_cert *ccert;
 
@@ -104,6 +112,15 @@ if (ccert == NULL) {
 
 ne_ssl_set_clicert(sess, ccert);
 .fi
+.RE
 .SH "SEE ALSO"
 .PP
 ne_ssl_cert_read
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

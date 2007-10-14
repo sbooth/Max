@@ -1,6 +1,6 @@
 /* 
    Tests for LFS support in neon
-   Copyright (C) 2004, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2004-2006, Joe Orton <joe@manyfish.co.uk>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ static int send_high_offset(void)
     CALL(make_session(&sess, serve_check_body, NULL));
     
     req = ne_request_create(sess, "PUT", "/sparse");
-    ne_set_request_body_fd64(req, fd, point, strlen(data));
+    ne_set_request_body_fd(req, fd, point, strlen(data));
     ret = ne_request_dispatch(req);
     CALL(await_server());
     ONV(ret != NE_OK || ne_get_status(req)->klass != 2,
@@ -148,16 +148,20 @@ static int read_large_response(void)
     off64_t count = 0;
     int ret;
     char buf[8192];
+#ifdef NE_DEBUGGING
+    int old_mask = ne_debug_mask;
+#endif
 
     CALL(make_session(&sess, serve_large_response, NULL));
 
     req = ne_request_create(sess, "GET", "/foo");
 
+    ret = ne_begin_request(req);
+
 #ifdef NE_DEBUGGING
     ne_debug_init(ne_debug_stream, ne_debug_mask & ~(NE_DBG_HTTPBODY|NE_DBG_HTTP));
 #endif
-    
-    ret = ne_begin_request(req);
+
     if (ret == NE_OK) {
         while ((ret = ne_read_response_block(req, buf, sizeof buf)) > 0)
             count += ret;
@@ -166,7 +170,7 @@ static int read_large_response(void)
     }
 
 #ifdef NE_DEBUGGING
-    ne_debug_init(ne_debug_stream, ne_debug_mask & (NE_DBG_HTTPBODY|NE_DBG_HTTP));
+    ne_debug_init(ne_debug_stream, old_mask);
 #endif
         
     ONV(ret, ("request failed: %s", ne_get_error(sess)));

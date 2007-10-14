@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SSL_CERT_IDENTITY" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_ssl_cert_identity
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SSL_CERT_IDENTITY" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,16 +13,20 @@
 .SH "NAME"
 ne_ssl_cert_identity, ne_ssl_cert_signedby, ne_ssl_cert_issuer, ne_ssl_cert_subject \- functions to access certificate properties
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_ssl.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_ssl.h>
+.fi
+.ft
 .HP 33
-\fBconst\ char\ *\fBne_ssl_cert_identity\fR\fR\fB(\fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.BI "const char *ne_ssl_cert_identity(const\ ne_ssl_certificate\ *" "cert" ");"
 .HP 47
-\fBconst\ ne_ssl_certificate\ *\fBne_ssl_cert_signedby\fR\fR\fB(\fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.BI "const ne_ssl_certificate *ne_ssl_cert_signedby(const\ ne_ssl_certificate\ *" "cert" ");"
 .HP 40
-\fBconst\ ne_ssl_dname\ *\fBne_ssl_cert_subject\fR\fR\fB(\fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.BI "const ne_ssl_dname *ne_ssl_cert_subject(const\ ne_ssl_certificate\ *" "cert" ");"
 .HP 39
-\fBconst\ ne_ssl_dname\ *\fBne_ssl_cert_issuer\fR\fR\fB(\fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.BI "const ne_ssl_dname *ne_ssl_cert_issuer(const\ ne_ssl_certificate\ *" "cert" ");"
 .SH "DESCRIPTION"
 .PP
 The function
@@ -60,24 +67,34 @@ as covered above.
 .PP
 The following function could be used to display information about a given certificate:
 .sp
+.RS 4
 .nf
 void dump_cert(const ne_ssl_certificate *cert) {
   const char *id = ne_ssl_cert_identity(cert);
   char *dn;
 
   if (id) 
-    printf("Certificate was issued for '%s'.\\n", id);
+    printf("Certificate was issued for '%s'.\en", id);
 
   dn = ne_ssl_readable_dname(ne_ssl_cert_subject(cert));
-  printf("Subject: %s\\n", dn);
+  printf("Subject: %s\en", dn);
   free(dn);
 
   dn = ne_ssl_readable_dname(ne_ssl_cert_issuer(cert));
-  printf("Issuer: %s\\n", dn);
+  printf("Issuer: %s\en", dn);
   free(dn);
 }
 .fi
+.RE
 .SH "SEE ALSO"
 .PP
 ne_ssl_cert_cmp,
 ne_ssl_readable_dname
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

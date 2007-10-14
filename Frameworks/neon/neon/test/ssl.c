@@ -1,6 +1,6 @@
 /* 
    neon test suite
-   Copyright (C) 2002-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2002-2007, Joe Orton <joe@manyfish.co.uk>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -502,6 +502,11 @@ static int ipaddr_altname(void)
     return accept_signed_cert_for_hostname("altname5.cert", "127.0.0.1");
 }
 
+static int uri_altname(void)
+{
+    return accept_signed_cert_for_hostname("altname7.cert", "localhost");
+}
+
 /* test that the *most specific* commonName attribute is used. */
 static int multi_commonName(void)
 {
@@ -789,6 +794,12 @@ static int fail_host_ipaltname(void)
 {
     return fail_ssl_request("altname5.cert", CA_CERT, "localhost",
                             "bad IP altname cert", NE_SSL_IDMISMATCH);
+}
+
+static int fail_bad_urialtname(void)
+{
+    return fail_ssl_request("altname8.cert", CA_CERT, "localhost",
+                            "bad URI altname cert", NE_SSL_IDMISMATCH);
 }
 
 /* Test that the SSL session is cached across connections. */
@@ -1094,6 +1105,32 @@ static int auth_tunnel_creds(void)
     return OK;    
 }
 
+static int auth_tunnel_fail(void)
+{
+    ne_session *sess = ne_session_create("https", "localhost", 443);
+    int ret;
+
+    CALL(spawn_server(7777, single_serve_string,
+                      "HTTP/1.1 407 Nyaaaaah\r\n"
+                      "Proxy-Authenticate: GaBoogle\r\n"
+                      "Connection: close\r\n"
+                      "\r\n"));
+    
+    ne_session_proxy(sess, "localhost", 7777);
+
+    ne_set_proxy_auth(sess, apt_creds, NULL);
+     
+    ret = any_request(sess, "/bar");
+    ONV(ret != NE_PROXYAUTH, ("bad error code for tunnel failure: %d", ret));
+
+    ONV(strstr(ne_get_error(sess), "GaBoogle") == NULL,
+        ("bad error string for tunnel failure: %s", ne_get_error(sess)));
+
+    ne_session_destroy(sess);
+
+    return await_server();
+}
+
 /* compare against known digest of notvalid.pem.  Via:
  *   $ openssl x509 -fingerprint -sha1 -noout -in notvalid.pem */
 #define THE_DIGEST "cf:5c:95:93:76:c6:3c:01:8b:62:" \
@@ -1154,6 +1191,7 @@ static int cert_identities(void)
         { "altname2.cert", "nohost.example.com" },
         { "altname4.cert", "localhost" },
         { "ca4.pem", "fourth.example.com" },
+        { "altname8.cert", "http://nohost.example.com/" },
         { NULL, NULL }
     };
     int n;
@@ -1453,6 +1491,17 @@ static int cache_cert(void)
     return OK;
 }
 
+static int nonssl_trust(void)
+{
+    ne_session *sess = ne_session_create("http", "www.example.com", 80);
+    
+    ne_ssl_trust_cert(sess, def_ca_cert);
+    
+    ne_session_destroy(sess);
+
+    return OK;
+}
+
 /* TODO: code paths still to test in cert verification:
  * - server cert changes between connections: Mozilla gives
  * a "bad MAC decode" error for this; can do better?
@@ -1509,6 +1558,7 @@ ne_test tests[] = {
     T(two_subject_altname2),
     T(notdns_altname),
     T(ipaddr_altname),
+    T(uri_altname),
 
     T(multi_commonName),
     T(commonName_first),
@@ -1521,6 +1571,7 @@ ne_test tests[] = {
     T(fail_missing_CN),
     T(fail_host_ipaltname),
     T(fail_bad_ipaltname),
+    T(fail_bad_urialtname),
 
     T(session_cache),
 	
@@ -1528,6 +1579,9 @@ ne_test tests[] = {
     T(proxy_tunnel),
     T(auth_proxy_tunnel),
     T(auth_tunnel_creds),
+    T(auth_tunnel_fail),
+
+    T(nonssl_trust),
 
     T(NULL) 
 };

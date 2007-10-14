@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NEON" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: neon
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NEON" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -34,21 +37,23 @@ To allow thread\-safe use of SSL in the OpenSSL and GnuTLS libraries neon must b
 ne_sock_init; note that care must be exercised if neon is used in conjunction with another library which uses OpenSSL or GnuTLS.
 .PP
 Some platforms and libraries used by neon require global initialization before use; notably:
-.TP 3
-\(bu
-The
+.RS 4
+\h'-04'\(bu\h'+03'The
 SIGPIPE
 signal disposition must be set to
 \fIignored\fR.
-.TP
-\(bu
-OpenSSL requires global initialization to load shared lookup tables.
-.TP
-\(bu
-The SOCKS library requires initialization before use.
-.TP
-\(bu
-The Win32 socket library requires initialization before use.
+.RE
+.RS 4
+\h'-04'\(bu\h'+03'OpenSSL requires global initialization to load shared lookup tables.
+.RE
+.RS 4
+\h'-04'\(bu\h'+03'The SOCKS library requires initialization before use.
+.RE
+.RS 4
+\h'-04'\(bu\h'+03'The Win32 socket library requires initialization before use.
+.RE
+.sp
+.RE
 The
 ne_sock_init
 function should be called before any other use of neon to perform any necessary initialization needed for the particular platform.
@@ -56,6 +61,32 @@ function should be called before any other use of neon to perform any necessary 
 For some applications it may be necessary to call
 ne_i18n_init
 to initialize the internationalization support in neon.
+.SS "Functions using global state"
+.PP
+Any function call in neon may modify the
+errno
+global variable as a side\-effect. Except where explicitly documented, the value of
+errno
+is unspecified after any neon function call.
+.PP
+Other than in the use of
+errno, the only functions which use or modify process\-global state in neon are as follows:
+.RS 4
+\h'-04'\(bu\h'+03'ne_sock_init,
+ne_i18n_init, and
+ne_sock_exit, as described above
+.RE
+.RS 4
+\h'-04'\(bu\h'+03'\fBne_debug_init\fR
+and
+\fBne_debug\fR, if enabled at compile time; for debugging output
+.RE
+.RS 4
+\h'-04'\(bu\h'+03'ne_oom_callback
+for installing a process\-global callback to be invoked on
+\fBmalloc\fR
+failure
+.RE
 .SS "Namespaces"
 .PP
 To avoid possible collisions between names used for symbols and preprocessor macros by an application and the libraries it uses, it is good practice for each library to reserve a particular
@@ -65,15 +96,36 @@ The neon library reserves the use of the namespace prefixes
 ne_
 and
 NE_. The libraries used by neon may also reserve certain namespaces; collisions between these libraries and a neon\-based application will not be detected at compile time, since the underlying library interfaces are not exposed through the neon header files. Such collisions can only be detected at link time, when the linker attempts to resolve symbols. The following list documents some of the namespaces claimed by libraries used by neon; this list may be incomplete.
-.TP
+.PP
 SSL, ssl, TLS, tls, ERR_, BIO_, d2i_, i2d_, ASN1_
+.RS 4
 Some of the many prefixes used by the OpenSSL library; little attempt has been made to keep exported symbols within any particular prefixes for this library.
-.TP
+.RE
+.PP
+gnutls_, gcry_, gpg_
+.RS 4
+Namespaces used by the GnuTLS library (and dependencies thereof)
+.RE
+.PP
 XML_, Xml[A\-Z]
+.RS 4
 Namespaces used by the expat library.
-.TP
+.RE
+.PP
 xml[A\-Z], html[A\-Z], docb[A\-Z]
+.RS 4
 Namespaces used by the libxml2 library; a relatively small number of symbols are used without these prefixes.
+.RE
+.PP
+inflate, deflate, crc32, compress, uncompres, adler32, zlib
+.RS 4
+Namespaces used by the zlib library; a relatively small number of symbols are used without these prefixes.
+.RE
+.PP
+krb5, gss, GSS, asn1, decode_krb5, encode_krb5, profile, mit
+.RS 4
+Some of the prefixes used by the MIT GSSAPI library and dependencies thereof; a number of symbols lie outside these prefixes.
+.RE
 .SS "Argument validation"
 .PP
 neon does not attempt to validate that the parameters passed to functions conform to the API (for instance, checking that pointer arguments are not
@@ -108,3 +160,11 @@ pointer is also used to allow the application to associate a context with the ca
 .PP
 ne_session_create(3),
 ne_oom_callback
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

@@ -1,6 +1,6 @@
 /* 
    HTTP session handling
-   Copyright (C) 1999-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 1999-2007, Joe Orton <joe@manyfish.co.uk>
    Portions are:
    Copyright (C) 1999-2000 Tommi Komulainen <Tommi.Komulainen@iki.fi>
 
@@ -65,9 +65,16 @@ void ne_session_destroy(ne_session *sess)
 	ne_destroy_sess_fn fn = (ne_destroy_sess_fn)hk->fn;
 	fn(hk->userdata);
     }
+
+    /* Close the connection; note that the notifier callback could
+     * still be invoked here. */
+    if (sess->connected) {
+	ne_close_connection(sess);
+    }
     
     destroy_hooks(sess->create_req_hooks);
     destroy_hooks(sess->pre_send_hooks);
+    destroy_hooks(sess->post_headers_hooks);
     destroy_hooks(sess->post_send_hooks);
     destroy_hooks(sess->destroy_req_hooks);
     destroy_hooks(sess->destroy_sess_hooks);
@@ -80,10 +87,6 @@ void ne_session_destroy(ne_session *sess)
     if (sess->proxy.address) ne_addr_destroy(sess->proxy.address);
     if (sess->proxy.hostname) ne_free(sess->proxy.hostname);
     if (sess->user_agent) ne_free(sess->user_agent);
-
-    if (sess->connected) {
-	ne_close_connection(sess);
-    }
 
 #ifdef NE_HAVE_SSL
     if (sess->ssl_context)
@@ -198,14 +201,24 @@ int ne_get_session_flag(ne_session *sess, ne_session_flag flag)
     return -1;
 }
 
-void ne_set_progress(ne_session *sess, 
-		     ne_progress progress, void *userdata)
+static void progress_notifier(void *userdata, ne_session_status status,
+                              const ne_session_status_info *info)
+{
+    ne_session *sess = userdata;
+
+    if (status == ne_status_sending || status == ne_status_recving) {
+        sess->progress_cb(sess->progress_ud, info->sr.progress, info->sr.total);    
+    }
+}
+
+void ne_set_progress(ne_session *sess, ne_progress progress, void *userdata)
 {
     sess->progress_cb = progress;
     sess->progress_ud = userdata;
+    ne_set_notifier(sess, progress_notifier, sess);
 }
 
-void ne_set_status(ne_session *sess,
+void ne_set_notifier(ne_session *sess,
 		     ne_notify_status status, void *userdata)
 {
     sess->notify_cb = status;
@@ -215,6 +228,11 @@ void ne_set_status(ne_session *sess,
 void ne_set_read_timeout(ne_session *sess, int timeout)
 {
     sess->rdtimeout = timeout;
+}
+
+void ne_set_connect_timeout(ne_session *sess, int timeout)
+{
+    sess->cotimeout = timeout;
 }
 
 #define UAHDR "User-Agent: "
@@ -249,6 +267,14 @@ void ne_fill_server_uri(ne_session *sess, ne_uri *uri)
     uri->scheme = ne_strdup(sess->scheme);
 }
 
+void ne_fill_proxy_uri(ne_session *sess, ne_uri *uri)
+{
+    if (sess->use_proxy) {
+        uri->host = ne_strdup(sess->proxy.hostname);
+        uri->port = sess->proxy.port;
+    }
+}
+
 const char *ne_get_error(ne_session *sess)
 {
     return ne_strclean(sess->error);
@@ -257,6 +283,12 @@ const char *ne_get_error(ne_session *sess)
 void ne_close_connection(ne_session *sess)
 {
     if (sess->connected) {
+        if (sess->notify_cb) {
+            sess->status.cd.hostname = 
+                sess->use_proxy ? sess->proxy.hostname : sess->server.hostname;
+            sess->notify_cb(sess->notify_ud, ne_status_disconnected, 
+                            &sess->status);
+        }
 	NE_DEBUG(NE_DBG_SOCKET, "Closing connection.\n");
 	ne_sock_close(sess->socket);
 	sess->socket = NULL;
@@ -283,7 +315,9 @@ void ne_ssl_provide_clicert(ne_session *sess,
 void ne_ssl_trust_cert(ne_session *sess, const ne_ssl_certificate *cert)
 {
 #ifdef NE_HAVE_SSL
-    ne_ssl_context_trustcert(sess->ssl_context, cert);
+    if (sess->ssl_context) {
+        ne_ssl_context_trustcert(sess->ssl_context, cert);
+    }
 #endif
 }
 
@@ -384,6 +418,12 @@ void ne_hook_post_send(ne_session *sess, ne_post_send_fn fn, void *userdata)
     ADD_HOOK(sess->post_send_hooks, fn, userdata);
 }
 
+void ne_hook_post_headers(ne_session *sess, ne_post_headers_fn fn, 
+                          void *userdata)
+{
+    ADD_HOOK(sess->post_headers_hooks, fn, userdata);
+}
+
 void ne_hook_destroy_request(ne_session *sess,
 			     ne_destroy_req_fn fn, void *userdata)
 {
@@ -427,6 +467,12 @@ void ne_unhook_create_request(ne_session *sess,
 void ne_unhook_pre_send(ne_session *sess, ne_pre_send_fn fn, void *userdata)
 {
     REMOVE_HOOK(sess->pre_send_hooks, fn, userdata);
+}
+
+void ne_unhook_post_headers(ne_session *sess, ne_post_headers_fn fn, 
+			    void *userdata)
+{
+    REMOVE_HOOK(sess->post_headers_hooks, fn, userdata);
 }
 
 void ne_unhook_post_send(ne_session *sess, ne_post_send_fn fn, void *userdata)

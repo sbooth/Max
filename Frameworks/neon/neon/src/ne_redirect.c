@@ -1,6 +1,6 @@
 /* 
    HTTP-redirect support
-   Copyright (C) 1999-2005, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 1999-2007, Joe Orton <joe@manyfish.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -89,7 +89,7 @@ static int post_send(ne_request *req, void *private, const ne_status *status)
     /* Parse the Location header */
     if (ne_uri_parse(location, &red->uri) || red->uri.path == NULL) {
         red->valid = 0;
-	ne_set_error(red->sess, _("Could not parse redirect location."));
+	ne_set_error(red->sess, _("Could not parse redirect destination URL"));
         ret = NE_ERROR;
     } else {
         /* got a valid redirect. */

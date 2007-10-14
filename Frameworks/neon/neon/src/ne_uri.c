@@ -84,8 +84,10 @@
 #define URI_PCHAR (URI_UNRESERVED | PC | URI_SUBDELIM | CL | AT)
 /* invented: segchar = pchar / "/" */
 #define URI_SEGCHAR (URI_PCHAR | FS)
-/* query = fragment = *( pchar / "/" / "?" ) */
+/* query = *( pchar / "/" / "?" ) */
 #define URI_QUERY (URI_PCHAR | FS | QU)
+/* fragment == query */
+#define URI_FRAGMENT URI_QUERY
 
 /* any characters which should be path-escaped: */
 #define URI_ESCAPE ((URI_GENDELIM & ~(FS)) | URI_SUBDELIM | OT | PC)
@@ -153,6 +155,8 @@ int ne_uri_parse(const char *uri, ne_uri *parsed)
 
     p = s = uri;
 
+    /* => s = p = URI-reference */
+
     if (uri_lookup(*p) & URI_ALPHA) {
         while (uri_lookup(*p) & URI_SCHEME)
             p++;
@@ -163,11 +167,15 @@ int ne_uri_parse(const char *uri, ne_uri *parsed)
         }
     }
 
+    /* => s = heir-part, or s = relative-part */
+
     if (s[0] == '/' && s[1] == '/') {
         const char *pa;
 
-        /* hier-part = "//" authority path-abempty 
-         * authority = [ userinfo "@" ] host [ ":" port ] */
+        /* => s = "//" authority path-abempty (from expansion of
+         * either heir-part of relative-part)  */
+        
+        /* authority = [ userinfo "@" ] host [ ":" port ] */
 
         s = pa = s + 2; /* => s = authority */
 
@@ -218,13 +226,17 @@ int ne_uri_parse(const char *uri, ne_uri *parsed)
         if (*s == '\0') {
             s = "/"; /* FIXME: scheme-specific. */
         }
-    } 
-    /* else, the path begins at s */
+    }
+
+    /* => s = path-abempty / path-absolute / path-rootless
+     *      / path-empty / path-noscheme */
 
     p = s;
 
     while (uri_lookup(*p) & URI_SEGCHAR)
         p++;
+
+    /* => p = [ "?" query ] [ "#" fragment ] */
 
     parsed->path = ne_strndup(s, p - s);
 
@@ -234,17 +246,22 @@ int ne_uri_parse(const char *uri, ne_uri *parsed)
         while (uri_lookup(*p) & URI_QUERY)
             p++;
 
+        /* => p = [ "#" fragment ] */
+        /* => s = [ "?" query ] [ "#" fragment ] */
+
         if (*s == '?') {
             parsed->query = ne_strndup(s + 1, p - s - 1);
             
             if (*p != '\0') {
                 s = p++;
 
-                while (uri_lookup(*p) & URI_QUERY)
+                while (uri_lookup(*p) & URI_FRAGMENT)
                     p++;
             }
         }
-        /* p must now point to the end of the input string */
+
+        /* => p now points to the next character after the
+         * URI-reference; which should be the NUL byte. */
 
         if (*s == '#') {
             parsed->fragment = ne_strndup(s + 1, p - s - 1);

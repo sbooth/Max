@@ -1,6 +1,6 @@
 /* 
    neon SSL/TLS support using OpenSSL
-   Copyright (C) 2002-2006, Joe Orton <joe@manyfish.co.uk>
+   Copyright (C) 2002-2007, Joe Orton <joe@manyfish.co.uk>
    Portions are:
    Copyright (C) 1999-2000 Tommi Komulainen <Tommi.Komulainen@iki.fi>
 
@@ -213,12 +213,12 @@ void ne_ssl_cert_validity_time(const ne_ssl_certificate *cert,
 }
 
 /* Return non-zero if hostname from certificate (cn) matches hostname
- * used for session (hostname).  (Wildcard matching is no longer
- * mandated by RFC3280, but certs are deployed which use wildcards) */
+ * used for session (hostname).  Doesn't implement complete RFC 2818
+ * logic; omits "f*.example.com" support for simplicity. */
 static int match_hostname(char *cn, const char *hostname)
 {
     const char *dot;
-    NE_DEBUG(NE_DBG_SSL, "Match %s on %s...\n", cn, hostname);
+
     dot = strchr(hostname, '.');
     if (dot == NULL) {
 	char *pnt = strchr(cn, '.');
@@ -231,18 +231,22 @@ static int match_hostname(char *cn, const char *hostname)
 	hostname = dot + 1;
 	cn += 2;
     }
+
     return !ne_strcasecmp(cn, hostname);
 }
 
 /* Check certificate identity.  Returns zero if identity matches; 1 if
  * identity does not match, or <0 if the certificate had no identity.
  * If 'identity' is non-NULL, store the malloc-allocated identity in
- * *identity. */
-static int check_identity(const char *hostname, X509 *cert, char **identity)
+ * *identity.  Logic specified by RFC 2818 and RFC 3280. */
+static int check_identity(const ne_uri *server, X509 *cert, char **identity)
 {
     STACK_OF(GENERAL_NAME) *names;
     int match = 0, found = 0;
+    const char *hostname;
     
+    hostname = server ? server->host : "";
+
     names = X509_get_ext_d2i(cert, NID_subject_alt_name, NULL, NULL);
     if (names) {
 	int n;
@@ -258,7 +262,8 @@ static int check_identity(const char *hostname, X509 *cert, char **identity)
 		match = match_hostname(name, hostname);
 		ne_free(name);
 		found = 1;
-            } else if (nm->type == GEN_IPADD) {
+            } 
+            else if (nm->type == GEN_IPADD) {
                 /* compare IP address with server IP address. */
                 ne_inet_addr *ia;
                 if (nm->d.ip->length == 4)
@@ -280,8 +285,32 @@ static int check_identity(const char *hostname, X509 *cert, char **identity)
                              "address type (length %d), skipped.\n",
                              nm->d.ip->length);
                 }
-            } /* TODO: handle uniformResourceIdentifier too */
+            } 
+            else if (nm->type == GEN_URI) {
+                char *name = dup_ia5string(nm->d.ia5);
+                ne_uri uri;
 
+                if (ne_uri_parse(name, &uri) == 0 && uri.host && uri.scheme) {
+                    ne_uri tmp;
+
+                    if (identity && !found) *identity = ne_strdup(name);
+                    found = 1;
+
+                    if (server) {
+                        /* For comparison purposes, all that matters is
+                         * host, scheme and port; ignore the rest. */
+                        memset(&tmp, 0, sizeof tmp);
+                        tmp.host = uri.host;
+                        tmp.scheme = uri.scheme;
+                        tmp.port = uri.port;
+                        
+                        match = ne_uri_cmp(server, &tmp) == 0;
+                    }
+                }
+
+                ne_uri_free(&uri);
+                ne_free(name);
+            }
 	}
         /* free the whole stack. */
         sk_GENERAL_NAME_pop_free(names, GENERAL_NAME_free);
@@ -332,7 +361,7 @@ static ne_ssl_certificate *populate_cert(ne_ssl_certificate *cert, X509 *x5)
     cert->subject = x5;
     /* Retrieve the cert identity; pass a dummy hostname to match. */
     cert->identity = NULL;
-    check_identity("", x5, &cert->identity);
+    check_identity(NULL, x5, &cert->identity);
     return cert;
 }
 
@@ -372,6 +401,7 @@ static int check_certificate(ne_session *sess, SSL *ssl, ne_ssl_certificate *cha
     ASN1_TIME *notAfter = X509_get_notAfter(cert);
     int ret, failures = 0;
     long result;
+    ne_uri server;
 
     /* check expiry dates */
     if (X509_cmp_current_time(notBefore) >= 0)
@@ -379,9 +409,12 @@ static int check_certificate(ne_session *sess, SSL *ssl, ne_ssl_certificate *cha
     else if (X509_cmp_current_time(notAfter) <= 0)
 	failures |= NE_SSL_EXPIRED;
 
-    /* Check certificate was issued to this server; pass network
-     * address of server if a proxy is not in use. */
-    ret = check_identity(sess->server.hostname, cert, NULL);
+    /* Check certificate was issued to this server; pass URI of
+     * server. */
+    memset(&server, 0, sizeof server);
+    ne_fill_server_uri(sess, &server);
+    ret = check_identity(&server, cert, NULL);
+    ne_uri_free(&server);
     if (ret < 0) {
         ne_set_error(sess, _("Server certificate was missing commonName "
                              "attribute in subject name"));
@@ -656,11 +689,6 @@ int ne__negotiate_ssl(ne_session *sess)
     } else {
 	/* Store the session. */
 	ctx->sess = SSL_get1_session(ssl);
-    }
-
-    if (sess->notify_cb) {
-	sess->notify_cb(sess->notify_ud, ne_conn_secure,
-                        SSL_get_version(ssl));
     }
 
     return NE_OK;
@@ -957,29 +985,24 @@ int ne_ssl_cert_digest(const ne_ssl_certificate *cert, char *digest)
 #ifdef NE_HAVE_TS_SSL
 /* Implementation of locking callbacks to make OpenSSL thread-safe.
  * If the OpenSSL API was better designed, this wouldn't be necessary.
- * It's not possible to implement the callbacks correctly using POSIX
- * mutexes in any case, since the callback API is itself broken. */
+ * In OpenSSL releases without CRYPTO_set_idptr_callback, it's not
+ * possible to implement the locking in a POSIX-compliant way, since
+ * it's necessary to cast from a pthread_t to an unsigned long at some
+ * point.  */
 
 static pthread_mutex_t *locks;
 static size_t num_locks;
 
+#ifndef HAVE_CRYPTO_SET_IDPTR_CALLBACK
 /* Named to be obvious when it shows up in a backtrace. */
 static unsigned long thread_id_neon(void)
 {
-    /* POSIX does not expose an "unsigned long" thread identifier as
-     * required by OpenSSL.  So OpenSSL thread-safety cannot be
-     * implemented correctly using *the* Unix threading interface.
-     *
-     * This code will work where pthread_self() happens to return
-     * something which, when cast to unsigned long, can be treated as
-     * a unique identifier for the thread.  There's absolutely no
-     * guarantee of this in POSIX.  pthread_t could even be a
-     * structure - in which case this function will fail to compile.
-     * That's probably a good thing, since there's no way to make a
-     * unique ID out of said structure. */
-
+    /* This will break if pthread_t is a structure; upgrading OpenSSL
+     * >= 0.9.9 (which does not require this callback) is the only
+     * solution.  */
     return (unsigned long) pthread_self();
 }
+#endif
 
 /* Another great API design win for OpenSSL: no return value!  So if
  * the lock/unlock fails, all that can be done is to abort. */
@@ -999,6 +1022,17 @@ static void thread_lock_neon(int mode, int n, const char *file, int line)
 
 #endif
 
+/* ID_CALLBACK_IS_{NEON,OTHER} evaluate as true if the currently
+ * registered OpenSSL ID callback is the neon function (_NEON), or has
+ * been overwritten by some other app (_OTHER). */
+#ifdef HAVE_CRYPTO_SET_IDPTR_CALLBACK
+#define ID_CALLBACK_IS_OTHER (0)
+#define ID_CALLBACK_IS_NEON (1)
+#else
+#define ID_CALLBACK_IS_OTHER (CRYPTO_get_id_callback() != NULL)
+#define ID_CALLBACK_IS_NEON (CRYPTO_get_id_callback() == thread_id_neon)
+#endif
+
 int ne__ssl_init(void)
 {
     CRYPTO_malloc_init();
@@ -1012,8 +1046,7 @@ int ne__ssl_init(void)
      * other library will have a longer lifetime in the process than
      * neon.  If the library which has installed the callbacks is
      * unloaded, then all bets are off. */
-    if (CRYPTO_get_id_callback() != NULL
-        || CRYPTO_get_locking_callback() != NULL) {
+    if (ID_CALLBACK_IS_OTHER || CRYPTO_get_locking_callback() != NULL) {
         NE_DEBUG(NE_DBG_SOCKET, "ssl: OpenSSL thread-safety callbacks already installed.\n");
         NE_DEBUG(NE_DBG_SOCKET, "ssl: neon will not replace existing callbacks.\n");
     } else {
@@ -1021,7 +1054,11 @@ int ne__ssl_init(void)
 
         num_locks = CRYPTO_num_locks();
 
+        /* For releases where CRYPTO_set_idptr_callback is present,
+         * the default ID callback should be sufficient. */
+#ifndef HAVE_CRYPTO_SET_IDPTR_CALLBACK
         CRYPTO_set_id_callback(thread_id_neon);
+#endif
         CRYPTO_set_locking_callback(thread_lock_neon);
 
         locks = malloc(num_locks * sizeof *locks);
@@ -1050,10 +1087,12 @@ void ne__ssl_exit(void)
      * come along in the mean-time and trampled over the callbacks
      * installed by neon. */
     if (CRYPTO_get_locking_callback() == thread_lock_neon
-        && CRYPTO_get_id_callback() == thread_id_neon) {
+        && ID_CALLBACK_IS_NEON) {
         size_t n;
 
+#ifndef HAVE_CRYPTO_SET_IDPTR_CALLBACK
         CRYPTO_set_id_callback(NULL);
+#endif
         CRYPTO_set_locking_callback(NULL);
 
         for (n = 0; n < num_locks; n++) {

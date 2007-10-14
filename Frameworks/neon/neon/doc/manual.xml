@@ -150,7 +150,8 @@ ignoring the WebDAV support if desired.</para>
     <referenceinfo>
       <title>neon API reference</title>
       <date>&date;</date>
-      <productname>neon &version;</productname>
+      <productname>neon</productname>
+      <productnumber>&version;</productnumber>
     </referenceinfo>
     
     <title>neon API reference</title>

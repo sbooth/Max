@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_ADD_REQUEST_HEADE" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_add_request_header
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_ADD_REQUEST_HEADE" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,12 +13,16 @@
 .SH "NAME"
 ne_add_request_header, ne_print_request_header \- add headers to a request
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_request.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_request.h>
+.fi
+.ft
 .HP 27
-\fBvoid\ \fBne_add_request_header\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIrequest\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIname\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIvalue\fR\fR\fB);\fR
+.BI "void ne_add_request_header(ne_request\ *" "request" ", const\ char\ *" "name" ", const\ char\ *" "value" ");"
 .HP 29
-\fBvoid\ \fBne_print_request_header\fR\fR\fB(\fR\fBne_request\ *\fR\fB\fIrequest\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIname\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIformat\fR\fR\fB, \fR\fB...\fR\fB);\fR
+.BI "void ne_print_request_header(ne_request\ *" "request" ", const\ char\ *" "name" ", const\ char\ *" "format" ", ...);"
 .SH "DESCRIPTION"
 .PP
 The functions
@@ -38,3 +45,11 @@ string parameter and subsequent variable\-length argument list.
 .SH "SEE ALSO"
 .PP
 ne_request_create
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

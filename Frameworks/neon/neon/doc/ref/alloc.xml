@@ -40,7 +40,6 @@
 	  <funcprototype>
 	    <funcdef>char *<function>ne_strdup</function></funcdef>
 	    <paramdef>const char *<parameter>s</parameter></paramdef>
-	    <paramdef>size_t <parameter>size</parameter></paramdef>
 	  </funcprototype>
 
 	  <funcprototype>

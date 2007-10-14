@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SET_USERAGENT" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_set_useragent
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SET_USERAGENT" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,18 +13,22 @@
 .SH "NAME"
 ne_set_useragent, ne_set_persist, ne_set_read_timeout, ne_get_scheme, ne_get_server_hostport \- common properties for HTTP sessions
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_session.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_session.h>
+.fi
+.ft
 .HP 22
-\fBvoid\ \fBne_set_useragent\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIproduct\fR\fR\fB);\fR
+.BI "void ne_set_useragent(ne_session\ *" "session" ", const\ char\ *" "product" ");"
 .HP 20
-\fBvoid\ \fBne_set_persist\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBint\ \fR\fB\fIflag\fR\fR\fB);\fR
+.BI "void ne_set_persist(ne_session\ *" "session" ", int\ " "flag" ");"
 .HP 25
-\fBvoid\ \fBne_set_read_timeout\fR\fR\fB(\fR\fBne_session\ *\fR\fB\fIsession\fR\fR\fB, \fR\fBint\ \fR\fB\fItimeout\fR\fR\fB);\fR
+.BI "void ne_set_read_timeout(ne_session\ *" "session" ", int\ " "timeout" ");"
 .HP 26
-\fBconst\ char\ *\fBne_get_scheme\fR\fR\fB(\fR\fBne_sesssion\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.BI "const char *ne_get_scheme(ne_sesssion\ *" "session" ");"
 .HP 35
-\fBconst\ char\ *\fBne_get_server_hostport\fR\fR\fB(\fR\fBne_sesssion\ *\fR\fB\fIsession\fR\fR\fB);\fR
+.BI "const char *ne_get_server_hostport(ne_sesssion\ *" "session" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -61,21 +68,35 @@ will be omitted if the default port for the scheme is used.
 .PP
 Set a user\-agent string:
 .sp
+.RS 4
 .nf
 ne_session *sess = ne_session_create(...);
 ne_set_useragent(sess, "MyApplication/2.1");
 .fi
+.RE
 .PP
 Disable use of persistent connections:
 .sp
+.RS 4
 .nf
 ne_session *sess = ne_session_create(...);
 ne_set_persist(sess, 0);
 .fi
+.RE
 .PP
 Set a 30 second read timeout:
 .sp
+.RS 4
 .nf
 ne_session *sess = ne_session_create(...);
 ne_set_read_timeout(sess, 30);
 .fi
+.RE
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+

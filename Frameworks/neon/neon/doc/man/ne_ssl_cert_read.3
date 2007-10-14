@@ -1,8 +1,11 @@
-.\" ** You probably do not want to edit this file directly **
-.\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
-.\" Instead of manually editing it, you probably should edit the DocBook XML
-.\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "NE_SSL_CERT_READ" "3" "23 January 2007" "neon 0.26.3" "neon API reference"
+.\"     Title: ne_ssl_cert_read
+.\"    Author: 
+.\" Generator: DocBook XSL Stylesheets v1.72.0 <http://docbook.sf.net/>
+.\"      Date: 25 September 2007
+.\"    Manual: neon API reference
+.\"    Source: neon 0.27.2
+.\"
+.TH "NE_SSL_CERT_READ" "3" "25 September 2007" "neon 0.27.2" "neon API reference"
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -10,16 +13,20 @@
 .SH "NAME"
 ne_ssl_cert_read, ne_ssl_cert_write, ne_ssl_cert_import, ne_ssl_cert_export \- functions to read or write certificates to and from files or strings
 .SH "SYNOPSIS"
-.PP
-\fB#include <ne_ssl.h>\fR
+.sp
+.ft B
+.nf
+#include <ne_ssl.h>
+.fi
+.ft
 .HP 37
-\fBne_ssl_certificate\ *\fBne_ssl_cert_read\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIfilename\fR\fR\fB);\fR
+.BI "ne_ssl_certificate *ne_ssl_cert_read(const\ char\ *" "filename" ");"
 .HP 22
-\fBint\ \fBne_ssl_cert_write\fR\fR\fB(\fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB, \fR\fBconst\ char\ *\fR\fB\fIfilename\fR\fR\fB);\fR
+.BI "int ne_ssl_cert_write(const\ ne_ssl_certificate\ *" "cert" ", const\ char\ *" "filename" ");"
 .HP 39
-\fBne_ssl_certificate\ *\fBne_ssl_cert_import\fR\fR\fB(\fR\fBconst\ char\ *\fR\fB\fIdata\fR\fR\fB);\fR
+.BI "ne_ssl_certificate *ne_ssl_cert_import(const\ char\ *" "data" ");"
 .HP 25
-\fBchar\ *\fBne_ssl_cert_export\fR\fR\fB(\fR\fBconst\ ne_ssl_certificate\ *\fR\fB\fIcert\fR\fR\fB);\fR
+.BI "char *ne_ssl_cert_export(const\ ne_ssl_certificate\ *" "cert" ");"
 .SH "DESCRIPTION"
 .PP
 The
@@ -63,3 +70,11 @@ The string produced by
 is the base64 encoding of the DER representation of the certificate. The file written by
 \fBne_ssl_cert_write\fR
 uses the PEM format: this is the base64 encoding of the DER representation with newlines every 64 characters, and start and end marker lines.
+.SH "AUTHOR"
+.PP
+\fBJoe Orton\fR <\&neon@webdav.org\&>
+.sp -1n
+.IP "" 4
+Author.
+.SH "COPYRIGHT"
+
