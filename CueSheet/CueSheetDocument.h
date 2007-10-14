@@ -20,51 +20,112 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "CueSheetTrack.h"
+
 @interface CueSheetDocument : NSDocument
 {
-	// Disc properties
-	int					_mode;
-	NSString			*_MCN;
+    IBOutlet NSArrayController		*_trackController;
+    IBOutlet NSDrawer				*_trackDrawer;
+    IBOutlet NSDrawer				*_artDrawer;
+    IBOutlet NSTableView			*_trackTable;
 
-	// CD-TEXT
-	NSString			*_title;
-	NSString			*_performer;
-	NSString			*_songwriter;
-	NSString			*_composer;
-	NSString			*_arranger;
-	NSString			*_UPC;
+	// Disc information
+	NSString						*_title;
+	NSString						*_artist;
+	unsigned						_year;
+	NSString						*_genre;
+	NSString						*_composer;
+	NSString						*_comment;
 	
-	NSMutableArray		*_tracks;
+	NSImage							*_albumArt;
+	
+	NSDate							*_albumArtDownloadDate;
+	
+	// Other disc info
+	unsigned						_discNumber;
+	unsigned						_discTotal;
+	BOOL							_compilation;
+	
+	NSString						*_MCN;
+	
+	// Array of audio tracks
+	NSMutableArray					*_tracks;
 }
 
-- (int)				mode;
-- (void)			setMode:(int)mode;
+- (NSArray *)		genres;
 
-- (NSString *)		MCN;
-- (void)			setMCN:(NSString *)MCN;
+// State
+- (BOOL)			encodeAllowed;
+- (BOOL)			queryMusicBrainzAllowed;
 
+- (BOOL)			emptySelection;
+
+// Action methods
+- (IBAction)		selectAll:(id)sender;
+- (IBAction)		selectNone:(id)sender;
+
+- (IBAction)		encode:(id)sender;
+
+- (IBAction)		queryMusicBrainz:(id)sender;
+- (void)			queryMusicBrainzNonInteractive;
+
+- (IBAction)		toggleTrackInformation:(id)sender;
+- (IBAction)		toggleAlbumArt:(id)sender;
+
+- (IBAction)		selectNextTrack:(id)sender;
+- (IBAction)		selectPreviousTrack:(id)sender;
+
+- (IBAction)		downloadAlbumArt:(id)sender;
+- (IBAction)		selectAlbumArt:(id)sender;
+
+// Miscellaneous
+- (NSArray *)		selectedTracks;
+
+// Metadata
 - (NSString *)		title;
 - (void)			setTitle:(NSString *)title;
 
-- (NSString *)		performer;
-- (void)			setPerformer:(NSString *)performer;
+- (NSString *)		artist;
+- (void)			setArtist:(NSString *)artist;
 
-- (NSString *)		songwriter;
-- (void)			setSongwriter:(NSString *)songwriter;
+- (unsigned)		year;
+- (void)			setYear:(unsigned)year;
+
+- (NSString *)		genre;
+- (void)			setGenre:(NSString *)genre;
 
 - (NSString *)		composer;
 - (void)			setComposer:(NSString *)composer;
 
-- (NSString *)		arranger;
-- (void)			setArranger:(NSString *)arranger;
+- (NSString *)		comment;
+- (void)			setComment:(NSString *)comment;
 
-- (NSString *)		UPC;
-- (void)			setUPC:(NSString *)UPC;
+- (NSImage *)		albumArt;
+- (void)			setAlbumArt:(NSImage *)albumArt;
 
+- (NSDate *)		albumArtDownloadDate;
+- (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
+
+- (unsigned)		albumArtWidth;
+- (unsigned)		albumArtHeight;
+
+- (unsigned)		discNumber;
+- (void)			setDiscNumber:(unsigned)discNumber;
+
+- (unsigned)		discTotal;
+- (void)			setDiscTotal:(unsigned)discTotal;
+
+- (BOOL)			compilation;
+- (void)			setCompilation:(BOOL)compilation;
+
+- (NSString *)		MCN;
+- (void)			setMCN:(NSString *)MCN;
+
+	// KVC methods
 - (unsigned)		countOfTracks;
-- (id)				objectInTracksAtIndex:(unsigned)index;
+- (CueSheetTrack *)	objectInTracksAtIndex:(unsigned)index;
 
-- (void)			insertObject:(id)track inTracksAtIndex:(unsigned)index;
+- (void)			insertObject:(CueSheetTrack *)track inTracksAtIndex:(unsigned)index;
 - (void)			removeObjectFromTracksAtIndex:(unsigned)index;
 
 @end
