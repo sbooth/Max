@@ -28,30 +28,19 @@ static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.Co
 static NSString		*QueryMusicBrainzToolbarItemIdentifier		= @"org.sbooth.Max.CompactDiscDocument.Toolbar.QueryMusicBrainz";
 static NSString		*EjectDiscToolbarItemIdentifier				= @"org.sbooth.Max.CompactDiscDocument.Toolbar.EjectDisc";
 
-enum {
-	kEncodeToolbarItemTag					= 1,
-	kTrackInfoToolbarItemTag				= 2,
-	kQueryMusicBrainzToolbarItemTag			= 3,
-	kEjectDiscToolbarItemTag				= 5,
-	kSelectNextTrackToolbarItemTag			= 6,
-	kSelectPreviousTrackToolbarItemTag		= 7,
-	kAlbumArtToolbarItemTag					= 8
-};
-
 @implementation CompactDiscDocumentToolbar
 
 - (id) initWithCompactDiscDocument:(CompactDiscDocument *)document
 {
 	if((self = [super initWithIdentifier:@"org.sbooth.Max.CompactDiscDocument.Toolbar"])) {
 		_document = [document retain];
-		return self;
 	}
-	return nil;
+	return self;
 }
 
 - (void) dealloc
 {
-	[_document release];	_document = nil;
+	[_document release], _document = nil;
 	
 	[super dealloc];
 }
@@ -63,12 +52,14 @@ enum {
 	NSToolbarItem	*item;
 	
 	while((item = [enumerator nextObject])) {
-		switch([item tag]) {
-			default:								[item setEnabled:YES];									break;
-			case kEncodeToolbarItemTag:				[item setEnabled:[_document encodeAllowed]];			break;
-			case kQueryMusicBrainzToolbarItemTag:	[item setEnabled:[_document queryMusicBrainzAllowed]];	break;
-			case kEjectDiscToolbarItemTag:			[item setEnabled:[_document ejectDiscAllowed]];			break;
-		}
+		if([item action] == @selector(encode:))
+			[item setEnabled:[_document encodeAllowed]];
+		if([item action] == @selector(queryMusicBrainz:))
+			[item setEnabled:[_document queryMusicBrainzAllowed]];
+		if([item action] == @selector(ejectDisc:))
+			[item setEnabled:[_document ejectDiscAllowed]];
+		else
+			[item setEnabled:YES];
 	}
 }
 
@@ -81,11 +72,10 @@ enum {
     if([itemIdentifier isEqualToString:EncodeToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kEncodeToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Encode", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Encode", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Encode the selected tracks", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"EncodeToolbarImage"]];
+		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Encode", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel:NSLocalizedStringFromTable(@"Encode", @"CompactDisc", @"")];
+		[toolbarItem setToolTip:NSLocalizedStringFromTable(@"Encode the selected tracks", @"CompactDisc", @"")];
+		[toolbarItem setImage:[NSImage imageNamed:@"EncodeToolbarImage"]];
 
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(encode:)];
@@ -93,11 +83,10 @@ enum {
     else if([itemIdentifier isEqualToString:TrackInfoToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kTrackInfoToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Tracks", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Tracks", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide detailed track information", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"TrackInfoToolbarImage"]];
+		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Tracks", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel:NSLocalizedStringFromTable(@"Tracks", @"CompactDisc", @"")];
+		[toolbarItem setToolTip:NSLocalizedStringFromTable(@"Show or hide detailed track information", @"CompactDisc", @"")];
+		[toolbarItem setImage:[NSImage imageNamed:@"TrackInfoToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(toggleTrackInformation:)];
@@ -105,11 +94,10 @@ enum {
     else if([itemIdentifier isEqualToString:AlbumArtToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kAlbumArtToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the artwork associated with this album", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"AlbumArtToolbarImage"]];
+		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel:NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
+		[toolbarItem setToolTip:NSLocalizedStringFromTable(@"Show or hide the artwork associated with this album", @"CompactDisc", @"")];
+		[toolbarItem setImage:[NSImage imageNamed:@"AlbumArtToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(toggleAlbumArt:)];
@@ -117,11 +105,10 @@ enum {
     else if([itemIdentifier isEqualToString:SelectNextTrackToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kSelectNextTrackToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Next", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Next", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select the next track for editing", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"SelectNextTrackToolbarImage"]];
+		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Next", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel:NSLocalizedStringFromTable(@"Next", @"CompactDisc", @"")];
+		[toolbarItem setToolTip:NSLocalizedStringFromTable(@"Select the next track for editing", @"CompactDisc", @"")];
+		[toolbarItem setImage:[NSImage imageNamed:@"SelectNextTrackToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(selectNextTrack:)];
@@ -129,11 +116,10 @@ enum {
     else if([itemIdentifier isEqualToString:SelectPreviousTrackToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kSelectPreviousTrackToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Previous", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Previous", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Select the previous track for editing", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"SelectPreviousTrackToolbarImage"]];
+		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Previous", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel:NSLocalizedStringFromTable(@"Previous", @"CompactDisc", @"")];
+		[toolbarItem setToolTip:NSLocalizedStringFromTable(@"Select the previous track for editing", @"CompactDisc", @"")];
+		[toolbarItem setImage:[NSImage imageNamed:@"SelectPreviousTrackToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(selectPreviousTrack:)];
@@ -141,11 +127,10 @@ enum {
     else if([itemIdentifier isEqualToString:QueryMusicBrainzToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kQueryMusicBrainzToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Query", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Query", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Query MusicBrainz for album information", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"MusicBrainz"]];
+		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Query", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel:NSLocalizedStringFromTable(@"Query", @"CompactDisc", @"")];
+		[toolbarItem setToolTip:NSLocalizedStringFromTable(@"Query MusicBrainz for album information", @"CompactDisc", @"")];
+		[toolbarItem setImage:[NSImage imageNamed:@"MusicBrainz"]];
 		
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(queryMusicBrainz:)];
@@ -153,25 +138,23 @@ enum {
     else if([itemIdentifier isEqualToString:EjectDiscToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
-		[toolbarItem setTag:kEjectDiscToolbarItemTag];
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Eject", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Eject", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Eject the disc", @"CompactDisc", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"EjectDiscToolbarImage"]];
+		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Eject", @"CompactDisc", @"")];
+		[toolbarItem setPaletteLabel:NSLocalizedStringFromTable(@"Eject", @"CompactDisc", @"")];
+		[toolbarItem setToolTip:NSLocalizedStringFromTable(@"Eject the disc", @"CompactDisc", @"")];
+		[toolbarItem setImage:[NSImage imageNamed:@"EjectDiscToolbarImage"]];
 		
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(ejectDisc:)];
 	}
-	else {
+	else
 		toolbarItem = nil;
-    }
 	
     return toolbarItem;
 }
 
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
-    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier, 
+    return [NSArray arrayWithObjects:EncodeToolbarItemIdentifier, 
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		QueryMusicBrainzToolbarItemIdentifier,
 		NSToolbarSpaceItemIdentifier, EjectDiscToolbarItemIdentifier, 
@@ -180,7 +163,7 @@ enum {
 
 - (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
 {
-    return [NSArray arrayWithObjects: EncodeToolbarItemIdentifier,
+    return [NSArray arrayWithObjects:EncodeToolbarItemIdentifier,
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		SelectPreviousTrackToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
 		QueryMusicBrainzToolbarItemIdentifier,

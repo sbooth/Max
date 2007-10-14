@@ -27,6 +27,7 @@
 #import "Genres.h"
 #import "RipperController.h"
 #import "PreferencesController.h"
+#import "FormatsController.h"
 #import "Encoder.h"
 #import "MediaController.h"
 
@@ -99,24 +100,18 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if([item action] == @selector(encode:)) {
+	if([item action] == @selector(encode:))
 		return [self encodeAllowed];
-	}
-	else if([item action] == @selector(queryMusicBrainz:)) {
+	else if([item action] == @selector(queryMusicBrainz:))
 		return [self queryMusicBrainzAllowed];
-	}
-	else if([item action] == @selector(ejectDisc:)) {
+	else if([item action] == @selector(ejectDisc:))
 		return [self ejectDiscAllowed];
-	}
-	else if([item action] == @selector(selectNextTrack:)) {
+	else if([item action] == @selector(selectNextTrack:))
 		return [_trackController canSelectNext];
-	}
-	else if([item action] == @selector(selectPreviousTrack:)) {
+	else if([item action] == @selector(selectPreviousTrack:))
 		return [_trackController canSelectPrevious];
-	}
-	else {
+	else
 		return [super validateMenuItem:item];
-	}
 }
 
 - (void) makeWindowControllers 
@@ -318,25 +313,21 @@
 {
 	unsigned i;
 	
-	for(i = 0; i < [self countOfTracks]; ++i) {
+	for(i = 0; i < [self countOfTracks]; ++i)
 		[[self objectInTracksAtIndex:i] setSelected:YES];
-	}
 }
 
 - (IBAction) selectNone:(id)sender
 {
 	unsigned i;
 	
-	for(i = 0; i < [self countOfTracks]; ++i) {
+	for(i = 0; i < [self countOfTracks]; ++i)
 		[[self objectInTracksAtIndex:i] setSelected:NO];
-	}
 }
 
 - (IBAction) encode:(id)sender
 {
 	@try {
-		NSMutableDictionary		*settings				= nil;
-		NSArray					*encoders				= nil;
 		NSMutableDictionary		*postProcessingOptions	= nil;
 		NSArray					*applicationPaths		= nil;
 		unsigned				i;
@@ -349,10 +340,34 @@
 		NSAssert(NO == [self emptySelection], NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @""));
 		NSAssert(NO == [self ripInProgress] && NO == [self encodeInProgress], NSLocalizedStringFromTable(@"A ripping or encoding operation is already in progress.", @"Exceptions", @""));		
 		
-		settings			= [NSMutableDictionary dictionary];
-		
 		// Encoders
-		encoders			= [[[NSUserDefaults standardUserDefaults] arrayForKey:@"outputFormats"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];		
+		NSArray *encoders = [[FormatsController sharedController] selectedFormats];
+
+		// Verify at least one output format is selected
+		if(0 == [encoders count]) {
+			int		result;
+			
+			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+			[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
+			[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
+			[alert setMessageText:NSLocalizedStringFromTable(@"No output formats are selected.", @"General", @"")];
+			[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
+			[alert setAlertStyle: NSWarningAlertStyle];
+			
+			result = [alert runModal];
+			
+			if(NSAlertFirstButtonReturn == result) {
+				// do nothing
+			}
+			else if(NSAlertSecondButtonReturn == result) {
+				[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
+				[[PreferencesController sharedPreferences] showWindow:self];
+			}
+			
+			return;
+		}
+
+		NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 		[settings setValue:encoders forKey:@"encoders"];
 		
 		// Ripper settings
@@ -361,12 +376,12 @@
 		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"generateCueSheet"] forKey:@"generateCueSheet"];
 		
 		// File locations
-		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"saveSettingsInComment"] forKey:@"saveSettingsInComment"];
 		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] forKey:@"outputDirectory"];
 //		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"convertInPlace"] forKey:@"convertInPlace"];
 		[settings setValue:[[[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] stringByExpandingTildeInPath] forKey:@"temporaryDirectory"];
 		
 		// Conversion parameters
+		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"saveSettingsInComment"] forKey:@"saveSettingsInComment"];
 		//		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"deleteSourceFiles"] forKey:@"deleteSourceFiles"];
 		[settings setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"overwriteOutputFiles"] forKey:@"overwriteOutputFiles"];
 		
@@ -468,13 +483,11 @@
 {
 	unsigned				matchCount	= 0;
 	
-	if(NO == [self queryMusicBrainzAllowed]) {
+	if(NO == [self queryMusicBrainzAllowed])
 		return;
-	}
 	
-	if(nil == _mbHelper) {
-		_mbHelper	= [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
-	}
+	if(nil == _mbHelper)
+		_mbHelper	= [[MusicBrainzHelper alloc] initWithCompactDiscDocument:self];
 	
 	[_mbHelper performQuery:sender];
 	
@@ -570,19 +583,19 @@
 
 #pragma mark Accessors
 
-- (CompactDisc *)	disc								{ return _disc; }
+- (CompactDisc *)	disc								{ return [[_disc retain] autorelease]; }
 - (BOOL)			discInDrive							{ return _discInDrive; }
 - (NSString *)		discID								{ return ([self discInDrive] ? [[self disc] discID] : _discID); }
 
-- (NSString *)		title								{ return _title; }
-- (NSString *)		artist								{ return _artist; }
+- (NSString *)		title								{ return [[_title retain] autorelease]; }
+- (NSString *)		artist								{ return [[_artist retain] autorelease]; }
 - (unsigned)		year								{ return _year; }
-- (NSString *)		genre								{ return _genre; }
-- (NSString *)		composer							{ return _composer; }
-- (NSString *)		comment								{ return _comment; }
+- (NSString *)		genre								{ return [[_genre retain] autorelease]; }
+- (NSString *)		composer							{ return [[_composer retain] autorelease]; }
+- (NSString *)		comment								{ return [[_comment retain] autorelease]; }
 
-- (NSImage *)		albumArt							{ return _albumArt; }
-- (NSDate *)		albumArtDownloadDate				{ return _albumArtDownloadDate; }
+- (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
+- (NSDate *)		albumArtDownloadDate				{ return [[_albumArtDownloadDate retain] autorelease]; }
 - (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
 - (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
 
@@ -590,7 +603,7 @@
 - (unsigned)		discTotal							{ return _discTotal; }
 - (BOOL)			compilation							{ return _compilation; }
 
-- (NSString *)		MCN									{ return _MCN; }
+- (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
 - (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
