@@ -23,16 +23,19 @@
 #import "EncoderMethods.h"
 #import "EncoderTaskMethods.h"
 #import "Decoder.h"
+#import "RegionDecoder.h"
 
 // An Encoder is responsible for taking audio input from a Decoder and turning it into a different format
 @interface Encoder : NSObject <EncoderMethods>
 {
 	id <EncoderTaskMethods>			_delegate;
 	Decoder							*_decoder;
+	RegionDecoder					*_regionDecoder;
 }
 
 - (id)						initWithFilename:(NSString *)filename;
 
 - (Decoder *)				decoder;
+- (RegionDecoder *)			regionDecoder;
 
 @end

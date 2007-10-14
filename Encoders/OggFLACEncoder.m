@@ -285,7 +285,6 @@
 	int16_t			*buffer16				= NULL;
 	int32_t			*buffer32				= NULL;
 	
-	int8_t			byteOne, byteTwo, byteThree;
 	int32_t			constructedSample;
 	
 	unsigned		wideSample;

@@ -84,10 +84,7 @@
 		[[self delegate] setStartTime:startTime];	
 		[[self delegate] setStarted:YES];
 		
-		// Setup the decoder
-		[[self decoder] finalizeSetup];
-		
-		totalFrames			= [[self decoder] totalFrames];
+		totalFrames			= [[self regionDecoder] totalFrames];
 		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
@@ -222,12 +219,11 @@
 			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount = [[self regionDecoder] readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
-			if(0 == frameCount) {
+			if(0 == frameCount)
 				break;
-			}
 			
 			// Encode the PCM data
 			[self encodeChunk:&bufferList frameCount:frameCount];
@@ -239,9 +235,8 @@
 			if(0 == iterations % MAX_DO_POLL_FREQUENCY) {
 				
 				// Check if we should stop, and if so throw an exception
-				if([[self delegate] shouldStop]) {
+				if([[self delegate] shouldStop])
 					@throw [StopException exceptionWithReason:@"Stop requested by user" userInfo:nil];
-				}
 				
 				// Update UI
 				percentComplete		= ((double)(totalFrames - framesToRead)/(double) totalFrames) * 100.0;
@@ -325,7 +320,6 @@
 	int16_t			*buffer16				= NULL;
 	int32_t			*buffer32				= NULL;
 	
-	int8_t			byteOne, byteTwo, byteThree;
 	int32_t			constructedSample;
 	
 	unsigned		wideSample;

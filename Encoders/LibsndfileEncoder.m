@@ -48,7 +48,6 @@
 	
 	unsigned long					iterations							= 0;
 
-	int8_t							byteOne, byteTwo, byteThree;
 	int32_t							constructedSample;
 	
 	unsigned						wideSample, sample, channel;

@@ -21,6 +21,10 @@
 #import "Encoder.h"
 #import "EncoderTask.h"
 
+@interface Encoder (Private)
+- (void) setRegionDecoder:(RegionDecoder *)regionDecoder;
+@end
+
 @implementation Encoder
 
 + (void) connectWithPorts:(NSArray *)portArray
@@ -35,6 +39,24 @@
 		connection		= [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0] sendPort:[portArray objectAtIndex:1]];
 		owner			= (EncoderTask *)[connection rootProxy];
 		encoder			= [[self alloc] initWithFilename:[[owner taskInfo] inputFilenameAtInputFileIndex]];
+		
+		if(nil != [[[owner taskInfo] settings] valueForKey:@"sectorsToConvert"]) {
+			NSDictionary *sectorsToConvert = [[[owner taskInfo] settings] valueForKey:@"sectorsToConvert"];
+
+			unsigned firstSector	= [[sectorsToConvert valueForKey:@"firstSector"] unsignedIntValue];
+			unsigned lastSector		= [[sectorsToConvert valueForKey:@"lastSector"] unsignedIntValue];
+			
+			SInt64 firstFrame	= (firstSector / 75) * [[encoder decoder] pcmFormat].mSampleRate;
+			SInt64 lastFrame	= (lastSector / 75) * [[encoder decoder] pcmFormat].mSampleRate;
+			UInt32 frameCount	= lastFrame - firstFrame;
+			
+			RegionDecoder *regionDecoder = [RegionDecoder regionDecoderForDecoder:[encoder decoder] startingFrame:firstFrame framesToPlay:frameCount];
+			[encoder setRegionDecoder:regionDecoder];
+		}
+		else {
+			RegionDecoder *regionDecoder = [RegionDecoder regionDecoderForDecoder:[encoder decoder]];
+			[encoder setRegionDecoder:regionDecoder];
+		}
 		
 		[encoder setDelegate:owner];
 		[owner encoderReady:encoder];		
@@ -54,23 +76,24 @@
 - (id) initWithFilename:(NSString *)filename
 {
 	if((self = [super init])) {
-
 		_decoder = [[Decoder decoderForFilename:filename] retain];
 		NSAssert1(nil != _decoder, @"Unable to create a Decoder for %@.", [[NSFileManager defaultManager] displayNameAtPath:filename]);
 
-		return self;
+		[_decoder finalizeSetup];
 	}
-	return nil;
+	return self;
 }
 
 - (void) dealloc
 {
-	[_decoder release];			_decoder = nil;
+	[_decoder release],			_decoder = nil;
+	[_regionDecoder release],	_regionDecoder = nil;
 	
 	[super dealloc];
 }
 
 - (Decoder *)			decoder											{ return [[_decoder retain] autorelease]; }
+- (RegionDecoder *)		regionDecoder									{ return [[_regionDecoder retain] autorelease]; }
 
 - (id <EncoderTaskMethods>)	delegate									{ return _delegate; }
 - (void)				setDelegate:(id <EncoderTaskMethods>)delegate	{ _delegate = delegate; }
@@ -78,5 +101,16 @@
 - (oneway void)			encodeToFile:(NSString *)filename				{}
 
 - (NSString *)			settingsString									{ return nil; }
+
+@end
+
+@implementation Encoder (Private)
+
+- (void) setRegionDecoder:(RegionDecoder *)regionDecoder
+{
+	NSParameterAssert(nil != regionDecoder);
+	[_regionDecoder release];
+	_regionDecoder = [regionDecoder retain];
+}
 
 @end
