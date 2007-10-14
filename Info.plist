@@ -156,7 +156,7 @@
 			<key>CFBundleTypeName</key>
 			<string>CD Cue Sheet</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSDocumentClass</key>
@@ -260,6 +260,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>aiff</string>
+				<string>aif</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>AIFF Audio</string>
