@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		8C0406530B5C584000648158 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C04064E0B5C584000648158 /* InfoPlist.strings */; };
+		8C05F19C0CC2DAA1006E5746 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; };
+		8C05F19D0CC2DAA1006E5746 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; };
+		8C05F19E0CC2DAAC006E5746 /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; };
+		8C05F19F0CC2DAAC006E5746 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; };
 		8C0883620A092EA500CAC5D0 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */; };
 		8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */; };
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
@@ -206,10 +210,6 @@
 		8CE251120AD335F2009E1323 /* MusicBrainzDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */; };
 		8CE608BF0C8ADC9000AEC125 /* RegionDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE607870C8ACD7900AEC125 /* RegionDecoder.m */; };
 		8CE608D20C8ADCE900AEC125 /* FLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */; };
-		8CEA06260AC75D0D009E46CB /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA06120AC75D0D009E46CB /* Sparkle.framework */; };
-		8CEA06270AC75D12009E46CB /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA06120AC75D0D009E46CB /* Sparkle.framework */; };
-		8CEA08D80AC784A6009E46CB /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA08D00AC784A6009E46CB /* Growl.framework */; };
-		8CEA08D90AC784AD009E46CB /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA08D00AC784A6009E46CB /* Growl.framework */; };
 		8CEA094D0AC787EF009E46CB /* ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA09470AC787EF009E46CB /* ogg.framework */; };
 		8CEA094E0AC787F5009E46CB /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA09470AC787EF009E46CB /* ogg.framework */; };
 		8CEA0A060AC78E8A009E46CB /* vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA09FF0AC78E8A009E46CB /* vorbis.framework */; };
@@ -253,6 +253,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8C05F19E0CC2DAAC006E5746 /* Growl.framework in Copy Frameworks */,
+				8C05F19F0CC2DAAC006E5746 /* Sparkle.framework in Copy Frameworks */,
 				8C98B44A0C4743DC004F7BF6 /* neon.framework in Copy Frameworks */,
 				8C98B4490C4743D6004F7BF6 /* musicbrainz3.framework in Copy Frameworks */,
 				8C98B4480C4743CC004F7BF6 /* discid.framework in Copy Frameworks */,
@@ -271,8 +273,6 @@
 				8CEA0A890AC79551009E46CB /* lame.framework in Copy Frameworks */,
 				8CEA0A070AC78E8F009E46CB /* vorbis.framework in Copy Frameworks */,
 				8CEA094E0AC787F5009E46CB /* ogg.framework in Copy Frameworks */,
-				8CEA08D90AC784AD009E46CB /* Growl.framework in Copy Frameworks */,
-				8CEA06270AC75D12009E46CB /* Sparkle.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,6 +298,8 @@
 		8C0406500B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Log.strings; sourceTree = "<group>"; };
 		8C0406510B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C0406520B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/UndoRedo.strings; sourceTree = "<group>"; };
+		8C05F1800CC2DAA1006E5746 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = Frameworks/Growl.framework; sourceTree = "<group>"; };
+		8C05F1810CC2DAA1006E5746 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
 		8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = AlbumArtDefaults.plist; sourceTree = "<group>"; };
 		8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
@@ -719,8 +721,6 @@
 		8CE6F51D08CD60970028DA37 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8CE9746209461F35000127B6 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ComponentVersions.nib; sourceTree = "<group>"; };
 		8CE9B39708CF7937007FCDB3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		8CEA06120AC75D0D009E46CB /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle/build/Release/Sparkle.framework; sourceTree = "<group>"; };
-		8CEA08D00AC784A6009E46CB /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = Frameworks/Growl/build/Deployment/Growl.framework; sourceTree = "<group>"; };
 		8CEA09470AC787EF009E46CB /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = Frameworks/ogg/build/Release/ogg.framework; sourceTree = "<group>"; };
 		8CEA09FF0AC78E8A009E46CB /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = Frameworks/vorbis/build/Release/vorbis.framework; sourceTree = "<group>"; };
 		8CEA0A830AC7954C009E46CB /* lame.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = lame.framework; path = Frameworks/lame/build/Release/lame.framework; sourceTree = "<group>"; };
@@ -789,8 +789,6 @@
 				8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */,
 				8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */,
 				8C244AFB0AC6DFEF001334D0 /* Security.framework in Frameworks */,
-				8CEA06260AC75D0D009E46CB /* Sparkle.framework in Frameworks */,
-				8CEA08D80AC784A6009E46CB /* Growl.framework in Frameworks */,
 				8CEA094D0AC787EF009E46CB /* ogg.framework in Frameworks */,
 				8CEA0A060AC78E8A009E46CB /* vorbis.framework in Frameworks */,
 				8CEA0A880AC7954C009E46CB /* lame.framework in Frameworks */,
@@ -810,6 +808,8 @@
 				8C98B3C60C473F0A004F7BF6 /* discid.framework in Frameworks */,
 				8C98B3E10C473F1C004F7BF6 /* neon.framework in Frameworks */,
 				8C98B4010C473F2C004F7BF6 /* musicbrainz3.framework in Frameworks */,
+				8C05F19C0CC2DAA1006E5746 /* Growl.framework in Frameworks */,
+				8C05F19D0CC2DAA1006E5746 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1359,6 +1359,8 @@
 		8CEA08B70AC78374009E46CB /* External Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C05F1800CC2DAA1006E5746 /* Growl.framework */,
+				8C05F1810CC2DAA1006E5746 /* Sparkle.framework */,
 				8C98B3E20C473F2C004F7BF6 /* musicbrainz3.framework */,
 				8C98B3C70C473F1C004F7BF6 /* neon.framework */,
 				8C98B3C10C473F0A004F7BF6 /* discid.framework */,
@@ -1377,8 +1379,6 @@
 				8CEA0A830AC7954C009E46CB /* lame.framework */,
 				8CEA09FF0AC78E8A009E46CB /* vorbis.framework */,
 				8CEA09470AC787EF009E46CB /* ogg.framework */,
-				8CEA08D00AC784A6009E46CB /* Growl.framework */,
-				8CEA06120AC75D0D009E46CB /* Sparkle.framework */,
 			);
 			name = "External Frameworks";
 			sourceTree = "<group>";
