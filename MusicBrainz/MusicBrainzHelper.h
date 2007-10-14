@@ -19,21 +19,18 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "CompactDisc.h"
 
+@class CompactDiscDocument;
 @class MusicBrainzHelperData;
 
 // Following the design of libmusicbrainz, all indexes in this object are one-based
 @interface MusicBrainzHelper : NSObject
 {
 	MusicBrainzHelperData		*_data;
-	CompactDisc					*_disc;
+	CompactDiscDocument			*_document;
 }
 
-- (id)				initWithCompactDisc:(CompactDisc *)disc;
-
-// MusicBrainz disc ID (does not go to server)
-- (NSString *)		discID;
+- (id)				initWithCompactDiscDocument:(CompactDiscDocument *)document;
 
 // Hits the server for the requested disc
 - (IBAction)		performQuery:(id)sender;
