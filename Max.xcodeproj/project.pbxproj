@@ -12,6 +12,10 @@
 		8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */; };
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
 		8C0883690A092EA500CAC5D0 /* ParanoiaDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */; };
+		8C1370390C42649000D0238C /* FormatsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C1370370C42649000D0238C /* FormatsController.m */; };
+		8C1370730C4267D800D0238C /* Formats.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C1370710C4267D800D0238C /* Formats.nib */; };
+		8C1371260C42F43E00D0238C /* CueSheetTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C1371240C42F43E00D0238C /* CueSheetTrack.m */; };
+		8C13724D0C432CF400D0238C /* CueSheetDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C13724B0C432CF400D0238C /* CueSheetDocumentToolbar.m */; };
 		8C1F78150B4218910066072B /* WavPack.png in Resources */ = {isa = PBXBuildFile; fileRef = 8C1F78140B4218910066072B /* WavPack.png */; };
 		8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
@@ -30,6 +34,15 @@
 		8C328123096D0CDF00608C9D /* Acknowledgments.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C328122096D0CDF00608C9D /* Acknowledgments.nib */; };
 		8C328182096D12CA00608C9D /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C328181096D12CA00608C9D /* Exceptions.strings */; };
 		8C37D3F80B3ABF0F00C5F85A /* FileConversion.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C37D3F60B3ABF0F00C5F85A /* FileConversion.strings */; };
+		8C397B920CC1D997004EFC92 /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */; };
+		8C397B930CC1D99B004EFC92 /* LibsndfileDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B390ABDE11800C5AE9F /* LibsndfileDecoder.m */; };
+		8C397B940CC1D99C004EFC92 /* MonkeysAudioDecoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3B0ABDE11800C5AE9F /* MonkeysAudioDecoder.mm */; };
+		8C397B950CC1D99D004EFC92 /* MusepackDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3D0ABDE11800C5AE9F /* MusepackDecoder.m */; };
+		8C397B960CC1D99E004EFC92 /* OggFLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3F0ABDE11800C5AE9F /* OggFLACDecoder.m */; };
+		8C397B970CC1D99F004EFC92 /* OggSpeexDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B410ABDE11800C5AE9F /* OggSpeexDecoder.m */; };
+		8C397B980CC1D9A0004EFC92 /* OggVorbisDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */; };
+		8C397B990CC1D9A2004EFC92 /* ShortenDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */; };
+		8C397B9A0CC1D9A3004EFC92 /* WavPackDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */; };
 		8C401720094901A6003413BE /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C401716094901A6003413BE /* CoreAudio.framework */; };
 		8C45050C0A8EEC14001BF1A1 /* AmazonAlbumArtSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */; };
 		8C4D4534093E6CB300A88927 /* GeneralPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8C4D452E093E6CB200A88927 /* GeneralPreferences.nib */; };
@@ -127,6 +140,13 @@
 		8C9451470A12E4D700C8DCAE /* CompactDiscDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513B0A12E4D700C8DCAE /* CompactDiscDocument.m */; };
 		8C9451490A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */; };
 		8C94514D0A12E4D700C8DCAE /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451410A12E4D700C8DCAE /* Track.m */; };
+		8C98B3C60C473F0A004F7BF6 /* discid.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98B3C10C473F0A004F7BF6 /* discid.framework */; };
+		8C98B3E10C473F1C004F7BF6 /* neon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98B3C70C473F1C004F7BF6 /* neon.framework */; };
+		8C98B4010C473F2C004F7BF6 /* musicbrainz3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98B3E20C473F2C004F7BF6 /* musicbrainz3.framework */; };
+		8C98B4480C4743CC004F7BF6 /* discid.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98B3C10C473F0A004F7BF6 /* discid.framework */; };
+		8C98B4490C4743D6004F7BF6 /* musicbrainz3.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98B3E20C473F2C004F7BF6 /* musicbrainz3.framework */; };
+		8C98B44A0C4743DC004F7BF6 /* neon.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C98B3C70C473F1C004F7BF6 /* neon.framework */; };
+		8C98B4600C4745C4004F7BF6 /* MusicBrainzHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CA9C1100AD2ED68000EF903 /* MusicBrainzHelper.mm */; };
 		8C99DD5D0A82B97C00A8CBE4 /* FileArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */; };
 		8C99DD5F0A82B97C00A8CBE4 /* FileConversionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */; };
 		8C99DD610A82B97C00A8CBE4 /* FilesTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */; };
@@ -138,11 +158,8 @@
 		8CA73F4B0A0FE6F300B12829 /* ComparisonRipperDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */; };
 		8CA99CFD0AD06B57000EF903 /* expat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99CF70AD06B57000EF903 /* expat.framework */; };
 		8CA99CFE0AD06B64000EF903 /* expat.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99CF70AD06B57000EF903 /* expat.framework */; };
-		8CA99D020AD06CBB000EF903 /* musicbrainz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99D000AD06CBB000EF903 /* musicbrainz.framework */; };
-		8CA99D030AD06CC3000EF903 /* musicbrainz.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA99D000AD06CBB000EF903 /* musicbrainz.framework */; };
 		8CA9B45A0AD21999000EF903 /* CompactDisc.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C9451390A12E4D700C8DCAE /* CompactDisc.m */; };
 		8CA9B48C0AD21CF5000EF903 /* SessionDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CA9B48A0AD21CF5000EF903 /* SessionDescriptor.m */; };
-		8CA9C1120AD2ED69000EF903 /* MusicBrainzHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CA9C1100AD2ED68000EF903 /* MusicBrainzHelper.mm */; };
 		8CA9C18B0AD303C2000EF903 /* MusicBrainz.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CA9C18A0AD303C1000EF903 /* MusicBrainz.png */; };
 		8CAB36390A04966E001234AC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97324FDCFA39411CA2CEA /* AppKit.framework */; };
 		8CABDD050ABE5C4F00905814 /* FLACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEFA0A05CB8E00890518 /* FLACEncoder.m */; };
@@ -165,7 +182,6 @@
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
 		8CC9A0C00ACD909300948BAA /* shorten.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC9A0B90ACD909300948BAA /* shorten.framework */; };
 		8CC9A0C10ACD909C00948BAA /* shorten.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC9A0B90ACD909300948BAA /* shorten.framework */; };
-		8CC9A0C80ACD90BF00948BAA /* ShortenDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */; };
 		8CD015CB0ADAA5BD00216B29 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD015C90ADAA5BD00216B29 /* MP3Encoder.m */; };
 		8CD015EB0ADAA67A00216B29 /* MP3EncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CD015E90ADAA67A00216B29 /* MP3EncoderTask.mm */; };
 		8CD01F0B0ADB488300216B29 /* OutputPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD01F090ADB488300216B29 /* OutputPreferencesController.m */; };
@@ -188,6 +204,8 @@
 		8CE250AE0AD31943009E1323 /* MusicBrainzPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE250AC0AD31943009E1323 /* MusicBrainzPreferencesController.m */; };
 		8CE250DC0AD31AB2009E1323 /* MusicBrainzPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8CE250DA0AD31AB2009E1323 /* MusicBrainzPreferences.nib */; };
 		8CE251120AD335F2009E1323 /* MusicBrainzDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */; };
+		8CE608BF0C8ADC9000AEC125 /* RegionDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE607870C8ACD7900AEC125 /* RegionDecoder.m */; };
+		8CE608D20C8ADCE900AEC125 /* FLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */; };
 		8CEA06260AC75D0D009E46CB /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA06120AC75D0D009E46CB /* Sparkle.framework */; };
 		8CEA06270AC75D12009E46CB /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA06120AC75D0D009E46CB /* Sparkle.framework */; };
 		8CEA08D80AC784A6009E46CB /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA08D00AC784A6009E46CB /* Growl.framework */; };
@@ -220,17 +238,8 @@
 		8CF0E8C60B0C21570018F871 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF0E8C40B0C21570018F871 /* ImageAndTextCell.m */; };
 		8CF2B1310A0DC0E5008738E4 /* MonkeysAudio.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2B1300A0DC0E5008738E4 /* MonkeysAudio.png */; };
 		8CF2B1380A0DC15F008738E4 /* LAME.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2B1370A0DC15F008738E4 /* LAME.png */; };
-		8CFA4B470ABDE11900C5AE9F /* CircularBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */; };
 		8CFA4B490ABDE11900C5AE9F /* CoreAudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B310ABDE11800C5AE9F /* CoreAudioDecoder.m */; };
 		8CFA4B4B0ABDE11900C5AE9F /* Decoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B330ABDE11800C5AE9F /* Decoder.m */; };
-		8CFA4B4F0ABDE11900C5AE9F /* FLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */; };
-		8CFA4B510ABDE11900C5AE9F /* LibsndfileDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B390ABDE11800C5AE9F /* LibsndfileDecoder.m */; };
-		8CFA4B530ABDE11900C5AE9F /* MonkeysAudioDecoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3B0ABDE11800C5AE9F /* MonkeysAudioDecoder.mm */; };
-		8CFA4B550ABDE11900C5AE9F /* MusepackDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3D0ABDE11800C5AE9F /* MusepackDecoder.m */; };
-		8CFA4B570ABDE11900C5AE9F /* OggFLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B3F0ABDE11800C5AE9F /* OggFLACDecoder.m */; };
-		8CFA4B590ABDE11900C5AE9F /* OggSpeexDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B410ABDE11800C5AE9F /* OggSpeexDecoder.m */; };
-		8CFA4B5B0ABDE11900C5AE9F /* OggVorbisDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */; };
-		8CFA4B5D0ABDE11900C5AE9F /* WavPackDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -244,7 +253,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8CA99D030AD06CC3000EF903 /* musicbrainz.framework in Copy Frameworks */,
+				8C98B44A0C4743DC004F7BF6 /* neon.framework in Copy Frameworks */,
+				8C98B4490C4743D6004F7BF6 /* musicbrainz3.framework in Copy Frameworks */,
+				8C98B4480C4743CC004F7BF6 /* discid.framework in Copy Frameworks */,
 				8CA99CFE0AD06B64000EF903 /* expat.framework in Copy Frameworks */,
 				8CC9A0C10ACD909C00948BAA /* shorten.framework in Copy Frameworks */,
 				8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */,
@@ -291,6 +302,13 @@
 		8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ApplicationControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = MediaControllerDefaults.plist; sourceTree = "<group>"; };
 		8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = ParanoiaDefaults.plist; sourceTree = "<group>"; };
+		8C1370360C42649000D0238C /* FormatsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormatsController.h; sourceTree = "<group>"; };
+		8C1370370C42649000D0238C /* FormatsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormatsController.m; sourceTree = "<group>"; };
+		8C1370720C4267D800D0238C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Formats.nib; sourceTree = "<group>"; };
+		8C1371230C42F43E00D0238C /* CueSheetTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueSheetTrack.h; sourceTree = "<group>"; };
+		8C1371240C42F43E00D0238C /* CueSheetTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueSheetTrack.m; sourceTree = "<group>"; };
+		8C13724A0C432CF400D0238C /* CueSheetDocumentToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CueSheetDocumentToolbar.h; sourceTree = "<group>"; };
+		8C13724B0C432CF400D0238C /* CueSheetDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CueSheetDocumentToolbar.m; sourceTree = "<group>"; };
 		8C1A62240B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
 		8C1A62250B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
 		8C1A62260B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
@@ -558,6 +576,9 @@
 		8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CompactDiscDocumentToolbar.m; sourceTree = "<group>"; };
 		8C9451400A12E4D700C8DCAE /* Track.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		8C9451410A12E4D700C8DCAE /* Track.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		8C98B3C10C473F0A004F7BF6 /* discid.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = discid.framework; path = Frameworks/discid/build/Release/discid.framework; sourceTree = "<group>"; };
+		8C98B3C70C473F1C004F7BF6 /* neon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = neon.framework; path = Frameworks/neon/build/Release/neon.framework; sourceTree = "<group>"; };
+		8C98B3E20C473F2C004F7BF6 /* musicbrainz3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = musicbrainz3.framework; path = Frameworks/musicbrainz3/build/Release/musicbrainz3.framework; sourceTree = "<group>"; };
 		8C99DD560A82B97C00A8CBE4 /* FileArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileArrayController.h; sourceTree = "<group>"; };
 		8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FileArrayController.m; sourceTree = "<group>"; };
 		8C99DD580A82B97C00A8CBE4 /* FileConversionController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileConversionController.h; sourceTree = "<group>"; };
@@ -601,7 +622,6 @@
 		8CA73F2D0A0FE45C00B12829 /* Cuesheet.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Cuesheet.icns; sourceTree = "<group>"; };
 		8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = ComparisonRipperDefaults.plist; sourceTree = "<group>"; };
 		8CA99CF70AD06B57000EF903 /* expat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = expat.framework; path = Frameworks/expat/build/Release/expat.framework; sourceTree = "<group>"; };
-		8CA99D000AD06CBB000EF903 /* musicbrainz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = musicbrainz.framework; path = Frameworks/musicbrainz/build/Release/musicbrainz.framework; sourceTree = "<group>"; };
 		8CA9B4890AD21CF5000EF903 /* SessionDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionDescriptor.h; sourceTree = "<group>"; };
 		8CA9B48A0AD21CF5000EF903 /* SessionDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionDescriptor.m; sourceTree = "<group>"; };
 		8CA9C10F0AD2ED68000EF903 /* MusicBrainzHelper.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = MusicBrainzHelper.h; path = MusicBrainz/MusicBrainzHelper.h; sourceTree = "<group>"; };
@@ -694,6 +714,8 @@
 		8CE250AC0AD31943009E1323 /* MusicBrainzPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicBrainzPreferencesController.m; sourceTree = "<group>"; };
 		8CE250DB0AD31AB2009E1323 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MusicBrainzPreferences.nib; sourceTree = "<group>"; };
 		8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = MusicBrainzDefaults.plist; sourceTree = "<group>"; };
+		8CE607860C8ACD7900AEC125 /* RegionDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RegionDecoder.h; path = Decoders/RegionDecoder.h; sourceTree = "<group>"; };
+		8CE607870C8ACD7900AEC125 /* RegionDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = RegionDecoder.m; path = Decoders/RegionDecoder.m; sourceTree = "<group>"; };
 		8CE6F51D08CD60970028DA37 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8CE9746209461F35000127B6 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ComponentVersions.nib; sourceTree = "<group>"; };
 		8CE9B39708CF7937007FCDB3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
@@ -785,7 +807,9 @@
 				8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */,
 				8CC9A0C00ACD909300948BAA /* shorten.framework in Frameworks */,
 				8CA99CFD0AD06B57000EF903 /* expat.framework in Frameworks */,
-				8CA99D020AD06CBB000EF903 /* musicbrainz.framework in Frameworks */,
+				8C98B3C60C473F0A004F7BF6 /* discid.framework in Frameworks */,
+				8C98B3E10C473F1C004F7BF6 /* neon.framework in Frameworks */,
+				8C98B4010C473F2C004F7BF6 /* musicbrainz3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -902,6 +926,7 @@
 				8CE250DA0AD31AB2009E1323 /* MusicBrainzPreferences.nib */,
 				8CD020460ADB688600216B29 /* iTunesPreferences.nib */,
 				8CD025350ADC04C900216B29 /* PostProcessingPreferences.nib */,
+				8C1370710C4267D800D0238C /* Formats.nib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -993,6 +1018,8 @@
 				8C5300BE0A05D18F00890518 /* MediaController.m */,
 				8C5300BF0A05D18F00890518 /* RipperController.h */,
 				8C5300C00A05D18F00890518 /* RipperController.m */,
+				8C1370360C42649000D0238C /* FormatsController.h */,
+				8C1370370C42649000D0238C /* FormatsController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1282,6 +1309,10 @@
 			children = (
 				8C94512D0A12E45B00C8DCAE /* CueSheetDocument.h */,
 				8C94512E0A12E45B00C8DCAE /* CueSheetDocument.m */,
+				8C1371230C42F43E00D0238C /* CueSheetTrack.h */,
+				8C1371240C42F43E00D0238C /* CueSheetTrack.m */,
+				8C13724A0C432CF400D0238C /* CueSheetDocumentToolbar.h */,
+				8C13724B0C432CF400D0238C /* CueSheetDocumentToolbar.m */,
 			);
 			path = CueSheet;
 			sourceTree = "<group>";
@@ -1328,7 +1359,9 @@
 		8CEA08B70AC78374009E46CB /* External Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8CA99D000AD06CBB000EF903 /* musicbrainz.framework */,
+				8C98B3E20C473F2C004F7BF6 /* musicbrainz3.framework */,
+				8C98B3C70C473F1C004F7BF6 /* neon.framework */,
+				8C98B3C10C473F0A004F7BF6 /* discid.framework */,
 				8CA99CF70AD06B57000EF903 /* expat.framework */,
 				8CC9A0B90ACD909300948BAA /* shorten.framework */,
 				8C5ED73B0ACB581C003E8ECF /* mac.framework */,
@@ -1353,6 +1386,8 @@
 		8CFA4B290ABDDB2700C5AE9F /* Decoders */ = {
 			isa = PBXGroup;
 			children = (
+				8CE607860C8ACD7900AEC125 /* RegionDecoder.h */,
+				8CE607870C8ACD7900AEC125 /* RegionDecoder.m */,
 				8CFA4B2E0ABDE11800C5AE9F /* CircularBuffer.h */,
 				8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */,
 				8CFA4B300ABDE11800C5AE9F /* CoreAudioDecoder.h */,
@@ -1512,6 +1547,7 @@
 				8C37D3F80B3ABF0F00C5F85A /* FileConversion.strings in Resources */,
 				8C1F78150B4218910066072B /* WavPack.png in Resources */,
 				8C0406530B5C584000648158 /* InfoPlist.strings in Resources */,
+				8C1370730C4267D800D0238C /* Formats.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1584,17 +1620,8 @@
 				8CD26CA50AB50B580037F33A /* EncoderTask.m in Sources */,
 				8CD26EFC0AB531F50037F33A /* CoreAudioEncoderTask.m in Sources */,
 				8CD26F4B0AB536120037F33A /* CoreAudioEncoder.m in Sources */,
-				8CFA4B470ABDE11900C5AE9F /* CircularBuffer.m in Sources */,
 				8CFA4B490ABDE11900C5AE9F /* CoreAudioDecoder.m in Sources */,
 				8CFA4B4B0ABDE11900C5AE9F /* Decoder.m in Sources */,
-				8CFA4B4F0ABDE11900C5AE9F /* FLACDecoder.m in Sources */,
-				8CFA4B510ABDE11900C5AE9F /* LibsndfileDecoder.m in Sources */,
-				8CFA4B530ABDE11900C5AE9F /* MonkeysAudioDecoder.mm in Sources */,
-				8CFA4B550ABDE11900C5AE9F /* MusepackDecoder.m in Sources */,
-				8CFA4B570ABDE11900C5AE9F /* OggFLACDecoder.m in Sources */,
-				8CFA4B590ABDE11900C5AE9F /* OggSpeexDecoder.m in Sources */,
-				8CFA4B5B0ABDE11900C5AE9F /* OggVorbisDecoder.m in Sources */,
-				8CFA4B5D0ABDE11900C5AE9F /* WavPackDecoder.m in Sources */,
 				8CABDD050ABE5C4F00905814 /* FLACEncoder.m in Sources */,
 				8CABDD580ABE621F00905814 /* FLACEncoderTask.m in Sources */,
 				8CABDD990ABE654C00905814 /* OggVorbisEncoderTask.mm in Sources */,
@@ -1610,11 +1637,9 @@
 				8CABDF9D0ABE731B00905814 /* WavPackEncoder.m in Sources */,
 				8CABDFB70ABE751100905814 /* OggSpeexEncoder.m in Sources */,
 				8CABDFC70ABE768100905814 /* LibsndfileEncoder.m in Sources */,
-				8CC9A0C80ACD90BF00948BAA /* ShortenDecoder.m in Sources */,
 				8C5E60860ACDC6F600D92D9A /* SecondsFormatter.m in Sources */,
 				8CA9B45A0AD21999000EF903 /* CompactDisc.m in Sources */,
 				8CA9B48C0AD21CF5000EF903 /* SessionDescriptor.m in Sources */,
-				8CA9C1120AD2ED69000EF903 /* MusicBrainzHelper.mm in Sources */,
 				8CE24FE10AD30A2D009E1323 /* MusicBrainzMatchSheet.m in Sources */,
 				8CE250AE0AD31943009E1323 /* MusicBrainzPreferencesController.m in Sources */,
 				8CDF024E0AD8A23E00193153 /* FileFormatNotSupportedException.m in Sources */,
@@ -1625,6 +1650,21 @@
 				8CD0251A0ADC036A00216B29 /* PostProcessingPreferencesController.m in Sources */,
 				8CF0E8C60B0C21570018F871 /* ImageAndTextCell.m in Sources */,
 				8C57F9EF0B10DE1300AA493C /* GaplessUtilities.mm in Sources */,
+				8C1370390C42649000D0238C /* FormatsController.m in Sources */,
+				8C1371260C42F43E00D0238C /* CueSheetTrack.m in Sources */,
+				8C13724D0C432CF400D0238C /* CueSheetDocumentToolbar.m in Sources */,
+				8C98B4600C4745C4004F7BF6 /* MusicBrainzHelper.mm in Sources */,
+				8CE608BF0C8ADC9000AEC125 /* RegionDecoder.m in Sources */,
+				8CE608D20C8ADCE900AEC125 /* FLACDecoder.m in Sources */,
+				8C397B920CC1D997004EFC92 /* CircularBuffer.m in Sources */,
+				8C397B930CC1D99B004EFC92 /* LibsndfileDecoder.m in Sources */,
+				8C397B940CC1D99C004EFC92 /* MonkeysAudioDecoder.mm in Sources */,
+				8C397B950CC1D99D004EFC92 /* MusepackDecoder.m in Sources */,
+				8C397B960CC1D99E004EFC92 /* OggFLACDecoder.m in Sources */,
+				8C397B970CC1D99F004EFC92 /* OggSpeexDecoder.m in Sources */,
+				8C397B980CC1D9A0004EFC92 /* OggVorbisDecoder.m in Sources */,
+				8C397B990CC1D9A2004EFC92 /* ShortenDecoder.m in Sources */,
+				8C397B9A0CC1D9A3004EFC92 /* WavPackDecoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1661,6 +1701,14 @@
 				8CBEDA5C0B76F73C0067CAE1 /* Spanish */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		8C1370710C4267D800D0238C /* Formats.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C1370720C4267D800D0238C /* English */,
+			);
+			name = Formats.nib;
 			sourceTree = "<group>";
 		};
 		8C29D8DA097F3D5D00E8B766 /* Preferences.strings */ = {
@@ -2134,6 +2182,8 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_19)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_20)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_4)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_5)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_6)",
@@ -2159,8 +2209,10 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/musicbrainz3/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/discid/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_20 = "\"$(SRCROOT)/Frameworks/neon/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(SRCROOT)/Frameworks/lame/build/Release\"";
@@ -2178,7 +2230,7 @@
 					"$(SRCROOT)/Frameworks/taglib/build/Release/taglib.framework/Headers",
 					"$(SRCROOT)/Frameworks/mp4v2/build/Release/mp4v2.framework/Headers",
 					"$(SRCROOT)/Frameworks/flac/build/Release/FLAC.framework/Headers",
-					"$(SRCROOT)/Frameworks/musicbrainz/build/Release/musicbrainz.framework/Headers",
+					"$(SRCROOT)/Frameworks/musicbrainz3/build/Release/musicbrainz3.framework/Headers",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -2205,6 +2257,8 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_3)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_19)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_20)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_4)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_5)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_6)",
@@ -2230,8 +2284,10 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_15 = "\"$(SRCROOT)/Frameworks/mp4v2/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_16 = "\"$(SRCROOT)/Frameworks/shorten/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_17 = "\"$(SRCROOT)/Frameworks/expat/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/musicbrainz/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_18 = "\"$(SRCROOT)/Frameworks/musicbrainz3/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/discid/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_20 = "\"$(SRCROOT)/Frameworks/neon/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(SRCROOT)/Frameworks/lame/build/Release\"";
@@ -2246,7 +2302,7 @@
 					"$(SRCROOT)/Frameworks/taglib/build/Release/taglib.framework/Headers",
 					"$(SRCROOT)/Frameworks/mp4v2/build/Release/mp4v2.framework/Headers",
 					"$(SRCROOT)/Frameworks/flac/build/Release/FLAC.framework/Headers",
-					"$(SRCROOT)/Frameworks/musicbrainz/build/Release/musicbrainz.framework/Headers",
+					"$(SRCROOT)/Frameworks/musicbrainz3/build/Release/musicbrainz3.framework/Headers",
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -2262,20 +2318,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SHADOW = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
@@ -2289,20 +2332,7 @@
 			buildSettings = {
 				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
-				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				GCC_WARN_SHADOW = YES;
-				GCC_WARN_SIGN_COMPARE = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_LABEL = YES;
-				GCC_WARN_UNUSED_PARAMETER = YES;
-				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
