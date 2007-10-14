@@ -19,6 +19,7 @@
  */
 
 #import "FileConversionController.h"
+#import "FormatsController.h"
 #import "EncoderController.h"
 #import "PreferencesController.h"
 #import "Genres.h"
@@ -49,9 +50,8 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 + (FileConversionController *) sharedController
 {
 	@synchronized(self) {
-		if(nil == sharedController) {
+		if(nil == sharedController)
 			sharedController = [[self alloc] init];
-		}
 	}
 	return sharedController;
 }
@@ -59,9 +59,8 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 + (id) allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
-        if(nil == sharedController) {
+        if(nil == sharedController)
             return [super allocWithZone:zone];
-        }
     }
     return sharedController;
 }
@@ -101,20 +100,15 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		[[[NSSortDescriptor alloc] initWithKey:@"metadata.albumTitle" ascending:YES] autorelease],
 		nil]];
 
-	[_encodersController setSortDescriptors:[NSArray arrayWithObjects:
-		[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease],
-		[[[NSSortDescriptor alloc] initWithKey:@"nickname" ascending:YES] autorelease],
-		nil]];
-
 	// Setup the toolbar
-    toolbar = [[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.FileConversion.Toolbar"];
-    
-    [toolbar setAllowsUserCustomization:YES];
-    [toolbar setAutosavesConfiguration:YES];
-    
-    [toolbar setDelegate:self];
-	
-    [[self window] setToolbar:[toolbar autorelease]];
+	toolbar = [[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.FileConversion.Toolbar"];
+
+	[toolbar setAllowsUserCustomization:YES];
+	[toolbar setAutosavesConfiguration:YES];
+
+	[toolbar setDelegate:self];
+
+	[[self window] setToolbar:[toolbar autorelease]];
 
 	// Setup files table
 	tableColumn			= [_filesTableView tableColumnWithIdentifier:@"filename"];
@@ -146,15 +140,14 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 - (IBAction) convert:(id)sender
 {
 	AudioMetadata			*metadata				= nil;
-	NSArray					*encoders				= nil;
 	NSArray					*filenames				= nil;
 	NSString				*filename				= nil;
-	NSMutableDictionary		*settings				= nil;
 	NSMutableDictionary		*postProcessingOptions	= nil;
 	NSArray					*applicationPaths;
 	unsigned				i;
 
-	encoders = [[_encodersController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];
+	// Encoders
+	NSArray *encoders = [[FormatsController sharedController] selectedFormats];
 	
 	// Verify at least one output format is selected
 	if(0 == [encoders count]) {
@@ -180,9 +173,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		return;
 	}
 
-	settings			= [NSMutableDictionary dictionary];
-
-	// Encoders
+	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 	[settings setValue:encoders forKey:@"encoders"];
 
 	// File locations
@@ -303,12 +294,6 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 - (IBAction) removeFiles:(id)sender
 {
 	[_filesController removeObjects:[_filesController selectedObjects]];	
-}
-
-- (IBAction) setupEncoders:(id)sender
-{
-	[[PreferencesController sharedPreferences] selectPreferencePane:FormatsPreferencesToolbarItemIdentifier];
-	[[PreferencesController sharedPreferences] showWindow:self];
 }
 
 #pragma mark File Management

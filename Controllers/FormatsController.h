@@ -20,33 +20,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <Growl/GrowlApplicationBridge.h>
-
-@interface NSApplication (ScriptingAdditions)
-- (id) handleConvertScriptCommand:(NSScriptCommand *)command;
-@end
-
-@interface ApplicationController : NSObject <GrowlApplicationBridgeDelegate>
+@interface FormatsController : NSWindowController
 {
+	IBOutlet NSArrayController		*_encodersController;
 }
 
-+ (ApplicationController *)		sharedController;
++ (FormatsController *)				sharedController;
 
-- (IBAction)			showPreferences:(id)sender;
-- (IBAction)			showAcknowledgments:(id)sender;
-- (IBAction)			showComponentVersions:(id)sender;
+- (NSArray *)						selectedFormats;
 
-- (IBAction)			toggleRipperWindow:(id)sender;
-- (IBAction)			toggleEncoderWindow:(id)sender;
-- (IBAction)			toggleLogWindow:(id)sender;
-- (IBAction)			toggleFormatsWindow:(id)sender;
-
-- (IBAction)			openHomeURL:(id)sender;
-
-- (IBAction)			encodeFile:(id)sender;
-
-- (void)				encodeFiles:(NSArray *)filenames;
-
-- (NSDictionary *)		registrationDictionaryForGrowl;
+- (IBAction)						setupEncoders:(id)sender;
 
 @end

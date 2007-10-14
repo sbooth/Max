@@ -25,7 +25,6 @@
 
 @interface FileConversionController : NSWindowController <AlbumArtMethods>
 {
-	IBOutlet NSArrayController		*_encodersController;
 	IBOutlet FileArrayController	*_filesController;
 	IBOutlet NSDrawer				*_metadataDrawer;
 	IBOutlet NSDrawer				*_artDrawer;
@@ -45,8 +44,6 @@
 
 - (IBAction)						downloadAlbumArt:(id)sender;
 - (IBAction)						selectAlbumArt:(id)sender;
-
-- (IBAction)						setupEncoders:(id)sender;
 
 - (BOOL)							addFile:(NSString *)filename;
 - (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;

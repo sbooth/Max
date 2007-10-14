@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {setupEncoders = id; }; 
+            CLASS = FormatsController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {"_encodersController" = NSArrayController; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

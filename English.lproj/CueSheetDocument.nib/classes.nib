@@ -1,6 +1,28 @@
 {
     IBClasses = (
-        {CLASS = CueSheetDocument; LANGUAGE = ObjC; SUPERCLASS = NSDocument; }, 
+        {
+            ACTIONS = {
+                downloadAlbumArt = id; 
+                encode = id; 
+                queryMusicBrainz = id; 
+                selectAlbumArt = id; 
+                selectAll = id; 
+                selectNextTrack = id; 
+                selectNone = id; 
+                selectPreviousTrack = id; 
+                toggleAlbumArt = id; 
+                toggleTrackInformation = id; 
+            }; 
+            CLASS = CueSheetDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                "_artDrawer" = NSDrawer; 
+                "_trackController" = NSArrayController; 
+                "_trackDrawer" = NSDrawer; 
+                "_trackTable" = NSTableView; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
     ); 
     IBVersion = 1; 

@@ -29,6 +29,7 @@
 #import "RipperController.h"
 #import "EncoderController.h"
 #import "LogController.h"
+#import "FormatsController.h"
 #import "FileFormatNotSupportedException.h"
 #import "CoreAudioUtilities.h"
 #import "UtilityFunctions.h"
@@ -148,6 +149,9 @@ static ApplicationController *sharedController = nil;
 		if([openWindows containsObject:@"FileConversion"]) {
 			[[[FileConversionController sharedController] window] orderFront:self];
 		}
+		if([openWindows containsObject:@"Formats"]) {
+			[[[FormatsController sharedController] window] orderFront:self];
+		}
 	}
 	
 	// Log startup
@@ -189,6 +193,9 @@ static ApplicationController *sharedController = nil;
 	}
 	if([[[FileConversionController sharedController] window] isVisible]) {
 		[openWindows addObject:@"FileConversion"];
+	}
+	if([[[FormatsController sharedController] window] isVisible]) {
+		[openWindows addObject:@"Formats"];
 	}
 	[[NSUserDefaults standardUserDefaults] setObject:openWindows forKey:@"openWindows"];
 
@@ -263,6 +270,15 @@ static ApplicationController *sharedController = nil;
 	else {
 		[logWindow makeKeyAndOrderFront:self];
 	}
+}
+
+- (IBAction) toggleFormatsWindow:(id)sender
+{
+	NSWindow *formatsWindow = [[FormatsController sharedController] window];
+	if([formatsWindow isVisible])
+		[formatsWindow performClose:self];
+	else
+		[formatsWindow makeKeyAndOrderFront:self];
 }
 
 - (IBAction) openHomeURL:(id)sender

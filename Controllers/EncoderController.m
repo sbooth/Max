@@ -57,9 +57,8 @@ static EncoderController *sharedController = nil;
 + (EncoderController *) sharedController
 {
 	@synchronized(self) {
-		if(nil == sharedController) {
+		if(nil == sharedController)
 			sharedController = [[self alloc] init];
-		}
 	}
 	return sharedController;
 }
@@ -67,9 +66,8 @@ static EncoderController *sharedController = nil;
 + (id) allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
-        if(nil == sharedController) {
+        if(nil == sharedController)
             return [super allocWithZone:zone];
-        }
     }
     return sharedController;
 }
@@ -82,14 +80,11 @@ static EncoderController *sharedController = nil;
 
 - (id) init
 {
-	if((self = [super initWithWindowNibName:@"Encoder"])) {
-		
-		_tasks		= [[NSMutableArray alloc] init];
-
-		return self;
+	if((self = [super initWithWindowNibName:@"Encoder"])) {		
+		_tasks = [[NSMutableArray alloc] init];
 	}
 	
-	return nil;
+	return self;
 }
 
 - (void) dealloc
@@ -195,9 +190,8 @@ static EncoderController *sharedController = nil;
 	
 	enumerator = [_tasks objectEnumerator];
 	while((current = [enumerator nextObject])) {
-		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]]) {
+		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]])
 			return YES;
-		}
 	}
 	
 	return NO;
@@ -211,9 +205,8 @@ static EncoderController *sharedController = nil;
 	_freeze = YES;
 	enumerator = [_tasks reverseObjectEnumerator];
 	while((current = [enumerator nextObject])) {
-		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]]) {
+		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]])
 			[current stop];
-		}
 	}
 	_freeze = NO;
 }
@@ -227,9 +220,9 @@ static EncoderController *sharedController = nil;
 	
 	_freeze = YES;
 	enumerator = [[_tasksController selectedObjects] reverseObjectEnumerator];
-	while((current = [enumerator nextObject])) {
+	while((current = [enumerator nextObject]))
 		[current stop];
-	}
+
 	_freeze = NO;
 }
 
@@ -240,9 +233,9 @@ static EncoderController *sharedController = nil;
 	
 	_freeze = YES;
 	enumerator = [[_tasksController arrangedObjects] reverseObjectEnumerator];
-	while((current = [enumerator nextObject])) {
+	while((current = [enumerator nextObject]))
 		[current stop];
-	}
+
 	_freeze = NO;
 }
 
@@ -265,18 +258,17 @@ static EncoderController *sharedController = nil;
 
 - (void) encoderTaskDidStart:(EncoderTask *)task notify:(BOOL)notify
 {
-	if(NO == notify) {
+	if(NO == notify)
 		return;
-	}
 	
 	NSString	*trackName		= [task description];
 	NSString	*type			= [task outputFormatName];
 	NSString	*settings		= [task encoderSettingsString];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode started for %@ [%@]", @"Log", @""), trackName, type]];
-	if(nil != settings) {
+	if(nil != settings)
 		[LogController logMessage:settings];
-	}
+
 	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode started", @"Log", @"") 
 								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
 						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
@@ -332,16 +324,14 @@ static EncoderController *sharedController = nil;
 	if(notify && NO == [self hasTasks] && NO == [[RipperController sharedController] hasTasks]) {
 
 		// Bounce dock icon if we're not the active application
-		if(NO == [[NSApplication sharedApplication] isActive]) {
+		if(NO == [[NSApplication sharedApplication] isActive])
 			[[NSApplication sharedApplication] requestUserAttention:NSInformationalRequest];			
-		}
 		
 		// Try to avoid Growl floods
-		if(NO == justNotified) {
+		if(NO == justNotified)
 			[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encoding completed", @"Log", @"")
 										description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
 								   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-		}
 	}
 
 	
@@ -365,10 +355,8 @@ static EncoderController *sharedController = nil;
 
 - (void) runEncoder:(Class)encoderClass taskInfo:(TaskInfo *)taskInfo encoderSettings:(NSDictionary *)encoderSettings
 {
-	EncoderTask				*encoderTask			= nil;
-	
 	// Create the task
-	encoderTask		= [[encoderClass alloc] init];
+	EncoderTask *encoderTask = [[encoderClass alloc] init];
 	
 	// Set the task info
 	[encoderTask setTaskInfo:taskInfo];
@@ -377,9 +365,8 @@ static EncoderController *sharedController = nil;
 	[encoderTask setEncoderSettings:encoderSettings];
 	
 	// Show the encoder window if it is hidden
-	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+	if(NO == [[NSApplication sharedApplication] isHidden] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"])
 		[[self window] orderFront:self];
-	}
 	
 	// Add the encoder to our list of encoding tasks
 	[self addTask:[encoderTask autorelease]];
@@ -393,9 +380,8 @@ static EncoderController *sharedController = nil;
 	[[self mutableArrayValueForKey:@"tasks"] removeObject:task];
 	
 	// Hide the window if no more tasks
-	if(NO == [self hasTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"]) {
+	if(NO == [self hasTasks] && [[NSUserDefaults standardUserDefaults] boolForKey:@"useDynamicWindows"])
 		[[self window] performClose:self];
-	}
 }
 
 - (void) spawnThreads
@@ -404,17 +390,15 @@ static EncoderController *sharedController = nil;
 	unsigned	i;
 	unsigned	limit;
 	
-	if(0 == [_tasks count] || _freeze) {
+	if(0 == [_tasks count] || _freeze)
 		return;
-	}
 	
 	limit = (maxThreads < [_tasks count] ? maxThreads : [_tasks count]);
 	
 	// Start encoding the next track(s)
 	for(i = 0; i < limit; ++i) {
-		if(NO == [[_tasks objectAtIndex:i] started]) {
+		if(NO == [[_tasks objectAtIndex:i] started])
 			[[_tasks objectAtIndex:i] run];
-		}	
 	}	
 }
 

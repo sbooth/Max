@@ -8,13 +8,11 @@
                 downloadAlbumArt = id; 
                 removeFiles = id; 
                 selectAlbumArt = id; 
-                setupEncoders = id; 
             }; 
             CLASS = ConvertFilesController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 "_artDrawer" = NSDrawer; 
-                "_encodersController" = NSArrayController; 
                 "_filesController" = FileArrayController; 
                 "_filesTableView" = NSTableView; 
                 "_metadataDrawer" = NSDrawer; 
