@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry excluding="Cocoa/|Library/|docs/|Library/" kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Cocoa"/>
-	<classpathentry kind="lib" path="Library"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>

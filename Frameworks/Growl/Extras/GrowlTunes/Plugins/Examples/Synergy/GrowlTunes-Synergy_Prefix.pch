@@ -1,7 +1,0 @@
-//
-// Prefix header for all source files of the 'GrowlTunes-Synergy' target in the 'GrowlTunes-Synergy' project.
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-#endif

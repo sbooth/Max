@@ -21,28 +21,6 @@
  ##
 
 		
-## Growl framework
-## Growl uses the older-style "Deployment" target name
-cd Growl
-xcodebuild \
-	-project Growl.xcodeproj \
-	-target Growl.framework \
-	-configuration Deployment \
-	OBJROOT="\$(SRCROOT)/build/intermediate" \
-	SYMROOT="\$(SRCROOT)/build"
-cd ..
-
-## Sparkle framework
-## Only build the framework, not the test app
-cd Sparkle
-xcodebuild \
-	-project Sparkle.xcodeproj \
-	-target Sparkle \
-	-configuration Release \
-	OBJROOT="\$(SRCROOT)/build/intermediate" \
-	SYMROOT="\$(SRCROOT)/build"
-cd ..
-
 ## Max custom-built frameworks
 subdirs=( cdparanoia taglib mp4v2 cuetools ogg vorbis flac speex lame wavpack mac sndfile mpcdec shorten expat neon discid musicbrainz3 ofa1 )
 
