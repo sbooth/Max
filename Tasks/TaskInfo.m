@@ -39,7 +39,7 @@
 
 - copyWithZone:(NSZone *)zone
 {
-    TaskInfo	*copy		= [[TaskInfo alloc] init];
+    TaskInfo	*copy		= [[TaskInfo allocWithZone:zone] init];
 	
 	copy->_settings			= [_settings retain];
 	copy->_metadata			= [_metadata retain];
