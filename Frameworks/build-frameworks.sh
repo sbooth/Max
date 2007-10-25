@@ -24,12 +24,20 @@
 ## Max custom-built frameworks
 subdirs=( cdparanoia taglib mp4v2 cuetools ogg vorbis flac speex lame wavpack mac sndfile mpcdec shorten expat neon discid musicbrainz3 ofa1 )
 
+if [[ $1 && $1 == clean ]]
+then
+	buildaction=clean
+else
+	buildaction=build
+fi
+
 for subdir in "${subdirs[@]}"
 do
 	cd $subdir
 	xcodebuild \
 		-alltargets \
 		-configuration Release \
+		$buildaction \
 		OBJROOT="\$(SRCROOT)/build/intermediate" \
 		SYMROOT="\$(SRCROOT)/build"
 	cd ..
