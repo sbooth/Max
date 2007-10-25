@@ -1,6 +1,6 @@
 /***************************************************************************
-    copyright            : (C) 2004 by Allan Sandfeld Jensen
-    email                : kde@carewolf.org
+    copyright            : (C) 2007 by Scott Wheeler
+    email                : wheeler@kde.org
  ***************************************************************************/
 
 /***************************************************************************
@@ -23,60 +23,17 @@
  *   http://www.mozilla.org/MPL/                                           *
  ***************************************************************************/
 
-#ifndef TAGLIB_MPCPROPERTIES_H
-#define TAGLIB_MPCPROPERTIES_H
+#ifndef TAGLIB_EXPORT_H
+#define TAGLIB_EXPORT_H
 
-#include "taglib_export.h"
-#include "audioproperties.h"
-
-namespace TagLib {
-
-  namespace MPC {
-
-    class File;
-
-    static const uint HeaderSize = 8*7;
-
-    //! An implementation of audio property reading for MPC
-
-    /*!
-     * This reads the data from an MPC stream found in the AudioProperties
-     * API.
-     */
-
-    class TAGLIB_EXPORT Properties : public AudioProperties
-    {
-    public:
-      /*!
-       * Create an instance of MPC::Properties with the data read from the
-       * ByteVector \a data.
-       */
-      Properties(const ByteVector &data, long streamLength, ReadStyle style = Average);
-
-      /*!
-       * Destroys this MPC::Properties instance.
-       */
-      virtual ~Properties();
-
-      // Reimplementations.
-
-      virtual int length() const;
-      virtual int bitrate() const;
-      virtual int sampleRate() const;
-      virtual int channels() const;
-
-      /*!
-       * Returns the version of the bitstream (SV4-SV7)
-       */
-      int mpcVersion() const;
-
-    private:
-      void read();
-
-      class PropertiesPrivate;
-      PropertiesPrivate *d;
-    };
-  }
-}
+#if defined(_WIN32) || defined(_WIN64)
+#ifdef MAKE_TAGLIB_LIB
+#define TAGLIB_EXPORT __declspec(dllexport)
+#else
+#define TAGLIB_EXPORT __declspec(dllimport)
+#endif
+#else
+#define TAGLIB_EXPORT
+#endif
 
 #endif
