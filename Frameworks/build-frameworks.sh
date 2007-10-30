@@ -22,7 +22,7 @@
 
 		
 ## Max custom-built frameworks
-subdirs=( cdparanoia taglib mp4v2 cuetools ogg vorbis flac speex lame wavpack mac sndfile mpcdec shorten expat neon discid musicbrainz3 ofa1 )
+subdirs=( cdparanoia taglib mp4v2 cuetools ogg vorbis flac speex lame wavpack mac sndfile mpcdec shorten expat neon discid musicbrainz3 ofa1 MAD )
 
 if [[ $1 && $1 == clean ]]
 then
