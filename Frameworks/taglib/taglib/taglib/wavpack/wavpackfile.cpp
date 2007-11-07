@@ -1,7 +1,7 @@
 /***************************************************************************
     copyright            : (C) 2006 by Lukáš Lalinský
     email                : lalinsky@gmail.com
-    
+
     copyright            : (C) 2004 by Allan Sandfeld Jensen 
     email                : kde@carewolf.org 
                            (original MPC implementation)
@@ -9,7 +9,7 @@
 
 /***************************************************************************
  *   This library is free software; you can redistribute it and/or modify  *
- *   it  under the terms of the GNU Lesser General Public License version  *
+ *   it under the terms of the GNU Lesser General Public License version   *
  *   2.1 as published by the Free Software Foundation.                     *
  *                                                                         *
  *   This library is distributed in the hope that it will be useful, but   *
@@ -21,13 +21,15 @@
  *   License along with this library; if not, write to the Free Software   *
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
  *   USA                                                                   *
+ *                                                                         *
+ *   Alternatively, this file is available under the Mozilla Public        *
+ *   License Version 1.1.  You may obtain a copy of the License at         *
+ *   http://www.mozilla.org/MPL/                                           *
  ***************************************************************************/
 
 #include <tbytevector.h>
 #include <tstring.h>
-#if 0
 #include <tdebug.h>
-#endif
 
 #include "wavpackfile.h"
 #include "id3v1tag.h"
@@ -67,9 +69,9 @@ public:
 
   ID3v1::Tag *ID3v1Tag;
   long ID3v1Location; 
-  
+
   Tag *tag;
-  
+
   Properties *properties;
   bool scanned;
 
@@ -109,9 +111,7 @@ WavPack::Properties *WavPack::File::audioProperties() const
 bool WavPack::File::save()
 {
   if(readOnly()) {
-#if 0
     debug("WavPack::File::save() -- File is read only.");
-#endif
     return false;
   }
 

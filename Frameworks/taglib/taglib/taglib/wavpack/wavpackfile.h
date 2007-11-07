@@ -1,7 +1,7 @@
 /***************************************************************************
     copyright            : (C) 2006 by Lukáš Lalinský
     email                : lalinsky@gmail.com
-    
+
     copyright            : (C) 2004 by Allan Sandfeld Jensen 
     email                : kde@carewolf.org 
                            (original MPC implementation)
@@ -9,7 +9,7 @@
 
 /***************************************************************************
  *   This library is free software; you can redistribute it and/or modify  *
- *   it  under the terms of the GNU Lesser General Public License version  *
+ *   it under the terms of the GNU Lesser General Public License version   *
  *   2.1 as published by the Free Software Foundation.                     *
  *                                                                         *
  *   This library is distributed in the hope that it will be useful, but   *
@@ -21,13 +21,17 @@
  *   License along with this library; if not, write to the Free Software   *
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
  *   USA                                                                   *
+ *                                                                         *
+ *   Alternatively, this file is available under the Mozilla Public        *
+ *   License Version 1.1.  You may obtain a copy of the License at         *
+ *   http://www.mozilla.org/MPL/                                           *
  ***************************************************************************/
 
 #ifndef TAGLIB_WVFILE_H
 #define TAGLIB_WVFILE_H
 
-#include "tfile.h"
-
+#include <tfile.h>
+#include "taglib_export.h"
 #include "wavpackproperties.h"
 
 namespace TagLib {
@@ -57,7 +61,7 @@ namespace TagLib {
      * information specific to WavPack files.
      */
 
-    class File : public TagLib::File
+    class TAGLIB_EXPORT File : public TagLib::File
     {
     public:
       /*!
@@ -73,8 +77,8 @@ namespace TagLib {
         APE     = 0x0002,
         //! Matches all tag types.
         AllTags = 0xffff
-      }; 
-      
+      };
+
       /*!
        * Contructs an WavPack file from \a file.  If \a readProperties is true the
        * file's audio properties will also be read using \a propertiesStyle.  If
