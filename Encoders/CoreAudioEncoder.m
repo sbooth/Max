@@ -51,8 +51,6 @@
 	SInt64							totalFrames, framesToRead;
 	UInt32							size, frameCount;
 	UInt32							bitrate, quality, mode;
-	FSRef							ref;
-	AudioFileID						audioFile							= NULL;
 	ExtAudioFileRef					extAudioFile						= NULL;
 	AudioStreamBasicDescription		asbd;
 	AudioConverterRef				converter							= NULL;
@@ -94,15 +92,11 @@
 		}
 		
 		// Open the output file
-		// There is no convenient ExtAudioFile API for wiping clean an existing file, so use AudioFile
-		err = FSPathMakeRef((const UInt8 *)[filename fileSystemRepresentation], &ref, NULL);
-		NSAssert1(noErr == err, NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @""), UTCreateStringForOSType(err));
-		
-		err = AudioFileInitialize(&ref, [self fileType], &asbd, 0, &audioFile);
-		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileInitialize", UTCreateStringForOSType(err));
+		NSURL *url = [NSURL fileURLWithPath:filename];
+		NSAssert(nil != url, NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @""));
 
-		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFile);
-		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID", UTCreateStringForOSType(err));
+		err = ExtAudioFileCreateWithURL((CFURLRef)url, [self fileType], &asbd, NULL, kAudioFileFlags_EraseFile, &extAudioFile);
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileCreateWithURL", UTCreateStringForOSType(err));
 		
 		asbd = [[self decoder] pcmFormat];
 		err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
@@ -158,8 +152,14 @@
 				err		= AudioConverterGetProperty(converter, kAudioConverterCompressionMagicCookie, &size, magicCookie);
 				NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioConverterGetProperty", UTCreateStringForOSType(err));
 
+				// Grab the AudioFileID used by the ExtAudioFile
+				AudioFileID audioFile = NULL;
+				size = sizeof(audioFile);
+				err = ExtAudioFileGetProperty(extAudioFile, kExtAudioFileProperty_AudioFile, &size, &audioFile);
+				
 				// Determine the if the output file will accept the cookie
 				err = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData, NULL, &willAcceptCookie);
+				NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileGetPropertyInfo", UTCreateStringForOSType(err));
 				
 				if(noErr == err && willAcceptCookie) {
 					err = AudioFileSetProperty(audioFile, kAudioFilePropertyMagicCookieData, size, magicCookie);
@@ -229,10 +229,6 @@
 			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose", UTCreateStringForOSType(err));
 			extAudioFile	= NULL;
 		
-			err				= AudioFileClose(audioFile);
-			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose", UTCreateStringForOSType(err));
-			audioFile		= NULL;
-
 			addMPEG4AACGaplessInformationAtom(filename, [[self decoder] totalFrames]);
 		}
 	}
@@ -260,16 +256,6 @@
 			}
 		}
 
-		if(NULL != audioFile) {
-			err = AudioFileClose(audioFile);
-			if(noErr != err) {
-				exception = [NSException exceptionWithName:@"CoreAudioException"
-													reason:[NSString stringWithFormat:NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileClose"]
-												  userInfo:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[NSString stringWithCString:GetMacOSStatusErrorString(err) encoding:NSASCIIStringEncoding], [NSString stringWithCString:GetMacOSStatusCommentString(err) encoding:NSASCIIStringEncoding], nil] forKeys:[NSArray arrayWithObjects:@"errorCode", @"errorString", nil]]];
-				NSLog(@"%@", exception);
-			}
-		}
-		
 		free(bufferList.mBuffers[0].mData);
 	}
 
