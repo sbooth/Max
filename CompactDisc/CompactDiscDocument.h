@@ -53,7 +53,7 @@ enum {
 	// Disc information
 	NSString						*_title;
 	NSString						*_artist;
-	unsigned						_year;
+	NSString						*_date;
 	NSString						*_genre;
 	NSString						*_composer;
 	NSString						*_comment;
@@ -63,8 +63,8 @@ enum {
 	NSDate							*_albumArtDownloadDate;
 
 	// Other disc info
-	unsigned						_discNumber;
-	unsigned						_discTotal;
+	NSNumber						*_discNumber;
+	NSNumber 						*_discTotal;
 	BOOL							_compilation;
 	
 	NSString						*_MCN;
@@ -128,8 +128,8 @@ enum {
 - (NSString *)		artist;
 - (void)			setArtist:(NSString *)artist;
 
-- (unsigned)		year;
-- (void)			setYear:(unsigned)year;
+- (NSString *)		date;
+- (void)			setDate:(NSString *)date;
 
 - (NSString *)		genre;
 - (void)			setGenre:(NSString *)genre;
@@ -149,11 +149,11 @@ enum {
 - (unsigned)		albumArtWidth;
 - (unsigned)		albumArtHeight;
 
-- (unsigned)		discNumber;
-- (void)			setDiscNumber:(unsigned)discNumber;
+- (NSNumber *)		discNumber;
+- (void)			setDiscNumber:(NSNumber *)discNumber;
 
-- (unsigned)		discTotal;
-- (void)			setDiscTotal:(unsigned)discTotal;
+- (NSNumber *)		discTotal;
+- (void)			setDiscTotal:(NSNumber *)discTotal;
 
 - (BOOL)			compilation;
 - (void)			setCompilation:(BOOL)compilation;

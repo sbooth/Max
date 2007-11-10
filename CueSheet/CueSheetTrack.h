@@ -35,7 +35,7 @@
 	// Metadata information
 	NSString				*_title;
 	NSString				*_artist;
-	unsigned				_year;
+	NSString				*_date;
 	NSString				*_genre;
 	NSString				*_composer;
 	NSString				*_comment;
@@ -70,8 +70,8 @@
 - (NSString *)		artist;
 - (void)			setArtist:(NSString *)artist;
 
-- (unsigned)		year;
-- (void)			setYear:(unsigned)year;
+- (NSString *)		date;
+- (void)			setDate:(NSString *)date;
 
 - (NSString *)		genre;
 - (void)			setGenre:(NSString *)genre;

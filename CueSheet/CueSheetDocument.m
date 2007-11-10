@@ -43,6 +43,7 @@
 {
 	[_title release],					_title = nil;
 	[_artist release],					_artist = nil;
+	[_date release],					_date = nil;
 	[_genre release],					_genre = nil;
 	[_composer release],				_composer = nil;
 	[_comment release],					_comment = nil;
@@ -50,6 +51,9 @@
 	[_albumArt release],				_albumArt = nil;
 	[_albumArtDownloadDate release],	_albumArtDownloadDate = nil;
 	
+	[_discNumber release],				_discNumber = nil;
+	[_discTotal release],				_discTotal = nil;
+
 	[_MCN release],						_MCN = nil;
 	
 	[_tracks release],					_tracks = nil;
@@ -436,7 +440,7 @@
 
 - (NSString *)		title								{ return [[_title retain] autorelease]; }
 - (NSString *)		artist								{ return [[_artist retain] autorelease]; }
-- (unsigned)		year								{ return _year; }
+- (NSString *)		date								{ return [[_date retain] autorelease]; }
 - (NSString *)		genre								{ return [[_genre retain] autorelease]; }
 - (NSString *)		composer							{ return [[_composer retain] autorelease]; }
 - (NSString *)		comment								{ return [[_comment retain] autorelease]; }
@@ -446,8 +450,8 @@
 - (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
 - (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
 
-- (unsigned)		discNumber							{ return _discNumber; }
-- (unsigned)		discTotal							{ return _discTotal; }
+- (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
+- (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
 - (BOOL)			compilation							{ return _compilation; }
 
 - (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
@@ -479,12 +483,13 @@
 	}
 }
 
-- (void) setYear:(unsigned)year
+- (void) setDate:(NSString *)date
 {
-	if(_year != year) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setYear:_year];
-		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Year", @"UndoRedo", @"")];
-		_year = year;
+	if(_date != date) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDate:) object:_date];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Date", @"UndoRedo", @"")];
+		[_date release];
+		_date = [date retain];
 	}
 }
 
@@ -532,21 +537,23 @@
 	}
 }
 
-- (void) setDiscNumber:(unsigned)discNumber
+- (void) setDiscNumber:(NSNumber *)discNumber
 {
 	if(_discNumber != discNumber) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setDiscNumber:_discNumber];
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscNumber:) object:_discNumber];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Disc Number", @"UndoRedo", @"")];
-		_discNumber = discNumber;
+		[_discNumber release];
+		_discNumber = [discNumber retain];
 	}
 }
 
-- (void) setDiscTotal:(unsigned)discTotal
+- (void) setDiscTotal:(NSNumber *)discTotal
 {
 	if(_discTotal != discTotal) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setDiscTotal:_discTotal];
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscTotal:) object:_discTotal];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Total Discs", @"UndoRedo", @"")];
-		_discTotal = discTotal;
+		[_discTotal release];
+		_discTotal = [discTotal retain];
 	}
 }
 

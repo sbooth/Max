@@ -48,6 +48,7 @@
 	
 	[_title release];			_title = nil;
 	[_artist release];			_artist = nil;
+	[_date release];			_date = nil;
 	[_genre release];			_genre = nil;
 	[_composer release];		_composer = nil;
 	
@@ -112,7 +113,7 @@
 - (NSString *)				filename			{ return [[_filename retain] autorelease]; }
 - (NSString *)				title				{ return [[_title retain] autorelease]; }
 - (NSString *)				artist				{ return [[_artist retain] autorelease]; }
-- (unsigned)				year				{ return _year; }
+- (NSString *)				date				{ return [[_date retain] autorelease]; }
 - (NSString *)				genre				{ return [[_genre retain] autorelease]; }
 - (NSString *)				composer			{ return [[_composer retain] autorelease]; }
 - (NSString *)				comment				{ return [[_comment retain] autorelease]; }
@@ -179,12 +180,13 @@
 	}
 }
 
-- (void) setYear:(unsigned)year
+- (void) setDate:(NSString *)date
 {
-	if(_year != year) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setYear:_year];
-		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Year", @"UndoRedo", @"")];
-		_year = year;
+	if(_date != date) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDate:) object:_date];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Track Date", @"UndoRedo", @"")];
+		[_date release];
+		_date = [date retain];
 	}
 }
 
@@ -228,7 +230,7 @@
 	
 	[result setValue:[self title] forKey:@"title"];
 	[result setValue:[self artist] forKey:@"artist"];
-	[result setObject:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
+	[result setValue:[self date] forKey:@"date"];
 	[result setValue:[self genre] forKey:@"genre"];
 	[result setValue:[self composer] forKey:@"composer"];
 	[result setValue:[self comment] forKey:@"comment"];
@@ -249,6 +251,7 @@
 {	
 	[_title release];		_title = nil;
 	[_artist release];		_artist = nil;
+	[_date release];		_date = nil;
 	[_genre release];		_genre = nil;
 	[_composer release];	_composer = nil;
 	[_comment release];		_comment = nil;
@@ -259,7 +262,7 @@
 	
 	_title			= [[properties valueForKey:@"title"] retain];
 	_artist			= [[properties valueForKey:@"artist"] retain];
-	_year			= [[properties valueForKey:@"year"] intValue];
+	_date			= [[properties valueForKey:@"date"] retain];
 	_genre			= [[properties valueForKey:@"genre"] retain];
 	_composer		= [[properties valueForKey:@"composer"] retain];
 	_comment		= [[properties valueForKey:@"comment"] retain];
@@ -284,7 +287,7 @@
 	
 	[copy setTitle:[self title]];
 	[copy setArtist:[self artist]];
-	[copy setYear:[self year]];
+	[copy setDate:[self date]];
 	[copy setGenre:[self genre]];
 	[copy setComposer:[self composer]];
 	[copy setComment:[self comment]];
@@ -308,7 +311,7 @@
 	[result setTrackNumber:[self number]];
 	[result setTrackTitle:[self title]];
 	[result setTrackArtist:[self artist]];
-	[result setTrackYear:[self year]];
+	[result setTrackYear:[self date]];
 	[result setTrackGenre:[self genre]];
 	[result setTrackComposer:[self composer]];
 	[result setTrackComment:[self comment]];
@@ -317,7 +320,7 @@
 	[result setTrackTotal:[[self document] countOfTracks]];
 	[result setAlbumTitle:[[self document] title]];
 	[result setAlbumArtist:[[self document] artist]];
-	[result setAlbumYear:[[self document] year]];
+	[result setAlbumYear:[[self document] date]];
 	[result setAlbumGenre:[[self document] genre]];
 	[result setAlbumComposer:[[self document] composer]];
 	[result setAlbumComment:[[self document] comment]];

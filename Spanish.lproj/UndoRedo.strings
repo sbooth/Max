@@ -14,7 +14,7 @@
 	<string>Género del Album</string>
 	<key>Album Title</key>
 	<string>Título del Album</string>
-	<key>Album Year</key>
+	<key>Album Date</key>
 	<string>Año del Album</string>
 	<key>Compilation</key>
 	<string>Compilación</string>
@@ -34,7 +34,7 @@
 	<string>Género de la Pista</string>
 	<key>Track Title</key>
 	<string>Título de la Pista</string>
-	<key>Track Year</key>
+	<key>Track Date</key>
 	<string>Año de la Pista</string>
 </dict>
 </plist>

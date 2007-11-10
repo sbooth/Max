@@ -73,12 +73,16 @@
 
 	[_title release],					_title = nil;
 	[_artist release],					_artist = nil;
+	[_date release],					_date = nil;
 	[_genre release],					_genre = nil;
 	[_composer release],				_composer = nil;
 	[_comment release],					_comment = nil;
 
 	[_albumArt release],				_albumArt = nil;
 	[_albumArtDownloadDate release],	_albumArtDownloadDate = nil;
+
+	[_discNumber release],				_discNumber = nil;
+	[_discTotal release],				_discTotal = nil;
 
 	[_MCN release],						_MCN = nil;
 	
@@ -148,12 +152,12 @@
 		
 		[result setValue:[self title] forKey:@"title"];
 		[result setValue:[self artist] forKey:@"artist"];
-		[result setValue:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
+		[result setValue:[self date] forKey:@"date"];
 		[result setValue:[self genre] forKey:@"genre"];
 		[result setValue:[self composer] forKey:@"composer"];
 		[result setValue:[self comment] forKey:@"comment"];
-		[result setValue:[NSNumber numberWithUnsignedInt:[self discNumber]] forKey:@"discNumber"];
-		[result setValue:[NSNumber numberWithUnsignedInt:[self discTotal]] forKey:@"discTotal"];
+		[result setValue:[self discNumber] forKey:@"discNumber"];
+		[result setValue:[self discTotal] forKey:@"discTotal"];
 		[result setValue:[NSNumber numberWithBool:[self compilation]] forKey:@"compilation"];
 		[result setValue:[self MCN] forKey:@"MCN"];
 		[result setValue:[self discID] forKey:@"discID"];
@@ -164,19 +168,16 @@
 			[result setValue:[self albumArtDownloadDate] forKey:@"albumArtDownloadDate"];
 		}
 		
-		for(i = 0; i < [self countOfTracks]; ++i) {
+		for(i = 0; i < [self countOfTracks]; ++i)
 			[tracks addObject:[[self objectInTracksAtIndex:i] getDictionary]];
-		}
 		
 		[result setValue:tracks forKey:@"tracks"];
 
 		data = [NSPropertyListSerialization dataFromPropertyList:result format:NSPropertyListXMLFormat_v1_0 errorDescription:&error];
-		if(nil != data) {
+		if(nil != data)
 			return data;
-		}
-		else {
+		else
 			*outError = [NSError errorWithDomain:NSCocoaErrorDomain code:-1 userInfo:[NSDictionary dictionaryWithObject:[error autorelease] forKey:NSLocalizedFailureReasonErrorKey]];
-		}
 	}
 	return nil;
 }
@@ -207,13 +208,17 @@
 			
 			[_title release],						_title = nil;
 			[_artist release],						_artist = nil;
+			[_date release],						_date = nil;
 			[_genre release],						_genre = nil;
 			[_composer release],					_composer = nil;
 			[_comment release],						_comment = nil;
 			
 			[_albumArt release],					_albumArt = nil;
 			[_albumArtDownloadDate release],		_albumArtDownloadDate = nil;
-			
+
+			[_discNumber release],					_discNumber = nil;
+			[_discTotal release],					_discTotal = nil;
+
 			[_discID release],						_discID = nil;
 			[_MCN release],							_MCN = nil;
 			
@@ -221,13 +226,13 @@
 
 			_title			= [[dictionary valueForKey:@"title"] retain];
 			_artist			= [[dictionary valueForKey:@"artist"] retain];
-			_year			= [[dictionary valueForKey:@"year"] unsignedIntValue];
+			_date			= [[dictionary valueForKey:@"date"] retain];
 			_genre			= [[dictionary valueForKey:@"genre"] retain];
 			_composer		= [[dictionary valueForKey:@"composer"] retain];
 			_comment		= [[dictionary valueForKey:@"comment"] retain];
 
-			_discNumber		= [[dictionary valueForKey:@"discNumber"] unsignedIntValue];
-			_discTotal		= [[dictionary valueForKey:@"discTotal"] unsignedIntValue];
+			_discNumber		= [[dictionary valueForKey:@"discNumber"] retain];
+			_discTotal		= [[dictionary valueForKey:@"discTotal"] retain];
 			_compilation	= [[dictionary valueForKey:@"compilation"] boolValue];	
 
 			_MCN			= [[dictionary valueForKey:@"MCN"] retain];
@@ -244,9 +249,9 @@
 				[self saveDocument:self];
 			}	
 		}
-		else {
+		else
 			[error release];
-		}
+
 		return YES;
 	}
     return NO;
@@ -330,10 +335,10 @@
 	@try {
 		NSMutableDictionary		*postProcessingOptions	= nil;
 		NSArray					*applicationPaths		= nil;
-		unsigned				i;
 
 		// Do nothing if the disc isn't in the drive, the selection is empty, or a rip/encode is in progress
 		if(NO == [self discInDrive]) {
+			NSBeep();
 			return;
 		}
 		
@@ -529,7 +534,7 @@
 
 - (IBAction) downloadAlbumArt:(id)sender
 {	
-	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
+	AmazonAlbumArtSheet *art = [[(AmazonAlbumArtSheet *)[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
 	[art showAlbumArtMatches];
 }
 
@@ -573,7 +578,7 @@
 
 - (NSString *)		title								{ return [[_title retain] autorelease]; }
 - (NSString *)		artist								{ return [[_artist retain] autorelease]; }
-- (unsigned)		year								{ return _year; }
+- (NSString *)		date								{ return [[_date retain] autorelease]; }
 - (NSString *)		genre								{ return [[_genre retain] autorelease]; }
 - (NSString *)		composer							{ return [[_composer retain] autorelease]; }
 - (NSString *)		comment								{ return [[_comment retain] autorelease]; }
@@ -583,8 +588,8 @@
 - (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
 - (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
 
-- (unsigned)		discNumber							{ return _discNumber; }
-- (unsigned)		discTotal							{ return _discTotal; }
+- (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
+- (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
 - (BOOL)			compilation							{ return _compilation; }
 
 - (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
@@ -660,12 +665,13 @@
 	}
 }
 
-- (void) setYear:(unsigned)year
+- (void) setDate:(NSString *)date
 {
-	if(_year != year) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setYear:_year];
-		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Year", @"UndoRedo", @"")];
-		_year = year;
+	if(_date != date) {
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDate:) object:_date];
+		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Date", @"UndoRedo", @"")];
+		[_date release];
+		_date = [date retain];
 	}
 }
 
@@ -713,21 +719,23 @@
 	}
 }
 
-- (void) setDiscNumber:(unsigned)discNumber
+- (void) setDiscNumber:(NSNumber *)discNumber
 {
 	if(_discNumber != discNumber) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setDiscNumber:_discNumber];
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscNumber:) object:_discNumber];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Disc Number", @"UndoRedo", @"")];
-		_discNumber = discNumber;
+		[_discNumber release];
+		_discNumber = [discNumber retain];
 	}
 }
 
-- (void) setDiscTotal:(unsigned)discTotal
+- (void) setDiscTotal:(NSNumber *)discTotal
 {
 	if(_discTotal != discTotal) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setDiscTotal:_discTotal];
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setDiscTotal:) object:_discTotal];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Total Discs", @"UndoRedo", @"")];
-		_discTotal = discTotal;
+		[_discTotal release];
+		_discTotal = [discTotal retain];
 	}
 }
 
@@ -816,7 +824,7 @@
 	[self setTitle:[releaseDictionary valueForKey:@"title"]];
 	[self setArtist:[releaseDictionary valueForKey:@"artist"]];
 	[self setComposer:[releaseDictionary valueForKey:@"composer"]];
-	[self setYear:[releaseDictionary valueForKey:@"date"]];
+	[self setDate:[releaseDictionary valueForKey:@"date"]];
 	
 	NSArray *tracksArray = [releaseDictionary valueForKey:@"tracks"];
 	
