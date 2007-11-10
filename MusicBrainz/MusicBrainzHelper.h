@@ -20,36 +20,23 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CompactDiscDocument;
+@class CompactDisc;
 @class MusicBrainzHelperData;
 
-// Following the design of libmusicbrainz, all indexes in this object are one-based
 @interface MusicBrainzHelper : NSObject
 {
+	CompactDisc					*_disc;
 	MusicBrainzHelperData		*_data;
-	CompactDiscDocument			*_document;
+	NSMutableArray				*_matches;
 }
 
-- (id)				initWithCompactDiscDocument:(CompactDiscDocument *)document;
+- (id) initWithCompactDisc:(CompactDisc *)disc;
 
 // Hits the server for the requested disc
-- (IBAction)		performQuery:(id)sender;
+- (IBAction) performQuery:(id)sender;
 
 // Number of matches found for the disc
-- (unsigned)		matchCount;
-- (void)			selectMatch:(unsigned)matchIndex;
-
-// Retrieve values from the selected match
-- (NSString *)		albumTitle;
-- (NSString *)		albumArtist;
-- (BOOL)			isVariousArtists;
-
-- (unsigned)		releaseDate;
-
-// Number of tracks contained in the disc
-- (unsigned)		trackCount;
-
-- (NSString *)		trackTitle:(unsigned)trackIndex;
-- (NSString *)		trackArtist:(unsigned)trackIndex;
+- (unsigned) matchCount;
+- (NSDictionary *) matchAtIndex:(unsigned)matchIndex;
 
 @end

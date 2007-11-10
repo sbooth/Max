@@ -44,7 +44,7 @@
 }
 
 - (NSWindow *)		sheet					{ return [[_sheet retain] autorelease]; }
-- (unsigned)		selectedAlbumIndex		{ return [[[_matchesController selection] valueForKey:@"index"] unsignedIntValue]; }
+- (unsigned)		selectedAlbumIndex		{ return [_matchesController selectionIndex]; }
 
 - (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSCancelButton]; }
 - (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton]; }

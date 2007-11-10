@@ -20,19 +20,20 @@
 
 #import "MusicBrainzHelper.h"
 
-#include <iostream>
 #include <musicbrainz3/webservice.h>
 #include <musicbrainz3/query.h>
 #include <musicbrainz3/model.h>
+#include <musicbrainz3/utils.h>
 
-//#import "CompactDiscDocument.h"
+#import "CompactDiscDocument.h"
 
 // This is here to avoid C++ code cascading into what otherwise is mostly Objective-C
 @interface MusicBrainzHelperData : NSObject
 {
+	MusicBrainz::WebService *_ws;
 }
 
-//- (MusicBrainz *)	mb;
+- (MusicBrainz::WebService *) ws;
 
 @end
 
@@ -41,180 +42,233 @@
 - (id) init
 {
 	if((self = [super init])) {
-		
-//		_mb = new MusicBrainz();
-//		NSAssert(NULL != _mb, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-		
-//		[self mb]->UseUTF8(true);
-
-		// Set MB server and port
-		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzServerPort"]) {
-//			[self mb]->SetServer([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"] cStringUsingEncoding:NSUTF8StringEncoding],
-//								 [[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"]);
+		_ws = new MusicBrainz::WebService();
+		if(NULL == _ws) {
+			[self release];
+			return nil;
 		}
+		
+		// Set MB server and port
+		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"])
+			_ws->setHost([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"] cStringUsingEncoding:NSUTF8StringEncoding]);
+		
+		if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzServerPort"])
+			_ws->setPort([[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"]);
 		
 		// Use authentication, if specified
-		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzPassword"]) {
-//			[self mb]->Authenticate([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] cStringUsingEncoding:NSUTF8StringEncoding],
-//									[[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzPassword"] cStringUsingEncoding:NSUTF8StringEncoding]);
-		}
+		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"])
+			_ws->setUserName([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] cStringUsingEncoding:NSUTF8StringEncoding]);
+		
+		if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzPassword"])
+			_ws->setPassword([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzPassword"] cStringUsingEncoding:NSUTF8StringEncoding]);
 
 		// Proxy setup
-		if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzUseProxy"] && nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] && nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzProxyServerPort"]) {
-//			[self mb]->SetProxy([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] cStringUsingEncoding:NSUTF8StringEncoding],
-//								[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);						
-		}
-		
-		return self;
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzUseProxy"]) {
+			if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"])
+				_ws->setProxyHost([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] cStringUsingEncoding:NSUTF8StringEncoding]);
+			if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerPort"])
+				_ws->setProxyPort([[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
+		}		
 	}
 	
-	return nil;
+	return self;
 }
 
 - (void) dealloc
 {
-//	delete _mb;		_mb = NULL;
+	delete _ws, _ws = NULL;
 	
 	[super dealloc];
 }
 
-//- (MusicBrainz *)	mb			{ return _mb; }
+- (MusicBrainz::WebService *) ws { return _ws; }
 
 @end
 
 
 @interface MusicBrainzHelper (Private)
 - (MusicBrainzHelperData *) data;
-- (CompactDiscDocument *)	document;
+- (CompactDisc *) disc;
 @end
 
 @implementation MusicBrainzHelper
 
-- (id) initWithCompactDiscDocument:(CompactDiscDocument *)document
+- (id) initWithCompactDisc:(CompactDisc *)disc
 {
-	NSParameterAssert(nil != document);
+	NSParameterAssert(nil != disc);
 	
 	if((self = [super init])) {
 		
-		_data = [[MusicBrainzHelperData alloc] init];
-		NSAssert(nil != _data, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-
-		_document = [document retain];		
+		_matches = [[NSMutableArray alloc] init];
 		
-		return self;
+		_data = [[MusicBrainzHelperData alloc] init];
+		if(nil == _data) {
+			[self release];
+			return nil;
+		}
+
+		_disc = [disc retain];		
 	}
 
-	return nil;
+	return self;
 }
 
 - (void) dealloc
 {
-	[_data release];	_data = nil;
-	[_document release],	_document = nil;
+	[_matches release],		_matches = nil;
+	[_data release],		_data = nil;
+	[_disc release],		_disc = nil;
 	
 	[super dealloc];
 }
 
 - (IBAction) performQuery:(id)sender
 {
-	MusicBrainz::Query					q;
+	MusicBrainz::Query					q([[self data] ws]);
 	MusicBrainz::ReleaseResultList		results;
 	
+	[_matches removeAllObjects];
+	
 	try {
-		std::string discId = [[[[self document] disc] discID] cStringUsingEncoding:NSASCIIStringEncoding];
+		std::string discId = [[[self disc] discID] cStringUsingEncoding:NSASCIIStringEncoding];
 		MusicBrainz::ReleaseFilter f = MusicBrainz::ReleaseFilter().discId(discId);
         results = q.getReleases(&f);
 	}
 	
-	catch(MusicBrainz::WebServiceError &e) {
-		std::cout << "Error: " << e.what() << std::endl;
-		return;// 1;
+	catch(/* const MusicBrainz::Exception &e */const std::exception &e) {
+		NSLog(@"Error: %s", e.what());
+		return;
 	}
 	
 	for(MusicBrainz::ReleaseResultList::iterator i = results.begin(); i != results.end(); i++) {
 		MusicBrainz::ReleaseResult *result = *i;
 		MusicBrainz::Release *release;
-
+		
 		try {
-			release = q.getReleaseById(result->getRelease()->getId(), &MusicBrainz::ReleaseIncludes().tracks().artist());
+			MusicBrainz::ReleaseIncludes includes = MusicBrainz::ReleaseIncludes().tracks().artist().releaseEvents();
+			release = q.getReleaseById(result->getRelease()->getId(), &includes);
 		}
 		
-		catch(MusicBrainz::WebServiceError &e) {
-			std::cout << "Error: " << e.what() << std::endl;
+		catch(/* const MusicBrainz::Exception &e */const std::exception &e) {
+			NSLog(@"Error: %s", e.what());
 			continue;
 		}
-	
-		std::cout << "Id      : " << release->getId() << std::endl;
-		std::cout << "Title   : " << release->getTitle() << std::endl;
-		std::cout << "Tracks  : ";
+
+		NSMutableDictionary *releaseDictionary = [NSMutableDictionary dictionary];
+
+		// ID
+		if(!release->getId().empty())
+			[releaseDictionary setValue:[NSString stringWithCString:release->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"MusicBrainzID"];
+
+		// Title
+		if(!release->getTitle().empty())
+			[releaseDictionary setValue:[NSString stringWithCString:release->getTitle().c_str() encoding:NSUTF8StringEncoding] forKey:@"title"];
+
+		// Artist
+		if(NULL != release->getArtist() && !release->getArtist()->getName().empty())
+			[releaseDictionary setValue:[NSString stringWithCString:release->getArtist()->getName().c_str() encoding:NSUTF8StringEncoding] forKey:@"artist"];
+		
+		// Take a best guess on the release date
+		if(1 == release->getNumReleaseEvents()) {
+			MusicBrainz::ReleaseEvent *releaseEvent = release->getReleaseEvent(0);
+			[releaseDictionary setValue:[NSString stringWithCString:releaseEvent->getDate().c_str() encoding:NSUTF8StringEncoding] forKey:@"date"];
+		}
+		else {
+			NSString	*currentLocale		= [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLocale"];
+			NSArray		*localeElements		= [currentLocale componentsSeparatedByString:@"_"];
+//			NSString	*currentLanguage	= [localeElements objectAtIndex:0];
+			NSString	*currentCountry		= [localeElements objectAtIndex:1];
+			
+			// Try to match based on the assumption that the disc is from the user's own locale
+			for(int k = 0; k < release->getNumReleaseEvents(); ++k) {
+				MusicBrainz::ReleaseEvent *releaseEvent = release->getReleaseEvent(k);
+				NSString *releaseEventCountry = [NSString stringWithCString:releaseEvent->getCountry().c_str() encoding:NSASCIIStringEncoding];
+				if(NSOrderedSame == [releaseEventCountry caseInsensitiveCompare:currentCountry])
+					[releaseDictionary setValue:[NSString stringWithCString:releaseEvent->getDate().c_str() encoding:NSUTF8StringEncoding] forKey:@"date"];
+			}
+			
+			// Nothing matched, just take the first one
+			if(nil == [releaseDictionary valueForKey:@"date"] && 0 < release->getNumReleaseEvents()) {
+				MusicBrainz::ReleaseEvent *releaseEvent = release->getReleaseEvent(0);
+				[releaseDictionary setValue:[NSString stringWithCString:releaseEvent->getDate().c_str() encoding:NSUTF8StringEncoding] forKey:@"date"];
+			}
+		}
+
+		// Iterate through the tracks
+		NSMutableArray *tracksDictionary = [NSMutableArray array];
 		int trackno = 1;
 		for(MusicBrainz::TrackList::iterator j = release->getTracks().begin(); j != release->getTracks().end(); j++) {
 			MusicBrainz::Track *track = *j;
-			MusicBrainz::Artist *artist = track->getArtist();
-			if (!artist)
-				artist = release->getArtist();
-			std::cout << trackno++ << ". " << artist->getName() << " / " << track->getTitle() << std::endl;
-			std::cout << "          ";
+			NSMutableDictionary *trackDictionary = [NSMutableDictionary dictionary];
+
+			// Number
+			[trackDictionary setValue:[NSNumber numberWithInt:trackno] forKey:@"trackNumber"];
+
+			// ID
+			if(!track->getId().empty())
+				[trackDictionary setValue:[NSString stringWithCString:track->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"MusicBrainzID"];
+
+			// Track title
+			[trackDictionary setValue:[NSString stringWithCString:track->getTitle().c_str() encoding:NSUTF8StringEncoding] forKey:@"title"];
+
+			// Track artist
+			if(NULL != track->getArtist() && !track->getArtist()->getName().empty())
+				[trackDictionary setValue:[NSString stringWithCString:track->getArtist()->getName().c_str() encoding:NSUTF8StringEncoding] forKey:@"artist"];
+		
+			// Look for Composer relations
+			MusicBrainz::RelationList relations = track->getRelations(MusicBrainz::Relation::TO_TRACK);
+			
+			for(MusicBrainz::RelationList::iterator k = relations.begin(); k != relations.end(); ++k) {
+				MusicBrainz::Relation *relation = *k;
+				
+				if("Composer" == MusicBrainz::extractFragment(relation->getType())) {
+					if(MusicBrainz::Relation::TO_ARTIST == relation->getTargetType()) {
+						MusicBrainz::Artist *composer = NULL;
+						
+						try {
+							composer = q.getArtistById(relation->getTargetId());
+							if(NULL == composer)
+								continue;
+						}
+						
+						catch(/* const MusicBrainz::Exception &e */ const std::exception &e) {
+							NSLog(@"MusicBrainz error: %s", e.what());
+							continue;
+						}
+						
+						[trackDictionary setValue:[NSString stringWithCString:composer->getName().c_str() encoding:NSUTF8StringEncoding] forKey:@"composer"];
+						
+						delete composer;
+					}
+				}				
+			}
+			
+			++trackno;
+
+			[tracksDictionary addObject:trackDictionary];
+			delete track;
 		}
-		std::cout << std::endl;
+		
+		[releaseDictionary setValue:tracksDictionary forKey:@"tracks"];
+		[_matches addObject:releaseDictionary];
+		
 		delete result;
 	}
 }
 
 - (unsigned) matchCount
 {
-	return 0;
-//	return [[self data] mb]->DataInt(MBE_GetNumAlbums);
+	return [_matches count];
 }
 
-- (void) selectMatch:(unsigned)matchIndex
+- (NSDictionary *) matchAtIndex:(unsigned)matchIndex;
 {
-//	[[self data] mb]->Select(MBS_SelectAlbum, matchIndex);
-}
-
-- (NSString *)		albumTitle
-{
-//	return [NSString stringWithCString:[[self data] mb]->Data(MBE_AlbumGetAlbumName).c_str() encoding:NSUTF8StringEncoding];
-}
-
-- (NSString *)		albumArtist
-{
-//	return [NSString stringWithCString:[[self data] mb]->Data(MBE_AlbumGetAlbumArtistName).c_str() encoding:NSUTF8StringEncoding];
-}
-
-- (BOOL)			isVariousArtists
-{
-//	std::string		data;
-	
-//	[[self data] mb]->GetIDFromURL([[self data] mb]->Data(MBE_AlbumGetAlbumArtistId), data);
-//	return (MBI_VARIOUS_ARTIST_ID == data);
-}
-
-- (unsigned)		releaseDate
-{
-//	NSLog(@"release:%s", [[self data] mb]->Data(MBE_ReleaseGetDate).c_str());
-//	return 0;
-//	return [NSString stringWithCString:[[self data] mb]->Data(MBE_ReleaseGetDate).c_str() encoding:NSUTF8StringEncoding];
-}
-
-- (unsigned) trackCount
-{
-//	return [[self data] mb]->DataInt(MBE_AlbumGetNumTracks);
-}
-
-- (NSString *)		trackTitle:(unsigned)trackIndex
-{
-//	return [NSString stringWithCString:[[self data] mb]->Data(MBE_AlbumGetTrackName, trackIndex).c_str() encoding:NSUTF8StringEncoding];
-}
-
-- (NSString *)		trackArtist:(unsigned)trackIndex
-{
-//	return [NSString stringWithCString:[[self data] mb]->Data(MBE_AlbumGetArtistName, trackIndex).c_str() encoding:NSUTF8StringEncoding];
+	return [_matches objectAtIndex:matchIndex];
 }
 
 @end
 
 @implementation MusicBrainzHelper (Private)
 - (MusicBrainzHelperData *)		data		{ return [[_data retain] autorelease]; }
-- (CompactDiscDocument *)		document	{ return [[_document retain] autorelease]; }
+- (CompactDisc *)				disc		{ return [[_disc retain] autorelease]; }
 @end

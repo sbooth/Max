@@ -481,40 +481,27 @@
 
 - (IBAction) queryMusicBrainz:(id)sender
 {
-	unsigned				matchCount	= 0;
-	
 	if(NO == [self queryMusicBrainzAllowed])
 		return;
 	
 	if(nil == _mbHelper)
-		_mbHelper	= [[MusicBrainzHelper alloc] initWithCompactDiscDocument:self];
+		_mbHelper = [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
 	
 	[_mbHelper performQuery:sender];
 	
-	matchCount	= [_mbHelper matchCount];
+	unsigned matchCount	= [_mbHelper matchCount];
 	NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
 
 	// If only match was found, update ourselves
-	if(1 == matchCount) {
-		[self updateMetadataFromMusicBrainz:1];
-	}
+	if(1 == matchCount)
+		[self updateMetadataFromMusicBrainz:0];
 	else {
-		MusicBrainzMatchSheet		*sheet		= nil;
-		NSMutableArray				*matches	= nil;
-		NSDictionary				*match		= nil;
-		unsigned					i;
+		MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
+		NSMutableArray			*matches	= [[NSMutableArray alloc] init];
 		
-		sheet		= [[MusicBrainzMatchSheet alloc] init];
-		matches		= [[NSMutableArray alloc] init];
-		
-		for(i = 1; i <= matchCount; ++i) {
-			[_mbHelper selectMatch:i];
-			
-			match = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[_mbHelper albumTitle], [_mbHelper albumArtist], [NSNumber numberWithUnsignedInt:i], nil]
-												forKeys:[NSArray arrayWithObjects:@"title", @"artist", @"index", nil]];
-						
-			[matches addObject:match];
-		}
+		unsigned i;
+		for(i = 0; i < matchCount; ++i)
+			[matches addObject:[_mbHelper matchAtIndex:i]];
 		
 		[sheet setValue:[matches autorelease] forKey:@"matches"];
 		[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndQueryMusicBrainzSheet:returnCode:contextInfo:) contextInfo:sheet];
@@ -523,19 +510,16 @@
 
 - (void) queryMusicBrainzNonInteractive
 {
-	if(NO == [self queryMusicBrainzAllowed]) {
+	if(NO == [self queryMusicBrainzAllowed])
 		return;
-	}
 	
-	if(nil == _mbHelper) {
-		_mbHelper	= [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
-	}
+	if(nil == _mbHelper)
+		_mbHelper = [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
 	
 	[_mbHelper performQuery:self];
 	
-	if(1 <= [_mbHelper matchCount]) {
-		[self updateMetadataFromMusicBrainz:1];
-	}
+	if(1 <= [_mbHelper matchCount])
+		[self updateMetadataFromMusicBrainz:0];
 }
 
 - (IBAction) toggleTrackInformation:(id)sender				{ [_trackDrawer toggle:sender]; }
@@ -794,13 +778,12 @@
 
 - (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	MusicBrainzMatchSheet	*musicBrainzMatchSheet	= (MusicBrainzMatchSheet *)contextInfo;
+	MusicBrainzMatchSheet *musicBrainzMatchSheet = (MusicBrainzMatchSheet *)contextInfo;
 
 	[sheet orderOut:self];
 	
-	if(NSOKButton == returnCode) {
+	if(NSOKButton == returnCode)
 		[self updateMetadataFromMusicBrainz:[musicBrainzMatchSheet selectedAlbumIndex]];
-	}
 
 	[musicBrainzMatchSheet release];
 }
@@ -824,28 +807,27 @@
 
 - (void) updateMetadataFromMusicBrainz:(unsigned)index
 {
-	Track						*track				= nil;
-	BOOL						isVariousArtists;
-	unsigned					i;
-	
-	[_mbHelper selectMatch:index];
+	NSDictionary *releaseDictionary = [_mbHelper matchAtIndex:index];
 
-	isVariousArtists	= [_mbHelper isVariousArtists];
+//	BOOL isVariousArtists = [_mbHelper isVariousArtists];
 
 	[[self undoManager] beginUndoGrouping];
 		
-	[self setTitle:[_mbHelper albumTitle]];
-	[self setArtist:[_mbHelper albumArtist]];
-						
-	for(i = 1; i <= [_mbHelper trackCount]; ++i) {
+	[self setTitle:[releaseDictionary valueForKey:@"title"]];
+	[self setArtist:[releaseDictionary valueForKey:@"artist"]];
+	[self setComposer:[releaseDictionary valueForKey:@"composer"]];
+	[self setYear:[releaseDictionary valueForKey:@"date"]];
+	
+	NSArray *tracksArray = [releaseDictionary valueForKey:@"tracks"];
+	
+	unsigned i;
+	for(i = 0; i < [tracksArray count]; ++i) {
+		NSDictionary *trackDictionary = [tracksArray objectAtIndex:i];
+		Track *track = [self objectInTracksAtIndex:i];
 		
-		track			= [self objectInTracksAtIndex:i - 1];
-		
-		[track setTitle:[_mbHelper trackTitle:i]];
-		
-		if(isVariousArtists) {
-			[track setArtist:[_mbHelper trackArtist:i]];
-		}
+		[track setTitle:[trackDictionary valueForKey:@"title"]];
+		[track setArtist:[trackDictionary valueForKey:@"artist"]];
+		[track setComposer:[trackDictionary valueForKey:@"composer"]];
 	}
 	
 	[self updateChangeCount:NSChangeReadOtherContents];
