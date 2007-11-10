@@ -235,7 +235,7 @@
 	unsigned		sample, channel;
 	int				result;
 	
-	// Convert MAC buffer to little endian byte order
+	// Convert MAC buffer to host endian byte order
 	switch([[self decoder] pcmFormat].mBitsPerChannel) {
 		
 		case 8:
@@ -251,7 +251,7 @@
 			buffer16 = (uint16_t *)chunk->mBuffers[0].mData;
 			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-					buffer16[sample] = OSSwapInt16(buffer16[sample]);
+					buffer16[sample] = OSSwapBigToHostInt16(buffer16[sample]);
 				}
 			}
 				break;
@@ -269,7 +269,7 @@
 			buffer32 = (uint32_t *)chunk->mBuffers[0].mData;
 			for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 				for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-					buffer32[sample] = OSSwapInt32(buffer32[sample]);
+					buffer32[sample] = OSSwapBigToHostInt32(buffer32[sample]);
 				}
 			}
 				break;
