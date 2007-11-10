@@ -80,9 +80,8 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 + (PreferencesController *) sharedPreferences
 {
 	@synchronized(self) {
-		if(nil == sharedPreferences) {
-			sharedPreferences = [[self alloc] init];
-		}
+		if(nil == sharedPreferences)
+			[[self alloc] init];
 	}
 	return sharedPreferences;
 }
@@ -91,10 +90,11 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 {
     @synchronized(self) {
         if(nil == sharedPreferences) {
-            return [super allocWithZone:zone];
+            sharedPreferences = [super allocWithZone:zone];
+			return sharedPreferences;
         }
     }
-    return sharedPreferences;
+    return nil;
 }
 
 - (id) init

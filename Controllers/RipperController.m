@@ -50,9 +50,8 @@ static RipperController *sharedController = nil;
 + (RipperController *) sharedController
 {
 	@synchronized(self) {
-		if(nil == sharedController) {
-			sharedController = [[self alloc] init];
-		}
+		if(nil == sharedController)
+			[[self alloc] init];
 	}
 	return sharedController;
 }
@@ -61,10 +60,11 @@ static RipperController *sharedController = nil;
 {
     @synchronized(self) {
         if(nil == sharedController) {
-            return [super allocWithZone:zone];
+            sharedController = [super allocWithZone:zone];
+			return sharedController;
         }
     }
-    return sharedController;
+    return nil;
 }
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
@@ -123,7 +123,7 @@ static RipperController *sharedController = nil;
 	if([[settings objectForKey:@"ripToSingleFile"] boolValue] && 1 < [tracks count]) {
 		AudioMetadata			*metadata				= nil;
 		
-		metadata = [[tracks objectAtIndex:0] metadata];
+		metadata = [(Track *)[tracks objectAtIndex:0] metadata];
 		
 		// Adjust metadata to reflect only album tags
 		[metadata setTrackNumber:0];

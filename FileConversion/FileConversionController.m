@@ -51,7 +51,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 {
 	@synchronized(self) {
 		if(nil == sharedController)
-			sharedController = [[self alloc] init];
+			[[self alloc] init];
 	}
 	return sharedController;
 }
@@ -59,18 +59,19 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 + (id) allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
-        if(nil == sharedController)
-            return [super allocWithZone:zone];
+        if(nil == sharedController) {
+            sharedController = [super allocWithZone:zone];
+			return sharedController;
+		}
     }
-    return sharedController;
+    return nil;
 }
 
 - (id) init
 {
 	if((self = [super initWithWindowNibName:@"FileConversion"])) {
-		return self;
 	}
-	return nil;
+	return self;
 }
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
@@ -400,7 +401,7 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 - (IBAction) downloadAlbumArt:(id)sender
 {	
-	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
+	AmazonAlbumArtSheet *art = [[(AmazonAlbumArtSheet *)[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
 	[art showAlbumArtMatches];
 }
 

@@ -189,7 +189,7 @@ static Genres *sharedGenres = nil;
 {
 	@synchronized(self) {
 		if(nil == sharedGenres) {
-			sharedGenres = [[self alloc] init];
+			[[self alloc] init];
 		}
 	}
 	return [sharedGenres valueForKey:@"genres"];
@@ -198,9 +198,8 @@ static Genres *sharedGenres = nil;
 + (NSArray *) unsortedGenres
 {
 	@synchronized(self) {
-		if(nil == sharedGenres) {
-			sharedGenres = [[self alloc] init];
-		}
+		if(nil == sharedGenres)
+			[[self alloc] init];
 	}
 	return [sharedGenres valueForKey:@"unsortedGenres"];
 }
@@ -209,10 +208,11 @@ static Genres *sharedGenres = nil;
 {
     @synchronized(self) {
         if(nil == sharedGenres) {
-            return [super allocWithZone:zone];
+            sharedGenres = [super allocWithZone:zone];
+			return sharedGenres;
         }
     }
-    return sharedGenres;
+	return nil;
 }
 
 - (id) copyWithZone:(NSZone *)zone								{ return self; }

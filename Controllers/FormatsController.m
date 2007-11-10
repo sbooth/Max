@@ -29,7 +29,7 @@ static FormatsController			*sharedController						= nil;
 {
 	@synchronized(self) {
 		if(nil == sharedController)
-			sharedController = [[self alloc] init];
+			[[self alloc] init];
 	}
 	return sharedController;
 }
@@ -37,10 +37,12 @@ static FormatsController			*sharedController						= nil;
 + (id) allocWithZone:(NSZone *)zone
 {
     @synchronized(self) {
-        if(nil == sharedController)
-            return [super allocWithZone:zone];
+        if(nil == sharedController) {
+            sharedController = [super allocWithZone:zone];
+			return sharedController;
+		}
     }
-    return sharedController;
+    return nil;
 }
 
 - (id) init

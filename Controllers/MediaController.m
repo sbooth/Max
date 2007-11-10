@@ -148,9 +148,8 @@ static MediaController *sharedController = nil;
 + (MediaController *) sharedController
 {
 	@synchronized(self) {
-		if(nil == sharedController) {
-			sharedController = [[self alloc] init];
-		}
+		if(nil == sharedController)
+			[[self alloc] init];
 	}
 	return sharedController;
 }
@@ -159,10 +158,11 @@ static MediaController *sharedController = nil;
 {
     @synchronized(self) {
         if(nil == sharedController) {
-            return [super allocWithZone:zone];
+            sharedController = [super allocWithZone:zone];
+			return sharedController;
         }
     }
-    return sharedController;
+    return nil;
 }
 
 - (id) init

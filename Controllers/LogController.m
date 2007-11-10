@@ -35,9 +35,8 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 + (LogController *) sharedController
 {
 	@synchronized(self) {
-		if(nil == sharedLog) {
-			sharedLog = [[self alloc] init];
-		}
+		if(nil == sharedLog)
+			[[self alloc] init];
 	}
 	return sharedLog;
 }
@@ -46,10 +45,11 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 {
     @synchronized(self) {
         if(nil == sharedLog) {
-            return [super allocWithZone:zone];
+            sharedLog = [super allocWithZone:zone];
+			return sharedLog;
         }
     }
-    return sharedLog;
+    return nil;
 }
 
 + (void) logMessage:(NSString *)message
