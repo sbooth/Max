@@ -83,6 +83,7 @@
 
 	[_discNumber release],				_discNumber = nil;
 	[_discTotal release],				_discTotal = nil;
+	[_compilation release],				_compilation = nil;
 
 	[_MCN release],						_MCN = nil;
 	
@@ -158,7 +159,7 @@
 		[result setValue:[self comment] forKey:@"comment"];
 		[result setValue:[self discNumber] forKey:@"discNumber"];
 		[result setValue:[self discTotal] forKey:@"discTotal"];
-		[result setValue:[NSNumber numberWithBool:[self compilation]] forKey:@"compilation"];
+		[result setValue:[self compilation] forKey:@"compilation"];
 		[result setValue:[self MCN] forKey:@"MCN"];
 		[result setValue:[self discID] forKey:@"discID"];
 		
@@ -233,7 +234,7 @@
 
 			_discNumber		= [[dictionary valueForKey:@"discNumber"] retain];
 			_discTotal		= [[dictionary valueForKey:@"discTotal"] retain];
-			_compilation	= [[dictionary valueForKey:@"compilation"] boolValue];	
+			_compilation	= [[dictionary valueForKey:@"compilation"] retain];	
 
 			_MCN			= [[dictionary valueForKey:@"MCN"] retain];
 
@@ -590,7 +591,7 @@
 
 - (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
 - (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
-- (BOOL)			compilation							{ return _compilation; }
+- (NSNumber *)		compilation							{ return [[_compilation retain] autorelease]; }
 
 - (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
 
@@ -739,12 +740,13 @@
 	}
 }
 
-- (void) setCompilation:(BOOL)compilation
+- (void) setCompilation:(NSNumber *)compilation
 {
 	if(_compilation != compilation) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setCompilation:_compilation];
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setCompilation:) object:_compilation];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Compilation", @"UndoRedo", @"")];
-		_compilation = compilation;
+		[_compilation release];
+		_compilation = [compilation retain];
 	}
 }
 

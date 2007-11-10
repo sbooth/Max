@@ -48,20 +48,20 @@
 - (void) writeTags
 {
 	AudioMetadata								*metadata				= [[self taskInfo] metadata];
-	unsigned									trackNumber				= 0;
-	unsigned									trackTotal				= 0;
+	NSNumber									*trackNumber			= nil;
+	NSNumber									*trackTotal				= nil;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*composer				= nil;
 	NSString									*title					= nil;
-	unsigned									year					= 0;
+	NSString									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	NSString									*trackComment			= nil;
-	BOOL										compilation				= NO;
-	unsigned									discNumber				= 0;
-	unsigned									discTotal				= 0;
-	unsigned									length					= 0;
+	NSNumber									*compilation			= nil;
+	NSNumber									*discNumber				= nil;
+	NSNumber									*discTotal				= nil;
+	NSNumber									*length					= nil;
 	TagLib::ID3v2::TextIdentificationFrame		*frame					= NULL;
 	TagLib::ID3v2::AttachedPictureFrame			*pictureFrame			= NULL;
 	NSImage										*albumArt				= nil;
@@ -79,24 +79,20 @@
 	
 	// Album title
 	album = [metadata albumTitle];
-	if(nil != album) {
+	if(nil != album)
 		f.tag()->setAlbum(TagLib::String([album UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Artist
 	artist = [metadata trackArtist];
-	if(nil == artist) {
+	if(nil == artist)
 		artist = [metadata albumArtist];
-	}
-	if(nil != artist) {
+	if(nil != artist)
 		f.tag()->setArtist(TagLib::String([artist UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Composer
 	composer = [metadata trackComposer];
-	if(nil == composer) {
+	if(nil == composer)
 		composer = [metadata albumComposer];
-	}
 	if(nil != composer) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TCOM", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
@@ -107,9 +103,8 @@
 
 	// Genre
 	genre = [metadata trackGenre];
-	if(nil == genre) {
+	if(nil == genre)
 		genre = [metadata albumGenre];
-	}
   	if(nil != genre) {
  		// There is a bug in iTunes that will show numeric genres for ID3v2.4 genre tags
  		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
@@ -119,70 +114,60 @@
 			NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
  
  			// Only use numbers for the original ID3v1 genre list
- 			if(NSNotFound == index) {
+ 			if(NSNotFound == index)
  				frame->setText(TagLib::String([genre UTF8String], TagLib::String::UTF8));
- 			}
- 			else {
+ 			else
  				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%u)", index] UTF8String], TagLib::String::UTF8));
- 			}
  			
  			f.ID3v2Tag()->addFrame(frame);
  		}
- 		else {
+ 		else
  			f.tag()->setGenre(TagLib::String([genre UTF8String], TagLib::String::UTF8));
-		}
   	}
 	
 	// Year
-	year = [metadata trackYear];
-	if(0 == year) {
-		year = [metadata albumYear];
-	}
-	if(0 != year) {
-		f.tag()->setYear(year);
-	}
+	year = [metadata trackDate];
+	if(nil == year)
+		year = [metadata albumDate];
+	if(nil != year)
+		f.tag()->setYear([year intValue]);
 	
 	// Comment
 	comment			= [metadata albumComment];
 	trackComment	= [metadata trackComment];
-	if(nil != trackComment) {
+	if(nil != trackComment)
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
-	}
-	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
-	}
-	if(nil != comment) {
+	if(nil != comment)
 		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Track title
 	title = [metadata trackTitle];
-	if(nil != title) {
+	if(nil != title)
 		f.tag()->setTitle(TagLib::String([title UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Track number
 	trackNumber		= [metadata trackNumber];
 	trackTotal		= [metadata trackTotal];
-	if(0 != trackTotal) {
+	if(nil != trackTotal) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TRCK", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u/%u", trackNumber, trackTotal] UTF8String], TagLib::String::UTF8));
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u/%u", [trackNumber intValue], [trackTotal intValue]] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
-	else if(0 != trackNumber) {
-		f.tag()->setTrack(trackNumber);
-	}
+	else if(nil != trackNumber)
+		f.tag()->setTrack([trackNumber intValue]);
 		
 	// Multi-artist (compilation)
 	// iTunes uses the TCMP frame for this, which isn't in the standard, but we'll use it for compatibility
 	compilation = [metadata compilation];
-	if(compilation && [[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+	if(nil != compilation && [[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TCMP", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		frame->setText(TagLib::String("1", TagLib::String::Latin1));
+		frame->setText(TagLib::String([[compilation stringValue] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}	
 	
@@ -190,25 +175,25 @@
 	discNumber = [metadata discNumber];
 	discTotal = [metadata discTotal];
 	
-	if(0 != discNumber && 0 != discTotal) {
+	if(nil != discNumber && nil != discTotal) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u/%u", discNumber, discTotal] UTF8String], TagLib::String::UTF8));
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u/%u", [discNumber intValue], [discTotal intValue]] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
-	else if(0 != discNumber) {
+	else if(nil != discNumber) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", discNumber] UTF8String], TagLib::String::UTF8));
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", [discNumber intValue]] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
-	else if(0 != discTotal) {
+	else if(nil != discTotal) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"/@u", discTotal] UTF8String], TagLib::String::UTF8));
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"/@u", [discTotal intValue]] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
 	
@@ -227,11 +212,11 @@
 		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", ms] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
-	else if(0 != length) {
+	else if(nil != length) {
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TLEN", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", 1000 * length] UTF8String], TagLib::String::UTF8));
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"%u", 1000 * [length intValue]] UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
 	

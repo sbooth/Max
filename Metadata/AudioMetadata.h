@@ -22,27 +22,27 @@
 
 @interface AudioMetadata : NSObject
 {
-	unsigned				_trackNumber;
-	unsigned				_trackTotal;
+	NSNumber				*_trackNumber;
+	NSNumber				*_trackTotal;
 	NSString				*_trackTitle;
 	NSString				*_trackArtist;
 	NSString				*_trackComposer;
-	unsigned				_trackYear;
+	NSNumber				*_trackDate;
 	NSString				*_trackGenre;
 	NSString				*_trackComment;
 
 	NSString				*_albumTitle;
 	NSString				*_albumArtist;
 	NSString				*_albumComposer;
-	unsigned				_albumYear;
+	NSNumber				*_albumDate;
 	NSString				*_albumGenre;
 	NSString				*_albumComment;
 
-	BOOL					_compilation;
-	unsigned				_discNumber;
-	unsigned				_discTotal;
+	NSNumber				*_compilation;
+	NSNumber				*_discNumber;
+	NSNumber				*_discTotal;
 
-	unsigned				_length;
+	NSNumber				*_length;
 	
 	NSImage					*_albumArt;
 	
@@ -60,11 +60,11 @@
 
 - (BOOL)		isEmpty;
 
-- (unsigned)	trackNumber;
-- (void)		setTrackNumber:(unsigned)trackNumber;
+- (NSNumber *)	trackNumber;
+- (void)		setTrackNumber:(NSNumber *)trackNumber;
 
-- (unsigned)	trackTotal;
-- (void)		setTrackTotal:(unsigned)trackTotal;
+- (NSNumber *)	trackTotal;
+- (void)		setTrackTotal:(NSNumber *)trackTotal;
 
 - (NSString *)	trackTitle;
 - (void)		setTrackTitle:(NSString *)trackTitle;
@@ -75,8 +75,8 @@
 - (NSString	*)	trackComposer;
 - (void)		setTrackComposer:(NSString *)trackComposer;
 
-- (unsigned)	trackYear;
-- (void)		setTrackYear:(unsigned)trackYear;
+- (NSString *)	trackDate;
+- (void)		setTrackDate:(NSString *)trackDate;
 
 - (NSString	*)	trackGenre;
 - (void)		setTrackGenre:(NSString *)trackGenre;
@@ -93,8 +93,8 @@
 - (NSString	*)	albumComposer;
 - (void)		setAlbumComposer:(NSString *)albumComposer;
 
-- (unsigned)	albumYear;
-- (void)		setAlbumYear:(unsigned)albumYear;
+- (NSString *)	albumDate;
+- (void)		setAlbumDate:(NSString *)albumDate;
 
 - (NSString	*)	albumGenre;
 - (void)		setAlbumGenre:(NSString *)albumGenre;
@@ -102,17 +102,17 @@
 - (NSString	*)	albumComment;
 - (void)		setAlbumComment:(NSString *)albumComment;
 
-- (BOOL)		compilation;
-- (void)		setCompilation:(BOOL)compilation;
+- (NSNumber *)	compilation;
+- (void)		setCompilation:(NSNumber *)compilation;
 
-- (unsigned)	discNumber;
-- (void)		setDiscNumber:(unsigned)discNumber;
+- (NSNumber *)	discNumber;
+- (void)		setDiscNumber:(NSNumber *)discNumber;
 
-- (unsigned)	discTotal;
-- (void)		setDiscTotal:(unsigned)discTotal;
+- (NSNumber *)	discTotal;
+- (void)		setDiscTotal:(NSNumber *)discTotal;
 
-- (unsigned)	length;
-- (void)		setLength:(unsigned)length;
+- (NSNumber *)	length;
+- (void)		setLength:(NSNumber *)length;
 
 - (NSString *)	MCN;
 - (void)		setMCN:(NSString *)MCN;
@@ -125,9 +125,5 @@
 
 - (NSString *)	playlist;
 - (void)		setPlaylist:(NSString *)playlist;
-
-// Legacy support
-- (unsigned)	albumTrackCount;
-- (void)		setAlbumTrackCount:(unsigned)albumTrackCount;
 
 @end

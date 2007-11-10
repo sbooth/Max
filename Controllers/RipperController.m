@@ -131,7 +131,7 @@ static RipperController *sharedController = nil;
 		[metadata setTrackArtist:nil];
 		[metadata setTrackGenre:nil];
 		[metadata setTrackComposer:nil];
-		[metadata setTrackYear:0];
+		[metadata setTrackDate:nil];
 		[metadata setISRC:nil];
 
 		switch(selectedRipper) {

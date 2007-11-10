@@ -53,7 +53,8 @@
 	
 	[_discNumber release],				_discNumber = nil;
 	[_discTotal release],				_discTotal = nil;
-
+	[_compilation release],				_compilation = nil;
+	
 	[_MCN release],						_MCN = nil;
 	
 	[_tracks release],					_tracks = nil;
@@ -452,7 +453,7 @@
 
 - (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
 - (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
-- (BOOL)			compilation							{ return _compilation; }
+- (NSNumber *)		compilation							{ return [[_compilation retain] autorelease]; }
 
 - (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
 
@@ -557,12 +558,13 @@
 	}
 }
 
-- (void) setCompilation:(BOOL)compilation
+- (void) setCompilation:(NSNumber *)compilation
 {
 	if(_compilation != compilation) {
-		[[[self undoManager] prepareWithInvocationTarget:self] setCompilation:_compilation];
+		[[self undoManager] registerUndoWithTarget:self selector:@selector(setCompilation:) object:_compilation];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Compilation", @"UndoRedo", @"")];
-		_compilation = compilation;
+		[_compilation release];
+		_compilation = [compilation retain];
 	}
 }
 

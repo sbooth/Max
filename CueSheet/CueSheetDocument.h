@@ -44,7 +44,7 @@
 	// Other disc info
 	NSNumber						*_discNumber;
 	NSNumber						*_discTotal;
-	BOOL							_compilation;
+	NSNumber						*_compilation;
 	
 	NSString						*_MCN;
 	
@@ -115,8 +115,8 @@
 - (NSNumber *)		discTotal;
 - (void)			setDiscTotal:(NSNumber *)discTotal;
 
-- (BOOL)			compilation;
-- (void)			setCompilation:(BOOL)compilation;
+- (NSNumber *)		compilation;
+- (void)			setCompilation:(NSNumber *)compilation;
 
 - (NSString *)		MCN;
 - (void)			setMCN:(NSString *)MCN;

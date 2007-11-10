@@ -435,7 +435,7 @@ addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 	NSString					*artist				= nil;
 	NSString					*composer			= nil;
 	NSString					*genre				= nil;
-	unsigned					year				= 0;
+	NSString 					*year				= nil;
 	NSString					*comment			= nil;
 	
 	
@@ -449,7 +449,7 @@ addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 	artist		= (nil == [metadata trackArtist] ? [metadata albumArtist] : [metadata trackArtist]);
 	composer	= (nil == [metadata trackComposer] ? [metadata albumComposer] : [metadata trackComposer]);
 	genre		= (nil == [metadata trackGenre] ? [metadata albumGenre] : [metadata trackGenre]);
-	year		= (0 == [metadata trackYear] ? [metadata albumYear] : [metadata trackYear]);
+	year		= (nil == [metadata trackDate] ? [metadata albumDate] : [metadata trackDate]);
 	comment		= (nil == [metadata albumComment] ? [metadata trackComment] : (nil == [metadata trackComment] ? [metadata albumComment] : [NSString stringWithFormat:@"%@\n%@", [metadata trackComment], [metadata albumComment]]));
 	
 	parameters		= [NSAppleEventDescriptor listDescriptor];
@@ -460,14 +460,14 @@ addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == artist ? @"" : artist)]									atIndex:4];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == composer ? @"" : composer)]								atIndex:5];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == genre ? @"" : genre)]										atIndex:6];
-	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:year]																atIndex:7];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:year]																atIndex:7];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == comment ? @"" : comment)]									atIndex:8];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata trackTitle] ? @"" : [metadata trackTitle])]		atIndex:9];
-	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata trackNumber]]											atIndex:10];
-	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata trackTotal]]												atIndex:11];
-	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithBoolean:[metadata compilation]]											atIndex:12];
-	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata discNumber]]												atIndex:13];
-	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[metadata discTotal]]												atIndex:14];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[[metadata trackNumber] intValue]]									atIndex:10];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[[metadata trackTotal] intValue]]									atIndex:11];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithBoolean:[[metadata compilation] boolValue]]								atIndex:12];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[[metadata discNumber] intValue]]									atIndex:13];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[[metadata discTotal] intValue]]									atIndex:14];
 	
 	target			= [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber bytes:&psn length:sizeof(psn)];
 	handler			= [NSAppleEventDescriptor descriptorWithString:[@"add_file_to_itunes_library" lowercaseString]];

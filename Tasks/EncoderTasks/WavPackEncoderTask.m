@@ -41,16 +41,16 @@
 - (void) writeTags
 {
 	AudioMetadata								*metadata				= [[self taskInfo] metadata];
-	unsigned									trackNumber				= 0;
-	unsigned									trackTotal				= 0;
-	unsigned									discNumber				= 0;
-	unsigned									discTotal				= 0;
-	BOOL										compilation				= NO;
+	NSNumber									*trackNumber			= nil;
+	NSNumber									*trackTotal				= nil;
+	NSNumber									*discNumber				= nil;
+	NSNumber									*discTotal				= nil;
+	NSNumber									*compilation			= nil;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*composer				= nil;
 	NSString									*title					= nil;
-	unsigned									year					= 0;
+	NSString									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	NSString									*trackComment			= nil;
@@ -66,106 +66,86 @@
 	
 	// Album title
 	album = [metadata albumTitle];
-	if(nil != album) {
+	if(nil != album)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"ALBUM"] cStringUsingEncoding:NSASCIIStringEncoding], [album UTF8String], strlen([album UTF8String]));
-	}
 	
 	// Artist
 	artist = [metadata trackArtist];
-	if(nil == artist) {
+	if(nil == artist)
 		artist = [metadata albumArtist];
-	}
-	if(nil != artist) {
+	if(nil != artist)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"ARTIST"] cStringUsingEncoding:NSASCIIStringEncoding], [artist UTF8String], strlen([artist UTF8String]));
-	}
 	
 	// Composer
 	composer = [metadata trackComposer];
-	if(nil == composer) {
+	if(nil == composer)
 		composer = [metadata albumComposer];
-	}
-	if(nil != composer) {
+	if(nil != composer)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"COMPOSER"] cStringUsingEncoding:NSASCIIStringEncoding], [composer UTF8String], strlen([composer UTF8String]));
-	}
 	
 	// Genre
 	genre = [metadata trackGenre];
-	if(nil == genre) {
+	if(nil == genre)
 		genre = [metadata albumGenre];
-	}
-	if(nil != genre) {
+	if(nil != genre)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"GENRE"] cStringUsingEncoding:NSASCIIStringEncoding], [genre UTF8String], strlen([genre UTF8String]));
-	}
 	
 	// Year
-	year = [metadata trackYear];
-	if(0 == year) {
-		year = [metadata albumYear];
-	}
-	if(0 != year) {
-		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"YEAR"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", year] UTF8String], strlen([[NSString stringWithFormat:@"%u", year] UTF8String]));
-	}
+	year = [metadata trackDate];
+	if(nil == year)
+		year = [metadata albumDate];
+	if(nil != year)
+		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"YEAR"] cStringUsingEncoding:NSASCIIStringEncoding], [year UTF8String], strlen([year UTF8String]));
 	
 	// Comment
 	comment			= [metadata albumComment];
 	trackComment	= [metadata trackComment];
-	if(nil != trackComment) {
+	if(nil != trackComment)
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
-	}
-	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
-	}
-	if(nil != comment) {
+	if(nil != comment)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"COMMENT"] cStringUsingEncoding:NSASCIIStringEncoding], [comment UTF8String], strlen([comment UTF8String]));
-	}
 	
 	// Track title
 	title = [metadata trackTitle];
-	if(nil != title) {
+	if(nil != title)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TITLE"] cStringUsingEncoding:NSASCIIStringEncoding], [title UTF8String], strlen([title UTF8String]));
-	}
 	
 	// Track number
 	trackNumber = [metadata trackNumber];
-	if(0 != trackNumber) {
-		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TRACK"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", trackNumber] UTF8String], strlen([[NSString stringWithFormat:@"%u", trackNumber] UTF8String]));
-	}
+	if(nil != trackNumber)
+		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TRACK"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", [trackNumber intValue]] UTF8String], strlen([[NSString stringWithFormat:@"%u", [trackNumber intValue]] UTF8String]));
 	
 	// Track total
 	trackTotal = [metadata trackTotal];
-	if(0 != trackTotal) {
-		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TRACKTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", trackTotal] UTF8String], strlen([[NSString stringWithFormat:@"%u", trackTotal] UTF8String]));
-	}
+	if(nil != trackTotal)
+		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"TRACKTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", [trackTotal intValue]] UTF8String], strlen([[NSString stringWithFormat:@"%u", [trackTotal intValue]] UTF8String]));
 	
 	// Disc number
 	discNumber = [metadata discNumber];
-	if(0 != discNumber) {
-		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"DISCNUMBER"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", discNumber] UTF8String], strlen([[NSString stringWithFormat:@"%u", discNumber] UTF8String]));
-	}
+	if(nil != discNumber)
+		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"DISCNUMBER"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", [discNumber intValue]] UTF8String], strlen([[NSString stringWithFormat:@"%u", [discNumber intValue]] UTF8String]));
 	
 	// Discs in set
 	discTotal = [metadata discTotal];
-	if(0 != discTotal) {
-		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"DISCTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", discTotal] UTF8String], strlen([[NSString stringWithFormat:@"%u", discTotal] UTF8String]));
-	}
+	if(nil != discTotal)
+		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"DISCTOTAL"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", [discTotal intValue]] UTF8String], strlen([[NSString stringWithFormat:@"%u", [discTotal intValue]] UTF8String]));
 	
 	// Compilation
 	compilation = [metadata compilation];
-	if(compilation) {
-		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"COMPILATION"] cStringUsingEncoding:NSASCIIStringEncoding], [@"1" UTF8String], strlen([@"1" UTF8String]));
-	}
+	if(nil != compilation)
+		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"COMPILATION"] cStringUsingEncoding:NSASCIIStringEncoding], [[NSString stringWithFormat:@"%u", [compilation intValue]] UTF8String], strlen([[NSString stringWithFormat:@"%u", [compilation intValue]] UTF8String]));
 	
 	// ISRC
 	isrc = [metadata ISRC];
-	if(nil != isrc) {
+	if(nil != isrc)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"ISRC"] cStringUsingEncoding:NSASCIIStringEncoding], [isrc UTF8String], strlen([isrc UTF8String]));
-	}
 	
 	// MCN
 	mcn = [metadata MCN];
-	if(nil != mcn) {
+	if(nil != mcn)
 		WavpackAppendTagItem(wpc, [[AudioMetadata customizeWavPackTag:@"MCN"] cStringUsingEncoding:NSASCIIStringEncoding], [mcn UTF8String], strlen([mcn UTF8String]));
-	}
 	
 	// Encoded by
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];

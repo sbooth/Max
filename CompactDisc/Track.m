@@ -237,7 +237,7 @@
 
 	[result setValue:[self title] forKey:@"title"];
 	[result setValue:[self artist] forKey:@"artist"];
-	[result setObject:[NSNumber numberWithUnsignedInt:[self year]] forKey:@"year"];
+	[result setObject:[self date] forKey:@"date"];
 	[result setValue:[self genre] forKey:@"genre"];
 	[result setValue:[self composer] forKey:@"composer"];
 	[result setValue:[self comment] forKey:@"comment"];
@@ -258,6 +258,7 @@
 {	
 	[_title release];		_title = nil;
 	[_artist release];		_artist = nil;
+	[_date release];		_date = nil;
 	[_genre release];		_genre = nil;
 	[_composer release];	_composer = nil;
 	[_comment release];		_comment = nil;
@@ -268,7 +269,7 @@
 
 	_title			= [[properties valueForKey:@"title"] retain];
 	_artist			= [[properties valueForKey:@"artist"] retain];
-	_date			= [[properties valueForKey:@"year"] retain];
+	_date			= [[properties valueForKey:@"date"] retain];
 	_genre			= [[properties valueForKey:@"genre"] retain];
 	_composer		= [[properties valueForKey:@"composer"] retain];
 	_comment		= [[properties valueForKey:@"comment"] retain];
@@ -314,19 +315,19 @@
 {
 	AudioMetadata *result = [[AudioMetadata alloc] init];
 
-	[result setTrackNumber:[self number]];
+	[result setTrackNumber:[NSNumber numberWithUnsignedInt:[self number]]];
 	[result setTrackTitle:[self title]];
 	[result setTrackArtist:[self artist]];
-	[result setTrackYear:[self date]];
+	[result setTrackDate:[self date]];
 	[result setTrackGenre:[self genre]];
 	[result setTrackComposer:[self composer]];
 	[result setTrackComment:[self comment]];
 	[result setISRC:[self ISRC]];
 	
-	[result setTrackTotal:[[self document] countOfTracks]];
+	[result setTrackTotal:[NSNumber numberWithUnsignedInt:[[self document] countOfTracks]]];
 	[result setAlbumTitle:[[self document] title]];
 	[result setAlbumArtist:[[self document] artist]];
-	[result setAlbumYear:[[self document] date]];
+	[result setAlbumDate:[[self document] date]];
 	[result setAlbumGenre:[[self document] genre]];
 	[result setAlbumComposer:[[self document] composer]];
 	[result setAlbumComment:[[self document] comment]];

@@ -42,16 +42,16 @@
 - (void) writeTags
 {
 	AudioMetadata								*metadata				= [[self taskInfo] metadata];
-	unsigned									trackNumber				= 0;
-	unsigned									trackTotal				= 0;
-	unsigned									discNumber				= 0;
-	unsigned									discTotal				= 0;
-	BOOL										compilation				= NO;
+	NSNumber									*trackNumber			= nil;
+	NSNumber									*trackTotal				= nil;
+	NSNumber									*discNumber				= nil;
+	NSNumber									*discTotal				= nil;
+	NSNumber									*compilation			= nil;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*composer				= nil;
 	NSString									*title					= nil;
-	unsigned									year					= 0;
+	NSString									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	NSString									*trackComment			= nil;
@@ -64,106 +64,86 @@
 
 	// Album title
 	album = [metadata albumTitle];
-	if(nil != album) {
+	if(nil != album)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"ALBUM"], TagLib::String([album UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Artist
 	artist = [metadata trackArtist];
-	if(nil == artist) {
+	if(nil == artist)
 		artist = [metadata albumArtist];
-	}
-	if(nil != artist) {
+	if(nil != artist)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"ARTIST"], TagLib::String([artist UTF8String], TagLib::String::UTF8));
-	}
 
 	// Composer
 	composer = [metadata trackComposer];
-	if(nil == composer) {
+	if(nil == composer)
 		composer = [metadata albumComposer];
-	}
-	if(nil != composer) {
+	if(nil != composer)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"COMPOSER"], TagLib::String([composer UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Genre
 	genre = [metadata trackGenre];
-	if(nil == genre) {
+	if(nil == genre)
 		genre = [metadata albumGenre];
-	}
-	if(nil != genre) {
+	if(nil != genre)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"GENRE"], TagLib::String([genre UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Year
-	year = [metadata trackYear];
-	if(0 == year) {
-		year = [metadata albumYear];
-	}
-	if(0 != year) {
-		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"DATE"], TagLib::String([[NSString stringWithFormat:@"%u", year] UTF8String], TagLib::String::UTF8));
-	}
+	year = [metadata trackDate];
+	if(nil == year)
+		year = [metadata albumDate];
+	if(nil != year)
+		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"DATE"], TagLib::String([year UTF8String], TagLib::String::UTF8));
 	
 	// Comment
 	comment			= [metadata albumComment];
 	trackComment	= [metadata trackComment];
-	if(nil != trackComment) {
+	if(nil != trackComment)
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
-	}
-	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
-	}
-	if(nil != comment) {
+	if(nil != comment)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"DESCRIPTION"], TagLib::String([comment UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Track title
 	title = [metadata trackTitle];
-	if(nil != title) {
+	if(nil != title)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"TITLE"], TagLib::String([title UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Track number
 	trackNumber = [metadata trackNumber];
-	if(0 != trackNumber) {
-		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"TRACKNUMBER"], TagLib::String([[NSString stringWithFormat:@"%u", trackNumber] UTF8String], TagLib::String::UTF8));
-	}
+	if(nil != trackNumber)
+		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"TRACKNUMBER"], TagLib::String([[trackNumber stringValue] UTF8String], TagLib::String::UTF8));
 
 	// Track total
 	trackTotal = [metadata trackTotal];
-	if(0 != trackTotal) {
-		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"TRACKTOTAL"], TagLib::String([[NSString stringWithFormat:@"%u", trackTotal] UTF8String], TagLib::String::UTF8));
-	}
+	if(nil != trackTotal)
+		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"TRACKTOTAL"], TagLib::String([[trackTotal stringValue] UTF8String], TagLib::String::UTF8));
 
 	// Disc number
 	discNumber = [metadata discNumber];
-	if(0 != discNumber) {
-		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"DISCNUMBER"], TagLib::String([[NSString stringWithFormat:@"%u", discNumber] UTF8String], TagLib::String::UTF8));
-	}
+	if(nil != discNumber)
+		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"DISCNUMBER"], TagLib::String([[discNumber stringValue] UTF8String], TagLib::String::UTF8));
 	
 	// Discs in set
 	discTotal = [metadata discTotal];
-	if(0 != discTotal) {
-		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"DISCTOTAL"], TagLib::String([[NSString stringWithFormat:@"%u", discTotal] UTF8String], TagLib::String::UTF8));
-	}
+	if(nil != discTotal)
+		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"DISCTOTAL"], TagLib::String([[discTotal stringValue] UTF8String], TagLib::String::UTF8));
 
 	// Compilation
 	compilation = [metadata compilation];
-	if(compilation) {
-		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"COMPILATION"], TagLib::String([@"1" UTF8String], TagLib::String::UTF8));
-	}
+	if(nil != compilation)
+		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"COMPILATION"], TagLib::String([[compilation stringValue] UTF8String], TagLib::String::UTF8));
 	
 	// ISRC
 	isrc = [metadata ISRC];
-	if(nil != isrc) {
+	if(nil != isrc)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"ISRC"], TagLib::String([isrc UTF8String], TagLib::String::UTF8));
-	}
 
 	// MCN
 	mcn = [metadata MCN];
-	if(nil != mcn) {
+	if(nil != mcn)
 		f.tag()->addField([AudioMetadata customizeOggVorbisTag:@"MCN"], TagLib::String([mcn UTF8String], TagLib::String::UTF8));
-	}
 	
 	// Encoded by
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];

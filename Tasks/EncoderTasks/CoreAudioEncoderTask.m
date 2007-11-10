@@ -47,24 +47,23 @@
 	NSMutableDictionary		*info;
 	UInt32					size;
 	MP4FileHandle			mp4FileHandle;
-	int						result;
 	AudioMetadata			*metadata				= [[self taskInfo] metadata];
 	AudioFileTypeID			fileType				= [self fileType];
 	NSString				*bundleVersion			= nil;
 	NSString				*versionString			= nil;
-	unsigned				trackNumber				= 0;
-	unsigned				trackTotal				= 0;
-	unsigned				discNumber				= 0;
-	unsigned				discTotal				= 0;
+	NSNumber				*trackNumber			= nil;
+	NSNumber				*trackTotal				= nil;
+	NSNumber				*discNumber				= nil;
+	NSNumber				*discTotal				= nil;
 	NSString				*album					= nil;
 	NSString				*artist					= nil;
 	NSString				*composer				= nil;
 	NSString				*title					= nil;
-	unsigned				year					= 0;
+	NSString				*year					= nil;
 	NSString				*genre					= nil;
 	NSString				*comment				= nil;
 	NSString				*trackComment			= nil;
-	BOOL					compilation				= NO;
+	NSNumber				*compilation			= nil;
 	NSImage					*albumArt				= nil;
 	NSData					*data					= nil;
 	NSString				*tempFilename			= NULL;
@@ -77,97 +76,77 @@
 
 		// Album title
 		album = [metadata albumTitle];
-		if(nil != album) {
+		if(nil != album)
 			MP4SetMetadataAlbum(mp4FileHandle, [album UTF8String]);
-		}
 		
 		// Artist
 		artist = [metadata trackArtist];
-		if(nil == artist) {
+		if(nil == artist)
 			artist = [metadata albumArtist];
-		}
-		if(nil != artist) {
+		if(nil != artist)
 			MP4SetMetadataArtist(mp4FileHandle, [artist UTF8String]);
-		}
 		
 		// Composer
 		composer = [metadata trackComposer];
-		if(nil == composer) {
+		if(nil == composer)
 			composer = [metadata albumComposer];
-		}
-		if(nil != composer) {
+		if(nil != composer)
 			MP4SetMetadataWriter(mp4FileHandle, [composer UTF8String]);
-		}
 
 		// Genre
-		if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count]) {
+		if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count])
 			genre = [metadata trackGenre];
-		}
-		if(nil == genre) {
+		if(nil == genre)
 			genre = [metadata albumGenre];
-		}
-		if(nil != genre) {
+		if(nil != genre)
 			MP4SetMetadataGenre(mp4FileHandle, [genre UTF8String]);
-		}
 		
 		// Year
-		year = [metadata trackYear];
-		if(0 == year) {
-			year = [metadata albumYear];
-		}
-		if(0 != year) {
-			MP4SetMetadataYear(mp4FileHandle, [[NSString stringWithFormat:@"%u", year] UTF8String]);
-		}
+		year = [metadata trackDate];
+		if(nil == year)
+			year = [metadata albumDate];
+		if(nil != year)
+			MP4SetMetadataYear(mp4FileHandle, [year UTF8String]);
 		
 		// Comment
 		comment			= [metadata albumComment];
 		trackComment	= [metadata trackComment];
-		if(nil != trackComment) {
+		if(nil != trackComment)
 			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
-		}
-		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 			comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
-		}
-		if(nil != comment) {
+		if(nil != comment)
 			MP4SetMetadataComment(mp4FileHandle, [comment UTF8String]);
-		}
 		
 		// Track title
 		title = [metadata trackTitle];
-		if(nil != title) {
+		if(nil != title)
 			MP4SetMetadataName(mp4FileHandle, [title UTF8String]);
-		}
 		
 		// Track number
 		trackNumber = [metadata trackNumber];
 		trackTotal = [metadata trackTotal];
-		if(0 != trackNumber && 0 != trackTotal) {
-			MP4SetMetadataTrack(mp4FileHandle, trackNumber, trackTotal);
-		}
-		else if(0 != trackNumber) {
-			MP4SetMetadataTrack(mp4FileHandle, trackNumber, 0);
-		}
-		else if(0 != trackTotal) {
-			MP4SetMetadataTrack(mp4FileHandle, 0, trackTotal);
-		}
+		if(nil != trackNumber && nil != trackTotal)
+			MP4SetMetadataTrack(mp4FileHandle, [trackNumber intValue], [trackTotal intValue]);
+		else if(nil != trackNumber)
+			MP4SetMetadataTrack(mp4FileHandle, [trackNumber intValue], 0);
+		else if(0 != trackTotal)
+			MP4SetMetadataTrack(mp4FileHandle, 0, [trackTotal intValue]);
 		
 		// Disc number
 		discNumber = [metadata discNumber];
 		discTotal = [metadata discTotal];
-		if(0 != discNumber && 0 != discTotal) {
-			MP4SetMetadataDisk(mp4FileHandle, discNumber, discTotal);
-		}
-		else if(0 != discNumber) {
-			MP4SetMetadataDisk(mp4FileHandle, discNumber, 0);
-		}
-		else if(0 != discTotal) {
-			MP4SetMetadataDisk(mp4FileHandle, 0, discTotal);
-		}
+		if(nil != discNumber && nil != discTotal)
+			MP4SetMetadataDisk(mp4FileHandle, [discNumber intValue], [discTotal intValue]);
+		else if(0 != discNumber)
+			MP4SetMetadataDisk(mp4FileHandle, [discNumber intValue], 0);
+		else if(0 != discTotal)
+			MP4SetMetadataDisk(mp4FileHandle, 0, [discTotal intValue]);
 		
 		// Compilation
 		compilation = [metadata compilation];
-		if(NO != compilation) {
-			MP4SetMetadataCompilation(mp4FileHandle, YES);
+		if(nil != compilation) {
+			MP4SetMetadataCompilation(mp4FileHandle, [compilation boolValue]);
 		}
 		
 		// Album art
@@ -226,72 +205,57 @@
 				
 				// Album title
 				album = [metadata albumTitle];
-				if(nil != album) {
+				if(nil != album)
 					[info setObject:album forKey:@kAFInfoDictionary_Album];
-				}
 				
 				// Artist
 				artist = [metadata trackArtist];
-				if(nil == artist) {
+				if(nil == artist)
 					artist = [metadata albumArtist];
-				}
-				if(nil != artist) {
+				if(nil != artist)
 					[info setObject:artist forKey:@kAFInfoDictionary_Artist];
-				}
 				
 				// Composer
 				composer = [metadata trackComposer];
-				if(nil == composer) {
+				if(nil == composer)
 					composer = [metadata albumComposer];
-				}
-				if(nil != composer) {
+				if(nil != composer)
 					[info setObject:composer forKey:@kAFInfoDictionary_Composer];
-				}
 
 				// Genre
-				if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count]) {
+				if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count])
 					genre = [metadata trackGenre];
-				}
-				if(nil == genre) {
+				if(nil == genre)
 					genre = [metadata albumGenre];
-				}
-				if(nil != genre) {
+				if(nil != genre)
 					[info setObject:genre forKey:@kAFInfoDictionary_Genre];
-				}
 				
 				// Year
-				year = [metadata trackYear];
-				if(0 == year) {
-					year = [metadata albumYear];
-				}
-				if(0 != year) {
-					[info setObject:[NSNumber numberWithUnsignedInt:year] forKey:@kAFInfoDictionary_Year];
-				}
+				year = [metadata trackDate];
+				if(nil == year)
+					year = [metadata albumDate];
+				if(nil != year)
+					[info setObject:year forKey:@kAFInfoDictionary_Year];
 				
 				// Comment
 				comment			= [metadata albumComment];
 				trackComment	= [metadata trackComment];
-				if(nil != trackComment) {
+				if(nil != trackComment)
 					comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
-				}
-				if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+				if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 					comment = (nil == comment ? [self encoderSettingsString] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self encoderSettingsString]]]);
-				}
-				if(nil != comment) {
+				if(nil != comment)
 					[info setObject:comment forKey:@kAFInfoDictionary_Comments];
-				}
 				
 				// Track title
 				title = [metadata trackTitle];
-				if(nil != title) {
+				if(nil != title)
 					[info setObject:title forKey:@kAFInfoDictionary_Title];
-				}
 				
 				// Track number
 				trackNumber = [metadata trackNumber];
-				if(0 != trackNumber) {
-					[info setObject:[NSNumber numberWithUnsignedInt:trackNumber] forKey:@kAFInfoDictionary_TrackNumber];
-				}
+				if(nil != trackNumber)
+					[info setObject:trackNumber forKey:@kAFInfoDictionary_TrackNumber];
 				
 				// On 10.4.8, this returns a 'pty?' error- must not be settable
 				/*

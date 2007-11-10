@@ -50,19 +50,19 @@
 	FLAC__bool									result;
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
-	unsigned									trackNumber				= 0;
-	unsigned									trackTotal				= 0;
+	NSNumber									*trackNumber			= nil;
+	NSNumber									*trackTotal				= nil;
 	NSString									*album					= nil;
 	NSString									*artist					= nil;
 	NSString									*composer				= nil;
 	NSString									*title					= nil;
-	unsigned									year					= 0;
+	NSString									*year					= nil;
 	NSString									*genre					= nil;
 	NSString									*comment				= nil;
 	NSString									*trackComment			= nil;
-	unsigned									discNumber				= 0;
-	unsigned									discTotal				= 0;
-	BOOL										compilation				= NO;
+	NSNumber									*discNumber				= nil;
+	NSNumber									*discTotal				= nil;
+	NSNumber									*compilation			= nil;
 	NSString									*isrc					= nil;
 	NSString									*mcn					= nil;
 	
@@ -83,9 +83,8 @@
 
 		// Seek to the vorbis comment block if it exists
 		while(FLAC__METADATA_TYPE_VORBIS_COMMENT != FLAC__metadata_iterator_get_block_type(iterator)) {
-			if(NO == FLAC__metadata_iterator_next(iterator)) {
+			if(NO == FLAC__metadata_iterator_next(iterator))
 				break; // Already at end
-			}
 		}
 		
 		// If there isn't a vorbis comment block add one
@@ -103,112 +102,91 @@
 			result = FLAC__metadata_iterator_insert_block_after(iterator, block);
 			NSAssert1(YES == result, @"FLAC__metadata_chain_status: %i", FLAC__metadata_chain_status(chain));
 		}
-		else {
+		else
 			block = FLAC__metadata_iterator_get_block(iterator);
-		}
 
 		// Album title
 		album = [metadata albumTitle];
-		if(nil != album) {
+		if(nil != album)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"ALBUM"], album);
-		}
 		
 		// Artist
 		artist = [metadata trackArtist];
-		if(nil == artist) {
+		if(nil == artist)
 			artist = [metadata albumArtist];
-		}
-		if(nil != artist) {
+		if(nil != artist)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"ARTIST"], artist);
-		}
 
 		// Composer
 		composer = [metadata trackComposer];
-		if(nil == composer) {
+		if(nil == composer)
 			composer = [metadata albumComposer];
-		}
-		if(nil != composer) {
+		if(nil != composer)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMPOSER"], composer);
-		}
 		
 		// Genre
 		genre = [metadata trackGenre];
-		if(nil == genre) {
+		if(nil == genre)
 			genre = [metadata albumGenre];
-		}
-		if(nil != genre) {
+		if(nil != genre)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"GENRE"], genre);
-		}
 		
 		// Year
-		year = [metadata trackYear];
-		if(0 == year) {
-			year = [metadata albumYear];
-		}
-		if(0 != year) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DATE"], [NSString stringWithFormat:@"%u", year]);
-		}
+		year = [metadata trackDate];
+		if(nil == year)
+			year = [metadata albumDate];
+		if(nil != year)
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DATE"], year);
 		
 		// Comment
 		comment			= [metadata albumComment];
 		trackComment	= [metadata trackComment];
-		if(nil != trackComment) {
+		if(nil != trackComment)
 			comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
-		}
-		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue]) {
+		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 			comment = (nil == comment ? [self encoderSettingsString] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self encoderSettingsString]]]);
-		}
-		if(nil != comment) {
+		if(nil != comment)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DESCRIPTION"], comment);
-		}
 		
 		// Track title
 		title = [metadata trackTitle];
-		if(nil != title) {
+		if(nil != title)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TITLE"], title);
-		}
 		
 		// Track number
 		trackNumber = [metadata trackNumber];
-		if(0 != trackNumber) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKNUMBER"], [NSString stringWithFormat:@"%u", trackNumber]);
-		}
+		if(nil != trackNumber)
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKNUMBER"], [trackNumber stringValue]);
 
 		// Total tracks
 		trackTotal = [metadata trackTotal];
-		if(0 != trackTotal) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKTOTAL"], [NSString stringWithFormat:@"%u", trackTotal]);
-		}
+		if(nil != trackTotal)
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKTOTAL"], [trackTotal stringValue]);
 
 		// Compilation
 		compilation = [metadata compilation];
-		if(compilation) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMPILATION"], @"1");
-		}
+		if(nil != compilation)
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMPILATION"], [compilation stringValue]);
 		
 		// Disc number
 		discNumber = [metadata discNumber];
-		if(0 != discNumber) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCNUMBER"], [NSString stringWithFormat:@"%u", discNumber]);
-		}
+		if(nil != discNumber)
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCNUMBER"], [discNumber stringValue]);
 		
 		// Discs in set
 		discTotal = [metadata discTotal];
-		if(0 != discTotal) {
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCTOTAL"], [NSString stringWithFormat:@"%u", discTotal]);
-		}
+		if(nil != discTotal)
+			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCTOTAL"], [discTotal stringValue]);
 		
 		// ISRC
 		isrc = [metadata ISRC];
-		if(nil != isrc) {
+		if(nil != isrc)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"ISRC"], isrc);
-		}
 
 		// MCN
 		mcn = [metadata MCN];
-		if(nil != mcn) {
+		if(nil != mcn)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"MCN"], mcn);
-		}
 		
 		// Encoded by
 		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
