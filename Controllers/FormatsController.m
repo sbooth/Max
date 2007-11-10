@@ -48,9 +48,8 @@ static FormatsController			*sharedController						= nil;
 - (id) init
 {
 	if((self = [super initWithWindowNibName:@"Formats"])) {
-		return self;
 	}
-	return nil;
+	return self;
 }
 
 - (void) awakeFromNib
@@ -76,7 +75,8 @@ static FormatsController			*sharedController						= nil;
 
 - (NSArray *) selectedFormats
 {
-	return [[_encodersController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];
+	NSArray *outputFormats = [[NSUserDefaults standardUserDefaults] arrayForKey:@"outputFormats"];
+	return [outputFormats filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"selected == 1"]];
 }
 
 - (IBAction) setupEncoders:(id)sender
