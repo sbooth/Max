@@ -179,11 +179,11 @@ getCoreAudioFileDataFormats(OSType filetype)
 					UInt32 mode = kAudioCodecBitRateFormat_CBR;
 					err = AudioConverterSetProperty(dummyConverter, kAudioCodecBitRateFormat, sizeof(mode), &mode);
 					if(noErr == err) {
-						err = AudioConverterGetPropertyInfo(dummyConverter, kAudioConverterAvailableEncodeBitRates, &size, NULL);
+						err = AudioConverterGetPropertyInfo(dummyConverter, kAudioConverterApplicableEncodeBitRates, &size, NULL);
 						bitrates = malloc(size);
 						NSCAssert(NULL != bitrates, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 						
-						err = AudioConverterGetProperty(dummyConverter, kAudioConverterAvailableEncodeBitRates, &size, bitrates);
+						err = AudioConverterGetProperty(dummyConverter, kAudioConverterApplicableEncodeBitRates, &size, bitrates);
 						if(noErr == err) {
 							unsigned		bitrateCount	= size / sizeof(AudioValueRange);
 							NSMutableArray	*bitratesA		= [NSMutableArray arrayWithCapacity:bitrateCount];
