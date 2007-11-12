@@ -174,7 +174,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 				// Create a dummy converter to query
 				AudioConverterRef dummyConverter;
 				err = AudioConverterNew(&inputASBD, &desc, &dummyConverter);
-				if(noErr == err) {
+				if(noErr == err) {					
 					// Get the available bitrates (CBR)
 					UInt32 mode = kAudioCodecBitRateFormat_CBR;
 					err = AudioConverterSetProperty(dummyConverter, kAudioCodecBitRateFormat, sizeof(mode), &mode);
@@ -264,6 +264,9 @@ getCoreAudioFileDataFormats(OSType filetype)
 				NSString *description = nil;
 				size = sizeof(description);
 
+				// Workaround a bug in Leopard where mChannelsPerFrame comes back as 1 for M4A/AAC
+				desc.mChannelsPerFrame = 0;
+				
 				err = AudioFormatGetProperty(kAudioFormatProperty_FormatName, sizeof(AudioStreamBasicDescription), &desc, &size, &description);
 				if(noErr != err)
 					description = NSLocalizedStringFromTable(@"Unknown", @"General", @"");
