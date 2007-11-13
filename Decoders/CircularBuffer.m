@@ -59,7 +59,8 @@
 	uint8_t		*newbuf;
 	
 	// We can only grow in size, not shrink
-	NSParameterAssert(size > [self size]);
+	if(size <= [self size])
+		return;
 
 	[self normalizeBuffer];
 	
