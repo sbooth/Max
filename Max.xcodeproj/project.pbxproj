@@ -24,6 +24,9 @@
 		8C2231D50ACA371300541BE7 /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C2231D60ACA371700541BE7 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA139B0AC8ACEB009E46CB /* taglib.framework */; };
 		8C244AFB0AC6DFEF001334D0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C244AC60AC6DFEF001334D0 /* Security.framework */; };
+		8C2682FF0CE95B8D00EF1929 /* MPEGDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C2682FE0CE95B8D00EF1929 /* MPEGDecoder.m */; };
+		8C2683120CE95F2B00EF1929 /* mad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2683110CE95F2B00EF1929 /* mad.framework */; };
+		8C2683150CE95F3400EF1929 /* mad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C2683110CE95F2B00EF1929 /* mad.framework */; };
 		8C29D8DB097F3D5D00E8B766 /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8DA097F3D5D00E8B766 /* Preferences.strings */; };
 		8C29D8FD097F3EBE00E8B766 /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */; };
 		8C29D928097F424900E8B766 /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C29D927097F424900E8B766 /* General.strings */; };
@@ -253,6 +256,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				8C2683150CE95F3400EF1929 /* mad.framework in Copy Frameworks */,
 				8C05F19E0CC2DAAC006E5746 /* Growl.framework in Copy Frameworks */,
 				8C05F19F0CC2DAAC006E5746 /* Sparkle.framework in Copy Frameworks */,
 				8C98B44A0C4743DC004F7BF6 /* neon.framework in Copy Frameworks */,
@@ -343,6 +347,9 @@
 		8C1F78140B4218910066072B /* WavPack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WavPack.png; sourceTree = "<group>"; };
 		8C244AC60AC6DFEF001334D0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		8C2681CF0CE8ED5D00EF1929 /* DecoderMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoderMethods.h; path = Decoders/DecoderMethods.h; sourceTree = "<group>"; };
+		8C2682FD0CE95B8D00EF1929 /* MPEGDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MPEGDecoder.h; path = Decoders/MPEGDecoder.h; sourceTree = "<group>"; };
+		8C2682FE0CE95B8D00EF1929 /* MPEGDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MPEGDecoder.m; path = Decoders/MPEGDecoder.m; sourceTree = "<group>"; };
+		8C2683110CE95F2B00EF1929 /* mad.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mad.framework; path = Frameworks/MAD/build/Release/mad.framework; sourceTree = "<group>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -811,6 +818,7 @@
 				8C98B4010C473F2C004F7BF6 /* musicbrainz3.framework in Frameworks */,
 				8C05F19C0CC2DAA1006E5746 /* Growl.framework in Frameworks */,
 				8C05F19D0CC2DAA1006E5746 /* Sparkle.framework in Frameworks */,
+				8C2683120CE95F2B00EF1929 /* mad.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1360,6 +1368,7 @@
 		8CEA08B70AC78374009E46CB /* External Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8C2683110CE95F2B00EF1929 /* mad.framework */,
 				8C05F1800CC2DAA1006E5746 /* Growl.framework */,
 				8C05F1810CC2DAA1006E5746 /* Sparkle.framework */,
 				8C98B3E20C473F2C004F7BF6 /* musicbrainz3.framework */,
@@ -1387,6 +1396,8 @@
 		8CFA4B290ABDDB2700C5AE9F /* Decoders */ = {
 			isa = PBXGroup;
 			children = (
+				8C2682FD0CE95B8D00EF1929 /* MPEGDecoder.h */,
+				8C2682FE0CE95B8D00EF1929 /* MPEGDecoder.m */,
 				8CE607860C8ACD7900AEC125 /* RegionDecoder.h */,
 				8CE607870C8ACD7900AEC125 /* RegionDecoder.m */,
 				8CFA4B2E0ABDE11800C5AE9F /* CircularBuffer.h */,
@@ -1669,6 +1680,7 @@
 				8C397B980CC1D9A0004EFC92 /* OggVorbisDecoder.m in Sources */,
 				8C397B990CC1D9A2004EFC92 /* ShortenDecoder.m in Sources */,
 				8C397B9A0CC1D9A3004EFC92 /* WavPackDecoder.m in Sources */,
+				8C2682FF0CE95B8D00EF1929 /* MPEGDecoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2180,6 +2192,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_21)",
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(SRCROOT)",
 					"$(SRCROOT)/Frameworks",
@@ -2217,6 +2230,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/discid/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_20 = "\"$(SRCROOT)/Frameworks/neon/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_21 = "\"$(SRCROOT)/Frameworks/mad/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(SRCROOT)/Frameworks/lame/build/Release\"";
@@ -2255,6 +2269,7 @@
 				);
 				DEPLOYMENT_POSTPROCESSING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_21)",
 					"$(FRAMEWORK_SEARCH_PATHS)",
 					"$(SRCROOT)",
 					"$(SRCROOT)/Frameworks",
@@ -2292,6 +2307,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/discid/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_20 = "\"$(SRCROOT)/Frameworks/neon/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_21 = "\"$(SRCROOT)/Frameworks/mad/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(SRCROOT)/Frameworks/lame/build/Release\"";

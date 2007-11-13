@@ -26,6 +26,7 @@
 #import "FLACDecoder.h"
 #import "LibsndfileDecoder.h"
 #import "MonkeysAudioDecoder.h"
+#import "MPEGDecoder.h"
 #import "MusepackDecoder.h"
 #import "OggFLACDecoder.h"
 #import "OggSpeexDecoder.h"
@@ -74,6 +75,8 @@
 		result = [[MusepackDecoder alloc] initWithFilename:filename];
 	else if([extension isEqualToString:@"shn"])
 		result = [[ShortenDecoder alloc] initWithFilename:filename];
+	else if([extension isEqualToString:@"mp3"])
+		result = [[MPEGDecoder alloc] initWithFilename:filename];
 	else if([coreAudioExtensions containsObject:extension])
 		result = [[CoreAudioDecoder alloc] initWithFilename:filename];
 	else if([libsndfileExtensions containsObject:extension])
