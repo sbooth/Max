@@ -19,6 +19,7 @@
  */
 
 #import "LibsndfileDecoder.h"
+#import "CircularBuffer.h"
 
 #define SF_INPUT_BUFFER_LEN		1024
 
@@ -29,12 +30,42 @@
 
 @implementation LibsndfileDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
 {
-	int		result;
-	
-	// Close the output file
-	result		= sf_close(_sf);
+	if((self = [super initWithFilename:filename])) {
+		SF_INFO info;
+		
+		_sf = sf_open([[self filename] fileSystemRepresentation], SFM_READ, &info);
+		NSAssert1(NULL != _sf, @"Unable to open the input file (%s)", sf_strerror(NULL));
+		
+		_totalFrames = info.frames;
+		[self setFormat:info.format];
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		_pcmFormat.mSampleRate			= info.samplerate;
+		_pcmFormat.mChannelsPerFrame	= info.channels;
+		
+		switch(SF_FORMAT_SUBMASK & [self format]) {
+			case SF_FORMAT_PCM_S8:			_pcmFormat.mBitsPerChannel	= 8;			break;
+			case SF_FORMAT_PCM_16:			_pcmFormat.mBitsPerChannel	= 16;			break;
+			case SF_FORMAT_PCM_24:			_pcmFormat.mBitsPerChannel	= 24;			break;
+			case SF_FORMAT_PCM_32:			_pcmFormat.mBitsPerChannel	= 32;			break;
+			default:						_pcmFormat.mBitsPerChannel	= 16;			break;
+		}
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+	}
+	return self;
+}
+
+- (void) dealloc
+{
+	int result = sf_close(_sf);
 	NSAssert1(0 == result, @"sf_close failed: %s", sf_error_number(result));
 	
 	[super dealloc];
@@ -42,7 +73,7 @@
 
 - (int)				format								{ return _format; }
 
-- (NSString *)		sourceFormatDescription
+- (NSString *) sourceFormatDescription
 {
 	SF_FORMAT_INFO		formatInfo;
 	int					result;
@@ -55,42 +86,17 @@
 }
 
 - (SInt64)			totalFrames								{ return _totalFrames; }
-- (SInt64)			currentFrame							{ return -1; }
-- (SInt64)			seekToFrame:(SInt64)frame				{ return sf_seek(_sf, frame, SEEK_SET); }
 
-- (void)			finalizeSetup
+- (BOOL)			supportsSeeking							{ return YES; }
+
+- (SInt64) seekToFrame:(SInt64)frame
 {
-	SF_INFO					info;
-
-	_sf								= sf_open([[self filename] fileSystemRepresentation], SFM_READ, &info);
-	NSAssert1(NULL != _sf, @"Unable to open the input file (%s)", sf_strerror(NULL));
-	
-	_totalFrames					= info.frames;
-	[self setFormat:info.format];
-		
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-	
-	_pcmFormat.mSampleRate			= info.samplerate;
-	_pcmFormat.mChannelsPerFrame	= info.channels;
-
-	switch(SF_FORMAT_SUBMASK & [self format]) {
-		case SF_FORMAT_PCM_S8:			_pcmFormat.mBitsPerChannel	= 8;			break;
-		case SF_FORMAT_PCM_16:			_pcmFormat.mBitsPerChannel	= 16;			break;
-		case SF_FORMAT_PCM_24:			_pcmFormat.mBitsPerChannel	= 24;			break;
-		case SF_FORMAT_PCM_32:			_pcmFormat.mBitsPerChannel	= 32;			break;
-		default:						_pcmFormat.mBitsPerChannel	= 16;			break;
-	}
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-	
-	[super finalizeSetup];
+	_currentFrame = sf_seek(_sf, frame, SEEK_SET);
+	[[self pcmBuffer] reset];
+	return [self currentFrame];
 }
 
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	unsigned			spaceRequired		= SF_INPUT_BUFFER_LEN * [self pcmFormat].mChannelsPerFrame * ([self pcmFormat].mBitsPerChannel / 8);

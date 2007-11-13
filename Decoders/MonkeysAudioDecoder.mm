@@ -19,6 +19,7 @@
  */
 
 #import "MonkeysAudioDecoder.h"
+#import "CircularBuffer.h"
 
 #include <mac/All.h>
 #include <mac/MACLib.h>
@@ -29,7 +30,36 @@
 
 @implementation MonkeysAudioDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
+{
+	if((self = [super initWithFilename:filename])) {
+		int result;
+		
+		// Setup converter
+		str_utf16 *chars = GetUTF16FromANSI([[self filename] fileSystemRepresentation]);
+		NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+		
+		_decompressor = (void *)CreateIAPEDecompress(chars, &result);
+		NSAssert(NULL != _decompressor && ERROR_SUCCESS == result, @"Unable to open the input file.");
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		_pcmFormat.mSampleRate			= SELF_DECOMPRESSOR->GetInfo(APE_INFO_SAMPLE_RATE);
+		_pcmFormat.mChannelsPerFrame	= SELF_DECOMPRESSOR->GetInfo(APE_INFO_CHANNELS);
+		_pcmFormat.mBitsPerChannel		= SELF_DECOMPRESSOR->GetInfo(APE_INFO_BITS_PER_SAMPLE);
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+		
+		delete [] chars;
+	}
+	return self;
+}
+
+- (void) dealloc
 {
 	delete SELF_DECOMPRESSOR;
 	
@@ -38,44 +68,9 @@
 
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"%@, %u channels, %u Hz", NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @""), [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
-- (SInt64)			totalFrames
-{
-	return SELF_DECOMPRESSOR->GetInfo(APE_DECOMPRESS_TOTAL_BLOCKS);
-}
+- (SInt64)			totalFrames						{ return SELF_DECOMPRESSOR->GetInfo(APE_DECOMPRESS_TOTAL_BLOCKS); }
 
-- (SInt64)			currentFrame					{ return -1; }
-- (SInt64)			seekToFrame:(SInt64)frame		{ return -1; }
-
-- (void)			finalizeSetup
-{
-	str_utf16			*chars				= NULL;
-	int					result;
-
-	// Setup converter
-	chars			= GetUTF16FromANSI([[self filename] fileSystemRepresentation]);
-	NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-
-	_decompressor	= (void *)CreateIAPEDecompress(chars, &result);
-	NSAssert(NULL != _decompressor && ERROR_SUCCESS == result, @"Unable to open the input file.");
-
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-	
-	_pcmFormat.mSampleRate			= SELF_DECOMPRESSOR->GetInfo(APE_INFO_SAMPLE_RATE);
-	_pcmFormat.mChannelsPerFrame	= SELF_DECOMPRESSOR->GetInfo(APE_INFO_CHANNELS);
-	_pcmFormat.mBitsPerChannel		= SELF_DECOMPRESSOR->GetInfo(APE_INFO_BITS_PER_SAMPLE);
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-	
-	[super finalizeSetup];
-	
-	delete [] chars;
-}
-
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	int					result;

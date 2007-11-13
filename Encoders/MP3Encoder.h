@@ -51,6 +51,7 @@ enum {
 {	
 	FILE					*_out;
 	lame_global_flags		*_gfp;
+	UInt32					_sourceBitsPerChannel;
 }
 
 @end

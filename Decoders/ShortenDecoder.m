@@ -19,12 +19,55 @@
  */
 
 #import "ShortenDecoder.h"
+#import "CircularBuffer.h"
 
 #define SHORTEN_BLOCKS 512
 
 @implementation ShortenDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
+{
+	if((self = [super initWithFilename:filename])) {
+		shn_config		config;
+		int				result;
+		
+		// Setup config struct
+		config.error_output_method			= ERROR_OUTPUT_STDERR;
+		config.seek_tables_path				= NULL;
+		config.relative_seek_tables_path	= NULL;
+		config.verbose						= 0;
+#if defined(__BIG_ENDIAN__)
+		config.swap_bytes					= 1;
+#elif defined(__LITTLE_ENDIAN__)
+		config.swap_bytes					= 0;
+#else
+#error "Target processor byte order unknown"
+#endif
+		
+		// Setup decoder
+		_shn = shn_load([[self filename] fileSystemRepresentation], config);
+		NSAssert(NULL != _shn, @"Unable to open the input file.");
+		
+		result	= shn_init_decoder(_shn);
+		NSAssert(1 == result, @"Unable to initialize the Shorten decoder.");
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		_pcmFormat.mSampleRate			= shn_get_samplerate(_shn);
+		_pcmFormat.mChannelsPerFrame	= shn_get_channels(_shn);
+		_pcmFormat.mBitsPerChannel		= shn_get_bitspersample(_shn);
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+		
+	}
+	return self;
+}
+
+- (void) dealloc
 {
 	shn_cleanup_decoder(_shn);
 	shn_unload(_shn);
@@ -36,50 +79,9 @@
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"%@, %u channels, %u Hz", NSLocalizedStringFromTable(@"Shorten", @"General", @""), [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
 - (SInt64)			totalFrames						{ return (shn_get_song_length(_shn) / 1000) * [self pcmFormat].mSampleRate; }
-- (SInt64)			currentFrame					{ return -1; }
 - (SInt64)			seekToFrame:(SInt64)frame		{ return -1; }
 
-- (void)			finalizeSetup
-{
-    shn_config				config;
-	int						result;
-	
-	// Setup config struct
-	config.error_output_method			= ERROR_OUTPUT_STDERR;
-	config.seek_tables_path				= NULL;
-	config.relative_seek_tables_path	= NULL;
-	config.verbose						= 0;
-#if defined(__BIG_ENDIAN__)
-	config.swap_bytes					= 1;
-#elif defined(__LITTLE_ENDIAN__)
-	config.swap_bytes					= 0;
-#else
-#error "Target processor byte order unknown"
-#endif
-	
-	// Setup decoder
-	_shn = shn_load([[self filename] fileSystemRepresentation], config);
-	NSAssert(NULL != _shn, @"Unable to open the input file.");
-	
-	result	= shn_init_decoder(_shn);
-	NSAssert(1 == result, @"Unable to initialize the Shorten decoder.");
-	
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-	
-	_pcmFormat.mSampleRate			= shn_get_samplerate(_shn);
-	_pcmFormat.mChannelsPerFrame	= shn_get_channels(_shn);
-	_pcmFormat.mBitsPerChannel		= shn_get_bitspersample(_shn);
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-	
-	[super finalizeSetup];
-}
-
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	unsigned			spaceRequired		= 0;	

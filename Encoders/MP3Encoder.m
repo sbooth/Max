@@ -29,6 +29,9 @@
 
 #include <lame/lame.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "StopException.h"
 
 #import "UtilityFunctions.h"
@@ -48,20 +51,17 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 
 @implementation MP3Encoder
 
-- (id) initWithFilename:(NSString *)filename
+- (id) init
 {
-	if((self = [super initWithFilename:filename])) {
-
+	if((self = [super init])) {
 		_gfp	= lame_init();
 		NSAssert(NULL != _gfp, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Write the Xing VBR tag
 		lame_set_bWriteVbrTag(_gfp, 1);			
-				
-		return self;
 	}
 	
-	return nil;
+	return self;
 }
 
 - (void) dealloc
@@ -97,21 +97,32 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
-				
-		NSAssert(1 == [[self decoder] pcmFormat].mChannelsPerFrame || 2 == [[self decoder] pcmFormat].mChannelsPerFrame, NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @""));
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
+		
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
+		
+		NSAssert(1 == [decoder pcmFormat].mChannelsPerFrame || 2 == [decoder pcmFormat].mChannelsPerFrame, NSLocalizedStringFromTable(@"LAME only supports one or two channel input.", @"Exceptions", @""));
 
-		totalFrames			= [[self decoder] totalFrames];
-		framesToRead		= totalFrames;
+		_sourceBitsPerChannel	= [decoder pcmFormat].mBitsPerChannel;
+		totalFrames				= [decoder totalFrames];
+		framesToRead			= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch([decoder pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -138,8 +149,8 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Initialize the LAME encoder
-		lame_set_num_channels(_gfp, [[self decoder] pcmFormat].mChannelsPerFrame);
-		lame_set_in_samplerate(_gfp, [[self decoder] pcmFormat].mSampleRate);
+		lame_set_num_channels(_gfp, [decoder pcmFormat].mChannelsPerFrame);
+		lame_set_in_samplerate(_gfp, [decoder pcmFormat].mSampleRate);
 		
 		result = lame_init_params(_gfp);
 		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the LAME encoder.", @"Exceptions", @""));
@@ -152,12 +163,12 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		for(;;) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount		= [decoder readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -355,7 +366,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		}
 		
 		// Split PCM data into channels and convert to appropriate sample size for LAME
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch(_sourceBitsPerChannel) {
 			
 			case 8:				
 				channelBuffers16 = (short **)channelBuffers;

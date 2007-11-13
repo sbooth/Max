@@ -31,13 +31,7 @@
 
 + (void) initialize 
 {
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"minute"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"second"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"frame"];
-	
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"size"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"length"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"duration"];
+	[self setKeys:[NSArray arrayWithObjects:@"startingFrame", @"frameCount", nil] triggerChangeNotificationsForDependentKey:@"length"];
 }
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
@@ -81,31 +75,12 @@
 
 #pragma mark Accessors
 
-- (unsigned) minute
+- (NSString *) length
 {
-	unsigned	sector		= [self firstSector];
-	unsigned	offset		= [self lastSector] - sector + 1;
-	
-	return (unsigned) (offset / (60 * 75));
+	unsigned durationInSeconds = (unsigned)([self frameCount] / [self sampleRate]);
+	return [NSString stringWithFormat:@"%i:%02i", durationInSeconds / 60, durationInSeconds % 60];
 }
 
-- (unsigned) second
-{
-	unsigned	sector		= [self firstSector];
-	unsigned	offset		= [self lastSector] - sector + 1;
-	
-	return (unsigned) ((offset / 75) % 60);
-}
-
-- (unsigned) frame
-{
-	unsigned	sector		= [self firstSector];
-	unsigned	offset		= [self lastSector] - sector + 1;
-	
-	return (unsigned) (offset % 75);
-}
-
-- (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
 - (CueSheetDocument *)		document			{ return [[_document retain] autorelease]; }
 
 - (BOOL)					selected			{ return _selected; }
@@ -119,13 +94,10 @@
 - (NSString *)				comment				{ return [[_comment retain] autorelease]; }
 
 - (unsigned)				number				{ return _number; }
-- (unsigned)				firstSector			{ return _firstSector; }
-- (unsigned)				lastSector			{ return _lastSector; }
-//- (unsigned)				channels			{ return _channels; }
-- (BOOL)					preEmphasis			{ return _preEmphasis; }
-- (BOOL)					copyPermitted		{ return _copyPermitted; }
+- (Float32)					sampleRate			{ return _sampleRate; }
+- (SInt64)					startingFrame		{ return _startingFrame; }
+- (UInt32)					frameCount			{ return _frameCount; }
 - (NSString *)				ISRC				{ return [[_ISRC retain] autorelease]; }
-- (BOOL)					dataTrack			{ return _dataTrack; }
 - (unsigned)				preGap				{ return _preGap; }
 - (unsigned)				postGap				{ return _postGap; }
 
@@ -141,12 +113,9 @@
 	_number = number;
 }
 
-- (void) setFirstSector:(unsigned)firstSector			{ _firstSector = firstSector; }
-- (void) setLastSector:(unsigned)lastSector				{ _lastSector = lastSector; }
-//- (void) setChannels:(unsigned)channels					{ _channels = channels; }
-- (void) setPreEmphasis:(BOOL)preEmphasis				{ _preEmphasis = preEmphasis; }
-- (void) setCopyPermitted:(BOOL)copyPermitted			{ _copyPermitted = copyPermitted; }
-- (void) setDataTrack:(BOOL)dataTrack					{ _dataTrack = dataTrack; }
+- (void) setSampleRate:(Float32)sampleRate				{ _sampleRate = sampleRate; }
+- (void) setStartingFrame:(SInt64)startingFrame			{ _startingFrame = startingFrame; }
+- (void) setFrameCount:(UInt32)frameCount				{ _frameCount = frameCount; }
 - (void) setPreGap:(unsigned)preGap						{ _preGap = preGap; }
 - (void) setPostGap:(unsigned)postGap					{ _postGap = postGap; }
 

@@ -19,23 +19,59 @@
  */
 
 #import "CoreAudioDecoder.h"
+#import "CircularBuffer.h"
 
 #include <AudioToolbox/AudioFormat.h>
 
 @implementation CoreAudioDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
 {
-	OSStatus	result;
-	
-	// Close the output file
-	result		= ExtAudioFileDispose(_extAudioFile);
+	if((self = [super initWithFilename:filename])) {
+		FSRef ref;
+		
+		// Open the input file
+		OSStatus result = FSPathMakeRef((const UInt8 *)[[self filename] fileSystemRepresentation], &ref, NULL);
+		NSAssert1(noErr == result, @"FSPathMakeRef failed: %@", UTCreateStringForOSType(result));
+		
+		result = ExtAudioFileOpen(&ref, &_extAudioFile);
+		NSAssert1(noErr == result, @"ExtAudioFileOpen failed: %@", UTCreateStringForOSType(result));
+		
+		// Query file type
+		UInt32 dataSize = sizeof(AudioStreamBasicDescription);
+		result = ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_FileDataFormat, &dataSize, &_sourceFormat);
+		NSAssert1(noErr == result, @"AudioFileGetProperty failed: %@", UTCreateStringForOSType(result));
+		
+		// Setup input format descriptor
+		_pcmFormat						= _sourceFormat;
+		
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		// Preserve mSampleRate and mChannelsPerFrame
+		_pcmFormat.mBitsPerChannel		= (0 == _pcmFormat.mBitsPerChannel ? 16 : _pcmFormat.mBitsPerChannel);
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+		
+		// Tell the extAudioFile the format we'd like for data
+		result			= ExtAudioFileSetProperty(_extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(_pcmFormat), &_pcmFormat);
+		NSAssert1(noErr == result, @"ExtAudioFileSetProperty failed: %@", UTCreateStringForOSType(result));
+		
+	}
+	return self;
+}
+
+- (void) dealloc
+{
+	OSStatus result = ExtAudioFileDispose(_extAudioFile);
 	NSAssert1(noErr == result, @"ExtAudioFileDispose failed: %@", UTCreateStringForOSType(result));
 	
 	[super dealloc];
 }
 
-- (NSString *)		sourceFormatDescription
+- (NSString *) sourceFormatDescription
 {
 	OSStatus						result;
 	UInt32							specifierSize;
@@ -50,7 +86,7 @@
 	return [fileFormat autorelease];
 }
 
-- (SInt64)			totalFrames
+- (SInt64) totalFrames
 {
 	OSStatus	result;
 	UInt32		dataSize;
@@ -63,7 +99,8 @@
 	return frameCount;
 }
 
-- (SInt64)			currentFrame
+/*
+- (SInt64) currentFrame
 {
 	OSStatus	result;
 	SInt64		frame;
@@ -73,58 +110,24 @@
 	
 	return frame;
 }
-
-- (SInt64)			seekToFrame:(SInt64)frame
+*/
+- (BOOL) supportsSeeking
 {
-	OSStatus	result;
-	
-	result			= ExtAudioFileSeek(_extAudioFile, frame);
-	NSAssert1(noErr == result, @"ExtAudioFileSeek failed: %@", UTCreateStringForOSType(result));
-	
-	[[self pcmBuffer] reset];
-	
-	return frame;
+	return YES;
 }
 
-- (void)			finalizeSetup
+- (SInt64) seekToFrame:(SInt64)frame
 {
-	OSStatus	result;
-	UInt32		dataSize;
-	FSRef		ref;
-
-	// Open the input file
-	result			= FSPathMakeRef((const UInt8 *)[[self filename] fileSystemRepresentation], &ref, NULL);
-	NSAssert1(noErr == result, @"FSPathMakeRef failed: %@", UTCreateStringForOSType(result));
+	OSStatus result = ExtAudioFileSeek(_extAudioFile, frame);
+	if(noErr == result) {
+		[[self pcmBuffer] reset];
+		_currentFrame = frame;
+	}
 	
-	result			= ExtAudioFileOpen(&ref, &_extAudioFile);
-	NSAssert1(noErr == result, @"ExtAudioFileOpen failed: %@", UTCreateStringForOSType(result));
-	
-	// Query file type
-	dataSize		= sizeof(AudioStreamBasicDescription);
-	result			= ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_FileDataFormat, &dataSize, &_sourceFormat);
-	NSAssert1(noErr == result, @"AudioFileGetProperty failed: %@", UTCreateStringForOSType(result));
-	
-	// Setup input format descriptor
-	_pcmFormat						= _sourceFormat;
-	
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-
-	// Preserve mSampleRate and mChannelsPerFrame
-	_pcmFormat.mBitsPerChannel		= (0 == _pcmFormat.mBitsPerChannel ? 16 : _pcmFormat.mBitsPerChannel);
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-
-	// Tell the extAudioFile the format we'd like for data
-	result			= ExtAudioFileSetProperty(_extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(_pcmFormat), &_pcmFormat);
-	NSAssert1(noErr == result, @"ExtAudioFileSetProperty failed: %@", UTCreateStringForOSType(result));
-	
-	[super finalizeSetup];
+	return [self currentFrame];
 }
 
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	OSStatus			result;

@@ -19,18 +19,48 @@
  */
 
 #import "OggVorbisDecoder.h"
+#import "CircularBuffer.h"
 
 @implementation OggVorbisDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
 {
-	int							result;
-	
-	result						= ov_clear(&_vf); 
-	
-	if(0 != result) {
-		NSLog(@"ov_clear failed");
+	if((self = [super initWithFilename:filename])) {		
+		FILE *file = fopen([[self filename] fileSystemRepresentation], "r");
+		NSAssert1(NULL != file, @"Unable to open the input file (%s).", strerror(errno));	
+		
+		int result = ov_test(file, &_vf, NULL, 0);
+		NSAssert(0 == result, NSLocalizedStringFromTable(@"The file does not appear to be a valid Ogg Vorbis file.", @"Exceptions", @""));
+		
+		result = ov_test_open(&_vf);
+		NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @""));
+		
+		// Get input file information
+		vorbis_info *ovInfo = ov_info(&_vf, -1);
+		
+		NSAssert(NULL != ovInfo, @"Unable to get information on Ogg Vorbis stream.");
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		_pcmFormat.mSampleRate			= ovInfo->rate;
+		_pcmFormat.mChannelsPerFrame	= ovInfo->channels;
+		_pcmFormat.mBitsPerChannel		= 16;
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
 	}
+	return self;
+}
+
+- (void) dealloc
+{
+	int result = ov_clear(&_vf); 
+	
+	if(0 != result)
+		NSLog(@"ov_clear failed");
 
 	[super dealloc];
 }
@@ -38,45 +68,20 @@
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"Ogg (Vorbis, %u channels, %u Hz)", [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
 - (SInt64)			totalFrames						{ return ov_pcm_total(&_vf, -1); }
-- (SInt64)			currentFrame					{ return ov_pcm_tell(&_vf); }
-- (SInt64)			seekToFrame:(SInt64)frame		{ ov_pcm_seek(&_vf, frame); [[self pcmBuffer] reset]; return frame; }
 
-- (void)			finalizeSetup
+- (BOOL)			supportsSeeking					{ return YES; }
+
+- (SInt64) seekToFrame:(SInt64)frame
 {
-	vorbis_info		*ovInfo		= NULL;
-	FILE			*file		= NULL;
-	int				result;
+	if(ov_pcm_seek(&_vf, frame)) {
+		[[self pcmBuffer] reset];
+		_currentFrame = frame;
+	}
 	
-	file							= fopen([[self filename] fileSystemRepresentation], "r");
-	NSAssert1(NULL != file, @"Unable to open the input file (%s).", strerror(errno));	
-	
-	result							= ov_test(file, &_vf, NULL, 0);
-	NSAssert(0 == result, NSLocalizedStringFromTable(@"The file does not appear to be a valid Ogg Vorbis file.", @"Exceptions", @""));
-	
-	result							= ov_test_open(&_vf);
-	NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to open the input file.", @"Exceptions", @""));
-	
-	// Get input file information
-	ovInfo							= ov_info(&_vf, -1);
-
-	NSAssert(NULL != ovInfo, @"Unable to get information on Ogg Vorbis stream.");
-	
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-
-	_pcmFormat.mSampleRate			= ovInfo->rate;
-	_pcmFormat.mChannelsPerFrame	= ovInfo->channels;
-	_pcmFormat.mBitsPerChannel		= 16;
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-	
-	[super finalizeSetup];
+	return [self currentFrame];
 }
 
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer;
 	long				bytesRead;

@@ -19,14 +19,15 @@
  */
 
 #import "FLACDecoder.h"
+#import "CircularBuffer.h"
 
 @interface FLACDecoder (Private)
 
-- (void)	setTotalSamples:(FLAC__uint64)totalSamples;
+- (void) setTotalSamples:(FLAC__uint64)totalSamples;
 
-- (void)	setSampleRate:(Float64)sampleRate;
-- (void)	setBitsPerChannel:(UInt32)bitsPerChannel;
-- (void)	setChannelsPerFrame:(UInt32)channelsPerFrame;
+- (void) setSampleRate:(Float64)sampleRate;
+- (void) setBitsPerChannel:(UInt32)bitsPerChannel;
+- (void) setChannelsPerFrame:(UInt32)channelsPerFrame;
 
 @end
 
@@ -170,7 +171,52 @@ errorCallback(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus
 
 @implementation FLACDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
+{
+	if((self = [super initWithFilename:filename])) {
+		// Create FLAC decoder
+		_flac = FLAC__stream_decoder_new();
+		NSAssert(NULL != _flac, NSLocalizedStringFromTable(@"Unable to create the FLAC decoder.", @"Exceptions", @""));
+		
+		// Initialize decoder
+		FLAC__StreamDecoderInitStatus status = FLAC__stream_decoder_init_file(_flac, 
+																			  [[self filename] fileSystemRepresentation],
+																			  writeCallback, 
+																			  metadataCallback, 
+																			  errorCallback,
+																			  self);
+		NSAssert1(FLAC__STREAM_DECODER_INIT_STATUS_OK == status, @"FLAC__stream_decoder_init_file failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
+		
+		/*
+		 // Process cue sheets
+		 result = FLAC__stream_decoder_set_metadata_respond(flac, FLAC__METADATA_TYPE_CUESHEET);
+		 NSAssert(YES == result, @"%s", FLAC__stream_decoder_get_resolved_state_string(_flac));
+		 */
+		
+		// Process metadata
+		FLAC__bool result = FLAC__stream_decoder_process_until_end_of_metadata(_flac);
+		NSAssert1(YES == result, @"FLAC__stream_decoder_process_until_end_of_metadata failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		//	_pcmFormat.mSampleRate			= FLAC__file_decoder_get_sample_rate(_flac);
+		//	_pcmFormat.mChannelsPerFrame	= FLAC__file_decoder_get_channels(_flac);
+		//	_pcmFormat.mBitsPerChannel		= FLAC__file_decoder_get_bits_per_sample(_flac);
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+		
+		// We only handle a subset of the legal bitsPerChannel for FLAC
+		NSAssert(8 == _pcmFormat.mBitsPerChannel || 16 == _pcmFormat.mBitsPerChannel || 24 == _pcmFormat.mBitsPerChannel || 32 == _pcmFormat.mBitsPerChannel, @"Sample size not supported");
+		
+	}
+	return self;
+}
+
+- (void) dealloc
 {
 	FLAC__bool					result;
 	
@@ -185,56 +231,22 @@ errorCallback(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"%@, %u channels, %u Hz", NSLocalizedStringFromTable(@"FLAC", @"General", @""), [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
 - (SInt64)			totalFrames						{ return _totalSamples; }
-- (SInt64)			currentFrame					{ return -1; }
-- (SInt64)			seekToFrame:(SInt64)frame		{ return -1; }
 
-- (void)			finalizeSetup
+- (BOOL)			supportsSeeking					{ return YES; }
+
+- (SInt64) seekToFrame:(SInt64)frame
 {
-	FLAC__bool						result;
-	FLAC__StreamDecoderInitStatus	status;
+	NSParameterAssert(0 <= frame && frame <= [self totalFrames]);
 	
-	// Create FLAC decoder
-	_flac		= FLAC__stream_decoder_new();
-	NSAssert(NULL != _flac, NSLocalizedStringFromTable(@"Unable to create the FLAC decoder.", @"Exceptions", @""));
+	if(FLAC__stream_decoder_seek_absolute(_flac, frame)) {
+		[[self pcmBuffer] reset];
+		_currentFrame = frame;
+	}
 	
-	// Initialize decoder
-	status		= FLAC__stream_decoder_init_file(_flac, 
-												 [[self filename] fileSystemRepresentation],
-												 writeCallback, 
-												 metadataCallback, 
-												 errorCallback,
-												 self);
-	NSAssert1(FLAC__STREAM_DECODER_INIT_STATUS_OK == status, @"FLAC__stream_decoder_init_file failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
-	
-	/*
-	 // Process cue sheets
-	 result = FLAC__stream_decoder_set_metadata_respond(flac, FLAC__METADATA_TYPE_CUESHEET);
-	 NSAssert(YES == result, @"%s", FLAC__stream_decoder_get_resolved_state_string(_flac));
-	 */
-
-	// Process metadata
-	result		= FLAC__stream_decoder_process_until_end_of_metadata(_flac);
-	NSAssert1(YES == result, @"FLAC__stream_decoder_process_until_end_of_metadata failed: %s", FLAC__stream_decoder_get_resolved_state_string(_flac));
-	
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-	
-//	_pcmFormat.mSampleRate			= FLAC__file_decoder_get_sample_rate(_flac);
-//	_pcmFormat.mChannelsPerFrame	= FLAC__file_decoder_get_channels(_flac);
-//	_pcmFormat.mBitsPerChannel		= FLAC__file_decoder_get_bits_per_sample(_flac);
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-	
-	// We only handle a subset of the legal bitsPerChannel for FLAC
-	NSAssert(8 == _pcmFormat.mBitsPerChannel || 16 == _pcmFormat.mBitsPerChannel || 24 == _pcmFormat.mBitsPerChannel || 32 == _pcmFormat.mBitsPerChannel, @"Sample size not supported");
-	
-	[super finalizeSetup];
+	return [self currentFrame];
 }
 
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer				*buffer				= [self pcmBuffer];
 

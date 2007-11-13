@@ -19,6 +19,7 @@
  */
 
 #import "OggSpeexDecoder.h"
+#import "CircularBuffer.h"
 
 #include <speex/speex.h>
 #include <speex/speex_header.h>
@@ -33,7 +34,92 @@
 
 @implementation OggSpeexDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
+{
+	if((self = [super initWithFilename:filename])) {
+		ogg_packet				op;
+		SpeexStereoState		stereo					= SPEEX_STEREO_STATE_INIT;
+		
+		// Open the input file
+		_fd = open([[self filename] fileSystemRepresentation], O_RDONLY);
+		NSAssert1(-1 != _fd, @"Unable to open the input file (%s).", strerror(errno));
+		
+		// Initialize Ogg data struct
+		ogg_sync_init(&_oy);
+		
+		// Get the ogg buffer for writing
+		char *data = ogg_sync_buffer(&_oy, 4096);
+		
+		// Read bitstream from input file
+		ssize_t bytesRead = read(_fd, data, 4096);
+		NSAssert1(-1 != bytesRead, @"Unable to read from the input file (%s).", strerror(errno));
+		
+		// Tell the sync layer how many bytes were written to its internal buffer
+		int result = ogg_sync_wrote(&_oy, bytesRead);
+		NSAssert(-1 != result, @"Ogg decoding error (ogg_sync_wrote).");
+		
+		// Turn the data we wrote into an ogg page
+		result = ogg_sync_pageout(&_oy, &_og);
+		NSAssert(1 == result, @"The file does not appear to be an Ogg bitstream.");
+		
+		// Initialize the stream and grab the serial number
+		ogg_stream_init(&_os, ogg_page_serialno(&_og));
+		
+		// Get the first Ogg page
+		result = ogg_stream_pagein(&_os, &_og);
+		NSAssert(0 == result, @"Error reading first page of Ogg bitstream data.");
+		
+		// Get the first packet (should be the header) from the page
+		result = ogg_stream_packetout(&_os, &op);
+		NSAssert(1 == result, @"Error reading initial Ogg packet header.");
+
+		[self incrementPacketCount];
+		
+		// Convert the packet to the Speex header
+		SpeexHeader *header = speex_packet_to_header((char*)op.packet, op.bytes);
+		NSAssert(NULL != header, @"Unable to read the Speex header.");
+		NSAssert1(SPEEX_NB_MODES > header->mode, NSLocalizedStringFromTable(@"The Speex mode number %i was not recognized.", @"Exceptions", @""), header->mode);
+		
+		const SpeexMode *mode = speex_lib_get_mode(header->mode);
+		NSAssert1(1 >= header->speex_version_id, NSLocalizedStringFromTable(@"Unable to decode Speex bitstream version %i.", @"Exceptions", @""), header->speex_version_id);
+		NSAssert(mode->bitstream_version == header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with a different version of Speex.", @"Exceptions", @""));
+		//	NSAssert(mode->bitstream_version > header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with a newer version of Speex.", @"Exceptions", @""));
+		//	NSAssert(mode->bitstream_version < header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with an older version of Speex.", @"Exceptions", @""));
+		
+		// Initialize the decoder
+		_st = speex_decoder_init(mode);
+		NSAssert(NULL != _st, NSLocalizedStringFromTable(@"Unable to intialize the Speex decoder.", @"Exceptions", @""));
+		
+		// Initialize the speex bit-packing data structure
+		speex_bits_init(&_bits);
+		
+		// Initialize the stereo mode
+		//	_stereo		= SPEEX_STEREO_STATE_INIT;
+		memcpy(&_stereo, &stereo, sizeof(SpeexStereoState));
+		
+		speex_decoder_ctl(_st, SPEEX_SET_SAMPLING_RATE, &header->rate);
+		
+		[self setFramesPerPacket:(0 == header->frames_per_packet ? 1 : header->frames_per_packet)];
+		[self setExtraHeaderCount:header->extra_headers];
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		_pcmFormat.mSampleRate			= header->rate;
+		_pcmFormat.mChannelsPerFrame	= header->nb_channels;
+		_pcmFormat.mBitsPerChannel		= 16;
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+		
+		free(header);
+	}
+	return self;
+}
+
+- (void) dealloc
 {
 	int			result;
 	
@@ -58,99 +144,8 @@
 
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"Ogg (Speex, %u channels, %u Hz)", [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 - (SInt64)			totalFrames						{ return -1; }
-- (SInt64)			currentFrame					{ return -1; }
-- (SInt64)			seekToFrame:(SInt64)frame		{ return -1; }
 
-- (void)			finalizeSetup
-{
-	SpeexHeader				*header					= NULL;
-	const SpeexMode			*mode					= NULL;
-	ogg_packet				op;
-	int						result;
-	ssize_t					bytesRead;
-	char					*data					= NULL;
-	SpeexStereoState		stereo					= SPEEX_STEREO_STATE_INIT;
-	
-	
-	// Open the input file
-	_fd			= open([[self filename] fileSystemRepresentation], O_RDONLY);
-	NSAssert1(-1 != _fd, @"Unable to open the input file (%s).", strerror(errno));
-	
-	// Initialize Ogg data struct
-	ogg_sync_init(&_oy);
-	
-	// Get the ogg buffer for writing
-	data		= ogg_sync_buffer(&_oy, 4096);
-	
-	// Read bitstream from input file
-	bytesRead	= read(_fd, data, 4096);
-	NSAssert1(-1 != bytesRead, @"Unable to read from the input file (%s).", strerror(errno));
-	
-	// Tell the sync layer how many bytes were written to its internal buffer
-	result		= ogg_sync_wrote(&_oy, bytesRead);
-	NSAssert(-1 != result, @"Ogg decoding error (ogg_sync_wrote).");
-	
-	// Turn the data we wrote into an ogg page
-	result		= ogg_sync_pageout(&_oy, &_og);
-	NSAssert(1 == result, @"The file does not appear to be an Ogg bitstream.");
-		
-	// Initialize the stream and grab the serial number
-	ogg_stream_init(&_os, ogg_page_serialno(&_og));
-	
-	// Get the first Ogg page
-	result		= ogg_stream_pagein(&_os, &_og);
-	NSAssert(0 == result, @"Error reading first page of Ogg bitstream data.");
-	
-	// Get the first packet (should be the header) from the page
-	result		= ogg_stream_packetout(&_os, &op);
-	NSAssert(1 == result, @"Error reading initial Ogg packet header.");
-	[self incrementPacketCount];
-	
-	// Convert the packet to the Speex header
-	header		= speex_packet_to_header((char*)op.packet, op.bytes);
-	NSAssert(NULL != header, @"Unable to read the Speex header.");
-	NSAssert1(SPEEX_NB_MODES > header->mode, NSLocalizedStringFromTable(@"The Speex mode number %i was not recognized.", @"Exceptions", @""), header->mode);
-	
-	mode		= speex_lib_get_mode(header->mode);
-	NSAssert1(1 >= header->speex_version_id, NSLocalizedStringFromTable(@"Unable to decode Speex bitstream version %i.", @"Exceptions", @""), header->speex_version_id);
-	NSAssert(mode->bitstream_version == header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with a different version of Speex.", @"Exceptions", @""));
-//	NSAssert(mode->bitstream_version > header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with a newer version of Speex.", @"Exceptions", @""));
-//	NSAssert(mode->bitstream_version < header->mode_bitstream_version, NSLocalizedStringFromTable(@"This file was encoded with an older version of Speex.", @"Exceptions", @""));
-		
-	// Initialize the decoder
-	_st			= speex_decoder_init(mode);
-	NSAssert(NULL != _st, NSLocalizedStringFromTable(@"Unable to intialize the Speex decoder.", @"Exceptions", @""));
-
-	// Initialize the speex bit-packing data structure
-	speex_bits_init(&_bits);
-	
-	// Initialize the stereo mode
-	//	_stereo		= SPEEX_STEREO_STATE_INIT;
-	memcpy(&_stereo, &stereo, sizeof(SpeexStereoState));
-
-	speex_decoder_ctl(_st, SPEEX_SET_SAMPLING_RATE, &header->rate);
-		
-	[self setFramesPerPacket:(0 == header->frames_per_packet ? 1 : header->frames_per_packet)];
-	[self setExtraHeaderCount:header->extra_headers];
-		
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-	
-	_pcmFormat.mSampleRate			= header->rate;
-	_pcmFormat.mChannelsPerFrame	= header->nb_channels;
-	_pcmFormat.mBitsPerChannel		= 16;
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-		
-	[super finalizeSetup];
-	
-	free(header);
-}
-
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	int					frameSize			= 0;

@@ -19,65 +19,50 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "DecoderMethods.h"
 
 #include <AudioToolbox/AudioToolbox.h>
 
 @class Decoder;
 
-@interface RegionDecoder : NSObject
+@interface RegionDecoder : NSObject <DecoderMethods>
 {
-	Decoder					*_decoder;
-	SInt64					_startingFrame;
-	UInt32					_framesToPlay;
-	unsigned				_loopCount;
+	Decoder			*_decoder;
+	SInt64			_startingFrame;
+	UInt32			_frameCount;
+	unsigned		_loopCount;
 	
-	UInt32					_framesReadInCurrentLoop;
-	SInt64					_totalFramesRead;
-	unsigned				_completedLoops;
-
-	BOOL					_atEnd;	
+	UInt32			_framesReadInCurrentLoop;
+	SInt64			_totalFramesRead;
+	unsigned		_completedLoops;
 }	
 
 // ========================================
 // Creation
 // ========================================
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder;
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount;
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount;
 
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder startingFrame:(SInt64)startingFrame;
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder startingFrame:(SInt64)startingFrame framesToPlay:(unsigned)framesToPlay;
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder startingFrame:(SInt64)startingFrame framesToPlay:(unsigned)framesToPlay loopCount:(unsigned)loopCount;
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount;
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount;
 
 // ========================================
 // Properties
 // ========================================
 - (Decoder *) decoder;
-- (void) setDecoder:(Decoder *)decoder;
 
 - (SInt64) startingFrame;
 - (void) setStartingFrame:(SInt64)startingFrame;
 
-- (UInt32) framesToPlay;
-- (void) setFramesToPlay:(UInt32)fframesToPlay;
+- (UInt32) frameCount;
+- (void) setFrameCount:(UInt32)frameCount;
 
 - (unsigned) loopCount;
 - (void) setLoopCount:(unsigned)loopCount;
 
-// ========================================
-// Audio access
-// ========================================
 - (void) reset;
-
-- (UInt32) readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
-
 - (unsigned) completedLoops;
-
-- (SInt64) totalFrames;
-- (SInt64) currentFrame;
-- (SInt64) framesRemaining;
-
-- (BOOL) supportsSeeking;
-- (SInt64) seekToFrame:(SInt64)frame;
-
-- (BOOL) atEnd;
 
 @end

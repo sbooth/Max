@@ -27,6 +27,8 @@
 {
 	FLAC__StreamEncoder		*_flac;
 	
+	UInt32					_sourceBitsPerChannel;
+	
 	BOOL					_exhaustiveModelSearch;
 	BOOL					_enableMidSide;
 	BOOL					_enableLooseMidSide;

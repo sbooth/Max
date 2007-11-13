@@ -19,15 +19,47 @@
  */
 
 #import "MusepackDecoder.h"
+#import "CircularBuffer.h"
 
 @implementation MusepackDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
 {
-	int result;
-	
-	result	= fclose(_file);
-	_file	= NULL;
+	if((self = [super initWithFilename:filename])) {
+		_file = fopen([[self filename] fileSystemRepresentation], "r");
+		NSAssert1(NULL != _file, @"Unable to open the input file (%s).", strerror(errno));	
+		
+		mpc_reader_setup_file_reader(&_reader_file, _file);
+		
+		// Get input file information
+		mpc_streaminfo_init(&_streaminfo);
+		mpc_int32_t intResult = mpc_streaminfo_read(&_streaminfo, &_reader_file.reader);
+		NSAssert(ERROR_CODE_OK == intResult, NSLocalizedStringFromTable(@"The file does not appear to be a valid Musepack file.", @"Exceptions", @""));
+		
+		// Set up the decoder
+		mpc_decoder_setup(&_decoder, &_reader_file.reader);
+		mpc_bool_t boolResult = mpc_decoder_initialize(&_decoder, &_streaminfo);
+		NSAssert(YES == boolResult, NSLocalizedStringFromTable(@"Unable to intialize the Musepack decoder.", @"Exceptions", @""));
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		_pcmFormat.mSampleRate			= _streaminfo.sample_freq;
+		_pcmFormat.mChannelsPerFrame	= _streaminfo.channels;
+		_pcmFormat.mBitsPerChannel		= 16;
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+	}
+	return self;
+}
+
+- (void) dealloc
+{
+	int result = fclose(_file);
+	_file = NULL;
 	NSAssert1(EOF != result, @"Unable to close the input file (%s).", strerror(errno));	
 	
 	[super dealloc];
@@ -36,45 +68,20 @@
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"%@, %u channels, %u Hz", NSLocalizedStringFromTable(@"Musepack", @"General", @""), [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
 - (SInt64)			totalFrames						{ return mpc_streaminfo_get_length_samples(&_streaminfo); }
-- (SInt64)			currentFrame					{ return -1; }
-- (SInt64)			seekToFrame:(SInt64)frame		{ mpc_decoder_seek_sample(&_decoder, frame); [[self pcmBuffer] reset]; return frame; }
 
-- (void)			finalizeSetup
+- (BOOL)			supportsSeeking					{ return YES; }
+
+- (SInt64) seekToFrame:(SInt64)frame
 {
-	mpc_int32_t		intResult;
-	mpc_bool_t		boolResult;
+	if(mpc_decoder_seek_sample(&_decoder, frame)) {
+		[[self pcmBuffer] reset]; 
+		_currentFrame = frame;
+	}
 	
-	_file		= fopen([[self filename] fileSystemRepresentation], "r");
-	NSAssert1(NULL != _file, @"Unable to open the input file (%s).", strerror(errno));	
-		
-	mpc_reader_setup_file_reader(&_reader_file, _file);
-	
-	// Get input file information
-	mpc_streaminfo_init(&_streaminfo);
-	intResult		= mpc_streaminfo_read(&_streaminfo, &_reader_file.reader);
-	NSAssert(ERROR_CODE_OK == intResult, NSLocalizedStringFromTable(@"The file does not appear to be a valid Musepack file.", @"Exceptions", @""));
-	
-	// Set up the decoder
-	mpc_decoder_setup(&_decoder, &_reader_file.reader);
-	boolResult		= mpc_decoder_initialize(&_decoder, &_streaminfo);
-	NSAssert(YES == boolResult, NSLocalizedStringFromTable(@"Unable to intialize the Musepack decoder.", @"Exceptions", @""));
-	
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
-	
-	_pcmFormat.mSampleRate			= _streaminfo.sample_freq;
-	_pcmFormat.mChannelsPerFrame	= _streaminfo.channels;
-	_pcmFormat.mBitsPerChannel		= 16;
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-	
-	[super finalizeSetup];
+	return [self currentFrame]; 
 }
 
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	unsigned			spaceRequired		= MPC_FRAME_LENGTH * [self pcmFormat].mChannelsPerFrame * ([self pcmFormat].mBitsPerChannel / 8);

@@ -113,6 +113,7 @@
 	return NO;
 }
 
+// TODO: Replace with cue sheet parser from Play
 - (BOOL) readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
 	if([typeName isEqualToString:@"CD Cue Sheet"] && [absoluteURL isFileURL]) {
@@ -186,39 +187,36 @@
 			[newTrack setPreGap:track_get_zero_pre(track)];
 			[newTrack setPostGap:track_get_zero_post(track)];
 
-			[newTrack setFirstSector:track_get_start(track)];
-			
-			if(0 != track_get_length(track))
-				[newTrack setLastSector:([newTrack firstSector] + track_get_length(track))];
-			else {
+			@try {
+				// TODO: Merge with AudioDecoders from Play and remove this
+				Decoder *decoder = [Decoder decoderWithFilename:[newTrack filename]];
 				
-				@try {
-					// TODO: Merge with AudioDecoders from Play and remove this
-					Decoder *decoder = [Decoder decoderForFilename:[newTrack filename]];
-
-					if(nil == decoder)
-						continue;
-					
-					[decoder finalizeSetup];
-					
-					unsigned lastSector = ([decoder totalFrames] / [decoder pcmFormat].mSampleRate) * 75;
-					[newTrack setLastSector:lastSector];
-				}
-				
-				@catch(NSException *exception) {
-					NSLog(@"Caught an exception: %@", exception);
+				if(nil == decoder)
 					continue;
-				}				
+				
+				[newTrack setSampleRate:[decoder pcmFormat].mSampleRate];
+				
+				[newTrack setStartingFrame:(track_get_start(track) / 75) * [decoder pcmFormat].mSampleRate];
+				
+				if(0 != track_get_length(track))
+					[newTrack setFrameCount:(track_get_length(track) / 75) * [decoder pcmFormat].mSampleRate];
+				else
+					[newTrack setFrameCount:([decoder totalFrames] - [newTrack startingFrame])];
 			}
+
+			@catch(NSException *exception) {
+				NSLog(@"Caught an exception: %@", exception);
+				continue;
+			}				
 			
-			if(track_is_set_flag(track, FLAG_PRE_EMPHASIS))
-				[newTrack setPreEmphasis:YES];
+//			if(track_is_set_flag(track, FLAG_PRE_EMPHASIS))
+//				[newTrack setPreEmphasis:YES];
 
-			if(track_is_set_flag(track, FLAG_COPY_PERMITTED))
-				[newTrack setCopyPermitted:YES];
+//			if(track_is_set_flag(track, FLAG_COPY_PERMITTED))
+//				[newTrack setCopyPermitted:YES];
 
-			if(track_is_set_flag(track, FLAG_DATA))
-				[newTrack setDataTrack:YES];
+//			if(track_is_set_flag(track, FLAG_DATA))
+//				[newTrack setDataTrack:YES];
 
 			char *isrc = track_get_isrc(track);
 			if(NULL != isrc)
@@ -387,17 +385,15 @@
 		
 		CueSheetTrack *currentTrack = [selectedTracks objectAtIndex:i];
 		
-		NSLog(@"%@", currentTrack);
-		
 		NSString				*filename			= [currentTrack filename];
 		AudioMetadata			*metadata			= [currentTrack metadata];
-		NSMutableDictionary		*sectorsToConvert	= [NSMutableDictionary dictionary];
+		NSMutableDictionary		*framesToConvert	= [NSMutableDictionary dictionary];
 		NSMutableDictionary		*trackSettings		= [NSMutableDictionary dictionary];
 		
-		[sectorsToConvert setValue:[NSNumber numberWithUnsignedInt:[currentTrack firstSector]] forKey:@"firstSector"];
-		[sectorsToConvert setValue:[NSNumber numberWithUnsignedInt:[currentTrack lastSector]] forKey:@"lastSector"];
+		[framesToConvert setValue:[NSNumber numberWithLongLong:[currentTrack startingFrame]] forKey:@"startingFrame"];
+		[framesToConvert setValue:[NSNumber numberWithUnsignedInt:[currentTrack frameCount]] forKey:@"frameCount"];
 		
-		[trackSettings setValue:sectorsToConvert forKey:@"sectorsToConvert"];
+		[trackSettings setValue:framesToConvert forKey:@"framesToConvert"];
 		[trackSettings addEntriesFromDictionary:settings];
 		
 		@try {

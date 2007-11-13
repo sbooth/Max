@@ -342,6 +342,7 @@
 		8C1A62410B7E5DA4008A04AB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/WavPackSettingsSheet.nib; sourceTree = "<group>"; };
 		8C1F78140B4218910066072B /* WavPack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WavPack.png; sourceTree = "<group>"; };
 		8C244AC60AC6DFEF001334D0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		8C2681CF0CE8ED5D00EF1929 /* DecoderMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DecoderMethods.h; path = Decoders/DecoderMethods.h; sourceTree = "<group>"; };
 		8C29D8D6097F3D5500E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Preferences.strings; sourceTree = "<group>"; };
 		8C29D8F8097F3EB700E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C29D923097F424400E8B766 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/General.strings; sourceTree = "<group>"; };
@@ -1412,6 +1413,7 @@
 				8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */,
 				8CC9A0C50ACD90BF00948BAA /* ShortenDecoder.h */,
 				8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */,
+				8C2681CF0CE8ED5D00EF1929 /* DecoderMethods.h */,
 			);
 			name = Decoders;
 			sourceTree = "<group>";

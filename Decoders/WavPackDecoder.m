@@ -19,14 +19,39 @@
  */
 
 #import "WavPackDecoder.h"
+#import "CircularBuffer.h"
 
 #define WP_INPUT_BUFFER_LEN		1024
 
 @implementation WavPackDecoder
 
-- (void)			dealloc
+- (id) initWithFilename:(NSString *)filename
 {
-	WavpackCloseFile(_wpc);			_wpc = NULL;
+	if((self = [super initWithFilename:filename])) {
+		char error [80];
+		
+		// Setup converter
+		_wpc = WavpackOpenFileInput([[self filename] fileSystemRepresentation], error, 0, 0);
+		NSAssert1(NULL != _wpc, @"Unable to open the input file (%s).", error);
+		
+		// Setup input format descriptor
+		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+		
+		_pcmFormat.mSampleRate			= WavpackGetSampleRate(_wpc);
+		_pcmFormat.mChannelsPerFrame	= WavpackGetNumChannels(_wpc);
+		_pcmFormat.mBitsPerChannel		= WavpackGetBitsPerSample(_wpc);
+		
+		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
+		_pcmFormat.mFramesPerPacket		= 1;
+		_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
+	}
+	return self;
+}
+
+- (void) dealloc
+{
+	WavpackCloseFile(_wpc), _wpc = NULL;
 	
 	[super dealloc];
 }
@@ -34,33 +59,18 @@
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"%@, %u channels, %u Hz", NSLocalizedStringFromTable(@"WavPack", @"General", @""), [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
 - (SInt64)			totalFrames						{ return WavpackGetNumSamples(_wpc); }
-- (SInt64)			currentFrame					{ return WavpackGetSampleIndex(_wpc); }
-- (SInt64)			seekToFrame:(SInt64)frame		{ WavpackSeekSample(_wpc, frame); [[self pcmBuffer] reset]; return frame; }
 
-- (void)			finalizeSetup
+- (SInt64) seekToFrame:(SInt64)frame
 {
-	char					error [80];
-
-	// Setup converter
-	_wpc = WavpackOpenFileInput([[self filename] fileSystemRepresentation], error, 0, 0);
-	NSAssert1(NULL != _wpc, @"Unable to open the input file (%s).", error);
-
-	// Setup input format descriptor
-	_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-	_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
+	if(WavpackSeekSample(_wpc, frame)) {
+		[[self pcmBuffer] reset]; 
+		_currentFrame = frame; 
+	}
 	
-	_pcmFormat.mSampleRate			= WavpackGetSampleRate(_wpc);
-	_pcmFormat.mChannelsPerFrame	= WavpackGetNumChannels(_wpc);
-	_pcmFormat.mBitsPerChannel		= WavpackGetBitsPerSample(_wpc);
-	
-	_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
-	_pcmFormat.mFramesPerPacket		= 1;
-	_pcmFormat.mBytesPerFrame		= _pcmFormat.mBytesPerPacket * _pcmFormat.mFramesPerPacket;
-	
-	[super finalizeSetup];
+	return [self currentFrame];
 }
 
-- (void)			fillPCMBuffer
+- (void) fillPCMBuffer
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	unsigned			spaceRequired		= 0;

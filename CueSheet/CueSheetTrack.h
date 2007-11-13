@@ -39,16 +39,15 @@
 	NSString				*_genre;
 	NSString				*_composer;
 	NSString				*_comment;
-	
-	// Physical track properties
+
+	// Region information
+	Float32					_sampleRate;
+	SInt64					_startingFrame;
+	UInt32					_frameCount;
+
+	// Track properties
 	unsigned 				_number;
-	unsigned				_firstSector;
-	unsigned				_lastSector;
-//	unsigned 				_channels;
-	BOOL					_preEmphasis;
-	BOOL					_copyPermitted;
 	NSString				*_ISRC;
-	BOOL					_dataTrack;
 	unsigned				_preGap;
 	unsigned				_postGap;
 }
@@ -82,33 +81,20 @@
 - (NSString *)		comment;
 - (void)			setComment:(NSString *)comment;
 
-- (unsigned)		minute;
-- (unsigned)		second;
-- (unsigned)		frame;
-
 - (unsigned)		number;
 - (void)			setNumber:(unsigned)number;
 
-- (unsigned)		firstSector;
-- (void)			setFirstSector:(unsigned)firstSector;
+- (Float32)			sampleRate;
+- (void)			setSampleRate:(Float32)sampleRate;
 
-- (unsigned)		lastSector;
-- (void)			setLastSector:(unsigned)lastSector;
+- (SInt64)			startingFrame;
+- (void)			setStartingFrame:(SInt64)startingFrame;
 
-//- (unsigned)		channels;
-//- (void)			setChannels:(unsigned)channels;
-
-- (BOOL)			preEmphasis;
-- (void)			setPreEmphasis:(BOOL)preEmphasis;
-
-- (BOOL)			copyPermitted;
-- (void)			setCopyPermitted:(BOOL)copyPermitted;
+- (UInt32)			frameCount;
+- (void)			setFrameCount:(UInt32)frameCount;
 
 - (NSString *)		ISRC;
 - (void)			setISRC:(NSString *)ISRC;
-
-- (BOOL)			dataTrack;
-- (void)			setDataTrack:(BOOL)dataTrack;
 
 - (unsigned)		preGap;
 - (void)			setPreGap:(unsigned)preGap;

@@ -22,6 +22,9 @@
 
 #include <sndfile/sndfile.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "StopException.h"
 
 #import "UtilityFunctions.h"
@@ -65,22 +68,32 @@
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
+		
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
 		
 		// Parse settings
 		format = [[[[self delegate] encoderSettings] objectForKey:@"majorFormat"] intValue] | [[[[self delegate] encoderSettings] objectForKey:@"subtypeFormat"] intValue];
 		
-		totalFrames			= [[self decoder] totalFrames];
+		totalFrames			= [decoder totalFrames];
 		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch([decoder pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -111,8 +124,8 @@
 
 		// Setup output file
 		memset(&info, 0, sizeof(info));
-		info.samplerate		= [[self decoder] pcmFormat].mSampleRate;
-		info.channels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		info.samplerate		= [decoder pcmFormat].mSampleRate;
+		info.channels		= [decoder pcmFormat].mChannelsPerFrame;
 		info.format			= format;
 		sf					= sf_open([filename fileSystemRepresentation], SFM_WRITE, &info);
 		NSAssert(NULL != sf, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
@@ -121,12 +134,12 @@
 		for(;;) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount		= [decoder readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -136,7 +149,7 @@
 			// Fill buf buffer, converting to host endian byte order
 			// Libsndfile expects the most significant byte to be the most significant byte, regardless of
 			// sample size
-			switch([[self decoder] pcmFormat].mBitsPerChannel) {
+			switch([decoder pcmFormat].mBitsPerChannel) {
 				
 				case 8:
 					buffer8 = bufferList.mBuffers[0].mData;

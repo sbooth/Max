@@ -26,6 +26,9 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "StopException.h"
 
 #import "UtilityFunctions.h"
@@ -37,10 +40,9 @@
 
 @implementation OggFLACEncoder
 
-- (id) initWithFilename:(NSString *)filename
+- (id) init
 {
-	if((self = [super initWithFilename:filename])) {
-		
+	if((self = [super init])) {
 		_padding				= 8192;
 		_exhaustiveModelSearch	= NO;
 		_enableMidSide			= YES;
@@ -49,11 +51,9 @@
 		_minPartitionOrder		= 0;
 		_maxPartitionOrder		= 4;
 		_maxLPCOrder			= 8;
-		
-		return self;
 	}
 	
-	return nil;
+	return self;
 }
 
 - (oneway void) encodeToFile:(NSString *) filename
@@ -77,7 +77,19 @@
 		bufferList.mBuffers[0].mData = NULL;
 
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
+		
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
+		
+		_sourceBitsPerChannel = [decoder pcmFormat].mBitsPerChannel;
 
 		// Tell our owner we are starting
 		[[self delegate] setStartTime:startTime];	
@@ -86,17 +98,17 @@
 		// Parse the encoder settings
 		[self parseSettings];
 		
-		totalFrames			= [[self decoder] totalFrames];
+		totalFrames			= [decoder totalFrames];
 		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch([decoder pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -129,13 +141,13 @@
 		// Setup Ogg FLAC encoder
 
 		// Input information
-		result = FLAC__stream_encoder_set_sample_rate(_flac, [[self decoder] pcmFormat].mSampleRate);
+		result = FLAC__stream_encoder_set_sample_rate(_flac, [decoder pcmFormat].mSampleRate);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_sample_rate failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = FLAC__stream_encoder_set_bits_per_sample(_flac, [[self decoder] pcmFormat].mBitsPerChannel);
+		result = FLAC__stream_encoder_set_bits_per_sample(_flac, [decoder pcmFormat].mBitsPerChannel);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_bits_per_sample failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
-		result = FLAC__stream_encoder_set_channels(_flac, [[self decoder] pcmFormat].mChannelsPerFrame);
+		result = FLAC__stream_encoder_set_channels(_flac, [decoder pcmFormat].mChannelsPerFrame);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_channels failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 		
 		// Encoder parameters
@@ -189,12 +201,12 @@
 		for(;;) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount		= [decoder readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -307,7 +319,7 @@
 		}
 		
 		// Split PCM data into channels and convert to 32-bit sample size for FLAC
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch(_sourceBitsPerChannel) {
 			
 			case 8:
 				buffer8 = chunk->mBuffers[0].mData;

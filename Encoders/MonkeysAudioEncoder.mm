@@ -31,6 +31,9 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "StopException.h"
 
 #import "UtilityFunctions.h"
@@ -42,16 +45,13 @@
 
 @implementation MonkeysAudioEncoder
 
-- (id) initWithFilename:(NSString *)filename
+- (id) init
 {	
-	if((self = [super initWithFilename:filename])) {
-
+	if((self = [super init])) {
 		_compressionLevel	= COMPRESSION_LEVEL_NORMAL;
-				
-		return self;	
 	}
 	
-	return nil;
+	return self;
 }
 
 - (oneway void) encodeToFile:(NSString *)filename
@@ -81,19 +81,31 @@
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
-				
-		totalFrames			= [[self decoder] totalFrames];
-		framesToRead		= totalFrames;
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
+		
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
+		
+		_sourceBitsPerChannel	= [decoder pcmFormat].mBitsPerChannel;
+		_sourceBytesPerFrame	= [decoder pcmFormat].mBytesPerFrame;
+		totalFrames				= [decoder totalFrames];
+		framesToRead			= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {			
+		switch([decoder pcmFormat].mBitsPerChannel) {			
 			case 8:				
 			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
@@ -126,23 +138,23 @@
 		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
 		NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
-		result = FillWaveFormatEx(&formatDesc, (int)[[self decoder] pcmFormat].mSampleRate, [[self decoder] pcmFormat].mBitsPerChannel, [[self decoder] pcmFormat].mChannelsPerFrame);
+		result = FillWaveFormatEx(&formatDesc, (int)[decoder pcmFormat].mSampleRate, [decoder pcmFormat].mBitsPerChannel, [decoder pcmFormat].mChannelsPerFrame);
 		NSAssert(ERROR_SUCCESS == result, NSLocalizedStringFromTable(@"Unable to initialize the Monkey's Audio compressor.", @"Exceptions", @""));
 		
 		// Start the compressor
-		result = _compressor->Start(chars, &formatDesc, totalFrames * [[self decoder] pcmFormat].mBytesPerFrame, _compressionLevel, NULL, 0);
+		result = _compressor->Start(chars, &formatDesc, totalFrames * [decoder pcmFormat].mBytesPerFrame, _compressionLevel, NULL, 0);
 		NSAssert(ERROR_SUCCESS == result, NSLocalizedStringFromTable(@"Unable to start the Monkey's Audio compressor.", @"Exceptions", @""));
 		
 		// Iteratively get the PCM data and encode it
 		for(;;) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount		= [decoder readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -236,7 +248,7 @@
 	int				result;
 	
 	// Convert MAC buffer to host endian byte order
-	switch([[self decoder] pcmFormat].mBitsPerChannel) {
+	switch(_sourceBitsPerChannel) {
 		
 		case 8:
 			/*			buffer8 = (uint8_t *)chunk->mBuffers[0].mData;
@@ -280,7 +292,7 @@
 	}
 	
 	// Compress the chunk
-	result = _compressor->AddData((unsigned char *)chunk->mBuffers[0].mData, frameCount * [[self decoder] pcmFormat].mBytesPerFrame);
+	result = _compressor->AddData((unsigned char *)chunk->mBuffers[0].mData, frameCount * _sourceBytesPerFrame);
 	NSAssert(ERROR_SUCCESS == result, NSLocalizedStringFromTable(@"Monkey's Audio compressor error.", @"Exceptions", @""));
 }	
 

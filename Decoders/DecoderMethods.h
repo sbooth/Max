@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2007 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,25 +19,27 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#include <CoreAudio/CoreAudioTypes.h>
 
-#include <FLAC/stream_encoder.h>
+@protocol DecoderMethods
 
-#import "Encoder.h"
+// The type of PCM data provided by this Decoder
+- (AudioStreamBasicDescription) pcmFormat;
 
-@interface OggFLACEncoder : Encoder
-{
-	FLAC__StreamEncoder		*_flac;
-	
-	UInt32					_sourceBitsPerChannel;
-	
-	BOOL					_exhaustiveModelSearch;
-	BOOL					_enableMidSide;
-	BOOL					_enableLooseMidSide;
-	int						_QLPCoeffPrecision;
-	int						_minPartitionOrder;
-	int						_maxPartitionOrder;
-	int						_maxLPCOrder;
-	unsigned				_padding;
-}
+// A descriptive string of the PCM data format
+- (NSString *) pcmFormatDescription;
+
+// Attempt to read frameCount frames of audio, returning the actual number of frames read
+- (UInt32) readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
+
+// The format of audio data provided by the source
+- (NSString *) sourceFormatDescription;
+
+// Input audio frame information
+- (SInt64) totalFrames;
+- (SInt64) currentFrame;
+
+- (BOOL) supportsSeeking;
+- (SInt64) seekToFrame:(SInt64)frame;
 
 @end

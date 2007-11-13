@@ -28,6 +28,9 @@
 
 #include <wavpack/wavpack.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "UtilityFunctions.h"
 #import "StopException.h"
 
@@ -87,19 +90,29 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
 		
-		totalFrames			= [[self decoder] totalFrames];
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
+		
+		totalFrames			= [decoder totalFrames];
 		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch([decoder pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -145,10 +158,10 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		
 		memset(&config, 0, sizeof(config));
 		
-		config.num_channels				= [[self decoder] pcmFormat].mChannelsPerFrame;
+		config.num_channels				= [decoder pcmFormat].mChannelsPerFrame;
 		config.channel_mask				= 3;
-		config.sample_rate				= [[self decoder] pcmFormat].mSampleRate;
-		config.bits_per_sample			= [[self decoder] pcmFormat].mBitsPerChannel;
+		config.sample_rate				= [decoder pcmFormat].mSampleRate;
+		config.bits_per_sample			= [decoder pcmFormat].mBitsPerChannel;
 		config.bytes_per_sample			= config.bits_per_sample / 8;
 		
 		config.flags					= _flags;
@@ -170,12 +183,12 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		for(;;) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount		= [decoder readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -183,7 +196,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 			}
 			
 			// Fill WavPack buffer, converting to host endian byte order
-			switch([[self decoder] pcmFormat].mBitsPerChannel) {
+			switch([decoder pcmFormat].mBitsPerChannel) {
 				
 				case 8:
 					buffer8 = bufferList.mBuffers[0].mData;
@@ -333,13 +346,11 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		
 		_flags |= CONFIG_HYBRID_FLAG;
 		
-		if([[settings objectForKey:@"createCorrectionFile"] intValue]) {
+		if([[settings objectForKey:@"createCorrectionFile"] intValue])
 			_flags |= CONFIG_CREATE_WVC;
-		}
 		
-		if([[settings objectForKey:@"maximumHybridCompression"] intValue]) {
+		if([[settings objectForKey:@"maximumHybridCompression"] intValue])
 			_flags |= CONFIG_OPTIMIZE_WVC;
-		}
 		
 		switch([[settings objectForKey:@"hybridMode"] intValue]) {
 			
@@ -356,9 +367,8 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		}
 		
 		_noiseShaping = [[settings objectForKey:@"noiseShaping"] floatValue];
-		if(0.0 != _noiseShaping) {
+		if(0.0 != _noiseShaping)
 			_flags |= (CONFIG_HYBRID_SHAPE | CONFIG_SHAPE_OVERRIDE);
-		}
 	}
 }
 

@@ -25,31 +25,96 @@
 
 #pragma mark Creation
 
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame
 {
-	return [RegionDecoder regionDecoderForDecoder:decoder startingFrame:0 framesToPlay:[decoder totalFrames] loopCount:0];
+	return [[[RegionDecoder alloc] initWithFilename:filename startingFrame:startingFrame] autorelease];
 }
 
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder startingFrame:(SInt64)startingFrame
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount
 {
-	return [RegionDecoder regionDecoderForDecoder:decoder startingFrame:startingFrame framesToPlay:([decoder totalFrames] - startingFrame) loopCount:0];
+	return [[[RegionDecoder alloc] initWithFilename:filename startingFrame:startingFrame frameCount:frameCount] autorelease];
 }
 
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder startingFrame:(SInt64)startingFrame framesToPlay:(unsigned)framesToPlay
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount
 {
-	return [RegionDecoder regionDecoderForDecoder:decoder startingFrame:startingFrame framesToPlay:framesToPlay loopCount:0];
+	return [[[RegionDecoder alloc] initWithFilename:filename startingFrame:startingFrame frameCount:frameCount loopCount:loopCount] autorelease];
 }
 
-+ (RegionDecoder *) regionDecoderForDecoder:(Decoder *)decoder startingFrame:(SInt64)startingFrame framesToPlay:(unsigned)framesToPlay loopCount:(unsigned)loopCount
+- (id) initWithFilename:(NSString *)filename
 {
-	RegionDecoder *result = [[RegionDecoder alloc] init];
-	
-	[result setDecoder:decoder];
-	[result setStartingFrame:startingFrame];
-	[result setFramesToPlay:framesToPlay];
-	[result setLoopCount:loopCount];
-	
-	return [result autorelease];
+	if((self = [super init])) {
+		_decoder = [Decoder decoderWithFilename:filename];
+		if(nil != _decoder)
+			[_decoder retain];
+		else {
+			[self release];
+			return nil;
+		}
+		
+		[self setFrameCount:[[self decoder] totalFrames]];
+	}
+	return self;
+}
+
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame
+{
+	if((self = [super init])) {
+		_decoder = [Decoder decoderWithFilename:filename];
+		if(nil != _decoder)
+			[_decoder retain];
+		else {
+			[self release];
+			return nil;
+		}
+		
+		[self setStartingFrame:startingFrame];
+		[self setFrameCount:([[self decoder] totalFrames] - startingFrame)];
+		
+		if(0 != [self startingFrame])
+			[self reset];
+	}
+	return self;
+}
+
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount
+{
+	if((self = [super init])) {
+		_decoder = [Decoder decoderWithFilename:filename];
+		if(nil != _decoder)
+			[_decoder retain];
+		else {
+			[self release];
+			return nil;
+		}
+		
+		[self setStartingFrame:startingFrame];
+		[self setFrameCount:frameCount];
+		
+		if(0 != [self startingFrame])
+			[self reset];
+	}
+	return self;
+}
+
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount
+{
+	if((self = [super init])) {
+		_decoder = [Decoder decoderWithFilename:filename];
+		if(nil != _decoder)
+			[_decoder retain];
+		else {
+			[self release];
+			return nil;
+		}
+		
+		[self setStartingFrame:startingFrame];
+		[self setFrameCount:frameCount];
+		[self setLoopCount:loopCount];
+		
+		if(0 != [self startingFrame])
+			[self reset];
+	}
+	return self;
 }
 
 - (void) dealloc
@@ -63,16 +128,6 @@
 
 - (Decoder *)	decoder									{ return [[_decoder retain] autorelease]; }
 
-- (void) setDecoder:(Decoder *)decoder
-{
-	NSParameterAssert(nil != decoder);
-//	NSParameterAssert(kAudioFormatFlagsNativeFloatPacked & [decoder format].mFormatFlags);
-//	NSParameterAssert(kAudioFormatFlagIsNonInterleaved & [decoder format].mFormatFlags);
-	
-	[_decoder release];
-	_decoder = [decoder retain];	
-}
-
 - (unsigned)		loopCount								{ return _loopCount; }
 - (void)			setLoopCount:(unsigned)loopCount 		{ _loopCount = loopCount; }
 
@@ -85,13 +140,13 @@
 	_startingFrame = startingFrame;
 }
 
-- (UInt32)			framesToPlay							{ return _framesToPlay; }
+- (UInt32)			frameCount								{ return _frameCount; }
 
-- (void) setFramesToPlay:(UInt32)framesToPlay
+- (void) setFrameCount:(UInt32)frameCount
 {
-	NSParameterAssert(0 < framesToPlay);
+	NSParameterAssert(0 < frameCount);
 
-	_framesToPlay = framesToPlay;
+	_frameCount = frameCount;
 }
 
 #pragma mark Audio Access
@@ -103,7 +158,6 @@
 	_framesReadInCurrentLoop	= 0;
 	_totalFramesRead			= 0;
 	_completedLoops				= 0;
-	_atEnd						= NO;
 }
 
 - (UInt32) readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount
@@ -114,7 +168,7 @@
 	if([self loopCount] < [self completedLoops])
 		return 0;
 	
-	UInt32	framesRemaining		= [self startingFrame] + [self framesToPlay] - [[self decoder] currentFrame];
+	UInt32	framesRemaining		= [self startingFrame] + [self frameCount] - [[self decoder] currentFrame];
 	UInt32	framesToRead		= (frameCount < framesRemaining ? frameCount : framesRemaining);
 	UInt32	framesRead			= 0;
 	
@@ -124,43 +178,38 @@
 	_framesReadInCurrentLoop	+= framesRead;
 	_totalFramesRead			+= framesRead;
 	
-	if([self framesToPlay] == _framesReadInCurrentLoop || (0 == framesRead && 0 != framesToRead)) {
+	if([self frameCount] == _framesReadInCurrentLoop || (0 == framesRead && 0 != framesToRead)) {
 		[[self decoder] seekToFrame:[self startingFrame]];
 		++_completedLoops;
 		_framesReadInCurrentLoop = 0;		
 	}
-	
-	if([self loopCount] < [self completedLoops])
-		_atEnd = YES;
 	
 	return framesRead;	
 }
 
 - (unsigned)		completedLoops							{ return _completedLoops; }
 
-- (SInt64)			totalFrames								{ return (([self loopCount] + 1) * [self framesToPlay]); }
+- (SInt64)			totalFrames								{ return (([self loopCount] + 1) * [self frameCount]); }
 - (SInt64)			currentFrame							{ return _totalFramesRead; }
 - (SInt64)			framesRemaining							{ return ([self totalFrames] - [self currentFrame]); }
 
-- (BOOL)			supportsSeeking							{ return NO /*[[self decoder] supportsSeeking]*/; }
+- (AudioStreamBasicDescription) pcmFormat					{ return [[self decoder] pcmFormat]; }
+- (NSString *)		sourceFormatDescription					{ return [[self decoder] sourceFormatDescription]; }
+- (NSString *)		pcmFormatDescription					{ return [[self decoder] pcmFormatDescription]; }
+
+- (BOOL)			supportsSeeking							{ return [[self decoder] supportsSeeking]; }
 
 - (SInt64) seekToFrame:(SInt64)frame
 {
 	NSParameterAssert(0 <= frame && frame < [self totalFrames]);
 	
-	_completedLoops				= frame / [self framesToPlay];
-	_framesReadInCurrentLoop	= frame % [self framesToPlay];
+	_completedLoops				= frame / [self frameCount];
+	_framesReadInCurrentLoop	= frame % [self frameCount];
 	_totalFramesRead			= frame;
-	_atEnd						= NO;
 
 	[[self decoder] seekToFrame:[self startingFrame] + _framesReadInCurrentLoop];
 	
 	return [self currentFrame];
-}
-
-- (BOOL) atEnd
-{
-	return _atEnd;
 }
 
 @end

@@ -26,6 +26,9 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "StopException.h"
 
 #import "UtilityFunctions.h"
@@ -37,9 +40,9 @@
 
 @implementation FLACEncoder
 
-- (id) initWithFilename:(NSString *)filename
+- (id) init
 {	
-	if((self = [super initWithFilename:filename])) {
+	if((self = [super init])) {
 		_padding							= 8192;
 		_verifyEncoding						= NO;
 		_enableMidSide						= YES;
@@ -84,17 +87,31 @@
 		[[self delegate] setStartTime:startTime];	
 		[[self delegate] setStarted:YES];
 		
-		totalFrames			= [[self regionDecoder] totalFrames];
-		framesToRead		= totalFrames;
+		// Setup the decoder
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
+
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
+
+		_sourceBitsPerChannel	= [decoder pcmFormat].mBitsPerChannel;
+		totalFrames				= [decoder totalFrames];
+		framesToRead			= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
-
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
+		
 		// Allocate the buffer that will hold the interleaved audio data
-		bufferLen									= 1024;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		bufferLen = 1024;
+		switch([decoder pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -130,13 +147,13 @@
 		// Setup FLAC encoder
 		
 		// Input information
-		result = FLAC__stream_encoder_set_sample_rate(_flac, [[self decoder] pcmFormat].mSampleRate);
+		result = FLAC__stream_encoder_set_sample_rate(_flac, [decoder pcmFormat].mSampleRate);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_sample_rate failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 
-		result = FLAC__stream_encoder_set_bits_per_sample(_flac, [[self decoder] pcmFormat].mBitsPerChannel);
+		result = FLAC__stream_encoder_set_bits_per_sample(_flac, [decoder pcmFormat].mBitsPerChannel);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_bits_per_sample failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 
-		result = FLAC__stream_encoder_set_channels(_flac, [[self decoder] pcmFormat].mChannelsPerFrame);
+		result = FLAC__stream_encoder_set_channels(_flac, [decoder pcmFormat].mChannelsPerFrame);
 		NSAssert1(YES == result, @"FLAC__stream_encoder_set_channels failed: %s", FLAC__stream_encoder_get_resolved_state_string(_flac));
 			
 		// Encoder parameters
@@ -172,7 +189,7 @@
 		NSAssert(NULL != seektable, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		// Append seekpoints (one every 30 seconds)
-		result = FLAC__metadata_object_seektable_template_append_spaced_points_by_samples(seektable, 30 * [[self decoder] pcmFormat].mSampleRate, totalFrames);
+		result = FLAC__metadata_object_seektable_template_append_spaced_points_by_samples(seektable, 30 * [decoder pcmFormat].mSampleRate, totalFrames);
 		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		// Sort the table
@@ -214,12 +231,12 @@
 		for(;;) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount = [[self regionDecoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount = [decoder readAudio:&bufferList frameCount:frameCount];
 			
 			// We're finished if no frames were returned
 			if(0 == frameCount)
@@ -342,7 +359,7 @@
 		}
 		
 		// Split PCM data into channels and convert to 32-bit sample size for FLAC
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch(_sourceBitsPerChannel) {
 
 			case 8:
 				buffer8 = chunk->mBuffers[0].mData;

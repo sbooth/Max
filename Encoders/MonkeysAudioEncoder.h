@@ -38,6 +38,8 @@ enum {
 {
 	IAPECompress			*_compressor;
 	int						_compressionLevel;
+	UInt32					_sourceBitsPerChannel;
+	UInt32					_sourceBytesPerFrame;
 }
 
 @end

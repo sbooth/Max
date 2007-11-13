@@ -30,6 +30,9 @@
 #import "CoreAudioEncoderTask.h"
 #import "StopException.h"
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "GaplessUtilities.h"
 
 @interface CoreAudioEncoder (Private)
@@ -68,7 +71,17 @@
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
+		
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
 		
 		// Parse the encoder settings
 		settings				= [[self delegate] encoderSettings];
@@ -81,8 +94,8 @@
 		//asbd.mSampleRate		= [[settings objectForKey:@"sampleRate"] doubleValue];
 		asbd.mBitsPerChannel	= [[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
 		
-		asbd.mSampleRate		= [[self decoder] pcmFormat].mSampleRate;			
-		asbd.mChannelsPerFrame	= [[self decoder] pcmFormat].mChannelsPerFrame;
+		asbd.mSampleRate		= [decoder pcmFormat].mSampleRate;			
+		asbd.mChannelsPerFrame	= [decoder pcmFormat].mChannelsPerFrame;
 
 		// Flesh out output structure for PCM formats
 		if(kAudioFormatLinearPCM == asbd.mFormatID) {
@@ -98,7 +111,7 @@
 		err = ExtAudioFileCreateWithURL((CFURLRef)url, [self fileType], &asbd, NULL, kAudioFileFlags_EraseFile, &extAudioFile);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileCreateWithURL", UTCreateStringForOSType(err));
 		
-		asbd = [[self decoder] pcmFormat];
+		asbd = [decoder pcmFormat];
 		err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty", UTCreateStringForOSType(err));
 		
@@ -177,24 +190,23 @@
 		bufferList.mBuffers[0].mData	= calloc(bufferLen, sizeof(uint8_t));
 		NSAssert(NULL != bufferList.mBuffers[0].mData, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		totalFrames						= [[self decoder] totalFrames];
+		totalFrames						= [decoder totalFrames];
 		framesToRead					= totalFrames;
 		
 		// Iteratively get the data and save it to the file
 		for(;;) {
 
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount = [decoder readAudio:&bufferList frameCount:frameCount];
 
 			// We're finished if no frames were returned
-			if(0 == frameCount) {
+			if(0 == frameCount)
 				break;
-			}
 			
 			// Write the data, encoding/converting in the process
 			err = ExtAudioFileWrite(extAudioFile, frameCount, &bufferList);
@@ -230,7 +242,7 @@
 			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose", UTCreateStringForOSType(err));
 			extAudioFile	= NULL;
 		
-			addMPEG4AACGaplessInformationAtom(filename, [[self decoder] totalFrames]);
+			addMPEG4AACGaplessInformationAtom(filename, [decoder totalFrames]);
 		}
 	}
 
@@ -287,12 +299,10 @@
 	bitrateString = (-1 == bitrate ? @"" : [NSString stringWithFormat:@"bitrate=%u", bitrate]);
 	qualityString = (-1 == quality ? @"" : [NSString stringWithFormat:@"quality=%u", quality]);
 
-	if(-1 == bitrate && -1 == quality) {
+	if(-1 == bitrate && -1 == quality)
 		return [NSString stringWithFormat:@"Core Audio '%@' codec", UTCreateStringForOSType([self formatID])];
-	}
-	else {
+	else
 		return [NSString stringWithFormat:@"Core Audio '%@' codec settings: %@ %@", UTCreateStringForOSType([self formatID]), bitrateString, qualityString];
-	}
 }
 
 @end

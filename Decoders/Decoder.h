@@ -21,54 +21,34 @@
 #import <Cocoa/Cocoa.h>
 #include <CoreAudio/CoreAudioTypes.h>
 
-#import "CircularBuffer.h"
+#import "DecoderMethods.h"
+
+@class CircularBuffer;
 
 // A decoder reads audio data in some format and provides it as PCM:
 //   - The audio stream is converted to PCM and placed in _pcmBuffer
-@interface Decoder : NSObject
+@interface Decoder : NSObject <DecoderMethods>
 {
 	NSString						*_filename;		// The filename of the source
 
 	AudioStreamBasicDescription		_pcmFormat;		// The type of PCM data provided by this source
 	CircularBuffer					*_pcmBuffer;	// The buffer which holds the PCM audio data
+	
+	SInt64							_currentFrame;	// The first frame that will be returned from -readAudio:frameCount:
 }
 
 // Create a Decoder of the correct type for the given file
-+ (id)								decoderForFilename:(NSString *)filename;
++ (id) decoderWithFilename:(NSString *)filename;
 
+- (id) initWithFilename:(NSString *)filename;
 
 // The source of the raw audio stream
-- (NSString *)						filename;
-- (void)							setFilename:(NSString *)filename;
-
-// The type of PCM data provided by this Decoder
-- (AudioStreamBasicDescription)		pcmFormat;
-
-// A descriptive string of the PCM data format
-- (NSString *)						pcmFormatDescription;
+- (NSString *) filename;
 
 // The buffer which holds the PCM data
-- (CircularBuffer *)				pcmBuffer;
+- (CircularBuffer *) pcmBuffer;
 
-// Attempt to read frameCount frames of audio, returning the actual number of frames read
-- (UInt32)							readAudio:(AudioBufferList *)bufferList frameCount:(UInt32)frameCount;
-
-// ========================================
-// Subclasses must implement these methods!
-// ========================================
-// The format of audio data provided by the source
-- (NSString *)		sourceFormatDescription;
-
-// Input audio frame information
-- (SInt64)			totalFrames;
-- (SInt64)			currentFrame;
-- (SInt64)			seekToFrame:(SInt64)frame;
-
-// Finalize setup prior to reading
-- (void)			finalizeSetup;
-
-// The meat & potatoes- 
-- (void)			fillPCMBuffer;
-// ========================================
+// Subclasses must implement this method!
+- (void) fillPCMBuffer;
 
 @end

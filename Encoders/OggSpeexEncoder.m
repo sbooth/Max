@@ -34,6 +34,9 @@
 
 #include <ogg/ogg.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "StopException.h"
 
 #import "UtilityFunctions.h"
@@ -171,9 +174,9 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	int32_t						*buffer32									= NULL;
 	float						*floatBuffer								= NULL;
 
-	int8_t						byteOne, byteTwo, byteThree;
+//	int8_t						byteOne, byteTwo, byteThree;
 	int32_t						constructedSample;
-	float						normalizedSample;
+//	float						normalizedSample;
 
 	unsigned					sample, wideSample;
 
@@ -193,11 +196,21 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
-				
-		NSAssert(1 == [[self decoder] pcmFormat].mChannelsPerFrame || 2 == [[self decoder] pcmFormat].mChannelsPerFrame, NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @""));
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
 		
-		totalFrames			= [[self decoder] totalFrames];
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
+		
+		NSAssert(1 == [decoder pcmFormat].mChannelsPerFrame || 2 == [decoder pcmFormat].mChannelsPerFrame, NSLocalizedStringFromTable(@"Speex only supports one or two channel input.", @"Exceptions", @""));
+		
+		totalFrames			= [decoder totalFrames];
 		framesToRead		= totalFrames;
 		
 		// Resample input if requested
@@ -250,7 +263,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		
 		header.frames_per_packet	= _framesPerOggPacket;
 		header.vbr					= _vbrEnabled;
-		header.nb_channels			= [[self decoder] pcmFormat].mChannelsPerFrame;
+		header.nb_channels			= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Setup the encoder
 		speexState = speex_encoder_init(mode);
@@ -331,11 +344,11 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 2 * frameSize;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch([decoder pcmFormat].mBitsPerChannel) {
 			
 			case 8:
 			case 24:
@@ -370,12 +383,12 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		while(NO == eos || totalFrames > framesEncoded) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount		= [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount		= [decoder readAudio:&bufferList frameCount:frameCount];
 
 			// We're finished if no frames were returned
 			if(0 == frameCount) {
@@ -384,7 +397,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			
 			// Fill Speex buffer, converting to host endian byte order
 			// Speex only supports 16-bit or floating point samples, so renormalize accordingly
-			switch([[self decoder] pcmFormat].mBitsPerChannel) {
+			switch([decoder pcmFormat].mBitsPerChannel) {
 				
 				case 8:
 					floatBuffer = calloc(frameCount, sizeof(float));
@@ -438,12 +451,12 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			totalFrames += frameCount;			
 			++frameID;
 			
-			switch([[self decoder] pcmFormat].mBitsPerChannel) {
+			switch([decoder pcmFormat].mBitsPerChannel) {
 
 				case 8:
 				case 24:
 				case 32:
-					if(2 == [[self decoder] pcmFormat].mChannelsPerFrame) {
+					if(2 == [decoder pcmFormat].mChannelsPerFrame) {
 						speex_encode_stereo(floatBuffer, frameSize, &bits);
 					}
 
@@ -458,7 +471,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 					break;
 							
 				case 16:
-					if(2 == [[self decoder] pcmFormat].mChannelsPerFrame) {
+					if(2 == [decoder pcmFormat].mChannelsPerFrame) {
 						speex_encode_stereo_int(bufferList.mBuffers[0].mData, frameSize, &bits);
 					}
 					

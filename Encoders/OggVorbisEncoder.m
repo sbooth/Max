@@ -27,6 +27,9 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/ExtendedAudioFile.h>
 
+#import "Decoder.h"
+#import "RegionDecoder.h"
+
 #import "StopException.h"
 
 #import "UtilityFunctions.h"
@@ -95,19 +98,29 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		[[self delegate] setStarted:YES];
 		
 		// Setup the decoder
-		[[self decoder] finalizeSetup];
+		id <DecoderMethods> decoder = nil;
+		NSString *sourceFilename = [[[self delegate] taskInfo] inputFilenameAtInputFileIndex];
 		
-		totalFrames			= [[self decoder] totalFrames];
+		// Create the appropriate kind of decoder
+		if(nil != [[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"]) {
+			SInt64 startingFrame = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"startingFrame"] longLongValue];
+			UInt32 frameCount = [[[[[[self delegate] taskInfo] settings] valueForKey:@"framesToConvert"] valueForKey:@"frameCount"] unsignedIntValue];
+			decoder = [RegionDecoder decoderWithFilename:sourceFilename startingFrame:startingFrame frameCount:frameCount];
+		}
+		else
+			decoder = [Decoder decoderWithFilename:sourceFilename];
+		
+		totalFrames			= [decoder totalFrames];
 		framesToRead		= totalFrames;
 		
 		// Set up the AudioBufferList
 		bufferList.mNumberBuffers					= 1;
 		bufferList.mBuffers[0].mData				= NULL;
-		bufferList.mBuffers[0].mNumberChannels		= [[self decoder] pcmFormat].mChannelsPerFrame;
+		bufferList.mBuffers[0].mNumberChannels		= [decoder pcmFormat].mChannelsPerFrame;
 		
 		// Allocate the buffer that will hold the interleaved audio data
 		bufferLen									= 1024;
-		switch([[self decoder] pcmFormat].mBitsPerChannel) {
+		switch([decoder pcmFormat].mBitsPerChannel) {
 			
 			case 8:				
 			case 24:
@@ -146,11 +159,11 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		
 		// Use quality-based VBR
 		if(VORBIS_MODE_QUALITY == _mode) {
-			result = vorbis_encode_init_vbr(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, _quality);
+			result = vorbis_encode_init_vbr(&vi, [decoder pcmFormat].mChannelsPerFrame, [decoder pcmFormat].mSampleRate, _quality);
 			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @""));
 		}
 		else if(VORBIS_MODE_BITRATE == _mode) {
-			result = vorbis_encode_init(&vi, [[self decoder] pcmFormat].mChannelsPerFrame, [[self decoder] pcmFormat].mSampleRate, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1));
+			result = vorbis_encode_init(&vi, [decoder pcmFormat].mChannelsPerFrame, [decoder pcmFormat].mSampleRate, (_cbr ? _bitrate : -1), _bitrate, (_cbr ? _bitrate : -1));
 			NSAssert(0 == result, NSLocalizedStringFromTable(@"Unable to initialize the Ogg Vorbis encoder.", @"Exceptions", @""));
 		}
 		else
@@ -187,18 +200,18 @@ static int sVorbisBitrates [14] = { 48, 56, 64, 80, 96, 112, 128, 160, 192, 224,
 		while(NO == eos) {
 			
 			// Set up the buffer parameters
-			bufferList.mBuffers[0].mNumberChannels	= [[self decoder] pcmFormat].mChannelsPerFrame;
+			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
 			bufferList.mBuffers[0].mDataByteSize	= bufferByteSize;
-			frameCount								= bufferList.mBuffers[0].mDataByteSize / [[self decoder] pcmFormat].mBytesPerFrame;
+			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
-			frameCount = [[self decoder] readAudio:&bufferList frameCount:frameCount];
+			frameCount = [decoder readAudio:&bufferList frameCount:frameCount];
 			
 			// Expose the buffer to submit data
 			buffer = vorbis_analysis_buffer(&vd, frameCount);
 			
 			// Split PCM data into channels and convert to 32-bit float samples for Vorbis
-			switch([[self decoder] pcmFormat].mBitsPerChannel) {
+			switch([decoder pcmFormat].mBitsPerChannel) {
 				
 				case 8:
 					buffer8 = bufferList.mBuffers[0].mData;
