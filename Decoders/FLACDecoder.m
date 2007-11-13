@@ -46,12 +46,11 @@ writeCallback(const FLAC__StreamDecoder *decoder, const FLAC__Frame *frame, cons
 	int32_t				audioSample;
 		
 	// Calculate the number of audio data points contained in the frame (should be one for each channel)
-	spaceRequired		= frame->header.blocksize * frame->header.channels * (frame->header.bits_per_sample / 8);
+	spaceRequired = frame->header.blocksize * frame->header.channels * (frame->header.bits_per_sample / 8);
 
 	// Increase buffer size as required
-	if([[source pcmBuffer] freeSpaceAvailable] < spaceRequired) {
-		[[source pcmBuffer] resize:spaceRequired];
-	}
+	if([[source pcmBuffer] freeSpaceAvailable] < spaceRequired)
+		[[source pcmBuffer] resize:([[source pcmBuffer] size] + spaceRequired)];
 
 	switch(frame->header.bits_per_sample) {
 		
