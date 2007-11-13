@@ -179,9 +179,11 @@
 	_totalFramesRead			+= framesRead;
 	
 	if([self frameCount] == _framesReadInCurrentLoop || (0 == framesRead && 0 != framesToRead)) {
-		[[self decoder] seekToFrame:[self startingFrame]];
 		++_completedLoops;
-		_framesReadInCurrentLoop = 0;		
+		_framesReadInCurrentLoop = 0;
+		
+		if([self loopCount] > [self completedLoops])
+			[[self decoder] seekToFrame:[self startingFrame]];
 	}
 	
 	return framesRead;	
