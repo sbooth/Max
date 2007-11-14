@@ -29,6 +29,8 @@
 #include <cuetools/cd.h>
 #include <cuetools/cue.h>
 
+#include <FLAC/metadata.h>
+
 @implementation CueSheetDocument
 
 - (id) init
@@ -107,16 +109,16 @@
 
 - (BOOL) writeToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
-	if([typeName isEqualToString:@"CD Cue Sheet"]) {
-		return YES;
-	}
+    if(NULL != outError)
+		*outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
+
 	return NO;
 }
 
 // TODO: Replace with cue sheet parser from Play
 - (BOOL) readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
-	if([typeName isEqualToString:@"CD Cue Sheet"] && [absoluteURL isFileURL]) {
+	if([absoluteURL isFileURL] && [[[[absoluteURL path] pathExtension] lowercaseString] isEqualToString:@"cue"]) {
 		FILE *f = fopen([[absoluteURL path] fileSystemRepresentation], "r");
 		if(NULL == f) {
 			*outError = [NSError errorWithDomain:NSPOSIXErrorDomain 
@@ -261,6 +263,151 @@
 		
 		return YES;
 	}
+	else if([absoluteURL isFileURL] && [[[[absoluteURL path] pathExtension] lowercaseString] isEqualToString:@"flac"]) {
+		NSString					*path		= [absoluteURL path];
+		FLAC__Metadata_Chain		*chain		= NULL;
+		FLAC__Metadata_Iterator		*iterator	= NULL;
+		FLAC__StreamMetadata		*block		= NULL;
+
+		// Read the file's metadata
+		AudioMetadata *metadata = [AudioMetadata metadataFromFile:path];
+		if(nil != metadata) {
+			[self setTitle:[metadata albumTitle]];
+			[self setArtist:[metadata albumArtist]];
+			[self setComposer:[metadata albumComposer]];
+			[self setDate:[metadata albumDate]];
+			[self setGenre:[metadata albumGenre]];
+			[self setComment:[metadata albumComment]];
+			[self setMCN:[metadata MCN]];
+			[self setCompilation:[metadata compilation]];
+			[self setDiscNumber:[metadata discNumber]];
+			[self setDiscTotal:[metadata discTotal]];
+		}
+		
+		chain = FLAC__metadata_chain_new();
+		NSAssert(NULL != chain, @"Unable to allocate memory.");
+		
+		if(NO == FLAC__metadata_chain_read(chain, [path fileSystemRepresentation])) {
+			if(NULL != outError) {
+				NSMutableDictionary *errorDictionary = [NSMutableDictionary dictionary];
+				
+				switch(FLAC__metadata_chain_status(chain)) {
+					case FLAC__METADATA_CHAIN_STATUS_NOT_A_FLAC_FILE:
+						[errorDictionary setObject:NSLocalizedStringFromTable(@"The file is not a valid FLAC file.", @"Exceptions", @"") forKey:NSLocalizedRecoverySuggestionErrorKey];
+						break;
+						
+					case FLAC__METADATA_CHAIN_STATUS_BAD_METADATA:
+						[errorDictionary setObject:NSLocalizedStringFromTable(@"The file contains bad metadata.", @"Exceptions", @"") forKey:NSLocalizedRecoverySuggestionErrorKey];
+						break;
+						
+					default:
+						[errorDictionary setObject:NSLocalizedStringFromTable(@"The file is not a valid FLAC file.", @"Exceptions", @"") forKey:NSLocalizedRecoverySuggestionErrorKey];
+						break;
+				}
+				
+				*outError = [NSError errorWithDomain:NSCocoaErrorDomain 
+												code:-1 
+											userInfo:errorDictionary];
+			}
+			
+			FLAC__metadata_chain_delete(chain);
+			
+			return NO;
+		}
+		
+		iterator = FLAC__metadata_iterator_new();
+		NSAssert(NULL != iterator, @"Unable to allocate memory.");
+		
+		FLAC__metadata_iterator_init(iterator, chain);
+		
+		unsigned i;
+		FLAC__StreamMetadata_StreamInfo streamInfo;
+		
+		do {
+			block = FLAC__metadata_iterator_get_block(iterator);
+			
+			if(NULL == block)
+				break;
+			
+			switch(block->type) {					
+				case FLAC__METADATA_TYPE_STREAMINFO:
+					streamInfo = block->data.stream_info;
+					break;
+					
+				case FLAC__METADATA_TYPE_CUESHEET:
+					[self setMCN:[NSString stringWithUTF8String:block->data.cue_sheet.media_catalog_number]];
+					
+					// Iterate through each track in the cue sheet and process each one
+					for(i = 0; i < block->data.cue_sheet.num_tracks; ++i) {						
+						// Only process audio tracks
+						// 0 is audio, 1 is non-audio
+						if(0 == block->data.cue_sheet.tracks[i].type && 1 <= block->data.cue_sheet.tracks[i].number && 99 >= block->data.cue_sheet.tracks[i].number) {
+							CueSheetTrack *newTrack = [[CueSheetTrack alloc] init]; 
+							
+							[newTrack setFilename:path];
+							[newTrack setSampleRate:streamInfo.sample_rate];
+							if(NULL != block->data.cue_sheet.tracks[i].isrc)
+								[newTrack setISRC:[NSString stringWithUTF8String:block->data.cue_sheet.tracks[i].isrc]];
+							[newTrack setNumber:block->data.cue_sheet.tracks[i].number];
+							[newTrack setStartingFrame:block->data.cue_sheet.tracks[i].offset];
+							
+							// Fill in frame counts
+							if(0 < i) {
+								unsigned frameCount = (block->data.cue_sheet.tracks[i].offset - 1) - block->data.cue_sheet.tracks[i - 1].offset;
+								[[self objectInTracksAtIndex:(i - 1)] setFrameCount:frameCount];
+							}
+							
+							// Special handling for the last audio track
+							// FIXME: Is it safe the assume the lead out will always be the final track in the cue sheet?
+							if(i == block->data.cue_sheet.num_tracks - 1 - 1) {
+								unsigned frameCount = streamInfo.total_samples - block->data.cue_sheet.tracks[i].offset + 1;
+								[newTrack setFrameCount:frameCount];
+							}
+							
+							// Do this here to avoid registering for undo information
+							[newTrack setDocument:self];
+							[self insertObject:[newTrack autorelease] inTracksAtIndex:i];
+						}
+					}
+					
+					[self updateChangeCount:NSChangeCleared];
+
+					break;
+					
+					case FLAC__METADATA_TYPE_VORBIS_COMMENT:				break;
+					case FLAC__METADATA_TYPE_PICTURE:						break;
+					case FLAC__METADATA_TYPE_PADDING:						break;
+					case FLAC__METADATA_TYPE_APPLICATION:					break;
+					case FLAC__METADATA_TYPE_SEEKTABLE:						break;
+					case FLAC__METADATA_TYPE_UNDEFINED:						break;
+					default:												break;
+			}
+		} while(FLAC__metadata_iterator_next(iterator));
+		
+		FLAC__metadata_iterator_delete(iterator);
+		FLAC__metadata_chain_delete(chain);
+
+		// No cue sheet found
+		if(0 == [self countOfTracks]) {
+			if(NULL != outError) {
+				NSMutableDictionary *errorDictionary = [NSMutableDictionary dictionary];
+
+				[errorDictionary setObject:NSLocalizedStringFromTable(@"The file does not contain an embedded cue sheet.", @"Exceptions", @"") forKey:NSLocalizedRecoverySuggestionErrorKey];
+				
+				*outError = [NSError errorWithDomain:NSCocoaErrorDomain 
+												code:-1 
+											userInfo:errorDictionary];
+			}
+			
+			return NO;
+		}
+		else
+			return YES;
+	}
+	
+    if(NULL != outError)
+		*outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
+
     return NO;
 }
 
@@ -382,7 +529,6 @@
 
 	NSArray *selectedTracks = [self selectedTracks];
 	for(i = 0; i < [selectedTracks count]; ++i) {
-		
 		CueSheetTrack *currentTrack = [selectedTracks objectAtIndex:i];
 		
 		NSString				*filename			= [currentTrack filename];
@@ -395,7 +541,7 @@
 		
 		[trackSettings setValue:framesToConvert forKey:@"framesToConvert"];
 		[trackSettings addEntriesFromDictionary:settings];
-		
+
 		@try {
 			[[EncoderController sharedController] encodeFile:filename metadata:metadata settings:trackSettings];
 		}

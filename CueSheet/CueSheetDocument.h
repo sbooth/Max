@@ -66,8 +66,8 @@
 
 - (IBAction)		encode:(id)sender;
 
-- (IBAction)		queryMusicBrainz:(id)sender;
-- (void)			queryMusicBrainzNonInteractive;
+//- (IBAction)		queryMusicBrainz:(id)sender;
+//- (void)			queryMusicBrainzNonInteractive;
 
 - (IBAction)		toggleTrackInformation:(id)sender;
 - (IBAction)		toggleAlbumArt:(id)sender;
@@ -75,8 +75,8 @@
 - (IBAction)		selectNextTrack:(id)sender;
 - (IBAction)		selectPreviousTrack:(id)sender;
 
-- (IBAction)		downloadAlbumArt:(id)sender;
-- (IBAction)		selectAlbumArt:(id)sender;
+//- (IBAction)		downloadAlbumArt:(id)sender;
+//- (IBAction)		selectAlbumArt:(id)sender;
 
 // Miscellaneous
 - (NSArray *)		selectedTracks;
