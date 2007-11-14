@@ -237,7 +237,7 @@
 
 	[result setValue:[self title] forKey:@"title"];
 	[result setValue:[self artist] forKey:@"artist"];
-	[result setObject:[self date] forKey:@"date"];
+	[result setValue:[self date] forKey:@"date"];
 	[result setValue:[self genre] forKey:@"genre"];
 	[result setValue:[self composer] forKey:@"composer"];
 	[result setValue:[self comment] forKey:@"comment"];
