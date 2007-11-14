@@ -276,7 +276,11 @@ errorCallback(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus
 		bitsPerSample		= FLAC__stream_decoder_get_bits_per_sample(_flac); 
 		
 		blockByteSize		= blockSize * channels * (bitsPerSample / 8);
-		
+
+		// Ensure the buffer is large enough to hold one block
+		if([buffer size] < blockByteSize)
+			[buffer resize:blockByteSize];
+
 		// Ensure sufficient space remains in the buffer
 		if([buffer freeSpaceAvailable] >= blockByteSize) {
 			result	= FLAC__stream_decoder_process_single(_flac);
