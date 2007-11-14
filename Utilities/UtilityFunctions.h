@@ -94,6 +94,9 @@ void addFileToiTunesLibrary(NSString		*filename,
 NSString * generateTemporaryFilename(NSString *directory, 
 									 NSString *extension);
 
+// Returns YES if the file at pathname contains an embedded cue sheet
+BOOL fileContainsEmbeddedCueSheet(NSString *pathname);
+	
 #ifdef __cplusplus
 }
 #endif

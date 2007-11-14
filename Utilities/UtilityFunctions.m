@@ -30,6 +30,8 @@
 #include <sndfile/sndfile.h>
 #include <ogg/ogg.h>
 
+#include <FLAC/metadata.h>
+
 static NSDateFormatter		*sDateFormatter			= nil;
 static NSString				*sDataDirectory			= nil;
 static NSArray				*sAudioExtensions		= nil;
@@ -517,4 +519,56 @@ generateTemporaryFilename(NSString *directory, NSString *extension)
 	NSCAssert1(0 == intResult, @"Unable to close the temporary file: %s", strerror(errno));
 	
 	return [NSString stringWithCString:path encoding:NSASCIIStringEncoding];
+}
+
+BOOL
+fileContainsEmbeddedCueSheet(NSString *pathname)
+{
+	NSCParameterAssert(nil != pathname);
+	
+	// For now, only FLAC files can contain embedded cue sheets
+	if(NO == [[[pathname pathExtension] lowercaseString] isEqualToString:@"flac"])
+		return NO;
+	
+	FLAC__Metadata_Chain		*chain		= NULL;
+	FLAC__Metadata_Iterator		*iterator	= NULL;
+	FLAC__StreamMetadata		*block		= NULL;
+	BOOL						found		= NO;
+	
+	chain = FLAC__metadata_chain_new();
+	NSCAssert(NULL != chain, @"Unable to allocate memory.");
+	
+	if(NO == FLAC__metadata_chain_read(chain, [pathname fileSystemRepresentation])) {		
+		FLAC__metadata_chain_delete(chain);
+		return NO;
+	}
+	
+	iterator = FLAC__metadata_iterator_new();
+	NSCAssert(NULL != iterator, @"Unable to allocate memory.");
+	
+	FLAC__metadata_iterator_init(iterator, chain);
+	
+	do {
+		block = FLAC__metadata_iterator_get_block(iterator);
+		
+		if(NULL == block)
+			break;
+		
+		switch(block->type) {					
+			case FLAC__METADATA_TYPE_STREAMINFO:					break;
+			case FLAC__METADATA_TYPE_CUESHEET:		found = YES;	break;
+			case FLAC__METADATA_TYPE_VORBIS_COMMENT:				break;
+			case FLAC__METADATA_TYPE_PICTURE:						break;
+			case FLAC__METADATA_TYPE_PADDING:						break;
+			case FLAC__METADATA_TYPE_APPLICATION:					break;
+			case FLAC__METADATA_TYPE_SEEKTABLE:						break;
+			case FLAC__METADATA_TYPE_UNDEFINED:						break;
+			default:												break;
+		}
+	} while(FLAC__metadata_iterator_next(iterator));
+	
+	FLAC__metadata_iterator_delete(iterator);
+	FLAC__metadata_chain_delete(chain);
+	
+	return found;
 }
