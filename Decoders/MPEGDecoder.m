@@ -108,7 +108,8 @@ audio_linear_round(unsigned int bits,
 		
 		// Setup input format descriptor
 		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
-		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
+		// Unfortunately Max requires the output to be in Big Endian format
+		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
 		
 		_pcmFormat.mBitsPerChannel		= 16;
 		
@@ -316,12 +317,12 @@ audio_linear_round(unsigned int bits,
 		if(_foundLAMEHeader && [self totalFrames] < _samplesDecoded + (sampleCount - startingSample))
 			sampleCount = [self totalFrames] - _samplesDecoded;
 		
-		// Output samples as 16-bit integer PCM
+		// Output samples as 16-bit integer PCM (big endian)
 		int16_t *intBuffer = _bufferList->mBuffers[0].mData;
 		unsigned channel, sample;
 		for(sample = startingSample; sample < sampleCount; ++sample) {
 			for(channel = 0; channel < MAD_NCHANNELS(&_mad_frame.header); ++channel)
-				*intBuffer++ = (int16_t)audio_linear_round(BIT_RESOLUTION, _mad_synth.pcm.samples[channel][sample]);			
+				*intBuffer++ = (int16_t)OSSwapHostToBigInt16((int16_t)audio_linear_round(BIT_RESOLUTION, _mad_synth.pcm.samples[channel][sample]));
 		}
 		_bufferList->mBuffers[0].mDataByteSize = (sampleCount - startingSample) * MAD_NCHANNELS(&_mad_frame.header) * sizeof(int16_t);
 
@@ -795,12 +796,12 @@ audio_linear_round(unsigned int bits,
 			// Skip any audio frames before the sample we are seeking to
 			unsigned additionalSamplesToSkip = frame - _samplesDecoded;
 			
-			// Output samples as 16-bit integer PCM
+			// Output samples as 16-bit integer PCM (big endian)
 			int16_t *intBuffer = _bufferList->mBuffers[0].mData;
 			unsigned channel, sample;
 			for(sample = startingSample + additionalSamplesToSkip; sample < sampleCount; ++sample) {
 				 for(channel = 0; channel < MAD_NCHANNELS(&_mad_frame.header); ++channel)
-					*intBuffer++ = (int16_t)audio_linear_round(BIT_RESOLUTION, _mad_synth.pcm.samples[channel][sample]);				
+					*intBuffer++ = (int16_t)OSSwapHostToBigInt16((int16_t)audio_linear_round(BIT_RESOLUTION, _mad_synth.pcm.samples[channel][sample]));
 			}
 			
 			_bufferList->mBuffers[0].mDataByteSize = (sampleCount - (startingSample + additionalSamplesToSkip)) * MAD_NCHANNELS(&_mad_frame.header) * sizeof(int16_t);
