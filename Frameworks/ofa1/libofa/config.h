@@ -68,8 +68,4 @@
    first (like Motorola and SPARC, unlike Intel and VAX). */
 #if __BIG_ENDIAN__
 #define WORDS_BIGENDIAN 1
-#elif __LITTLE_ENDIAN__
-#define WORDS_BIGENDIAN 0
-#else
-#error "Target processor byte order unknown"
 #endif
