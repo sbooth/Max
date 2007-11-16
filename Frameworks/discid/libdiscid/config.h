@@ -63,7 +63,7 @@
 #if __BIG_ENDIAN__
 #define WORDS_BIGENDIAN 1
 #elif __LITTLE_ENDIAN__
-#define WORDS_BIGENDIAN 0
+/*#undef WORDS_BIGENDIAN */
 #else
 #error "Target processor byte order unknown"
 #endif
