@@ -98,7 +98,6 @@ static NSString		*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileConvers
 - (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
 {
     return [NSArray arrayWithObjects:EncodeToolbarItemIdentifier, 
-			NSToolbarSpaceItemIdentifier, 
 			MetadataToolbarItemIdentifier, 
 			AlbumArtToolbarItemIdentifier, 
 			nil];

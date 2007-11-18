@@ -78,7 +78,7 @@
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
 	if([item action] == @selector(encode:)) {
-		[item setTitle:NSLocalizedStringFromTable(@"Encode Selected Tracks", @"Menus", @"")];
+		[item setTitle:NSLocalizedStringFromTable(@"Convert Selected Tracks", @"Menus", @"")];
 		return [self encodeAllowed];
 	}
 	else if([item action] == @selector(queryMusicBrainz:))
@@ -89,9 +89,9 @@
 		return [_trackController canSelectPrevious];
 	else if([item action] == @selector(toggleTrackInformation:)) {
 		if(NSDrawerOpenState == [_trackDrawer state] || NSDrawerOpeningState == [_trackDrawer state])
-			[item setTitle:NSLocalizedStringFromTable(@"Hide Track Information", @"Menus", @"")];
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Metadata", @"Menus", @"")];
 		else
-			[item setTitle:NSLocalizedStringFromTable(@"Show Track Information", @"Menus", @"")];
+			[item setTitle:NSLocalizedStringFromTable(@"Show Metadata", @"Menus", @"")];
 		
 		return YES;
 	}
@@ -290,16 +290,16 @@
 		// Read the file's metadata
 		AudioMetadata *metadata = [AudioMetadata metadataFromFile:path];
 		if(nil != metadata) {
-			[self setTitle:[metadata albumTitle]];
-			[self setArtist:[metadata albumArtist]];
-			[self setComposer:[metadata albumComposer]];
-			[self setDate:[metadata albumDate]];
-			[self setGenre:[metadata albumGenre]];
-			[self setComment:[metadata albumComment]];
-			[self setMCN:[metadata MCN]];
-			[self setCompilation:[metadata compilation]];
-			[self setDiscNumber:[metadata discNumber]];
-			[self setDiscTotal:[metadata discTotal]];
+			_title = [[metadata albumTitle] retain];
+			_artist = [[metadata albumArtist] retain];
+			_composer = [[metadata albumComposer] retain];
+			_date = [[metadata albumDate] retain];
+			_genre = [[metadata albumGenre] retain];
+			_comment = [[metadata albumComment] retain];
+			_MCN = [[metadata MCN] retain];
+			_compilation = [[metadata compilation] retain];
+			_discNumber = [[metadata discNumber] retain];
+			_discTotal = [[metadata discTotal] retain];
 		}
 		
 		chain = FLAC__metadata_chain_new();
@@ -353,7 +353,7 @@
 					break;
 					
 				case FLAC__METADATA_TYPE_CUESHEET:
-					[self setMCN:[NSString stringWithUTF8String:block->data.cue_sheet.media_catalog_number]];
+					_MCN = [[NSString stringWithUTF8String:block->data.cue_sheet.media_catalog_number] retain];
 					
 					// Iterate through each track in the cue sheet and process each one
 					for(i = 0; i < block->data.cue_sheet.num_tracks; ++i) {						
@@ -387,9 +387,6 @@
 							[self insertObject:[newTrack autorelease] inTracksAtIndex:i];
 						}
 					}
-					
-					[self updateChangeCount:NSChangeCleared];
-
 					break;
 					
 					case FLAC__METADATA_TYPE_VORBIS_COMMENT:				break;
@@ -419,8 +416,9 @@
 			
 			return NO;
 		}
-		else
-			return YES;
+
+		[self updateChangeCount:NSChangeCleared];
+		return YES;
 	}
 	
     if(NULL != outError)
