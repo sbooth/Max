@@ -19,6 +19,7 @@
  */
 
 #import "FileConversionController.h"
+#import "FileConversionToolbar.h"
 #import "FormatsController.h"
 #import "EncoderController.h"
 #import "PreferencesController.h"
@@ -28,9 +29,6 @@
 #import "UtilityFunctions.h"
 
 static FileConversionController		*sharedController						= nil;
-
-static NSString						*MetadataToolbarItemIdentifier			= @"org.sbooth.Max.FileConversion.Toolbar.Metadata";
-static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileConversion.Toolbar.AlbumArt";
 
 @interface FileConversionController (Private)
 - (void)	addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo;
@@ -76,23 +74,37 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	BOOL result;
-	
-	switch([item tag]) {
-		default:								result = [super validateMenuItem:item];			break;
-		case kDownloadAlbumArtMenuItemTag:		result = (0 != [[_filesController arrangedObjects] count]);	break;
+	if([item action] == @selector(encode:)) {
+		[item setTitle:NSLocalizedStringFromTable(@"Convert", @"Menus", @"")];
+		return [self encodeAllowed];
 	}
-	
-	return result;
+	else if([item action] == @selector(downloadAlbumArt:))
+	   return 0 != [[_filesController selectedObjects] count];
+	else if([item action] == @selector(toggleTrackInformation:)) {
+		if(NSDrawerOpenState == [_metadataDrawer state] || NSDrawerOpeningState == [_metadataDrawer state])
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Metadata", @"Menus", @"")];
+		else
+			[item setTitle:NSLocalizedStringFromTable(@"Show Metadata", @"Menus", @"")];
+		
+		return YES;
+	}
+	else if([item action] == @selector(toggleAlbumArt:)) {
+		if(NSDrawerOpenState == [_artDrawer state] || NSDrawerOpeningState == [_artDrawer state])
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Album Art", @"Menus", @"")];
+		else
+			[item setTitle:NSLocalizedStringFromTable(@"Show Album Art", @"Menus", @"")];
+		
+		return YES;
+	}
+	else
+		return YES;
 }
 
 - (void) awakeFromNib
 {
 	NSTableColumn	*tableColumn;
 	NSCell			*dataCell;
-	
-	NSToolbar		*toolbar	= nil;
-	
+		
 	// Set the sort descriptors
 	[_filesController setSortDescriptors:[NSArray arrayWithObjects:
 		[[[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES] autorelease],
@@ -102,14 +114,15 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 		nil]];
 
 	// Setup the toolbar
-	toolbar = [[NSToolbar alloc] initWithIdentifier:@"org.sbooth.Max.FileConversion.Toolbar"];
-
-	[toolbar setAllowsUserCustomization:YES];
-	[toolbar setAutosavesConfiguration:YES];
-
-	[toolbar setDelegate:self];
-
-	[[self window] setToolbar:[toolbar autorelease]];
+	NSToolbar *toolbar = [[FileConversionToolbar alloc] init];
+    
+    [toolbar setAllowsUserCustomization:YES];
+    [toolbar setAutosavesConfiguration:YES];
+    [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
+    
+    [toolbar setDelegate:toolbar];
+	
+    [[self window] setToolbar:[toolbar autorelease]];
 
 	// Setup files table
 	tableColumn			= [_filesTableView tableColumnWithIdentifier:@"filename"];
@@ -138,7 +151,12 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 
 #pragma mark Action Methods
 
-- (IBAction) convert:(id)sender
+- (BOOL) encodeAllowed
+{
+	return (0 != [[_filesController arrangedObjects] count]);
+}
+
+- (IBAction) encode:(id)sender
 {
 	AudioMetadata			*metadata				= nil;
 	NSArray					*filenames				= nil;
@@ -282,6 +300,16 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	[self clearFileList];
 }
 
+- (IBAction) toggleTrackInformation:(id)sender
+{
+	[_metadataDrawer toggle:sender];
+}
+
+- (IBAction) toggleAlbumArt:(id)sender
+{
+	[_artDrawer toggle:sender];
+}
+
 - (IBAction) addFiles:(id)sender
 {
 	NSOpenPanel		*panel		= [NSOpenPanel openPanel];
@@ -414,53 +442,6 @@ static NSString						*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileCon
 	[panel setCanChooseFiles:YES];
 	
 	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectAlbumArtPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-}
-
-#pragma mark NSToolbar Delegate Methods
-
-- (NSToolbarItem *) toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag 
-{
-    NSToolbarItem *toolbarItem = nil;
-    
-    if([itemIdentifier isEqualToString:MetadataToolbarItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Metadata", @"FileConversion", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Metadata", @"FileConversion", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the metadata associated with the selected files", @"FileConversion", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"TrackInfoToolbarImage"]];
-		
-		[toolbarItem setTarget:_metadataDrawer];
-		[toolbarItem setAction:@selector(toggle:)];
-	}
-    else if([itemIdentifier isEqualToString:AlbumArtToolbarItemIdentifier]) {
-        toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
-		
-		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
-		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Album Art", @"CompactDisc", @"")];
-		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the artwork associated with the selected files", @"FileConversion", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"AlbumArtToolbarImage"]];
-		
-		[toolbarItem setTarget:_artDrawer];
-		[toolbarItem setAction:@selector(toggle:)];
-	}
-	else {
-		toolbarItem = nil;
-    }
-	
-    return toolbarItem;
-}
-
-- (NSArray *) toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar 
-{
-    return [NSArray arrayWithObjects: MetadataToolbarItemIdentifier, AlbumArtToolbarItemIdentifier, nil];
-}
-
-- (NSArray *) toolbarAllowedItemIdentifiers:(NSToolbar *) toolbar 
-{
-    return [NSArray arrayWithObjects: MetadataToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
-		NSToolbarSeparatorItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
-		NSToolbarCustomizeToolbarItemIdentifier, nil];
 }
 
 #pragma mark NSTableView Delegate Methods

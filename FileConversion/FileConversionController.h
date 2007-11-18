@@ -37,7 +37,11 @@
 
 - (NSArray *)						genres;
 
-- (IBAction)						convert:(id)sender;
+- (BOOL)							encodeAllowed;
+- (IBAction)						encode:(id)sender;
+
+- (IBAction)						toggleTrackInformation:(id)sender;
+- (IBAction)						toggleAlbumArt:(id)sender;
 
 - (IBAction)						addFiles:(id)sender;
 - (IBAction)						removeFiles:(id)sender;

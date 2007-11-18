@@ -105,8 +105,10 @@
 
 - (BOOL) validateMenuItem:(NSMenuItem *)item
 {
-	if([item action] == @selector(encode:))
+	if([item action] == @selector(encode:)) {
+		[item setTitle:NSLocalizedStringFromTable(@"Encode Selected Tracks", @"Menus", @"")];
 		return [self encodeAllowed];
+	}
 	else if([item action] == @selector(queryMusicBrainz:))
 		return [self queryMusicBrainzAllowed];
 	else if([item action] == @selector(ejectDisc:))
@@ -115,6 +117,22 @@
 		return [_trackController canSelectNext];
 	else if([item action] == @selector(selectPreviousTrack:))
 		return [_trackController canSelectPrevious];
+	else if([item action] == @selector(toggleTrackInformation:)) {
+		if(NSDrawerOpenState == [_trackDrawer state] || NSDrawerOpeningState == [_trackDrawer state])
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Track Information", @"Menus", @"")];
+		else
+			[item setTitle:NSLocalizedStringFromTable(@"Show Track Information", @"Menus", @"")];
+		
+		return YES;
+	}
+	else if([item action] == @selector(toggleAlbumArt:)) {
+		if(NSDrawerOpenState == [_artDrawer state] || NSDrawerOpeningState == [_artDrawer state])
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Album Art", @"Menus", @"")];
+		else
+			[item setTitle:NSLocalizedStringFromTable(@"Show Album Art", @"Menus", @"")];
+
+		return YES;
+	}
 	else
 		return [super validateMenuItem:item];
 }

@@ -186,6 +186,7 @@
 		8CABDFB70ABE751100905814 /* OggSpeexEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CABDED20ABE6AF900905814 /* OggSpeexEncoder.m */; };
 		8CABDFC70ABE768100905814 /* LibsndfileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEFC0A05CB8E00890518 /* LibsndfileEncoder.m */; };
 		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
+		8CBB34EE0CEFF42F004678FB /* FileConversionToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB34ED0CEFF42F004678FB /* FileConversionToolbar.m */; };
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
 		8CC9A0C00ACD909300948BAA /* shorten.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC9A0B90ACD909300948BAA /* shorten.framework */; };
 		8CC9A0C10ACD909C00948BAA /* shorten.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8CC9A0B90ACD909300948BAA /* shorten.framework */; };
@@ -661,6 +662,8 @@
 		8CBA9F980999BB98007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Preferences.nib; sourceTree = "<group>"; };
 		8CBA9FA20999BC3B007C9F11 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Log.nib; sourceTree = "<group>"; };
 		8CBAB14809D7AA6B00F97BDC /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8CBB34EC0CEFF42F004678FB /* FileConversionToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileConversionToolbar.h; sourceTree = "<group>"; };
+		8CBB34ED0CEFF42F004678FB /* FileConversionToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileConversionToolbar.m; sourceTree = "<group>"; };
 		8CBEDA570B76F73C0067CAE1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Spanish; path = Spanish.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8CBEDA580B76F73C0067CAE1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Spanish; path = Spanish.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		8CBEDA590B76F73C0067CAE1 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = Spanish; path = Spanish.lproj/FileConversion.strings; sourceTree = "<group>"; };
@@ -1350,6 +1353,8 @@
 				8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */,
 				8C99DD5A0A82B97C00A8CBE4 /* FilesTableView.h */,
 				8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */,
+				8CBB34EC0CEFF42F004678FB /* FileConversionToolbar.h */,
+				8CBB34ED0CEFF42F004678FB /* FileConversionToolbar.m */,
 			);
 			path = FileConversion;
 			sourceTree = "<group>";
@@ -1681,6 +1686,7 @@
 				8C397B990CC1D9A2004EFC92 /* ShortenDecoder.m in Sources */,
 				8C397B9A0CC1D9A3004EFC92 /* WavPackDecoder.m in Sources */,
 				8C2682FF0CE95B8D00EF1929 /* MPEGDecoder.m in Sources */,
+				8CBB34EE0CEFF42F004678FB /* FileConversionToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
