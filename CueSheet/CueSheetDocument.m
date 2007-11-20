@@ -542,7 +542,7 @@
 		[settings setValue:postProcessingOptions forKey:@"postProcessingOptions"];
 	
 	// Album art
-	if([[NSUserDefaults standardUserDefaults] objectForKey:@"saveAlbumArt"]) {
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"saveAlbumArt"]) {
 		NSMutableDictionary *albumArt = [NSMutableDictionary dictionary];
 		
 		[albumArt setValue:[[NSUserDefaults standardUserDefaults] objectForKey:@"albumArtFileExtension"] forKey:@"extension"];
