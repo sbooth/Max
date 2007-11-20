@@ -2236,7 +2236,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/discid/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_20 = "\"$(SRCROOT)/Frameworks/neon/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_21 = "\"$(SRCROOT)/Frameworks/mad/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_21 = "\"$(SRCROOT)/Frameworks/MAD/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(SRCROOT)/Frameworks/lame/build/Release\"";
@@ -2313,7 +2313,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_19 = "\"$(SRCROOT)/Frameworks/discid/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Frameworks/Growl/build/Deployment\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_20 = "\"$(SRCROOT)/Frameworks/neon/build/Release\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_21 = "\"$(SRCROOT)/Frameworks/mad/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_21 = "\"$(SRCROOT)/Frameworks/MAD/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/Frameworks/ogg/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_4 = "\"$(SRCROOT)/Frameworks/vorbis/build/Release\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_5 = "\"$(SRCROOT)/Frameworks/lame/build/Release\"";
