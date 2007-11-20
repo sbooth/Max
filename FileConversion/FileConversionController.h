@@ -29,6 +29,10 @@
 	IBOutlet NSDrawer				*_metadataDrawer;
 	IBOutlet NSDrawer				*_artDrawer;
 	IBOutlet NSTableView			*_filesTableView;
+	IBOutlet NSTextField			*_trackNumberTextField;
+	IBOutlet NSTextField			*_trackTotalTextField;
+	IBOutlet NSTextField			*_discNumberTextField;
+	IBOutlet NSTextField			*_discTotalTextField;
 	
 	NSMutableArray					*_files;
 }

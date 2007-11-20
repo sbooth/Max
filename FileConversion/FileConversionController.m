@@ -133,7 +133,17 @@ static FileConversionController		*sharedController						= nil;
 	
 	[tableColumn setDataCell:dataCell];
 	[tableColumn bind:@"value" toObject:_filesController withKeyPath:@"arrangedObjects.displayName" options:nil];
-	[dataCell release];		
+	[dataCell release];
+	
+	// Set number formatters	
+	NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+	[numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+	
+	[_trackNumberTextField setFormatter:numberFormatter];
+	[_trackTotalTextField setFormatter:numberFormatter];
+	[_discNumberTextField setFormatter:numberFormatter];
+	[_discTotalTextField setFormatter:numberFormatter];
+	[numberFormatter release];	
 }
 
 - (void) windowDidLoad

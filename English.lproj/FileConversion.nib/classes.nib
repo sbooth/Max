@@ -45,29 +45,41 @@
 			<dict>
 				<key>addFiles</key>
 				<string>id</string>
-				<key>convert</key>
-				<string>id</string>
 				<key>downloadAlbumArt</key>
+				<string>id</string>
+				<key>encode</key>
 				<string>id</string>
 				<key>removeFiles</key>
 				<string>id</string>
 				<key>selectAlbumArt</key>
 				<string>id</string>
+				<key>toggleAlbumArt</key>
+				<string>id</string>
+				<key>toggleTrackInformation</key>
+				<string>id</string>
 			</dict>
 			<key>CLASS</key>
-			<string>ConvertFilesController</string>
+			<string>FileConversionController</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
 				<key>_artDrawer</key>
 				<string>NSDrawer</string>
+				<key>_discNumberTextField</key>
+				<string>NSTextField</string>
+				<key>_discTotalTextField</key>
+				<string>NSTextField</string>
 				<key>_filesController</key>
 				<string>FileArrayController</string>
 				<key>_filesTableView</key>
 				<string>NSTableView</string>
 				<key>_metadataDrawer</key>
 				<string>NSDrawer</string>
+				<key>_trackNumberTextField</key>
+				<string>NSTextField</string>
+				<key>_trackTotalTextField</key>
+				<string>NSTextField</string>
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSWindowController</string>
