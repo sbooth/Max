@@ -30,7 +30,6 @@
 - (IBAction)	openWithFinder:(id)sender;
 - (IBAction)	revealInFinder:(id)sender;
 
-- (IBAction)	playWithCog:(id)sender;
 - (IBAction)	playWithPlay:(id)sender;
 - (IBAction)	editWithTag:(id)sender;
 
