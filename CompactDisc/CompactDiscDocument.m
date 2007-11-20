@@ -94,6 +94,14 @@
 
 - (void) awakeFromNib
 {
+	// Set number formatters	
+	NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+	[numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+	
+	[_discNumberTextField setFormatter:numberFormatter];
+	[_discTotalTextField setFormatter:numberFormatter];
+	[numberFormatter release];
+
 	[_trackTable setAutosaveName:[NSString stringWithFormat: @"Tracks for %@", [self discID]]];
 	[_trackTable setAutosaveTableColumns:YES];
 	[_trackController setSortDescriptors:[NSArray arrayWithObjects:
