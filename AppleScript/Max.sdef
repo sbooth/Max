@@ -5,7 +5,7 @@
 
   $Id$
 
-  Copyright (C) 2005, 2006 Stephen F. Booth <me@sbooth.org>
+  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -302,9 +302,9 @@
 				description="The disc's artist.">
 				<cocoa key="artist"/>
 			</property>
-			<property name="year" code="year" type="integer"
-				description="The disc's year.">
-				<cocoa key="year"/>
+			<property name="date" code="date" type="text"
+				description="The disc's date.">
+				<cocoa key="date"/>
 			</property>
 			<property name="genre" code="genr" type="text"
 				description="The disc's genre.">
@@ -615,9 +615,9 @@
 				description="The track's artist.">
 				<cocoa key="artist"/>
 			</property>
-			<property name="year" code="year" type="integer"
-				description="The track's year.">
-				<cocoa key="year"/>
+			<property name="date" code="date" type="string"
+				description="The track's date.">
+				<cocoa key="date"/>
 			</property>
 			<property name="genre" code="genr" type="text"
 				description="The track's genre.">
