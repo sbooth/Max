@@ -28,6 +28,8 @@
     IBOutlet NSDrawer				*_trackDrawer;
     IBOutlet NSDrawer				*_artDrawer;
     IBOutlet NSTableView			*_trackTable;
+	IBOutlet NSTextField			*_discNumberTextField;
+	IBOutlet NSTextField			*_discTotalTextField;
 
 	// Disc information
 	NSString						*_title;
