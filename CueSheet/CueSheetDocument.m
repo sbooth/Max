@@ -25,11 +25,16 @@
 #import "PreferencesController.h"
 #import "Decoder.h"
 #import "Genres.h"
+#import "AmazonAlbumArtSheet.h"
 
 #include <cuetools/cd.h>
 #include <cuetools/cue.h>
 
 #include <FLAC/metadata.h>
+
+@interface CueSheetDocument (Private)
+- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+@end
 
 @implementation CueSheetDocument
 
@@ -587,6 +592,23 @@
 - (IBAction) selectNextTrack:(id)sender						{ [_trackController selectNext:sender]; }
 - (IBAction) selectPreviousTrack:(id)sender					{ [_trackController selectPrevious:sender];	 }
 
+- (IBAction) downloadAlbumArt:(id)sender
+{	
+	AmazonAlbumArtSheet *art = [[(AmazonAlbumArtSheet *)[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
+	[art showAlbumArtMatches];
+}
+
+- (IBAction) selectAlbumArt:(id) sender
+{
+	NSOpenPanel *panel = [NSOpenPanel openPanel];
+	
+	[panel setAllowsMultipleSelection:NO];
+	[panel setCanChooseDirectories:NO];
+	[panel setCanChooseFiles:YES];
+	
+	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+}
+
 - (NSArray *)		genres								{ return [Genres sharedGenres]; }
 
 - (NSArray *) selectedTracks
@@ -746,5 +768,25 @@
 
 - (void) insertObject:(CueSheetTrack *)track inTracksAtIndex:(unsigned)idx	{ [_tracks insertObject:track atIndex:idx]; }
 - (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
+
+@end
+
+@implementation CueSheetDocument (Private)
+
+- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if(NSOKButton == returnCode) {
+		NSArray		*filesToOpen	= [sheet filenames];
+		unsigned	count			= [filesToOpen count];
+		unsigned	i;
+		NSImage		*image			= nil;
+		
+		for(i = 0; i < count; ++i) {
+			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
+			if(nil != image)
+				[self setAlbumArt:[image autorelease]];
+		}
+	}	
+}
 
 @end

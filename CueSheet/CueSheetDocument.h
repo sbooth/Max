@@ -21,8 +21,9 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CueSheetTrack.h"
+#import "AlbumArtMethods.h"
 
-@interface CueSheetDocument : NSDocument
+@interface CueSheetDocument : NSDocument <AlbumArtMethods>
 {
     IBOutlet NSArrayController		*_trackController;
     IBOutlet NSDrawer				*_trackDrawer;
@@ -77,8 +78,8 @@
 - (IBAction)		selectNextTrack:(id)sender;
 - (IBAction)		selectPreviousTrack:(id)sender;
 
-//- (IBAction)		downloadAlbumArt:(id)sender;
-//- (IBAction)		selectAlbumArt:(id)sender;
+- (IBAction)		downloadAlbumArt:(id)sender;
+- (IBAction)		selectAlbumArt:(id)sender;
 
 // Miscellaneous
 - (NSArray *)		selectedTracks;
