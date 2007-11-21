@@ -264,6 +264,10 @@
 
 			_MCN			= [[dictionary valueForKey:@"MCN"] retain];
 
+			// Maintain backwards compatibility
+			if(nil == _date)
+				_date		= [[[properties valueForKey:@"year"] stringValue] retain];
+
 			// Convert PNG data to an NSImage
 			_albumArt				= [[NSImage alloc] initWithData:[dictionary valueForKey:@"albumArt"]];
 			_albumArtDownloadDate	= [[dictionary valueForKey:@"albumArtDownloadDate"] retain];

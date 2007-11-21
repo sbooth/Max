@@ -282,6 +282,10 @@
 	_copyPermitted	= [[properties valueForKey:@"copyPermitted"] boolValue];
 	_ISRC			= [[properties valueForKey:@"ISRC"] retain];
 	_dataTrack		= [[properties valueForKey:@"dataTrack"] boolValue];
+	
+	// Maintain backwards compatibility
+	if(nil == _date)
+		_date		= [[[properties valueForKey:@"year"] stringValue] retain];
 }
 
 - (id) copyWithZone:(NSZone *)zone
