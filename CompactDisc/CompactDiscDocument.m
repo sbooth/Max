@@ -517,7 +517,7 @@
 		return;
 	
 	if(nil == _mbHelper)
-		_mbHelper = [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
+		_mbHelper = [[MusicBrainzHelper alloc] initWithDiscID:[[self disc] discID]];
 	
 	[_mbHelper performQuery:sender];
 	
@@ -546,7 +546,7 @@
 		return;
 	
 	if(nil == _mbHelper)
-		_mbHelper = [[MusicBrainzHelper alloc] initWithCompactDisc:[self disc]];
+		_mbHelper = [[MusicBrainzHelper alloc] initWithDiscID:[[self disc] discID]];
 	
 	[_mbHelper performQuery:self];
 	

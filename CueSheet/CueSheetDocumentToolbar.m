@@ -25,7 +25,7 @@ static NSString		*TrackInfoToolbarItemIdentifier				= @"org.sbooth.Max.CueSheetD
 static NSString		*AlbumArtToolbarItemIdentifier				= @"org.sbooth.Max.CueSheetDocument.Toolbar.AlbumArt";
 static NSString		*SelectNextTrackToolbarItemIdentifier		= @"org.sbooth.Max.CueSheetDocument.Toolbar.SelectNextTrack";
 static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.CueSheetDocument.Toolbar.SelectPreviousTrack";
-//static NSString		*QueryMusicBrainzToolbarItemIdentifier		= @"org.sbooth.Max.CueSheetDocument.Toolbar.QueryMusicBrainz";
+static NSString		*QueryMusicBrainzToolbarItemIdentifier		= @"org.sbooth.Max.CueSheetDocument.Toolbar.QueryMusicBrainz";
 
 @implementation CueSheetDocumentToolbar
 
@@ -53,8 +53,8 @@ static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.Cu
 	while((item = [enumerator nextObject])) {
 		if([item action] == @selector(encode:))
 			[item setEnabled:[_document encodeAllowed]];
-//		else if([item action] == @selector(queryMusicBrainz:))
-//			[item setEnabled:[_document queryMusicBrainzAllowed]];
+		else if([item action] == @selector(queryMusicBrainz:))
+			[item setEnabled:[_document queryMusicBrainzAllowed]];
 		else
 			[item setEnabled:YES];
 	}
@@ -121,7 +121,7 @@ static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.Cu
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(selectPreviousTrack:)];
 	}
-/*    else if([itemIdentifier isEqualToString:QueryMusicBrainzToolbarItemIdentifier]) {
+    else if([itemIdentifier isEqualToString:QueryMusicBrainzToolbarItemIdentifier]) {
         toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier] autorelease];
 		
 		[toolbarItem setLabel:NSLocalizedStringFromTable(@"Query", @"CompactDisc", @"")];
@@ -131,7 +131,7 @@ static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.Cu
 		
 		[toolbarItem setTarget:_document];
 		[toolbarItem setAction:@selector(queryMusicBrainz:)];
-	}*/
+	}
 	else
 		toolbarItem = nil;
 	
@@ -142,7 +142,7 @@ static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.Cu
 {
     return [NSArray arrayWithObjects:EncodeToolbarItemIdentifier, 
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
-//		QueryMusicBrainzToolbarItemIdentifier, 
+		QueryMusicBrainzToolbarItemIdentifier, 
 		nil];
 }
 
@@ -151,7 +151,7 @@ static NSString		*SelectPreviousTrackToolbarItemIdentifier	= @"org.sbooth.Max.Cu
     return [NSArray arrayWithObjects:EncodeToolbarItemIdentifier,
 		TrackInfoToolbarItemIdentifier, AlbumArtToolbarItemIdentifier,
 		SelectPreviousTrackToolbarItemIdentifier, SelectNextTrackToolbarItemIdentifier,
-//		QueryMusicBrainzToolbarItemIdentifier,
+		QueryMusicBrainzToolbarItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,  NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
 		NSToolbarCustomizeToolbarItemIdentifier, nil];
 }

@@ -88,14 +88,14 @@
 
 @interface MusicBrainzHelper (Private)
 - (MusicBrainzHelperData *) data;
-- (CompactDisc *) disc;
+- (NSString *) discID;
 @end
 
 @implementation MusicBrainzHelper
 
-- (id) initWithCompactDisc:(CompactDisc *)disc
+- (id) initWithDiscID:(NSString *)discID
 {
-	NSParameterAssert(nil != disc);
+	NSParameterAssert(nil != discID);
 	
 	if((self = [super init])) {
 		
@@ -107,7 +107,7 @@
 			return nil;
 		}
 
-		_disc = [disc retain];		
+		_discID = [discID retain];
 	}
 
 	return self;
@@ -117,7 +117,7 @@
 {
 	[_matches release],		_matches = nil;
 	[_data release],		_data = nil;
-	[_disc release],		_disc = nil;
+	[_discID release],		_discID = nil;
 	
 	[super dealloc];
 }
@@ -130,7 +130,7 @@
 	[_matches removeAllObjects];
 	
 	try {
-		std::string discId = [[[self disc] discID] cStringUsingEncoding:NSASCIIStringEncoding];
+		std::string discId = [[self discID] cStringUsingEncoding:NSASCIIStringEncoding];
 		MusicBrainz::ReleaseFilter f = MusicBrainz::ReleaseFilter().discId(discId);
         results = q.getReleases(&f);
 	}
@@ -270,5 +270,5 @@
 
 @implementation MusicBrainzHelper (Private)
 - (MusicBrainzHelperData *)		data		{ return [[_data retain] autorelease]; }
-- (CompactDisc *)				disc		{ return [[_disc retain] autorelease]; }
+- (NSString *)					discID		{ return [[_discID retain] autorelease]; }
 @end

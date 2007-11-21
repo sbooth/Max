@@ -26,6 +26,9 @@
 #import "Decoder.h"
 #import "Genres.h"
 #import "AmazonAlbumArtSheet.h"
+#import "MusicBrainzMatchSheet.h"
+
+#include <discid/discid.h>
 
 #include <cuetools/cd.h>
 #include <cuetools/cue.h>
@@ -34,6 +37,8 @@
 
 @interface CueSheetDocument (Private)
 - (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void) updateMetadataFromMusicBrainz:(unsigned)index;
 @end
 
 @implementation CueSheetDocument
@@ -443,7 +448,7 @@
 #pragma mark State
 
 - (BOOL) encodeAllowed				{ return (NO == [self emptySelection]); }
-- (BOOL) queryMusicBrainzAllowed	{ return NO; }
+- (BOOL) queryMusicBrainzAllowed	{ return (0 != [self countOfTracks]); }
 
 - (BOOL) emptySelection				{ return (0 == [[self selectedTracks] count]); }
 
@@ -587,6 +592,49 @@
 	
 }
 
+- (IBAction) queryMusicBrainz:(id)sender
+{
+	if(NO == [self queryMusicBrainzAllowed])
+		return;
+	
+	if(nil == _mbHelper)
+		_mbHelper = [[MusicBrainzHelper alloc] initWithDiscID:[self discID]];
+	
+	[_mbHelper performQuery:sender];
+	
+	unsigned matchCount	= [_mbHelper matchCount];
+	NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
+	
+	// If only match was found, update ourselves
+	if(1 == matchCount)
+		[self updateMetadataFromMusicBrainz:0];
+	else {
+		MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
+		NSMutableArray			*matches	= [[NSMutableArray alloc] init];
+		
+		unsigned i;
+		for(i = 0; i < matchCount; ++i)
+			[matches addObject:[_mbHelper matchAtIndex:i]];
+		
+		[sheet setValue:[matches autorelease] forKey:@"matches"];
+		[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndQueryMusicBrainzSheet:returnCode:contextInfo:) contextInfo:sheet];
+	}	
+}
+
+- (void) queryMusicBrainzNonInteractive
+{
+	if(NO == [self queryMusicBrainzAllowed])
+		return;
+	
+	if(nil == _mbHelper)
+		_mbHelper = [[MusicBrainzHelper alloc] initWithDiscID:[self discID]];
+	
+	[_mbHelper performQuery:self];
+	
+	if(1 <= [_mbHelper matchCount])
+		[self updateMetadataFromMusicBrainz:0];
+}
+
 - (IBAction) toggleTrackInformation:(id)sender				{ [_trackDrawer toggle:sender]; }
 - (IBAction) toggleAlbumArt:(id)sender						{ [_artDrawer toggle:sender]; }
 - (IBAction) selectNextTrack:(id)sender						{ [_trackController selectNext:sender]; }
@@ -647,6 +695,38 @@
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
 - (CueSheetTrack *)	objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
+
+- (NSString *) discID
+{
+	NSString *musicBrainzDiscID = nil;
+	
+	DiscId *discID = discid_new();
+	if(NULL == discID)
+		return nil;
+	
+	int offsets[100];
+	
+	unsigned i;
+	for(i = 0; i < [self countOfTracks]; ++i) {
+		CueSheetTrack *track = [self objectInTracksAtIndex:i];
+		UInt32 firstSector = ([track startingFrame] / [track sampleRate]) * 75;
+		offsets[1 + i] = firstSector + 150;
+		
+		// Use the sector immediately following the last track's last sector for lead out
+		if(1 + i == [self countOfTracks]) {
+			UInt32 sectorCount = ([track frameCount] / [track sampleRate]) * 75;
+			offsets[0] = offsets[1 + i] + sectorCount;
+		}
+	}
+	
+	int result = discid_put(discID, 1, [self countOfTracks], offsets);
+	if(result)
+		musicBrainzDiscID = [NSString stringWithCString:discid_get_id(discID) encoding:NSASCIIStringEncoding];
+	
+	discid_free(discID);
+	
+	return [[musicBrainzDiscID retain] autorelease];
+}
 
 #pragma mark Mutators
 
@@ -787,6 +867,50 @@
 				[self setAlbumArt:[image autorelease]];
 		}
 	}	
+}
+
+- (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	MusicBrainzMatchSheet *musicBrainzMatchSheet = (MusicBrainzMatchSheet *)contextInfo;
+	
+	[sheet orderOut:self];
+	
+	if(NSOKButton == returnCode)
+		[self updateMetadataFromMusicBrainz:[musicBrainzMatchSheet selectedAlbumIndex]];
+	
+	[musicBrainzMatchSheet release];
+}
+
+- (void) updateMetadataFromMusicBrainz:(unsigned)index
+{
+	NSDictionary *releaseDictionary = [_mbHelper matchAtIndex:index];
+	
+	//	BOOL isVariousArtists = [_mbHelper isVariousArtists];
+	
+	[[self undoManager] beginUndoGrouping];
+	
+	[self setTitle:[releaseDictionary valueForKey:@"title"]];
+	[self setArtist:[releaseDictionary valueForKey:@"artist"]];
+	[self setComposer:[releaseDictionary valueForKey:@"composer"]];
+	[self setDate:[releaseDictionary valueForKey:@"date"]];
+	
+	NSArray *tracksArray = [releaseDictionary valueForKey:@"tracks"];
+	
+	unsigned i;
+	for(i = 0; i < [tracksArray count]; ++i) {
+		NSDictionary *trackDictionary = [tracksArray objectAtIndex:i];
+		CueSheetTrack *track = [self objectInTracksAtIndex:i];
+		
+		[track setTitle:[trackDictionary valueForKey:@"title"]];
+		[track setArtist:[trackDictionary valueForKey:@"artist"]];
+		[track setComposer:[trackDictionary valueForKey:@"composer"]];
+	}
+	
+	[self updateChangeCount:NSChangeReadOtherContents];
+	
+	[[self undoManager] setActionName:NSLocalizedStringFromTable(@"MusicBrainz", @"UndoRedo", @"")];
+	[[self undoManager] endUndoGrouping];
+	
 }
 
 @end

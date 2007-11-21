@@ -20,17 +20,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class CompactDisc;
 @class MusicBrainzHelperData;
 
 @interface MusicBrainzHelper : NSObject
 {
-	CompactDisc					*_disc;
+	NSString					*_discID;
 	MusicBrainzHelperData		*_data;
 	NSMutableArray				*_matches;
 }
 
-- (id) initWithCompactDisc:(CompactDisc *)disc;
+- (id) initWithDiscID:(NSString *)discID;
 
 // Hits the server for the requested disc
 - (IBAction) performQuery:(id)sender;

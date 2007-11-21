@@ -22,6 +22,7 @@
 
 #import "CueSheetTrack.h"
 #import "AlbumArtMethods.h"
+#import "MusicBrainzHelper.h"
 
 @interface CueSheetDocument : NSDocument <AlbumArtMethods>
 {
@@ -31,6 +32,8 @@
     IBOutlet NSTableView			*_trackTable;
 	IBOutlet NSTextField			*_discNumberTextField;
 	IBOutlet NSTextField			*_discTotalTextField;
+
+	MusicBrainzHelper				*_mbHelper;
 
 	// Disc information
 	NSString						*_title;
@@ -69,8 +72,8 @@
 
 - (IBAction)		encode:(id)sender;
 
-//- (IBAction)		queryMusicBrainz:(id)sender;
-//- (void)			queryMusicBrainzNonInteractive;
+- (IBAction)		queryMusicBrainz:(id)sender;
+- (void)			queryMusicBrainzNonInteractive;
 
 - (IBAction)		toggleTrackInformation:(id)sender;
 - (IBAction)		toggleAlbumArt:(id)sender;
@@ -123,6 +126,9 @@
 
 - (NSString *)		MCN;
 - (void)			setMCN:(NSString *)MCN;
+
+// Calculate a MusicBrainz disc ID for this cue sheet
+- (NSString *) discID;
 
 	// KVC methods
 - (unsigned)		countOfTracks;
