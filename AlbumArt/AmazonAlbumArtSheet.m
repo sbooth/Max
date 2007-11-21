@@ -61,14 +61,14 @@
 		_source		= source;
 		_images		= [[NSMutableArray alloc] init];
 
-		[_artistTextField setStringValue:[_source artist]];
-		[_titleTextField setStringValue:[_source title]];
+		if(nil != [_source artist])
+			[_artistTextField setStringValue:[_source artist]];
+		if(nil != [_source title])
+			[_titleTextField setStringValue:[_source title]];
 		
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"searchInProgress"];
-		
-		return self;
 	}
-	return nil;
+	return self;
 }
 
 - (void) dealloc
