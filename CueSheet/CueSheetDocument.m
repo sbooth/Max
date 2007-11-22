@@ -709,12 +709,12 @@
 	unsigned i;
 	for(i = 0; i < [self countOfTracks]; ++i) {
 		CueSheetTrack *track = [self objectInTracksAtIndex:i];
-		UInt32 firstSector = ([track startingFrame] / [track sampleRate]) * 75;
+		UInt32 firstSector = [track startingFrame] / ((unsigned)[track sampleRate] / 75);
 		offsets[1 + i] = firstSector + 150;
 		
 		// Use the sector immediately following the last track's last sector for lead out
 		if(1 + i == [self countOfTracks]) {
-			UInt32 sectorCount = ([track frameCount] / [track sampleRate]) * 75;
+			UInt32 sectorCount = [track frameCount] / ((unsigned)[track sampleRate] / 75);
 			offsets[0] = offsets[1 + i] + sectorCount;
 		}
 	}
@@ -724,7 +724,6 @@
 		musicBrainzDiscID = [NSString stringWithCString:discid_get_id(discID) encoding:NSASCIIStringEncoding];
 	
 	discid_free(discID);
-	
 	return [[musicBrainzDiscID retain] autorelease];
 }
 
