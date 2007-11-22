@@ -297,9 +297,7 @@
 	NSString									*mcn					= nil;
 	NSString									*isrc					= nil;
 	unsigned									i;
-	unsigned									m						= 0;
-	unsigned									s						= 0;
-	unsigned									f						= 0;
+	SInt64										offset					= 0;
 	
 	
 	if(nil == [[self taskInfo] inputTracks])
@@ -368,22 +366,9 @@
 				strncpy(track->isrc, [isrc UTF8String], sizeof(track->isrc));
 			
 			// 44.1 kHz
-			track->offset = (((60 * m) + s) * 44100) + (f * 588);
-			
-			// Update times
-			f += [currentTrack frame];
-			while(75 <= f) {
-				f -= 75;
-				++s;
-			}
-			
-			s += [currentTrack second];
-			while(60 <= s) {
-				s -= 60;
-				++m;
-			}
-			
-			m += [currentTrack minute];
+			track->offset = offset;
+
+			offset += ([currentTrack lastSector] - [currentTrack firstSector] + 1) * (44100 / 75);
 			
 			result = FLAC__metadata_object_cuesheet_insert_track(block, i, track, NO);
 			NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
@@ -397,7 +382,7 @@
 		NSAssert(NULL != track, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		track->number		= 0xAA;
-		track->offset		= (((60 * m) + s) * 44100) + (f * 588);
+		track->offset		= offset;
 		track->type			= 1;
 		track->num_indices	= 0;
 		track->indices		= NULL;
