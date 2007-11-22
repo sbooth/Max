@@ -153,6 +153,31 @@
 	return [[musicBrainzDiscID retain] autorelease];
 }
 
+- (NSString *) freeDBDiscID
+{
+	NSString *freeDBDiscID = nil;
+	
+	DiscId *discID = discid_new();
+	if(NULL == discID)
+		return nil;
+	
+	// zero is lead out
+	int offsets[100];
+	offsets[0] = [self leadOut] + 150;
+	
+	unsigned i;
+	for(i = 0; i < [self countOfTracks]; ++i)
+		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
+	
+	int result = discid_put(discID, 1, [self countOfTracks], offsets);
+	if(result)
+		freeDBDiscID = [NSString stringWithCString:discid_get_freedb_id(discID) encoding:NSASCIIStringEncoding];
+	
+	discid_free(discID);
+	
+	return [[freeDBDiscID retain] autorelease];
+}
+
 - (unsigned)		length									{ return _length; }
 
 // KVC

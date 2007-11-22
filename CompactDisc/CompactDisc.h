@@ -65,6 +65,7 @@
 
 // Derived properties
 - (NSString *)			discID;
+- (NSString *)			freeDBDiscID;
 - (unsigned)			length;
 
 @end
