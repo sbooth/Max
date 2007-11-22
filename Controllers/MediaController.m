@@ -200,12 +200,13 @@ static MediaController *sharedController = nil;
 
 - (void) volumeMounted:(NSString *)deviceName
 {
-	CompactDisc				*disc		= nil;
-	NSString				*filename	= nil;
-	NSURL					*url		= nil;
-	CompactDiscDocument		*doc		= nil;
-	NSError					*err		= nil;
-	BOOL					newDisc		= NO;
+	CompactDisc				*disc			= nil;
+	NSString				*filename		= nil;
+	NSString				*oldFilename	= nil;
+	NSURL					*url			= nil;
+	CompactDiscDocument		*doc			= nil;
+	NSError					*err			= nil;
+	BOOL					newDisc			= NO;
 	
 	@try {
 		
@@ -213,7 +214,12 @@ static MediaController *sharedController = nil;
 		
 		disc		= [[[CompactDisc alloc] initWithDeviceName:deviceName] autorelease];
 		filename	= [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [disc discID]];
+		oldFilename	= [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [disc freeDBDiscID]];
 		url			= [NSURL fileURLWithPath:filename];
+		
+		// If a .cdinfo file exists with the old FreeDB ID naming scheme, rename it
+		if([[NSFileManager defaultManager] fileExistsAtPath:oldFilename] && NO == [[NSFileManager defaultManager] fileExistsAtPath:filename])
+			/* BOOL result = */[[NSFileManager defaultManager] movePath:oldFilename toPath:filename handler:nil];
 		
 		// Ugly hack to avoid letting the user specify the save filename
 		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {
@@ -233,13 +239,11 @@ static MediaController *sharedController = nil;
 			
 			// Automatically query MusicBrainz for new discs if desired
 			if(newDisc) {
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryMusicBrainz"]) {
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallyQueryMusicBrainz"])
 					[doc queryMusicBrainzNonInteractive];
-				}
 
-				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallySaveMusicBrainzInfo"]) {
+				if([[NSUserDefaults standardUserDefaults] boolForKey:@"automaticallySaveMusicBrainzInfo"])
 					[doc saveDocument:self];
-				}				
 			}
 			
 			// Automatic rip/encode functionality
@@ -249,9 +253,8 @@ static MediaController *sharedController = nil;
 				[doc encode:self];
 			}
 		}
-		else {
+		else
 			[[NSDocumentController sharedDocumentController] presentError:err];
-		}
 	}
 	
 	@catch(NSException *exception) {
@@ -273,9 +276,8 @@ static MediaController *sharedController = nil;
 	while((document = [documentEnumerator nextObject])) {
 		disc = [document disc];
 		// If disc is nil, disc was unmounted by another agency (most likely user pressed eject key)
-		if(nil != disc && [[disc deviceName] isEqualToString:deviceName]) {
+		if(nil != disc && [[disc deviceName] isEqualToString:deviceName])
 			[document discEjected];
-		}
 	}
 }
 
