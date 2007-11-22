@@ -615,7 +615,7 @@
 				description="The track's artist.">
 				<cocoa key="artist"/>
 			</property>
-			<property name="date" code="date" type="string"
+			<property name="date" code="date" type="text"
 				description="The track's date.">
 				<cocoa key="date"/>
 			</property>
