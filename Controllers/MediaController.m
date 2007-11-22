@@ -214,9 +214,9 @@ static MediaController *sharedController = nil;
 		
 		disc		= [[[CompactDisc alloc] initWithDeviceName:deviceName] autorelease];
 		filename	= [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [disc discID]];
-		oldFilename	= [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [disc freeDBDiscID]];
+		oldFilename	= [NSString stringWithFormat:@"%@/0x%@.cdinfo", getApplicationDataDirectory(), [disc freeDBDiscID]];
 		url			= [NSURL fileURLWithPath:filename];
-		
+
 		// If a .cdinfo file exists with the old FreeDB ID naming scheme, rename it
 		if([[NSFileManager defaultManager] fileExistsAtPath:oldFilename] && NO == [[NSFileManager defaultManager] fileExistsAtPath:filename])
 			/* BOOL result = */[[NSFileManager defaultManager] movePath:oldFilename toPath:filename handler:nil];
