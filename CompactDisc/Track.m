@@ -284,7 +284,7 @@
 	_dataTrack		= [[properties valueForKey:@"dataTrack"] boolValue];
 	
 	// Maintain backwards compatibility
-	if(nil == _date)
+	if(nil == _date && nil != [properties valueForKey:@"year"] && 0 != [[properties valueForKey:@"year"] intValue])
 		_date		= [[[properties valueForKey:@"year"] stringValue] retain];
 }
 

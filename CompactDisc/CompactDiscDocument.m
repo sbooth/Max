@@ -265,7 +265,7 @@
 			_MCN			= [[dictionary valueForKey:@"MCN"] retain];
 
 			// Maintain backwards compatibility
-			if(nil == _date)
+			if(nil == _date && nil != [dictionary valueForKey:@"year"] && 0 != [[dictionary valueForKey:@"year"] intValue])
 				_date		= [[[dictionary valueForKey:@"year"] stringValue] retain];
 
 			// Convert PNG data to an NSImage
