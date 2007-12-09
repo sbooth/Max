@@ -8,6 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		8C85D1290CBB27F5002802E1 /* taglib_export.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C8AC7380D0C476100A90C21 /* speexfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC72B0D0C476100A90C21 /* speexfile.cpp */; };
+		8C8AC7390D0C476100A90C21 /* speexfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC72C0D0C476100A90C21 /* speexfile.h */; };
+		8C8AC73A0D0C476100A90C21 /* speexproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC72D0D0C476100A90C21 /* speexproperties.cpp */; };
+		8C8AC73B0D0C476100A90C21 /* speexproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC72E0D0C476100A90C21 /* speexproperties.h */; };
+		8C8AC73E0D0C476100A90C21 /* trueaudiofile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC7320D0C476100A90C21 /* trueaudiofile.cpp */; };
+		8C8AC73F0D0C476100A90C21 /* trueaudiofile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC7330D0C476100A90C21 /* trueaudiofile.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C8AC7400D0C476100A90C21 /* trueaudioproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC7340D0C476100A90C21 /* trueaudioproperties.cpp */; };
+		8C8AC7410D0C476100A90C21 /* trueaudioproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC7350D0C476100A90C21 /* trueaudioproperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C8AC7440D0C478D00A90C21 /* urllinkframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC7420D0C478D00A90C21 /* urllinkframe.cpp */; };
+		8C8AC7450D0C478D00A90C21 /* urllinkframe.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC7430D0C478D00A90C21 /* urllinkframe.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8CA82A3E0BF28A5600E98527 /* wavpackfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA82A3A0BF28A5600E98527 /* wavpackfile.cpp */; };
 		8CA82A400BF28A5600E98527 /* wavpackproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CA82A3C0BF28A5600E98527 /* wavpackproperties.cpp */; };
 		8CA82A420BF28A6700E98527 /* wavpackfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CA82A3B0BF28A5600E98527 /* wavpackfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -131,6 +141,16 @@
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* taglib_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = taglib_Prefix.pch; sourceTree = "<group>"; };
 		8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = taglib_export.h; path = taglib/taglib/taglib_export.h; sourceTree = "<group>"; };
+		8C8AC72B0D0C476100A90C21 /* speexfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = speexfile.cpp; sourceTree = "<group>"; };
+		8C8AC72C0D0C476100A90C21 /* speexfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = speexfile.h; sourceTree = "<group>"; };
+		8C8AC72D0D0C476100A90C21 /* speexproperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = speexproperties.cpp; sourceTree = "<group>"; };
+		8C8AC72E0D0C476100A90C21 /* speexproperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = speexproperties.h; sourceTree = "<group>"; };
+		8C8AC7320D0C476100A90C21 /* trueaudiofile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trueaudiofile.cpp; sourceTree = "<group>"; };
+		8C8AC7330D0C476100A90C21 /* trueaudiofile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trueaudiofile.h; sourceTree = "<group>"; };
+		8C8AC7340D0C476100A90C21 /* trueaudioproperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trueaudioproperties.cpp; sourceTree = "<group>"; };
+		8C8AC7350D0C476100A90C21 /* trueaudioproperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trueaudioproperties.h; sourceTree = "<group>"; };
+		8C8AC7420D0C478D00A90C21 /* urllinkframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = urllinkframe.cpp; sourceTree = "<group>"; };
+		8C8AC7430D0C478D00A90C21 /* urllinkframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = urllinkframe.h; sourceTree = "<group>"; };
 		8CA82A3A0BF28A5600E98527 /* wavpackfile.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wavpackfile.cpp; path = taglib/taglib/wavpack/wavpackfile.cpp; sourceTree = "<group>"; };
 		8CA82A3B0BF28A5600E98527 /* wavpackfile.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = wavpackfile.h; path = taglib/taglib/wavpack/wavpackfile.h; sourceTree = "<group>"; };
 		8CA82A3C0BF28A5600E98527 /* wavpackproperties.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = wavpackproperties.cpp; path = taglib/taglib/wavpack/wavpackproperties.cpp; sourceTree = "<group>"; };
@@ -287,6 +307,8 @@
 		08FB77AEFE84172EC02AAC07 /* taglib */ = {
 			isa = PBXGroup;
 			children = (
+				8C8AC7280D0C476100A90C21 /* speex */,
+				8C8AC72F0D0C476100A90C21 /* trueaudio */,
 				8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */,
 				8CEA12590AC8A95C009E46CB /* ape */,
 				8CEA12630AC8A95C009E46CB /* audioproperties.cpp */,
@@ -329,6 +351,30 @@
 				32DBCF5E0370ADEE00C91783 /* taglib_Prefix.pch */,
 			);
 			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		8C8AC7280D0C476100A90C21 /* speex */ = {
+			isa = PBXGroup;
+			children = (
+				8C8AC72B0D0C476100A90C21 /* speexfile.cpp */,
+				8C8AC72C0D0C476100A90C21 /* speexfile.h */,
+				8C8AC72D0D0C476100A90C21 /* speexproperties.cpp */,
+				8C8AC72E0D0C476100A90C21 /* speexproperties.h */,
+			);
+			name = speex;
+			path = taglib/taglib/speex;
+			sourceTree = "<group>";
+		};
+		8C8AC72F0D0C476100A90C21 /* trueaudio */ = {
+			isa = PBXGroup;
+			children = (
+				8C8AC7320D0C476100A90C21 /* trueaudiofile.cpp */,
+				8C8AC7330D0C476100A90C21 /* trueaudiofile.h */,
+				8C8AC7340D0C476100A90C21 /* trueaudioproperties.cpp */,
+				8C8AC7350D0C476100A90C21 /* trueaudioproperties.h */,
+			);
+			name = trueaudio;
+			path = taglib/taglib/trueaudio;
 			sourceTree = "<group>";
 		};
 		8CA82A340BF289E600E98527 /* wavpack */ = {
@@ -436,6 +482,8 @@
 		8CEA12820AC8A95C009E46CB /* frames */ = {
 			isa = PBXGroup;
 			children = (
+				8C8AC7420D0C478D00A90C21 /* urllinkframe.cpp */,
+				8C8AC7430D0C478D00A90C21 /* urllinkframe.h */,
 				8CEA12830AC8A95C009E46CB /* attachedpictureframe.cpp */,
 				8CEA12840AC8A95C009E46CB /* attachedpictureframe.h */,
 				8CEA12860AC8A95C009E46CB /* commentsframe.cpp */,
@@ -578,6 +626,11 @@
 				8CA82A420BF28A6700E98527 /* wavpackfile.h in Headers */,
 				8CA82A430BF28A6800E98527 /* wavpackproperties.h in Headers */,
 				8C85D1290CBB27F5002802E1 /* taglib_export.h in Headers */,
+				8C8AC7390D0C476100A90C21 /* speexfile.h in Headers */,
+				8C8AC73B0D0C476100A90C21 /* speexproperties.h in Headers */,
+				8C8AC73F0D0C476100A90C21 /* trueaudiofile.h in Headers */,
+				8C8AC7410D0C476100A90C21 /* trueaudioproperties.h in Headers */,
+				8C8AC7450D0C478D00A90C21 /* urllinkframe.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,10 +663,12 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "taglib" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* taglib */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8DC2EF4F0486A6940098B216 /* taglib.framework */,
 			);
@@ -682,6 +737,11 @@
 				8CEA13520AC8A95C009E46CB /* unicode.cpp in Sources */,
 				8CA82A3E0BF28A5600E98527 /* wavpackfile.cpp in Sources */,
 				8CA82A400BF28A5600E98527 /* wavpackproperties.cpp in Sources */,
+				8C8AC7380D0C476100A90C21 /* speexfile.cpp in Sources */,
+				8C8AC73A0D0C476100A90C21 /* speexproperties.cpp in Sources */,
+				8C8AC73E0D0C476100A90C21 /* trueaudiofile.cpp in Sources */,
+				8C8AC7400D0C476100A90C21 /* trueaudioproperties.cpp in Sources */,
+				8C8AC7440D0C478D00A90C21 /* urllinkframe.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
