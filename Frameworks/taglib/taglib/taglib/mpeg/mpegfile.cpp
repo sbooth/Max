@@ -225,7 +225,7 @@ public:
 // public members
 ////////////////////////////////////////////////////////////////////////////////
 
-MPEG::File::File(const char *file, bool readProperties,
+MPEG::File::File(FileName file, bool readProperties,
                  Properties::ReadStyle propertiesStyle) : TagLib::File(file)
 {
   d = new FilePrivate;
@@ -235,7 +235,7 @@ MPEG::File::File(const char *file, bool readProperties,
   }
 }
 
-MPEG::File::File(const char *file, ID3v2::FrameFactory *frameFactory,
+MPEG::File::File(FileName file, ID3v2::FrameFactory *frameFactory,
                  bool readProperties, Properties::ReadStyle propertiesStyle) :
   TagLib::File(file)
 {
@@ -430,7 +430,7 @@ bool MPEG::File::strip(int tags, bool freeMemory)
       d->ID3v1Location = findID3v1();
 
     // APE tag location has changed, update if it exists
- 
+
    if(d->APETag)
       d->APELocation = findAPE();
   }

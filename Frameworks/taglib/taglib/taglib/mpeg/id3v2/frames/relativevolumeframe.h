@@ -125,7 +125,7 @@ namespace TagLib {
 
       /*!
        * Returns a list of channels with information currently in the frame.
-       */        
+       */
       List<ChannelType> channels() const;
 
       /*!
@@ -243,6 +243,18 @@ namespace TagLib {
       void setPeakVolume(const PeakVolume &peak);
 
 #endif
+
+      /*!
+       * Returns the identification for this frame.
+       */
+      String identification() const;
+
+      /*!
+       * Sets the identification of the frame to \a s. The string
+       * is used to identify the situation and/or device where this
+       * adjustment should apply.
+       */
+      void setIdentification(const String &s);
 
     protected:
       virtual void parseFields(const ByteVector &data);

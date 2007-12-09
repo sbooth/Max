@@ -102,7 +102,7 @@ public:
 // public members
 ////////////////////////////////////////////////////////////////////////////////
 
-FLAC::File::File(const char *file, bool readProperties,
+FLAC::File::File(FileName file, bool readProperties,
                  Properties::ReadStyle propertiesStyle) :
   TagLib::File(file)
 {
@@ -110,7 +110,7 @@ FLAC::File::File(const char *file, bool readProperties,
   read(readProperties, propertiesStyle);
 }
 
-FLAC::File::File(const char *file, ID3v2::FrameFactory *frameFactory,
+FLAC::File::File(FileName file, ID3v2::FrameFactory *frameFactory,
                  bool readProperties, Properties::ReadStyle propertiesStyle) :
   TagLib::File(file)
 {
@@ -154,7 +154,7 @@ bool FLAC::File::save()
 
   // A Xiph comment portion of the data stream starts with a 4-byte descriptor.
   // The first byte indicates the frame type.  The last three bytes are used
-  // to give the length of the data segment.  Here we start 
+  // to give the length of the data segment.  Here we start
 
   ByteVector data = ByteVector::fromUInt(d->xiphCommentData.size());
 
@@ -380,7 +380,7 @@ void FLAC::File::scan()
   // Header format (from spec):
   // <1> Last-metadata-block flag
   // <7> BLOCK_TYPE
-  //	0 : STREAMINFO
+  //    0 : STREAMINFO
   //    1 : PADDING
   //    ..
   //    4 : VORBIS_COMMENT

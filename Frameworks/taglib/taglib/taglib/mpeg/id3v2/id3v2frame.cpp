@@ -54,6 +54,19 @@ public:
   Frame::Header *header;
 };
 
+bool isValidFrameID(const ByteVector &frameID)
+{
+  if(frameID.size() != 4) {
+    return false;
+  }
+  for(ByteVector::ConstIterator it = frameID.begin(); it != frameID.end(); it++) {
+    if( (*it < 'A' || *it > 'Z') && (*it < '1' || *it > '9') ) {
+      return false;
+    }
+  }
+  return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // static methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +84,7 @@ TagLib::uint Frame::headerSize(uint version)
 ByteVector Frame::textDelimiter(String::Type t)
 {
   ByteVector d = char(0);
-  if(t == String::UTF16 || t == String::UTF16BE)
+  if(t == String::UTF16 || t == String::UTF16BE || t == String::UTF16LE)
     d.append(char(0));
   return d;
 }
@@ -202,9 +215,11 @@ String Frame::readStringField(const ByteVector &data, String::Type encoding, int
   if(end < *position)
     return String::null;
 
+  String str = String(data.mid(*position, end - *position), encoding);
+
   *position = end + delimiter.size();
 
-  return String(data.mid(*position, end - *position), encoding);
+  return str;
 }
 
 
@@ -392,6 +407,17 @@ void Frame::Header::setData(const ByteVector &data, uint version)
     // the frame header (structure 4)
 
     d->frameSize = SynchData::toUInt(data.mid(4, 4));
+#ifndef NO_ITUNES_HACKS
+    // iTunes writes v2.4 tags with v2.3-like frame sizes
+    if(d->frameSize > 127) {
+      if(!isValidFrameID(data.mid(d->frameSize + 10, 4))) {
+        unsigned int uintSize = data.mid(4, 4).toUInt();
+        if(isValidFrameID(data.mid(uintSize + 10, 4))) {
+          d->frameSize = uintSize;
+        }
+      }
+    }
+#endif
 
     { // read the first byte of flags
       std::bitset<8> flags(data[8]);

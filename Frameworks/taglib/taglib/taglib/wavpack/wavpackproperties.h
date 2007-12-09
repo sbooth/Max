@@ -2,8 +2,8 @@
     copyright            : (C) 2006 by Lukáš Lalinský
     email                : lalinsky@gmail.com
 
-    copyright            : (C) 2004 by Allan Sandfeld Jensen 
-    email                : kde@carewolf.org 
+    copyright            : (C) 2004 by Allan Sandfeld Jensen
+    email                : kde@carewolf.org
                            (original MPC implementation)
  ***************************************************************************/
 
@@ -80,6 +80,9 @@ namespace TagLib {
       int version() const;
 
     private:
+      Properties(const Properties &);
+      Properties &operator=(const Properties &);
+
       void read();
 
       class PropertiesPrivate;

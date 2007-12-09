@@ -1,6 +1,9 @@
 project(taglib)
 
-OPTION(BUILD_TESTS "Create tests and examples"  OFF)
+OPTION(BUILD_TESTS "Build the test suite"  OFF)
+OPTION(BUILD_EXAMPLES "Build the examples"  OFF)
+
+OPTION(NO_ITUNES_HACKS "Disable workarounds for iTunes bugs"  OFF)
 
 #add some KDE specific stuff
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
@@ -14,7 +17,7 @@ set(INCLUDE_INSTALL_DIR      "${CMAKE_INSTALL_PREFIX}/include"             CACHE
 if (CMAKE_COMPILER_IS_GNUCXX)
    if (CMAKE_SYSTEM_NAME MATCHES Linux)
      set ( CMAKE_C_FLAGS     "${CMAKE_C_FLAGS} -Wno-long-long -ansi -Wundef -Wcast-align -Werror-implicit-function-declaration -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -Wmissing-format-attribute -fno-common")
-     set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -fno-exceptions -fno-check-new -fno-common")
+     set ( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wnon-virtual-dtor -Wno-long-long -ansi -Wundef -Wcast-align -Wchar-subscripts -Wall -W -Wpointer-arith -Wwrite-strings -Wformat-security -fno-check-new -fno-common")
    endif (CMAKE_SYSTEM_NAME MATCHES Linux)
 endif (CMAKE_COMPILER_IS_GNUCXX)
 if(MSVC)

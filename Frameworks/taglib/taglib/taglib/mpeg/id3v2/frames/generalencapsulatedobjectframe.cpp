@@ -55,8 +55,8 @@ GeneralEncapsulatedObjectFrame::GeneralEncapsulatedObjectFrame() : Frame("GEOB")
 
 GeneralEncapsulatedObjectFrame::GeneralEncapsulatedObjectFrame(const ByteVector &data) : Frame(data)
 {
-  setData(data);
   d = new GeneralEncapsulatedObjectFramePrivate;
+  setData(data);
 }
 
 GeneralEncapsulatedObjectFrame::~GeneralEncapsulatedObjectFrame()
@@ -140,7 +140,7 @@ void GeneralEncapsulatedObjectFrame::parseFields(const ByteVector &data)
 
   d->textEncoding = String::Type(data[0]);
 
-	int pos = 1;
+  int pos = 1;
 
   d->mimeType = readStringField(data, String::Latin1, &pos);
   d->fileName = readStringField(data, d->textEncoding, &pos);
