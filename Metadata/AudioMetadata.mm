@@ -428,7 +428,7 @@
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"TRACKTOTAL"]])
 						 [result setTrackTotal:[NSNumber numberWithInt:[value intValue]]];
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPILATION"]])
-						  [result setCompilation:[NSNumber numberWithBool:[value boolValue]]];
+						  [result setCompilation:[NSNumber numberWithBool:(BOOL)[value intValue]]];
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCNUMBER"]])
 						   [result setDiscNumber:[NSNumber numberWithInt:[value intValue]]];
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"DISCTOTAL"]])
@@ -782,7 +782,7 @@
 			tag = [self customizeOggVorbisTag:@"COMPILATION"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setCompilation:[NSNumber numberWithBool:[value boolValue]]];
+				[result setCompilation:[NSNumber numberWithBool:(BOOL)[value intValue]]];
 			}
 			
 			tag = [self customizeOggVorbisTag:@"ISRC"];
@@ -908,7 +908,7 @@
 			tag = [self customizeOggFLACTag:@"COMPILATION"];
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
-				[result setCompilation:[NSNumber numberWithBool:[value boolValue]]];
+				[result setCompilation:[NSNumber numberWithBool:(BOOL)[value intValue]]];
 			}
 			
 			tag = [self customizeOggFLACTag:@"ISRC"];
@@ -1043,7 +1043,7 @@
 		tagName = [self customizeAPETag:@"COMPILATION"];
 		tag = f->GetTagField(tagName);
 		if(NULL != tag && tag->GetIsUTF8Text())
-			[result setCompilation:[NSNumber numberWithBool:[[NSString stringWithUTF8String:tag->GetFieldValue()] boolValue]]];
+			[result setCompilation:[NSNumber numberWithBool:(BOOL)[[NSString stringWithUTF8String:tag->GetFieldValue()] intValue]]];
 		free(tagName);
 		
 		// ISRC
@@ -1223,7 +1223,7 @@
 			NSAssert(NULL != tagValue, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 			WavpackGetTagItem(wpc, tagName, tagValue, len + 1);
-			[result setCompilation:[NSNumber numberWithBool:[[NSString stringWithUTF8String:tagValue] boolValue]]];
+			[result setCompilation:[NSNumber numberWithBool:(BOOL)[[NSString stringWithUTF8String:tagValue] intValue]]];
 			free(tagValue);
 		}
 		
