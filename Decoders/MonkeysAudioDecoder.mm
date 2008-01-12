@@ -69,6 +69,20 @@
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"%@, %u channels, %u Hz", NSLocalizedStringFromTable(@"Monkey's Audio", @"General", @""), [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 
 - (SInt64)			totalFrames						{ return SELF_DECOMPRESSOR->GetInfo(APE_DECOMPRESS_TOTAL_BLOCKS); }
+//- (SInt64)			currentFrame					{ return _myCurrentFrame; }
+
+- (BOOL)			supportsSeeking					{ return YES; }
+
+- (SInt64) seekToFrame:(SInt64)frame
+{
+	NSParameterAssert(0 <= frame && frame < [self totalFrames]);
+
+	int result = SELF_DECOMPRESSOR->Seek(frame);
+	if(ERROR_SUCCESS == result)
+		_currentFrame = frame;
+	
+	return (ERROR_SUCCESS == result ? _currentFrame : -1);
+}
 
 - (void) fillPCMBuffer
 {
