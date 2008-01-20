@@ -91,8 +91,15 @@
 		
 	while([buffer freeSpaceAvailable] >= spaceRequired) {
 		int				bytesRead			= 0;
-		
-		bytesRead		= shn_read(_shn, [buffer exposeBufferForWriting], spaceRequired);
+		void			*rawBuffer			= [buffer exposeBufferForWriting];
+
+		bytesRead		= shn_read(_shn, rawBuffer, spaceRequired);
+
+		// Convert host-ordered data to big-endian
+#if __LITTLE_ENDIAN__
+		swab(rawBuffer, rawBuffer, bytesRead);
+#endif
+
 		[buffer wroteBytes:bytesRead];
 		
 		// No more data
