@@ -5,7 +5,7 @@
 
   $Id$
 
-  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+  Copyright (C) 2005 - 2008 Stephen F. Booth <me@sbooth.org>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -270,51 +270,51 @@
 				<cocoa key="fileURL"/>
 			</property>
 			<element type="track"/>
-			<property name="encode allowed" code="enco" type="boolean" access="r" 
+			<property name="encode allowed" code="Enco" type="boolean" access="r" 
 				description="Does the state of the document allow the selected tracks to be encoded?">
 				<cocoa key="encodeAllowed"/>
 			</property>
-			<property name="query MusicBrainz allowed" code="quer" type="boolean" access="r" 
+			<property name="query MusicBrainz allowed" code="Quer" type="boolean" access="r" 
 				description="Does the state of the document allow MusicBrainz to be queried for disc information?">
 				<cocoa key="queryMusicBrainzAllowed"/>
 			</property>
-			<property name="rip in progress" code="rip " type="boolean" access="r" 
+			<property name="rip in progress" code="RIP " type="boolean" access="r" 
 				description="Does this document contain tracks currently being ripped?">
 				<cocoa key="ripInProgress"/>
 			</property>
-			<property name="encode in progress" code="eip " type="boolean" access="r" 
+			<property name="encode in progress" code="EIP " type="boolean" access="r" 
 				description="Does this document contain tracks currently being encoded?">
 				<cocoa key="encodeInProgress"/>
 			</property>
-			<property name="disc in drive" code="disc" type="boolean" access="r"
+			<property name="disc in drive" code="Disc" type="boolean" access="r"
 				description="Is the disc associated with this document in the drive?">
 				<cocoa key="discInDrive"/>
 			</property>
-			<property name="disc ID" code="id  " type="text" access="r"
+			<property name="disc ID" code="MBID" type="text" access="r"
 				description="The disc's MusicBrainz ID.">
 				<cocoa key="discID"/>
 			</property>
-			<property name="title" code="titl" type="text"
+			<property name="title" code="Titl" type="text"
 				description="The disc's title.">
 				<cocoa key="title"/>
 			</property>
-			<property name="artist" code="arts" type="text"
+			<property name="artist" code="Arts" type="text"
 				description="The disc's artist.">
 				<cocoa key="artist"/>
 			</property>
-			<property name="date" code="date" type="text"
+			<property name="date" code="Date" type="text"
 				description="The disc's date.">
 				<cocoa key="date"/>
 			</property>
-			<property name="genre" code="genr" type="text"
+			<property name="genre" code="Genr" type="text"
 				description="The disc's genre.">
 				<cocoa key="genre"/>
 			</property>
-			<property name="composer" code="comp" type="text"
+			<property name="composer" code="Comp" type="text"
 				description="The disc's composer.">
 				<cocoa key="composer"/>
 			</property>
-			<property name="comment" code="comm" type="text"
+			<property name="comment" code="Comm" type="text"
 				description="The disc's comment.">
 				<cocoa key="comment"/>
 			</property>
@@ -332,23 +332,23 @@
 				<cocoa key="albumArtHeight"/>
 			</property>
 			-->
-			<property name="total tracks" code="ttot" type="integer" access="r"
+			<property name="total tracks" code="TTot" type="integer" access="r"
 				description="The total number of tracks on the disc.">
 				<cocoa key="countOfTracks"/>
 			</property>
-			<property name="disc number" code="dnum" type="integer"
+			<property name="disc number" code="DNum" type="integer"
 				description="The number of this disc in the set.">
 				<cocoa key="discNumber"/>
 			</property>
-			<property name="total discs" code="dtot" type="integer"
+			<property name="total discs" code="DTot" type="integer"
 				description="The total number of discs in the set.">
 				<cocoa key="discTotal"/>
 			</property>
-			<property name="compilation" code="cmpl" type="boolean"
+			<property name="compilation" code="Cmpl" type="boolean"
 				description="Is this disc a compilation?">
 				<cocoa key="compilation"/>
 			</property>
-			<property name="MCN" code="mcn " type="text" access="r"
+			<property name="MCN" code="MCN " type="text" access="r"
 				description="The disc's media catalog number (MCN).">
 				<cocoa key="MCN"/>
 			</property>
@@ -592,82 +592,82 @@
 	<suite name="Max Suite" code="MaxX" 
 		description="Max specific classes.">
 			
-		<class name="track" plural="tracks" code="trck"
+		<class name="track" plural="tracks" code="Trck"
 			description="A track contained in a CD.">
 			<cocoa class="Track"/>
-			<property name="rip in progress" code="rip " type="boolean" access="r" 
+			<property name="rip in progress" code="RIP " type="boolean" access="r" 
 				description="Is this track is currently being ripped?">
 				<cocoa key="ripInProgress"/>
 			</property>
-			<property name="encode in progress" code="eip " type="boolean" access="r" 
+			<property name="encode in progress" code="EIP " type="boolean" access="r" 
 				description="Is this track is currently being encoded?">
 				<cocoa key="encodeInProgress"/>
 			</property>
-			<property name="selected" code="selc" type="boolean"
+			<property name="selected" code="Selc" type="boolean"
 				description="Is this track is currently selected?">
 				<cocoa key="selected"/>
 			</property>
-			<property name="title" code="titl" type="text"
+			<property name="title" code="Titl" type="text"
 				description="The title of the track.">
 				<cocoa key="title"/>
 			</property>
-			<property name="artist" code="arts" type="text"
+			<property name="artist" code="Arts" type="text"
 				description="The track's artist.">
 				<cocoa key="artist"/>
 			</property>
-			<property name="date" code="date" type="text"
+			<property name="date" code="Date" type="text"
 				description="The track's date.">
 				<cocoa key="date"/>
 			</property>
-			<property name="genre" code="genr" type="text"
+			<property name="genre" code="Genr" type="text"
 				description="The track's genre.">
 				<cocoa key="genre"/>
 			</property>
-			<property name="composer" code="comp" type="text"
+			<property name="composer" code="Comp" type="text"
 				description="The track's composer.">
 				<cocoa key="composer"/>
 			</property>
-			<property name="size" code="size" type="integer" access="r" 
+			<property name="size" code="Size" type="integer" access="r" 
 				description="The track's size, in bytes.">
 				<cocoa key="size"/>
 			</property>
-			<property name="minute" code="min " type="integer" access="r" 
+			<property name="minute" code="Min " type="integer" access="r" 
 				description="The track's minute.">
 				<cocoa key="size"/>
 			</property>
-			<property name="second" code="sec " type="integer" access="r" 
+			<property name="second" code="Sec " type="integer" access="r" 
 				description="The track's second.">
 				<cocoa key="size"/>
 			</property>
-			<property name="frame" code="fram" type="integer" access="r" 
+			<property name="frame" code="Fram" type="integer" access="r" 
 				description="The track's frame.">
 				<cocoa key="size"/>
 			</property>
-			<property name="number" code="num " type="integer" access="r" 
+			<property name="number" code="Num " type="integer" access="r" 
 				description="The track's number.">
 				<cocoa key="number"/>
 			</property>
-			<property name="first sector" code="fsec" type="integer" access="r" 
+			<property name="first sector" code="FSec" type="integer" access="r" 
 				description="The track's first sector.">
 				<cocoa key="firstSector"/>
 			</property>
-			<property name="last sector" code="lsec" type="integer" access="r" 
+			<property name="last sector" code="LSec" type="integer" access="r" 
 				description="The track's last sector.">
 				<cocoa key="lastSector"/>
 			</property>
-			<property name="channels" code="chan" type="integer" access="r" 
+			<property name="channels" code="Chan" type="integer" access="r" 
 				description="The number of channels in the track.">
 				<cocoa key="size"/>
 			</property>
-			<property name="has pre-emphasis" code="pree" type="boolean" access="r" 
+			<property name="has pre-emphasis" code="PreE" type="boolean" access="r" 
 				description="Does this track have pre-emphasis?">
 				<cocoa key="preEmphasis"/>
 			</property>
-			<property name="digital copy permitted" code="copy" type="boolean" access="r" 
+			<property name="digital copy permitted" code="Copy" type="boolean" access="r" 
 				description="Does this track allows digital copies?">
 				<cocoa key="copyPermitted"/>
 			</property>
-			<property name="ISRC" code="isrc" type="text" access="r"
+			<property name="ISRC" code="ISRC" type="text" access="r"
 				description="The track's international standard recording code (ISRC).">
 				<cocoa key="ISRC"/>
 			</property>
