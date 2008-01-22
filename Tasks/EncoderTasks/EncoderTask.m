@@ -745,10 +745,10 @@ enum {
 		
 		path = [NSString stringWithFormat:@"%@/%@", NSLocalizedStringFromTable(@"Compilations", @"CompactDisc", @""),makeStringSafeForFilename(albumTitle)]; 
 		
-		if(0 == [metadata discNumber])
-			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [metadata trackNumber], makeStringSafeForFilename(trackTitle)];
+		if(nil == [metadata discNumber])
+			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 		else
-			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [metadata discNumber], [metadata trackNumber], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [metadata discNumber], [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 	}
 	// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
 	else {
@@ -773,10 +773,10 @@ enum {
 		
 		path = [NSString stringWithFormat:@"%@/%@", makeStringSafeForFilename(artist), makeStringSafeForFilename(albumTitle)]; 
 		
-		if(0 == [metadata discNumber])
-			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [metadata trackNumber], makeStringSafeForFilename(trackTitle)];
+		if(nil == [metadata discNumber])
+			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 		else
-			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [metadata discNumber], [metadata trackNumber], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [metadata discNumber], [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 	}
 	
 	return [[basename retain] autorelease];
