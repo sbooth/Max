@@ -193,9 +193,9 @@
 		[customPath replaceOccurrencesOfString:@"{albumGenre}" withString:makeStringSafeForFilename(albumGenre) options:nil range:NSMakeRange(0, [customPath length])];
 
 	if(nil == albumYear)
-		[customPath replaceOccurrencesOfString:@"{albumYear}" withString:@"Unknown Date" options:nil range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumDate}" withString:@"Unknown Date" options:nil range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumYear}" withString:makeStringSafeForFilename(albumYear) options:nil range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumDate}" withString:makeStringSafeForFilename(albumYear) options:nil range:NSMakeRange(0, [customPath length])];
 	
 	if(nil == albumComposer)
 		[customPath replaceOccurrencesOfString:@"{albumComposer}" withString:@"Unknown Composer" options:nil range:NSMakeRange(0, [customPath length])];
@@ -233,9 +233,9 @@
 		[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:makeStringSafeForFilename(trackGenre) options:nil range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackYear)
-		[customPath replaceOccurrencesOfString:@"{trackYear}" withString:@"Unknown Date" options:nil range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackDate}" withString:@"Unknown Date" options:nil range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackYear}" withString:makeStringSafeForFilename(trackYear) options:nil range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackDate}" withString:makeStringSafeForFilename(trackYear) options:nil range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackComposer)
 		[customPath replaceOccurrencesOfString:@"{trackComposer}" withString:@"Unknown Composer" options:nil range:NSMakeRange(0, [customPath length])];

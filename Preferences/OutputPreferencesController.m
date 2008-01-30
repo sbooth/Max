@@ -128,12 +128,12 @@ enum {
 	switch([[sender selectedItem] tag]) {
 		case kAlbumTitleMenuItem:			string = @"{albumTitle}";		break;
 		case kAlbumArtistMenuItem:			string = @"{albumArtist}";		break;
-		case kAlbumYearMenuItem:			string = @"{albumYear}";		break;
+		case kAlbumYearMenuItem:			string = @"{albumDate}";		break;
 		case kAlbumGenreMenuItem:			string = @"{albumGenre}";		break;
 		case kAlbumComposerMenuItem:		string = @"{albumComposer}";	break;
 		case kTrackTitleMenuItem:			string = @"{trackTitle}";		break;
 		case kTrackArtistMenuItem:			string = @"{trackArtist}";		break;
-		case kTrackYearMenuItem:			string = @"{trackYear}";		break;
+		case kTrackYearMenuItem:			string = @"{trackDate}";		break;
 		case kTrackGenreMenuItem:			string = @"{trackGenre}";		break;
 		case kTrackComposerMenuItem:		string = @"{trackComposer}";	break;
 		case kTrackNumberMenuItemTag:		string = @"{trackNumber}";		break;

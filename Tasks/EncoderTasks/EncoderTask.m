@@ -591,7 +591,7 @@ enum {
 	NSString			*albumYear			= [metadata albumDate];
 	NSString			*albumComposer		= [metadata albumComposer];
 	NSString			*albumComment		= [metadata albumComment];
-	NSNumber			*trackNumber			= [metadata trackNumber];
+	NSNumber			*trackNumber		= [metadata trackNumber];
 	NSNumber			*trackTotal			= [metadata trackTotal];
 	NSString			*trackArtist		= [metadata trackArtist];
 	NSString			*trackTitle			= [metadata trackTitle];
@@ -646,9 +646,9 @@ enum {
 		[customPath replaceOccurrencesOfString:@"{albumGenre}" withString:makeStringSafeForFilename(albumGenre) options:0 range:NSMakeRange(0, [customPath length])];
 	
 	if(nil == albumYear)
-		[customPath replaceOccurrencesOfString:@"{albumYear}" withString:@"Unknown Year" options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumDate}" withString:@"Unknown Year" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumYear}" withString:[NSString stringWithFormat:@"%u", [albumYear intValue]] options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumDate}" withString:[NSString stringWithFormat:@"%u", [albumYear intValue]] options:0 range:NSMakeRange(0, [customPath length])];
 	
 	if(nil == albumComposer)
 		[customPath replaceOccurrencesOfString:@"{albumComposer}" withString:@"Unknown Composer" options:0 range:NSMakeRange(0, [customPath length])];
@@ -694,9 +694,9 @@ enum {
 		[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:makeStringSafeForFilename(trackGenre) options:0 range:NSMakeRange(0, [customPath length])];
 	
 	if(nil == trackYear)
-		[customPath replaceOccurrencesOfString:@"{trackYear}" withString:@"Unknown Year" options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackDate}" withString:@"Unknown Year" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackYear}" withString:makeStringSafeForFilename(trackYear) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackDate}" withString:makeStringSafeForFilename(trackYear) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackComposer)
 		[customPath replaceOccurrencesOfString:@"{trackComposer}" withString:@"Unknown Composer" options:0 range:NSMakeRange(0, [customPath length])];
@@ -748,7 +748,7 @@ enum {
 		if(nil == [metadata discNumber])
 			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 		else
-			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [metadata discNumber], [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[metadata discNumber] intValue], [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 	}
 	// Use standard iTunes-style naming: "Artist/Album/DiscNumber-TrackNumber TrackTitle.mp3"
 	else {
@@ -776,7 +776,7 @@ enum {
 		if(nil == [metadata discNumber])
 			basename = [NSString stringWithFormat:@"%@/%02u %@", path, [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 		else
-			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [metadata discNumber], [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
+			basename = [NSString stringWithFormat:@"%@/%i-%02u %@", path, [[metadata discNumber] intValue], [[metadata trackNumber] intValue], makeStringSafeForFilename(trackTitle)];
 	}
 	
 	return [[basename retain] autorelease];
