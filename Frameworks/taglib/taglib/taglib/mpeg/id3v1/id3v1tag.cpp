@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002, 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -64,6 +64,11 @@ String ID3v1::StringHandler::parse(const ByteVector &data) const
 
 ByteVector ID3v1::StringHandler::render(const String &s) const
 {
+  if(!s.isLatin1())
+  {
+    return ByteVector();
+  }
+
   return s.data(String::Latin1);
 }
 

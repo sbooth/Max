@@ -7,11 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C4C8E280D5E37EE00DC0279 /* unsynchronizedlyricsframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C4C8E260D5E37EE00DC0279 /* unsynchronizedlyricsframe.cpp */; };
+		8C4C8E290D5E37EE00DC0279 /* unsynchronizedlyricsframe.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C4C8E270D5E37EE00DC0279 /* unsynchronizedlyricsframe.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8C4C8E2C0D5E381D00DC0279 /* tagunion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C4C8E2A0D5E381D00DC0279 /* tagunion.cpp */; };
+		8C4C8E2D0D5E381D00DC0279 /* tagunion.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C4C8E2B0D5E381D00DC0279 /* tagunion.h */; settings = {ATTRIBUTES = (); }; };
 		8C85D1290CBB27F5002802E1 /* taglib_export.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8AC7380D0C476100A90C21 /* speexfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC72B0D0C476100A90C21 /* speexfile.cpp */; };
-		8C8AC7390D0C476100A90C21 /* speexfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC72C0D0C476100A90C21 /* speexfile.h */; };
+		8C8AC7390D0C476100A90C21 /* speexfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC72C0D0C476100A90C21 /* speexfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8AC73A0D0C476100A90C21 /* speexproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC72D0D0C476100A90C21 /* speexproperties.cpp */; };
-		8C8AC73B0D0C476100A90C21 /* speexproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC72E0D0C476100A90C21 /* speexproperties.h */; };
+		8C8AC73B0D0C476100A90C21 /* speexproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC72E0D0C476100A90C21 /* speexproperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8AC73E0D0C476100A90C21 /* trueaudiofile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC7320D0C476100A90C21 /* trueaudiofile.cpp */; };
 		8C8AC73F0D0C476100A90C21 /* trueaudiofile.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C8AC7330D0C476100A90C21 /* trueaudiofile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C8AC7400D0C476100A90C21 /* trueaudioproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C8AC7340D0C476100A90C21 /* trueaudioproperties.cpp */; };
@@ -140,6 +144,10 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF5E0370ADEE00C91783 /* taglib_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = taglib_Prefix.pch; sourceTree = "<group>"; };
+		8C4C8E260D5E37EE00DC0279 /* unsynchronizedlyricsframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = unsynchronizedlyricsframe.cpp; path = taglib/taglib/mpeg/id3v2/frames/unsynchronizedlyricsframe.cpp; sourceTree = "<group>"; };
+		8C4C8E270D5E37EE00DC0279 /* unsynchronizedlyricsframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = unsynchronizedlyricsframe.h; path = taglib/taglib/mpeg/id3v2/frames/unsynchronizedlyricsframe.h; sourceTree = "<group>"; };
+		8C4C8E2A0D5E381D00DC0279 /* tagunion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tagunion.cpp; path = taglib/taglib/tagunion.cpp; sourceTree = "<group>"; };
+		8C4C8E2B0D5E381D00DC0279 /* tagunion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tagunion.h; path = taglib/taglib/tagunion.h; sourceTree = "<group>"; };
 		8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = taglib_export.h; path = taglib/taglib/taglib_export.h; sourceTree = "<group>"; };
 		8C8AC72B0D0C476100A90C21 /* speexfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = speexfile.cpp; sourceTree = "<group>"; };
 		8C8AC72C0D0C476100A90C21 /* speexfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = speexfile.h; sourceTree = "<group>"; };
@@ -307,6 +315,10 @@
 		08FB77AEFE84172EC02AAC07 /* taglib */ = {
 			isa = PBXGroup;
 			children = (
+				8C4C8E2A0D5E381D00DC0279 /* tagunion.cpp */,
+				8C4C8E2B0D5E381D00DC0279 /* tagunion.h */,
+				8C4C8E260D5E37EE00DC0279 /* unsynchronizedlyricsframe.cpp */,
+				8C4C8E270D5E37EE00DC0279 /* unsynchronizedlyricsframe.h */,
 				8C8AC7280D0C476100A90C21 /* speex */,
 				8C8AC72F0D0C476100A90C21 /* trueaudio */,
 				8C85D0FC0CBAEEB1002802E1 /* taglib_export.h */,
@@ -631,6 +643,8 @@
 				8C8AC73F0D0C476100A90C21 /* trueaudiofile.h in Headers */,
 				8C8AC7410D0C476100A90C21 /* trueaudioproperties.h in Headers */,
 				8C8AC7450D0C478D00A90C21 /* urllinkframe.h in Headers */,
+				8C4C8E290D5E37EE00DC0279 /* unsynchronizedlyricsframe.h in Headers */,
+				8C4C8E2D0D5E381D00DC0279 /* tagunion.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -742,6 +756,8 @@
 				8C8AC73E0D0C476100A90C21 /* trueaudiofile.cpp in Sources */,
 				8C8AC7400D0C476100A90C21 /* trueaudioproperties.cpp in Sources */,
 				8C8AC7440D0C478D00A90C21 /* urllinkframe.cpp in Sources */,
+				8C4C8E280D5E37EE00DC0279 /* unsynchronizedlyricsframe.cpp in Sources */,
+				8C4C8E2C0D5E381D00DC0279 /* tagunion.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

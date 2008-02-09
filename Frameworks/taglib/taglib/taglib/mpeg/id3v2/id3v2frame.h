@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002, 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -31,6 +31,8 @@
 #include "taglib_export.h"
 
 namespace TagLib {
+
+  class StringList;
 
   namespace ID3v2 {
 
@@ -193,6 +195,13 @@ namespace TagLib {
       String readStringField(const ByteVector &data, String::Type encoding,
                              int *positon = 0);
 
+      /*!
+       * Checks a the list of string values to see if they can be used with the
+       * specified encoding and returns the recommended encoding.
+       */
+      static String::Type checkEncoding(const StringList &fields,
+                                        String::Type encoding);
+
     private:
       Frame(const Frame &);
       Frame &operator=(const Frame &);
@@ -216,7 +225,7 @@ namespace TagLib {
      * the type and attaches the header.
      */
 
-    class Frame::Header
+    class TAGLIB_EXPORT Frame::Header
     {
     public:
       /*!
@@ -372,7 +381,7 @@ namespace TagLib {
 #endif
 
       /*!
-       * Returns true if unsyncronisation is enabled for this frame.
+       * Returns true if unsynchronisation is enabled for this frame.
        */
       bool unsynchronisation() const;
 
@@ -387,7 +396,7 @@ namespace TagLib {
       ByteVector render() const;
 
       /*!
-       * @deprecated
+       * \deprecated
        */
       bool frameAlterPreservation() const;
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002 - 2004 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -161,6 +161,12 @@ namespace TagLib {
      * Returns true if the vector ends with \a pattern.
      */
     bool endsWith(const ByteVector &pattern) const;
+
+    /*!
+     * Replaces \a pattern with \a with and returns a reference to the ByteVector
+     * after the operation.  This \e does modify the vector.
+     */
+    ByteVector &replace(const ByteVector &pattern, const ByteVector &with);
 
     /*!
      * Checks for a partial match of \a pattern at the end of the vector.  It

@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002, 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
     copyright            : (C) 2006 by Urs Fleisch
     email                : ufleisch@users.sourceforge.net
@@ -37,7 +37,8 @@ namespace TagLib {
     /*!
      * An implementation of ID3v2 URL link frames.
      */
-    class UrlLinkFrame : public Frame {
+    class TAGLIB_EXPORT UrlLinkFrame : public Frame
+    {
       friend class FrameFactory;
 
     public:
@@ -91,7 +92,8 @@ namespace TagLib {
      *
      * This description identifies the frame and must be unique.
      */
-    class UserUrlLinkFrame : public UrlLinkFrame {
+    class TAGLIB_EXPORT UserUrlLinkFrame : public UrlLinkFrame
+    {
       friend class FrameFactory;
 
     public:

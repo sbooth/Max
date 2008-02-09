@@ -2,7 +2,7 @@
     copyright            : (C) 2006 by Lukáš Lalinský
     email                : lalinsky@gmail.com
 
-    copyright            : (C) 2002 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
                            (original Vorbis implementation)
  ***************************************************************************/
@@ -49,13 +49,13 @@ namespace TagLib {
     {
     public:
       /*!
-       * Create an instance of Vorbis::Properties with the data read from the
-       * Vorbis::File \a file.
+       * Create an instance of Speex::Properties with the data read from the
+       * Speex::File \a file.
        */
       Properties(File *file, ReadStyle style = Average);
 
       /*!
-       * Destroys this VorbisProperties instance.
+       * Destroys this Speex::Properties instance.
        */
       virtual ~Properties();
 
@@ -67,7 +67,7 @@ namespace TagLib {
       virtual int channels() const;
 
       /*!
-       * Returns the Vorbis version, currently "0" (as specified by the spec).
+       * Returns the Speex version, currently "0" (as specified by the spec).
        */
       int speexVersion() const;
 

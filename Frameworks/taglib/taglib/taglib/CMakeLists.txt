@@ -67,6 +67,7 @@ mpeg/id3v2/frames/relativevolumeframe.cpp
 mpeg/id3v2/frames/textidentificationframe.cpp
 mpeg/id3v2/frames/uniquefileidentifierframe.cpp
 mpeg/id3v2/frames/unknownframe.cpp
+mpeg/id3v2/frames/unsynchronizedlyricsframe.cpp
 mpeg/id3v2/frames/urllinkframe.cpp
 )
 
@@ -132,6 +133,7 @@ SET(tag_LIB_SRCS ${mpeg_SRCS} ${id3v1_SRCS} ${id3v2_SRCS} ${frames_SRCS} ${ogg_S
 		 ${vorbis_SRCS} ${oggflacs_SRCS} ${mpc_SRCS} ${ape_SRCS} ${toolkit_SRCS} ${flacs_SRCS}
 		 ${wavpack_SRCS} ${speex_SRCS} ${trueaudio_SRCS}
 		 tag.cpp
+		 tagunion.cpp
 		 fileref.cpp
 		 audioproperties.cpp
 )

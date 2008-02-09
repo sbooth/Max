@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002, 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -23,15 +23,18 @@
  *   http://www.mozilla.org/MPL/                                           *
  ***************************************************************************/
 
+#ifndef HAVE_ZLIB
 #include <config.h>
-
-#include <bitset>
+#endif
 
 #if HAVE_ZLIB
 #include <zlib.h>
 #endif
 
+#include <bitset>
+
 #include <tdebug.h>
+#include <tstringlist.h>
 
 #include "id3v2frame.h"
 #include "id3v2synchdata.h"
@@ -54,17 +57,20 @@ public:
   Frame::Header *header;
 };
 
-bool isValidFrameID(const ByteVector &frameID)
+namespace
 {
-  if(frameID.size() != 4) {
-    return false;
-  }
-  for(ByteVector::ConstIterator it = frameID.begin(); it != frameID.end(); it++) {
-    if( (*it < 'A' || *it > 'Z') && (*it < '1' || *it > '9') ) {
+  bool isValidFrameID(const ByteVector &frameID)
+  {
+    if(frameID.size() != 4)
       return false;
+
+    for(ByteVector::ConstIterator it = frameID.begin(); it != frameID.end(); it++) {
+      if( (*it < 'A' || *it > 'Z') && (*it < '1' || *it > '9') ) {
+        return false;
+      }
     }
+    return true;
   }
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -222,6 +228,20 @@ String Frame::readStringField(const ByteVector &data, String::Type encoding, int
   return str;
 }
 
+String::Type Frame::checkEncoding(const StringList &fields, String::Type encoding) // static
+{
+  if(encoding != String::Latin1)
+    return encoding;
+
+  for(StringList::ConstIterator it = fields.begin(); it != fields.end(); ++it) {
+    if(!(*it).isLatin1()) {
+      debug("Frame::checkEncoding() -- Rendering using UTF8.");
+      return String::UTF8;
+    }
+  }
+
+  return String::Latin1;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Frame::Header class
@@ -523,7 +543,7 @@ ByteVector Frame::Header::render() const
   return v;
 }
 
-bool Frame::Header::frameAlterPreservation() const // deprecated
+bool Frame::Header::frameAlterPreservation() const
 {
   return fileAlterPreservation();
 }

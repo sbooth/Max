@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -72,7 +72,7 @@ namespace TagLib {
    *
    * class MyFileTypeResolver : FileTypeResolver
    * {
-   *   TagLib::File *createFile(const char *fileName, bool, AudioProperties::ReadStyle)
+   *   TagLib::File *createFile(TagLib::FileName *fileName, bool, AudioProperties::ReadStyle)
    *   {
    *     if(someCheckForAnMP3File(fileName))
    *       return new TagLib::MPEG::File(fileName);
@@ -89,7 +89,7 @@ namespace TagLib {
    * to TagLib.
    */
 
-    class FileTypeResolver
+    class TAGLIB_EXPORT FileTypeResolver
     {
     public:
       // do not fix compiler warning about missing virtual destructor

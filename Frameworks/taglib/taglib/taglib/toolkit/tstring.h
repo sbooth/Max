@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002, 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -178,7 +178,7 @@ namespace TagLib {
     /*!
      * Returns a wstring version of the TagLib string as a wide string.
      */
-    wstring to32Bit() const;
+    wstring toWString() const;
 
     /*!
      * Creates and returns a C-String based on the data.  This string is still
@@ -291,6 +291,16 @@ namespace TagLib {
      * Returns a string with the leading and trailing whitespace stripped.
      */
     String stripWhiteSpace() const;
+
+    /*!
+     * Returns true if the file only uses characters required by Latin1.
+     */
+    bool isLatin1() const;
+
+    /*!
+     * Returns true if the file only uses characters required by (7-bit) ASCII.
+     */
+    bool isAscii() const;
 
     /*!
      * Converts the base-10 integer \a n to a string.

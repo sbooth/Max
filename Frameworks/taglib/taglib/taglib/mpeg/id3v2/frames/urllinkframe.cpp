@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002, 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
     copyright            : (C) 2006 by Urs Fleisch
     email                : ufleisch@users.sourceforge.net
@@ -27,16 +27,19 @@
 
 #include "urllinkframe.h"
 #include <tdebug.h>
+#include <tstringlist.h>
 
 using namespace TagLib;
 using namespace ID3v2;
 
-class UrlLinkFrame::UrlLinkFramePrivate {
+class UrlLinkFrame::UrlLinkFramePrivate
+{
 public:
   String url;
 };
 
-class UserUrlLinkFrame::UserUrlLinkFramePrivate {
+class UserUrlLinkFrame::UserUrlLinkFramePrivate
+{
 public:
   UserUrlLinkFramePrivate() : textEncoding(String::Latin1) {}
   String::Type textEncoding;
@@ -138,7 +141,7 @@ void UserUrlLinkFrame::setDescription(const String &s)
 
 void UserUrlLinkFrame::parseFields(const ByteVector &data)
 {
-  if (data.size() < 2) {
+  if(data.size() < 2) {
     debug("A user URL link frame must contain at least 2 bytes.");
     return;
   }
@@ -148,16 +151,17 @@ void UserUrlLinkFrame::parseFields(const ByteVector &data)
   d->textEncoding = String::Type(data[0]);
   pos += 1;
 
-  if (d->textEncoding == String::Latin1 || d->textEncoding == String::UTF8) {
+  if(d->textEncoding == String::Latin1 || d->textEncoding == String::UTF8) {
     int offset = data.find(textDelimiter(d->textEncoding), pos);
-    if (offset < pos)
+    if(offset < pos)
       return;
 
     d->description = String(data.mid(pos, offset - pos), d->textEncoding);
     pos = offset + 1;
-  } else {
+  }
+  else {
     int len = data.mid(pos).find(textDelimiter(d->textEncoding), 0, 2);
-    if (len < 0)
+    if(len < 0)
       return;
 
     d->description = String(data.mid(pos, len), d->textEncoding);
@@ -171,9 +175,11 @@ ByteVector UserUrlLinkFrame::renderFields() const
 {
   ByteVector v;
 
-  v.append(char(d->textEncoding));
-  v.append(d->description.data(d->textEncoding));
-  v.append(textDelimiter(d->textEncoding));
+  String::Type encoding = checkEncoding(d->description, d->textEncoding);
+
+  v.append(char(encoding));
+  v.append(d->description.data(encoding));
+  v.append(textDelimiter(encoding));
   v.append(url().data(String::Latin1));
 
   return v;

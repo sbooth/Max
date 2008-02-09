@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002 - 2004 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -418,6 +418,37 @@ bool ByteVector::startsWith(const ByteVector &pattern) const
 bool ByteVector::endsWith(const ByteVector &pattern) const
 {
   return containsAt(pattern, size() - pattern.size());
+}
+
+ByteVector &ByteVector::replace(const ByteVector &pattern, const ByteVector &with)
+{
+  if(pattern.size() == 0 || pattern.size() > size())
+    return *this;
+
+  const int patternSize = pattern.size();
+  const int withSize = with.size();
+
+  int offset = find(pattern);
+
+  while(offset >= 0)
+  {
+    const int originalSize = size();
+
+    if(withSize > patternSize)
+      resize(originalSize + withSize - patternSize);
+
+    if(patternSize != withSize)
+      ::memcpy(data() + offset + withSize, mid(offset + patternSize).data(), originalSize - offset - patternSize);
+
+    if(withSize < patternSize)
+      resize(originalSize + withSize - patternSize);
+
+    ::memcpy(data() + offset, with.data(), withSize);
+
+    offset = find(pattern, offset + withSize);
+  }
+
+  return *this;
 }
 
 int ByteVector::endsWithPartialMatch(const ByteVector &pattern) const

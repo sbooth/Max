@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -143,6 +143,11 @@ namespace TagLib {
        * Returns the frame length.
        */
       int frameLength() const;
+
+      /*!
+       * Returns the number of frames per sample.
+       */
+      int samplesPerFrame() const;
 
       /*!
        * Makes a shallow copy of the header.

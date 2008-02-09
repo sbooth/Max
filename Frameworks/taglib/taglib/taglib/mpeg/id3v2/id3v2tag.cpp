@@ -1,5 +1,5 @@
 /***************************************************************************
-    copyright            : (C) 2002, 2003 by Scott Wheeler
+    copyright            : (C) 2002 - 2008 by Scott Wheeler
     email                : wheeler@kde.org
  ***************************************************************************/
 
@@ -118,9 +118,18 @@ String ID3v2::Tag::album() const
 
 String ID3v2::Tag::comment() const
 {
-  if(!d->frameListMap["COMM"].isEmpty())
-    return d->frameListMap["COMM"].front()->toString();
-  return String::null;
+  const FrameList &comments = d->frameListMap["COMM"];
+
+  if(comments.isEmpty())
+    return String::null;
+
+  for(FrameList::ConstIterator it = comments.begin(); it != comments.end(); ++it)
+  {
+    if(static_cast<CommentsFrame *>(*it)->description().isEmpty())
+      return (*it)->toString();
+  }
+
+  return comments.front()->toString();
 }
 
 String ID3v2::Tag::genre() const
@@ -386,9 +395,8 @@ void ID3v2::Tag::parse(const ByteVector &origData)
 {
   ByteVector data = origData;
 
-  if(d->header.unsynchronisation() && d->header.majorVersion() <= 3) {
-    SynchData::decode(data);
-  }
+  if(d->header.unsynchronisation() && d->header.majorVersion() <= 3)
+    data = SynchData::decode(data);
 
   uint frameDataPosition = 0;
   uint frameDataLength = data.size();
