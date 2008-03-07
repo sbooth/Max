@@ -121,10 +121,16 @@
 				// Convert to big endian byte order 
 				alias8 = [buffer exposeBufferForWriting];
 				for(sample = 0; sample < samplesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
-					audioSample	= OSSwapHostToBigInt32(inputBuffer[sample]);
+					audioSample	= inputBuffer[sample];
+#if __BIG_ENDIAN__
 					*alias8++	= (int8_t)(audioSample >> 16);
 					*alias8++	= (int8_t)(audioSample >> 8);
 					*alias8++	= (int8_t)audioSample;
+#else
+					*alias8++	= (int8_t)audioSample;
+					*alias8++	= (int8_t)(audioSample >> 8);
+					*alias8++	= (int8_t)(audioSample >> 16);
+#endif
 				}
 					
 				[buffer wroteBytes:samplesRead * [self pcmFormat].mChannelsPerFrame * 3 * sizeof(int8_t)];

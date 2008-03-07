@@ -89,9 +89,15 @@ writeCallback(const FLAC__StreamDecoder *decoder, const FLAC__Frame *frame, cons
 			for(sample = 0; sample < frame->header.blocksize; ++sample) {
 				for(channel = 0; channel < frame->header.channels; ++channel) {
 					audioSample	= buffer[channel][sample];
+#if __BIG_ENDIAN__
 					*alias8++	= (int8_t)(audioSample >> 16);
 					*alias8++	= (int8_t)(audioSample >> 8);
 					*alias8++	= (int8_t)audioSample;
+#else
+					*alias8++	= (int8_t)audioSample;
+					*alias8++	= (int8_t)(audioSample >> 8);
+					*alias8++	= (int8_t)(audioSample >> 16);
+#endif
 				}
 			}
 				
