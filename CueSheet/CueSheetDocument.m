@@ -36,6 +36,7 @@
 #include <FLAC/metadata.h>
 
 @interface CueSheetDocument (Private)
+- (void) readFromCDInfoFileIfPresent;
 - (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) updateMetadataFromMusicBrainz:(unsigned)index;
@@ -296,6 +297,7 @@
 		fclose(f);
 
 		[self updateChangeCount:NSChangeCleared];
+		[self readFromCDInfoFileIfPresent];
 		
 		return YES;
 	}
@@ -436,6 +438,8 @@
 		}
 
 		[self updateChangeCount:NSChangeCleared];
+		[self readFromCDInfoFileIfPresent];
+		
 		return YES;
 	}
 	
@@ -851,6 +855,91 @@
 @end
 
 @implementation CueSheetDocument (Private)
+
+- (void) readFromCDInfoFileIfPresent
+{    	
+	NSString *filename = [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [self discID]];
+	NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:filename];
+	if(nil != dictionary) {
+		unsigned i;
+		
+		NSArray *tracks = [dictionary valueForKey:@"tracks"];
+		for(i = 0; i < [tracks count]; ++i) {
+			NSDictionary *properties = [tracks objectAtIndex:i];
+			
+			// Match tracks by track number
+			CueSheetTrack *track = nil;
+			unsigned j;
+			for(j = 0; j < [self countOfTracks]; ++j) {
+				track = [self objectInTracksAtIndex:j];
+				if([track number] == [[properties objectForKey:@"number"] unsignedIntValue])
+					break;
+			}
+			
+			// Skip this track if it isn't in the image
+			if(nil == track)
+				continue;
+			
+			if([properties objectForKey:@"title"])
+				[track setTitle:[properties objectForKey:@"title"]];
+			if([properties objectForKey:@"artist"])
+				[track setArtist:[properties objectForKey:@"artist"]];
+			if([properties objectForKey:@"date"])
+				[track setDate:[properties objectForKey:@"date"]];
+			if([properties objectForKey:@"genre"])
+				[track setGenre:[properties objectForKey:@"genre"]];
+			if([properties objectForKey:@"composer"])
+				[track setComposer:[properties objectForKey:@"composer"]];
+			if([properties objectForKey:@"comment"])
+				[track setComment:[properties objectForKey:@"comment"]];
+			if([properties objectForKey:@"ISRC"])
+				[track setISRC:[properties objectForKey:@"ISRC"]];
+			
+			// Maintain backwards compatibility
+			if(nil == [track date] && nil != [properties objectForKey:@"year"] && 0 != [[properties objectForKey:@"year"] intValue])
+				[track setDate:[[properties objectForKey:@"year"] stringValue]];
+		}
+		
+		if([dictionary objectForKey:@"title"])
+			[self setTitle:[dictionary objectForKey:@"title"]];
+		if([dictionary objectForKey:@"artist"])
+			[self setArtist:[dictionary objectForKey:@"artist"]];
+		if([dictionary objectForKey:@"date"])
+			[self setDate:[dictionary objectForKey:@"date"]];
+		if([dictionary objectForKey:@"genre"])
+			[self setGenre:[dictionary objectForKey:@"genre"]];
+		if([dictionary objectForKey:@"composer"])
+			[self setComposer:[dictionary objectForKey:@"composer"]];
+		if([dictionary objectForKey:@"comment"])
+			[self setComment:[dictionary objectForKey:@"comment"]];
+		
+		if([dictionary objectForKey:@"discNumber"])
+			[self setDiscNumber:[dictionary objectForKey:@"discNumber"]];
+		if([dictionary objectForKey:@"discTotal"])
+			[self setDiscTotal:[dictionary objectForKey:@"discTotal"]];
+		if([dictionary objectForKey:@"compilation"])
+			[self setCompilation:[dictionary objectForKey:@"compilation"]];
+		
+		if([dictionary objectForKey:@"MCN"])
+			[self setMCN:[dictionary objectForKey:@"MCN"]];
+		
+		// Maintain backwards compatibility
+		if(nil == [self date] && nil != [dictionary objectForKey:@"year"] && 0 != [[dictionary objectForKey:@"year"] intValue])
+			[self setDate:[[dictionary objectForKey:@"year"] stringValue]];
+		
+		// Convert PNG data to an NSImage
+		if([dictionary objectForKey:@"albumArt"])
+			[self setAlbumArt:[[NSImage alloc] initWithData:[dictionary objectForKey:@"albumArt"]]];
+		if([dictionary objectForKey:@"albumArtDownloadDate"])
+			[self setAlbumArtDownloadDate:[dictionary objectForKey:@"albumArtDownloadDate"]];
+		
+		// Album art downloaded from amazon can only be kept for 30 days
+		if(nil != [self albumArtDownloadDate] && (NSTimeInterval)(-30 * 24 * 60 * 60) >= [[self albumArtDownloadDate] timeIntervalSinceNow]) {
+			[self setAlbumArt:nil];
+			[self setAlbumArtDownloadDate:nil];
+		}	
+	}
+}
 
 - (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
