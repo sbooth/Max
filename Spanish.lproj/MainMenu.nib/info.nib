@@ -4,12 +4,14 @@
 <dict>
 	<key>IBFramework Version</key>
 	<string>629</string>
+	<key>IBLastKnownRelativeProjectPath</key>
+	<string>../../Max.xcodeproj</string>
 	<key>IBOldestOS</key>
 	<integer>5</integer>
 	<key>IBOpenObjects</key>
 	<array/>
 	<key>IBSystem Version</key>
-	<string>9B18</string>
+	<string>9C2028</string>
 	<key>targetFramework</key>
 	<string>IBCocoaFramework</string>
 </dict>

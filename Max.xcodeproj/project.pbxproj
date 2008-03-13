@@ -292,6 +292,10 @@
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		327375A10D88F21F00B9D9FB /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/Formats.nib; sourceTree = "<group>"; };
+		327375B80D88F44E00B9D9FB /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/Formats.nib; sourceTree = "<group>"; };
+		327375BB0D88F47C00B9D9FB /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Formats.nib; sourceTree = "<group>"; };
+		327375BE0D88F49900B9D9FB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Formats.nib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
 		8C0406480B5C582E00648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nb_NO; path = nb_NO.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8C0406490B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/CompactDisc.strings; sourceTree = "<group>"; };
@@ -1729,6 +1733,10 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C1370720C4267D800D0238C /* English */,
+				327375A10D88F21F00B9D9FB /* French */,
+				327375B80D88F44E00B9D9FB /* Dutch */,
+				327375BB0D88F47C00B9D9FB /* German */,
+				327375BE0D88F49900B9D9FB /* Spanish */,
 			);
 			name = Formats.nib;
 			sourceTree = "<group>";
