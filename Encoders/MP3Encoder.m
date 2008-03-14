@@ -423,10 +423,14 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 						byteOne				= buffer8[sample];
 						byteTwo				= buffer8[++sample];
 						byteThree			= buffer8[++sample];
+#if __BIG_ENDIAN
 						constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);
+#else
+						constructedSample	= ((byteThree << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteOne & 0xFF);
+#endif
 						
-						// Convert to 32-bit sample size
-						channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(((constructedSample << 8) & 0xFFFFFF00) | (constructedSample & 0xFF));
+						// Convert to 32-bit sample scaling
+						channelBuffers32[channel][wideSample] = (long)((constructedSample << 8) | constructedSample);
 					}
 				}
 					
