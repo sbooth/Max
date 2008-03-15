@@ -297,6 +297,10 @@
 		327375BB0D88F47C00B9D9FB /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/Formats.nib; sourceTree = "<group>"; };
 		327375BE0D88F49900B9D9FB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Formats.nib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
+		32F895B80D8B61AE006B6116 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
+		32F895BB0D8B7DDD006B6116 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
+		32F895BF0D8B7EDF006B6116 /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
+		32F895C10D8B7FB4006B6116 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
 		8C0406480B5C582E00648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nb_NO; path = nb_NO.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8C0406490B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C04064A0B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Exceptions.strings; sourceTree = "<group>"; };
@@ -1980,6 +1984,10 @@
 			isa = PBXVariantGroup;
 			children = (
 				8C781F5009E8DAB4001D85EF /* English */,
+				32F895B80D8B61AE006B6116 /* French */,
+				32F895BB0D8B7DDD006B6116 /* Dutch */,
+				32F895BF0D8B7EDF006B6116 /* German */,
+				32F895C10D8B7FB4006B6116 /* Spanish */,
 			);
 			name = CueSheetDocument.nib;
 			sourceTree = "<group>";
