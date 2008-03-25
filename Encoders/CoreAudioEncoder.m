@@ -104,13 +104,31 @@
 			asbd.mBytesPerFrame		= asbd.mBytesPerPacket * asbd.mFramesPerPacket;
 		}
 		
+		// A dilemma: ExtAudioFileWrapAudioFileID fails on Leopard, while ExtAudioFileCreateWithURL doesn't exist on Tiger
+		// To work around this, delete the input file and then immediately re-create it
+		BOOL deleteSuccessful = [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
+		NSAssert1(YES == deleteSuccessful, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"removeFileAtPath");
+		
+		// Create the file
+		NSString *file = [filename lastPathComponent];
+		NSString *parentDir = [filename stringByDeletingLastPathComponent];
+		
+		FSRef parentDirRef;		
+		err = FSPathMakeRef((const UInt8 *)[parentDir fileSystemRepresentation], &parentDirRef, NULL);
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FSPathMakeRef", UTCreateStringForOSType(err));
+		
+		err = ExtAudioFileCreateNew(&parentDirRef, (CFStringRef)file, [self fileType], &asbd, NULL, &extAudioFile);
+		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileCreateNew", UTCreateStringForOSType(err));
+		
+#if 0
 		// Open the output file
 		NSURL *url = [NSURL fileURLWithPath:filename];
 		NSAssert(nil != url, NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @""));
 
 		err = ExtAudioFileCreateWithURL((CFURLRef)url, [self fileType], &asbd, NULL, kAudioFileFlags_EraseFile, &extAudioFile);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileCreateWithURL", UTCreateStringForOSType(err));
-		
+#endif
+
 		asbd = [decoder pcmFormat];
 		err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty", UTCreateStringForOSType(err));
