@@ -34,6 +34,19 @@
 	[_tableView registerForDraggedTypes:[NSArray arrayWithObject:NSFilenamesPboardType]];
 }
 
+#pragma mark Data Source Overrides
+
+// Fall back to bindings
+- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+{
+	return -1;
+}
+
+- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
+{
+	return nil;
+}
+
 - (BOOL) containsFile:(NSString *)filename
 {
 	return (nil == [self findFile:filename] ? NO :  YES);
