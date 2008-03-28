@@ -31,7 +31,7 @@
 		char error [80];
 		
 		// Setup converter
-		_wpc = WavpackOpenFileInput([[self filename] fileSystemRepresentation], error, 0, 0);
+		_wpc = WavpackOpenFileInput([[self filename] fileSystemRepresentation], error, OPEN_WVC, 0);
 		NSAssert1(NULL != _wpc, @"Unable to open the input file (%s).", error);
 		
 		// Setup input format descriptor
