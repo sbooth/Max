@@ -310,7 +310,7 @@ cdrom_paranoia *paranoia_init(cdrom_drive *d){
   p->fragments=new_list((void *)&i_vfragment_constructor,
 			(void *)&i_v_fragment_destructor);
 
-  p->readahead=150;
+  p->readahead=1200; /* 8 MB cache */
   p->sortcache=sort_alloc(p->readahead*CD_FRAMEWORDS);
   p->d=d;
   p->dynoverlap=MAX_SECTOR_OVERLAP*CD_FRAMEWORDS;
