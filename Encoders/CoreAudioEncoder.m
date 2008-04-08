@@ -106,8 +106,10 @@
 		
 		// A dilemma: ExtAudioFileWrapAudioFileID fails on Leopard, while ExtAudioFileCreateWithURL doesn't exist on Tiger
 		// To work around this, delete the input file and then immediately re-create it
-		BOOL deleteSuccessful = [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
-		NSAssert1(YES == deleteSuccessful, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"removeFileAtPath");
+		if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+			BOOL deleteSuccessful = [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
+			NSAssert1(YES == deleteSuccessful, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"removeFileAtPath");
+		}
 		
 		// Create the file
 		NSString *file = [filename lastPathComponent];
@@ -168,38 +170,6 @@
 			
 			err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ConverterConfig, size, &converterPropertySettings);
 			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileSetProperty", UTCreateStringForOSType(err));
-
-			// Magic cookie stuff
-			err =  AudioConverterGetPropertyInfo(converter, kAudioConverterCompressionMagicCookie, &size, NULL);
-			
-			// Not all formats require magic cookies
-			if(noErr == err && 0 < size) {
-				void		*magicCookie		= NULL;
-				UInt32		willAcceptCookie	= NO;
-				
-				magicCookie = calloc(1, size);
-				NSAssert(NULL != magicCookie, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
-
-				err		= AudioConverterGetProperty(converter, kAudioConverterCompressionMagicCookie, &size, magicCookie);
-				NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioConverterGetProperty", UTCreateStringForOSType(err));
-
-				// Grab the AudioFileID used by the ExtAudioFile
-				AudioFileID audioFile = NULL;
-				size = sizeof(audioFile);
-				err = ExtAudioFileGetProperty(extAudioFile, kExtAudioFileProperty_AudioFile, &size, &audioFile);
-				NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileGetProperty", UTCreateStringForOSType(err));
-				
-				// Determine the if the output file will accept the cookie
-				err = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData, NULL, &willAcceptCookie);
-				
-				if(noErr == err && willAcceptCookie) {
-					err = AudioFileSetProperty(audioFile, kAudioFilePropertyMagicCookieData, size, magicCookie);
-					// For some reason ALAC us choking with a 'chk?' error
-//					NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileSetProperty", UTCreateStringForOSType(err));
-				}
-				
-				free(magicCookie);
-			}
 		}					
 		
 		// Allocate buffer
