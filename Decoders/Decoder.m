@@ -49,7 +49,7 @@
 	NSString		*extension				= [[filename pathExtension] lowercaseString];
 
 	// Determine which type of converter to use and create it
-	if([extension isEqualToString:@"ogg"]) {
+	if([extension isEqualToString:@"ogg"] || [extension isEqualToString:@"oga"]) {
 		// Determine the content type of the ogg stream
 		OggStreamType type = oggStreamType(filename);
 		NSAssert(kOggStreamTypeInvalid != type, @"The file does not appear to be an Ogg file.");
