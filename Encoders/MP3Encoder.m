@@ -341,7 +341,6 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 	int16_t			*buffer16				= NULL;
 	int32_t			*buffer32				= NULL;
 	
-	int8_t			byteOne, byteTwo, byteThree;
 	int32_t			constructedSample;
 	
 	int				result;
@@ -419,18 +418,12 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-						// Reconstruct the original sample
-						byteOne				= buffer8[sample];
-						byteTwo				= buffer8[++sample];
-						byteThree			= buffer8[++sample];
-#if __BIG_ENDIAN
-						constructedSample	= ((byteOne << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteThree & 0xFF);
-#else
-						constructedSample	= ((byteThree << 16) & 0xFF0000) | ((byteTwo << 8) & 0xFF00) | (byteOne & 0xFF);
-#endif
+						// Read three bytes and reconstruct them as a 32-bit BE integer
+						constructedSample = (((int32_t)buffer8[sample] << 8) & 0x0000ff00) | (((int32_t)buffer8[++sample] << 16) & 0x00ff0000) | (((int32_t)buffer8[++sample] << 24) & 0xff000000);
+						constructedSample = OSSwapBigToHostInt32(constructedSample);
 						
 						// Convert to 32-bit sample scaling
-						channelBuffers32[channel][wideSample] = (long)((constructedSample << 8) | constructedSample);
+						channelBuffers32[channel][wideSample] = (long)((constructedSample << 8) | (constructedSample & 0x000000ff));
 					}
 				}
 					

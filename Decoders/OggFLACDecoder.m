@@ -84,24 +84,19 @@ writeCallback(const FLAC__StreamDecoder *decoder, const FLAC__Frame *frame, cons
 			
 		case 24:				
 			
-			// Interleave the audio (no need for byte swapping)
+			// Interleave the audio, converting to big endian byte order
 			alias8 = [[source pcmBuffer] exposeBufferForWriting];
 			for(sample = 0; sample < frame->header.blocksize; ++sample) {
 				for(channel = 0; channel < frame->header.channels; ++channel) {
-					audioSample	= buffer[channel][sample];
-#if __BIG_ENDIAN__
-					*alias8++	= (int8_t)(audioSample >> 16);
-					*alias8++	= (int8_t)(audioSample >> 8);
-					*alias8++	= (int8_t)audioSample;
-#else
-					*alias8++	= (int8_t)audioSample;
-					*alias8++	= (int8_t)(audioSample >> 8);
-					*alias8++	= (int8_t)(audioSample >> 16);
-#endif
+					audioSample	= OSSwapHostToBigInt32(buffer[channel][sample]);
+					// Skip the lowest byte
+					*alias8++	= (int8_t)((audioSample & 0x0000ff00) >> 8);
+					*alias8++	= (int8_t)((audioSample & 0x00ff0000) >> 16);
+					*alias8++	= (int8_t)((audioSample & 0xff000000) >> 24);
 				}
 			}
-				
-				[[source pcmBuffer] wroteBytes:spaceRequired];
+			
+			[[source pcmBuffer] wroteBytes:spaceRequired];
 			
 			break;
 			
