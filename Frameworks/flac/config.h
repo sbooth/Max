@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
 /* define to align allocated memory on 32-byte boundaries */
-/* #undef FLAC__ALIGN_MALLOC_DATA */
+#define FLAC__ALIGN_MALLOC_DATA 1
 
 /* define if building for ia32/i386 */
 #if __LITTLE_ENDIAN__
@@ -24,10 +24,10 @@
 /* #undef FLAC__HAS_DOCBOOK_TO_MAN */
 
 /* define if you are compiling for PowerPC and have the 'gas' assembler */
-/* #undef FLAC__HAS_GAS */
+#define FLAC__HAS_GAS 1
 
 /* define if you are compiling for x86 and have the NASM assembler */
-/* #undef FLAC__HAS_NASM */
+#define FLAC__HAS_NASM 1
 
 /* define if you have the ogg library */
 #define FLAC__HAS_OGG 1
@@ -96,7 +96,7 @@
 #define HAVE_UNISTD_H 1
 
 /* Define as const if the declaration of iconv() needs const. */
-#define ICONV_CONST const
+#define ICONV_CONST 
 
 /* Name of package */
 #define PACKAGE "flac"
@@ -124,6 +124,12 @@
 
 /* Version number of package */
 #define VERSION "1.2.1"
+
+/* Define to 1 if your processor stores words with the most significant byte
+   first (like Motorola and SPARC, unlike Intel and VAX). */
+#if __BIG_ENDIAN__
+#define WORDS_BIGENDIAN 1
+#endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
