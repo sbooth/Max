@@ -382,11 +382,11 @@
 			case 24:
 				buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-						// Read three bytes and reconstruct them as a 32-bit BE integer
-						constructedSample = (((int32_t)buffer8[sample] << 8) & 0x0000ff00) | (((int32_t)buffer8[++sample] << 16) & 0x00ff0000) | (((int32_t)buffer8[++sample] << 24) & 0xff000000);
-						constructedSample = OSSwapBigToHostInt32(constructedSample);
-
+					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
+						constructedSample = (int8_t)*buffer8++; constructedSample <<= 8;
+						constructedSample |= (uint8_t)*buffer8++; constructedSample <<= 8;
+						constructedSample |= (uint8_t)*buffer8++;
+						
 						buffer[channel][wideSample] = constructedSample;
 					}
 				}

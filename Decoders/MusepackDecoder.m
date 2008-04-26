@@ -142,15 +142,11 @@
 				for(sample = 0; sample < framesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					audioSample		= mpcBuffer[sample] * (1 << 23);
 					audioSample		= (audioSample < clipMin ? clipMin : (audioSample > clipMax ? clipMax : audioSample));
-#if __BIG_ENDIAN__
-					*alias8++		= (int8_t)(audioSample >> 16);
-					*alias8++		= (int8_t)(audioSample >> 8);
-					*alias8++		= (int8_t)audioSample;
-#else
-					*alias8++		= (int8_t)audioSample;
-					*alias8++		= (int8_t)(audioSample >> 8);
-					*alias8++		= (int8_t)(audioSample >> 16);
-#endif
+
+					// Skip the highest byte
+					*alias8++	= (int8_t)((audioSample & 0x00ff0000) >> 16);
+					*alias8++	= (int8_t)((audioSample & 0x0000ff00) >> 8);
+					*alias8++	= (int8_t)((audioSample & 0x000000ff) /*>> 0*/);					
 				}
 					
 				[buffer wroteBytes:framesRead * [self pcmFormat].mChannelsPerFrame * 3 * sizeof(int8_t)];

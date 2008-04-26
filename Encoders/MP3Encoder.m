@@ -417,11 +417,12 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
 				buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
-					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
+					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 						// Read three bytes and reconstruct them as a 32-bit BE integer
-						constructedSample = (((int32_t)buffer8[sample] << 8) & 0x0000ff00) | (((int32_t)buffer8[++sample] << 16) & 0x00ff0000) | (((int32_t)buffer8[++sample] << 24) & 0xff000000);
-						constructedSample = OSSwapBigToHostInt32(constructedSample);
-						
+						constructedSample = (int8_t)*buffer8++; constructedSample <<= 8;
+						constructedSample |= (uint8_t)*buffer8++; constructedSample <<= 8;
+						constructedSample |= (uint8_t)*buffer8++;
+												
 						// Convert to 32-bit sample scaling
 						channelBuffers32[channel][wideSample] = (long)((constructedSample << 8) | (constructedSample & 0x000000ff));
 					}

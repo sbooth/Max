@@ -88,11 +88,12 @@ writeCallback(const FLAC__StreamDecoder *decoder, const FLAC__Frame *frame, cons
 			alias8 = [[source pcmBuffer] exposeBufferForWriting];
 			for(sample = 0; sample < frame->header.blocksize; ++sample) {
 				for(channel = 0; channel < frame->header.channels; ++channel) {
-					audioSample	= OSSwapHostToBigInt32(buffer[channel][sample]);
-					// Skip the lowest byte
-					*alias8++	= (int8_t)((audioSample & 0x0000ff00) >> 8);
+					audioSample	= buffer[channel][sample];
+					
+					// Skip the highest byte
 					*alias8++	= (int8_t)((audioSample & 0x00ff0000) >> 16);
-					*alias8++	= (int8_t)((audioSample & 0xff000000) >> 24);
+					*alias8++	= (int8_t)((audioSample & 0x0000ff00) >> 8);
+					*alias8++	= (int8_t)((audioSample & 0x000000ff) /*>> 0*/);					
 				}
 			}
 			
