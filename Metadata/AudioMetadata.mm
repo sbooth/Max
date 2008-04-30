@@ -26,6 +26,7 @@
 #include <taglib/mpegfile.h>				// TagLib::MPEG::File
 #include <taglib/vorbisfile.h>				// TagLib::Ogg::Vorbis::File
 #include <taglib/oggflacfile.h>				// TagLib::Ogg::FLAC::File
+#include <taglib/speexfile.h>				// TagLib::Ogg::Speex::File
 #include <taglib/id3v2tag.h>				// TagLib::ID3v2::Tag
 #include <taglib/id3v2frame.h>				// TagLib::ID3v2::Frame
 #include <taglib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
@@ -48,6 +49,7 @@
 + (AudioMetadata *)		metadataFromMP4File:(NSString *)filename;
 + (AudioMetadata *)		metadataFromOggVorbisFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromOggFLACFile:(NSString *)filename;
++ (AudioMetadata *)		metadataFromOggSpeexFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMonkeysAudioFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromWavPackFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMusepackFile:(NSString *)filename;
@@ -87,7 +89,7 @@
 		switch(type) {
 			case kOggStreamTypeVorbis:		result = [self metadataFromOggVorbisFile:filename];			break;
 			case kOggStreamTypeFLAC:		result = [self metadataFromOggFLACFile:filename];			break;
-			case kOggStreamTypeSpeex:		result = [[[AudioMetadata alloc] init] autorelease];		break;
+			case kOggStreamTypeSpeex:		result = [self metadataFromOggSpeexFile:filename];			break;
 			default:						result = [[[AudioMetadata alloc] init] autorelease];		break;
 		}
 
@@ -101,6 +103,8 @@
 		return [self metadataFromWavPackFile:filename];
 	else if([extension isEqualToString:@"mpc"])
 		return [self metadataFromMusepackFile:filename];
+	else if([extension isEqualToString:@"spx"])
+		return [self metadataFromOggSpeexFile:filename];
 	else
 		return [[[AudioMetadata alloc] init] autorelease];
 }
@@ -824,6 +828,132 @@
 {
 	AudioMetadata							*result;
 	TagLib::Ogg::FLAC::File					f						([filename fileSystemRepresentation], false);
+	TagLib::String							s;
+	TagLib::Ogg::XiphComment				*xiphComment;
+	
+	
+	result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		xiphComment = f.tag();
+		
+		if(NULL != xiphComment) {
+			TagLib::Ogg::FieldListMap		fieldList	= xiphComment->fieldListMap();
+			NSString						*value		= nil;
+			TagLib::String					tag;
+			
+			tag = [self customizeOggFLACTag:@"ALBUM"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumTitle:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"ARTIST"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumArtist:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"GENRE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumGenre:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DATE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumDate:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DESCRIPTION"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"TITLE"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackTitle:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"TRACKNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackNumber:[NSNumber numberWithInt:[value intValue]]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"COMPOSER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setAlbumComposer:value];
+			}
+			
+			tag = [self customizeOggFLACTag:@"TRACKTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setTrackTotal:[NSNumber numberWithInt:[value intValue]]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DISCNUMBER"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setDiscNumber:[NSNumber numberWithInt:[value intValue]]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"DISCTOTAL"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setDiscTotal:[NSNumber numberWithInt:[value intValue]]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"COMPILATION"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setCompilation:[NSNumber numberWithBool:(BOOL)[value intValue]]];
+			}
+			
+			tag = [self customizeOggFLACTag:@"ISRC"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setISRC:value];
+			}					
+			
+			tag = [self customizeOggFLACTag:@"MCN"];
+			if(fieldList.contains(tag)) {
+				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
+				[result setMCN:value];
+			}					
+			
+			// Maintain backwards compatibility for the following tags
+			if(fieldList.contains("DISCSINSET") && nil == [result discTotal]) {
+				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
+				[result setDiscTotal:[NSNumber numberWithInt:[value intValue]]];
+			}
+			if(fieldList.contains("YEAR") && nil == [result albumDate]) {
+				value = [NSString stringWithUTF8String:fieldList["YEAR"].toString().toCString(true)];
+				[result setAlbumDate:value];
+			}
+			if(fieldList.contains("COMMENT") && nil == [result albumComment]) {
+				value = [NSString stringWithUTF8String:fieldList["COMMENT"].toString().toCString(true)];
+				[result setAlbumComment:value];
+			}
+		}
+		
+		// Length
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *)	metadataFromOggSpeexFile:(NSString *)filename
+{
+	AudioMetadata							*result;
+	TagLib::Ogg::Speex::File				f						([filename fileSystemRepresentation], false);
 	TagLib::String							s;
 	TagLib::Ogg::XiphComment				*xiphComment;
 	
