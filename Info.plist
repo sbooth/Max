@@ -4,28 +4,6 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
-	<key>UTImportedTypeDeclarations</key>
-	<array>
-		<dict>
-			<key>UTTypeIdentifier</key>
-			<string>org.xiph.flac</string>
-			<key>UTTypeReferenceURL</key>
-			<string>http://flac.sourceforge.net</string>
-			<key>UTTypeDescription</key>
-			<string>FLAC Audio</string>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.audio</string>
-			</array>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>flac</string>
-				</array>
-			</dict>
-		</dict>
-	</array>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -226,7 +204,7 @@
 				<string>ape</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Monkey's Audio</string>
+			<string>Monkey&apos;s Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -359,7 +337,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Max 0.8</string>
+	<string>Max 0.8.1</string>
 	<key>CFBundleHelpBookFolder</key>
 	<string>Max Help</string>
 	<key>CFBundleHelpBookName</key>
@@ -375,7 +353,7 @@
 	<key>CFBundleSignature</key>
 	<string>Maxx</string>
 	<key>CFBundleVersion</key>
-	<string>0.8</string>
+	<string>0.8.1</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
 	<key>NSMainNibFile</key>
@@ -405,5 +383,27 @@
 	<string>Max.sdef</string>
 	<key>SUFeedURL</key>
 	<string>http://sbooth.org/Max/appcast.xml</string>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.audio</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>FLAC Audio</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.xiph.flac</string>
+			<key>UTTypeReferenceURL</key>
+			<string>http://flac.sourceforge.net</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>flac</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
