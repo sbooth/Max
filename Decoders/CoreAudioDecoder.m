@@ -48,8 +48,31 @@
 		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
 		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
 		
-		// Preserve mSampleRate and mChannelsPerFrame
-		_pcmFormat.mBitsPerChannel		= (0 == _pcmFormat.mBitsPerChannel ? 16 : _pcmFormat.mBitsPerChannel);
+		// For alac the source bit depth is encoded in the format flag
+		if(kAudioFormatAppleLossless == _sourceFormat.mFormatID) {
+			switch (_sourceFormat.mFormatFlags) {
+				case kAppleLosslessFormatFlag_16BitSourceData:
+					_pcmFormat.mBitsPerChannel = 16;
+					break;
+//				case kAppleLosslessFormatFlag_20BitSourceData:
+//					_pcmFormat.mBitsPerChannel = 20;
+//					break;
+				case kAppleLosslessFormatFlag_24BitSourceData:
+					_pcmFormat.mBitsPerChannel = 24;
+					break;
+				case kAppleLosslessFormatFlag_32BitSourceData:
+					_pcmFormat.mBitsPerChannel = 32;
+					break;
+					
+// FIXME: How to handle 20-bit files?
+				default:
+					_pcmFormat.mBitsPerChannel = 16;
+					break;
+			}	
+		}
+		else
+			// Preserve mSampleRate and mChannelsPerFrame
+			_pcmFormat.mBitsPerChannel	= (0 == _pcmFormat.mBitsPerChannel ? 16 : _pcmFormat.mBitsPerChannel);
 		
 		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
 		_pcmFormat.mFramesPerPacket		= 1;
