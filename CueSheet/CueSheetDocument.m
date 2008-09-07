@@ -234,11 +234,10 @@
 					continue;
 				
 				[newTrack setSampleRate:[decoder pcmFormat].mSampleRate];
-				
-				[newTrack setStartingFrame:(track_get_start(track) / 75) * [decoder pcmFormat].mSampleRate];
+				[newTrack setStartingFrame:(track_get_start(track) / (float)75) * [decoder pcmFormat].mSampleRate];
 				
 				if(0 != track_get_length(track))
-					[newTrack setFrameCount:(track_get_length(track) / 75) * [decoder pcmFormat].mSampleRate];
+					[newTrack setFrameCount:(track_get_length(track) / (float)75) * [decoder pcmFormat].mSampleRate];
 				else
 					[newTrack setFrameCount:([decoder totalFrames] - [newTrack startingFrame])];
 			}
