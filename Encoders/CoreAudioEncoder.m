@@ -90,7 +90,7 @@
 		bzero(&asbd, sizeof(AudioStreamBasicDescription));
 		asbd.mFormatID			= [self formatID];
 		asbd.mFormatFlags		= [[settings objectForKey:@"formatFlags"] unsignedLongValue];
-		
+				
 		//asbd.mSampleRate		= [[settings objectForKey:@"sampleRate"] doubleValue];
 		asbd.mBitsPerChannel	= [[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
 		
@@ -102,6 +102,16 @@
 			asbd.mFramesPerPacket	= 1;
 			asbd.mBytesPerPacket	= asbd.mChannelsPerFrame * (asbd.mBitsPerChannel / 8);
 			asbd.mBytesPerFrame		= asbd.mBytesPerPacket * asbd.mFramesPerPacket;
+		}
+		// Adjust the flags for Apple Lossless
+		else if(kAudioFormatAppleLossless == asbd.mFormatID) {
+			switch(asbd.mBitsPerChannel) {
+				case 16:	asbd.mFormatFlags = kAppleLosslessFormatFlag_16BitSourceData;	break;
+				case 20:	asbd.mFormatFlags = kAppleLosslessFormatFlag_20BitSourceData;	break;
+				case 24:	asbd.mFormatFlags = kAppleLosslessFormatFlag_24BitSourceData;	break;
+				case 32:	asbd.mFormatFlags = kAppleLosslessFormatFlag_32BitSourceData;	break;
+				default:	asbd.mFormatFlags = kAppleLosslessFormatFlag_16BitSourceData;	break;
+			}
 		}
 		
 		// A dilemma: ExtAudioFileWrapAudioFileID fails on Leopard, while ExtAudioFileCreateWithURL doesn't exist on Tiger
