@@ -105,7 +105,7 @@
 		}
 		// Adjust the flags for Apple Lossless
 		else if(kAudioFormatAppleLossless == asbd.mFormatID) {
-			switch(asbd.mBitsPerChannel) {
+			switch([decoder pcmFormat].mBitsPerChannel) {
 				case 16:	asbd.mFormatFlags = kAppleLosslessFormatFlag_16BitSourceData;	break;
 				case 20:	asbd.mFormatFlags = kAppleLosslessFormatFlag_20BitSourceData;	break;
 				case 24:	asbd.mFormatFlags = kAppleLosslessFormatFlag_24BitSourceData;	break;
