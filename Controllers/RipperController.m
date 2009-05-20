@@ -158,11 +158,9 @@ static RipperController *sharedController = nil;
 	// Create one RipperTask per track
 	else {
 		Track			*track;
-		NSEnumerator	*enumerator;
 
-		enumerator		= [tracks objectEnumerator];
 		
-		while((track = [enumerator nextObject])) {
+		for(track in tracks) {
 			switch(selectedRipper) {
 				case kBasicRipper:		ripperTask = [[BasicRipperTask alloc] initWithTracks:[NSArray arrayWithObject:track]];		break;
 				case kComparisonRipper:	ripperTask = [[ComparisonRipperTask alloc] initWithTracks:[NSArray arrayWithObject:track]];	break;
@@ -189,11 +187,9 @@ static RipperController *sharedController = nil;
 
 - (BOOL) documentHasRipperTasks:(CompactDiscDocument *)document
 {
-	NSEnumerator	*enumerator;
 	RipperTask		*current;
 	
-	enumerator = [_tasks objectEnumerator];
-	while((current = [enumerator nextObject])) {
+	for(current in _tasks) {
 		if([document isEqual:[[current objectInTracksAtIndex:0] document]]) {
 			return YES;
 		}
@@ -361,8 +357,7 @@ static RipperController *sharedController = nil;
 	}
 	
 	// Iterate through a second time and spawn threads for non-active devices
-	enumerator = [_tasks objectEnumerator];
-	while((task = [enumerator nextObject])) {
+	for(task in _tasks) {
 		deviceName = [task deviceName];
 		if(NO == [task started] && NO == [activeDrives containsObject:deviceName]) {
 			[activeDrives addObject:deviceName];

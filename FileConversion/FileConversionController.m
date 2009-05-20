@@ -352,7 +352,6 @@ static FileConversionController		*sharedController						= nil;
 	NSDictionary		*file;
 	NSArray				*subpaths;
 	BOOL				isDir;
-	NSEnumerator		*enumerator;
 	NSString			*subpath;
 	NSString			*composedPath;
 	BOOL				result;
@@ -365,9 +364,8 @@ static FileConversionController		*sharedController						= nil;
 	
 	if(isDir) {
 		subpaths	= [manager subpathsAtPath:filename];
-		enumerator	= [subpaths objectEnumerator];
 		
-		while((subpath = [enumerator nextObject])) {
+		for(subpath in subpaths) {
 			loopPool		= [[NSAutoreleasePool alloc] init];
 			composedPath	= [NSString stringWithFormat:@"%@/%@", filename, subpath];
 			

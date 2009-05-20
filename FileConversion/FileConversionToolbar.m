@@ -37,10 +37,9 @@ static NSString		*AlbumArtToolbarItemIdentifier			= @"org.sbooth.Max.FileConvers
 - (void) validateVisibleItems
 {
 	NSArray			*visibleItems	= [self visibleItems];
-	NSEnumerator	*enumerator		= [visibleItems objectEnumerator];
 	NSToolbarItem	*item;
 	
-	while((item = [enumerator nextObject])) {
+	for(item in visibleItems) {
 		if([item action] == @selector(encode:))
 			[item setEnabled:[[FileConversionController sharedController] encodeAllowed]];
 //		if([item action] == @selector(queryMusicBrainz:))

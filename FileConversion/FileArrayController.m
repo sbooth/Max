@@ -196,11 +196,10 @@
 	NSArray					*arrangedObjects		= [self arrangedObjects];
 	NSEnumerator			*enumerator				= nil;
 	NSMutableIndexSet		*indexSet				= [NSMutableIndexSet indexSet];
-	NSEnumerator			*rowEnumerator			= [rows objectEnumerator];
 	id						object;
 	NSString				*filename;
 
-	while((filename = [rowEnumerator nextObject])) {
+	for(filename in rows) {
 		enumerator = [arrangedObjects objectEnumerator];
 		while((object = [enumerator nextObject])) {
 			if([[object valueForKey:@"filename"] isEqualToString:filename]) {
