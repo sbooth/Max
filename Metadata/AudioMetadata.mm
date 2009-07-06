@@ -605,6 +605,13 @@
 				if(NO == frameList.isEmpty())
 					[result setCompilation:[NSNumber numberWithBool:YES]];
 			}
+
+			// Extract ISRC if present
+			frameList = id3v2tag->frameListMap()["TSRC"];
+			if(NO == frameList.isEmpty()) {
+				NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+				[result setISRC:value];
+			}			
 		}
 	}
 	

@@ -70,6 +70,7 @@
 	NSString									*bundleVersion			= nil;
 	NSString									*versionString			= nil;
 	NSString									*timestamp				= nil;
+	NSString									*isrc					= nil;
 	unsigned									index					= NSNotFound;
 	
 	NSAssert(f.isValid(), NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
@@ -232,6 +233,14 @@
 		f.ID3v2Tag()->addFrame(pictureFrame);
 	}
 	
+	// ISRC
+	isrc = [metadata ISRC];
+	if(nil != isrc) {
+		frame = new TagLib::ID3v2::TextIdentificationFrame("TSRC", TagLib::String::Latin1);
+		frame->setText(TagLib::String([isrc UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+
 	// Encoded by
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TENC", TagLib::String::Latin1);
 	NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
