@@ -416,7 +416,11 @@
 					if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ALBUM"]])
 						[result setAlbumTitle:value];
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ARTIST"]])
-						[result setAlbumArtist:value];
+					{
+						[result setTrackArtist:value];
+						if(nil == [result albumArtist])
+							[result setAlbumArtist:value];
+					}
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"COMPOSER"]])
 						[result setAlbumComposer:value];
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"GENRE"]])
@@ -441,7 +445,9 @@
 						[result setISRC:value];
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"MCN"]])
 						[result setMCN:value];
-					
+					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ALBUMARTIST"]])
+						[result setAlbumArtist:value];					
+
 					// Maintain backwards compability for the following tags
 					else if(NSOrderedSame == [key caseInsensitiveCompare:@"YEAR"] && nil == [result albumDate])
 						[result setAlbumDate:value];

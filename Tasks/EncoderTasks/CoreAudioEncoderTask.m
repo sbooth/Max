@@ -57,6 +57,7 @@
 	NSNumber				*discTotal				= nil;
 	NSString				*album					= nil;
 	NSString				*artist					= nil;
+	NSString				*albumArtist			= nil;
 	NSString				*composer				= nil;
 	NSString				*title					= nil;
 	NSString				*year					= nil;
@@ -85,7 +86,12 @@
 			artist = [metadata albumArtist];
 		if(nil != artist)
 			MP4SetMetadataArtist(mp4FileHandle, [artist UTF8String]);
-		
+
+		// Album artist
+		albumArtist = [metadata albumArtist];
+		if(nil != albumArtist)
+			MP4SetMetadataAlbumArtist(mp4FileHandle, [albumArtist UTF8String]);
+
 		// Composer
 		composer = [metadata trackComposer];
 		if(nil == composer)
