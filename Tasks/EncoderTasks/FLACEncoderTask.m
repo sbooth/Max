@@ -43,29 +43,34 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [[self taskInfo] metadata];
-	FLAC__Metadata_Chain						*chain					= NULL;
-	FLAC__Metadata_Iterator						*iterator				= NULL;
-	FLAC__StreamMetadata						*block					= NULL;
+	AudioMetadata								*metadata					= [[self taskInfo] metadata];
+	FLAC__Metadata_Chain						*chain						= NULL;
+	FLAC__Metadata_Iterator						*iterator					= NULL;
+	FLAC__StreamMetadata						*block						= NULL;
 	FLAC__bool									result;
-	NSString									*bundleVersion			= nil;
-	NSString									*versionString			= nil;
-	NSNumber									*trackNumber			= nil;
-	NSNumber									*trackTotal				= nil;
-	NSString									*album					= nil;
-	NSString									*artist					= nil;
-	NSString									*composer				= nil;
-	NSString									*title					= nil;
-	NSString									*year					= nil;
-	NSString									*genre					= nil;
-	NSString									*comment				= nil;
-	NSString									*trackComment			= nil;
-	NSNumber									*discNumber				= nil;
-	NSNumber									*discTotal				= nil;
-	NSNumber									*compilation			= nil;
-	NSString									*isrc					= nil;
-	NSString									*mcn					= nil;
-	
+	NSString									*bundleVersion				= nil;
+	NSString									*versionString				= nil;
+	NSNumber									*trackNumber				= nil;
+	NSNumber									*trackTotal					= nil;
+	NSString									*album						= nil;
+	NSString									*artist						= nil;
+	NSString									*composer					= nil;
+	NSString									*title						= nil;
+	NSString									*year						= nil;
+	NSString									*genre						= nil;
+	NSString									*comment					= nil;
+	NSString									*trackComment				= nil;
+	NSNumber									*discNumber					= nil;
+	NSNumber									*discTotal					= nil;
+	NSNumber									*compilation				= nil;
+	NSString									*isrc						= nil;
+	NSString									*mcn						= nil;
+	NSString									*musicbrainzTrackId			= nil;
+	NSString									*musicbrainzAlbumId			= nil;
+	NSString									*musicbrainzArtistId		= nil;
+	NSString									*musicbrainzAlbumArtistId	= nil;
+	NSString									*musicbrainzDiscId			= nil;
+
 	
 	@try  {
 		chain = FLAC__metadata_chain_new();
@@ -188,6 +193,31 @@
 		if(nil != mcn)
 			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"MCN"], mcn);
 		
+		// MusicBrainz Track Id
+		musicbrainzTrackId = [metadata musicbrainzTrackId];
+		if(nil != musicbrainzTrackId)
+			addVorbisComment(block, @"MUSICBRAINZ_TRACKID", musicbrainzTrackId);
+
+		// MusicBrainz Album Id
+		musicbrainzAlbumId = [metadata musicbrainzAlbumId];
+		if(nil != musicbrainzAlbumId)
+			addVorbisComment(block, @"MUSICBRAINZ_ALBUMID", musicbrainzAlbumId);
+		
+		// MusicBrainz Artist Id
+		musicbrainzArtistId = [metadata musicbrainzArtistId];
+		if(nil != musicbrainzArtistId)
+			addVorbisComment(block, @"MUSICBRAINZ_ARTISTID", musicbrainzArtistId);
+		
+		// MusicBrainz Album Artist Id
+		musicbrainzAlbumArtistId = [metadata musicbrainzAlbumArtistId];
+		if(nil != musicbrainzAlbumArtistId)
+			addVorbisComment(block, @"MUSICBRAINZ_ALBUMARTISTID", musicbrainzAlbumArtistId);
+		
+		// MusicBrainz Disc Id
+		musicbrainzDiscId = [metadata discId];
+		if(nil != musicbrainzDiscId)
+			addVorbisComment(block, @"MUSICBRAINZ_DISCID", musicbrainzDiscId);
+
 		// Encoded by
 		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];

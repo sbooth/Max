@@ -60,6 +60,10 @@ enum {
 	NSString						*_composer;
 	NSString						*_comment;
 
+	// MusicBrainz identifiers
+	NSString						*_musicbrainzAlbumId;
+	NSString						*_musicbrainzArtistId;
+	
 	NSImage							*_albumArt;
 	
 	NSDate							*_albumArtDownloadDate;
@@ -162,6 +166,12 @@ enum {
 
 - (NSString *)		MCN;
 - (void)			setMCN:(NSString *)MCN;
+
+- (NSString *)		musicbrainzArtistId;
+- (void)			setMusicbrainzArtistId:(NSString *)musicbrainzArtistId;
+
+- (NSString *)		musicbrainzAlbumId;
+- (void)			setMusicbrainzAlbumId:(NSString *)musicbrainzAlbumId;
 
 // KVC methods
 - (unsigned)		countOfTracks;

@@ -51,9 +51,13 @@
 	[_date release];			_date = nil;
 	[_genre release];			_genre = nil;
 	[_composer release];		_composer = nil;
-
+	
+	[_musicbrainzTrackId release];  _musicbrainzTrackId = nil;
+	[_musicbrainzArtistId release]; _musicbrainzArtistId = nil;
+	
 	[_ISRC release];			_ISRC = nil;
-
+	
+	
 	[super dealloc];
 }
 
@@ -127,6 +131,9 @@
 
 - (unsigned)				byteSize			{ return (([self lastSector] - [self firstSector]) * kCDSectorSizeCDDA); }
 
+- (NSString *)				musicbrainzTrackId	{ return [[_musicbrainzTrackId retain] autorelease]; }
+- (NSString *)				musicbrainzArtistId	{ return [[_musicbrainzArtistId retain] autorelease]; }
+
 - (unsigned)				number				{ return _number; }
 - (unsigned)				firstSector			{ return _firstSector; }
 - (unsigned)				lastSector			{ return _lastSector; }
@@ -143,6 +150,11 @@
 - (void) setRipInProgress:(BOOL)ripInProgress			{ _ripInProgress = ripInProgress; }
 
 - (void) setSelected:(BOOL)selected						{ _selected = selected; }
+
+- (void) setMusicbrainzTrackId:(NSString *)musicbrainzTrackId
+{ [_musicbrainzTrackId release]; _musicbrainzTrackId = [musicbrainzTrackId retain]; }
+- (void) setMusicbrainzArtistId:(NSString *)musicbrainzArtistId
+{ [_musicbrainzArtistId release]; _musicbrainzArtistId = [musicbrainzArtistId retain]; }
 
 - (void) setNumber:(unsigned)number						{ _number = number; }
 - (void) setFirstSector:(unsigned)firstSector			{ _firstSector = firstSector; }
@@ -242,6 +254,9 @@
 	[result setValue:[self composer] forKey:@"composer"];
 	[result setValue:[self comment] forKey:@"comment"];
 
+	[result setValue:[self musicbrainzTrackId] forKey:@"musicbrainzTrackId"];
+	[result setValue:[self musicbrainzArtistId] forKey:@"musicbrainzArtistId"];
+
 	[result setObject:[NSNumber numberWithUnsignedInt:[self number]] forKey:@"number"];
 	[result setObject:[NSNumber numberWithUnsignedLong:[self firstSector]] forKey:@"firstSector"];
 	[result setObject:[NSNumber numberWithUnsignedLong:[self lastSector]] forKey:@"lastSector"];
@@ -263,6 +278,9 @@
 	[_composer release];	_composer = nil;
 	[_comment release];		_comment = nil;
 	
+	[_musicbrainzTrackId release];	_musicbrainzTrackId = nil;
+	[_musicbrainzArtistId release];	_musicbrainzArtistId = nil;
+	
 	[_ISRC release];		_ISRC = nil;
 
 //	_selected		= [[properties valueForKey:@"selected"] boolValue];
@@ -273,7 +291,10 @@
 	_genre			= [[properties valueForKey:@"genre"] retain];
 	_composer		= [[properties valueForKey:@"composer"] retain];
 	_comment		= [[properties valueForKey:@"comment"] retain];
-	
+
+	_musicbrainzTrackId		= [[properties valueForKey:@"musicbrainzTrackId"] retain];
+	_musicbrainzArtistId	= [[properties valueForKey:@"musicbrainzArtistId"] retain];
+
 	_number			= [[properties valueForKey:@"number"] unsignedIntValue];
 	_firstSector	= [[properties valueForKey:@"firstSector"] unsignedLongValue];
 	_lastSector		= [[properties valueForKey:@"lastSector"] unsignedLongValue];
@@ -302,6 +323,9 @@
 	[copy setGenre:[self genre]];
 	[copy setComposer:[self composer]];
 	[copy setComment:[self comment]];
+
+	[copy setMusicbrainzTrackId:[self musicbrainzTrackId]];
+	[copy setMusicbrainzArtistId:[self musicbrainzArtistId]];
 	
 	[copy setNumber:[self number]];
 	[copy setFirstSector:[self firstSector]];
@@ -335,13 +359,19 @@
 	[result setAlbumGenre:[[self document] genre]];
 	[result setAlbumComposer:[[self document] composer]];
 	[result setAlbumComment:[[self document] comment]];
-		
+	
+	[result setMusicbrainzTrackId: [self musicbrainzTrackId]];
+	[result setMusicbrainzArtistId: [self musicbrainzArtistId]];
+	[result setMusicbrainzAlbumId: [[self document] musicbrainzAlbumId]];
+	[result setMusicbrainzAlbumArtistId: [[self document] musicbrainzArtistId]];
+	
 	[result setDiscNumber:[[self document] discNumber]];
 	[result setDiscTotal:[[self document] discTotal]];
 	[result setCompilation:[[self document] compilation]];
 
 	[result setAlbumArt:[[self document] albumArt]];
 	
+	[result setDiscId:[[self document] discID]];
 	[result setMCN:[[self document] MCN]];
 	
 	return [result autorelease];

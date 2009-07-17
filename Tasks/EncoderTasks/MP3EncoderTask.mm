@@ -31,6 +31,7 @@
 #include <taglib/tstring.h>					// TagLib::String
 #include <taglib/tbytevector.h>				// TagLib::ByteVector
 #include <taglib/textidentificationframe.h>	// TagLib::ID3V2::TextIdentificationFrame
+#include <taglib/uniquefileidentifierframe.h> // TagLib::ID3V2::UniqueFileIdentifierFrame
 #include <taglib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
 #include <taglib/id3v2tag.h>				// TagLib::ID3V2::Tag
 
@@ -47,31 +48,37 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [[self taskInfo] metadata];
-	NSNumber									*trackNumber			= nil;
-	NSNumber									*trackTotal				= nil;
-	NSString									*album					= nil;
-	NSString									*artist					= nil;
-	NSString									*composer				= nil;
-	NSString									*title					= nil;
-	NSString									*year					= nil;
-	NSString									*genre					= nil;
-	NSString									*comment				= nil;
-	NSString									*trackComment			= nil;
-	NSNumber									*compilation			= nil;
-	NSNumber									*discNumber				= nil;
-	NSNumber									*discTotal				= nil;
-	NSNumber									*length					= nil;
-	TagLib::ID3v2::TextIdentificationFrame		*frame					= NULL;
-	TagLib::ID3v2::AttachedPictureFrame			*pictureFrame			= NULL;
-	NSImage										*albumArt				= nil;
-	NSData										*data					= nil;
-	TagLib::MPEG::File							f						([[self outputFilename] fileSystemRepresentation], false);
-	NSString									*bundleVersion			= nil;
-	NSString									*versionString			= nil;
-	NSString									*timestamp				= nil;
-	NSString									*isrc					= nil;
-	unsigned									index					= NSNotFound;
+	AudioMetadata								*metadata					= [[self taskInfo] metadata];
+	NSNumber									*trackNumber				= nil;
+	NSNumber									*trackTotal					= nil;
+	NSString									*album						= nil;
+	NSString									*artist						= nil;
+	NSString									*composer					= nil;
+	NSString									*title						= nil;
+	NSString									*year						= nil;
+	NSString									*genre						= nil;
+	NSString									*comment					= nil;
+	NSString									*trackComment				= nil;
+	NSNumber									*compilation				= nil;
+	NSNumber									*discNumber					= nil;
+	NSNumber									*discTotal					= nil;
+	NSNumber									*length						= nil;
+	TagLib::ID3v2::TextIdentificationFrame		*frame						= NULL;
+	TagLib::ID3v2::AttachedPictureFrame			*pictureFrame				= NULL;
+	NSImage										*albumArt					= nil;
+	NSData										*data						= nil;
+	TagLib::MPEG::File							f							([[self outputFilename] fileSystemRepresentation], false);
+	NSString									*bundleVersion				= nil;
+	NSString									*versionString				= nil;
+	NSString									*timestamp					= nil;
+	NSString									*mcn						= nil;
+	NSString									*isrc						= nil;
+	NSString									*musicbrainzDiscId			= nil;
+	NSString									*musicbrainzAlbumId			= nil;
+	NSString									*musicbrainzArtistId		= nil;
+	NSString									*musicbrainzAlbumArtistId	= nil;
+	NSString									*musicbrainzTrackId			= nil;
+	unsigned									index						= NSNotFound;
 	
 	NSAssert(f.isValid(), NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
 
@@ -233,6 +240,16 @@
 		f.ID3v2Tag()->addFrame(pictureFrame);
 	}
 	
+	// MCN
+	mcn = [metadata MCN];
+	if (nil != mcn) {
+		TagLib::ID3v2::UserTextIdentificationFrame *frame = new TagLib::ID3v2::UserTextIdentificationFrame(TagLib::String::Latin1);
+		NSAssert(NULL != frame, @"Unable to allocate memory.");
+		frame->setDescription("MCN");
+		frame->setText(TagLib::String([mcn UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+	
 	// ISRC
 	isrc = [metadata ISRC];
 	if(nil != isrc) {
@@ -240,7 +257,57 @@
 		frame->setText(TagLib::String([isrc UTF8String], TagLib::String::UTF8));
 		f.ID3v2Tag()->addFrame(frame);
 	}
-
+	
+	// MusicBrainz Artist Id
+	musicbrainzArtistId = [metadata musicbrainzArtistId];
+	if (nil != musicbrainzArtistId) {
+		TagLib::ID3v2::UserTextIdentificationFrame *frame = new TagLib::ID3v2::UserTextIdentificationFrame(TagLib::String::Latin1);
+		NSAssert(NULL != frame, @"Unable to allocate memory.");
+		frame->setDescription("MusicBrainz Artist Id");
+		frame->setText(TagLib::String([musicbrainzArtistId UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+	
+	// MusicBrainz Album Id
+	musicbrainzAlbumId = [metadata musicbrainzAlbumId];
+	if (nil != musicbrainzAlbumId) {
+		TagLib::ID3v2::UserTextIdentificationFrame *frame = new TagLib::ID3v2::UserTextIdentificationFrame(TagLib::String::Latin1);
+		NSAssert(NULL != frame, @"Unable to allocate memory.");
+		frame->setDescription("MusicBrainz Album Id");
+		frame->setText(TagLib::String([musicbrainzAlbumId UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+	
+	// MusicBrainz Album Artist Id
+	musicbrainzAlbumArtistId = [metadata musicbrainzAlbumArtistId];
+	if (nil != musicbrainzAlbumArtistId) {
+		TagLib::ID3v2::UserTextIdentificationFrame *frame = new TagLib::ID3v2::UserTextIdentificationFrame(TagLib::String::Latin1);
+		NSAssert(NULL != frame, @"Unable to allocate memory.");
+		frame->setDescription("MusicBrainz Album Artist Id");
+		frame->setText(TagLib::String([musicbrainzAlbumArtistId UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+	
+	// MusicBrainz Disc Id
+	musicbrainzDiscId = [metadata discId];
+	if (nil != musicbrainzDiscId) {
+		TagLib::ID3v2::UserTextIdentificationFrame *frame = new TagLib::ID3v2::UserTextIdentificationFrame(TagLib::String::Latin1);
+		NSAssert(NULL != frame, @"Unable to allocate memory.");
+		frame->setDescription("MusicBrainz Disc Id");
+		frame->setText(TagLib::String([musicbrainzDiscId UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(frame);
+	}
+	
+	// Unique file identifier
+	musicbrainzTrackId = [metadata musicbrainzTrackId];
+	if (nil != musicbrainzTrackId) {
+		TagLib::ID3v2::UniqueFileIdentifierFrame *frame = new TagLib::ID3v2::UniqueFileIdentifierFrame(
+			"http://musicbrainz.org", TagLib::ByteVector([musicbrainzTrackId UTF8String])
+		);
+		NSAssert(NULL != frame, @"Unable to allocate memory.");
+		f.ID3v2Tag()->addFrame(frame);
+	}
+	
 	// Encoded by
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TENC", TagLib::String::Latin1);
 	NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));

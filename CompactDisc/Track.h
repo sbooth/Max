@@ -41,6 +41,10 @@
 	NSString				*_genre;
 	NSString				*_composer;
 	NSString				*_comment;
+
+	// MusicBrainz identifiers
+	NSString				*_musicbrainzTrackId;
+	NSString				*_musicbrainzArtistId;
 	
 	// Physical track properties
 	unsigned 				_number;
@@ -112,6 +116,12 @@
 
 - (NSString *)		ISRC;
 - (void)			setISRC:(NSString *)ISRC;
+
+- (NSString *)	    musicbrainzTrackId;
+- (void)		    setMusicbrainzTrackId:(NSString *)musicbrainzTrackId;
+
+- (NSString *)	    musicbrainzArtistId;
+- (void)		    setMusicbrainzArtistId:(NSString *)musicbrainzArtistId;
 
 - (BOOL)			dataTrack;
 - (void)			setDataTrack:(BOOL)dataTrack;

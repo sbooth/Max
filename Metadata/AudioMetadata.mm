@@ -22,19 +22,21 @@
 
 #import "UtilityFunctions.h"
 
-#include <taglib/fileref.h>					// TagLib::FileRef
-#include <taglib/mpegfile.h>				// TagLib::MPEG::File
-#include <taglib/vorbisfile.h>				// TagLib::Ogg::Vorbis::File
-#include <taglib/oggflacfile.h>				// TagLib::Ogg::FLAC::File
-#include <taglib/speexfile.h>				// TagLib::Ogg::Speex::File
-#include <taglib/id3v2tag.h>				// TagLib::ID3v2::Tag
-#include <taglib/id3v2frame.h>				// TagLib::ID3v2::Frame
-#include <taglib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
-#include <taglib/xiphcomment.h>				// TagLib::Ogg::XiphComment
-#include <taglib/tbytevector.h>				// TagLib::ByteVector
-#include <taglib/mpcfile.h>					// TagLib::MPC::File
+#include <taglib/fileref.h>						// TagLib::FileRef
+#include <taglib/mpegfile.h>					// TagLib::MPEG::File
+#include <taglib/vorbisfile.h>					// TagLib::Ogg::Vorbis::File
+#include <taglib/oggflacfile.h>					// TagLib::Ogg::FLAC::File
+#include <taglib/speexfile.h>					// TagLib::Ogg::Speex::File
+#include <taglib/id3v2tag.h>					// TagLib::ID3v2::Tag
+#include <taglib/id3v2frame.h>					// TagLib::ID3v2::Frame
+#include <taglib/attachedpictureframe.h>		// TagLib::ID3V2::AttachedPictureFrame
+#include <taglib/textidentificationframe.h>		// TagLib::ID3v2::UserTextIdentificationFrame
+#include <taglib/uniquefileidentifierframe.h>	// TagLib::ID3v2::UniqueFileIdentifierFrame
+#include <taglib/xiphcomment.h>					// TagLib::Ogg::XiphComment
+#include <taglib/tbytevector.h>					// TagLib::ByteVector
+#include <taglib/mpcfile.h>						// TagLib::MPC::File
 
-#include <mp4v2/mp4.h>						// MP4FileHandle
+#include <mp4v2/mp4.h>							// MP4FileHandle
 
 #include <mac/All.h>
 #include <mac/MACLib.h>
@@ -137,10 +139,16 @@
 
 	[_albumArt release];			_albumArt = nil;
 	
-	[_playlist release];			_playlist = nil;
-	
+	[_discId release];				_discId = nil;
 	[_MCN release];					_MCN = nil;
 	[_ISRC release];				_ISRC = nil;
+
+	[_musicbrainzTrackId release];	_musicbrainzTrackId = nil;
+	[_musicbrainzArtistId release];	_musicbrainzArtistId = nil;
+	[_musicbrainzAlbumId release];	_musicbrainzAlbumId = nil;
+	[_musicbrainzAlbumArtistId release];	_musicbrainzAlbumArtistId = nil;
+
+	[_playlist release];			_playlist = nil;
 	
 	[super dealloc];
 }
@@ -296,9 +304,14 @@
 			nil		== [self discNumber] &&
 			nil		== [self discTotal] &&
 			nil		== [self length] &&
+			nil		== [self albumArt] &&
+			nil		== [self discId] &&
 			nil		== [self MCN] &&
 			nil		== [self ISRC] &&
-			nil		== [self albumArt]
+			nil     == [self musicbrainzTrackId] &&
+			nil     == [self musicbrainzArtistId] &&
+			nil     == [self musicbrainzAlbumId] &&
+			nil     == [self musicbrainzAlbumArtistId]
 			);
 }
 
@@ -326,10 +339,16 @@
 
 - (NSNumber *)	length						{ return [[_length retain] autorelease]; }
 
+- (NSImage *)	albumArt					{ return [[_albumArt retain] autorelease]; }
+
 - (NSString *)	MCN							{ return [[_MCN retain] autorelease]; }
 - (NSString *)	ISRC						{ return [[_ISRC retain] autorelease]; }
 
-- (NSImage *)	albumArt					{ return [[_albumArt retain] autorelease]; }
+- (NSString *)	discId						{ return [[_discId retain] autorelease]; }
+- (NSString *)	musicbrainzTrackId			{ return [[_musicbrainzTrackId retain] autorelease]; }
+- (NSString *)	musicbrainzArtistId			{ return [[_musicbrainzArtistId retain] autorelease]; }
+- (NSString *)	musicbrainzAlbumId			{ return [[_musicbrainzAlbumId retain] autorelease]; }
+- (NSString *)	musicbrainzAlbumArtistId    { return [[_musicbrainzAlbumArtistId retain] autorelease]; }
 
 - (NSString *)	playlist					{ return [[_playlist retain] autorelease]; }
 
@@ -357,10 +376,20 @@
 
 - (void)		setLength:(NSNumber *)length					{ [_length release]; _length = [length retain]; }
 
+- (void)		setAlbumArt:(NSImage *)albumArt					{ [_albumArt release]; _albumArt = [albumArt retain]; }
+
+- (void)		setDiscId:(NSString *)discId					{ [_discId release]; _discId = [discId retain]; }
 - (void)		setMCN:(NSString *)MCN							{ [_MCN release]; _MCN = [MCN retain]; }
 - (void)		setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = [ISRC retain]; }
 
-- (void)		setAlbumArt:(NSImage *)albumArt					{ [_albumArt release]; _albumArt = [albumArt retain]; }
+- (void)		setMusicbrainzTrackId:(NSString *)musicbrainzTrackId
+                { [_musicbrainzTrackId release]; _musicbrainzTrackId = [musicbrainzTrackId retain]; }
+- (void)		setMusicbrainzArtistId:(NSString *)musicbrainzArtistId
+                { [_musicbrainzArtistId release]; _musicbrainzArtistId = [musicbrainzArtistId retain]; }
+- (void)		setMusicbrainzAlbumId:(NSString *)musicbrainzAlbumId
+                { [_musicbrainzAlbumId release]; _musicbrainzAlbumId = [musicbrainzAlbumId retain]; }
+- (void)		setMusicbrainzAlbumArtistId:(NSString *)musicbrainzAlbumArtistId
+                { [_musicbrainzAlbumArtistId release]; _musicbrainzAlbumArtistId = [musicbrainzAlbumArtistId retain]; }
 
 - (void)		setPlaylist:(NSString *)playlist				{ [_playlist release]; _playlist = [playlist retain]; }
 
@@ -447,6 +476,16 @@
 						[result setMCN:value];
 					else if(NSOrderedSame == [key caseInsensitiveCompare:[self customizeFLACTag:@"ALBUMARTIST"]])
 						[result setAlbumArtist:value];					
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"MUSICBRAINZ_TRACKID"])
+						[result setMusicbrainzTrackId:value];					
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"MUSICBRAINZ_ALBUMID"])
+						[result setMusicbrainzAlbumId:value];					
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"MUSICBRAINZ_ARTISTID"])
+						[result setMusicbrainzArtistId:value];					
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"MUSICBRAINZ_ALBUMARTISTID"])
+						[result setMusicbrainzAlbumArtistId:value];					
+					else if(NSOrderedSame == [key caseInsensitiveCompare:@"MUSICBRAINZ_DISCID"])
+						[result setDiscId:value];					
 
 					// Maintain backwards compability for the following tags
 					else if(NSOrderedSame == [key caseInsensitiveCompare:@"YEAR"] && nil == [result albumDate])
@@ -618,6 +657,36 @@
 				NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
 				[result setISRC:value];
 			}			
+
+			
+			// MusicBrainz artist and album identifiers
+			frameList = id3v2tag->frameList("TXXX");
+			for(TagLib::ID3v2::FrameList::Iterator it = frameList.begin(); it != frameList.end(); ++it)
+			{
+				TagLib::ID3v2::UserTextIdentificationFrame *frame = (TagLib::ID3v2::UserTextIdentificationFrame *)(*it);
+				const char* text = frame->fieldList().back().toCString(true);
+				if (frame->description() == "MCN")
+					[result setMCN: [NSString stringWithUTF8String:text]];
+				else if (frame->description() == "MusicBrainz Artist Id")
+					[result setMusicbrainzArtistId: [NSString stringWithUTF8String:text]];
+				else if (frame->description() == "MusicBrainz Album Id")
+					 [result setMusicbrainzAlbumId: [NSString stringWithUTF8String:text]];
+				else if (frame->description() == "MusicBrainz Album Artist Id")
+					  [result setMusicbrainzAlbumArtistId: [NSString stringWithUTF8String:text]];
+				else if (frame->description() == "MusicBrainz Disc Id")
+					[result setDiscId: [NSString stringWithUTF8String:text]];
+			}
+			
+			// Unique file identifier (MusicBrainz track ID)
+			frameList = id3v2tag->frameList("UFID");
+			for(TagLib::ID3v2::FrameList::Iterator it = frameList.begin(); it != frameList.end(); ++it)
+			{
+				TagLib::ID3v2::UniqueFileIdentifierFrame *frame = (TagLib::ID3v2::UniqueFileIdentifierFrame *)(*it);
+				if (frame->owner() == "http://musicbrainz.org") {
+					s = TagLib::String(frame->identifier());
+					[result setMusicbrainzTrackId: [NSString stringWithUTF8String:s.toCString(true)]];
+				}
+			}
 		}
 	}
 	
@@ -814,6 +883,31 @@
 				[result setMCN:value];
 			}					
 			
+			if(fieldList.contains("MUSICBRAINZ_TRACKID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_TRACKID"].toString().toCString(true)];
+				[result setMusicbrainzTrackId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ALBUMID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ALBUMID"].toString().toCString(true)];
+				[result setMusicbrainzTrackId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ARTISTID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ARTISTID"].toString().toCString(true)];
+				[result setMusicbrainzArtistId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ALBUMARTISTID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ALBUMARTISTID"].toString().toCString(true)];
+				[result setMusicbrainzAlbumArtistId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_DISCID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_DISCID"].toString().toCString(true)];
+				[result setDiscId:value];
+			}					
+			
 			// Maintain backwards compatibility for the following tags
 			if(fieldList.contains("DISCSINSET") && 0 == [result discTotal]) {
 				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
@@ -940,6 +1034,31 @@
 				[result setMCN:value];
 			}					
 			
+			if(fieldList.contains("MUSICBRAINZ_TRACKID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_TRACKID"].toString().toCString(true)];
+				[result setMusicbrainzTrackId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ALBUMID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ALBUMID"].toString().toCString(true)];
+				[result setMusicbrainzTrackId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ARTISTID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ARTISTID"].toString().toCString(true)];
+				[result setMusicbrainzArtistId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ALBUMARTISTID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ALBUMARTISTID"].toString().toCString(true)];
+				[result setMusicbrainzAlbumArtistId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_DISCID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_DISCID"].toString().toCString(true)];
+				[result setDiscId:value];
+			}					
+			
 			// Maintain backwards compatibility for the following tags
 			if(fieldList.contains("DISCSINSET") && nil == [result discTotal]) {
 				value = [NSString stringWithUTF8String:fieldList["DISCSINSET"].toString().toCString(true)];
@@ -1064,6 +1183,31 @@
 			if(fieldList.contains(tag)) {
 				value = [NSString stringWithUTF8String:fieldList[tag].toString().toCString(true)];
 				[result setMCN:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_TRACKID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_TRACKID"].toString().toCString(true)];
+				[result setMusicbrainzTrackId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ALBUMID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ALBUMID"].toString().toCString(true)];
+				[result setMusicbrainzTrackId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ARTISTID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ARTISTID"].toString().toCString(true)];
+				[result setMusicbrainzArtistId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_ALBUMARTISTID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_ALBUMARTISTID"].toString().toCString(true)];
+				[result setMusicbrainzAlbumArtistId:value];
+			}					
+			
+			if(fieldList.contains("MUSICBRAINZ_DISCID")) {
+				value = [NSString stringWithUTF8String:fieldList["MUSICBRAINZ_DISCID"].toString().toCString(true)];
+				[result setDiscId:value];
 			}					
 			
 			// Maintain backwards compatibility for the following tags

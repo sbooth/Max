@@ -85,6 +85,9 @@
 	[_discTotal release],				_discTotal = nil;
 	[_compilation release],				_compilation = nil;
 
+	[_musicbrainzAlbumId release],		_musicbrainzAlbumId = nil;
+	[_musicbrainzArtistId release],		_musicbrainzArtistId = nil;
+	
 	[_MCN release],						_MCN = nil;
 	
 	[_tracks release],					_tracks = nil;
@@ -186,6 +189,8 @@
 		[result setValue:[self discNumber] forKey:@"discNumber"];
 		[result setValue:[self discTotal] forKey:@"discTotal"];
 		[result setValue:[self compilation] forKey:@"compilation"];
+		[result setValue:[self musicbrainzAlbumId] forKey:@"musicbrainzAlbumId"];
+		[result setValue:[self musicbrainzArtistId] forKey:@"musicbrainzArtistId"];
 		[result setValue:[self MCN] forKey:@"MCN"];
 		[result setValue:[self discID] forKey:@"discID"];
 		
@@ -242,10 +247,13 @@
 			
 			[_albumArt release],					_albumArt = nil;
 			[_albumArtDownloadDate release],		_albumArtDownloadDate = nil;
-
+			
+			[_musicbrainzAlbumId release],			_musicbrainzAlbumId = nil;
+			[_musicbrainzArtistId release],			_musicbrainzArtistId = nil;
+			
 			[_discNumber release],					_discNumber = nil;
 			[_discTotal release],					_discTotal = nil;
-
+			
 			[_discID release],						_discID = nil;
 			[_MCN release],							_MCN = nil;
 			
@@ -257,6 +265,9 @@
 			_genre			= [[dictionary valueForKey:@"genre"] retain];
 			_composer		= [[dictionary valueForKey:@"composer"] retain];
 			_comment		= [[dictionary valueForKey:@"comment"] retain];
+
+			_musicbrainzAlbumId = [[dictionary valueForKey:@"musicbrainzAlbumId"] retain];
+			_musicbrainzArtistId = [[dictionary valueForKey:@"musicbrainzArtistId"] retain];
 
 			_discNumber		= [[dictionary valueForKey:@"discNumber"] retain];
 			_discTotal		= [[dictionary valueForKey:@"discTotal"] retain];
@@ -623,6 +634,9 @@
 - (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
 - (NSNumber *)		compilation							{ return [[_compilation retain] autorelease]; }
 
+- (NSString *)		musicbrainzArtistId					{ return [[_musicbrainzArtistId retain] autorelease]; }
+- (NSString *)		musicbrainzAlbumId					{ return [[_musicbrainzAlbumId retain] autorelease]; }
+
 - (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
 
 - (unsigned)		countOfTracks						{ return [_tracks count]; }
@@ -782,6 +796,11 @@
 
 - (void) setMCN:(NSString *)MCN { [_MCN release]; _MCN = [MCN retain]; }
 
+- (void) setMusicbrainzArtistId:(NSString *)musicbrainzArtistId
+		 { [_musicbrainzArtistId release]; _musicbrainzArtistId = [musicbrainzArtistId retain]; }
+- (void) setMusicbrainzAlbumId:(NSString *)musicbrainzAlbumId
+		 { [_musicbrainzAlbumId release]; _musicbrainzAlbumId = [musicbrainzAlbumId retain]; }
+
 - (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
 - (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
 
@@ -857,6 +876,8 @@
 	[self setArtist:[releaseDictionary valueForKey:@"artist"]];
 	[self setComposer:[releaseDictionary valueForKey:@"composer"]];
 	[self setDate:[releaseDictionary valueForKey:@"date"]];
+	[self setMusicbrainzAlbumId:[[releaseDictionary valueForKey:@"albumId"] lastPathComponent]];
+	[self setMusicbrainzArtistId:[[releaseDictionary valueForKey:@"artistId"] lastPathComponent]];
 	
 	NSArray *tracksArray = [releaseDictionary valueForKey:@"tracks"];
 	
@@ -868,6 +889,11 @@
 		[track setTitle:[trackDictionary valueForKey:@"title"]];
 		[track setArtist:[trackDictionary valueForKey:@"artist"]];
 		[track setComposer:[trackDictionary valueForKey:@"composer"]];
+		[track setMusicbrainzTrackId:[[trackDictionary valueForKey:@"trackId"] lastPathComponent]];
+		if ([trackDictionary valueForKey:@"artistId"] != nil)
+			[track setMusicbrainzArtistId:[[trackDictionary valueForKey:@"artistId"] lastPathComponent]];
+		else
+			[track setMusicbrainzArtistId:[[releaseDictionary valueForKey:@"artistId"] lastPathComponent]];
 	}
 	
 	[self updateChangeCount:NSChangeReadOtherContents];

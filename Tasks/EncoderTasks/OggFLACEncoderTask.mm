@@ -41,22 +41,27 @@
 
 - (void) writeTags
 {
-	AudioMetadata								*metadata				= [[self taskInfo] metadata];
-	NSNumber									*trackNumber			= nil;
-	NSNumber									*trackTotal				= nil;
-	NSNumber									*discNumber				= nil;
-	NSNumber									*discTotal				= nil;
-	NSNumber									*compilation			= nil;
-	NSString									*album					= nil;
-	NSString									*artist					= nil;
-	NSString									*composer				= nil;
-	NSString									*title					= nil;
-	NSString									*year					= nil;
-	NSString									*genre					= nil;
-	NSString									*comment				= nil;
-	NSString									*trackComment			= nil;
-	NSString									*isrc					= nil;
-	NSString									*mcn					= nil;
+	AudioMetadata								*metadata					= [[self taskInfo] metadata];
+	NSNumber									*trackNumber				= nil;
+	NSNumber									*trackTotal					= nil;
+	NSNumber									*discNumber					= nil;
+	NSNumber									*discTotal					= nil;
+	NSNumber									*compilation				= nil;
+	NSString									*album						= nil;
+	NSString									*artist						= nil;
+	NSString									*composer					= nil;
+	NSString									*title						= nil;
+	NSString									*year						= nil;
+	NSString									*genre						= nil;
+	NSString									*comment					= nil;
+	NSString									*trackComment				= nil;
+	NSString									*isrc						= nil;
+	NSString									*mcn						= nil;
+	NSString									*musicbrainzTrackId			= nil;
+	NSString									*musicbrainzAlbumId			= nil;
+	NSString									*musicbrainzArtistId		= nil;
+	NSString									*musicbrainzAlbumArtistId	= nil;
+	NSString									*musicbrainzDiscId			= nil;
 	NSString									*bundleVersion, *versionString;
 	TagLib::Ogg::FLAC::File						f						([[self outputFilename] fileSystemRepresentation], false);
 	
@@ -144,6 +149,31 @@
 	mcn = [metadata MCN];
 	if(nil != mcn)
 		f.tag()->addField([AudioMetadata customizeOggFLACTag:@"MCN"], TagLib::String([mcn UTF8String], TagLib::String::UTF8));
+	
+	// MusicBrainz Track Id
+	musicbrainzTrackId = [metadata musicbrainzTrackId];
+	if(nil != musicbrainzTrackId)
+		f.tag()->addField([@"MUSICBRAINZ_TRACKID" UTF8String], TagLib::String([musicbrainzTrackId UTF8String], TagLib::String::UTF8));
+	
+	// MusicBrainz Album Id
+	musicbrainzAlbumId = [metadata musicbrainzAlbumId];
+	if(nil != musicbrainzAlbumId)
+		f.tag()->addField([@"MUSICBRAINZ_ALBUMID" UTF8String], TagLib::String([musicbrainzAlbumId UTF8String], TagLib::String::UTF8));
+	
+	// MusicBrainz Artist Id
+	musicbrainzArtistId = [metadata musicbrainzArtistId];
+	if(nil != musicbrainzArtistId)
+		f.tag()->addField([@"MUSICBRAINZ_ARTISTID" UTF8String], TagLib::String([musicbrainzArtistId UTF8String], TagLib::String::UTF8));
+	
+	// MusicBrainz Album Artist Id
+	musicbrainzAlbumArtistId = [metadata musicbrainzAlbumArtistId];
+	if(nil != musicbrainzAlbumArtistId)
+		f.tag()->addField([@"MUSICBRAINZ_ALBUMARTISTID" UTF8String], TagLib::String([musicbrainzAlbumArtistId UTF8String], TagLib::String::UTF8));
+	
+	// MusicBrainz Disc Id
+	musicbrainzDiscId = [metadata discId];
+	if(nil != musicbrainzDiscId)
+		f.tag()->addField([@"MUSICBRAINZ_DISCID" UTF8String], TagLib::String([musicbrainzDiscId UTF8String], TagLib::String::UTF8));
 	
 	// Encoded by
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];

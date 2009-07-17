@@ -46,8 +46,14 @@
 	
 	NSImage					*_albumArt;
 	
+	NSString				*_discId;
 	NSString				*_MCN;
 	NSString				*_ISRC;
+	
+	NSString				*_musicbrainzTrackId;
+	NSString				*_musicbrainzArtistId;
+	NSString				*_musicbrainzAlbumId;
+	NSString				*_musicbrainzAlbumArtistId;
 	
 	NSString				*_playlist;
 }
@@ -114,11 +120,26 @@
 - (NSNumber *)	length;
 - (void)		setLength:(NSNumber *)length;
 
+- (NSString *)	discId;
+- (void)		setDiscId:(NSString *)discId;
+
 - (NSString *)	MCN;
 - (void)		setMCN:(NSString *)MCN;
 
 - (NSString *)	ISRC;
 - (void)		setISRC:(NSString *)ISRC;
+
+- (NSString *)	musicbrainzTrackId;
+- (void)		setMusicbrainzTrackId:(NSString *)musicbrainzTrackId;
+
+- (NSString *)	musicbrainzArtistId;
+- (void)		setMusicbrainzArtistId:(NSString *)musicbrainzArtistId;
+
+- (NSString *)	musicbrainzAlbumId;
+- (void)		setMusicbrainzAlbumId:(NSString *)musicbrainzAlbumId;
+
+- (NSString *)	musicbrainzAlbumArtistId;
+- (void)		setMusicbrainzAlbumArtistId:(NSString *)musicbrainzAlbumArtistId;
 
 - (NSImage *)	albumArt;
 - (void)		setAlbumArt:(NSImage *)albumArt;

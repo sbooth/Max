@@ -158,15 +158,17 @@
 
 		// ID
 		if(!release->getId().empty())
-			[releaseDictionary setValue:[NSString stringWithCString:release->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"MusicBrainzID"];
+			[releaseDictionary setValue:[NSString stringWithCString:release->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"albumId"];
 
 		// Title
 		if(!release->getTitle().empty())
 			[releaseDictionary setValue:[NSString stringWithCString:release->getTitle().c_str() encoding:NSUTF8StringEncoding] forKey:@"title"];
 
 		// Artist
-		if(NULL != release->getArtist() && !release->getArtist()->getName().empty())
+		if(NULL != release->getArtist() && !release->getArtist()->getName().empty()) {
 			[releaseDictionary setValue:[NSString stringWithCString:release->getArtist()->getName().c_str() encoding:NSUTF8StringEncoding] forKey:@"artist"];
+			[releaseDictionary setValue:[NSString stringWithCString:release->getArtist()->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"artistId"];
+		}
 		
 		// Take a best guess on the release date
 		if(1 == release->getNumReleaseEvents()) {
@@ -206,15 +208,17 @@
 
 			// ID
 			if(!track->getId().empty())
-				[trackDictionary setValue:[NSString stringWithCString:track->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"MusicBrainzID"];
+				[trackDictionary setValue:[NSString stringWithCString:track->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"trackId"];
 
 			// Track title
 			[trackDictionary setValue:[NSString stringWithCString:track->getTitle().c_str() encoding:NSUTF8StringEncoding] forKey:@"title"];
 
 			// Track artist
-			if(NULL != track->getArtist() && !track->getArtist()->getName().empty())
+			if(NULL != track->getArtist() && !track->getArtist()->getName().empty()) {
 				[trackDictionary setValue:[NSString stringWithCString:track->getArtist()->getName().c_str() encoding:NSUTF8StringEncoding] forKey:@"artist"];
-		
+				[trackDictionary setValue:[NSString stringWithCString:track->getArtist()->getId().c_str() encoding:NSUTF8StringEncoding] forKey:@"artistId"];
+			}
+			
 			// Look for Composer relations
 			MusicBrainz::RelationList relations = track->getRelations(MusicBrainz::Relation::TO_TRACK);
 			
