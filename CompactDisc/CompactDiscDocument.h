@@ -85,6 +85,7 @@ enum {
 - (BOOL)			encodeAllowed;
 - (BOOL)			queryMusicBrainzAllowed;
 - (BOOL)			ejectDiscAllowed;
+- (BOOL)			submitDiscIdAllowed;
 
 - (BOOL)			emptySelection;
 - (BOOL)			ripInProgress;
@@ -97,6 +98,8 @@ enum {
 - (IBAction)		encode:(id)sender;
 
 - (IBAction)		ejectDisc:(id)sender;
+
+- (IBAction)		submitDiscId:(id)sender;
 
 - (IBAction)		queryMusicBrainz:(id)sender;
 - (void)			queryMusicBrainzNonInteractive;

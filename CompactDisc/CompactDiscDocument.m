@@ -124,6 +124,8 @@
 		return [self queryMusicBrainzAllowed];
 	else if([item action] == @selector(ejectDisc:))
 		return [self ejectDiscAllowed];
+	else if([item action] == @selector(submitDiscId:))
+		return [self submitDiscIdAllowed];
 	else if([item action] == @selector(selectNextTrack:))
 		return [_trackController canSelectNext];
 	else if([item action] == @selector(selectPreviousTrack:))
@@ -326,6 +328,7 @@
 - (BOOL) encodeAllowed				{ return ([self discInDrive] && NO == [self emptySelection] && NO == [self ripInProgress] && NO == [self encodeInProgress]); }
 - (BOOL) queryMusicBrainzAllowed	{ return [self discInDrive]; }
 - (BOOL) ejectDiscAllowed			{ return [self discInDrive]; }
+- (BOOL) submitDiscIdAllowed		{ return [self discInDrive]; }
 - (BOOL) emptySelection				{ return (0 == [[self selectedTracks] count]); }
 
 - (BOOL) ripInProgress
@@ -524,6 +527,11 @@
 	else {
 		[[MediaController sharedController] ejectDiscForDocument:self];
 	}
+}
+
+- (IBAction) submitDiscId:(id)sender;
+{
+	[[NSWorkspace sharedWorkspace] openURL:[[self disc] discIDSubmissionUrl]];
 }
 
 - (IBAction) queryMusicBrainz:(id)sender
