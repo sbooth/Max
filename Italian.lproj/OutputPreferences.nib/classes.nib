@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>insertFileNamingFormatSpecifier</key>
+				<string>id</string>
+				<key>saveFileNamingFormat</key>
+				<string>id</string>
+				<key>selectOutputDirectory</key>
+				<string>id</string>
+				<key>selectTemporaryDirectory</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>OutputPreferencesController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_fileNamingComboBox</key>
+				<string>NSComboBox</string>
+				<key>_formatSpecifierPopUpButton</key>
+				<string>NSPopUpButton</string>
+				<key>_outputDirectoryPopUpButton</key>
+				<string>NSPopUpButton</string>
+				<key>_temporaryDirectoryPopUpButton</key>
+				<string>NSPopUpButton</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>
