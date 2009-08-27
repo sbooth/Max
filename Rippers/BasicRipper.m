@@ -66,6 +66,7 @@
 	AudioFileID						audioFile;
 	ExtAudioFileRef					extAudioFileRef;
 	AudioStreamBasicDescription		outputASBD;
+	NSEnumerator					*enumerator;
 	SectorRange						*range;
 	
 	// Tell our owner we are starting
@@ -98,7 +99,8 @@
 		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID", UTCreateStringForOSType(err));
 		
-		for(range in _sectors) {
+		enumerator = [_sectors objectEnumerator];
+		while((range = [enumerator nextObject])) {
 			[self ripSectorRange:range toFile:extAudioFileRef];
 			_sectorsRead += [range length];
 		}

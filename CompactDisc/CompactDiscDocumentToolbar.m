@@ -49,8 +49,10 @@ static NSString		*EjectDiscToolbarItemIdentifier				= @"org.sbooth.Max.CompactDi
 {
 	NSArray			*visibleItems	= [self visibleItems];
 	NSToolbarItem	*item;
+	NSEnumerator	*enumerator;
 	
-	for(item in visibleItems) {
+	enumerator = [visibleItems objectEnumerator];
+	while((item = [enumerator nextObject])) {
 		if([item action] == @selector(encode:))
 			[item setEnabled:[_document encodeAllowed]];
 		if([item action] == @selector(queryMusicBrainz:))

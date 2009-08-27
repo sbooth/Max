@@ -228,11 +228,13 @@ static ApplicationController *sharedController = nil;
 
 - (void) encodeFiles:(NSArray *)filenames
 {
+	NSEnumerator	*enumerator		= nil;
 	NSString		*filename		= nil;
 	
 	[[FileConversionController sharedController] showWindow:self];
 
-	for(filename in filenames) {
+	enumerator = [filenames objectEnumerator];
+	while((filename = [enumerator nextObject])) {
 		[[FileConversionController sharedController] addFile:filename];
 	}				
 }
@@ -358,11 +360,13 @@ static ApplicationController *sharedController = nil;
 			NSArray			*urlArray;
 			NSURL			*url;
 			NSMutableArray	*filenamesArray;
+			NSEnumerator	*enumerator;
 			
 			urlArray		= (NSArray *)directParameter;
 			filenamesArray	= [NSMutableArray arrayWithCapacity:[urlArray count]];
 			
-			for(url in urlArray) {
+			enumerator = [urlArray objectEnumerator];
+			while((url = [enumerator nextObject])) {
 				if([url isFileURL]) {
 					[filenamesArray addObject:[url path]];
 				}

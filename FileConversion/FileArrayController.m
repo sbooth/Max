@@ -42,7 +42,7 @@
 	return -1;
 }
 
-- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
+- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
 {
 	return nil;
 }
@@ -194,12 +194,13 @@
 - (NSIndexSet *) indexSetForRows:(NSArray *)rows
 {
 	NSArray					*arrangedObjects		= [self arrangedObjects];
+	NSEnumerator			*rowEnumerator			= [rows objectEnumerator];
 	NSEnumerator			*enumerator				= nil;
 	NSMutableIndexSet		*indexSet				= [NSMutableIndexSet indexSet];
 	id						object;
 	NSString				*filename;
 
-	for(filename in rows) {
+	while((filename = [rowEnumerator nextObject])) {
 		enumerator = [arrangedObjects objectEnumerator];
 		while((object = [enumerator nextObject])) {
 			if([[object valueForKey:@"filename"] isEqualToString:filename]) {

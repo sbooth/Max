@@ -48,8 +48,10 @@ static NSString		*QueryMusicBrainzToolbarItemIdentifier		= @"org.sbooth.Max.CueS
 {
 	NSArray			*visibleItems	= [self visibleItems];
 	NSToolbarItem	*item;
+	NSEnumerator	*enumerator;
 	
-	for(item in visibleItems) {
+	enumerator = [visibleItems objectEnumerator];
+	while((item = [enumerator nextObject])) {
 		if([item action] == @selector(encode:))
 			[item setEnabled:[_document encodeAllowed]];
 		else if([item action] == @selector(queryMusicBrainz:))
