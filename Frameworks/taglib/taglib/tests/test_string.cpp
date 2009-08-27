@@ -33,10 +33,13 @@ class TestString : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(TestString);
   CPPUNIT_TEST(testString);
+  CPPUNIT_TEST(testRfind);
   CPPUNIT_TEST(testUTF16Encode);
   CPPUNIT_TEST(testUTF16Decode);
   CPPUNIT_TEST(testUTF16DecodeInvalidBOM);
   CPPUNIT_TEST(testUTF16DecodeEmptyWithBOM);
+  CPPUNIT_TEST(testAppendCharDetach);
+  CPPUNIT_TEST(testAppendStringDetach);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -129,6 +132,37 @@ public:
     ByteVector b("\376\377", 2);
     CPPUNIT_ASSERT_EQUAL(String(), String(a, String::UTF16));
     CPPUNIT_ASSERT_EQUAL(String(), String(b, String::UTF16));
+  }
+
+  void testAppendStringDetach()
+  {
+    String a("a");
+    String b = a;
+    a += "b";
+    CPPUNIT_ASSERT_EQUAL(String("ab"), a);
+    CPPUNIT_ASSERT_EQUAL(String("a"), b);
+  }
+
+  void testAppendCharDetach()
+  {
+    String a("a");
+    String b = a;
+    a += 'b';
+    CPPUNIT_ASSERT_EQUAL(String("ab"), a);
+    CPPUNIT_ASSERT_EQUAL(String("a"), b);
+  }
+
+  void testRfind()
+  {
+    CPPUNIT_ASSERT_EQUAL(-1, String("foo.bar").rfind(".", 0));
+    CPPUNIT_ASSERT_EQUAL(-1, String("foo.bar").rfind(".", 1));
+    CPPUNIT_ASSERT_EQUAL(-1, String("foo.bar").rfind(".", 2));
+    CPPUNIT_ASSERT_EQUAL(3, String("foo.bar").rfind(".", 3));
+    CPPUNIT_ASSERT_EQUAL(3, String("foo.bar").rfind(".", 4));
+    CPPUNIT_ASSERT_EQUAL(3, String("foo.bar").rfind(".", 5));
+    CPPUNIT_ASSERT_EQUAL(3, String("foo.bar").rfind(".", 6));
+    CPPUNIT_ASSERT_EQUAL(3, String("foo.bar").rfind(".", 7));
+    CPPUNIT_ASSERT_EQUAL(3, String("foo.bar").rfind("."));
   }
 
 };

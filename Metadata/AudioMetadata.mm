@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2009 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@
 #include <taglib/xiphcomment.h>					// TagLib::Ogg::XiphComment
 #include <taglib/tbytevector.h>					// TagLib::ByteVector
 #include <taglib/mpcfile.h>						// TagLib::MPC::File
+#include <taglib/aifffile.h>					// TagLib::RIFF:AIFF::File
+#include <taglib/wavfile.h>						// TagLib::RIFF:WAVE::File
 
 #include <mp4v2/mp4.h>							// MP4FileHandle
 
@@ -55,6 +57,8 @@
 + (AudioMetadata *)		metadataFromMonkeysAudioFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromWavPackFile:(NSString *)filename;
 + (AudioMetadata *)		metadataFromMusepackFile:(NSString *)filename;
++ (AudioMetadata *)		metadataFromAIFFFile:(NSString *)filename;
++ (AudioMetadata *)		metadataFromWAVEFile:(NSString *)filename;
 @end
 
 @interface AudioMetadata (TagMappings)
@@ -107,6 +111,10 @@
 		return [self metadataFromMusepackFile:filename];
 	else if([extension isEqualToString:@"spx"])
 		return [self metadataFromOggSpeexFile:filename];
+	else if([extension isEqualToString:@"aiff"] || [extension isEqualToString:@"aif"])
+		return [self metadataFromAIFFFile:filename];
+	else if([extension isEqualToString:@"wave"] || [extension isEqualToString:@"wav"])
+		return [self metadataFromWAVEFile:filename];
 	else
 		return [[[AudioMetadata alloc] init] autorelease];
 }
@@ -1603,6 +1611,316 @@
 		apeTag = f.APETag();
 		if(NULL != apeTag) {
 			
+		}
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromAIFFFile:(NSString *)filename
+{
+	TagLib::RIFF::AIFF::File				f						([filename fileSystemRepresentation], false);
+	TagLib::ID3v2::AttachedPictureFrame		*picture				= NULL;
+	TagLib::String							s;
+	NSString								*trackString, *trackNum, *totalTracks;
+	NSString								*discString, *discNum, *totalDiscs;
+	NSRange									range;
+	
+	
+	AudioMetadata *result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		// Album title
+		s = f.tag()->album();
+		if(false == s.isNull())
+			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Artist
+		s = f.tag()->artist();
+		if(false == s.isNull())
+			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Genre
+		s = f.tag()->genre();
+		if(false == s.isNull())
+			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Year
+		if(0 != f.tag()->year())
+			[result setAlbumDate:[NSString stringWithFormat:@"%i", f.tag()->year()]];
+		
+		// Comment
+		s = f.tag()->comment();
+		if(false == s.isNull())
+			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Track title
+		s = f.tag()->title();
+		if(false == s.isNull())
+			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Track number
+		if(0 != f.tag()->track())
+			[result setTrackNumber:[NSNumber numberWithInt:f.tag()->track()]];
+		
+		// Length
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		
+		// Extract composer if present
+		TagLib::ID3v2::FrameList frameList = f.tag()->frameListMap()["TCOM"];
+		if(NO == frameList.isEmpty())
+			[result setAlbumComposer:[NSString stringWithUTF8String:frameList.front()->toString().toCString(true)]];
+		
+		// Extract total tracks if present
+		frameList = f.tag()->frameListMap()["TRCK"];
+		if(NO == frameList.isEmpty()) {
+			// Split the tracks at '/'
+			trackString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			range			= [trackString rangeOfString:@"/" options:NSLiteralSearch];
+			
+			if(NSNotFound != range.location && 0 != range.length) {
+				trackNum		= [trackString substringToIndex:range.location];
+				totalTracks		= [trackString substringFromIndex:range.location + 1];
+				
+				[result setTrackNumber:[NSNumber numberWithInt:[trackNum intValue]]];
+				[result setTrackTotal:[NSNumber numberWithInt:[totalTracks intValue]]];
+			}
+			else
+				[result setTrackNumber:[NSNumber numberWithInt:[trackString intValue]]];
+		}
+		
+		// Extract track length if present
+		frameList = f.tag()->frameListMap()["TLEN"];
+		if(NO == frameList.isEmpty()) {
+			NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			[result setLength:[NSNumber numberWithInt:([value intValue] / 1000)]];
+		}			
+		
+		// Extract disc number and total discs
+		frameList = f.tag()->frameListMap()["TPOS"];
+		if(NO == frameList.isEmpty()) {
+			// Split the tracks at '/'
+			discString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			range			= [discString rangeOfString:@"/" options:NSLiteralSearch];
+			
+			if(NSNotFound != range.location && 0 != range.length) {
+				discNum			= [discString substringToIndex:range.location];
+				totalDiscs		= [discString substringFromIndex:range.location + 1];
+				
+				[result setDiscNumber:[NSNumber numberWithInt:[discNum intValue]]];
+				[result setDiscTotal:[NSNumber numberWithInt:[totalDiscs intValue]]];
+			}
+			else
+				[result setDiscNumber:[NSNumber numberWithInt:[discString intValue]]];
+		}
+		
+		// Extract album art if present
+		frameList = f.tag()->frameListMap()["APIC"];
+		if(NO == frameList.isEmpty() && NULL != (picture = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front()))) {
+			TagLib::ByteVector bv = picture->picture();
+			[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]] autorelease]];
+		}
+		
+		// Extract compilation if present (iTunes TCMP tag)
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+			frameList = f.tag()->frameListMap()["TCMP"];
+			// It seems that the presence of this frame indicates a compilation
+			if(NO == frameList.isEmpty())
+				[result setCompilation:[NSNumber numberWithBool:YES]];
+		}
+		
+		// Extract ISRC if present
+		frameList = f.tag()->frameListMap()["TSRC"];
+		if(NO == frameList.isEmpty()) {
+			NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			[result setISRC:value];
+		}			
+		
+		
+		// MusicBrainz artist and album identifiers
+		frameList = f.tag()->frameList("TXXX");
+		for(TagLib::ID3v2::FrameList::Iterator it = frameList.begin(); it != frameList.end(); ++it)
+		{
+			TagLib::ID3v2::UserTextIdentificationFrame *frame = (TagLib::ID3v2::UserTextIdentificationFrame *)(*it);
+			const char* text = frame->fieldList().back().toCString(true);
+			if (frame->description() == "MCN")
+				[result setMCN: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Artist Id")
+				[result setMusicbrainzArtistId: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Album Id")
+				[result setMusicbrainzAlbumId: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Album Artist Id")
+				[result setMusicbrainzAlbumArtistId: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Disc Id")
+				[result setDiscId: [NSString stringWithUTF8String:text]];
+		}
+		
+		// Unique file identifier (MusicBrainz track ID)
+		frameList = f.tag()->frameList("UFID");
+		for(TagLib::ID3v2::FrameList::Iterator it = frameList.begin(); it != frameList.end(); ++it)
+		{
+			TagLib::ID3v2::UniqueFileIdentifierFrame *frame = (TagLib::ID3v2::UniqueFileIdentifierFrame *)(*it);
+			if (frame->owner() == "http://musicbrainz.org") {
+				s = TagLib::String(frame->identifier());
+				[result setMusicbrainzTrackId: [NSString stringWithUTF8String:s.toCString(true)]];
+			}
+		}
+	}
+	
+	return [result autorelease];
+}
+
++ (AudioMetadata *) metadataFromWAVEFile:(NSString *)filename
+{
+	TagLib::RIFF::WAV::File					f						([filename fileSystemRepresentation], false);
+	TagLib::ID3v2::AttachedPictureFrame		*picture				= NULL;
+	TagLib::String							s;
+	NSString								*trackString, *trackNum, *totalTracks;
+	NSString								*discString, *discNum, *totalDiscs;
+	NSRange									range;
+	
+	
+	AudioMetadata *result = [[AudioMetadata alloc] init];
+	
+	if(f.isValid()) {
+		
+		// Album title
+		s = f.tag()->album();
+		if(false == s.isNull())
+			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Artist
+		s = f.tag()->artist();
+		if(false == s.isNull())
+			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Genre
+		s = f.tag()->genre();
+		if(false == s.isNull())
+			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Year
+		if(0 != f.tag()->year())
+			[result setAlbumDate:[NSString stringWithFormat:@"%i", f.tag()->year()]];
+		
+		// Comment
+		s = f.tag()->comment();
+		if(false == s.isNull())
+			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Track title
+		s = f.tag()->title();
+		if(false == s.isNull())
+			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
+		
+		// Track number
+		if(0 != f.tag()->track())
+			[result setTrackNumber:[NSNumber numberWithInt:f.tag()->track()]];
+		
+		// Length
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		
+		// Extract composer if present
+		TagLib::ID3v2::FrameList frameList = f.tag()->frameListMap()["TCOM"];
+		if(NO == frameList.isEmpty())
+			[result setAlbumComposer:[NSString stringWithUTF8String:frameList.front()->toString().toCString(true)]];
+		
+		// Extract total tracks if present
+		frameList = f.tag()->frameListMap()["TRCK"];
+		if(NO == frameList.isEmpty()) {
+			// Split the tracks at '/'
+			trackString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			range			= [trackString rangeOfString:@"/" options:NSLiteralSearch];
+			
+			if(NSNotFound != range.location && 0 != range.length) {
+				trackNum		= [trackString substringToIndex:range.location];
+				totalTracks		= [trackString substringFromIndex:range.location + 1];
+				
+				[result setTrackNumber:[NSNumber numberWithInt:[trackNum intValue]]];
+				[result setTrackTotal:[NSNumber numberWithInt:[totalTracks intValue]]];
+			}
+			else
+				[result setTrackNumber:[NSNumber numberWithInt:[trackString intValue]]];
+		}
+		
+		// Extract track length if present
+		frameList = f.tag()->frameListMap()["TLEN"];
+		if(NO == frameList.isEmpty()) {
+			NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			[result setLength:[NSNumber numberWithInt:([value intValue] / 1000)]];
+		}			
+		
+		// Extract disc number and total discs
+		frameList = f.tag()->frameListMap()["TPOS"];
+		if(NO == frameList.isEmpty()) {
+			// Split the tracks at '/'
+			discString		= [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			range			= [discString rangeOfString:@"/" options:NSLiteralSearch];
+			
+			if(NSNotFound != range.location && 0 != range.length) {
+				discNum			= [discString substringToIndex:range.location];
+				totalDiscs		= [discString substringFromIndex:range.location + 1];
+				
+				[result setDiscNumber:[NSNumber numberWithInt:[discNum intValue]]];
+				[result setDiscTotal:[NSNumber numberWithInt:[totalDiscs intValue]]];
+			}
+			else
+				[result setDiscNumber:[NSNumber numberWithInt:[discString intValue]]];
+		}
+		
+		// Extract album art if present
+		frameList = f.tag()->frameListMap()["APIC"];
+		if(NO == frameList.isEmpty() && NULL != (picture = dynamic_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front()))) {
+			TagLib::ByteVector bv = picture->picture();
+			[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bv.data() length:bv.size()]] autorelease]];
+		}
+		
+		// Extract compilation if present (iTunes TCMP tag)
+		if([[NSUserDefaults standardUserDefaults] boolForKey:@"useiTunesWorkarounds"]) {
+			frameList = f.tag()->frameListMap()["TCMP"];
+			// It seems that the presence of this frame indicates a compilation
+			if(NO == frameList.isEmpty())
+				[result setCompilation:[NSNumber numberWithBool:YES]];
+		}
+		
+		// Extract ISRC if present
+		frameList = f.tag()->frameListMap()["TSRC"];
+		if(NO == frameList.isEmpty()) {
+			NSString *value = [NSString stringWithUTF8String:frameList.front()->toString().toCString(true)];
+			[result setISRC:value];
+		}			
+		
+		
+		// MusicBrainz artist and album identifiers
+		frameList = f.tag()->frameList("TXXX");
+		for(TagLib::ID3v2::FrameList::Iterator it = frameList.begin(); it != frameList.end(); ++it)
+		{
+			TagLib::ID3v2::UserTextIdentificationFrame *frame = (TagLib::ID3v2::UserTextIdentificationFrame *)(*it);
+			const char* text = frame->fieldList().back().toCString(true);
+			if (frame->description() == "MCN")
+				[result setMCN: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Artist Id")
+				[result setMusicbrainzArtistId: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Album Id")
+				[result setMusicbrainzAlbumId: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Album Artist Id")
+				[result setMusicbrainzAlbumArtistId: [NSString stringWithUTF8String:text]];
+			else if (frame->description() == "MusicBrainz Disc Id")
+				[result setDiscId: [NSString stringWithUTF8String:text]];
+		}
+		
+		// Unique file identifier (MusicBrainz track ID)
+		frameList = f.tag()->frameList("UFID");
+		for(TagLib::ID3v2::FrameList::Iterator it = frameList.begin(); it != frameList.end(); ++it)
+		{
+			TagLib::ID3v2::UniqueFileIdentifierFrame *frame = (TagLib::ID3v2::UniqueFileIdentifierFrame *)(*it);
+			if (frame->owner() == "http://musicbrainz.org") {
+				s = TagLib::String(frame->identifier());
+				[result setMusicbrainzTrackId: [NSString stringWithUTF8String:s.toCString(true)]];
+			}
 		}
 	}
 	

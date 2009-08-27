@@ -31,7 +31,7 @@
 #include "tbytevector.h"
 
 #include <string>
-#include <ostream>
+#include <iostream>
 
 /*!
  * \relates TagLib::String
@@ -224,6 +224,13 @@ namespace TagLib {
      * \a offset.  If the pattern is not found, -1 is returned.
      */
     int find(const String &s, int offset = 0) const;
+
+    /*!
+     * Finds the last occurrence of pattern \a s in this string, searched backwards,
+     * either from the end of the string or starting from \a offset. If the pattern
+     * is not found, -1 is returned.
+     */
+    int rfind(const String &s, int offset = -1) const;
 
     /*!
      * Returns true if the strings starts with the substring \a s.

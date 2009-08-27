@@ -1,4 +1,4 @@
-SUBDIRS = toolkit mpeg ogg flac ape mpc wavpack trueaudio
+SUBDIRS = toolkit mpeg ogg flac ape mpc wavpack trueaudio riff asf mp4
 
 INCLUDES = \
 	-I$(top_srcdir)/taglib \
@@ -8,10 +8,16 @@ INCLUDES = \
 	-I$(top_srcdir)/taglib/ogg/flac \
 	-I$(top_srcdir)/taglib/flac \
 	-I$(top_srcdir)/taglib/mpc \
+	-I$(top_srcdir)/taglib/asf \
+	-I$(top_srcdir)/taglib/mp4 \
 	-I$(top_srcdir)/taglib/ogg/vorbis \
 	-I$(top_srcdir)/taglib/ogg/speex \
 	-I$(top_srcdir)/taglib/wavpack \
 	-I$(top_srcdir)/taglib/trueaudio \
+	-I$(top_srcdir)/taglib/riff \
+	-I$(top_srcdir)/taglib/riff/aiff \
+	-I$(top_srcdir)/taglib/riff/wav \
+	-I$(top_srcdir)/taglib/mpeg/id3v2 \
 	$(all_includes)
 
 lib_LTLIBRARIES = libtag.la
@@ -23,4 +29,5 @@ taglib_includedir = $(includedir)/taglib
 libtag_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 6:0:5
 libtag_la_LIBADD = ./mpeg/libmpeg.la ./ogg/libogg.la ./flac/libflac.la ./mpc/libmpc.la \
 	./ape/libape.la ./toolkit/libtoolkit.la ./wavpack/libwavpack.la \
-	./trueaudio/libtrueaudio.la
+	./trueaudio/libtrueaudio.la ./riff/libriff.la \
+	./mp4/libmp4.la ./asf/libasf.la

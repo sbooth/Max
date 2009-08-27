@@ -35,7 +35,7 @@ namespace TagLib {
 
   inline unsigned short byteSwap(unsigned short x)
   {
-    return ((x) >> 8) & 0xff | ((x) & 0xff) << 8;
+    return (((x) >> 8) & 0xff) | (((x) & 0xff) << 8);
   }
 
   inline unsigned short combine(unsigned char c1, unsigned char c2)
@@ -293,6 +293,17 @@ int String::find(const String &s, int offset) const
     return -1;
 }
 
+int String::rfind(const String &s, int offset) const
+{
+  wstring::size_type position =
+    d->data.rfind(s.d->data, offset == -1 ? wstring::npos : offset);
+
+  if(position != wstring::npos)
+    return position;
+  else
+    return -1;
+}
+
 bool String::startsWith(const String &s) const
 {
   if(s.length() > length())
@@ -510,6 +521,8 @@ String String::number(int n) // static
 
 TagLib::wchar &String::operator[](int i)
 {
+  detach();
+
   return d->data[i];
 }
 
@@ -558,6 +571,8 @@ String &String::operator+=(wchar_t c)
 
 String &String::operator+=(char c)
 {
+  detach();
+
   d->data += uchar(c);
   return *this;
 }

@@ -9,7 +9,9 @@
 #include <attachedpictureframe.h>
 #include <generalencapsulatedobjectframe.h>
 #include <relativevolumeframe.h>
+#include <popularimeterframe.h>
 #include <urllinkframe.h>
+#include <tdebug.h>
 #include "utils.h"
 
 using namespace std;
@@ -36,7 +38,14 @@ class TestID3v2 : public CppUnit::TestFixture
   CPPUNIT_TEST(testReadStringField);
   CPPUNIT_TEST(testParseAPIC);
   CPPUNIT_TEST(testParseAPIC_UTF16_BOM);
+  CPPUNIT_TEST(testParseAPICv22);
+  CPPUNIT_TEST(testDontRender22);
   CPPUNIT_TEST(testParseGEOB);
+  CPPUNIT_TEST(testPOPMtoString);
+  CPPUNIT_TEST(testParsePOPM);
+  CPPUNIT_TEST(testParsePOPMWithoutCounter);
+  CPPUNIT_TEST(testRenderPOPM);
+  CPPUNIT_TEST(testPOPMFromFile);
   CPPUNIT_TEST(testParseRelativeVolumeFrame);
   CPPUNIT_TEST(testParseUniqueFileIdentifierFrame);
   CPPUNIT_TEST(testParseEmptyUniqueFileIdentifierFrame);
@@ -47,6 +56,9 @@ class TestID3v2 : public CppUnit::TestFixture
   CPPUNIT_TEST(testParseUserUrlLinkFrame);
   CPPUNIT_TEST(testRenderUserUrlLinkFrame);
   CPPUNIT_TEST(testSaveUTF16Comment);
+  CPPUNIT_TEST(testUpdateGenre23_1);
+  CPPUNIT_TEST(testUpdateGenre23_2);
+  CPPUNIT_TEST(testUpdateGenre24);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -122,6 +134,45 @@ public:
     CPPUNIT_ASSERT_EQUAL(ByteVector("\xff\xd8\xff", 3), f.picture());
   }
 
+  void testParseAPICv22()
+  {
+    ID3v2::FrameFactory *factory = ID3v2::FrameFactory::instance();
+    ByteVector data = ByteVector("PIC"
+                                 "\x00\x00\x08"
+                                 "\x00"
+                                 "JPG"
+                                 "\x01"
+                                 "d\x00"
+                                 "\x00", 18);
+    ID3v2::AttachedPictureFrame *frame =
+        static_cast<TagLib::ID3v2::AttachedPictureFrame*>(factory->createFrame(data, TagLib::uint(2)));
+
+    CPPUNIT_ASSERT(frame);
+    CPPUNIT_ASSERT_EQUAL(String("image/jpeg"), frame->mimeType());
+    CPPUNIT_ASSERT_EQUAL(ID3v2::AttachedPictureFrame::FileIcon, frame->type());
+    CPPUNIT_ASSERT_EQUAL(String("d"), frame->description());
+  }
+
+  void testDontRender22()
+  {
+    ID3v2::FrameFactory *factory = ID3v2::FrameFactory::instance();
+    ByteVector data = ByteVector("FOO"
+                                 "\x00\x00\x08"
+                                 "\x00"
+                                 "JPG"
+                                 "\x01"
+                                 "d\x00"
+                                 "\x00", 18);
+    ID3v2::AttachedPictureFrame *frame =
+        static_cast<TagLib::ID3v2::AttachedPictureFrame*>(factory->createFrame(data, TagLib::uint(2)));
+
+    CPPUNIT_ASSERT(frame);
+
+    ID3v2::Tag tag;
+    tag.addFrame(frame);
+    CPPUNIT_ASSERT_EQUAL(TagLib::uint(1034), tag.render().size());
+  }
+
   // http://bugs.kde.org/show_bug.cgi?id=151078
   void testParseGEOB()
   {
@@ -136,6 +187,76 @@ public:
     CPPUNIT_ASSERT_EQUAL(String("m"), f.mimeType());
     CPPUNIT_ASSERT_EQUAL(String("f"), f.fileName());
     CPPUNIT_ASSERT_EQUAL(String("d"), f.description());
+  }
+
+  void testParsePOPM()
+  {
+    ID3v2::PopularimeterFrame f(ByteVector("POPM"
+                                           "\x00\x00\x00\x17"
+                                           "\x00\x00"
+                                           "email@example.com\x00"
+                                           "\x02"
+                                           "\x00\x00\x00\x03", 33));
+    CPPUNIT_ASSERT_EQUAL(String("email@example.com"), f.email());
+    CPPUNIT_ASSERT_EQUAL(2, f.rating());
+    CPPUNIT_ASSERT_EQUAL(TagLib::uint(3), f.counter());
+  }
+
+  void testParsePOPMWithoutCounter()
+  {
+    ID3v2::PopularimeterFrame f(ByteVector("POPM"
+                                           "\x00\x00\x00\x13"
+                                           "\x00\x00"
+                                           "email@example.com\x00"
+                                           "\x02", 29));
+    CPPUNIT_ASSERT_EQUAL(String("email@example.com"), f.email());
+    CPPUNIT_ASSERT_EQUAL(2, f.rating());
+    CPPUNIT_ASSERT_EQUAL(TagLib::uint(0), f.counter());
+  }
+
+  void testRenderPOPM()
+  {
+    ID3v2::PopularimeterFrame f;
+    f.setEmail("email@example.com");
+    f.setRating(2);
+    f.setCounter(3);
+    CPPUNIT_ASSERT_EQUAL(
+      ByteVector("POPM"
+                 "\x00\x00\x00\x17"
+                 "\x00\x00"
+                 "email@example.com\x00"
+                 "\x02"
+                 "\x00\x00\x00\x03", 33),
+      f.render());
+  }
+
+  void testPOPMtoString()
+  {
+    ID3v2::PopularimeterFrame f;
+    f.setEmail("email@example.com");
+    f.setRating(2);
+    f.setCounter(3);
+    CPPUNIT_ASSERT_EQUAL(
+      String("email@example.com rating=2 counter=3"), f.toString());
+  }
+
+  void testPOPMFromFile()
+  {
+    string newname = copyFile("xing", ".mp3");
+
+    ID3v2::PopularimeterFrame *f = new ID3v2::PopularimeterFrame();
+    f->setEmail("email@example.com");
+    f->setRating(200);
+    f->setCounter(3);
+
+    MPEG::File foo(newname.c_str());
+    foo.ID3v2Tag()->addFrame(f);
+    foo.save();
+
+    MPEG::File bar(newname.c_str());
+    CPPUNIT_ASSERT_EQUAL(String("email@example.com"), dynamic_cast<ID3v2::PopularimeterFrame *>(bar.ID3v2Tag()->frameList("POPM").front())->email());
+    CPPUNIT_ASSERT_EQUAL(200, dynamic_cast<ID3v2::PopularimeterFrame *>(bar.ID3v2Tag()->frameList("POPM").front())->rating());
+    deleteFile(newname);
   }
 
   // http://bugs.kde.org/show_bug.cgi?id=150481
@@ -258,6 +379,64 @@ public:
     CPPUNIT_ASSERT_EQUAL(String("Test comment!"), bar.tag()->comment());
     deleteFile(newname);
     ID3v2::FrameFactory::instance()->setDefaultTextEncoding(defaultEncoding);
+  }
+
+  void testUpdateGenre23_1()
+  {
+    // "Refinement" is the same as the ID3v1 genre - duplicate
+    ID3v2::FrameFactory *factory = ID3v2::FrameFactory::instance();
+    ByteVector data = ByteVector("TCON"                 // Frame ID
+                                 "\x00\x00\x00\x10"     // Frame size
+                                 "\x00\x00"             // Frame flags
+                                 "\x00"                 // Encoding
+                                 "(22)Death Metal", 26);     // Text
+    ID3v2::TextIdentificationFrame *frame =
+        static_cast<TagLib::ID3v2::TextIdentificationFrame*>(factory->createFrame(data, TagLib::uint(3)));
+    CPPUNIT_ASSERT_EQUAL(TagLib::uint(1), frame->fieldList().size());
+    CPPUNIT_ASSERT_EQUAL(String("Death Metal"), frame->fieldList()[0]);
+
+    ID3v2::Tag tag;
+    tag.addFrame(frame);
+    CPPUNIT_ASSERT_EQUAL(String("Death Metal"), tag.genre());
+  }
+
+  void testUpdateGenre23_2()
+  {
+    // "Refinement" is different from the ID3v1 genre
+    ID3v2::FrameFactory *factory = ID3v2::FrameFactory::instance();
+    ByteVector data = ByteVector("TCON"                 // Frame ID
+                                 "\x00\x00\x00\x13"     // Frame size
+                                 "\x00\x00"             // Frame flags
+                                 "\x00"                 // Encoding
+                                 "(4)Eurodisco", 23);   // Text
+    ID3v2::TextIdentificationFrame *frame =
+        static_cast<TagLib::ID3v2::TextIdentificationFrame*>(factory->createFrame(data, TagLib::uint(3)));
+    CPPUNIT_ASSERT_EQUAL(TagLib::uint(2), frame->fieldList().size());
+    CPPUNIT_ASSERT_EQUAL(String("4"), frame->fieldList()[0]);
+    CPPUNIT_ASSERT_EQUAL(String("Eurodisco"), frame->fieldList()[1]);
+
+    ID3v2::Tag tag;
+    tag.addFrame(frame);
+    CPPUNIT_ASSERT_EQUAL(String("Disco Eurodisco"), tag.genre());
+  }
+
+  void testUpdateGenre24()
+  {
+    ID3v2::FrameFactory *factory = ID3v2::FrameFactory::instance();
+    ByteVector data = ByteVector("TCON"                   // Frame ID
+                                 "\x00\x00\x00\x0D"       // Frame size
+                                 "\x00\x00"               // Frame flags
+                                 "\0"                   // Encoding
+                                 "14\0Eurodisco", 23);     // Text
+    ID3v2::TextIdentificationFrame *frame =
+        static_cast<TagLib::ID3v2::TextIdentificationFrame*>(factory->createFrame(data, TagLib::uint(4)));
+    CPPUNIT_ASSERT_EQUAL(TagLib::uint(2), frame->fieldList().size());
+    CPPUNIT_ASSERT_EQUAL(String("14"), frame->fieldList()[0]);
+    CPPUNIT_ASSERT_EQUAL(String("Eurodisco"), frame->fieldList()[1]);
+
+    ID3v2::Tag tag;
+    tag.addFrame(frame);
+    CPPUNIT_ASSERT_EQUAL(String("R&B Eurodisco"), tag.genre());
   }
 
 };

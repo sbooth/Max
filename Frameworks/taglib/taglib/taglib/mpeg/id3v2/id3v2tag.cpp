@@ -125,7 +125,9 @@ String ID3v2::Tag::comment() const
 
   for(FrameList::ConstIterator it = comments.begin(); it != comments.end(); ++it)
   {
-    if(static_cast<CommentsFrame *>(*it)->description().isEmpty())
+    CommentsFrame *frame = dynamic_cast<CommentsFrame *>(*it);
+
+    if(frame && frame->description().isEmpty())
       return (*it)->toString();
   }
 
@@ -158,6 +160,9 @@ String ID3v2::Tag::genre() const
   StringList genres;
 
   for(StringList::Iterator it = fields.begin(); it != fields.end(); ++it) {
+
+    if((*it).isEmpty())
+      continue;
 
     bool isNumber = true;
 
@@ -347,6 +352,11 @@ ByteVector ID3v2::Tag::render() const
   // Loop through the frames rendering them and adding them to the tagData.
 
   for(FrameList::Iterator it = d->frameList.begin(); it != d->frameList.end(); it++) {
+    if ((*it)->header()->frameID().size() != 4) {
+      debug("A frame of unsupported or unknown type \'"
+          + String((*it)->header()->frameID()) + "\' has been discarded");
+      continue;
+    }
     if(!(*it)->header()->tagAlterPreservation())
       tagData.append((*it)->render());
   }

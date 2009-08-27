@@ -1,11 +1,13 @@
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/toolkit
+		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/asf
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/mpeg
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/ogg
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/ogg/vorbis
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/ogg/flac
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/flac
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/mpc
+		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/mp4
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/mpeg/id3v2
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/wavpack
 		     ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib/ogg/speex
@@ -16,12 +18,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/../../taglib
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/taglib_c.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/taglib_c.pc )
 ########### next target ###############
 
-SET(tag_c_LIB_SRCS
-tag_c.cpp
-)
-
-
-ADD_LIBRARY(tag_c SHARED ${tag_c_LIB_SRCS})
+ADD_LIBRARY(tag_c SHARED tag_c.cpp)
 
 TARGET_LINK_LIBRARIES(tag_c  tag )
 
@@ -45,10 +42,11 @@ SET_TARGET_PROPERTIES(tag_c PROPERTIES
   VERSION 0.0.0
   SOVERSION 0
   DEFINE_SYMBOL MAKE_TAGLIB_C_LIB
+  INSTALL_NAME_DIR ${LIB_INSTALL_DIR}
   )
 INSTALL(TARGETS tag_c
 	LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-	RUNTIME DESTINATION bin
+	RUNTIME DESTINATION ${BIN_INSTALL_DIR}
 	ARCHIVE DESTINATION  ${LIB_INSTALL_DIR}
 )
 

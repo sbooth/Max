@@ -6,7 +6,7 @@ TEMPLATE = lib
 CONFIG += lib_bundle
 CONFIG += x86 ppc
 CONFIG -= qt
-DEFINES += HAVE_ZLIB=1
+DEFINES += HAVE_ZLIB=1 NDEBUG
 LIBS += -lz
 TARGET = TagLib
 VERSION = 1.5
@@ -14,6 +14,7 @@ DEPENDPATH += . \
               ape \
               flac \
               mpc \
+              mp4 \
               mpeg \
               ogg \
               ogg/speex \
@@ -33,6 +34,7 @@ INCLUDEPATH += . \
                flac \
                ogg/flac \
                mpc \
+               mp4 \
                wavpack \
                ogg/speex \
                trueaudio \
@@ -54,6 +56,10 @@ HEADERS += audioproperties.h \
            flac/flacproperties.h \
            mpc/mpcfile.h \
            mpc/mpcproperties.h \
+           mp4/mp4atom.h \
+           mp4/mp4item.h \
+           mp4/mp4file.h \
+           mp4/mp4properties.h \
            mpeg/mpegfile.h \
            mpeg/mpegheader.h \
            mpeg/mpegproperties.h \
@@ -93,6 +99,7 @@ HEADERS += audioproperties.h \
            mpeg/id3v2/frames/attachedpictureframe.h \
            mpeg/id3v2/frames/commentsframe.h \
            mpeg/id3v2/frames/generalencapsulatedobjectframe.h \
+           mpeg/id3v2/frames/popularimeterframe.h \
            mpeg/id3v2/frames/relativevolumeframe.h \
            mpeg/id3v2/frames/textidentificationframe.h \
            mpeg/id3v2/frames/uniquefileidentifierframe.h \
@@ -110,6 +117,10 @@ SOURCES += audioproperties.cpp \
            ape/apetag.cpp \
            flac/flacfile.cpp \
            flac/flacproperties.cpp \
+           mp4/mp4atom.cpp \
+           mp4/mp4item.cpp \
+           mp4/mp4file.cpp \
+           mp4/mp4properties.cpp \
            mpc/mpcfile.cpp \
            mpc/mpcproperties.cpp \
            mpeg/mpegfile.cpp \
@@ -148,6 +159,7 @@ SOURCES += audioproperties.cpp \
            mpeg/id3v2/frames/attachedpictureframe.cpp \
            mpeg/id3v2/frames/commentsframe.cpp \
            mpeg/id3v2/frames/generalencapsulatedobjectframe.cpp \
+           mpeg/id3v2/frames/popularimeterframe.cpp \
            mpeg/id3v2/frames/relativevolumeframe.cpp \
            mpeg/id3v2/frames/textidentificationframe.cpp \
            mpeg/id3v2/frames/uniquefileidentifierframe.cpp \
@@ -166,6 +178,10 @@ SOURCES += audioproperties.cpp \
            ape/apetag.h \
            flac/flacfile.h \
            flac/flacproperties.h \
+           mp4/mp4atom.h \
+           mp4/mp4item.h \
+           mp4/mp4file.h \
+           mp4/mp4properties.h \
            mpc/mpcfile.h \
            mpc/mpcproperties.h \
            mpeg/mpegfile.h \

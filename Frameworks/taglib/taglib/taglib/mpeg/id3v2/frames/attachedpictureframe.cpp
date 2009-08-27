@@ -50,7 +50,7 @@ public:
 
 AttachedPictureFrame::AttachedPictureFrame() : Frame("APIC")
 {
-    d = new AttachedPictureFramePrivate;
+  d = new AttachedPictureFramePrivate;
 }
 
 AttachedPictureFrame::AttachedPictureFrame(const ByteVector &data) : Frame(data)
@@ -136,6 +136,12 @@ void AttachedPictureFrame::parseFields(const ByteVector &data)
   int pos = 1;
 
   d->mimeType = readStringField(data, String::Latin1, &pos);
+  /* Now we need at least two more bytes available */	
+  if (pos + 1 >= data.size()) {
+    debug("Truncated picture frame.");
+    return;
+  }
+
   d->type = (TagLib::ID3v2::AttachedPictureFrame::Type)data[pos++];
   d->description = readStringField(data, d->textEncoding, &pos);
 
@@ -167,4 +173,52 @@ AttachedPictureFrame::AttachedPictureFrame(const ByteVector &data, Header *h) : 
 {
   d = new AttachedPictureFramePrivate;
   parseFields(fieldData(data));
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// support for ID3v2.2 PIC frames
+////////////////////////////////////////////////////////////////////////////////
+
+void AttachedPictureFrameV22::parseFields(const ByteVector &data)
+{
+  if(data.size() < 5) {
+    debug("A picture frame must contain at least 5 bytes.");
+    return;
+  }
+
+  d->textEncoding = String::Type(data[0]);
+
+  int pos = 1;
+
+  String fixedString = String(data.mid(pos, 3), String::Latin1);
+  pos += 3;
+  // convert fixed string image type to mime string
+  if (fixedString.upper() == "JPG") {
+    d->mimeType = "image/jpeg";
+  } else if (fixedString.upper() == "PNG") {
+    d->mimeType = "image/png";
+  } else {
+    debug("probably unsupported image type");
+    d->mimeType = "image/" + fixedString;
+  }
+
+  d->type = (TagLib::ID3v2::AttachedPictureFrame::Type)data[pos++];
+  d->description = readStringField(data, d->textEncoding, &pos);
+
+  d->data = data.mid(pos);
+}
+
+AttachedPictureFrameV22::AttachedPictureFrameV22(const ByteVector &data, Header *h)
+{
+  d = new AttachedPictureFramePrivate;
+
+  // set v2.2 header to make fieldData work correctly
+  setHeader(h, true);
+
+  parseFields(fieldData(data));
+
+  // now set the v2.4 header
+  Frame::Header *newHeader = new Frame::Header("APIC");
+  newHeader->setFrameSize(h->frameSize());
+  setHeader(newHeader, false);
 }

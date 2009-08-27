@@ -2,6 +2,8 @@ INSTALL(FILES
 	attachedpictureframe.h
 	commentsframe.h
 	generalencapsulatedobjectframe.h
+	popularimeterframe.h
+	privateframe.h
 	relativevolumeframe.h
 	textidentificationframe.h
 	uniquefileidentifierframe.h
