@@ -20,6 +20,20 @@
 
 #import "AmazonAlbumArtSheet.h"
 #import "LogController.h"
+#import "NSString+URLEscapingMethods.h"
+
+// ========================================
+// My amazon.com web services access ID
+#define AWS_ACCESS_KEY_ID "18PZ5RH3H0X43PS96MR2"
+
+static NSString *
+queryStringComponentFromPair(NSString *field, NSString *value)
+{
+	NSCParameterAssert(nil != field);
+	NSCParameterAssert(nil != value);
+	
+	return [NSString stringWithFormat:@"%@=%@", [field URLEscapedString], [value URLEscapedString]];
+}
 
 @interface AmazonAlbumArtSheet (Private)
 - (NSString *) localeDomain;
@@ -91,30 +105,66 @@
 
 - (IBAction) search:(id)sender
 {
-	// http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=Kid+Rock&Title=Cocky
-	
-	NSError					*error;
-	NSString				*urlString, *artist, *title;
-	NSURL					*url;
-	NSXMLDocument			*xmlDoc;
-
-	NSXMLNode				*node, *childNode, *grandChildNode;
-	NSEnumerator			*childrenEnumerator, *grandChildrenEnumerator;
-	NSMutableDictionary		*dictionary;
-	NSMutableArray			*images;
-
-	
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"searchInProgress"];
-
-	artist		= [_artistTextField stringValue];
-	title		= [_titleTextField stringValue];
 	
-	urlString	= [NSString stringWithFormat:@"http://webservices.amazon.%@/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=18PZ5RH3H0X43PS96MR2&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Artist=%@&Title=%@", [self localeDomain], artist, title];
-	url			= [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	// All searches start at this URL
+	NSString *urlBase = [NSString stringWithFormat:@"http://ecs.amazonaws.%@/onca/xml", [self localeDomain]];
 	
-	xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:(NSXMLNodePreserveWhitespace | NSXMLNodePreserveCDATA) error:&error];
+	// Build up the query string
+	NSMutableArray *queryComponents = [NSMutableArray array];
+	
+	[queryComponents addObject:queryStringComponentFromPair(@"Service", @"AWSECommerceService")];
+	[queryComponents addObject:queryStringComponentFromPair(@"AWSAccessKeyId", @ AWS_ACCESS_KEY_ID)];
+	[queryComponents addObject:queryStringComponentFromPair(@"Version", @"2009-02-01")];
+	[queryComponents addObject:queryStringComponentFromPair(@"Operation", @"ItemSearch")];
+	[queryComponents addObject:queryStringComponentFromPair(@"SearchIndex", @"Music")];
+	[queryComponents addObject:queryStringComponentFromPair(@"ResponseGroup", @"Small,Images")];
+	[queryComponents addObject:queryStringComponentFromPair(@"Keywords", [NSString stringWithFormat:@"%@ %@", [_artistTextField stringValue], [_titleTextField stringValue]])];
+	
+	// Create the timestamp in XML dateTime format (omit milliseconds)
+	NSCalendarDate *now = [NSCalendarDate calendarDate];
+	[now setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+	[queryComponents addObject:queryStringComponentFromPair(@"Timestamp", [now descriptionWithCalendarFormat:@"%Y-%m-%dT%H:%M:%S.000Z"])];
+	
+	// Sort the parameters and form the canonical AWS query string
+	[queryComponents sortUsingSelector:@selector(caseInsensitiveCompare:)];
+	NSString *canonicalizedQueryString = [queryComponents componentsJoinedByString:@"&"];
+	
+	// Build the string which will be signed
+	NSString *stringToSign = [NSString stringWithFormat:@"GET\necs.amazonaws.com\n/onca/xml\n%@", canonicalizedQueryString];
+	
+	// Calculate the HMAC for the string
+	// This is done on a server to avoid revealing the secret key
+	NSURL *signerURL = [NSURL URLWithString:@"http://sbooth.org/Max/sign_aws_query.php"];
+	NSMutableURLRequest *signerURLRequest = [NSMutableURLRequest requestWithURL:signerURL];
+	[signerURLRequest setHTTPMethod:@"POST"];
+	[signerURLRequest setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"] forHTTPHeaderField:@"User-Agent"];
+	[signerURLRequest setValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+	
+	NSString *postBody = [NSString stringWithFormat:@"string_to_sign=%@", [stringToSign URLEscapedString]];	
+	[signerURLRequest setValue:[NSString stringWithFormat:@"%ld", [postBody length]] forHTTPHeaderField:@"Content-Length"];
+	[signerURLRequest setHTTPBody:[postBody dataUsingEncoding:NSUTF8StringEncoding]];	
+	
+	NSHTTPURLResponse *signerResponse = nil;
+	NSError *error = nil;
+	NSData *digestData = [NSURLConnection sendSynchronousRequest:signerURLRequest returningResponse:&signerResponse error:&error];
+	if(!digestData) {
+		[_sheet presentError:error modalForWindow:_sheet delegate:nil didPresentSelector:NULL contextInfo:NULL];
+		return;
+	}
+	
+	NSString *digestString = [[NSString alloc] initWithData:digestData encoding:NSUTF8StringEncoding];
+	
+	// Append the signature to the request
+	[queryComponents addObject:queryStringComponentFromPair(@"Signature", digestString)];
+	
+	// Build the query string and search URL
+	NSString *queryString = [queryComponents componentsJoinedByString:@"&"];
+	NSURL *searchURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", urlBase, queryString]];
+	
+	NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:searchURL options:(NSXMLNodePreserveWhitespace | NSXMLNodePreserveCDATA) error:&error];
 	if(nil == xmlDoc) {
-		xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:NSXMLDocumentTidyXML error:&error];
+		xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:searchURL options:NSXMLDocumentTidyXML error:&error];
 	}
 	if(nil == xmlDoc) {
 		if(error) {
@@ -145,7 +195,12 @@
 		[self setValue:[NSNumber numberWithBool:NO] forKey:@"searchInProgress"];
 		return;
 	}
-			
+	
+	NSXMLNode				*node, *childNode, *grandChildNode;
+	NSEnumerator			*childrenEnumerator, *grandChildrenEnumerator;
+	NSMutableDictionary		*dictionary;
+	NSMutableArray			*images;
+		
 	images	= [self mutableArrayValueForKey:@"images"];
 	[images removeAllObjects];
 	node	= [xmlDoc rootElement];

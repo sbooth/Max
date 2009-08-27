@@ -10,6 +10,7 @@
 		322E1EB30DC81AAB00CB6DDB /* OggSpeexEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 322E1EB20DC81AAB00CB6DDB /* OggSpeexEncoderTask.mm */; };
 		32A145131046DB920020238F /* CoreAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145121046DB920020238F /* CoreAudioEncoderTask.mm */; };
 		32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145201046DD100020238F /* LibsndfileEncoderTask.mm */; };
+		32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A1478F104742030020238F /* NSString+URLEscapingMethods.m */; };
 		8C0406530B5C584000648158 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C04064E0B5C584000648158 /* InfoPlist.strings */; };
 		8C05F19C0CC2DAA1006E5746 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; };
 		8C05F19D0CC2DAA1006E5746 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; };
@@ -299,6 +300,8 @@
 		327375BE0D88F49900B9D9FB /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/Formats.nib; sourceTree = "<group>"; };
 		32A145121046DB920020238F /* CoreAudioEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoreAudioEncoderTask.mm; sourceTree = "<group>"; };
 		32A145201046DD100020238F /* LibsndfileEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibsndfileEncoderTask.mm; sourceTree = "<group>"; };
+		32A1478E104742030020238F /* NSString+URLEscapingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+URLEscapingMethods.h"; path = "AlbumArt/NSString+URLEscapingMethods.h"; sourceTree = "<group>"; };
+		32A1478F104742030020238F /* NSString+URLEscapingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+URLEscapingMethods.m"; path = "AlbumArt/NSString+URLEscapingMethods.m"; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
 		32F895B80D8B61AE006B6116 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
 		32F895BB0D8B7DDD006B6116 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
@@ -1000,6 +1003,8 @@
 		8C4505080A8EEBFE001BF1A1 /* AlbumArt */ = {
 			isa = PBXGroup;
 			children = (
+				32A1478E104742030020238F /* NSString+URLEscapingMethods.h */,
+				32A1478F104742030020238F /* NSString+URLEscapingMethods.m */,
 				8C4505090A8EEC13001BF1A1 /* AmazonAlbumArtSheet.h */,
 				8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */,
 				8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */,
@@ -1695,6 +1700,7 @@
 				322E1EB30DC81AAB00CB6DDB /* OggSpeexEncoderTask.mm in Sources */,
 				32A145131046DB920020238F /* CoreAudioEncoderTask.mm in Sources */,
 				32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */,
+				32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
