@@ -150,6 +150,8 @@
 		32248CAE103E6AAB008BF376 /* wavpackproperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 32248B3F103E6AAB008BF376 /* wavpackproperties.cpp */; };
 		32248CAF103E6AAB008BF376 /* wavpackproperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 32248B40103E6AAB008BF376 /* wavpackproperties.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		322E1E460DC817C700CB6DDB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 322E1E450DC817C700CB6DDB /* config.h */; };
+		32A1462C1046EBDE0020238F /* tlist.tcc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32248B2A103E6AAB008BF376 /* tlist.tcc */; };
+		32A1462D1046EBDE0020238F /* tmap.tcc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32248B2C103E6AAB008BF376 /* tmap.tcc */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -160,6 +162,8 @@
 			dstPath = taglib.framework/Headers;
 			dstSubfolderSpec = 16;
 			files = (
+				32A1462C1046EBDE0020238F /* tlist.tcc in CopyFiles */,
+				32A1462D1046EBDE0020238F /* tmap.tcc in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
