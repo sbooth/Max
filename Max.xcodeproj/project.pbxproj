@@ -11,6 +11,15 @@
 		32A145131046DB920020238F /* CoreAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145121046DB920020238F /* CoreAudioEncoderTask.mm */; };
 		32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145201046DD100020238F /* LibsndfileEncoderTask.mm */; };
 		32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A1478F104742030020238F /* NSString+URLEscapingMethods.m */; };
+		32A147B0104745BD0020238F /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 32A147AF104745BD0020238F /* dsa_pub.pem */; };
+		32A1483B104747240020238F /* CompactDisc.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A1480E104747240020238F /* CompactDisc.strings */; };
+		32A1483C104747240020238F /* Exceptions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A14816104747240020238F /* Exceptions.strings */; };
+		32A1483D104747240020238F /* FileConversion.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A14819104747240020238F /* FileConversion.strings */; };
+		32A1483E104747240020238F /* General.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A1481E104747240020238F /* General.strings */; };
+		32A1483F104747240020238F /* Genres.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A14821104747240020238F /* Genres.strings */; };
+		32A14840104747240020238F /* Log.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A14827104747240020238F /* Log.strings */; };
+		32A14841104747240020238F /* Preferences.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A14833104747240020238F /* Preferences.strings */; };
+		32A14842104747240020238F /* UndoRedo.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32A14838104747240020238F /* UndoRedo.strings */; };
 		8C0406530B5C584000648158 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C04064E0B5C584000648158 /* InfoPlist.strings */; };
 		8C05F19C0CC2DAA1006E5746 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; };
 		8C05F19D0CC2DAA1006E5746 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; };
@@ -302,6 +311,47 @@
 		32A145201046DD100020238F /* LibsndfileEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibsndfileEncoderTask.mm; sourceTree = "<group>"; };
 		32A1478E104742030020238F /* NSString+URLEscapingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+URLEscapingMethods.h"; path = "AlbumArt/NSString+URLEscapingMethods.h"; sourceTree = "<group>"; };
 		32A1478F104742030020238F /* NSString+URLEscapingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+URLEscapingMethods.m"; path = "AlbumArt/NSString+URLEscapingMethods.m"; sourceTree = "<group>"; };
+		32A147AF104745BD0020238F /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		32A1480B104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/Acknowledgments.nib; sourceTree = "<group>"; };
+		32A1480C104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/AlbumArtPreferences.nib; sourceTree = "<group>"; };
+		32A1480D104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/AmazonAlbumArtSheet.nib; sourceTree = "<group>"; };
+		32A1480F104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/CompactDisc.strings; sourceTree = "<group>"; };
+		32A14810104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/CompactDiscDocument.nib; sourceTree = "<group>"; };
+		32A14811104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/ComponentVersions.nib; sourceTree = "<group>"; };
+		32A14812104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/CoreAudioSettingsSheet.nib; sourceTree = "<group>"; };
+		32A14813104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Italian; path = Italian.lproj/Credits.rtf; sourceTree = "<group>"; };
+		32A14814104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
+		32A14815104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/Encoder.nib; sourceTree = "<group>"; };
+		32A14817104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/Exceptions.strings; sourceTree = "<group>"; };
+		32A14818104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/FileConversion.nib; sourceTree = "<group>"; };
+		32A1481A104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/FileConversion.strings; sourceTree = "<group>"; };
+		32A1481B104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/FLACSettingsSheet.nib; sourceTree = "<group>"; };
+		32A1481C104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/Formats.nib; sourceTree = "<group>"; };
+		32A1481D104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/FormatsPreferences.nib; sourceTree = "<group>"; };
+		32A1481F104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/General.strings; sourceTree = "<group>"; };
+		32A14820104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/GeneralPreferences.nib; sourceTree = "<group>"; };
+		32A14822104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/Genres.strings; sourceTree = "<group>"; };
+		32A14823104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		32A14824104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/iTunesPreferences.nib; sourceTree = "<group>"; };
+		32A14825104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/LibsndfileSettingsSheet.nib; sourceTree = "<group>"; };
+		32A14826104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/Log.nib; sourceTree = "<group>"; };
+		32A14828104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/Log.strings; sourceTree = "<group>"; };
+		32A14829104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		32A1482A104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/MonkeysAudioSettingsSheet.nib; sourceTree = "<group>"; };
+		32A1482B104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/MP3SettingsSheet.nib; sourceTree = "<group>"; };
+		32A1482C104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/MusicBrainzMatchSheet.nib; sourceTree = "<group>"; };
+		32A1482D104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/MusicBrainzPreferences.nib; sourceTree = "<group>"; };
+		32A1482E104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/OggSpeexSettingsSheet.nib; sourceTree = "<group>"; };
+		32A1482F104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/OggVorbisSettingsSheet.nib; sourceTree = "<group>"; };
+		32A14830104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/OutputPreferences.nib; sourceTree = "<group>"; };
+		32A14831104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/PostProcessingPreferences.nib; sourceTree = "<group>"; };
+		32A14832104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/Preferences.nib; sourceTree = "<group>"; };
+		32A14834104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/Preferences.strings; sourceTree = "<group>"; };
+		32A14835104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/Ripper.nib; sourceTree = "<group>"; };
+		32A14836104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
+		32A14837104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
+		32A14839104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Italian; path = Italian.lproj/UndoRedo.strings; sourceTree = "<group>"; };
+		32A1483A104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/WavPackSettingsSheet.nib; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
 		32F895B80D8B61AE006B6116 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
 		32F895BB0D8B7DDD006B6116 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
@@ -915,6 +965,15 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				32A1480E104747240020238F /* CompactDisc.strings */,
+				32A14816104747240020238F /* Exceptions.strings */,
+				32A14819104747240020238F /* FileConversion.strings */,
+				32A1481E104747240020238F /* General.strings */,
+				32A14821104747240020238F /* Genres.strings */,
+				32A14827104747240020238F /* Log.strings */,
+				32A14833104747240020238F /* Preferences.strings */,
+				32A14838104747240020238F /* UndoRedo.strings */,
+				32A147AF104745BD0020238F /* dsa_pub.pem */,
 				8CD01F1C0ADB4A9A00216B29 /* OutputPreferences.nib */,
 				8CABDF030ABE6CE000905814 /* OggSpeexSettingsSheet.nib */,
 				8C99E2750A82BA3A00A8CBE4 /* FileConversion.nib */,
@@ -1485,6 +1544,7 @@
 				Dutch,
 				nb_NO,
 				Spanish,
+				Italian,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* cocoa test */;
 			projectDirPath = "";
@@ -1581,6 +1641,15 @@
 				8C1F78150B4218910066072B /* WavPack.png in Resources */,
 				8C0406530B5C584000648158 /* InfoPlist.strings in Resources */,
 				8C1370730C4267D800D0238C /* Formats.nib in Resources */,
+				32A147B0104745BD0020238F /* dsa_pub.pem in Resources */,
+				32A1483B104747240020238F /* CompactDisc.strings in Resources */,
+				32A1483C104747240020238F /* Exceptions.strings in Resources */,
+				32A1483D104747240020238F /* FileConversion.strings in Resources */,
+				32A1483E104747240020238F /* General.strings in Resources */,
+				32A1483F104747240020238F /* Genres.strings in Resources */,
+				32A14840104747240020238F /* Log.strings in Resources */,
+				32A14841104747240020238F /* Preferences.strings in Resources */,
+				32A14842104747240020238F /* UndoRedo.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1714,6 +1783,7 @@
 				8C794DFB097F191C0081CD7F /* French */,
 				8C675CA009CEF2D5002CB034 /* German */,
 				8CBAB14809D7AA6B00F97BDC /* Dutch */,
+				32A14823104747240020238F /* Italian */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1726,8 +1796,73 @@
 				8C91B7C0099AF5D80040C8DE /* German */,
 				8C643A7109D7391000F6C1F6 /* Dutch */,
 				8C1A62340B7E5DA4008A04AB /* Spanish */,
+				32A14829104747240020238F /* Italian */,
 			);
 			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		32A1480E104747240020238F /* CompactDisc.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A1480F104747240020238F /* Italian */,
+			);
+			name = CompactDisc.strings;
+			sourceTree = "<group>";
+		};
+		32A14816104747240020238F /* Exceptions.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A14817104747240020238F /* Italian */,
+			);
+			name = Exceptions.strings;
+			sourceTree = "<group>";
+		};
+		32A14819104747240020238F /* FileConversion.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A1481A104747240020238F /* Italian */,
+			);
+			name = FileConversion.strings;
+			sourceTree = "<group>";
+		};
+		32A1481E104747240020238F /* General.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A1481F104747240020238F /* Italian */,
+			);
+			name = General.strings;
+			sourceTree = "<group>";
+		};
+		32A14821104747240020238F /* Genres.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A14822104747240020238F /* Italian */,
+			);
+			name = Genres.strings;
+			sourceTree = "<group>";
+		};
+		32A14827104747240020238F /* Log.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A14828104747240020238F /* Italian */,
+			);
+			name = Log.strings;
+			sourceTree = "<group>";
+		};
+		32A14833104747240020238F /* Preferences.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A14834104747240020238F /* Italian */,
+			);
+			name = Preferences.strings;
+			sourceTree = "<group>";
+		};
+		32A14838104747240020238F /* UndoRedo.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				32A14839104747240020238F /* Italian */,
+			);
+			name = UndoRedo.strings;
 			sourceTree = "<group>";
 		};
 		8C04064E0B5C584000648158 /* InfoPlist.strings */ = {
@@ -1747,6 +1882,7 @@
 				327375B80D88F44E00B9D9FB /* Dutch */,
 				327375BB0D88F47C00B9D9FB /* German */,
 				327375BE0D88F49900B9D9FB /* Spanish */,
+				32A1481C104747240020238F /* Italian */,
 			);
 			name = Formats.nib;
 			sourceTree = "<group>";
@@ -1824,6 +1960,7 @@
 				8CBA9F870999BA9D007C9F11 /* German */,
 				8CA73E9A0A0FD33300B12829 /* Dutch */,
 				8C1A623E0B7E5DA4008A04AB /* Spanish */,
+				32A14835104747240020238F /* Italian */,
 			);
 			name = Ripper.nib;
 			sourceTree = "<group>";
@@ -1836,6 +1973,7 @@
 				8CBA9FA20999BC3B007C9F11 /* German */,
 				8CA73E940A0FD33300B12829 /* Dutch */,
 				8C1A62330B7E5DA4008A04AB /* Spanish */,
+				32A14826104747240020238F /* Italian */,
 			);
 			name = Log.nib;
 			sourceTree = "<group>";
@@ -1848,6 +1986,7 @@
 				8C91B798099AF1FE0040C8DE /* German */,
 				8CA73E8E0A0FD33300B12829 /* Dutch */,
 				8C1A622F0B7E5DA4008A04AB /* Spanish */,
+				32A1481D104747240020238F /* Italian */,
 			);
 			name = FormatsPreferences.nib;
 			sourceTree = "<group>";
@@ -1860,6 +1999,7 @@
 				8CBA9F7F0999BA0F007C9F11 /* German */,
 				8CA73E8C0A0FD33300B12829 /* Dutch */,
 				8C1A622C0B7E5DA4008A04AB /* Spanish */,
+				32A14815104747240020238F /* Italian */,
 			);
 			name = Encoder.nib;
 			sourceTree = "<group>";
@@ -1872,6 +2012,7 @@
 				8CBA9F680999B7D5007C9F11 /* German */,
 				8CA73E890A0FD33300B12829 /* Dutch */,
 				8C1A62280B7E5DA4008A04AB /* Spanish */,
+				32A14811104747240020238F /* Italian */,
 			);
 			name = ComponentVersions.nib;
 			sourceTree = "<group>";
@@ -1884,6 +2025,7 @@
 				8CBA9F5F0999B457007C9F11 /* German */,
 				8CA73E880A0FD33300B12829 /* Dutch */,
 				8C1A62270B7E5DA4008A04AB /* Spanish */,
+				32A14810104747240020238F /* Italian */,
 			);
 			name = CompactDiscDocument.nib;
 			sourceTree = "<group>";
@@ -1896,6 +2038,7 @@
 				8CBA9F570999B409007C9F11 /* German */,
 				8C643A7009D7391000F6C1F6 /* Dutch */,
 				8C1A62240B7E5DA4008A04AB /* Spanish */,
+				32A1480B104747240020238F /* Italian */,
 			);
 			name = Acknowledgments.nib;
 			sourceTree = "<group>";
@@ -1934,6 +2077,7 @@
 				8C91B7B0099AF4040040C8DE /* German */,
 				8CA73E910A0FD33300B12829 /* Dutch */,
 				8C1A62300B7E5DA4008A04AB /* Spanish */,
+				32A14820104747240020238F /* Italian */,
 			);
 			name = GeneralPreferences.nib;
 			sourceTree = "<group>";
@@ -1946,6 +2090,7 @@
 				8CBA9F980999BB98007C9F11 /* German */,
 				8CA73E990A0FD33300B12829 /* Dutch */,
 				8C1A623D0B7E5DA4008A04AB /* Spanish */,
+				32A14832104747240020238F /* Italian */,
 			);
 			name = Preferences.nib;
 			sourceTree = "<group>";
@@ -1958,6 +2103,7 @@
 				8C91B7D8099AF9410040C8DE /* German */,
 				8CA73E9B0A0FD33300B12829 /* Dutch */,
 				8C1A623F0B7E5DA4008A04AB /* Spanish */,
+				32A14836104747240020238F /* Italian */,
 			);
 			name = RipperPreferences.nib;
 			sourceTree = "<group>";
@@ -1970,6 +2116,7 @@
 				8CDE899609D3B9F600FBD401 /* German */,
 				8CA73E9D0A0FD33300B12829 /* Dutch */,
 				8C1A62400B7E5DA4008A04AB /* Spanish */,
+				32A14837104747240020238F /* Italian */,
 			);
 			name = TaggingPreferences.nib;
 			sourceTree = "<group>";
@@ -1982,6 +2129,7 @@
 				8C781DE709E8B61C001D85EF /* German */,
 				8CA73E860A0FD33300B12829 /* Dutch */,
 				8C1A62250B7E5DA4008A04AB /* Spanish */,
+				32A1480C104747240020238F /* Italian */,
 			);
 			name = AlbumArtPreferences.nib;
 			sourceTree = "<group>";
@@ -1994,6 +2142,7 @@
 				32F895BB0D8B7DDD006B6116 /* Dutch */,
 				32F895BF0D8B7EDF006B6116 /* German */,
 				32F895C10D8B7FB4006B6116 /* Spanish */,
+				32A14814104747240020238F /* Italian */,
 			);
 			name = CueSheetDocument.nib;
 			sourceTree = "<group>";
@@ -2006,6 +2155,7 @@
 				8CA73E8D0A0FD33300B12829 /* Dutch */,
 				8CA73EA20A0FD38C00B12829 /* German */,
 				8C1A622E0B7E5DA4008A04AB /* Spanish */,
+				32A1481B104747240020238F /* Italian */,
 			);
 			name = FLACSettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2018,6 +2168,7 @@
 				8CA73E950A0FD33300B12829 /* Dutch */,
 				8CA73EA40A0FD38C00B12829 /* German */,
 				8C1A62350B7E5DA4008A04AB /* Spanish */,
+				32A1482A104747240020238F /* Italian */,
 			);
 			name = MonkeysAudioSettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2030,6 +2181,7 @@
 				8CA73EA30A0FD38C00B12829 /* German */,
 				8CA73EA90A0FD3AC00B12829 /* French */,
 				8C1A62320B7E5DA4008A04AB /* Spanish */,
+				32A14825104747240020238F /* Italian */,
 			);
 			name = LibsndfileSettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2042,6 +2194,7 @@
 				8CA73E8B0A0FD33300B12829 /* Dutch */,
 				8CA73EA10A0FD36000B12829 /* German */,
 				8C1A62290B7E5DA4008A04AB /* Spanish */,
+				32A14812104747240020238F /* Italian */,
 			);
 			name = CoreAudioSettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2054,6 +2207,7 @@
 				8CA73E9F0A0FD33300B12829 /* Dutch */,
 				8CA73EA80A0FD38C00B12829 /* German */,
 				8C1A62410B7E5DA4008A04AB /* Spanish */,
+				32A1483A104747240020238F /* Italian */,
 			);
 			name = WavPackSettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2066,6 +2220,7 @@
 				8CA73E970A0FD33300B12829 /* Dutch */,
 				8CA73EA60A0FD38C00B12829 /* German */,
 				8C1A623A0B7E5DA4008A04AB /* Spanish */,
+				32A1482F104747240020238F /* Italian */,
 			);
 			name = OggVorbisSettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2078,6 +2233,7 @@
 				8CA73E960A0FD33300B12829 /* Dutch */,
 				8CA73EA50A0FD38C00B12829 /* German */,
 				8C1A62360B7E5DA4008A04AB /* Spanish */,
+				32A1482B104747240020238F /* Italian */,
 			);
 			name = MP3SettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2098,6 +2254,7 @@
 				8CDEF3510B140280008D2D25 /* Dutch */,
 				8CDEF3530B140299008D2D25 /* German */,
 				8C1A622D0B7E5DA4008A04AB /* Spanish */,
+				32A14818104747240020238F /* Italian */,
 			);
 			name = FileConversion.nib;
 			sourceTree = "<group>";
@@ -2110,6 +2267,7 @@
 				8CDE897C09D3B67F00FBD401 /* German */,
 				8CA73E870A0FD33300B12829 /* Dutch */,
 				8C1A62260B7E5DA4008A04AB /* Spanish */,
+				32A1480D104747240020238F /* Italian */,
 			);
 			name = AmazonAlbumArtSheet.nib;
 			sourceTree = "<group>";
@@ -2135,6 +2293,7 @@
 				8CABDF0B0ABE6CFF00905814 /* German */,
 				8CABDF0C0ABE6D0F00905814 /* Dutch */,
 				8C1A62390B7E5DA4008A04AB /* Spanish */,
+				32A1482E104747240020238F /* Italian */,
 			);
 			name = OggSpeexSettingsSheet.nib;
 			sourceTree = "<group>";
@@ -2147,6 +2306,7 @@
 				8CDEF36D0B140535008D2D25 /* French */,
 				8CDEF36F0B140547008D2D25 /* German */,
 				8C1A623B0B7E5DA4008A04AB /* Spanish */,
+				32A14830104747240020238F /* Italian */,
 			);
 			name = OutputPreferences.nib;
 			sourceTree = "<group>";
@@ -2159,6 +2319,7 @@
 				8CDEF3520B140280008D2D25 /* Dutch */,
 				8CDEF3540B140299008D2D25 /* German */,
 				8C1A62310B7E5DA4008A04AB /* Spanish */,
+				32A14824104747240020238F /* Italian */,
 			);
 			name = iTunesPreferences.nib;
 			sourceTree = "<group>";
@@ -2171,6 +2332,7 @@
 				8CDEF36E0B140535008D2D25 /* French */,
 				8CDEF3700B140547008D2D25 /* German */,
 				8C1A623C0B7E5DA4008A04AB /* Spanish */,
+				32A14831104747240020238F /* Italian */,
 			);
 			name = PostProcessingPreferences.nib;
 			sourceTree = "<group>";
@@ -2184,6 +2346,7 @@
 				8C643A7809D7393400F6C1F6 /* Dutch */,
 				8C0406480B5C582E00648158 /* nb_NO */,
 				8C1A622A0B7E5DA4008A04AB /* Spanish */,
+				32A14813104747240020238F /* Italian */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -2196,6 +2359,7 @@
 				8CDEF3660B140484008D2D25 /* French */,
 				8CDEF3680B140496008D2D25 /* German */,
 				8C1A62370B7E5DA4008A04AB /* Spanish */,
+				32A1482C104747240020238F /* Italian */,
 			);
 			name = MusicBrainzMatchSheet.nib;
 			sourceTree = "<group>";
@@ -2208,6 +2372,7 @@
 				8CDEF3670B140484008D2D25 /* French */,
 				8CDEF3690B140496008D2D25 /* German */,
 				8C1A62380B7E5DA4008A04AB /* Spanish */,
+				32A1482D104747240020238F /* Italian */,
 			);
 			name = MusicBrainzPreferences.nib;
 			sourceTree = "<group>";
