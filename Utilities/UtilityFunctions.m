@@ -462,7 +462,7 @@ addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == artist ? @"" : artist)]									atIndex:4];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == composer ? @"" : composer)]								atIndex:5];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == genre ? @"" : genre)]										atIndex:6];
-	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:year]																atIndex:7];
+	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[year intValue]]																atIndex:7];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == comment ? @"" : comment)]									atIndex:8];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithString:(nil == [metadata trackTitle] ? @"" : [metadata trackTitle])]		atIndex:9];
 	[parameters insertDescriptor:[NSAppleEventDescriptor descriptorWithInt32:[[metadata trackNumber] intValue]]									atIndex:10];
