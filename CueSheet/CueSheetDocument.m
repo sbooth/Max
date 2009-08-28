@@ -176,33 +176,33 @@
 //		[self setMode:cd_get_mode(cd)];
 		
 		if(NULL != cd_get_catalog(cd))
-			_MCN = [[NSString stringWithCString:cd_get_catalog(cd) encoding:NSASCIIStringEncoding] retain];
+			_MCN = [[NSString stringWithCString:cd_get_catalog(cd) encoding:NSUTF8StringEncoding] retain];
 		
 		Cdtext *cdtext = cd_get_cdtext(cd);
 		if(NULL != cdtext) {
 			char *value = cdtext_get(PTI_TITLE, cdtext);
 			if(NULL != value)
-				_title = [[NSString stringWithCString:value encoding:NSASCIIStringEncoding] retain];
+				_title = [[NSString stringWithCString:value encoding:NSUTF8StringEncoding] retain];
 
 			value = cdtext_get(PTI_PERFORMER, cdtext);
 			if(NULL != value)
-				_artist = [[NSString stringWithCString:value encoding:NSASCIIStringEncoding] retain];
+				_artist = [[NSString stringWithCString:value encoding:NSUTF8StringEncoding] retain];
 
 //			value = cdtext_get(PTI_SONGWRITER, cdtext);
 //			if(NULL != value)
-//				[self setSongwriter:[NSString stringWithCString:value encoding:NSASCIIStringEncoding]];
+//				[self setSongwriter:[NSString stringWithCString:value encoding:NSUTF8StringEncoding]];
 
 			value = cdtext_get(PTI_COMPOSER, cdtext);
 			if(NULL != value)
-				_composer = [[NSString stringWithCString:value encoding:NSASCIIStringEncoding] retain];
+				_composer = [[NSString stringWithCString:value encoding:NSUTF8StringEncoding] retain];
 
 //			value = cdtext_get(PTI_ARRANGER, cdtext);
 //			if(NULL != value)
-//				[self setArranger:[NSString stringWithCString:value encoding:NSASCIIStringEncoding]];
+//				[self setArranger:[NSString stringWithCString:value encoding:NSUTF8StringEncoding]];
 
 			value = cdtext_get(PTI_UPC_ISRC, cdtext);
 			if(NULL != value)
-				_MCN = [[NSString stringWithCString:value encoding:NSASCIIStringEncoding] retain];
+				_MCN = [[NSString stringWithCString:value encoding:NSUTF8StringEncoding] retain];
 		}
 		
 		// Parse each track
@@ -216,7 +216,7 @@
 
 			char *filename = track_get_filename(track);
 			if(NULL != filename) {
-				NSString *relativePath	= [NSString stringWithCString:filename encoding:NSASCIIStringEncoding];
+				NSString *relativePath	= [NSString stringWithCString:filename encoding:NSUTF8StringEncoding];
 				NSString *cueSheetPath	= [[absoluteURL path] stringByDeletingLastPathComponent];
 				NSString *filenamePath	= [cueSheetPath stringByAppendingPathComponent:relativePath];
 				
@@ -258,33 +258,33 @@
 
 			char *isrc = track_get_isrc(track);
 			if(NULL != isrc)
-				[newTrack setISRC:[NSString stringWithCString:isrc encoding:NSASCIIStringEncoding]];
+				[newTrack setISRC:[NSString stringWithCString:isrc encoding:NSUTF8StringEncoding]];
 
 			cdtext = track_get_cdtext(track);
 			if(NULL != cdtext) {
 				char *value = cdtext_get(PTI_TITLE, cdtext);
 				if(NULL != value)
-					[newTrack setTitle:[NSString stringWithCString:value encoding:NSASCIIStringEncoding]];
+					[newTrack setTitle:[NSString stringWithCString:value encoding:NSUTF8StringEncoding]];
 
 				value = cdtext_get(PTI_PERFORMER, cdtext);
 				if(NULL != value)
-					[newTrack setArtist:[NSString stringWithCString:value encoding:NSASCIIStringEncoding]];
+					[newTrack setArtist:[NSString stringWithCString:value encoding:NSUTF8StringEncoding]];
 
 //				value = cdtext_get(PTI_SONGWRITER, cdtext);
 //				if(NULL != value)
-//					[dictionary setObject:[NSString stringWithCString:value encoding:NSASCIIStringEncoding] forKey:@"songwriter"];
+//					[dictionary setObject:[NSString stringWithCString:value encoding:NSUTF8StringEncoding] forKey:@"songwriter"];
 
 				value = cdtext_get(PTI_COMPOSER, cdtext);
 				if(NULL != value)
-					[newTrack setComposer:[NSString stringWithCString:value encoding:NSASCIIStringEncoding]];
+					[newTrack setComposer:[NSString stringWithCString:value encoding:NSUTF8StringEncoding]];
 
 //				value = cdtext_get(PTI_ARRANGER, cdtext);
 //				if(NULL != value)
-//					[dictionary setObject:[NSString stringWithCString:value encoding:NSASCIIStringEncoding] forKey:@"arranger"];
+//					[dictionary setObject:[NSString stringWithCString:value encoding:NSUTF8StringEncoding] forKey:@"arranger"];
 
 				value = cdtext_get(PTI_UPC_ISRC, cdtext);
 				if(NULL != value)
-					[newTrack setISRC:[NSString stringWithCString:value encoding:NSASCIIStringEncoding]];
+					[newTrack setISRC:[NSString stringWithCString:value encoding:NSUTF8StringEncoding]];
 			}
 
 			// Do this here to avoid registering for undo information
@@ -724,7 +724,7 @@
 	
 	int result = discid_put(discID, 1, [self countOfTracks], offsets);
 	if(result)
-		musicBrainzDiscID = [NSString stringWithCString:discid_get_id(discID) encoding:NSASCIIStringEncoding];
+		musicBrainzDiscID = [NSString stringWithCString:discid_get_id(discID) encoding:NSUTF8StringEncoding];
 	
 	discid_free(discID);
 	return [[musicBrainzDiscID retain] autorelease];
