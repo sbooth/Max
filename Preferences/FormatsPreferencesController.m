@@ -58,8 +58,8 @@
 	if((self = [super initWithWindowNibName:@"FormatsPreferences"])) {
 		
 		coreAudioFormats			= getCoreAudioWritableTypes();
-		libsndfileFormats			= [NSMutableArray arrayWithCapacity:20];
-		_availableFormats			= [NSMutableArray array];
+		libsndfileFormats			= [NSMutableArray array];
+		_availableFormats			= [[NSMutableArray alloc] init];
 
 		// Get the list of libsndfile major formats
 		sf_command(NULL, SFC_GET_FORMAT_MAJOR_COUNT, &majorCount, sizeof(int)) ;
@@ -85,7 +85,7 @@
 				@"extension",
 				nil];
 
-			[libsndfileFormats addObject:[NSMutableDictionary dictionaryWithObjects:objects forKeys:keys]];
+			[libsndfileFormats addObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
 		}
 		
 		// Add the built-in formats to the list
@@ -143,11 +143,10 @@
 				nil];
 			
 			[_availableFormats addObject:[NSDictionary dictionaryWithObjects:objects forKeys:keys]];
-			
-			NSSortDescriptor *sd = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
-			_availableFormats = [[_availableFormats sortedArrayUsingDescriptors:[NSArray arrayWithObject:sd]] retain];
-
 		}
+		
+		NSSortDescriptor *sd = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+		[_availableFormats sortUsingDescriptors:[NSArray arrayWithObject:sd]];
 		
 		return self;		
 	}
