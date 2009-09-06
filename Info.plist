@@ -204,7 +204,7 @@
 				<string>ape</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Monkey&apos;s Audio</string>
+			<string>Monkey's Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -353,7 +353,7 @@
 	<key>CFBundleSignature</key>
 	<string>Maxx</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.1</string>
+	<string>0.9.2</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
 	<key>NSMainNibFile</key>
