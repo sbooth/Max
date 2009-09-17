@@ -1,0 +1,5 @@
+@enumerate
+@item
+Removed deprecated metadata/free-form API and replaced with iTMF Generic and Tags API.
+
+@end enumerate
