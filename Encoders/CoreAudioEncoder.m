@@ -241,7 +241,7 @@
 			extAudioFile	= NULL;
 		
 			// Snow Leopard correctly writes the SMPB atom
-			if(floor(NSAppKitVersionNumber) > 949.0 /* Leopard */)
+			if(floor(NSAppKitVersionNumber) <= 949.0 /* Leopard */)
 				addMPEG4AACGaplessInformationAtom(filename, [decoder totalFrames]);
 			
 			addMPEG4AACBitrateInformationAtom(filename, bitrate, mode);
