@@ -28,7 +28,7 @@
 #include <AudioToolbox/AudioFile.h>
 #include <AudioToolbox/AudioFormat.h>
 
-#include <mp4v2/mp4.h>
+#include <mp4v2/mp4v2.h>
 
 #include <taglib/aifffile.h>
 #include <taglib/wavfile.h>
@@ -256,32 +256,42 @@
 	NSData					*data					= nil;
 	NSString				*tempFilename			= NULL;
 
-	mp4FileHandle = MP4Modify([[self outputFilename] fileSystemRepresentation], 0, 0);
+	// Open the file for modification
+	mp4FileHandle = MP4Modify([[self outputFilename] fileSystemRepresentation], MP4_DETAILS_ERROR, 0);
 	NSAssert(MP4_INVALID_FILE_HANDLE != mp4FileHandle, NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
 	
+	// Read the tags
+	const MP4Tags *tags = MP4TagsAlloc();
+	if(NULL == tags) {
+		MP4Close(mp4FileHandle);		
+		return;
+	}
+	
+	MP4TagsFetch(tags, mp4FileHandle);
+
 	// Album title
 	album = [metadata albumTitle];
 	if(nil != album)
-		MP4SetMetadataAlbum(mp4FileHandle, [album UTF8String]);
+		MP4TagsSetAlbum(tags, [album UTF8String]);
 	
 	// Artist
 	artist = [metadata trackArtist];
 	if(nil == artist)
 		artist = [metadata albumArtist];
 	if(nil != artist)
-		MP4SetMetadataArtist(mp4FileHandle, [artist UTF8String]);
+		MP4TagsSetArtist(tags, [artist UTF8String]);
 	
 	// Album artist
 	albumArtist = [metadata albumArtist];
 	if(nil != albumArtist)
-		MP4SetMetadataAlbumArtist(mp4FileHandle, [albumArtist UTF8String]);
+		MP4TagsSetAlbumArtist(tags, [albumArtist UTF8String]);
 	
 	// Composer
 	composer = [metadata trackComposer];
 	if(nil == composer)
 		composer = [metadata albumComposer];
 	if(nil != composer)
-		MP4SetMetadataWriter(mp4FileHandle, [composer UTF8String]);
+		MP4TagsSetComposer(tags, [composer UTF8String]);
 	
 	// Genre
 	if(nil != [[self taskInfo] inputTracks] && 1 == [[[self taskInfo] inputTracks] count])
@@ -289,14 +299,14 @@
 	if(nil == genre)
 		genre = [metadata albumGenre];
 	if(nil != genre)
-		MP4SetMetadataGenre(mp4FileHandle, [genre UTF8String]);
+		MP4TagsSetGenre(tags, [genre UTF8String]);
 	
 	// Year
 	year = [metadata trackDate];
 	if(nil == year)
 		year = [metadata albumDate];
 	if(nil != year)
-		MP4SetMetadataYear(mp4FileHandle, [year UTF8String]);
+		MP4TagsSetReleaseDate(tags, [year UTF8String]);
 	
 	// Comment
 	comment			= [metadata albumComment];
@@ -306,53 +316,71 @@
 	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
 	if(nil != comment)
-		MP4SetMetadataComment(mp4FileHandle, [comment UTF8String]);
+		MP4TagsSetComments(tags, [comment UTF8String]);
 	
 	// Track title
 	title = [metadata trackTitle];
 	if(nil != title)
-		MP4SetMetadataName(mp4FileHandle, [title UTF8String]);
+		MP4TagsSetName(tags, [title UTF8String]);
 	
 	// Track number
 	trackNumber = [metadata trackNumber];
 	trackTotal = [metadata trackTotal];
-	if(nil != trackNumber && nil != trackTotal)
-		MP4SetMetadataTrack(mp4FileHandle, [trackNumber intValue], [trackTotal intValue]);
+	MP4TagTrack trackInfo = { 0, 0 };
+	if(nil != trackNumber && nil != trackTotal) {
+		trackInfo.index = [trackNumber unsignedShortValue];
+		trackInfo.total = [trackTotal unsignedShortValue];
+	}
 	else if(nil != trackNumber)
-		MP4SetMetadataTrack(mp4FileHandle, [trackNumber intValue], 0);
-	else if(0 != trackTotal)
-		MP4SetMetadataTrack(mp4FileHandle, 0, [trackTotal intValue]);
+		trackInfo.index = [trackNumber unsignedShortValue];
+	else if(nil != trackTotal)
+		trackInfo.total = [trackTotal unsignedShortValue];
+	MP4TagsSetTrack(tags, &trackInfo);
 	
 	// Disc number
 	discNumber = [metadata discNumber];
 	discTotal = [metadata discTotal];
-	if(nil != discNumber && nil != discTotal)
-		MP4SetMetadataDisk(mp4FileHandle, [discNumber intValue], [discTotal intValue]);
-	else if(0 != discNumber)
-		MP4SetMetadataDisk(mp4FileHandle, [discNumber intValue], 0);
-	else if(0 != discTotal)
-		MP4SetMetadataDisk(mp4FileHandle, 0, [discTotal intValue]);
+	MP4TagDisk discInfo = { 0, 0 };
+	if(nil != discNumber && nil != discTotal) {
+		discInfo.index = [discNumber unsignedShortValue];
+		discInfo.total = [discTotal unsignedShortValue];
+	}
+	else if(nil != discNumber)
+		discInfo.index = [discNumber unsignedShortValue];
+	else if(nil != discTotal)
+		discInfo.total = [discTotal unsignedShortValue];
+	MP4TagsSetDisk(tags, &discInfo);
 	
 	// Compilation
 	compilation = [metadata compilation];
 	if(nil != compilation) {
-		MP4SetMetadataCompilation(mp4FileHandle, [compilation boolValue]);
+		u_int8_t isCompilation = [compilation boolValue];
+		MP4TagsSetCompilation(tags, &isCompilation);
 	}
 	
 	// Album art
 	albumArt = [metadata albumArt];
 	if(nil != albumArt) {
-		data = getPNGDataForImage(albumArt); 
-		MP4SetMetadataCoverArt(mp4FileHandle, (u_int8_t *)[data bytes], [data length]);
+		data = getPNGDataForImage(albumArt);
+
+		MP4TagArtwork artwork;
+		artwork.data = (void *)[data bytes];
+		artwork.size = [data length];
+		artwork.type = MP4_ART_PNG;
+		
+		MP4TagsAddArtwork(tags, &artwork);
 	}
 	
 	// Encoded by
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 	versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
-	MP4SetMetadataTool(mp4FileHandle, [versionString UTF8String]);
+	MP4TagsSetEncodedBy(tags, [versionString UTF8String]);
 	
-	MP4Close(mp4FileHandle);
-	
+	// Save our changes
+	MP4TagsStore(tags, mp4FileHandle);
+	MP4TagsFree(tags);
+	MP4Close(mp4FileHandle);	
+#if 0	
 	// Optimize the atoms so the MP4 files will play on shared iTunes libraries
 	// mp4v2 creates a temp file in ., so use a custom file and manually rename it	
 	tempFilename = generateTemporaryFilename([[[self taskInfo] settings] objectForKey:@"temporaryDirectory"], [self fileExtension]);
@@ -373,6 +401,7 @@
 	else {
 		[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[NSFileManager defaultManager] displayNameAtPath:[self outputFilename]]]];
 	}
+#endif
 }
 
 -(void) writeAIFFTags

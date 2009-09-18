@@ -38,7 +38,7 @@
 #include <taglib/aifffile.h>					// TagLib::RIFF:AIFF::File
 #include <taglib/wavfile.h>						// TagLib::RIFF:WAVE::File
 
-#include <mp4v2/mp4.h>							// MP4FileHandle
+#include <mp4v2/mp4v2.h>						// MP4FileHandle
 
 #include <mac/All.h>
 #include <mac/MACLib.h>
@@ -707,81 +707,80 @@
 	MP4FileHandle		mp4FileHandle	= MP4Read([filename fileSystemRepresentation], 0);
 	
 	if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
-		char			*s									= NULL;
-		u_int16_t		trackNumber, totalTracks;
-		u_int16_t		discNumber, discTotal;
-		u_int8_t		compilation;
-		u_int64_t		duration;
-		u_int32_t		artCount;
-		u_int8_t		*bytes								= NULL;
-		u_int32_t		length								= 0;
-		
-		// Album title
-		MP4GetMetadataAlbum(mp4FileHandle, &s);
-		if(NULL != s)
-			[result setAlbumTitle:[NSString stringWithUTF8String:s]];
-		
-		// Artist
-		MP4GetMetadataArtist(mp4FileHandle, &s);
-		if(NULL != s)
-			[result setAlbumArtist:[NSString stringWithUTF8String:s]];
-		
-		// Genre
-		MP4GetMetadataGenre(mp4FileHandle, &s);
-		if(NULL != s)
-			[result setAlbumGenre:[NSString stringWithUTF8String:s]];
-		
-		// Year
-		MP4GetMetadataYear(mp4FileHandle, &s);
-		if(NULL != s)
-			[result setAlbumDate:[NSString stringWithUTF8String:s]];
-		
-		// Composer
-		MP4GetMetadataWriter(mp4FileHandle, &s);
-		if(NULL != s)
-			[result setAlbumComposer:[NSString stringWithUTF8String:s]];
-		
-		// Comment
-		MP4GetMetadataComment(mp4FileHandle, &s);
-		if(NULL != s)
-			[result setAlbumComment:[NSString stringWithUTF8String:s]];
-		
-		// Track title
-		MP4GetMetadataName(mp4FileHandle, &s);
-		if(NULL != s)
-			[result setTrackTitle:[NSString stringWithUTF8String:s]];
-		
-		// Track number
-		MP4GetMetadataTrack(mp4FileHandle, &trackNumber, &totalTracks);
-		if(0 != trackNumber)
-			[result setTrackNumber:[NSNumber numberWithInt:trackNumber]];
-		if(0 != totalTracks)
-			[result setTrackTotal:[NSNumber numberWithInt:totalTracks]];
-		
-		// Disc number
-		MP4GetMetadataDisk(mp4FileHandle, &discNumber, &discTotal);
-		if(0 != discNumber)
-			[result setDiscNumber:[NSNumber numberWithInt:discNumber]];
-		if(0 != discTotal)
-			[result setDiscTotal:[NSNumber numberWithInt:discTotal]];
-		
-		// Compilation
-		MP4GetMetadataCompilation(mp4FileHandle, &compilation);
-		if(compilation)
-			[result setCompilation:[NSNumber numberWithBool:YES]];
-		
-		// Length
-		duration = MP4GetDuration(mp4FileHandle);
-		if(0 != duration)
-			[result setLength:[NSNumber numberWithUnsignedLong:(duration / MP4GetTimeScale(mp4FileHandle))]];
-		
-		// Album art
-		artCount = MP4GetMetadataCoverArtCount(mp4FileHandle);
-		if(0 < artCount) {
-			MP4GetMetadataCoverArt(mp4FileHandle, &bytes, &length);
-			[result setAlbumArt:[[[NSImage alloc] initWithData:[NSData dataWithBytes:bytes length:length]] autorelease]];
+		// Read the tags
+		const MP4Tags *tags = MP4TagsAlloc();
+		if(NULL == tags) {
+			[result release];
+			MP4Close(mp4FileHandle);		
+			return nil;
 		}
 		
+		MP4TagsFetch(tags, mp4FileHandle);
+
+		// Album title
+		if(tags->album)
+			[result setAlbumTitle:[NSString stringWithUTF8String:tags->album]];
+
+		// Artist
+		if(tags->albumArtist)
+			[result setAlbumArtist:[NSString stringWithUTF8String:tags->albumArtist]];
+		else if(tags->artist)
+			[result setAlbumArtist:[NSString stringWithUTF8String:tags->artist]];
+		
+		// Genre
+		if(tags->genre)
+			[result setAlbumGenre:[NSString stringWithUTF8String:tags->genre]];
+		
+		// Year
+		if(tags->releaseDate)
+			[result setAlbumDate:[NSString stringWithUTF8String:tags->releaseDate]];
+		
+		// Composer
+		if(tags->composer)
+			[result setAlbumComposer:[NSString stringWithUTF8String:tags->composer]];
+		
+		// Comment
+		if(tags->comments)
+			[result setAlbumComment:[NSString stringWithUTF8String:tags->comments]];
+		
+		// Track title
+		if(tags->name)
+			[result setTrackTitle:[NSString stringWithUTF8String:tags->name]];
+		
+		// Track number
+		if(tags->track) {			
+			if(tags->track->index)
+				[result setTrackNumber:[NSNumber numberWithUnsignedShort:tags->track->index]];
+			if(tags->track->total)
+				[result setTrackTotal:[NSNumber numberWithUnsignedShort:tags->track->total]];
+		}
+		
+		// Disc number
+		if(tags->disk) {
+			if(tags->disk->index)
+				[result setDiscNumber:[NSNumber numberWithUnsignedShort:tags->disk->index]];
+			if(tags->disk->total)
+				[result setDiscTotal:[NSNumber numberWithUnsignedShort:tags->disk->total]];
+		}
+		
+		// Compilation
+		if(tags->compilation)
+			[result setCompilation:[NSNumber numberWithBool:*(tags->compilation)]];
+		
+		// Length
+		MP4Duration duration = MP4GetDuration(mp4FileHandle);
+		uint32_t timeScale = MP4GetTimeScale(mp4FileHandle);
+		if(duration)
+			[result setLength:[NSNumber numberWithUnsignedLong:(duration / timeScale)]];
+		
+		// Album art
+		if(tags->artworkCount) {
+			MP4TagArtwork artwork = (tags->artwork)[0];
+			NSData *artworkData = [NSData dataWithBytes:artwork.data length:artwork.size];
+			[result setAlbumArt:[[[NSImage alloc] initWithData:artworkData] autorelease]];
+		}
+		
+		MP4TagsFree(tags);
 		MP4Close(mp4FileHandle);
 	}
 	
