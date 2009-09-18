@@ -99,7 +99,7 @@ addMPEG4AACBitrateInformationAtom(NSString *filename, UInt32 bitrate, int bitrat
 	[blockData appendBytes:&num length:4];
 
 	MP4ItmfData *data = &smpb->dataList.elements[0];
-	data->typeCode = MP4_ITMF_BT_UTF8;
+	data->typeCode = MP4_ITMF_BT_IMPLICIT;
 	data->valueSize = [blockData length];
 	data->value = (uint8_t *)malloc( data->valueSize );
 	
