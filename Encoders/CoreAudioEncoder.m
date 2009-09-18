@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2009 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -232,7 +232,7 @@
 			++iterations;
 		}
 		
-		// Write gapless info for AAC files
+		// Write gapless info and accurate bitrate for AAC files
 		if((kAudioFileMPEG4Type == [self fileType] || kAudioFileM4AType == [self fileType]) && kAudioFormatMPEG4AAC == [self formatID]) {
 
 			// First close the output files
@@ -240,7 +240,11 @@
 			NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileDispose", UTCreateStringForOSType(err));
 			extAudioFile	= NULL;
 		
-			addMPEG4AACGaplessInformationAtom(filename, [decoder totalFrames]);
+			// Snow Leopard correctly writes the SMPB atom
+			if(floor(NSAppKitVersionNumber) > 949.0 /* Leopard */)
+				addMPEG4AACGaplessInformationAtom(filename, [decoder totalFrames]);
+			
+			addMPEG4AACBitrateInformationAtom(filename, bitrate, mode);
 		}
 	}
 

@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2009 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +27,11 @@ extern "C" {
 	// Add the appropriate iTunSMPB atom for AAC gapless playback in iTunes
 	void addMPEG4AACGaplessInformationAtom(NSString		*filename, 
 										   SInt64		totalFrames);
+
+	// Add the appropriate Encoding Params atom for AAC accurate bitrate in iTunes
+	void addMPEG4AACBitrateInformationAtom(NSString		*filename, 
+										   UInt32		bitrate,
+										   int			bitrateMode);
 	
 #ifdef __cplusplus
 }

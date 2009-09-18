@@ -14,6 +14,7 @@
 		32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145201046DD100020238F /* LibsndfileEncoderTask.mm */; };
 		32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A1478F104742030020238F /* NSString+URLEscapingMethods.m */; };
 		32A147B0104745BD0020238F /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 32A147AF104745BD0020238F /* dsa_pub.pem */; };
+		32C8F0EE10632AB0004AB74F /* GaplessUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C8F0ED10632AB0004AB74F /* GaplessUtilities.m */; };
 		8C0406530B5C584000648158 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C04064E0B5C584000648158 /* InfoPlist.strings */; };
 		8C05F19C0CC2DAA1006E5746 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; };
 		8C05F19D0CC2DAA1006E5746 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; };
@@ -114,7 +115,6 @@
 		8C53FF930A05CD4100890518 /* ParanoiaRipper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF860A05CD4100890518 /* ParanoiaRipper.m */; };
 		8C53FF950A05CD4100890518 /* Rip.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF880A05CD4100890518 /* Rip.m */; };
 		8C53FF970A05CD4100890518 /* Ripper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF8A0A05CD4100890518 /* Ripper.m */; };
-		8C57F9EF0B10DE1300AA493C /* GaplessUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C57F9ED0B10DE1300AA493C /* GaplessUtilities.mm */; };
 		8C5E60860ACDC6F600D92D9A /* SecondsFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C5E60840ACDC6F500D92D9A /* SecondsFormatter.m */; };
 		8C5ED74F0ACB581C003E8ECF /* mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
 		8C5ED7500ACB5821003E8ECF /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C5ED73B0ACB581C003E8ECF /* mac.framework */; };
@@ -349,6 +349,7 @@
 		32A14836104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/RipperPreferences.nib; sourceTree = "<group>"; };
 		32A14837104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/TaggingPreferences.nib; sourceTree = "<group>"; };
 		32A1483A104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Italian; path = Italian.lproj/WavPackSettingsSheet.nib; sourceTree = "<group>"; };
+		32C8F0ED10632AB0004AB74F /* GaplessUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaplessUtilities.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
 		32F895B80D8B61AE006B6116 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
 		32F895BB0D8B7DDD006B6116 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/CueSheetDocument.nib; sourceTree = "<group>"; };
@@ -535,7 +536,6 @@
 		8C53FF8B0A05CD4100890518 /* RipperMethods.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RipperMethods.h; sourceTree = "<group>"; };
 		8C5568DC0948A4CF00F45C7E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		8C57F9EC0B10DE1300AA493C /* GaplessUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GaplessUtilities.h; sourceTree = "<group>"; };
-		8C57F9ED0B10DE1300AA493C /* GaplessUtilities.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GaplessUtilities.mm; sourceTree = "<group>"; };
 		8C5E60830ACDC6F500D92D9A /* SecondsFormatter.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = SecondsFormatter.h; path = Formatters/SecondsFormatter.h; sourceTree = "<group>"; };
 		8C5E60840ACDC6F500D92D9A /* SecondsFormatter.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = SecondsFormatter.m; path = Formatters/SecondsFormatter.m; sourceTree = "<group>"; };
 		8C5ED73B0ACB581C003E8ECF /* mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mac.framework; path = Frameworks/mac/build/Release/mac.framework; sourceTree = "<group>"; };
@@ -1135,6 +1135,7 @@
 		8C53021E0A05D66A00890518 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				32C8F0ED10632AB0004AB74F /* GaplessUtilities.m */,
 				8CF0E8C30B0C21570018F871 /* ImageAndTextCell.h */,
 				8CF0E8C40B0C21570018F871 /* ImageAndTextCell.m */,
 				8C74F8900A0B307E002260CF /* ServicesProvider.h */,
@@ -1147,7 +1148,6 @@
 				8C5302220A05D66A00890518 /* UtilityFunctions.h */,
 				8C5302230A05D66A00890518 /* UtilityFunctions.m */,
 				8C57F9EC0B10DE1300AA493C /* GaplessUtilities.h */,
-				8C57F9ED0B10DE1300AA493C /* GaplessUtilities.mm */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1736,7 +1736,6 @@
 				8CD0201A0ADB66E000216B29 /* iTunesPreferencesController.m in Sources */,
 				8CD0251A0ADC036A00216B29 /* PostProcessingPreferencesController.m in Sources */,
 				8CF0E8C60B0C21570018F871 /* ImageAndTextCell.m in Sources */,
-				8C57F9EF0B10DE1300AA493C /* GaplessUtilities.mm in Sources */,
 				8C1370390C42649000D0238C /* FormatsController.m in Sources */,
 				8C1371260C42F43E00D0238C /* CueSheetTrack.m in Sources */,
 				8C13724D0C432CF400D0238C /* CueSheetDocumentToolbar.m in Sources */,
@@ -1758,6 +1757,7 @@
 				32A145131046DB920020238F /* CoreAudioEncoderTask.mm in Sources */,
 				32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */,
 				32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */,
+				32C8F0EE10632AB0004AB74F /* GaplessUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
