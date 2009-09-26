@@ -380,7 +380,7 @@
 	MP4TagsStore(tags, mp4FileHandle);
 	MP4TagsFree(tags);
 	MP4Close(mp4FileHandle);	
-#if 0	
+
 	// Optimize the atoms so the MP4 files will play on shared iTunes libraries
 	// mp4v2 creates a temp file in ., so use a custom file and manually rename it	
 	tempFilename = generateTemporaryFilename([[[self taskInfo] settings] objectForKey:@"temporaryDirectory"], [self fileExtension]);
@@ -401,7 +401,6 @@
 	else {
 		[[LogController sharedController] logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to optimize file: %@", @"General", @""), [[NSFileManager defaultManager] displayNameAtPath:[self outputFilename]]]];
 	}
-#endif
 }
 
 -(void) writeAIFFTags
