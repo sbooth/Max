@@ -374,8 +374,11 @@
 	// Encoded by
 	bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 	versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
+	MP4TagsSetEncodingTool(tags, [versionString UTF8String]);
+
+	// TODO: Should this be set to the user's name?
 	MP4TagsSetEncodedBy(tags, [versionString UTF8String]);
-	
+
 	// Save our changes
 	MP4TagsStore(tags, mp4FileHandle);
 	MP4TagsFree(tags);
