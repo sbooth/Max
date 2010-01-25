@@ -92,7 +92,7 @@ addMPEG4AACBitrateInformationAtom(NSString *filename, UInt32 bitrate, int bitrat
 	num = OSSwapHostToBigInt32(bitrate);
 	[blockData appendBytes:&num length:4];
 
-	atomName = @"vers";
+	atomName = @"cdcv";
 	utf8 = [atomName UTF8String];
 	[blockData appendBytes:utf8 length:strlen(utf8)];
 	num = OSSwapHostToBigInt32(0x10504);
