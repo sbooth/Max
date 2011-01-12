@@ -84,7 +84,7 @@
 		return [self metadataFromMP3File:filename];
 	else if([extension isEqualToString:@"mp4"] || [extension isEqualToString:@"m4a"])
 		return [self metadataFromMP4File:filename];
-	else if([extension isEqualToString:@"ogg"]) {
+	else if([extension isEqualToString:@"ogg"] || [extension isEqualToString:@"oga"]) {
 		
 		// Determine the content type of the ogg stream
 		AudioMetadata	*result		= nil;
