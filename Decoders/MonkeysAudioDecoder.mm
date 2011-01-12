@@ -23,7 +23,7 @@
 
 #include <mac/All.h>
 #include <mac/MACLib.h>
-#include <mac/APEDecompress.h>
+#include <mac/IO.h>
 #include <mac/CharacterHelper.h>
 
 #define SELF_DECOMPRESSOR	(reinterpret_cast<IAPEDecompress *>(_decompressor))

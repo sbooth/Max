@@ -25,21 +25,14 @@
 
 - (id) initWithFilename:(NSString *)filename
 {
-	if((self = [super initWithFilename:filename])) {
-		_file = fopen([[self filename] fileSystemRepresentation], "r");
-		NSAssert1(NULL != _file, @"Unable to open the input file (%s).", strerror(errno));	
-		
-		mpc_reader_setup_file_reader(&_reader_file, _file);
-		
+	if((self = [super initWithFilename:filename])) {		
+		mpc_reader_init_stdio(&_reader, [[self filename] fileSystemRepresentation]);
+
+		_demux = mpc_demux_init(&_reader);
+		NSAssert(NULL != _demux, NSLocalizedStringFromTable(@"The file does not appear to be a valid Musepack file.", @"Exceptions", @""));
+
 		// Get input file information
-		mpc_streaminfo_init(&_streaminfo);
-		mpc_int32_t intResult = mpc_streaminfo_read(&_streaminfo, &_reader_file.reader);
-		NSAssert(ERROR_CODE_OK == intResult, NSLocalizedStringFromTable(@"The file does not appear to be a valid Musepack file.", @"Exceptions", @""));
-		
-		// Set up the decoder
-		mpc_decoder_setup(&_decoder, &_reader_file.reader);
-		mpc_bool_t boolResult = mpc_decoder_initialize(&_decoder, &_streaminfo);
-		NSAssert(YES == boolResult, NSLocalizedStringFromTable(@"Unable to intialize the Musepack decoder.", @"Exceptions", @""));
+		mpc_demux_get_info(_demux, &_streaminfo);
 		
 		// Setup input format descriptor
 		_pcmFormat.mFormatID			= kAudioFormatLinearPCM;
@@ -58,9 +51,8 @@
 
 - (void) dealloc
 {
-	int result = fclose(_file);
-	_file = NULL;
-	NSAssert1(EOF != result, @"Unable to close the input file (%s).", strerror(errno));	
+	mpc_demux_exit(_demux), _demux = NULL;
+	mpc_reader_exit_stdio(&_reader);
 	
 	[super dealloc];
 }
@@ -73,7 +65,7 @@
 
 - (SInt64) seekToFrame:(SInt64)frame
 {
-	if(mpc_decoder_seek_sample(&_decoder, frame)) {
+	if(MPC_STATUS_OK == mpc_demux_seek_sample(_demux, frame)) {
 		[[self pcmBuffer] reset]; 
 		_currentFrame = frame;
 	}
@@ -88,15 +80,21 @@
 	
 	if(spaceRequired <= [buffer freeSpaceAvailable]) {
 		MPC_SAMPLE_FORMAT		mpcBuffer			[MPC_DECODER_BUFFER_LENGTH];
-		mpc_uint32_t			framesRead			= 0;
 		unsigned				sample				= 0;
+
+		// Decode one frame of MPC data
+		mpc_frame_info frame;
+		frame.buffer = mpcBuffer;
+
+		mpc_status result = mpc_demux_decode(_demux, &frame);
+		NSAssert(MPC_STATUS_OK == result, NSLocalizedStringFromTable(@"Musepack decoding error.", @"Exceptions", @""));
 		
-		// Decode the data
-		framesRead		= mpc_decoder_decode(&_decoder, mpcBuffer, 0, 0);
-		NSAssert((mpc_uint32_t)-1 != framesRead, NSLocalizedStringFromTable(@"Musepack decoding error.", @"Exceptions", @""));
-		
+		// End of input
+		if(-1 == frame.bits)
+			return;
+
 #ifdef MPC_FIXED_POINT
-#error "Fixed point not yet supported"
+# error "Fixed point not yet supported"
 #else
 		int32_t					audioSample			= 0;
 		int8_t					*alias8				= NULL;
@@ -111,13 +109,13 @@
 				
 				// No need for byte swapping
 				alias8 = [buffer exposeBufferForWriting];
-				for(sample = 0; sample < framesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
+				for(sample = 0; sample < frame.samples * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					audioSample		= mpcBuffer[sample] * (1 << 7);
 					audioSample		= (audioSample < clipMin ? clipMin : (audioSample > clipMax ? clipMax : audioSample));
 					*alias8++		= (int8_t)audioSample;
 				}
 					
-				[buffer wroteBytes:framesRead * [self pcmFormat].mChannelsPerFrame * sizeof(int8_t)];
+				[buffer wroteBytes:frame.samples * [self pcmFormat].mChannelsPerFrame * sizeof(int8_t)];
 				
 				break;
 				
@@ -125,13 +123,13 @@
 				
 				// Convert to big endian byte order 
 				alias16 = [buffer exposeBufferForWriting];
-				for(sample = 0; sample < framesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
+				for(sample = 0; sample < frame.samples * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					audioSample		= mpcBuffer[sample] * (1 << 15);
 					audioSample		= (audioSample < clipMin ? clipMin : (audioSample > clipMax ? clipMax : audioSample));
 					*alias16++		= (int16_t)OSSwapHostToBigInt16(audioSample);
 				}
 					
-				[buffer wroteBytes:framesRead * [self pcmFormat].mChannelsPerFrame * sizeof(int16_t)];
+				[buffer wroteBytes:frame.samples * [self pcmFormat].mChannelsPerFrame * sizeof(int16_t)];
 				
 				break;
 				
@@ -139,7 +137,7 @@
 				
 				// Convert to big endian byte order 
 				alias8 = [buffer exposeBufferForWriting];
-				for(sample = 0; sample < framesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
+				for(sample = 0; sample < frame.samples * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					audioSample		= mpcBuffer[sample] * (1 << 23);
 					audioSample		= (audioSample < clipMin ? clipMin : (audioSample > clipMax ? clipMax : audioSample));
 
@@ -149,7 +147,7 @@
 					*alias8++	= (int8_t)((audioSample & 0x000000ff) /*>> 0*/);					
 				}
 					
-				[buffer wroteBytes:framesRead * [self pcmFormat].mChannelsPerFrame * 3 * sizeof(int8_t)];
+				[buffer wroteBytes:frame.samples * [self pcmFormat].mChannelsPerFrame * 3 * sizeof(int8_t)];
 				
 				break;
 				
@@ -157,13 +155,13 @@
 				
 				// Convert to big endian byte order 
 				alias32 = [buffer exposeBufferForWriting];
-				for(sample = 0; sample < framesRead * [self pcmFormat].mChannelsPerFrame; ++sample) {
+				for(sample = 0; sample < frame.samples * [self pcmFormat].mChannelsPerFrame; ++sample) {
 					audioSample		= mpcBuffer[sample] * (1 << 31);
 					audioSample		= (audioSample < clipMin ? clipMin : (audioSample > clipMax ? clipMax : audioSample));
 					*alias32++		= OSSwapHostToBigInt32(audioSample);
 				}
 					
-				[buffer wroteBytes:framesRead * [self pcmFormat].mChannelsPerFrame * sizeof(int32_t)];
+				[buffer wroteBytes:frame.samples * [self pcmFormat].mChannelsPerFrame * sizeof(int32_t)];
 				
 				break;
 				

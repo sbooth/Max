@@ -27,6 +27,7 @@
 #import "Genres.h"
 #import "AmazonAlbumArtSheet.h"
 #import "MusicBrainzMatchSheet.h"
+#import "UtilityFunctions.h"
 
 #include <discid/discid.h>
 
@@ -292,7 +293,8 @@
 			[self insertObject:[newTrack autorelease] inTracksAtIndex:(i - 1)];
 		}
 				
-		cd_delete(cd);
+		//cd_delete(cd);
+		free(cd);
 		fclose(f);
 
 		[self updateChangeCount:NSChangeCleared];

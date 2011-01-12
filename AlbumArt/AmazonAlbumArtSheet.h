@@ -21,7 +21,6 @@
 #import <Cocoa/Cocoa.h>
 
 #import "AlbumArtMethods.h"
-#import "CompactDiscDocument.h"
 
 enum {
 	kAmazonLocaleUSMenuItemTag			= 1,

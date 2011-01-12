@@ -23,6 +23,7 @@
 #import "EncoderMethods.h"
 #import "EncoderController.h"
 #import "LogController.h"
+#import "Track.h"
 
 #import "UtilityFunctions.h"
 

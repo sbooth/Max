@@ -20,8 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "CompactDiscDocument.h"
-#import "EncoderTask.h"
+@class AudioMetadata, CompactDiscDocument, EncoderTask;
 
 // List of the encoder components available in Max
 enum {

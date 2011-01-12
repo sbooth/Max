@@ -25,9 +25,8 @@
 
 @interface MusepackDecoder : Decoder
 {
-	FILE							*_file;
-	mpc_reader_file					_reader_file;
-	mpc_decoder						_decoder;
+	mpc_reader						_reader;
+	mpc_demux						*_demux;
 	mpc_streaminfo					_streaminfo;
 }
 

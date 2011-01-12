@@ -32,7 +32,7 @@ static FileConversionController		*sharedController						= nil;
 
 @interface FileConversionController (Private)
 - (void)	addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (BOOL)	addOneFile:(NSString *)filename atIndex:(unsigned)index;
+- (BOOL)	addOneFile:(NSString *)filename atIndex:(NSUInteger)index;
 - (void)	clearFileList;
 - (void)	selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
@@ -155,7 +155,7 @@ static FileConversionController		*sharedController						= nil;
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
-- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
@@ -180,8 +180,6 @@ static FileConversionController		*sharedController						= nil;
 	
 	// Verify at least one output format is selected
 	if(0 == [encoders count]) {
-		int		result;
-		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"Show Preferences", @"General", @"")];
@@ -189,7 +187,7 @@ static FileConversionController		*sharedController						= nil;
 		[alert setInformativeText:NSLocalizedStringFromTable(@"Please select one or more output formats.", @"General", @"")];
 		[alert setAlertStyle: NSWarningAlertStyle];
 		
-		result = [alert runModal];
+		NSInteger result = [alert runModal];
 		
 		if(NSAlertFirstButtonReturn == result) {
 			// do nothing
@@ -342,7 +340,7 @@ static FileConversionController		*sharedController						= nil;
 	return [self addFile:filename atIndex:/*[[_filesController arrangedObjects] count]*/NSNotFound];
 }
 
-- (BOOL) addFile:(NSString *)filename atIndex:(unsigned)index
+- (BOOL) addFile:(NSString *)filename atIndex:(NSUInteger)index
 {
 	NSAutoreleasePool	*pool				= [[NSAutoreleasePool alloc] init];
 	NSAutoreleasePool	*loopPool			= nil;
@@ -382,7 +380,7 @@ static FileConversionController		*sharedController						= nil;
 			
 			// Ignore directories
 			if([manager fileExistsAtPath:composedPath isDirectory:&isDir] && NO == isDir) {
-				success &= [self addOneFile:composedPath atIndex:(unsigned)index];
+				success &= [self addOneFile:composedPath atIndex:index];
 			}
 			
 			if(success) {
@@ -400,7 +398,7 @@ static FileConversionController		*sharedController						= nil;
 		}
 	}
 	else {
-		success &= [self addOneFile:filename atIndex:(unsigned)index];
+		success &= [self addOneFile:filename atIndex:index];
 		if(success) {
 			[_filesController selectFile:filename];
 		}
@@ -427,8 +425,8 @@ static FileConversionController		*sharedController						= nil;
 	return [[_filesController selection] valueForKeyPath:@"metadata.albumTitle"];
 }
 
-- (unsigned) albumArtWidth	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].width; }
-- (unsigned) albumArtHeight	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].height; }
+- (NSUInteger) albumArtWidth	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].width; }
+- (NSUInteger) albumArtHeight	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].height; }
 
 - (void) setAlbumArt:(NSImage *)albumArt
 {
@@ -481,20 +479,14 @@ static FileConversionController		*sharedController						= nil;
 
 - (void) addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	NSArray			*filenames;
-	unsigned		i;
-	
 	if(NSOKButton == returnCode) {
-		
-		filenames = [panel filenames];
-		
-		for(i = 0; i < [filenames count]; ++i) {
-			[self addFile:[filenames objectAtIndex:i]];
-		}
+		NSArray *filenames = [panel filenames];
+		for(NSString *filename in filenames)
+			[self addFile:filename];
 	}
 }
 
-- (BOOL) addOneFile:(NSString *)filename atIndex:(unsigned)index
+- (BOOL) addOneFile:(NSString *)filename atIndex:(NSUInteger)index
 {
 	NSImage				*icon			= nil;
 	AudioMetadata		*metadata		= nil;
@@ -546,8 +538,8 @@ static FileConversionController		*sharedController						= nil;
 {
     if(NSOKButton == returnCode) {
 		NSArray		*filesToOpen	= [sheet filenames];
-		unsigned	count			= [filesToOpen count];
-		unsigned	i;
+		NSUInteger	count			= [filesToOpen count];
+		NSUInteger	i;
 		NSImage		*image			= nil;
 		
 		for(i = 0; i < count; ++i) {

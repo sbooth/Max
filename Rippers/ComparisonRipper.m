@@ -24,6 +24,7 @@
 #import "BitArray.h"
 #import "LogController.h"
 #import "StopException.h"
+#import "UtilityFunctions.h"
 
 #include <IOKit/storage/IOCDTypes.h>
 

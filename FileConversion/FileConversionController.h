@@ -54,6 +54,6 @@
 - (IBAction)						selectAlbumArt:(id)sender;
 
 - (BOOL)							addFile:(NSString *)filename;
-- (BOOL)							addFile:(NSString *)filename atIndex:(unsigned)index;
+- (BOOL)							addFile:(NSString *)filename atIndex:(NSUInteger)index;
 
 @end

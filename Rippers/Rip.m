@@ -22,6 +22,9 @@
 
 #include <IOKit/storage/IOCDTypes.h>
 
+/* sha-256 a block of memory */
+void sha_memory(unsigned char *buf, int len, unsigned char *hash);
+
 @interface Rip (Private)
 - (void)				setFirstSector:(unsigned)sector;
 - (void)				setLastSector:(unsigned)sector;

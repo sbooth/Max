@@ -25,6 +25,7 @@
 #import "RipperController.h"
 #import "EncoderController.h"
 #import "LogController.h"
+#import "UtilityFunctions.h"
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <DiskArbitration/DiskArbitration.h>
