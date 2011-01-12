@@ -34,6 +34,7 @@
 #include <taglib/uniquefileidentifierframe.h> // TagLib::ID3V2::UniqueFileIdentifierFrame
 #include <taglib/attachedpictureframe.h>	// TagLib::ID3V2::AttachedPictureFrame
 #include <taglib/id3v2tag.h>				// TagLib::ID3V2::Tag
+#include <taglib/commentsframe.h>			// TagLib::ID3V2::CommentsFrame
 
 @implementation MP3EncoderTask
 
@@ -147,8 +148,13 @@
 		comment = (nil == comment ? trackComment : [NSString stringWithFormat:@"%@\n%@", trackComment, comment]);
 	if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 		comment = (nil == comment ? [self encoderSettingsString] : [NSString stringWithFormat:@"%@\n%@", comment, [self encoderSettingsString]]);
-	if(nil != comment)
-		f.tag()->setComment(TagLib::String([comment UTF8String], TagLib::String::UTF8));
+	// Recent versions of iTunes require the language to be set (comments without a language are ignored)
+	if(nil != comment) {
+		TagLib::ID3v2::CommentsFrame *commentFrame = new TagLib::ID3v2::CommentsFrame(TagLib::String::UTF8);
+		commentFrame->setLanguage("eng");
+		commentFrame->setText(TagLib::String([comment UTF8String], TagLib::String::UTF8));
+		f.ID3v2Tag()->addFrame(commentFrame);
+	}
 	
 	// Track title
 	title = [metadata trackTitle];
