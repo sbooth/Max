@@ -2347,7 +2347,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/../Frameworks/SFBAudioEngine.framework/Versions/A/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				PRODUCT_NAME = Max;
 			};
 			name = Debug;
@@ -2362,7 +2362,7 @@
 				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @loader_path/../Frameworks/SFBAudioEngine.framework/Versions/A/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				PRODUCT_NAME = Max;
 			};
 			name = Release;
