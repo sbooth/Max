@@ -166,7 +166,6 @@ callback(long inpos, int function, void *userdata)
 	AudioFileID						audioFile;
 	ExtAudioFileRef					extAudioFileRef;
 	AudioStreamBasicDescription		outputASBD;
-	NSEnumerator					*enumerator;
 	SectorRange						*range;
 	
 	@try {
@@ -199,8 +198,7 @@ callback(long inpos, int function, void *userdata)
 		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileWrapAudioFileID", UTCreateStringForOSType(err));
 		
-		enumerator = [_sectors objectEnumerator];
-		while((range = [enumerator nextObject])) {
+		for(range in _sectors) {
 			[self ripSectorRange:range toFile:extAudioFileRef];
 			_sectorsRead = [NSNumber numberWithUnsignedLong:[_sectorsRead unsignedLongValue] + [range length]];
 		}

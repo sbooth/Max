@@ -131,7 +131,6 @@
 	AudioFileID						audioFile;
 	ExtAudioFileRef					extAudioFileRef;
 	AudioStreamBasicDescription		outputASBD;
-	NSEnumerator					*enumerator;
 	SectorRange						*range;
 	uint16_t						driveSpeed;
 	
@@ -168,8 +167,7 @@
 		driveSpeed = [_drive speed];
 		
 		// Process each sector range
-		enumerator = [_sectors objectEnumerator];
-		while((range = [enumerator nextObject])) {
+		for(range in _sectors) {
 			[self ripSectorRange:range toFile:extAudioFileRef];
 			_sectorsRead += [range length];
 		}

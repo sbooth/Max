@@ -37,7 +37,6 @@
 - (id) initWithTracks:(NSArray *)tracks
 {
 	Track				*track;
-	NSEnumerator		*enumerator;
 	
 	NSParameterAssert(nil != tracks);
 	NSParameterAssert(0 != [tracks count]);
@@ -50,8 +49,7 @@
 		_deviceName		= [[[[_tracks objectAtIndex:0] document] disc] deviceName];
 		_sectors		= [[NSMutableArray alloc] initWithCapacity:[tracks count]];
 		
-		enumerator = [_tracks objectEnumerator];
-		while((track = [enumerator nextObject])) {
+		for(track in _tracks) {
 			
 			// Don't try to rip data tracks
 			if([track dataTrack]) {
@@ -118,15 +116,13 @@
 - (void) setStopped :(BOOL)stopped
 {
 	Track				*track;
-	NSEnumerator		*enumerator;
 	
 	[super setStopped:stopped];
 	
 	// Once we're stopped, invalidate the connection
 	[_connection invalidate];
 
-	enumerator = [_tracks objectEnumerator];
-	while((track = [enumerator nextObject])) {
+	for(track in _tracks) {
 		[track setRipInProgress:NO];
 	}
 	
@@ -138,15 +134,13 @@
 - (void) setCompleted:(BOOL)completed
 {
 	Track				*track;
-	NSEnumerator		*enumerator;
 
 	[super setCompleted:completed];
 	
 	// Once we're complete, invalidate the connection
 	[_connection invalidate];
 
-	enumerator = [_tracks objectEnumerator];
-	while((track = [enumerator nextObject])) {
+	for(track in _tracks) {
 		[track setRipInProgress:NO];
 	}
 	

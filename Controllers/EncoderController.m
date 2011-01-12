@@ -187,11 +187,9 @@ static EncoderController *sharedController = nil;
 
 - (BOOL) documentHasEncoderTasks:(CompactDiscDocument *)document
 {
-	NSEnumerator	*enumerator;
 	EncoderTask		*current;
 	
-	enumerator = [_tasks objectEnumerator];
-	while((current = [enumerator nextObject])) {
+	for(current in _tasks) {
 		if([document isEqual:[[[[current taskInfo] inputTracks] objectAtIndex:0] document]])
 			return YES;
 	}
