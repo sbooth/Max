@@ -37,12 +37,12 @@
 #pragma mark Data Source Overrides
 
 // Fall back to bindings
-- (int) numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger) numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	return -1;
 }
 
-- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (id) tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
 	return nil;
 }
@@ -83,7 +83,7 @@
 {
 	NSArray				*rows				= [self arrangedObjects];
 	NSMutableArray		*filenames			= [NSMutableArray arrayWithCapacity:[rowIndexes count]];
-	unsigned			index				= [rowIndexes firstIndex];
+	NSUInteger			index				= [rowIndexes firstIndex];
 		
 	while(NSNotFound != index) {
 		[filenames addObject:[[rows objectAtIndex:index] valueForKey:@"filename"]];
@@ -96,7 +96,7 @@
 	return YES;
 }
 
-- (NSDragOperation) tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(int)row proposedDropOperation:(NSTableViewDropOperation)op
+- (NSDragOperation) tableView:(NSTableView*)tv validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)op
 {
 	NSDragOperation		dragOperation		= NSDragOperationNone;
 
@@ -113,7 +113,7 @@
 	return dragOperation;
 }
 
-- (BOOL) tableView:(NSTableView*)tv acceptDrop:(id <NSDraggingInfo>)info row:(int)row dropOperation:(NSTableViewDropOperation)op
+- (BOOL) tableView:(NSTableView*)tv acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)op
 {
 	BOOL				success			= YES;
 
@@ -124,7 +124,7 @@
     if(_tableView == [info draggingSource]) {
 		NSArray			*filenames		= [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType];
 		NSIndexSet		*indexSet		= [self indexSetForRows:filenames];
-		int				rowsAbove;
+		NSInteger		rowsAbove;
 		NSRange			range;
 
 		[self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
@@ -169,9 +169,9 @@
 - (void) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)indexSet toIndex:(unsigned)insertIndex
 {
 	NSArray			*objects					= [self arrangedObjects];
-	unsigned		index						= [indexSet lastIndex];
-	unsigned		aboveInsertIndexCount		= 0;
-	unsigned		removeIndex;
+	NSUInteger		index						= [indexSet lastIndex];
+	NSUInteger		aboveInsertIndexCount		= 0;
+	NSUInteger		removeIndex;
 	id				object;
 
 	while(NSNotFound != index) {
@@ -214,7 +214,7 @@
 - (int) rowsAboveRow:(int)row inIndexSet:(NSIndexSet *)indexSet
 {
 	int				i				= 0;
-	unsigned		currentIndex	= [indexSet firstIndex];
+	NSUInteger		currentIndex	= [indexSet firstIndex];
 
 	while(NSNotFound != currentIndex) {
 		if(currentIndex < (unsigned)row) {

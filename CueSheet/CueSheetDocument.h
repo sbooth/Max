@@ -112,8 +112,8 @@
 - (NSDate *)		albumArtDownloadDate;
 - (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
 
-- (unsigned)		albumArtWidth;
-- (unsigned)		albumArtHeight;
+- (NSUInteger)		albumArtWidth;
+- (NSUInteger)		albumArtHeight;
 
 - (NSNumber *)		discNumber;
 - (void)			setDiscNumber:(NSNumber *)discNumber;
@@ -131,10 +131,10 @@
 - (NSString *) discID;
 
 	// KVC methods
-- (unsigned)		countOfTracks;
-- (CueSheetTrack *)	objectInTracksAtIndex:(unsigned)index;
+- (NSUInteger)		countOfTracks;
+- (CueSheetTrack *)	objectInTracksAtIndex:(NSUInteger)index;
 
-- (void)			insertObject:(CueSheetTrack *)track inTracksAtIndex:(unsigned)index;
-- (void)			removeObjectFromTracksAtIndex:(unsigned)index;
+- (void)			insertObject:(CueSheetTrack *)track inTracksAtIndex:(NSUInteger)index;
+- (void)			removeObjectFromTracksAtIndex:(NSUInteger)index;
 
 @end

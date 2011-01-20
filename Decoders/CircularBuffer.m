@@ -22,8 +22,8 @@
 
 @interface CircularBuffer (Private)
 - (void)			normalizeBuffer;
-- (unsigned)		contiguousBytesAvailable;
-- (unsigned)		contiguousFreeSpaceAvailable;
+- (NSUInteger)		contiguousBytesAvailable;
+- (NSUInteger)		contiguousFreeSpaceAvailable;
 @end
 
 @implementation CircularBuffer
@@ -33,7 +33,7 @@
 	return [self initWithSize:10 * 1024];
 }
 
-- (id)				initWithSize:(unsigned)size
+- (id)				initWithSize:(NSUInteger)size
 {
 	NSParameterAssert(0 < size);
 	
@@ -52,9 +52,9 @@
 }
 
 - (void)			reset							{ _readPtr = _writePtr = _buffer; }
-- (unsigned)		size							{ return _bufsize; }
+- (NSUInteger)		size							{ return _bufsize; }
 
-- (void)			resize:(unsigned)size
+- (void)			resize:(NSUInteger)size
 {
 	uint8_t		*newbuf;
 	
@@ -81,14 +81,14 @@
 	_bufsize	= size;
 }
 
-- (unsigned)		bytesAvailable
+- (NSUInteger)		bytesAvailable
 {	
-	return (_writePtr >= _readPtr ? (unsigned)(_writePtr - _readPtr) : [self size] - (unsigned)(_readPtr - _writePtr));
+	return (_writePtr >= _readPtr ? (NSUInteger)(_writePtr - _readPtr) : [self size] - (NSUInteger)(_readPtr - _writePtr));
 }
 
-- (unsigned)		freeSpaceAvailable				{ return _bufsize - [self bytesAvailable]; }
+- (NSUInteger)		freeSpaceAvailable				{ return _bufsize - [self bytesAvailable]; }
 
-- (unsigned)		putData:(const void *)data byteCount:(unsigned)byteCount
+- (NSUInteger)		putData:(const void *)data byteCount:(NSUInteger)byteCount
 {
 	NSParameterAssert(NULL != data);
 	NSParameterAssert(0 < byteCount);
@@ -101,8 +101,8 @@
 		return byteCount;
 	}
 	else {
-		unsigned	blockSize		= [self contiguousFreeSpaceAvailable];
-		unsigned	wrapSize		= byteCount - blockSize;
+		NSUInteger	blockSize		= [self contiguousFreeSpaceAvailable];
+		NSUInteger	wrapSize		= byteCount - blockSize;
 		
 		memcpy(_writePtr, data, blockSize);
 		_writePtr = _buffer;
@@ -114,7 +114,7 @@
 	}
 }
 
-- (unsigned)		getData:(void *)buffer byteCount:(unsigned)byteCount
+- (NSUInteger)		getData:(void *)buffer byteCount:(NSUInteger)byteCount
 {
 	NSParameterAssert(NULL != buffer);
 
@@ -133,8 +133,8 @@
 		_readPtr += byteCount;
 	}
 	else {
-		unsigned	blockSize		= [self contiguousBytesAvailable];
-		unsigned	wrapSize		= byteCount - blockSize;
+		NSUInteger	blockSize		= [self contiguousBytesAvailable];
+		NSUInteger	wrapSize		= byteCount - blockSize;
 		
 		memcpy(buffer, _readPtr, blockSize);
 		_readPtr = _buffer;
@@ -148,7 +148,7 @@
 
 - (const void *)	exposeBufferForReading			{ [self normalizeBuffer]; return _readPtr; }
 
-- (void)			readBytes:(unsigned)byteCount
+- (void)			readBytes:(NSUInteger)byteCount
 {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
@@ -161,7 +161,7 @@
 
 - (void *)			exposeBufferForWriting			{ [self normalizeBuffer]; return _writePtr; }
 
-- (void)			wroteBytes:(unsigned)byteCount
+- (void)			wroteBytes:(NSUInteger)byteCount
 {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
@@ -176,14 +176,14 @@
 
 @implementation CircularBuffer (Private)
 
-- (unsigned)		contiguousBytesAvailable
+- (NSUInteger)		contiguousBytesAvailable
 {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
 	return (_writePtr >= _readPtr ? _writePtr - _readPtr : limit - _readPtr);
 }
 
-- (unsigned)		contiguousFreeSpaceAvailable
+- (NSUInteger)		contiguousFreeSpaceAvailable
 {
 	uint8_t			*limit		= _buffer + _bufsize;
 	
@@ -196,8 +196,8 @@
 		_writePtr = _readPtr = _buffer;
 	}
 	else if(_writePtr > _readPtr) {
-		unsigned	count		= _writePtr - _readPtr;
-		unsigned	delta		= _readPtr - _buffer;
+		NSUInteger	count		= _writePtr - _readPtr;
+		NSUInteger	delta		= _readPtr - _buffer;
 		
 		memmove(_buffer, _readPtr, count);
 		
@@ -205,8 +205,8 @@
 		_writePtr	-= delta;
 	}
 	else {
-		unsigned		chunkASize	= [self contiguousBytesAvailable];
-		unsigned		chunkBSize	= [self bytesAvailable] - [self contiguousBytesAvailable];
+		NSUInteger		chunkASize	= [self contiguousBytesAvailable];
+		NSUInteger		chunkBSize	= [self bytesAvailable] - [self contiguousBytesAvailable];
 		uint8_t			*chunkA		= NULL;
 		uint8_t			*chunkB		= NULL;
 		

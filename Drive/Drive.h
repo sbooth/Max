@@ -34,13 +34,13 @@ enum {
 	NSString		*_deviceName;
 	int				_fd;
 	
-	unsigned		_cacheSize;
+	NSUInteger		_cacheSize;
 	
 	NSMutableArray	*_sessions;
 	NSMutableArray	*_tracks;
 	
-	unsigned		_firstSession;
-	unsigned		_lastSession;
+	NSUInteger		_firstSession;
+	NSUInteger		_lastSession;
 }
 
 // Set up to read the drive corresponding to deviceName (will open the device and read the CDTOC)
@@ -52,37 +52,37 @@ enum {
 - (void)				closeDevice;
 
 // Disc session information
-- (unsigned)			firstSession;
-- (unsigned)			lastSession;
+- (NSUInteger)			firstSession;
+- (NSUInteger)			lastSession;
 
-- (SessionDescriptor *)	sessionNumber:(unsigned)number;
+- (SessionDescriptor *)	sessionNumber:(NSUInteger)number;
 
-- (unsigned)			firstTrackForSession:(unsigned)session;
-- (unsigned)			lastTrackForSession:(unsigned)session;
+- (NSUInteger)			firstTrackForSession:(NSUInteger)session;
+- (NSUInteger)			lastTrackForSession:(NSUInteger)session;
 
 // Session sector information
-- (unsigned)			firstSectorForSession:(unsigned)session;
-- (unsigned)			lastSectorForSession:(unsigned)session;
+- (NSUInteger)			firstSectorForSession:(NSUInteger)session;
+- (NSUInteger)			lastSectorForSession:(NSUInteger)session;
 
-- (unsigned)			leadOutForSession:(unsigned)session;
+- (NSUInteger)			leadOutForSession:(NSUInteger)session;
 
-- (unsigned)			sessionContainingSector:(unsigned)sector;
-- (unsigned)			sessionContainingSectorRange:(SectorRange *)sectorRange;
+- (NSUInteger)			sessionContainingSector:(NSUInteger)sector;
+- (NSUInteger)			sessionContainingSectorRange:(SectorRange *)sectorRange;
 
 // Disc track information
-- (TrackDescriptor *)	trackNumber:(unsigned)number;
+- (TrackDescriptor *)	trackNumber:(NSUInteger)number;
 
 // Track sector information
-- (unsigned)			firstSectorForTrack:(unsigned)number;
-- (unsigned)			lastSectorForTrack:(unsigned)number;
+- (NSUInteger)			firstSectorForTrack:(NSUInteger)number;
+- (NSUInteger)			lastSectorForTrack:(NSUInteger)number;
 
 // Device name
 - (NSString *)			deviceName;
 
 // Drive cache information
-- (unsigned)			cacheSize;
-- (unsigned)			cacheSectorSize;
-- (void)				setCacheSize:(unsigned)cacheSize;
+- (NSUInteger)			cacheSize;
+- (NSUInteger)			cacheSectorSize;
+- (void)				setCacheSize:(NSUInteger)cacheSize;
 
 // Drive speed
 - (uint16_t)			speed;
@@ -92,39 +92,39 @@ enum {
 - (void)				clearCache:(SectorRange *)range;
 
 // Read a chunk of CD-DA data (buffer should be kCDSectorSizeCDDA * sectorCount bytes)
-- (unsigned)			readAudio:(void *)buffer sector:(unsigned)sector;
-- (unsigned)			readAudio:(void *)buffer sectorRange:(SectorRange *)range;
-- (unsigned)			readAudio:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+- (NSUInteger)			readAudio:(void *)buffer sector:(NSUInteger)sector;
+- (NSUInteger)			readAudio:(void *)buffer sectorRange:(SectorRange *)range;
+- (NSUInteger)			readAudio:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount;
 
 // Read Q sub-channel (buffer should be kCDSectorSizeQSubchannel * sectorCount bytes)
-- (unsigned)			readQSubchannel:(void *)buffer sector:(unsigned)sector;
-- (unsigned)			readQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
-- (unsigned)			readQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+- (NSUInteger)			readQSubchannel:(void *)buffer sector:(NSUInteger)sector;
+- (NSUInteger)			readQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
+- (NSUInteger)			readQSubchannel:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount;
 
 // Read error flags (buffer should be kCDSectorSizeErrorFlags * sectorCount bytes)
-- (unsigned)			readErrorFlags:(void *)buffer sector:(unsigned)sector;
-- (unsigned)			readErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
-- (unsigned)			readErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+- (NSUInteger)			readErrorFlags:(void *)buffer sector:(NSUInteger)sector;
+- (NSUInteger)			readErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
+- (NSUInteger)			readErrorFlags:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount;
 
 // Read a chunk of CD-DA data, with Q sub-channel (buffer should be (kCDSectorSizeCDDA + kCDSectorSizeQSubchannel) * sectorCount bytes)
-- (unsigned)			readAudioAndQSubchannel:(void *)buffer sector:(unsigned)sector;
-- (unsigned)			readAudioAndQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
-- (unsigned)			readAudioAndQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+- (NSUInteger)			readAudioAndQSubchannel:(void *)buffer sector:(NSUInteger)sector;
+- (NSUInteger)			readAudioAndQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
+- (NSUInteger)			readAudioAndQSubchannel:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount;
 
 // Read a chunk of CD-DA data, with error flags (buffer should be (kCDSectorSizeCDDA + kCDSectorSizeErrorFlags) * sectorCount bytes)
-- (unsigned)			readAudioAndErrorFlags:(void *)buffer sector:(unsigned)sector;
-- (unsigned)			readAudioAndErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
-- (unsigned)			readAudioAndErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+- (NSUInteger)			readAudioAndErrorFlags:(void *)buffer sector:(NSUInteger)sector;
+- (NSUInteger)			readAudioAndErrorFlags:(void *)buffer sectorRange:(SectorRange *)range;
+- (NSUInteger)			readAudioAndErrorFlags:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount;
 
 // Read a chunk of CD-DA data, with error flags and Q sub-channel (buffer should be (kCDSectorSizeCDDA + kCDSectorSizeErrorFlags + kCDSectorSizeQSubchannel) * sectorCount bytes)
-- (unsigned)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sector:(unsigned)sector;
-- (unsigned)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
-- (unsigned)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+- (NSUInteger)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sector:(NSUInteger)sector;
+- (NSUInteger)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sectorRange:(SectorRange *)range;
+- (NSUInteger)			readAudioAndErrorFlagsWithQSubchannel:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount;
 
 // Get the CD's media catalog number
 - (NSString *)			readMCN;
 
 // Get the ISRC for the specified track
-- (NSString *)			readISRC:(unsigned)track;
+- (NSString *)			readISRC:(NSUInteger)track;
 
 @end

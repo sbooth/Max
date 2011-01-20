@@ -42,7 +42,7 @@
 - (void)		didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)		openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
-- (void)		updateMetadataFromMusicBrainz:(unsigned)index;
+- (void)		updateMetadataFromMusicBrainz:(NSUInteger)index;
 @end
 
 @implementation CompactDiscDocument
@@ -180,7 +180,7 @@
 		NSString				*error					= nil;
 		NSMutableDictionary		*result					= [NSMutableDictionary dictionaryWithCapacity:10];
 		NSMutableArray			*tracks					= [NSMutableArray arrayWithCapacity:[self countOfTracks]];
-		unsigned				i;
+		NSUInteger				i;
 		
 		[result setValue:[self title] forKey:@"title"];
 		[result setValue:[self artist] forKey:@"artist"];
@@ -225,7 +225,7 @@
 		
 		dictionary = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:&format errorDescription:&error];
 		if(nil != dictionary) {
-			unsigned				i;
+			NSUInteger				i;
 			NSArray					*tracks			= [dictionary valueForKey:@"tracks"];
 			
 			if([self discInDrive] && [tracks count] != [self countOfTracks]) {
@@ -333,7 +333,7 @@
 
 - (BOOL) ripInProgress
 {
-	unsigned i;
+	NSUInteger i;
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
 		if([[self objectInTracksAtIndex:i] ripInProgress]) {
@@ -346,7 +346,7 @@
 
 - (BOOL) encodeInProgress
 {
-	unsigned i;
+	NSUInteger i;
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
 		if([[self objectInTracksAtIndex:i] encodeInProgress]) {
@@ -361,7 +361,7 @@
 
 - (IBAction) selectAll:(id)sender
 {
-	unsigned i;
+	NSUInteger i;
 	
 	for(i = 0; i < [self countOfTracks]; ++i)
 		[[self objectInTracksAtIndex:i] setSelected:YES];
@@ -369,7 +369,7 @@
 
 - (IBAction) selectNone:(id)sender
 {
-	unsigned i;
+	NSUInteger i;
 	
 	for(i = 0; i < [self countOfTracks]; ++i)
 		[[self objectInTracksAtIndex:i] setSelected:NO];
@@ -395,7 +395,7 @@
 
 		// Verify at least one output format is selected
 		if(0 == [encoders count]) {
-			int		result;
+			NSInteger		result;
 			
 			NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 			[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
@@ -544,7 +544,7 @@
 	
 	[_mbHelper performQuery:sender];
 	
-	unsigned matchCount	= [_mbHelper matchCount];
+	NSUInteger matchCount	= [_mbHelper matchCount];
 	NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
 
 	// If only match was found, update ourselves
@@ -554,7 +554,7 @@
 		MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
 		NSMutableArray			*matches	= [[NSMutableArray alloc] init];
 		
-		unsigned i;
+		NSUInteger i;
 		for(i = 0; i < matchCount; ++i)
 			[matches addObject:[_mbHelper matchAtIndex:i]];
 		
@@ -606,7 +606,7 @@
 
 - (NSArray *) selectedTracks
 {
-	unsigned		i;
+	NSUInteger		i;
 	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[self countOfTracks]];
 	Track			*track;
 	
@@ -635,8 +635,8 @@
 
 - (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
 - (NSDate *)		albumArtDownloadDate				{ return [[_albumArtDownloadDate retain] autorelease]; }
-- (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
-- (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
+- (NSUInteger)		albumArtWidth						{ return (NSUInteger)[[self albumArt] size].width; }
+- (NSUInteger)		albumArtHeight						{ return (NSUInteger)[[self albumArt] size].height; }
 
 - (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
 - (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
@@ -647,14 +647,14 @@
 
 - (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
 
-- (unsigned)		countOfTracks						{ return [_tracks count]; }
-- (Track *)			objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
+- (NSUInteger)		countOfTracks						{ return [_tracks count]; }
+- (Track *)			objectInTracksAtIndex:(NSUInteger)idx { return [_tracks objectAtIndex:idx]; }
 
 #pragma mark Mutators
 
 - (void) setDisc:(CompactDisc *)disc
 {
-	unsigned			i;
+	NSUInteger			i;
 
 	if(NO == [[self disc] isEqual:disc]) {
 
@@ -809,8 +809,8 @@
 - (void) setMusicbrainzAlbumId:(NSString *)musicbrainzAlbumId
 		 { [_musicbrainzAlbumId release]; _musicbrainzAlbumId = [musicbrainzAlbumId retain]; }
 
-- (void) insertObject:(Track *)track inTracksAtIndex:(unsigned)idx		{ [_tracks insertObject:track atIndex:idx]; }
-- (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
+- (void) insertObject:(Track *)track inTracksAtIndex:(NSUInteger)idx		{ [_tracks insertObject:track atIndex:idx]; }
+- (void) removeObjectFromTracksAtIndex:(NSUInteger)idx					{ [_tracks removeObjectAtIndex:idx]; }
 
 @end
 
@@ -859,8 +859,8 @@
 {
     if(NSOKButton == returnCode) {
 		NSArray		*filesToOpen	= [sheet filenames];
-		unsigned	count			= [filesToOpen count];
-		unsigned	i;
+		NSUInteger	count			= [filesToOpen count];
+		NSUInteger	i;
 		NSImage		*image			= nil;
 		
 		for(i = 0; i < count; ++i) {
@@ -872,7 +872,7 @@
 	}	
 }
 
-- (void) updateMetadataFromMusicBrainz:(unsigned)index
+- (void) updateMetadataFromMusicBrainz:(NSUInteger)index
 {
 	NSDictionary *releaseDictionary = [_mbHelper matchAtIndex:index];
 
@@ -889,7 +889,7 @@
 	
 	NSArray *tracksArray = [releaseDictionary valueForKey:@"tracks"];
 	
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [tracksArray count]; ++i) {
 		NSDictionary *trackDictionary = [tracksArray objectAtIndex:i];
 		Track *track = [self objectInTracksAtIndex:i];

@@ -76,7 +76,7 @@ static EncoderController *sharedController = nil;
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
-- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
@@ -131,7 +131,7 @@ static EncoderController *sharedController = nil;
 	TaskInfo		*taskInfo			= [TaskInfo taskInfoWithSettings:settings metadata:metadata];
 	NSArray			*outputFormats		= [settings objectForKey:@"encoders"];
 	NSDictionary	*format				= nil;
-	unsigned		i					= 0;
+	NSUInteger		i					= 0;
 	
 	[taskInfo setInputFilenames:filenames];
 	[taskInfo setInputTracks:inputTracks];
@@ -211,7 +211,7 @@ static EncoderController *sharedController = nil;
 	_freeze = NO;
 }
 
-#pragma Action Methods
+#pragma mark mark Action Methods
 
 - (IBAction) stopSelectedTasks:(id)sender
 {
@@ -346,7 +346,7 @@ static EncoderController *sharedController = nil;
 
 #pragma mark Task Management
 
-- (unsigned)	countOfTasks							{ return [_tasks count]; }
+- (NSUInteger)	countOfTasks							{ return [_tasks count]; }
 - (BOOL)		hasTasks								{ return (0 != [_tasks count]); }
 
 @end
@@ -386,9 +386,9 @@ static EncoderController *sharedController = nil;
 
 - (void) spawnThreads
 {
-	unsigned	maxThreads		= (unsigned) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"];
-	unsigned	i;
-	unsigned	limit;
+	NSUInteger	maxThreads		= (NSUInteger) [[NSUserDefaults standardUserDefaults] integerForKey:@"maximumEncoderThreads"];
+	NSUInteger	i;
+	NSUInteger	limit;
 	
 	if(0 == [_tasks count] || _freeze)
 		return;

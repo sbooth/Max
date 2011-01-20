@@ -22,27 +22,27 @@
 
 @interface SectorRange : NSObject 
 {
-	unsigned	_firstSector;
-	unsigned	_lastSector;
+	NSUInteger	_firstSector;
+	NSUInteger	_lastSector;
 }
 
-+ (id)				sectorRangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector;
-+ (id)				sectorRangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount;
-+ (id)				sectorRangeWithSector:(unsigned)sector;
++ (id)				sectorRangeWithFirstSector:(NSUInteger)firstSector lastSector:(NSUInteger)lastSector;
++ (id)				sectorRangeWithFirstSector:(NSUInteger)firstSector sectorCount:(NSUInteger)sectorCount;
++ (id)				sectorRangeWithSector:(NSUInteger)sector;
 
-- (unsigned)		firstSector;
-- (void)			setFirstSector:(unsigned)sector;
+- (NSUInteger)		firstSector;
+- (void)			setFirstSector:(NSUInteger)sector;
 
-- (unsigned)		lastSector;
-- (void)			setLastSector:(unsigned)sector;
+- (NSUInteger)		lastSector;
+- (void)			setLastSector:(NSUInteger)sector;
 
-- (unsigned)		length;
-- (unsigned)		byteSize;
+- (NSUInteger)		length;
+- (NSUInteger)		byteSize;
 
-- (unsigned)		indexForSector:(unsigned)sector;
-- (unsigned)		sectorForIndex:(unsigned)index;
+- (NSUInteger)		indexForSector:(NSUInteger)sector;
+- (NSUInteger)		sectorForIndex:(NSUInteger)index;
 
-- (BOOL)			containsSector:(unsigned)sector;
+- (BOOL)			containsSector:(NSUInteger)sector;
 - (BOOL)			containsSectorRange:(SectorRange *)range;
 
 @end

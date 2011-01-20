@@ -155,8 +155,8 @@ enum {
 - (NSDate *)		albumArtDownloadDate;
 - (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
 
-- (unsigned)		albumArtWidth;
-- (unsigned)		albumArtHeight;
+- (NSUInteger)		albumArtWidth;
+- (NSUInteger)		albumArtHeight;
 
 - (NSNumber *)		discNumber;
 - (void)			setDiscNumber:(NSNumber *)discNumber;
@@ -177,11 +177,11 @@ enum {
 - (void)			setMusicbrainzAlbumId:(NSString *)musicbrainzAlbumId;
 
 // KVC methods
-- (unsigned)		countOfTracks;
-- (Track *)			objectInTracksAtIndex:(unsigned)index;
+- (NSUInteger)		countOfTracks;
+- (Track *)			objectInTracksAtIndex:(NSUInteger)index;
 
-- (void)			insertObject:(Track *)track inTracksAtIndex:(unsigned)index;
-- (void)			removeObjectFromTracksAtIndex:(unsigned)index;
+- (void)			insertObject:(Track *)track inTracksAtIndex:(NSUInteger)index;
+- (void)			removeObjectFromTracksAtIndex:(NSUInteger)index;
 
 @end
 

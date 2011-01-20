@@ -71,7 +71,7 @@ createDirectoryStructure(NSString *path)
 	
 	if(1 < [pathComponents count]) {
 		int				i;
-		int				directoryCount		= [pathComponents count] - 1;
+		NSUInteger		directoryCount		= [pathComponents count] - 1;
 
 		// Accept a '/' as the first path
 		if(NO == [[pathComponents objectAtIndex:0] isEqualToString:@"/"]) {

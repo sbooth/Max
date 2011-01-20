@@ -217,7 +217,7 @@ static Genres *sharedGenres = nil;
 
 - (id) copyWithZone:(NSZone *)zone								{ return self; }
 - (id) retain													{ return self; }
-- (unsigned) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (NSUInteger) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void) release												{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 

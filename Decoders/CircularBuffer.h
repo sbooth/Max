@@ -24,29 +24,29 @@
 @interface CircularBuffer : NSObject
 {
 	uint8_t			*_buffer;
-	unsigned		_bufsize;
+	NSUInteger		_bufsize;
 
 	uint8_t			*_readPtr;
 	uint8_t			*_writePtr;
 }
 
-- (id)				initWithSize:(unsigned)size;
+- (id)				initWithSize:(NSUInteger)size;
 
 - (void)			reset;
 
-- (unsigned)		size;
-- (void)			resize:(unsigned)size;
+- (NSUInteger)		size;
+- (void)			resize:(NSUInteger)size;
 
-- (unsigned)		bytesAvailable;
-- (unsigned)		freeSpaceAvailable;
+- (NSUInteger)		bytesAvailable;
+- (NSUInteger)		freeSpaceAvailable;
 
-- (unsigned)		putData:(const void *)data byteCount:(unsigned)byteCount;
-- (unsigned)		getData:(void *)buffer byteCount:(unsigned)byteCount;
+- (NSUInteger)		putData:(const void *)data byteCount:(NSUInteger)byteCount;
+- (NSUInteger)		getData:(void *)buffer byteCount:(NSUInteger)byteCount;
 
 - (const void *)	exposeBufferForReading;
-- (void)			readBytes:(unsigned)byteCount;
+- (void)			readBytes:(NSUInteger)byteCount;
 
 - (void *)			exposeBufferForWriting;
-- (void)			wroteBytes:(unsigned)byteCount;
+- (void)			wroteBytes:(NSUInteger)byteCount;
 
 @end

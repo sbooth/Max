@@ -29,19 +29,19 @@
 @interface Drive (Private)
 - (void)				logMessage:(NSString *)message;
 
-- (unsigned)			countOfTracks;
-- (unsigned)			countOfSessions;
+- (NSUInteger)			countOfTracks;
+- (NSUInteger)			countOfSessions;
 
-- (TrackDescriptor *)	objectInTracksAtIndex:(unsigned)index;
-- (SessionDescriptor *)	objectInSessionsAtIndex:(unsigned)index;
+- (TrackDescriptor *)	objectInTracksAtIndex:(NSUInteger)index;
+- (SessionDescriptor *)	objectInSessionsAtIndex:(NSUInteger)index;
 
-- (void)				setFirstSession:(unsigned)session;
-- (void)				setLastSession:(unsigned)session;
+- (void)				setFirstSession:(NSUInteger)session;
+- (void)				setLastSession:(NSUInteger)session;
 
 - (void)				readTOC;
 - (int)					fileDescriptor;
 
-- (unsigned)			readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount;
+- (NSUInteger)			readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount;
 @end
 
 @implementation Drive
@@ -104,23 +104,23 @@
 	}
 }
 
-- (unsigned)			cacheSize									{ return _cacheSize; }
-- (unsigned)			cacheSectorSize								{ return (([self cacheSize] / kCDSectorSizeCDDA) + 1); }
-- (void)				setCacheSize:(unsigned)cacheSize			{ _cacheSize = cacheSize; }
+- (NSUInteger)			cacheSize									{ return _cacheSize; }
+- (NSUInteger)			cacheSectorSize								{ return (([self cacheSize] / kCDSectorSizeCDDA) + 1); }
+- (void)				setCacheSize:(NSUInteger)cacheSize			{ _cacheSize = cacheSize; }
 
 - (NSString *)			deviceName									{ return [[_deviceName retain] autorelease]; }
 
 // Disc track information
-- (unsigned)			sessionContainingSector:(unsigned)sector
+- (NSUInteger)			sessionContainingSector:(NSUInteger)sector
 {
 	return [self sessionContainingSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
 
-- (unsigned)			sessionContainingSectorRange:(SectorRange *)sectorRange
+- (NSUInteger)			sessionContainingSectorRange:(SectorRange *)sectorRange
 {
-	unsigned		session;
-	unsigned		sessionFirstSector;
-	unsigned		sessionLastSector;
+	NSUInteger		session;
+	NSUInteger		sessionFirstSector;
+	NSUInteger		sessionLastSector;
 	SectorRange		*sessionSectorRange;
 	
 	for(session = [self firstSession]; session <= [self lastSession]; ++session) {
@@ -138,13 +138,13 @@
 }
 
 // Disc session information
-- (unsigned)			firstSession								{ return _firstSession; }
-- (unsigned)			lastSession									{ return _lastSession; }
+- (NSUInteger)			firstSession								{ return _firstSession; }
+- (NSUInteger)			lastSession									{ return _lastSession; }
 
-- (SessionDescriptor *)	sessionNumber:(unsigned)number
+- (SessionDescriptor *)	sessionNumber:(NSUInteger)number
 {
 	SessionDescriptor	*session	= nil;
-	unsigned			i;
+	NSUInteger			i;
 	
 	for(i = 0; i < [self countOfSessions]; ++i) {
 		session = [self objectInSessionsAtIndex:i];
@@ -156,17 +156,17 @@
 }
 
 // First and last track and lead out information (session-based)
-- (unsigned)			firstTrackForSession:(unsigned)session		{ return [[self sessionNumber:session] firstTrack]; }
-- (unsigned)			lastTrackForSession:(unsigned)session		{ return [[self sessionNumber:session] lastTrack]; }
-- (unsigned)			leadOutForSession:(unsigned)session			{ return [[self sessionNumber:session] leadOut]; }
+- (NSUInteger)			firstTrackForSession:(NSUInteger)session		{ return [[self sessionNumber:session] firstTrack]; }
+- (NSUInteger)			lastTrackForSession:(NSUInteger)session		{ return [[self sessionNumber:session] lastTrack]; }
+- (NSUInteger)			leadOutForSession:(NSUInteger)session			{ return [[self sessionNumber:session] leadOut]; }
 
-- (unsigned)			firstSectorForSession:(unsigned)session		{ return [self firstSectorForTrack:[[self sessionNumber:session] firstTrack]]; }
-- (unsigned)			lastSectorForSession:(unsigned)session		{ return [[self sessionNumber:session] leadOut] - 1; }
+- (NSUInteger)			firstSectorForSession:(NSUInteger)session		{ return [self firstSectorForTrack:[[self sessionNumber:session] firstTrack]]; }
+- (NSUInteger)			lastSectorForSession:(NSUInteger)session		{ return [[self sessionNumber:session] leadOut] - 1; }
 
-- (TrackDescriptor *)		trackNumber:(unsigned)number
+- (TrackDescriptor *)		trackNumber:(NSUInteger)number
 {
 	TrackDescriptor		*track	= nil;
-	unsigned			i;
+	NSUInteger			i;
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
 		track = [self objectInTracksAtIndex:i];
@@ -178,8 +178,8 @@
 }
 
 // Track sector information
-- (unsigned)			firstSectorForTrack:(unsigned)number		{ return [[self trackNumber:number] firstSector]; }
-- (unsigned)			lastSectorForTrack:(unsigned)number
+- (NSUInteger)			firstSectorForTrack:(NSUInteger)number		{ return [[self trackNumber:number] firstSector]; }
+- (NSUInteger)			lastSectorForTrack:(NSUInteger)number
 {
 	TrackDescriptor		*thisTrack		= [self trackNumber:number];
 	TrackDescriptor		*nextTrack		= [self trackNumber:number + 1];
@@ -209,12 +209,12 @@
 - (void)			clearCache:(SectorRange *)range
 {
 	int16_t			*buffer											= NULL;
-	unsigned		bufferLen										= 0;
-	unsigned		session;
-	unsigned		requiredReadSize;
-	unsigned		sessionFirstSector, sessionLastSector;
-	unsigned		preSectorsAvailable, postSectorsAvailable;
-	unsigned		sectorsRemaining, sectorsRead, boundary;
+	NSUInteger		bufferLen										= 0;
+	NSUInteger		session;
+	NSUInteger		requiredReadSize;
+	NSUInteger		sessionFirstSector, sessionLastSector;
+	NSUInteger		preSectorsAvailable, postSectorsAvailable;
+	NSUInteger		sectorsRemaining, sectorsRead, boundary;
 	
 	requiredReadSize		= [self cacheSectorSize];
 	session					= [self sessionContainingSectorRange:range];
@@ -301,92 +301,92 @@
 	}
 }
 
-- (unsigned)		readAudio:(void *)buffer sector:(unsigned)sector
+- (NSUInteger)		readAudio:(void *)buffer sector:(NSUInteger)sector
 {
 	return [self readAudio:buffer startSector:sector sectorCount:1];
 }
 
-- (unsigned)		readAudio:(void *)buffer sectorRange:(SectorRange *)range
+- (NSUInteger)		readAudio:(void *)buffer sectorRange:(SectorRange *)range
 {
 	return [self readAudio:buffer startSector:[range firstSector] sectorCount:[range length]];
 }
 
-- (unsigned)		readAudio:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+- (NSUInteger)		readAudio:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount
 {
 	return [self readCD:buffer sectorAreas:kCDSectorAreaUser startSector:startSector sectorCount:sectorCount];
 }
 
-- (unsigned)		readQSubchannel:(void *)buffer sector:(unsigned)sector
+- (NSUInteger)		readQSubchannel:(void *)buffer sector:(NSUInteger)sector
 {
 	return [self readQSubchannel:buffer startSector:sector sectorCount:1];
 }
 
-- (unsigned)		readQSubchannel:(void *)buffer sectorRange:(SectorRange *)range
+- (NSUInteger)		readQSubchannel:(void *)buffer sectorRange:(SectorRange *)range
 {
 	return [self readQSubchannel:buffer startSector:[range firstSector] sectorCount:[range length]];
 }
 
-- (unsigned)		readQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+- (NSUInteger)		readQSubchannel:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount
 {
 	return [self readCD:buffer sectorAreas:kCDSectorAreaSubChannelQ startSector:startSector sectorCount:sectorCount];
 }
 
-- (unsigned)		readErrorFlags:(void *)buffer sector:(unsigned)sector
+- (NSUInteger)		readErrorFlags:(void *)buffer sector:(NSUInteger)sector
 {
 	return [self readErrorFlags:buffer startSector:sector sectorCount:1];
 }
 
-- (unsigned)		readErrorFlags:(void *)buffer sectorRange:(SectorRange *)range
+- (NSUInteger)		readErrorFlags:(void *)buffer sectorRange:(SectorRange *)range
 {
 	return [self readErrorFlags:buffer startSector:[range firstSector] sectorCount:[range length]];
 }
 
-- (unsigned)		readErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+- (NSUInteger)		readErrorFlags:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount
 {
 	return [self readCD:buffer sectorAreas:kCDSectorAreaErrorFlags startSector:startSector sectorCount:sectorCount];
 }
 
-- (unsigned)		readAudioAndQSubchannel:(void *)buffer sector:(unsigned)sector
+- (NSUInteger)		readAudioAndQSubchannel:(void *)buffer sector:(NSUInteger)sector
 {
 	return [self readAudioAndQSubchannel:buffer startSector:sector sectorCount:1];
 }
 
-- (unsigned)		readAudioAndQSubchannel:(void *)buffer sectorRange:(SectorRange *)range
+- (NSUInteger)		readAudioAndQSubchannel:(void *)buffer sectorRange:(SectorRange *)range
 {
 	return [self readAudioAndQSubchannel:buffer startSector:[range firstSector] sectorCount:[range length]];
 }
 
-- (unsigned)		readAudioAndQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+- (NSUInteger)		readAudioAndQSubchannel:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount
 {
 	return [self readCD:buffer sectorAreas:(kCDSectorAreaUser | kCDSectorAreaSubChannelQ) startSector:startSector sectorCount:sectorCount];
 }
 
-- (unsigned)		readAudioAndErrorFlags:(void *)buffer sector:(unsigned)sector
+- (NSUInteger)		readAudioAndErrorFlags:(void *)buffer sector:(NSUInteger)sector
 {
 	return [self readAudioAndErrorFlags:buffer startSector:sector sectorCount:1];
 }
 
-- (unsigned)		readAudioAndErrorFlags:(void *)buffer sectorRange:(SectorRange *)range
+- (NSUInteger)		readAudioAndErrorFlags:(void *)buffer sectorRange:(SectorRange *)range
 {
 	return [self readAudioAndErrorFlags:buffer startSector:[range firstSector] sectorCount:[range length]];
 }
 
-- (unsigned)		readAudioAndErrorFlags:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+- (NSUInteger)		readAudioAndErrorFlags:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount
 {
 	return [self readCD:buffer sectorAreas:(kCDSectorAreaUser | kCDSectorAreaErrorFlags) startSector:startSector sectorCount:sectorCount];
 }
 
-- (unsigned)		readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sector:(unsigned)sector
+- (NSUInteger)		readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sector:(NSUInteger)sector
 {
 	return [self readAudioAndErrorFlagsWithQSubchannel:buffer startSector:sector sectorCount:1];
 }
 
-- (unsigned)		readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sectorRange:(SectorRange *)range
+- (NSUInteger)		readAudioAndErrorFlagsWithQSubchannel:(void *)buffer sectorRange:(SectorRange *)range
 {
 	return [self readAudioAndErrorFlagsWithQSubchannel:buffer startSector:[range firstSector] sectorCount:[range length]];
 }
 
-- (unsigned)		readAudioAndErrorFlagsWithQSubchannel:(void *)buffer startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+- (NSUInteger)		readAudioAndErrorFlagsWithQSubchannel:(void *)buffer startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount
 {
 	return [self readCD:buffer sectorAreas:(kCDSectorAreaUser | kCDSectorAreaErrorFlags | kCDSectorAreaSubChannelQ) startSector:startSector sectorCount:sectorCount];
 }
@@ -405,7 +405,7 @@
 	return [NSString stringWithCString:cd_read_mcn.mcn encoding:NSASCIIStringEncoding];
 }
 
-- (NSString *)		readISRC:(unsigned)track
+- (NSString *)		readISRC:(NSUInteger)track
 {
 	dk_cd_read_isrc_t	cd_read_isrc;
 	
@@ -435,14 +435,14 @@
 	[[LogController sharedController] performSelectorOnMainThread:@selector(logMessage:) withObject:message waitUntilDone:NO];
 }
 
-- (unsigned)			countOfTracks								{ return [_tracks count]; }
-- (unsigned)			countOfSessions								{ return [_sessions count]; }
+- (NSUInteger)			countOfTracks								{ return [_tracks count]; }
+- (NSUInteger)			countOfSessions								{ return [_sessions count]; }
 
-- (TrackDescriptor *)	objectInTracksAtIndex:(unsigned)index		{ return [_tracks objectAtIndex:index]; }
-- (SessionDescriptor *)	objectInSessionsAtIndex:(unsigned)index		{ return [_sessions objectAtIndex:index]; }
+- (TrackDescriptor *)	objectInTracksAtIndex:(NSUInteger)index		{ return [_tracks objectAtIndex:index]; }
+- (SessionDescriptor *)	objectInSessionsAtIndex:(NSUInteger)index		{ return [_sessions objectAtIndex:index]; }
 
-- (void)				setFirstSession:(unsigned)session			{ _firstSession = session; }
-- (void)				setLastSession:(unsigned)session			{ _lastSession = session; }
+- (void)				setFirstSession:(NSUInteger)session			{ _firstSession = session; }
+- (void)				setLastSession:(NSUInteger)session			{ _lastSession = session; }
 
 - (void)			readTOC
 {
@@ -452,7 +452,7 @@
 	CDTOC				*toc					= NULL;
 	CDTOCDescriptor		*desc					= NULL;
 	TrackDescriptor		*track					= nil;
-	unsigned			i, numDescriptors;
+	NSUInteger			i, numDescriptors;
 	
 	/* formats:
 		kCDTOCFormatTOC  = 0x02, // CDTOC
@@ -558,11 +558,11 @@
 - (int)					fileDescriptor								{ return _fd; }
 
 // Implementation method
-- (unsigned)		readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(unsigned)startSector sectorCount:(unsigned)sectorCount
+- (NSUInteger)		readCD:(void *)buffer sectorAreas:(uint8_t)sectorAreas startSector:(NSUInteger)startSector sectorCount:(NSUInteger)sectorCount
 {
 	int				result;
 	dk_cd_read_t	cd_read;
-	unsigned		blockSize		= 0;
+	NSUInteger		blockSize		= 0;
 	
 	if(kCDSectorAreaUser & sectorAreas)					{ blockSize += kCDSectorSizeCDDA; }
 	if(kCDSectorAreaErrorFlags & sectorAreas)			{ blockSize += kCDSectorSizeErrorFlags; }

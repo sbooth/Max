@@ -261,7 +261,7 @@ enum {
 {
 	NSArray			*filesToOpen;
 	NSString		*dirname;
-	unsigned		count, i;
+	NSUInteger		count, i;
 
 	[sheet orderOut:self];
 
@@ -292,7 +292,7 @@ enum {
 {
 	NSArray			*filesToOpen;
 	NSString		*dirname;
-	unsigned		count, i;
+	NSUInteger		count, i;
 	
 	[sheet orderOut:self];
 	

@@ -24,7 +24,7 @@
 
 @implementation SectorRange
 
-+ (id) sectorRangeWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector
++ (id) sectorRangeWithFirstSector:(NSUInteger)firstSector lastSector:(NSUInteger)lastSector
 {
 	NSParameterAssert(lastSector >= firstSector);
 	
@@ -36,7 +36,7 @@
 	return [range autorelease];
 }
 
-+ (id) sectorRangeWithFirstSector:(unsigned)firstSector sectorCount:(unsigned)sectorCount
++ (id) sectorRangeWithFirstSector:(NSUInteger)firstSector sectorCount:(NSUInteger)sectorCount
 {
 	NSParameterAssert(0 < sectorCount);
 
@@ -48,7 +48,7 @@
 	return [range autorelease];
 }
 
-+ (id) sectorRangeWithSector:(unsigned)sector
++ (id) sectorRangeWithSector:(NSUInteger)sector
 {
 	SectorRange *range = [[SectorRange alloc] init];
 	
@@ -58,19 +58,19 @@
 	return [range autorelease];
 }
 
-- (unsigned)		firstSector										{ return _firstSector; }
-- (void)			setFirstSector:(unsigned)sector					{ _firstSector = sector; }
+- (NSUInteger)		firstSector										{ return _firstSector; }
+- (void)			setFirstSector:(NSUInteger)sector					{ _firstSector = sector; }
 
-- (unsigned)		lastSector										{ return _lastSector; }
-- (void)			setLastSector:(unsigned)sector					{ _lastSector = sector; }
+- (NSUInteger)		lastSector										{ return _lastSector; }
+- (void)			setLastSector:(NSUInteger)sector					{ _lastSector = sector; }
 
-- (unsigned)		length											{ return ([self lastSector] - [self firstSector] + 1); }
-- (unsigned)		byteSize										{ return kCDSectorSizeCDDA * [self length]; }
+- (NSUInteger)		length											{ return ([self lastSector] - [self firstSector] + 1); }
+- (NSUInteger)		byteSize										{ return kCDSectorSizeCDDA * [self length]; }
 
-- (unsigned)		indexForSector:(unsigned)sector					{ return ([self containsSector:sector] ? sector - [self firstSector] : NSNotFound); }
-- (unsigned)		sectorForIndex:(unsigned)idx					{ return ([self length] > idx ? [self firstSector] + idx : NSNotFound); }
+- (NSUInteger)		indexForSector:(NSUInteger)sector					{ return ([self containsSector:sector] ? sector - [self firstSector] : NSNotFound); }
+- (NSUInteger)		sectorForIndex:(NSUInteger)idx					{ return ([self length] > idx ? [self firstSector] + idx : NSNotFound); }
 
-- (BOOL)			containsSector:(unsigned)sector					{ return ([self firstSector] <= sector && [self lastSector] >= sector); }
+- (BOOL)			containsSector:(NSUInteger)sector					{ return ([self firstSector] <= sector && [self lastSector] >= sector); }
 - (BOOL)			containsSectorRange:(SectorRange *)range		{ return ([self containsSector:[range firstSector]] && [self containsSector:[range lastSector]]); }
 
 @end

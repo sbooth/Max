@@ -77,7 +77,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
-- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
@@ -217,7 +217,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 		nil];
 }
 
-- (unsigned)		countOfLogEntries								{ return [_logEntries count]; }
+- (NSUInteger)		countOfLogEntries								{ return [_logEntries count]; }
 - (NSDictionary *)	objectInLogEntriesAtIndex:(unsigned)index		{ return [_logEntries objectAtIndex:index]; }
 
 @end

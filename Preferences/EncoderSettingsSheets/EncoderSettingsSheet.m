@@ -62,7 +62,7 @@
 {
 	NSMutableArray			*formats		= nil;
 	NSMutableDictionary		*newFormat		= nil;
-	unsigned				index			= NSNotFound;
+	NSUInteger				index			= NSNotFound;
 
 	// Swap out the userInfo object in this format's dictionary with the modified one
 	formats		= [[[NSUserDefaults standardUserDefaults] arrayForKey:@"outputFormats"] mutableCopy];

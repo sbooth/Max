@@ -82,7 +82,7 @@
 	else if([libsndfileExtensions containsObject:extension])
 		result = [[LibsndfileDecoder alloc] initWithFilename:filename];
 	else
-		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @"") userInfo:@""];
+		@throw [FileFormatNotSupportedException exceptionWithReason:NSLocalizedStringFromTable(@"The file's format was not recognized.", @"Exceptions", @"") userInfo:nil];
 
 	return [result autorelease];
 }

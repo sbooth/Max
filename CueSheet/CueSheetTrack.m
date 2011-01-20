@@ -277,7 +277,7 @@
 {
 	AudioMetadata *result = [[AudioMetadata alloc] init];
 	
-	[result setTrackNumber:[NSNumber numberWithInt:[self number]]];
+	[result setTrackNumber:[NSNumber numberWithUnsignedInteger:[self number]]];
 	[result setTrackTitle:[self title]];
 	[result setTrackArtist:[self artist]];
 	[result setTrackDate:[self date]];
@@ -305,12 +305,12 @@
 	return [result autorelease];
 }
 
-#pragma Scripting
+#pragma mark Scripting
 
 - (NSScriptObjectSpecifier *) objectSpecifier
 {
     NSArray		*tracks		= [[self document] valueForKey:@"tracks"];
-    unsigned	idx			= [tracks indexOfObjectIdenticalTo:self];
+    NSUInteger	idx			= [tracks indexOfObjectIdenticalTo:self];
 	
     if(NSNotFound != idx) {
         NSScriptObjectSpecifier *containerRef = [[self document] objectSpecifier];

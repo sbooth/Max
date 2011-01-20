@@ -90,28 +90,28 @@
 
 #pragma mark Accessors
 
-- (unsigned) minute
+- (NSUInteger) minute
 {
-	unsigned	sector		= [self firstSector];
-	unsigned	offset		= [self lastSector] - sector + 1;
+	NSUInteger	sector		= [self firstSector];
+	NSUInteger	offset		= [self lastSector] - sector + 1;
 	
-	return (unsigned) (offset / (60 * 75));
+	return (NSUInteger) (offset / (60 * 75));
 }
 
-- (unsigned) second
+- (NSUInteger) second
 {
-	unsigned	sector		= [self firstSector];
-	unsigned	offset		= [self lastSector] - sector + 1;
+	NSUInteger	sector		= [self firstSector];
+	NSUInteger	offset		= [self lastSector] - sector + 1;
 	
-	return (unsigned) ((offset / 75) % 60);
+	return (NSUInteger) ((offset / 75) % 60);
 }
 
-- (unsigned) frame
+- (NSUInteger) frame
 {
-	unsigned	sector		= [self firstSector];
-	unsigned	offset		= [self lastSector] - sector + 1;
+	NSUInteger	sector		= [self firstSector];
+	NSUInteger	offset		= [self lastSector] - sector + 1;
 	
-	return (unsigned) (offset % 75);
+	return (NSUInteger) (offset % 75);
 }
 
 - (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
@@ -129,15 +129,15 @@
 - (NSString *)				composer			{ return [[_composer retain] autorelease]; }
 - (NSString *)				comment				{ return [[_comment retain] autorelease]; }
 
-- (unsigned)				byteSize			{ return (([self lastSector] - [self firstSector]) * kCDSectorSizeCDDA); }
+- (NSUInteger)				byteSize			{ return (([self lastSector] - [self firstSector]) * kCDSectorSizeCDDA); }
 
 - (NSString *)				musicbrainzTrackId	{ return [[_musicbrainzTrackId retain] autorelease]; }
 - (NSString *)				musicbrainzArtistId	{ return [[_musicbrainzArtistId retain] autorelease]; }
 
-- (unsigned)				number				{ return _number; }
-- (unsigned)				firstSector			{ return _firstSector; }
-- (unsigned)				lastSector			{ return _lastSector; }
-- (unsigned)				channels			{ return _channels; }
+- (NSUInteger)				number				{ return _number; }
+- (NSUInteger)				firstSector			{ return _firstSector; }
+- (NSUInteger)				lastSector			{ return _lastSector; }
+- (NSUInteger)				channels			{ return _channels; }
 - (BOOL)					preEmphasis			{ return _preEmphasis; }
 - (BOOL)					copyPermitted		{ return _copyPermitted; }
 - (NSString *)				ISRC				{ return [[_ISRC retain] autorelease]; }
@@ -156,10 +156,10 @@
 - (void) setMusicbrainzArtistId:(NSString *)musicbrainzArtistId
 { [_musicbrainzArtistId release]; _musicbrainzArtistId = [musicbrainzArtistId retain]; }
 
-- (void) setNumber:(unsigned)number						{ _number = number; }
-- (void) setFirstSector:(unsigned)firstSector			{ _firstSector = firstSector; }
-- (void) setLastSector:(unsigned)lastSector				{ _lastSector = lastSector; }
-- (void) setChannels:(unsigned)channels					{ _channels = channels; }
+- (void) setNumber:(NSUInteger)number					{ _number = number; }
+- (void) setFirstSector:(NSUInteger)firstSector			{ _firstSector = firstSector; }
+- (void) setLastSector:(NSUInteger)lastSector			{ _lastSector = lastSector; }
+- (void) setChannels:(NSUInteger)channels				{ _channels = channels; }
 - (void) setPreEmphasis:(BOOL)preEmphasis				{ _preEmphasis = preEmphasis; }
 - (void) setCopyPermitted:(BOOL)copyPermitted			{ _copyPermitted = copyPermitted; }
 - (void) setISRC:(NSString *)ISRC						{ [_ISRC release]; _ISRC = [ISRC retain]; }
@@ -296,8 +296,8 @@
 	_musicbrainzArtistId	= [[properties valueForKey:@"musicbrainzArtistId"] retain];
 
 	_number			= [[properties valueForKey:@"number"] unsignedIntValue];
-	_firstSector	= [[properties valueForKey:@"firstSector"] unsignedLongValue];
-	_lastSector		= [[properties valueForKey:@"lastSector"] unsignedLongValue];
+	_firstSector	= [[properties valueForKey:@"firstSector"] unsignedIntegerValue];
+	_lastSector		= [[properties valueForKey:@"lastSector"] unsignedIntegerValue];
 	_channels		= [[properties valueForKey:@"channels"] unsignedIntValue];
 	_preEmphasis	= [[properties valueForKey:@"preEmphasis"] boolValue];
 	_copyPermitted	= [[properties valueForKey:@"copyPermitted"] boolValue];
@@ -377,12 +377,12 @@
 	return [result autorelease];
 }
 
-#pragma Scripting
+#pragma mark Scripting
 
 - (NSScriptObjectSpecifier *) objectSpecifier
 {
     NSArray		*tracks		= [[self document] valueForKey:@"tracks"];
-    unsigned	idx			= [tracks indexOfObjectIdenticalTo:self];
+    NSUInteger	idx			= [tracks indexOfObjectIdenticalTo:self];
 
     if(NSNotFound != idx) {
         NSScriptObjectSpecifier *containerRef = [[self document] objectSpecifier];

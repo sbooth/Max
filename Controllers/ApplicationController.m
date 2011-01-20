@@ -108,7 +108,7 @@ static ApplicationController *sharedController = nil;
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
-- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
@@ -228,14 +228,10 @@ static ApplicationController *sharedController = nil;
 
 - (void) encodeFiles:(NSArray *)filenames
 {
-	NSEnumerator	*enumerator		= nil;
-	NSString		*filename		= nil;
-	
 	[[FileConversionController sharedController] showWindow:self];
 
-	for(filename in filenames) {
+	for(NSString *filename in filenames)
 		[[FileConversionController sharedController] addFile:filename];
-	}				
 }
 
 - (IBAction) toggleRipperWindow:(id)sender

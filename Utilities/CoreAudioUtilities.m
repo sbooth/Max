@@ -355,7 +355,7 @@ getCoreAudioWritableTypes()
 					NSMutableArray			*dataFormats;
 					NSMutableIndexSet		*indexesToRemove	= [NSMutableIndexSet indexSet];
 					BOOL					writable			= NO;
-					unsigned				dataFormatsCount;
+					NSUInteger				dataFormatsCount;
 					
 					[d setObject:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
 					[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];

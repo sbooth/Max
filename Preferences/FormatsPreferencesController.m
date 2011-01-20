@@ -283,7 +283,7 @@
 	[[NSApplication sharedApplication] beginSheet:[settingsSheet sheet] modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(didEndSettingsSheet:returnCode:contextInfo:) contextInfo:settingsSheet];
 }		
 
-- (unsigned)		countOfAvailableFormats							{ return [_availableFormats count]; }
+- (NSUInteger)		countOfAvailableFormats							{ return [_availableFormats count]; }
 - (NSDictionary *)	objectInAvailableFormatsAtIndex:(unsigned)idx	{ return [_availableFormats objectAtIndex:idx]; }
 
 @end

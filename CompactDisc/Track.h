@@ -29,7 +29,7 @@
 	CompactDiscDocument		*_document;
 
 	BOOL					_ripInProgress;
-	unsigned				_activeEncoders;
+	NSUInteger				_activeEncoders;
 
 	// View properties
 	BOOL					_selected;
@@ -47,10 +47,10 @@
 	NSString				*_musicbrainzArtistId;
 	
 	// Physical track properties
-	unsigned 				_number;
-	unsigned				_firstSector;
-	unsigned				_lastSector;
-	unsigned 				_channels;
+	NSUInteger 				_number;
+	NSUInteger				_firstSector;
+	NSUInteger				_lastSector;
+	NSUInteger 				_channels;
 	BOOL					_preEmphasis;
 	BOOL					_copyPermitted;
 	NSString				*_ISRC;
@@ -90,23 +90,23 @@
 - (NSString *)		comment;
 - (void)			setComment:(NSString *)comment;
 
-- (unsigned)		byteSize;
+- (NSUInteger)		byteSize;
 
-- (unsigned)		minute;
-- (unsigned)		second;
-- (unsigned)		frame;
+- (NSUInteger)		minute;
+- (NSUInteger)		second;
+- (NSUInteger)		frame;
 
-- (unsigned)		number;
-- (void)			setNumber:(unsigned)number;
+- (NSUInteger)		number;
+- (void)			setNumber:(NSUInteger)number;
 
-- (unsigned)		firstSector;
-- (void)			setFirstSector:(unsigned)firstSector;
+- (NSUInteger)		firstSector;
+- (void)			setFirstSector:(NSUInteger)firstSector;
 
-- (unsigned)		lastSector;
-- (void)			setLastSector:(unsigned)lastSector;
+- (NSUInteger)		lastSector;
+- (void)			setLastSector:(NSUInteger)lastSector;
 
-- (unsigned)		channels;
-- (void)			setChannels:(unsigned)channels;
+- (NSUInteger)		channels;
+- (void)			setChannels:(NSUInteger)channels;
 
 - (BOOL)			preEmphasis;
 - (void)			setPreEmphasis:(BOOL)preEmphasis;

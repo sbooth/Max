@@ -40,7 +40,7 @@
 - (void) readFromCDInfoFileIfPresent;
 - (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (void) updateMetadataFromMusicBrainz:(unsigned)index;
+- (void) updateMetadataFromMusicBrainz:(NSUInteger)index;
 @end
 
 @implementation CueSheetDocument
@@ -207,7 +207,7 @@
 		}
 		
 		// Parse each track
-		int i;
+		NSUInteger i;
 		for(i = 1; i <= cd_get_ntrack(cd); ++i) {
 			
 			struct Track	*track			= cd_get_track(cd, i);			
@@ -359,7 +359,7 @@
 		
 		FLAC__metadata_iterator_init(iterator, chain);
 		
-		unsigned i;
+		NSUInteger i;
 		FLAC__StreamMetadata_StreamInfo streamInfo;
 		
 		do {
@@ -392,14 +392,14 @@
 							
 							// Fill in frame counts
 							if(0 < i) {
-								unsigned frameCount = (block->data.cue_sheet.tracks[i].offset - 1) - block->data.cue_sheet.tracks[i - 1].offset;
+								NSUInteger frameCount = (block->data.cue_sheet.tracks[i].offset - 1) - block->data.cue_sheet.tracks[i - 1].offset;
 								[[self objectInTracksAtIndex:(i - 1)] setFrameCount:frameCount];
 							}
 							
 							// Special handling for the last audio track
 							// FIXME: Is it safe the assume the lead out will always be the final track in the cue sheet?
 							if(i == block->data.cue_sheet.num_tracks - 1 - 1) {
-								unsigned frameCount = streamInfo.total_samples - block->data.cue_sheet.tracks[i].offset + 1;
+								NSUInteger frameCount = streamInfo.total_samples - block->data.cue_sheet.tracks[i].offset + 1;
 								[newTrack setFrameCount:frameCount];
 							}
 							
@@ -461,14 +461,14 @@
 
 - (IBAction) selectAll:(id)sender
 {
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
 		[[self objectInTracksAtIndex:i] setSelected:YES];
 }
 
 - (IBAction) selectNone:(id)sender
 {
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
 		[[self objectInTracksAtIndex:i] setSelected:NO];
 }
@@ -477,7 +477,7 @@
 {
 	NSMutableDictionary		*postProcessingOptions	= nil;
 	NSArray					*applicationPaths		= nil;
-	unsigned				i;
+	NSUInteger				i;
 	
 	// Do nothing if the selection is empty
 	NSAssert(NO == [self emptySelection], NSLocalizedStringFromTable(@"No tracks are selected for encoding.", @"Exceptions", @""));
@@ -487,7 +487,7 @@
 
 	// Verify at least one output format is selected
 	if(0 == [encoders count]) {
-		int		result;
+		NSInteger		result;
 		
 		NSAlert *alert = [[[NSAlert alloc] init] autorelease];
 		[alert addButtonWithTitle: NSLocalizedStringFromTable(@"OK", @"General", @"")];
@@ -607,7 +607,7 @@
 	
 	[_mbHelper performQuery:sender];
 	
-	unsigned matchCount	= [_mbHelper matchCount];
+	NSUInteger matchCount	= [_mbHelper matchCount];
 	NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
 	
 	// If only match was found, update ourselves
@@ -617,7 +617,7 @@
 		MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
 		NSMutableArray			*matches	= [[NSMutableArray alloc] init];
 		
-		unsigned i;
+		NSUInteger i;
 		for(i = 0; i < matchCount; ++i)
 			[matches addObject:[_mbHelper matchAtIndex:i]];
 		
@@ -666,7 +666,7 @@
 
 - (NSArray *) selectedTracks
 {
-	unsigned		i;
+	NSUInteger		i;
 	NSMutableArray	*result			= [NSMutableArray arrayWithCapacity:[self countOfTracks]];
 	
 	for(i = 0; i < [self countOfTracks]; ++i) {
@@ -689,8 +689,8 @@
 
 - (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
 - (NSDate *)		albumArtDownloadDate				{ return [[_albumArtDownloadDate retain] autorelease]; }
-- (unsigned)		albumArtWidth						{ return (unsigned)[[self albumArt] size].width; }
-- (unsigned)		albumArtHeight						{ return (unsigned)[[self albumArt] size].height; }
+- (NSUInteger)		albumArtWidth						{ return (NSUInteger)[[self albumArt] size].width; }
+- (NSUInteger)		albumArtHeight						{ return (NSUInteger)[[self albumArt] size].height; }
 
 - (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
 - (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
@@ -698,8 +698,8 @@
 
 - (NSString *)		MCN									{ return [[_MCN retain] autorelease]; }
 
-- (unsigned)		countOfTracks						{ return [_tracks count]; }
-- (CueSheetTrack *)	objectInTracksAtIndex:(unsigned)idx { return [_tracks objectAtIndex:idx]; }
+- (NSUInteger)		countOfTracks						{ return [_tracks count]; }
+- (CueSheetTrack *)	objectInTracksAtIndex:(NSUInteger)idx { return [_tracks objectAtIndex:idx]; }
 
 - (NSString *) discID
 {
@@ -711,15 +711,15 @@
 	
 	int offsets[100];
 	
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i) {
 		CueSheetTrack *track = [self objectInTracksAtIndex:i];
-		UInt32 firstSector = [track startingFrame] / ((unsigned)[track sampleRate] / 75);
+		UInt32 firstSector = [track startingFrame] / ((NSUInteger)[track sampleRate] / 75);
 		offsets[1 + i] = firstSector + 150;
 		
 		// Use the sector immediately following the last track's last sector for lead out
 		if(1 + i == [self countOfTracks]) {
-			UInt32 sectorCount = [track frameCount] / ((unsigned)[track sampleRate] / 75);
+			UInt32 sectorCount = [track frameCount] / ((NSUInteger)[track sampleRate] / 75);
 			offsets[0] = offsets[1 + i] + sectorCount;
 		}
 	}
@@ -850,8 +850,8 @@
 	}
 }
 
-- (void) insertObject:(CueSheetTrack *)track inTracksAtIndex:(unsigned)idx	{ [_tracks insertObject:track atIndex:idx]; }
-- (void) removeObjectFromTracksAtIndex:(unsigned)idx					{ [_tracks removeObjectAtIndex:idx]; }
+- (void) insertObject:(CueSheetTrack *)track inTracksAtIndex:(NSUInteger)idx	{ [_tracks insertObject:track atIndex:idx]; }
+- (void) removeObjectFromTracksAtIndex:(NSUInteger)idx					{ [_tracks removeObjectAtIndex:idx]; }
 
 @end
 
@@ -862,7 +862,7 @@
 	NSString *filename = [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [self discID]];
 	NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:filename];
 	if(nil != dictionary) {
-		unsigned i;
+		NSUInteger i;
 		
 		NSArray *tracks = [dictionary valueForKey:@"tracks"];
 		for(i = 0; i < [tracks count]; ++i) {
@@ -870,7 +870,7 @@
 			
 			// Match tracks by track number
 			CueSheetTrack *track = nil;
-			unsigned j;
+			NSUInteger j;
 			for(j = 0; j < [self countOfTracks]; ++j) {
 				track = [self objectInTracksAtIndex:j];
 				if([track number] == [[properties objectForKey:@"number"] unsignedIntValue])
@@ -946,8 +946,8 @@
 {
     if(NSOKButton == returnCode) {
 		NSArray		*filesToOpen	= [sheet filenames];
-		unsigned	count			= [filesToOpen count];
-		unsigned	i;
+		NSUInteger	count			= [filesToOpen count];
+		NSUInteger	i;
 		NSImage		*image			= nil;
 		
 		for(i = 0; i < count; ++i) {
@@ -970,7 +970,7 @@
 	[musicBrainzMatchSheet release];
 }
 
-- (void) updateMetadataFromMusicBrainz:(unsigned)index
+- (void) updateMetadataFromMusicBrainz:(NSUInteger)index
 {
 	NSDictionary *releaseDictionary = [_mbHelper matchAtIndex:index];
 	
@@ -985,7 +985,7 @@
 	
 	NSArray *tracksArray = [releaseDictionary valueForKey:@"tracks"];
 	
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [tracksArray count]; ++i) {
 		NSDictionary *trackDictionary = [tracksArray objectAtIndex:i];
 		CueSheetTrack *track = [self objectInTracksAtIndex:i];

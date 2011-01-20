@@ -173,7 +173,7 @@ enum {
 			[alert setInformativeText:NSLocalizedStringFromTable(@"Do you want to replace the existing file?", @"General", @"")];
 			[alert setAlertStyle:NSInformationalAlertStyle];
 			
-			int			result		= [alert runModal];
+			NSInteger			result		= [alert runModal];
 			switch(result) {
 				case NSAlertFirstButtonReturn:
 					;

@@ -77,7 +77,7 @@
 
 - (NSArray *)			sectors									{ return [[_sectors retain] autorelease]; }
 - (NSString *)			deviceName								{ return [[_deviceName retain] autorelease]; }
-- (unsigned)			countOfTracks							{ return [_tracks count]; }
+- (NSUInteger)			countOfTracks							{ return [_tracks count]; }
 - (Track *)				objectInTracksAtIndex:(unsigned)index	{ return [_tracks objectAtIndex:index]; }
 
 - (NSString *)			phase									{ return [[_phase retain] autorelease]; }

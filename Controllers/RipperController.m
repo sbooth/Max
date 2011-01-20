@@ -69,7 +69,7 @@ static RipperController *sharedController = nil;
 
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
-- (unsigned)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
+- (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (void)		release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
@@ -212,7 +212,7 @@ static RipperController *sharedController = nil;
 	_freeze = NO;
 }
 
-#pragma Action Methods
+#pragma mark Action Methods
 
 - (IBAction) stopSelectedTasks:(id)sender
 {
@@ -316,7 +316,7 @@ static RipperController *sharedController = nil;
 
 #pragma mark Task Management
 
-- (unsigned)	countOfTasks							{ return [_tasks count]; }
+- (NSUInteger)	countOfTasks							{ return [_tasks count]; }
 - (BOOL)		hasTasks								{ return (0 != [_tasks count]); }
 
 @end
