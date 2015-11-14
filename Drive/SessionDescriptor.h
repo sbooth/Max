@@ -22,22 +22,22 @@
 
 @interface SessionDescriptor : NSObject
 {
-	unsigned 		_number;
-	unsigned		_firstTrack;
-	unsigned		_lastTrack;
-	unsigned		_leadOut;
+	NSUInteger 		_number;
+	NSUInteger		_firstTrack;
+	NSUInteger		_lastTrack;
+	NSUInteger		_leadOut;
 }
 
-- (unsigned)		number;
-- (void)			setNumber:(unsigned)number;
+- (NSUInteger)		number;
+- (void)			setNumber:(NSUInteger)number;
 
-- (unsigned)		firstTrack;
-- (void)			setFirstTrack:(unsigned)firstTrack;
+- (NSUInteger)		firstTrack;
+- (void)			setFirstTrack:(NSUInteger)firstTrack;
 
-- (unsigned)		lastTrack;
-- (void)			setLastTrack:(unsigned)lastTrack;
+- (NSUInteger)		lastTrack;
+- (void)			setLastTrack:(NSUInteger)lastTrack;
 
-- (unsigned)		leadOut;
-- (void)			setLeadOut:(unsigned)leadOut;
+- (NSUInteger)		leadOut;
+- (void)			setLeadOut:(NSUInteger)leadOut;
 
 @end

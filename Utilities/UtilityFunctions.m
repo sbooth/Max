@@ -52,7 +52,7 @@ getApplicationDataDirectory()
 			sDataDirectory	= [[[paths objectAtIndex:0] stringByAppendingString:@"/Max"] retain];
 			result			= [manager fileExistsAtPath:sDataDirectory isDirectory:&isDir];
 			if(NO == result) {
-				result		= [manager createDirectoryAtPath:sDataDirectory attributes:nil];
+				result		= [manager createDirectoryAtPath:sDataDirectory withIntermediateDirectories:YES attributes:nil error:nil];
 				NSCAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create the application data directory.", @"Exceptions", @""));
 			}
 			else {
@@ -70,7 +70,6 @@ createDirectoryStructure(NSString *path)
 	NSArray			*pathComponents		= [path pathComponents];
 	
 	if(1 < [pathComponents count]) {
-		int				i;
 		NSUInteger		directoryCount		= [pathComponents count] - 1;
 
 		// Accept a '/' as the first path
@@ -83,7 +82,7 @@ createDirectoryStructure(NSString *path)
 		validateAndCreateDirectory(pathPart);
 		
 		// Iterate through all the components
-		for(i = 1; i < directoryCount - 1; ++i) {
+		for(NSUInteger i = 1; i < directoryCount - 1; ++i) {
 			pathPart = [NSString stringWithFormat:@"%@/%@", pathPart, makeStringSafeForFilename([pathComponents objectAtIndex:i])];				
 			validateAndCreateDirectory(pathPart);
 		}
@@ -142,7 +141,7 @@ validateAndCreateDirectory(NSString *path)
 
 	result = [manager fileExistsAtPath:path isDirectory:&isDir];
 	if(NO == result) {
-		result = [manager createDirectoryAtPath:path attributes:nil];
+		result = [manager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 		NSCAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create directory.", @"Exceptions", @""));
 	}
 	else {

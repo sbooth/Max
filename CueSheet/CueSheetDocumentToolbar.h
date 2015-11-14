@@ -22,7 +22,7 @@
 
 #import "CueSheetDocument.h"
 
-@interface CueSheetDocumentToolbar : NSToolbar 
+@interface CueSheetDocumentToolbar : NSToolbar <NSToolbarDelegate>
 {
 	CueSheetDocument		*_document;
 }

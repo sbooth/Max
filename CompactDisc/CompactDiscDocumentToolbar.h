@@ -22,7 +22,7 @@
 
 #import "CompactDiscDocument.h"
 
-@interface CompactDiscDocumentToolbar : NSToolbar 
+@interface CompactDiscDocumentToolbar : NSToolbar <NSToolbarDelegate>
 {
 	CompactDiscDocument		*_document;
 }

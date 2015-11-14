@@ -35,7 +35,7 @@
 - (IBAction) performQuery:(id)sender;
 
 // Number of matches found for the disc
-- (unsigned) matchCount;
-- (NSDictionary *) matchAtIndex:(unsigned)matchIndex;
+- (NSUInteger) matchCount;
+- (NSDictionary *) matchAtIndex:(NSUInteger)matchIndex;
 
 @end

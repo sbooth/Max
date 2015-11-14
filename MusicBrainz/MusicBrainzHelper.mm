@@ -260,12 +260,12 @@
 	}
 }
 
-- (unsigned) matchCount
+- (NSUInteger) matchCount
 {
 	return [_matches count];
 }
 
-- (NSDictionary *) matchAtIndex:(unsigned)matchIndex;
+- (NSDictionary *) matchAtIndex:(NSUInteger)matchIndex;
 {
 	return [_matches objectAtIndex:matchIndex];
 }

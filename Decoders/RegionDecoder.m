@@ -30,12 +30,12 @@
 	return [[[RegionDecoder alloc] initWithFilename:filename startingFrame:startingFrame] autorelease];
 }
 
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount
 {
 	return [[[RegionDecoder alloc] initWithFilename:filename startingFrame:startingFrame frameCount:frameCount] autorelease];
 }
 
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount loopCount:(NSUInteger)loopCount
 {
 	return [[[RegionDecoder alloc] initWithFilename:filename startingFrame:startingFrame frameCount:frameCount loopCount:loopCount] autorelease];
 }
@@ -76,7 +76,7 @@
 	return self;
 }
 
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount
 {
 	if((self = [super init])) {
 		_decoder = [Decoder decoderWithFilename:filename];
@@ -96,7 +96,7 @@
 	return self;
 }
 
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount loopCount:(NSUInteger)loopCount
 {
 	if((self = [super init])) {
 		_decoder = [Decoder decoderWithFilename:filename];
@@ -128,8 +128,8 @@
 
 - (Decoder *)	decoder									{ return [[_decoder retain] autorelease]; }
 
-- (unsigned)		loopCount								{ return _loopCount; }
-- (void)			setLoopCount:(unsigned)loopCount 		{ _loopCount = loopCount; }
+- (NSUInteger)		loopCount								{ return _loopCount; }
+- (void)			setLoopCount:(NSUInteger)loopCount 		{ _loopCount = loopCount; }
 
 - (SInt64)			startingFrame							{ return _startingFrame; }
 
@@ -189,7 +189,7 @@
 	return framesRead;	
 }
 
-- (unsigned)		completedLoops							{ return _completedLoops; }
+- (NSUInteger)		completedLoops							{ return _completedLoops; }
 
 - (SInt64)			totalFrames								{ return (([self loopCount] + 1) * [self frameCount]); }
 - (SInt64)			currentFrame							{ return _totalFramesRead; }

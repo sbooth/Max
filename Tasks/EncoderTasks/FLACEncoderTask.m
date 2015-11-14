@@ -273,7 +273,7 @@
 				[image unlockFocus];
 			}
 			
-			imageData	= [bitmapRep representationUsingType:NSPNGFileType properties:nil]; 			
+			imageData	= [bitmapRep representationUsingType:NSPNGFileType properties:@{}];
 			
 			// Add the image data to the metadata block
  			block->data.picture.type		= FLAC__STREAM_METADATA_PICTURE_TYPE_FRONT_COVER;

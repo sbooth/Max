@@ -22,26 +22,26 @@
 
 @interface BitArray : NSObject
 {
-	unsigned		_bitCount;
-	unsigned		_length;
+	NSUInteger		_bitCount;
+	NSUInteger		_length;
 	uint32_t		*_bits;
 }
 
 // Access the number of bits this object holds
-- (unsigned)		bitCount;
-- (void)			setBitCount:(unsigned)bitCount;
+- (NSUInteger)		bitCount;
+- (void)			setBitCount:(NSUInteger)bitCount;
 
 // Access to the individual bits
-- (BOOL)			valueAtIndex:(unsigned)index;
-- (void)			setValue:(BOOL)value forIndex:(unsigned)index;
+- (BOOL)			valueAtIndex:(NSUInteger)index;
+- (void)			setValue:(BOOL)value forIndex:(NSUInteger)index;
 
 // Convenience methods
 - (BOOL)			allZeroes;
-- (unsigned)		countOfZeroes;
+- (NSUInteger)		countOfZeroes;
 - (void)			setAllZeroes;
 
 - (BOOL)			allOnes;
-- (unsigned)		countOfOnes;
+- (NSUInteger)		countOfOnes;
 - (void)			setAllOnes;
 
 @end

@@ -56,7 +56,7 @@ static ComponentVersionsController *sharedController = nil;
 	if((self = [super initWithWindowNibName:@"ComponentVersions"])) {
 
 		const char		*speexVersion;
-		char			buffer [128] ;
+		char			buffer [128];
 		
 		speex_lib_ctl(SPEEX_LIB_GET_VERSION_STRING, &speexVersion);
 		sf_command(NULL, SFC_GET_LIB_VERSION, buffer, sizeof(buffer));
@@ -72,13 +72,8 @@ static ComponentVersionsController *sharedController = nil;
 			_speexVersion		= NSLocalizedStringFromTable(@"Unknown", @"General", @"");
 		}
 
-		if(NULL != buffer) {
-			_libsndfileVersion	= [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
-		}
-		else {
-			_libsndfileVersion	= NSLocalizedStringFromTable(@"Unknown", @"General", @"");
-		}
-		
+		_libsndfileVersion	= [NSString stringWithCString:buffer encoding:NSASCIIStringEncoding];
+
 		_wavPackVersion		= [NSString stringWithFormat:@"WavPack %s", WavpackGetLibraryVersionString()];
 		
 		return self;
@@ -95,7 +90,7 @@ static ComponentVersionsController *sharedController = nil;
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
 - (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void)		release											{ /* do nothing */ }
+- (oneway void)	release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
 @end

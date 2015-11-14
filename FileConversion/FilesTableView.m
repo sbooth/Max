@@ -36,7 +36,7 @@
 		return YES;
 }
 
-- (unsigned) draggingSourceOperationMaskForLocal:(BOOL)isLocal
+- (NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
 	return (isLocal ? NSDragOperationMove : NSDragOperationCopy);
 }
@@ -71,7 +71,7 @@
 {
 	NSPoint		location		= [event locationInWindow];
 	NSPoint		localLocation	= [self convertPoint:location fromView:nil];
-	int			row				= [self rowAtPoint:localLocation];
+	NSInteger	row				= [self rowAtPoint:localLocation];
 	
 	if(-1 != row) {
 		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
@@ -90,7 +90,7 @@
 - (IBAction) revealInFinder:(id)sender
 {
 	NSString *path = [[_filesController selection] valueForKey:@"filename"];
-	[[NSWorkspace sharedWorkspace] selectFile:path inFileViewerRootedAtPath:nil];
+	[[NSWorkspace sharedWorkspace] selectFile:path inFileViewerRootedAtPath:@""];
 }
 
 - (IBAction) playWithPlay:(id)sender

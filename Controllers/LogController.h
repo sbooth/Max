@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface LogController : NSWindowController 
+@interface LogController : NSWindowController <NSToolbarDelegate>
 {
 	NSMutableArray					*_logEntries;
 	IBOutlet NSArrayController		*_logEntriesController;
@@ -34,7 +34,7 @@
 
 - (void)				logMessage:(NSString *)message;
 
-- (unsigned)			countOfLogEntries;
-- (NSDictionary *)		objectInLogEntriesAtIndex:(unsigned)index;
+- (NSUInteger)			countOfLogEntries;
+- (NSDictionary *)		objectInLogEntriesAtIndex:(NSUInteger)index;
 
 @end

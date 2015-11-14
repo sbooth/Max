@@ -44,10 +44,10 @@
 	if((self = [super initWithNibName:@"CoreAudioSettingsSheet" settings:settings])) {
 		coreAudioFormats	= getCoreAudioWritableTypes();
 
-		fileType			= [[settings objectForKey:@"fileType"] unsignedLongValue];
-		formatID			= [[settings objectForKey:@"formatID"] unsignedLongValue];
-		formatFlags			= [[settings objectForKey:@"formatFlags"] unsignedLongValue];
-		bitsPerChannel		= [[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
+		fileType			= (AudioFileTypeID)[[settings objectForKey:@"fileType"] unsignedLongValue];
+		formatID			= (UInt32)[[settings objectForKey:@"formatID"] unsignedLongValue];
+		formatFlags			= (UInt32)[[settings objectForKey:@"formatFlags"] unsignedLongValue];
+		bitsPerChannel		= (UInt32)[[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
 
 		[self setFormatName:getCoreAudioOutputFormatName(fileType, formatID, 0)];
 
@@ -70,9 +70,9 @@
 			for(i = 0; i < [_availableSubtypes count]; ++i) {
 				subtype					= [_availableSubtypes objectAtIndex:i];
 
-				subtypeFormatID			= [[subtype objectForKey:@"formatID"] unsignedLongValue];
-				subtypeFormatFlags		= [[subtype objectForKey:@"formatFlags"] unsignedLongValue];
-				subtypeBitsPerChannel	= [[subtype objectForKey:@"bitsPerChannel"] unsignedLongValue];
+				subtypeFormatID			= (UInt32)[[subtype objectForKey:@"formatID"] unsignedLongValue];
+				subtypeFormatFlags		= (UInt32)[[subtype objectForKey:@"formatFlags"] unsignedLongValue];
+				subtypeBitsPerChannel	= (UInt32)[[subtype objectForKey:@"bitsPerChannel"] unsignedLongValue];
 
 				if(formatID == subtypeFormatID && formatFlags == subtypeFormatFlags && bitsPerChannel == subtypeBitsPerChannel) {
 					objectToSelect = subtype;
@@ -158,9 +158,9 @@
 	subtypeInfo = [selectedObjects objectAtIndex:0];
 	
 	// Update name
-	fileType			= [[[self settings] objectForKey:@"fileType"] unsignedLongValue];
-	formatID			= [[subtypeInfo objectForKey:@"formatID"] unsignedLongValue];
-	formatFlags			= [[subtypeInfo objectForKey:@"formatFlags"] unsignedLongValue];
+	fileType			= (AudioFileTypeID)[[[self settings] objectForKey:@"fileType"] unsignedLongValue];
+	formatID			= (UInt32)[[subtypeInfo objectForKey:@"formatID"] unsignedLongValue];
+	formatFlags			= (UInt32)[[subtypeInfo objectForKey:@"formatFlags"] unsignedLongValue];
 
 	[self setFormatName:getCoreAudioOutputFormatName(fileType, formatID, formatFlags)];
 

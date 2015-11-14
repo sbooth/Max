@@ -51,10 +51,10 @@
 - (BOOL)			shouldStop;
 - (void)			setShouldStop:(BOOL)shouldStop;
 
-- (unsigned)		secondsRemaining;
-- (void)			setSecondsRemaining:(unsigned)secondsRemaining;
+- (NSUInteger)		secondsRemaining;
+- (void)			setSecondsRemaining:(NSUInteger)secondsRemaining;
 
-- (void)			updateProgress:(float)percentComplete secondsRemaining:(unsigned)secondsRemaining;
+- (void)			updateProgress:(float)percentComplete secondsRemaining:(NSUInteger)secondsRemaining;
 
 - (NSException *)	exception;
 - (void)			setException:(NSException *)exception;

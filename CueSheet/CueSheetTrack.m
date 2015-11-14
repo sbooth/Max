@@ -29,9 +29,9 @@
 
 @implementation CueSheetTrack
 
-+ (void) initialize 
++ (NSSet *) keyPathsForValuesAffectingLength
 {
-	[self setKeys:[NSArray arrayWithObjects:@"startingFrame", @"frameCount", nil] triggerChangeNotificationsForDependentKey:@"length"];
+	return [NSSet setWithObjects:@"startingFrame", @"frameCount", nil];
 }
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
@@ -286,7 +286,7 @@
 	[result setTrackComment:[self comment]];
 	[result setISRC:[self ISRC]];
 	
-	[result setTrackTotal:[NSNumber numberWithInt:[[self document] countOfTracks]]];
+	[result setTrackTotal:[NSNumber numberWithUnsignedInteger:[[self document] countOfTracks]]];
 	[result setAlbumTitle:[[self document] title]];
 	[result setAlbumArtist:[[self document] artist]];
 	[result setAlbumDate:[[self document] date]];

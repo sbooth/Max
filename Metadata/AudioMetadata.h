@@ -27,14 +27,14 @@
 	NSString				*_trackTitle;
 	NSString				*_trackArtist;
 	NSString				*_trackComposer;
-	NSNumber				*_trackDate;
+	NSString				*_trackDate;
 	NSString				*_trackGenre;
 	NSString				*_trackComment;
 
 	NSString				*_albumTitle;
 	NSString				*_albumArtist;
 	NSString				*_albumComposer;
-	NSNumber				*_albumDate;
+	NSString				*_albumDate;
 	NSString				*_albumGenre;
 	NSString				*_albumComment;
 

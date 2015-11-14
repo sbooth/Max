@@ -24,21 +24,21 @@
 
 + (BOOL)				accessInstanceVariablesDirectly			{ return NO; }
 
-- (unsigned)			number									{ return _number; }
-- (void)				setNumber:(unsigned)number				{ _number = number; }
+- (NSUInteger)			number									{ return _number; }
+- (void)				setNumber:(NSUInteger)number			{ _number = number; }
 
-- (unsigned)			firstTrack								{ return _firstTrack; }
-- (void)				setFirstTrack:(unsigned)firstTrack		{ _firstTrack = firstTrack; }
+- (NSUInteger)			firstTrack								{ return _firstTrack; }
+- (void)				setFirstTrack:(NSUInteger)firstTrack	{ _firstTrack = firstTrack; }
 
-- (unsigned)			lastTrack								{ return _lastTrack; }
-- (void)				setLastTrack:(unsigned)lastTrack		{ _lastTrack = lastTrack; }
+- (NSUInteger)			lastTrack								{ return _lastTrack; }
+- (void)				setLastTrack:(NSUInteger)lastTrack		{ _lastTrack = lastTrack; }
 
-- (unsigned)			leadOut									{ return _leadOut; }
-- (void)				setLeadOut:(unsigned)leadOut			{ _leadOut = leadOut; }
+- (NSUInteger)			leadOut									{ return _leadOut; }
+- (void)				setLeadOut:(NSUInteger)leadOut			{ _leadOut = leadOut; }
 
 - (NSString *) description
 {
-	return [NSString stringWithFormat:@"{\n\tSession: %u\n\tFirst Track: %u\n\tLast Track: %u\n\tLead Out: %u\n}", [self number], [self firstTrack], [self lastTrack], [self leadOut]];
+	return [NSString stringWithFormat:@"{\n\tSession: %lu\n\tFirst Track: %lu\n\tLast Track: %lu\n\tLead Out: %lu\n}", (unsigned long)[self number], (unsigned long)[self firstTrack], (unsigned long)[self lastTrack], (unsigned long)[self leadOut]];
 }
 
 @end

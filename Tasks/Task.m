@@ -116,7 +116,7 @@
 - (void) deleteOutputFile
 {
 	if([[NSFileManager defaultManager] fileExistsAtPath:[self outputFilename]]) {
-		BOOL			result			= [[NSFileManager defaultManager] removeFileAtPath:[self outputFilename] handler:nil];
+		BOOL			result			= [[NSFileManager defaultManager] removeItemAtPath:[self outputFilename] error:nil];
 		NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to delete the output file.", @"Exceptions", @"") );
 	}
 }

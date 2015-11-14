@@ -30,23 +30,23 @@
 	Decoder			*_decoder;
 	SInt64			_startingFrame;
 	UInt32			_frameCount;
-	unsigned		_loopCount;
+	NSUInteger		_loopCount;
 	
 	UInt32			_framesReadInCurrentLoop;
 	SInt64			_totalFramesRead;
-	unsigned		_completedLoops;
+	NSUInteger		_completedLoops;
 }	
 
 // ========================================
 // Creation
 // ========================================
 + (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount;
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount;
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount;
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount loopCount:(NSUInteger)loopCount;
 
 - (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount;
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(unsigned)frameCount loopCount:(unsigned)loopCount;
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount;
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount loopCount:(NSUInteger)loopCount;
 
 // ========================================
 // Properties
@@ -59,10 +59,10 @@
 - (UInt32) frameCount;
 - (void) setFrameCount:(UInt32)frameCount;
 
-- (unsigned) loopCount;
-- (void) setLoopCount:(unsigned)loopCount;
+- (NSUInteger) loopCount;
+- (void) setLoopCount:(NSUInteger)loopCount;
 
 - (void) reset;
-- (unsigned) completedLoops;
+- (NSUInteger) completedLoops;
 
 @end

@@ -29,15 +29,34 @@
 
 @implementation Track
 
-+ (void) initialize 
++ (NSSet *) keyPathsForValuesAffectingMinute
 {
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"minute"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"second"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"frame"];
-	
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"size"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"length"];
-	[self setKeys:[NSArray arrayWithObjects:@"firstSector", @"lastSector", nil] triggerChangeNotificationsForDependentKey:@"duration"];
+	return [NSSet setWithObjects:@"firstSector", @"lastSector", nil];
+}
+
++ (NSSet *) keyPathsForValuesAffectingSecond
+{
+	return [NSSet setWithObjects:@"firstSector", @"lastSector", nil];
+}
+
++ (NSSet *) keyPathsForValuesAffectingFrame
+{
+	return [NSSet setWithObjects:@"firstSector", @"lastSector", nil];
+}
+
++ (NSSet *) keyPathsForValuesAffectingSize
+{
+	return [NSSet setWithObjects:@"firstSector", @"lastSector", nil];
+}
+
++ (NSSet *) keyPathsForValuesAffectingLength
+{
+	return [NSSet setWithObjects:@"firstSector", @"lastSector", nil];
+}
+
++ (NSSet *) keyPathsForValuesAffectingDuration
+{
+	return [NSSet setWithObjects:@"firstSector", @"lastSector", nil];
 }
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
@@ -114,7 +133,7 @@
 	return (NSUInteger) (offset % 75);
 }
 
-- (NSString *)				length				{ return [NSString stringWithFormat:@"%i:%02i", [self minute], [self second]]; }
+- (NSString *)				length				{ return [NSString stringWithFormat:@"%lu:%02lu", (unsigned long)[self minute], (unsigned long)[self second]]; }
 - (CompactDiscDocument *)	document			{ return [[_document retain] autorelease]; }
 
 - (BOOL)					ripInProgress		{ return _ripInProgress; }
@@ -257,10 +276,10 @@
 	[result setValue:[self musicbrainzTrackId] forKey:@"musicbrainzTrackId"];
 	[result setValue:[self musicbrainzArtistId] forKey:@"musicbrainzArtistId"];
 
-	[result setObject:[NSNumber numberWithUnsignedInt:[self number]] forKey:@"number"];
-	[result setObject:[NSNumber numberWithUnsignedLong:[self firstSector]] forKey:@"firstSector"];
-	[result setObject:[NSNumber numberWithUnsignedLong:[self lastSector]] forKey:@"lastSector"];
-	[result setObject:[NSNumber numberWithUnsignedInt:[self channels]] forKey:@"channels"];
+	[result setObject:[NSNumber numberWithUnsignedInteger:[self number]] forKey:@"number"];
+	[result setObject:[NSNumber numberWithUnsignedInteger:[self firstSector]] forKey:@"firstSector"];
+	[result setObject:[NSNumber numberWithUnsignedInteger:[self lastSector]] forKey:@"lastSector"];
+	[result setObject:[NSNumber numberWithUnsignedInteger:[self channels]] forKey:@"channels"];
 	[result setObject:[NSNumber numberWithBool:[self preEmphasis]] forKey:@"preEmphasis"];
 	[result setObject:[NSNumber numberWithBool:[self copyPermitted]] forKey:@"copyPermitted"];
 	[result setValue:[self ISRC] forKey:@"ISRC"];

@@ -31,9 +31,9 @@
 - (id) initWithDeviceName:(NSString *)deviceName;
 {
 	if((self = [super init])) {
-		unsigned				i;
-		unsigned				session			= 1;
-		unsigned long			discLength		= 150;
+		NSUInteger				i;
+		NSUInteger				session			= 1;
+		NSUInteger				discLength		= 150;
 		Drive					*drive			= nil;
 		TrackDescriptor			*track			= nil;
 		NSMutableDictionary		*trackInfo		= nil;
@@ -69,12 +69,12 @@
 			
 			trackInfo = [NSMutableDictionary dictionaryWithCapacity:6];
 		
-			[trackInfo setObject:[NSNumber numberWithUnsignedInt:i] forKey:@"number"];
+			[trackInfo setObject:[NSNumber numberWithUnsignedInteger:i] forKey:@"number"];
 
-			[trackInfo setObject:[NSNumber numberWithUnsignedInt:[drive firstSectorForTrack:i]] forKey:@"firstSector"];
-			[trackInfo setObject:[NSNumber numberWithUnsignedInt:[drive lastSectorForTrack:i]] forKey:@"lastSector"];
+			[trackInfo setObject:[NSNumber numberWithUnsignedInteger:[drive firstSectorForTrack:i]] forKey:@"firstSector"];
+			[trackInfo setObject:[NSNumber numberWithUnsignedInteger:[drive lastSectorForTrack:i]] forKey:@"lastSector"];
 
-			[trackInfo setObject:[NSNumber numberWithUnsignedInt:[track channels]] forKey:@"channels"];
+			[trackInfo setObject:[NSNumber numberWithUnsignedInteger:[track channels]] forKey:@"channels"];
 
 			[trackInfo setObject:[NSNumber numberWithBool:[track preEmphasis]] forKey:@"preEmphasis"];
 			[trackInfo setObject:[NSNumber numberWithBool:[track copyPermitted]] forKey:@"allowsDigitalCopy"];
@@ -89,7 +89,7 @@
 		
 		for(i = 0; i < [self countOfTracks]; ++i)
 			discLength += [self lastSectorForTrack:i] - [self firstSectorForTrack:i] + 1;
-		_length = (unsigned) (60 * (discLength / (60 * 75))) + (unsigned)((discLength / 75) % 60);
+		_length = (NSUInteger) (60 * (discLength / (60 * 75))) + (NSUInteger)((discLength / 75) % 60);
 		
 		[drive release];
 				
@@ -112,21 +112,21 @@
 
 - (NSString *)		MCN										{ return [[_MCN retain] autorelease]; }
 
-- (unsigned)		firstSector								{ return _firstSector; }
-- (unsigned)		lastSector								{ return _lastSector; }
+- (NSUInteger)		firstSector								{ return _firstSector; }
+- (NSUInteger)		lastSector								{ return _lastSector; }
 
-- (unsigned)		leadOut									{ return _leadOut; }
+- (NSUInteger)		leadOut									{ return _leadOut; }
 
-- (unsigned)		firstSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"firstSector"] unsignedIntValue]; }
-- (unsigned)		lastSectorForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"lastSector"] unsignedIntValue]; }
+- (NSUInteger)		firstSectorForTrack:(NSUInteger)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"firstSector"] unsignedIntegerValue]; }
+- (NSUInteger)		lastSectorForTrack:(NSUInteger)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"lastSector"] unsignedIntegerValue]; }
 
-- (unsigned)		channelsForTrack:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"channels"] unsignedIntValue]; }
+- (NSUInteger)		channelsForTrack:(NSUInteger)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"channels"] unsignedIntegerValue]; }
 
-- (BOOL)			trackHasPreEmphasis:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"hasPreEmphasis"] boolValue]; }
-- (BOOL)			trackAllowsDigitalCopy:(unsigned)track	{ return [[[self objectInTracksAtIndex:track] objectForKey:@"allowsDigitalCopy"] boolValue]; }
-- (BOOL)			trackContainsData:(unsigned)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"dataTrack"] boolValue]; }
+- (BOOL)			trackHasPreEmphasis:(NSUInteger)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"hasPreEmphasis"] boolValue]; }
+- (BOOL)			trackAllowsDigitalCopy:(NSUInteger)track	{ return [[[self objectInTracksAtIndex:track] objectForKey:@"allowsDigitalCopy"] boolValue]; }
+- (BOOL)			trackContainsData:(NSUInteger)track		{ return [[[self objectInTracksAtIndex:track] objectForKey:@"dataTrack"] boolValue]; }
 
-- (NSString *)		ISRCForTrack:(unsigned)track			{ return [[self objectInTracksAtIndex:track] objectForKey:@"ISRC"]; }
+- (NSString *)		ISRCForTrack:(NSUInteger)track			{ return [[self objectInTracksAtIndex:track] objectForKey:@"ISRC"]; }
 
 - (NSString *) discID
 {
@@ -140,7 +140,7 @@
 	int offsets[100];
 	offsets[0] = [self leadOut] + 150;
 	
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
 		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
 
@@ -165,7 +165,7 @@
 	int offsets[100];
 	offsets[0] = [self leadOut] + 150;
 	
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
 		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
 	
@@ -190,7 +190,7 @@
 	int offsets[100];
 	offsets[0] = [self leadOut] + 150;
 	
-	unsigned i;
+	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
 		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
 	
@@ -203,10 +203,10 @@
 	return [[freeDBDiscID retain] autorelease];
 }
 
-- (unsigned)		length									{ return _length; }
+- (NSUInteger)		length									{ return _length; }
 
 // KVC
-- (unsigned)		countOfTracks							{ return [_tracks count]; }
-- (NSDictionary *)	objectInTracksAtIndex:(unsigned)index	{ return [_tracks objectAtIndex:index]; }
+- (NSUInteger)		countOfTracks							{ return [_tracks count]; }
+- (NSDictionary *)	objectInTracksAtIndex:(NSUInteger)index	{ return [_tracks objectAtIndex:index]; }
 
 @end

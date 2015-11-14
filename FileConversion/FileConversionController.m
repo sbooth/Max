@@ -114,7 +114,7 @@ static FileConversionController		*sharedController						= nil;
 		nil]];
 
 	// Setup the toolbar
-	NSToolbar *toolbar = [[FileConversionToolbar alloc] init];
+	FileConversionToolbar *toolbar = [[FileConversionToolbar alloc] init];
     
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
@@ -156,7 +156,7 @@ static FileConversionController		*sharedController						= nil;
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
 - (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void)		release											{ /* do nothing */ }
+- (oneway void)	release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
 #pragma mark Action Methods

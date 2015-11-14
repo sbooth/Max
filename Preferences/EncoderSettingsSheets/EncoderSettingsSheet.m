@@ -54,7 +54,7 @@
 - (void)			setSearchKey:(NSDictionary *)searchKey		{ [_searchKey release]; _searchKey = [searchKey retain]; }
 
 - (NSDictionary *)	settings									{ return [[_settings retain] autorelease]; }
-- (void)			setSettings:(NSDictionary *)settings		{ [_settings release]; _settings = [settings retain]; }
+- (void)			setSettings:(NSDictionary *)settings		{ [_settings release]; _settings = [settings mutableCopy]; }
 
 - (NSWindow *)		sheet										{ return [[_sheet retain] autorelease]; }
 

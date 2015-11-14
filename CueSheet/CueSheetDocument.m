@@ -132,7 +132,7 @@
 	[controller setShouldCascadeWindows:NO];
 //	[controller setWindowFrameAutosaveName:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Compact Disc %@", @"CompactDisc", @""), [self discID]]];	
 
-	NSToolbar *toolbar = [[CueSheetDocumentToolbar alloc] initWithCueSheetDocument:self];
+	CueSheetDocumentToolbar *toolbar = [[CueSheetDocumentToolbar alloc] initWithCueSheetDocument:self];
 
 	[toolbar setAllowsUserCustomization:YES];
 	[toolbar setAutosavesConfiguration:YES];
@@ -385,8 +385,7 @@
 							
 							[newTrack setFilename:path];
 							[newTrack setSampleRate:streamInfo.sample_rate];
-							if(NULL != block->data.cue_sheet.tracks[i].isrc)
-								[newTrack setISRC:[NSString stringWithUTF8String:block->data.cue_sheet.tracks[i].isrc]];
+							[newTrack setISRC:[NSString stringWithUTF8String:block->data.cue_sheet.tracks[i].isrc]];
 							[newTrack setNumber:block->data.cue_sheet.tracks[i].number];
 							[newTrack setStartingFrame:block->data.cue_sheet.tracks[i].offset];
 							

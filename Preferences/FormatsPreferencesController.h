@@ -32,7 +32,7 @@
 - (IBAction)		removeOutputFormat:(id)sender;
 - (IBAction)		editOutputFormat:(id)sender;
 
-- (unsigned)		countOfAvailableFormats;
+- (NSUInteger)		countOfAvailableFormats;
 - (NSDictionary *)	objectInAvailableFormatsAtIndex:(unsigned)index;
 
 @end

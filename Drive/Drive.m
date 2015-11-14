@@ -185,7 +185,7 @@
 	TrackDescriptor		*nextTrack		= [self trackNumber:number + 1];
 	
 	if(nil == thisTrack)
-		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:[NSString stringWithFormat:@"Track %u doesn't exist", number] userInfo:nil];
+		@throw [NSException exceptionWithName:@"IllegalArgumentException" reason:[NSString stringWithFormat:@"Track %lu doesn't exist", (unsigned long)number] userInfo:nil];
 	
 	return ([self lastTrackForSession:[thisTrack session]] == number ? [self lastSectorForSession:[thisTrack session]] : [nextTrack firstSector] - 1);
 }
@@ -423,7 +423,7 @@
 
 - (NSString *)		description
 {
-	return [NSString stringWithFormat:@"{\n\tDevice: %@\n\tFirst Session: %u\n\tLast Session: %u\n}", [self deviceName], [self firstSession], [self lastSession]];
+	return [NSString stringWithFormat:@"{\n\tDevice: %@\n\tFirst Session: %lu\n\tLast Session: %lu\n}", [self deviceName], (unsigned long)[self firstSession], (unsigned long)[self lastSession]];
 }
 
 @end
@@ -575,7 +575,7 @@
 	cd_read.sectorArea		= sectorAreas;
 	cd_read.sectorType		= kCDSectorTypeCDDA;
 	cd_read.buffer			= buffer;
-	cd_read.bufferLength	= blockSize * sectorCount;
+	cd_read.bufferLength	= (uint32_t)(blockSize * sectorCount);
 	
 	result = ioctl([self fileDescriptor], DKIOCCDREAD, &cd_read);
 	NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Exceptions", @""));

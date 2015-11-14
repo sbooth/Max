@@ -32,14 +32,14 @@
 }
 
 - (id)					initWithSectorRange:(SectorRange *)range;
-- (id)					initWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector;
+- (id)					initWithFirstSector:(NSUInteger)firstSector lastSector:(NSUInteger)lastSector;
 
 // Easy access to the SectorRange contained in this rip
-- (unsigned)			firstSector;
-- (unsigned)			lastSector;
+- (NSUInteger)			firstSector;
+- (NSUInteger)			lastSector;
 
-- (unsigned)			length;
-- (BOOL)				containsSector:(unsigned)sector;
+- (NSUInteger)			length;
+- (BOOL)				containsSector:(NSUInteger)sector;
 - (BOOL)				containsSectorRange:(SectorRange *)range;
 
 // Access to the filename
@@ -52,30 +52,30 @@
 - (void)				setCalculateHashes:(BOOL)calculateHashes;
 
 // Access to the hashes for each sector
-- (unsigned)			hashLength;
-- (unsigned char *)		hashForSector:(unsigned)sector;
+- (NSUInteger)			hashLength;
+- (unsigned char *)		hashForSector:(NSUInteger)sector;
 
 // Sector equality testing
-- (BOOL)				sector:(unsigned)sector hasHash:(unsigned char *)hash;
-- (BOOL)				sector:(unsigned)sector matchesSector:(void *)data;
+- (BOOL)				sector:(NSUInteger)sector hasHash:(unsigned char *)hash;
+- (BOOL)				sector:(NSUInteger)sector matchesSector:(void *)data;
 
 // Access the CD-DA data for a specific sector range
-- (NSData *)			dataForSector:(unsigned)sector;
+- (NSData *)			dataForSector:(NSUInteger)sector;
 - (NSData *)			dataForSectorRange:(SectorRange *)range;
 
-- (void)				getBytes:(void *)buffer forSector:(unsigned)sector;
+- (void)				getBytes:(void *)buffer forSector:(NSUInteger)sector;
 - (void)				getBytes:(void *)buffer forSectorRange:(SectorRange *)range;
 
-- (void)				setData:(NSData *)data forSector:(unsigned)sector;
+- (void)				setData:(NSData *)data forSector:(NSUInteger)sector;
 - (void)				setData:(NSData *)data forSectorRange:(SectorRange *)range;
 
-- (void)				setBytes:(const void *)data forSector:(unsigned)sector;
+- (void)				setBytes:(const void *)data forSector:(NSUInteger)sector;
 - (void)				setBytes:(const void *)data forSectorRange:(SectorRange *)range;
 
 // Error flag manipulation
-- (BOOL)				sectorHasError:(unsigned)sector;
+- (BOOL)				sectorHasError:(NSUInteger)sector;
 
-- (void)				setErrorFlag:(BOOL)errorFlag forSector:(unsigned)sector;
+- (void)				setErrorFlag:(BOOL)errorFlag forSector:(NSUInteger)sector;
 - (void)				setErrorFlags:(const void *)errorFlags forSectorRange:(SectorRange *)range;
 
 @end

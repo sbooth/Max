@@ -119,7 +119,7 @@ callback(long inpos, int function, void *userdata)
 		if([[NSUserDefaults standardUserDefaults] boolForKey:@"paranoiaEnable"]) {
 			paranoiaMode = PARANOIA_MODE_FULL ^ PARANOIA_MODE_NEVERSKIP; 
 			
-			paranoiaLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
+			paranoiaLevel = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaLevel"];
 			
 			if(PARANOIA_LEVEL_FULL == paranoiaLevel) {
 			}
@@ -133,7 +133,7 @@ callback(long inpos, int function, void *userdata)
 				_maximumRetries = -1;
 			}
 			else {
-				_maximumRetries = [[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaMaximumRetries"];
+				_maximumRetries = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"paranoiaMaximumRetries"];
 			}
 		}
 		else {

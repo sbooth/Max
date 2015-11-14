@@ -37,7 +37,7 @@
 	int						i, majorFormat, currentSubtypeFormat;
 	int						subtypeCount;
 	NSDictionary			*objectToSelect			= nil;
-	NSMutableDictionary		*subtype;
+	NSDictionary			*subtype;
 	NSArray					*objects;
 	NSArray					*keys;
 	

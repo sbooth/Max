@@ -77,7 +77,7 @@ static EncoderController *sharedController = nil;
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
 - (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void)		release											{ /* do nothing */ }
+- (oneway void)	release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
 - (id) init

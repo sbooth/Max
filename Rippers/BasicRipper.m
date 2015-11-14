@@ -145,21 +145,21 @@
 - (void) ripSectorRange:(SectorRange *)range toFile:(ExtAudioFileRef)file
 {
 	int16_t				*buffer				= NULL;
-	unsigned			bufferLen			= 0;
-	unsigned			sectorsRead			= 0;
-	unsigned			sectorCount			= 0;
-	unsigned			startSector			= 0;
-	unsigned			sectorsRemaining	= 0;
-	unsigned			grandTotalSectors	= _grandTotalSectors;
-	unsigned			sectorsToRead		= grandTotalSectors - _sectorsRead;
+	NSUInteger			bufferLen			= 0;
+	NSUInteger			sectorsRead			= 0;
+	NSUInteger			sectorCount			= 0;
+	NSUInteger			startSector			= 0;
+	NSUInteger			sectorsRemaining	= 0;
+	NSUInteger			grandTotalSectors	= _grandTotalSectors;
+	NSUInteger			sectorsToRead		= grandTotalSectors - _sectorsRead;
 	SectorRange			*readRange			= nil;
 	OSStatus			err					= noErr;
-	unsigned long		iterations			= 0;
+	NSUInteger			iterations			= 0;
 	AudioBufferList		bufferList;
 	UInt32				frameCount			= 0;
 	double				percentComplete;
 	NSTimeInterval		interval;
-	unsigned			secondsRemaining;
+	NSUInteger			secondsRemaining;
 	
 	@try {
 		// Allocate a buffer to hold the ripped data
@@ -189,10 +189,10 @@
 			// Put the data in an AudioBufferList
 			bufferList.mNumberBuffers					= 1;
 			bufferList.mBuffers[0].mData				= buffer;
-			bufferList.mBuffers[0].mDataByteSize		= [readRange byteSize];
+			bufferList.mBuffers[0].mDataByteSize		= (UInt32)[readRange byteSize];
 			bufferList.mBuffers[0].mNumberChannels		= 2;
 			
-			frameCount									= [readRange byteSize] / 4;
+			frameCount									= (UInt32)([readRange byteSize] / 4);
 			
 			// Write the data
 			err = ExtAudioFileWrite(file, frameCount, &bufferList);

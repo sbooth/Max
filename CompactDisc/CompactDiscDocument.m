@@ -47,10 +47,14 @@
 
 @implementation CompactDiscDocument
 
-+ (void) initialize
++ (NSSet *) keyPathsForValuesAffectingAlbumArtWidth
 {
-	[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtWidth"];
-	[self setKeys:[NSArray arrayWithObject:@"albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtHeight"];
+	return [NSSet setWithObject:@"albumArt"];
+}
+
++ (NSSet *) keyPathsForValuesAffectingAlbumArtHeight
+{
+	return [NSSet setWithObject:@"albumArt"];
 }
 
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
@@ -162,7 +166,7 @@
 	[controller setShouldCascadeWindows:NO];
 	[controller setWindowFrameAutosaveName:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Compact Disc %@", @"CompactDisc", @""), [self discID]]];
 	
-	NSToolbar *toolbar = [[CompactDiscDocumentToolbar alloc] initWithCompactDiscDocument:self];
+	CompactDiscDocumentToolbar *toolbar = [[CompactDiscDocumentToolbar alloc] initWithCompactDiscDocument:self];
     
     [toolbar setAllowsUserCustomization: YES];
     [toolbar setAutosavesConfiguration: YES];

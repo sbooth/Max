@@ -105,11 +105,11 @@
 - (int)					driveOffset									{ return _driveOffset; }
 - (void)				setDriveOffset:(int)driveOffset				{ _driveOffset = driveOffset; }
 
-- (unsigned)			requiredMatches								{ return _requiredMatches; }
-- (void)				setRequiredMatches:(unsigned)matches		{ _requiredMatches = matches; }
+- (NSUInteger)			requiredMatches								{ return _requiredMatches; }
+- (void)				setRequiredMatches:(NSUInteger)matches		{ _requiredMatches = matches; }
 
-- (unsigned)			maximumRetries								{ return _maximumRetries; }
-- (void)				setMaximumRetries:(unsigned)retries			{ _maximumRetries = retries; }
+- (NSUInteger)			maximumRetries								{ return _maximumRetries; }
+- (void)				setMaximumRetries:(NSUInteger)retries			{ _maximumRetries = retries; }
 
 - (BOOL)				useHashes									{ return _useHashes; }
 - (void)				setUseHashes:(BOOL)useHashes				{ _useHashes = useHashes; }

@@ -503,7 +503,7 @@ enum {
 			currentTrack = [[[self taskInfo] inputTracks] objectAtIndex:i];
 
 			// TRACK xx
-			temp	= [NSString stringWithFormat:@"  TRACK %.02u AUDIO\n", [currentTrack number]];
+			temp	= [NSString stringWithFormat:@"  TRACK %.2lu AUDIO\n", (unsigned long)[currentTrack number]];
 			buf		= [temp UTF8String];
 			bytesWritten = write(fd, buf, strlen(buf));
 			NSAssert(-1 != bytesWritten, NSLocalizedStringFromTable(@"Unable to write to the cue sheet.", @"Exceptions", @""));

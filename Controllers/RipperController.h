@@ -48,7 +48,7 @@ enum {
 - (void)			stopRipperTasksForDocument:(CompactDiscDocument *)document;
 
 - (BOOL)			hasTasks;
-- (unsigned)		countOfTasks;
+- (NSUInteger)		countOfTasks;
 
 // Action methods
 - (IBAction)		stopSelectedTasks:(id)sender;

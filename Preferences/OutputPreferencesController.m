@@ -98,7 +98,7 @@ enum {
 	
 	switch([[sender selectedItem] tag]) {
 		case kCurrentDirectoryMenuItemTag:
-			[[NSWorkspace sharedWorkspace] selectFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:nil];
+			[[NSWorkspace sharedWorkspace] selectFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath] inFileViewerRootedAtPath:@""];
 			break;
 			
 		case kChooseDirectoryMenuItemTag:
@@ -193,7 +193,7 @@ enum {
 			break;
 			
 		case kCurrentTempDirectoryMenuItemTag:
-			[[NSWorkspace sharedWorkspace] selectFile:[[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] inFileViewerRootedAtPath:nil];
+			[[NSWorkspace sharedWorkspace] selectFile:[[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] inFileViewerRootedAtPath:@""];
 			break;
 			
 		case kChooseTempDirectoryMenuItemTag:

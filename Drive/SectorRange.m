@@ -59,18 +59,18 @@
 }
 
 - (NSUInteger)		firstSector										{ return _firstSector; }
-- (void)			setFirstSector:(NSUInteger)sector					{ _firstSector = sector; }
+- (void)			setFirstSector:(NSUInteger)sector				{ _firstSector = sector; }
 
 - (NSUInteger)		lastSector										{ return _lastSector; }
-- (void)			setLastSector:(NSUInteger)sector					{ _lastSector = sector; }
+- (void)			setLastSector:(NSUInteger)sector				{ _lastSector = sector; }
 
 - (NSUInteger)		length											{ return ([self lastSector] - [self firstSector] + 1); }
 - (NSUInteger)		byteSize										{ return kCDSectorSizeCDDA * [self length]; }
 
-- (NSUInteger)		indexForSector:(NSUInteger)sector					{ return ([self containsSector:sector] ? sector - [self firstSector] : NSNotFound); }
+- (NSUInteger)		indexForSector:(NSUInteger)sector				{ return ([self containsSector:sector] ? sector - [self firstSector] : NSNotFound); }
 - (NSUInteger)		sectorForIndex:(NSUInteger)idx					{ return ([self length] > idx ? [self firstSector] + idx : NSNotFound); }
 
-- (BOOL)			containsSector:(NSUInteger)sector					{ return ([self firstSector] <= sector && [self lastSector] >= sector); }
+- (BOOL)			containsSector:(NSUInteger)sector				{ return ([self firstSector] <= sector && [self lastSector] >= sector); }
 - (BOOL)			containsSectorRange:(SectorRange *)range		{ return ([self containsSector:[range firstSector]] && [self containsSector:[range lastSector]]); }
 
 @end

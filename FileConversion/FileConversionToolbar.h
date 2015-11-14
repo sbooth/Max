@@ -20,7 +20,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface FileConversionToolbar : NSToolbar 
+@interface FileConversionToolbar : NSToolbar <NSToolbarDelegate>
 {
 }
 

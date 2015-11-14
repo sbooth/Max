@@ -26,8 +26,8 @@
 void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 
 @interface Rip (Private)
-- (void)				setFirstSector:(unsigned)sector;
-- (void)				setLastSector:(unsigned)sector;
+- (void)				setFirstSector:(NSUInteger)sector;
+- (void)				setLastSector:(NSUInteger)sector;
 @end
 
 @implementation Rip
@@ -42,9 +42,9 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	return [self initWithFirstSector:[range firstSector] lastSector:[range lastSector]];
 }
 
-- (id) initWithFirstSector:(unsigned)firstSector lastSector:(unsigned)lastSector
+- (id) initWithFirstSector:(NSUInteger)firstSector lastSector:(NSUInteger)lastSector
 {
-	unsigned i;
+	NSUInteger i;
 	
 	if((self = [super init])) {
 		
@@ -80,7 +80,7 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 
 - (void) dealloc
 {
-	unsigned i;
+	NSUInteger i;
 	
 	[_sectorRange release];			_sectorRange	= nil;
 	[_filename release];			_filename		= nil;
@@ -96,17 +96,17 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	[super dealloc];
 }
 
-#pragma SectorRange access
+#pragma mark SectorRange access
 
-- (unsigned)		firstSector									{ return [_sectorRange firstSector]; }
-- (unsigned)		lastSector									{ return [_sectorRange lastSector]; }
+- (NSUInteger)		firstSector									{ return [_sectorRange firstSector]; }
+- (NSUInteger)		lastSector									{ return [_sectorRange lastSector]; }
 
-- (unsigned)		length										{ return [_sectorRange length]; }
-- (BOOL)			containsSector:(unsigned)sector				{ return [_sectorRange containsSector:sector]; }
+- (NSUInteger)		length										{ return [_sectorRange length]; }
+- (BOOL)			containsSector:(NSUInteger)sector			{ return [_sectorRange containsSector:sector]; }
 - (BOOL)			containsSectorRange:(SectorRange *)range	{ return [_sectorRange containsSectorRange:range]; }
 
-- (void)			setFirstSector:(unsigned)sector				{ [_sectorRange setFirstSector:sector]; }
-- (void)			setLastSector:(unsigned)sector				{ [_sectorRange setLastSector:sector]; }
+- (void)			setFirstSector:(NSUInteger)sector			{ [_sectorRange setFirstSector:sector]; }
+- (void)			setLastSector:(NSUInteger)sector			{ [_sectorRange setLastSector:sector]; }
 
 #pragma mark -
 
@@ -120,9 +120,9 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 
 #pragma mark -
 
-- (unsigned)			hashLength								{ return 32; }
+- (NSUInteger)			hashLength								{ return 32; }
 
-- (unsigned char *)		hashForSector:(unsigned)sector
+- (unsigned char *)		hashForSector:(NSUInteger)sector
 {
 /*	if(NO == [self containsSector:sector]) {
 		return NULL;
@@ -131,12 +131,12 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	return _hashes[[_sectorRange indexForSector:sector]];
 }
 
-- (BOOL)				sector:(unsigned)sector hasHash:(unsigned char *)hash
+- (BOOL)				sector:(NSUInteger)sector hasHash:(unsigned char *)hash
 {
 	return (0 == memcmp(hash, [self hashForSector:sector], 32/*[self hashLength]*/));
 }
 
-- (BOOL)				sector:(unsigned)sector matchesSector:(void *)data
+- (BOOL)				sector:(NSUInteger)sector matchesSector:(void *)data
 {
 	int8_t		buffer [ kCDSectorSizeCDDA ];
 	
@@ -145,7 +145,7 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	return (0 == memcmp(data, buffer, kCDSectorSizeCDDA));
 }
 
-- (NSData *)			dataForSector:(unsigned)sector
+- (NSData *)			dataForSector:(NSUInteger)sector
 {
 	return [self dataForSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
@@ -181,7 +181,7 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	return (nil != result ? [[result retain] autorelease] : nil);
 }
 
-- (void)				getBytes:(void *)buffer forSector:(unsigned)sector
+- (void)				getBytes:(void *)buffer forSector:(NSUInteger)sector
 {
 	[self getBytes:buffer forSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
@@ -212,7 +212,7 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 		
 		// Read the sectors into the buffer
 		bytesRead = read(fd, buffer, [range byteSize]);
-		NSAssert(-1 != bytesRead && (unsigned)bytesRead == [range byteSize], NSLocalizedStringFromTable(@"Unable to read from the input file.", @"Exceptions", @""));
+		NSAssert(-1 != bytesRead && (NSUInteger)bytesRead == [range byteSize], NSLocalizedStringFromTable(@"Unable to read from the input file.", @"Exceptions", @""));
 	}
 	
 	@finally {
@@ -222,7 +222,7 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	}
 }
 
-- (void)				setData:(NSData *)data forSector:(unsigned)sector
+- (void)				setData:(NSData *)data forSector:(NSUInteger)sector
 {
 	[self setData:data forSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
@@ -236,7 +236,7 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	[self setBytes:[data bytes] forSectorRange:range];
 }
 
-- (void)				setBytes:(const void *)buffer forSector:(unsigned)sector
+- (void)				setBytes:(const void *)buffer forSector:(NSUInteger)sector
 {
 	[self setBytes:buffer forSectorRange:[SectorRange sectorRangeWithSector:sector]];
 }
@@ -247,9 +247,9 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 	off_t			location		= -1;
 	off_t			offset			= -1;
 	ssize_t			bytesWritten	= -1;
-	unsigned		i				= 0;
-	unsigned		arrayIndex		= 0;
-	int8_t			sector			[ kCDSectorSizeCDDA ];
+	NSUInteger		i				= 0;
+	NSUInteger		arrayIndex		= 0;
+	uint8_t			sector			[ kCDSectorSizeCDDA ];
 	unsigned char	hash			[ 32 ];
 	
 	if(NO == [self containsSectorRange:range]  || nil == [self filename]) {
@@ -269,7 +269,7 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 		
 		// Write the sectors into the file
 		bytesWritten = write(fd, buffer, [range byteSize]);
-		NSAssert(-1 != bytesWritten && (unsigned)bytesWritten == [range byteSize], NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
+		NSAssert(-1 != bytesWritten && (NSUInteger)bytesWritten == [range byteSize], NSLocalizedStringFromTable(@"Unable to write to the output file.", @"Exceptions", @""));
 		
 		if(NO == [self calculateHashes]) {
 			return;
@@ -303,12 +303,12 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 
 #pragma mark -
 
-- (BOOL)				sectorHasError:(unsigned)sector
+- (BOOL)				sectorHasError:(NSUInteger)sector
 {
 	return [_errors valueAtIndex:(sector - [self firstSector])];
 }
 
-- (void)				setErrorFlag:(BOOL)errorFlag forSector:(unsigned)sector
+- (void)				setErrorFlag:(BOOL)errorFlag forSector:(NSUInteger)sector
 {
 	[_errors setValue:errorFlag forIndex:(sector - [self firstSector])];
 }
@@ -316,9 +316,9 @@ void sha_memory(unsigned char *buf, int len, unsigned char *hash);
 - (void)				setErrorFlags:(const void *)errorFlags forSectorRange:(SectorRange *)range
 {
 	const uint32_t	*flags;
-	unsigned		lastArrayIndex;
-	unsigned		lastBitIndex;
-	unsigned		i, j;
+	NSUInteger		lastArrayIndex;
+	NSUInteger		lastBitIndex;
+	NSUInteger		i, j;
 	
 	flags			= (const uint32_t *)errorFlags;
 	lastArrayIndex	= [range length] / (8 * sizeof(uint32_t));

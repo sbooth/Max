@@ -29,13 +29,13 @@
 
 	int						_driveOffset;
 
-	unsigned				_requiredMatches;
-	unsigned				_maximumRetries;
+	NSUInteger				_requiredMatches;
+	NSUInteger				_maximumRetries;
 	BOOL					_useHashes;
 	BOOL					_useC2;
 	
-	unsigned				_grandTotalSectors;
-	unsigned				_sectorsRead;
+	NSUInteger				_grandTotalSectors;
+	NSUInteger				_sectorsRead;
 	NSDate					*_startTime;
 }
 
@@ -44,11 +44,11 @@
 - (int)						driveOffset;
 - (void)					setDriveOffset:(int)driveOffset;
 
-- (unsigned)				requiredMatches;
-- (void)					setRequiredMatches:(unsigned)matches;
+- (NSUInteger)				requiredMatches;
+- (void)					setRequiredMatches:(NSUInteger)matches;
 
-- (unsigned)				maximumRetries;
-- (void)					setMaximumRetries:(unsigned)retries;
+- (NSUInteger)				maximumRetries;
+- (void)					setMaximumRetries:(NSUInteger)retries;
 
 - (BOOL)					useHashes;
 - (void)					setUseHashes:(BOOL)useHashes;

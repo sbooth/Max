@@ -28,12 +28,12 @@
 	NSMutableArray		*_tracks;
 	NSString			*_MCN;
 
-	unsigned			_firstSector;
-	unsigned			_lastSector;
+	NSUInteger			_firstSector;
+	NSUInteger			_lastSector;
 	
-	unsigned			_leadOut;
+	NSUInteger			_leadOut;
 		
-	unsigned			_length;
+	NSUInteger			_length;
 }
 
 - (id)					initWithDeviceName:(NSString *)deviceName;
@@ -41,32 +41,32 @@
 - (NSString *)			deviceName;
 
 // Physical disc properties
-- (unsigned)			firstSector;
-- (unsigned)			lastSector;
+- (NSUInteger)			firstSector;
+- (NSUInteger)			lastSector;
 
-- (unsigned)			leadOut;
+- (NSUInteger)			leadOut;
 
 - (NSString *)			MCN;
 
-- (unsigned)			firstSectorForTrack:(unsigned)track;
-- (unsigned)			lastSectorForTrack:(unsigned)track;
+- (NSUInteger)			firstSectorForTrack:(NSUInteger)track;
+- (NSUInteger)			lastSectorForTrack:(NSUInteger)track;
 
-- (unsigned)			channelsForTrack:(unsigned)track;
+- (NSUInteger)			channelsForTrack:(NSUInteger)track;
 
-- (BOOL)				trackHasPreEmphasis:(unsigned)track;
-- (BOOL)				trackAllowsDigitalCopy:(unsigned)track;
-- (BOOL)				trackContainsData:(unsigned)track;
+- (BOOL)				trackHasPreEmphasis:(NSUInteger)track;
+- (BOOL)				trackAllowsDigitalCopy:(NSUInteger)track;
+- (BOOL)				trackContainsData:(NSUInteger)track;
 
-- (NSString *)			ISRCForTrack:(unsigned)track;
+- (NSString *)			ISRCForTrack:(NSUInteger)track;
 
 // KVC accessors
-- (unsigned)			countOfTracks;
-- (NSDictionary *)		objectInTracksAtIndex:(unsigned)index;
+- (NSUInteger)			countOfTracks;
+- (NSDictionary *)		objectInTracksAtIndex:(NSUInteger)index;
 
 // Derived properties
 - (NSString *)			discID;
 - (NSURL *)				discIDSubmissionUrl;
 - (NSString *)			freeDBDiscID;
-- (unsigned)			length;
+- (NSUInteger)			length;
 
 @end

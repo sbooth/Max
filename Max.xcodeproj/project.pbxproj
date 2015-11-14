@@ -27,23 +27,23 @@
 		326D254312DE4CF800767B04 /* taglib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254212DE4CF800767B04 /* taglib.framework */; };
 		326D254512DE4CF800767B04 /* vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254412DE4CF800767B04 /* vorbis.framework */; };
 		326D254712DE4CF800767B04 /* wavpack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254612DE4CF800767B04 /* wavpack.framework */; };
-		326D256A12DE4D0500767B04 /* cdparanoia.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252612DE4CF800767B04 /* cdparanoia.framework */; };
-		326D256B12DE4D0500767B04 /* cuetools.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252812DE4CF800767B04 /* cuetools.framework */; };
-		326D256C12DE4D0500767B04 /* discid.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252A12DE4CF800767B04 /* discid.framework */; };
-		326D256D12DE4D0500767B04 /* FLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252C12DE4CF800767B04 /* FLAC.framework */; };
-		326D256E12DE4D0500767B04 /* lame.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252E12DE4CF800767B04 /* lame.framework */; };
-		326D256F12DE4D0500767B04 /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253012DE4CF800767B04 /* mac.framework */; };
-		326D257012DE4D0500767B04 /* mad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253212DE4CF800767B04 /* mad.framework */; };
-		326D257112DE4D0500767B04 /* mp4v2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253412DE4CF800767B04 /* mp4v2.framework */; };
-		326D257212DE4D0500767B04 /* mpcdec.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253612DE4CF800767B04 /* mpcdec.framework */; };
-		326D257312DE4D0500767B04 /* musicbrainz3.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253812DE4CF800767B04 /* musicbrainz3.framework */; };
-		326D257412DE4D0500767B04 /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253A12DE4CF800767B04 /* ogg.framework */; };
-		326D257512DE4D0500767B04 /* shorten.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253C12DE4CF800767B04 /* shorten.framework */; };
-		326D257612DE4D0500767B04 /* sndfile.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253E12DE4CF800767B04 /* sndfile.framework */; };
-		326D257712DE4D0500767B04 /* speex.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254012DE4CF800767B04 /* speex.framework */; };
-		326D257812DE4D0500767B04 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254212DE4CF800767B04 /* taglib.framework */; };
-		326D257912DE4D0500767B04 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254412DE4CF800767B04 /* vorbis.framework */; };
-		326D257A12DE4D0500767B04 /* wavpack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254612DE4CF800767B04 /* wavpack.framework */; };
+		326D256A12DE4D0500767B04 /* cdparanoia.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252612DE4CF800767B04 /* cdparanoia.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D256B12DE4D0500767B04 /* cuetools.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252812DE4CF800767B04 /* cuetools.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D256C12DE4D0500767B04 /* discid.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252A12DE4CF800767B04 /* discid.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D256D12DE4D0500767B04 /* FLAC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252C12DE4CF800767B04 /* FLAC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D256E12DE4D0500767B04 /* lame.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252E12DE4CF800767B04 /* lame.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D256F12DE4D0500767B04 /* mac.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253012DE4CF800767B04 /* mac.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257012DE4D0500767B04 /* mad.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253212DE4CF800767B04 /* mad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257112DE4D0500767B04 /* mp4v2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253412DE4CF800767B04 /* mp4v2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257212DE4D0500767B04 /* mpcdec.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253612DE4CF800767B04 /* mpcdec.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257312DE4D0500767B04 /* musicbrainz3.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253812DE4CF800767B04 /* musicbrainz3.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257412DE4D0500767B04 /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253A12DE4CF800767B04 /* ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257512DE4D0500767B04 /* shorten.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253C12DE4CF800767B04 /* shorten.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257612DE4D0500767B04 /* sndfile.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D253E12DE4CF800767B04 /* sndfile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257712DE4D0500767B04 /* speex.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254012DE4CF800767B04 /* speex.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257812DE4D0500767B04 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254212DE4CF800767B04 /* taglib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257912DE4D0500767B04 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254412DE4CF800767B04 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		326D257A12DE4D0500767B04 /* wavpack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254612DE4CF800767B04 /* wavpack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		32A145131046DB920020238F /* CoreAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145121046DB920020238F /* CoreAudioEncoderTask.mm */; };
 		32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145201046DD100020238F /* LibsndfileEncoderTask.mm */; };
 		32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A1478F104742030020238F /* NSString+URLEscapingMethods.m */; };
@@ -82,8 +82,8 @@
 		8C0406530B5C584000648158 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C04064E0B5C584000648158 /* InfoPlist.strings */; };
 		8C05F19C0CC2DAA1006E5746 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; };
 		8C05F19D0CC2DAA1006E5746 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; };
-		8C05F19E0CC2DAAC006E5746 /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; };
-		8C05F19F0CC2DAAC006E5746 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; };
+		8C05F19E0CC2DAAC006E5746 /* Growl.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1800CC2DAA1006E5746 /* Growl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		8C05F19F0CC2DAAC006E5746 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 8C05F1810CC2DAA1006E5746 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8C0883620A092EA500CAC5D0 /* AlbumArtDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */; };
 		8C0883630A092EA500CAC5D0 /* ApplicationControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */; };
 		8C0883680A092EA500CAC5D0 /* MediaControllerDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */; };
@@ -1521,7 +1521,13 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = sbooth.org;
+				TargetAttributes = {
+					8D1107260486CEB800E47090 = {
+						DevelopmentTeam = 5T4XYKTQ8R;
+					};
+				};
 			};
 			buildConfigurationList = 8C1919E208C50B7A00CB7453 /* Build configuration list for PBXProject "Max" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2326,6 +2332,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 326D22E512DE468000767B04 /* Debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2337,6 +2345,8 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sbooth.Max;
 				PRODUCT_NAME = Max;
 			};
 			name = Debug;
@@ -2345,6 +2355,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 326D22E612DE468000767B04 /* Release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
@@ -2352,6 +2364,8 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				PRODUCT_BUNDLE_IDENTIFIER = org.sbooth.Max;
 				PRODUCT_NAME = Max;
 			};
 			name = Release;
@@ -2359,14 +2373,14 @@
 		8C1919E308C50B7A00CB7453 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = macosx10.5;
+				ENABLE_TESTABILITY = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
 		8C1919E408C50B7A00CB7453 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = macosx10.5;
 			};
 			name = Release;
 		};

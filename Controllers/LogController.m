@@ -26,8 +26,8 @@ static NSString			*SaveLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar.
 static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar.Clear";
 
 @interface LogController (Private)
-- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)idx;
-- (void) removeObjectFromLogEntriesAtIndex:(unsigned)idx;
+- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(NSUInteger)idx;
+- (void) removeObjectFromLogEntriesAtIndex:(NSUInteger)idx;
 @end
 
 @implementation LogController
@@ -78,7 +78,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
 - (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void)		release											{ /* do nothing */ }
+- (oneway void)	release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
 - (void) windowDidLoad
@@ -119,42 +119,36 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 - (IBAction) save:(id)sender
 {
 	NSSavePanel *panel = [NSSavePanel savePanel];
-	
-	[panel setRequiredFileType:@"rtf"];
-	
-	[panel beginSheetForDirectory:nil file:nil modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-}
 
-- (void) savePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if(NSOKButton == returnCode) {
-		@synchronized(self) {
-			NSString						*filename		= [sheet filename];
-			NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
-			NSDictionary					*current;
-			unsigned						i;
-			BOOL							result;
-			
-			// Build the strings
-			for(i = 0; i < [self countOfLogEntries]; ++i) {
-				
-				current = [self objectInLogEntriesAtIndex:i];
-				
-				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[NSString stringWithFormat:@"%@", [current objectForKey:@"timestamp"]]];
-				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\t"];
-				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[current objectForKey:@"message"]];
-				[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
-			}
-			
-			// Apply style
-			[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
-			
-			NSData							*rtf			= [logMessage RTFFromRange:NSMakeRange(0, [logMessage length]) documentAttributes:nil];
-			
-			result = [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil];
-			NSAssert(YES == result, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
-		}	
-	}
+	panel.allowedFileTypes = @[@"rtf"];
+
+	[panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
+		if(NSOKButton == result) {
+			@synchronized(self) {
+				NSString						*filename		= [panel filename];
+				NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
+
+				// Build the strings
+				for(NSUInteger i = 0; i < [self countOfLogEntries]; ++i) {
+
+					NSDictionary *current = [self objectInLogEntriesAtIndex:i];
+
+					[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[NSString stringWithFormat:@"%@", [current objectForKey:@"timestamp"]]];
+					[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\t"];
+					[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:[current objectForKey:@"message"]];
+					[logMessage replaceCharactersInRange:NSMakeRange([logMessage length], 0) withString:@"\n"];
+				}
+
+				// Apply style
+				[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
+
+				NSData							*rtf			= [logMessage RTFFromRange:NSMakeRange(0, [logMessage length]) documentAttributes:nil];
+
+				BOOL fileCreated = [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil];
+				NSAssert(YES == fileCreated, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
+			}	
+		}
+	}];
 }
 
 - (void) logMessage:(NSString *)message
@@ -218,18 +212,18 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 }
 
 - (NSUInteger)		countOfLogEntries								{ return [_logEntries count]; }
-- (NSDictionary *)	objectInLogEntriesAtIndex:(unsigned)index		{ return [_logEntries objectAtIndex:index]; }
+- (NSDictionary *)	objectInLogEntriesAtIndex:(NSUInteger)index		{ return [_logEntries objectAtIndex:index]; }
 
 @end
 
 @implementation LogController (Private)
 
-- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(unsigned)index
+- (void) insertObject:(NSDictionary *)entry inLogEntriesAtIndex:(NSUInteger)index
 {
 	[_logEntries insertObject:entry atIndex:index];
 }
 
-- (void) removeObjectFromLogEntriesAtIndex:(unsigned)index
+- (void) removeObjectFromLogEntriesAtIndex:(NSUInteger)index
 {
 	[_logEntries removeObjectAtIndex:index];
 }

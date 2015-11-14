@@ -30,38 +30,38 @@
 
 #pragma mark Bit Count
 
-- (unsigned)		bitCount									{ return _bitCount; }
-- (void)			setBitCount:(unsigned)bitCount
+- (NSUInteger)		bitCount									{ return _bitCount; }
+- (void)			setBitCount:(NSUInteger)bitCount
 {
 	_bitCount	= bitCount;
-	_length		= ([self bitCount] / (8 * sizeof(uint32_t))) + 1;
+	_length		= ([self bitCount] / (8 * sizeof(NSUInteger))) + 1;
 	
 	free(_bits);
-	_bits = calloc(_length, sizeof(uint32_t));
+	_bits = calloc(_length, sizeof(NSUInteger));
 	NSAssert(NULL != _bits, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 }
 
 #pragma mark Bit Setting
 
-- (BOOL)				valueAtIndex:(unsigned)idx
+- (BOOL)				valueAtIndex:(NSUInteger)idx
 {
-	unsigned		arrayIndex;
-	unsigned		bitIndex;
+	NSUInteger		arrayIndex;
+	NSUInteger		bitIndex;
 
-	arrayIndex	= idx / (8 * sizeof(uint32_t));
-	bitIndex	= idx % (8 * sizeof(uint32_t));
+	arrayIndex	= idx / (8 * sizeof(NSUInteger));
+	bitIndex	= idx % (8 * sizeof(NSUInteger));
 	
 	return (_bits[arrayIndex] & (1 << bitIndex) ? YES : NO);
 }
 
-- (void)				setValue:(BOOL)value forIndex:(unsigned)idx
+- (void)				setValue:(BOOL)value forIndex:(NSUInteger)idx
 {
-	unsigned		arrayIndex;
-	unsigned		bitIndex;
-	uint32_t		mask;
+	NSUInteger		arrayIndex;
+	NSUInteger		bitIndex;
+	NSUInteger		mask;
 	
-	arrayIndex	= idx / (8 * sizeof(uint32_t));
-	bitIndex	= idx % (8 * sizeof(uint32_t));
+	arrayIndex	= idx / (8 * sizeof(NSUInteger));
+	bitIndex	= idx % (8 * sizeof(NSUInteger));
 	mask		= value << bitIndex;
 	
 	if(value) {
@@ -76,12 +76,12 @@
 
 - (BOOL)			allZeroes
 {
-	unsigned		lastArrayIndex;
-	unsigned		lastBitIndex;
-	unsigned		i;
+	NSUInteger		lastArrayIndex;
+	NSUInteger		lastBitIndex;
+	NSUInteger		i;
 	
-	lastArrayIndex	= [self bitCount] / (8 * sizeof(uint32_t));
-	lastBitIndex	= [self bitCount] % (8 * sizeof(uint32_t));
+	lastArrayIndex	= [self bitCount] / (8 * sizeof(NSUInteger));
+	lastBitIndex	= [self bitCount] % (8 * sizeof(NSUInteger));
 	
 	for(i = 0; i < lastArrayIndex; ++i) {
 		if(0x00000000 != _bits[i]) {
@@ -98,19 +98,19 @@
 	return YES;
 }
 
-- (unsigned)		countOfZeroes
+- (NSUInteger)		countOfZeroes
 {
-	unsigned		lastArrayIndex;
-	unsigned		lastBitIndex;
-	unsigned		i, j;
-	unsigned		result;
+	NSUInteger		lastArrayIndex;
+	NSUInteger		lastBitIndex;
+	NSUInteger		i, j;
+	NSUInteger		result;
 	
-	lastArrayIndex	= [self bitCount] / (8 * sizeof(uint32_t));
-	lastBitIndex	= [self bitCount] % (8 * sizeof(uint32_t));
+	lastArrayIndex	= [self bitCount] / (8 * sizeof(NSUInteger));
+	lastBitIndex	= [self bitCount] % (8 * sizeof(NSUInteger));
 	result			= 0;
 	
 	for(i = 0; i < lastArrayIndex; ++i) {
-		for(j = 0; j < (8 * sizeof(uint32_t)); ++j) {
+		for(j = 0; j < (8 * sizeof(NSUInteger)); ++j) {
 			if(!(_bits[i] & (1 << j))) {
 				++result;
 			}
@@ -128,12 +128,12 @@
 
 - (void)			setAllZeroes
 {
-	unsigned		lastArrayIndex;
-	unsigned		lastBitIndex;
-	unsigned		i;
+	NSUInteger		lastArrayIndex;
+	NSUInteger		lastBitIndex;
+	NSUInteger		i;
 	
-	lastArrayIndex	= [self bitCount] / (8 * sizeof(uint32_t));
-	lastBitIndex	= [self bitCount] % (8 * sizeof(uint32_t));
+	lastArrayIndex	= [self bitCount] / (8 * sizeof(NSUInteger));
+	lastBitIndex	= [self bitCount] % (8 * sizeof(NSUInteger));
 	
 	for(i = 0; i < lastArrayIndex; ++i) {
 		_bits[i] = 0x00000000;
@@ -148,12 +148,12 @@
 
 - (BOOL)			allOnes
 {
-	unsigned		lastArrayIndex;
-	unsigned		lastBitIndex;
-	unsigned		i;
+	NSUInteger		lastArrayIndex;
+	NSUInteger		lastBitIndex;
+	NSUInteger		i;
 	
-	lastArrayIndex	= [self bitCount] / (8 * sizeof(uint32_t));
-	lastBitIndex	= [self bitCount] % (8 * sizeof(uint32_t));
+	lastArrayIndex	= [self bitCount] / (8 * sizeof(NSUInteger));
+	lastBitIndex	= [self bitCount] % (8 * sizeof(NSUInteger));
 	
 	for(i = 0; i < lastArrayIndex; ++i) {
 		if(0xFFFFFFFF != _bits[i]) {
@@ -170,19 +170,19 @@
 	return YES;
 }
 
-- (unsigned)		countOfOnes
+- (NSUInteger)		countOfOnes
 {
-	unsigned		lastArrayIndex;
-	unsigned		lastBitIndex;
-	unsigned		i, j;
-	unsigned		result;
+	NSUInteger		lastArrayIndex;
+	NSUInteger		lastBitIndex;
+	NSUInteger		i, j;
+	NSUInteger		result;
 	
-	lastArrayIndex	= [self bitCount] / (8 * sizeof(uint32_t));
-	lastBitIndex	= [self bitCount] % (8 * sizeof(uint32_t));
+	lastArrayIndex	= [self bitCount] / (8 * sizeof(NSUInteger));
+	lastBitIndex	= [self bitCount] % (8 * sizeof(NSUInteger));
 	result			= 0;
 	
 	for(i = 0; i < lastArrayIndex; ++i) {
-		for(j = 0; j < (8 * sizeof(uint32_t)); ++j) {
+		for(j = 0; j < (8 * sizeof(NSUInteger)); ++j) {
 			if(_bits[i] & (1 << j)) {
 				++result;
 			}
@@ -200,12 +200,12 @@
 
 - (void)			setAllOnes
 {
-	unsigned		lastArrayIndex;
-	unsigned		lastBitIndex;
-	unsigned		i;
+	NSUInteger		lastArrayIndex;
+	NSUInteger		lastBitIndex;
+	NSUInteger		i;
 	
-	lastArrayIndex	= [self bitCount] / (8 * sizeof(uint32_t));
-	lastBitIndex	= [self bitCount] % (8 * sizeof(uint32_t));
+	lastArrayIndex	= [self bitCount] / (8 * sizeof(NSUInteger));
+	lastBitIndex	= [self bitCount] % (8 * sizeof(NSUInteger));
 	
 	for(i = 0; i < lastArrayIndex; ++i) {
 		_bits[i] = 0xFFFFFFFF;
@@ -219,7 +219,7 @@
 - (NSString *)		description
 {
 	NSMutableString		*result;
-	unsigned			i;
+	NSUInteger			i;
 	
 	result = [NSMutableString stringWithCapacity:[self bitCount]];
 	for(i = 0; i < [self bitCount]; ++i) {

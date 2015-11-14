@@ -196,7 +196,7 @@ static MediaController *sharedController = nil;
 - (id) copyWithZone:(NSZone *)zone								{ return self; }
 - (id) retain													{ return self; }
 - (NSUInteger) retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void) release												{ /* do nothing */ }
+- (oneway void) release											{ /* do nothing */ }
 - (id) autorelease												{ return self; }
 
 - (void) volumeMounted:(NSString *)deviceName
@@ -220,7 +220,7 @@ static MediaController *sharedController = nil;
 
 		// If a .cdinfo file exists with the old FreeDB ID naming scheme, rename it
 		if([[NSFileManager defaultManager] fileExistsAtPath:oldFilename] && NO == [[NSFileManager defaultManager] fileExistsAtPath:filename])
-			/* BOOL result = */[[NSFileManager defaultManager] movePath:oldFilename toPath:filename handler:nil];
+			/* BOOL result = */[[NSFileManager defaultManager] moveItemAtPath:oldFilename toPath:filename error:nil];
 		
 		// Ugly hack to avoid letting the user specify the save filename
 		if(NO == [[NSFileManager defaultManager] fileExistsAtPath:filename]) {

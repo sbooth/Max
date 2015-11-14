@@ -30,7 +30,7 @@ extern NSString *		AlbumArtPreferencesToolbarItemIdentifier;
 extern NSString *		iTunesPreferencesToolbarItemIdentifier;
 extern NSString *		PostProcessingPreferencesToolbarItemIdentifier;
 
-@interface PreferencesController : NSWindowController
+@interface PreferencesController : NSWindowController <NSToolbarDelegate>
 {
 }
 
