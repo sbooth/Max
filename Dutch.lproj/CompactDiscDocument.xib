@@ -151,7 +151,7 @@
                         </textFieldCell>
                     </textField>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="32">
-                        <rect key="frame" x="20" y="20" width="394" height="210"/>
+                        <rect key="frame" x="19" y="20" width="394" height="210"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="hdO-Rz-pBH">
                             <rect key="frame" x="1" y="0.0" width="392" height="209"/>

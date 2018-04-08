@@ -248,7 +248,7 @@
                     <button imageHugsTitle="YES" id="101">
                         <rect key="frame" x="254" y="271" width="101" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Compilación" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="413">
+                        <buttonCell key="cell" type="check" title="Compilación" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="413">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>

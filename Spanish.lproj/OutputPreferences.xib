@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -221,7 +221,7 @@
                                 <button imageHugsTitle="YES" id="712">
                                     <rect key="frame" x="14" y="118" width="423" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <buttonCell key="cell" type="check" title="Usar un formato personalizado para nombrar ficheros de salida" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="782">
+                                    <buttonCell key="cell" type="check" title="Usar un formato personalizado para nombrar ficheros de salida" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="782">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>

@@ -137,8 +137,8 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button imageHugsTitle="YES" id="32">
-                        <rect key="frame" x="41" y="16" width="22" height="22"/>
+                    <button misplaced="YES" imageHugsTitle="YES" id="32">
+                        <rect key="frame" x="41" y="12" width="22" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Remove" imagePosition="above" alignment="center" alternateImage="Remove_Pressed" inset="2" id="599">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

@@ -448,9 +448,5 @@ DQ
                 <binding destination="-2" name="contentObject" keyPath="settings" id="489"/>
             </connections>
         </objectController>
-        <view id="593">
-            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
-            <autoresizingMask key="autoresizingMask"/>
-        </view>
     </objects>
 </document>

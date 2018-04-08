@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
@@ -26,14 +26,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="520" height="243"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box fixedFrame="YES" title="Amazon Web Services" translatesAutoresizingMaskIntoConstraints="NO" id="103">
+                    <box title="Amazon Web Services" id="103">
                         <rect key="frame" x="17" y="164" width="486" height="59"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="uCT-6W-n0b">
                             <rect key="frame" x="2" y="2" width="482" height="42"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49">
+                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="49">
                                     <rect key="frame" x="221" y="7" width="147" height="26"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <popUpButtonCell key="cell" type="push" title="amazon.com" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="52" id="156">
@@ -54,7 +54,7 @@
                                         <binding destination="35" name="selectedTag" keyPath="values.amazonDefaultLocale" id="94"/>
                                     </connections>
                                 </popUpButton>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="145" translatesAutoresizingMaskIntoConstraints="NO" id="48">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="48">
                                     <rect key="frame" x="70" y="13" width="149" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Default amazon locale:" id="155">
@@ -66,14 +66,14 @@
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Album Art Options" translatesAutoresizingMaskIntoConstraints="NO" id="140">
+                    <box title="Album Art Options" id="140">
                         <rect key="frame" x="17" y="16" width="486" height="144"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="X8Y-un-u6z">
                             <rect key="frame" x="2" y="2" width="482" height="127"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="105">
+                                <button imageHugsTitle="YES" id="105">
                                     <rect key="frame" x="12" y="97" width="223" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Save album art with output files" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="157">
@@ -84,7 +84,7 @@
                                         <binding destination="35" name="value" keyPath="values.saveAlbumArt" id="147"/>
                                     </connections>
                                 </button>
-                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="73" translatesAutoresizingMaskIntoConstraints="NO" id="106">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="106">
                                     <rect key="frame" x="11" y="16" width="77" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="File format:" id="158">
@@ -93,7 +93,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="107">
+                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="107">
                                     <rect key="frame" x="90" y="10" width="130" height="26"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <popUpButtonCell key="cell" type="push" title="BMP" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="112" id="159">
@@ -115,7 +115,7 @@
                                         <binding destination="35" name="selectedTag" keyPath="values.albumArtFileExtension" id="152"/>
                                     </connections>
                                 </popUpButton>
-                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="115">
+                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="115">
                                     <rect key="frame" x="276" y="38" width="193" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="Add Format Specifier" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" pullsDown="YES" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="128" id="160">
@@ -163,7 +163,7 @@
                                         <binding destination="35" name="enabled" keyPath="values.saveAlbumArt" id="149"/>
                                     </connections>
                                 </popUpButton>
-                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="139">
+                                <comboBox verticalHuggingPriority="750" textCompletion="NO" id="139">
                                     <rect key="frame" x="14" y="67" width="455" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="161">

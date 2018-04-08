@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment version="1060" identifier="macosx"/>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,17 +30,17 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         <size key="cellSize" width="67" height="18"/>
                         <size key="intercellSpacing" width="4" height="2"/>
-                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="280">
+                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="280">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <cells>
                             <column>
-                                <buttonCell type="radio" title="Quality" imagePosition="leading" alignment="left" state="on" toolTip="Generate a variable bitrate (VBR) Ogg Vorbis stream based on quality.  Recommended for most applications." inset="2" id="127">
+                                <buttonCell type="radio" title="Quality" imagePosition="left" alignment="left" state="on" toolTip="Generate a variable bitrate (VBR) Ogg Vorbis stream based on quality.  Recommended for most applications." inset="2" id="127">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="radio" title="Bitrate" imagePosition="leading" alignment="left" toolTip="Generate a variable bitrate (VBR) or constant bitrate (CBR) Ogg Vorbis stream based on the specified bitrate." tag="1" inset="2" id="126">
+                                <buttonCell type="radio" title="Bitrate" imagePosition="left" alignment="left" toolTip="Generate a variable bitrate (VBR) or constant bitrate (CBR) Ogg Vorbis stream based on the specified bitrate." tag="1" inset="2" id="126">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -303,7 +303,7 @@ DQ
                     <button imageHugsTitle="YES" id="122">
                         <rect key="frame" x="135" y="58" width="246" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="check" title="Restrict encoder to constant bitrate" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="272">
+                        <buttonCell key="cell" type="check" title="Restrict encoder to constant bitrate" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="272">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
