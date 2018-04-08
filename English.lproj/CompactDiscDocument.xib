@@ -18,9 +18,9 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Compact Disc 0xsfb+jmr" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="25" userLabel="CompactDiscWindow">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="30" y="129" width="434" height="518"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -154,7 +154,7 @@
                         <rect key="frame" x="20" y="20" width="394" height="210"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="3IY-AF-Yft">
-                            <rect key="frame" x="1" y="23" width="392" height="186"/>
+                            <rect key="frame" x="1" y="0.0" width="392" height="209"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" emptySelection="NO" autosaveColumns="NO" headerView="1075" id="33">
@@ -185,14 +185,6 @@
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
                                                 </binding>
-                                                <binding destination="-2" name="enabled3" keyPath="discInDrive" previousBinding="617" id="882">
-                                                    <dictionary key="options">
-                                                        <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                                        <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                                        <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                                        <integer key="NSNullPlaceholder" value="-1"/>
-                                                    </dictionary>
-                                                </binding>
                                                 <binding destination="109" name="enabled" keyPath="arrangedObjects.ripInProgress" id="503">
                                                     <dictionary key="options">
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -201,6 +193,14 @@
                                                 <binding destination="109" name="value" keyPath="arrangedObjects.selected" id="128">
                                                     <dictionary key="options">
                                                         <integer key="NSConditionallySetsEditable" value="1"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="-2" name="enabled3" keyPath="discInDrive" previousBinding="617" id="882">
+                                                    <dictionary key="options">
+                                                        <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                        <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                        <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                        <integer key="NSNullPlaceholder" value="-1"/>
                                                     </dictionary>
                                                 </binding>
                                             </connections>
@@ -245,7 +245,7 @@
                                                 </binding>
                                             </connections>
                                         </tableColumn>
-                                        <tableColumn identifier="length" editable="NO" width="62.6201171875" minWidth="44.6201171875" maxWidth="1000" id="304">
+                                        <tableColumn identifier="length" editable="NO" width="73.6201171875" minWidth="44.6201171875" maxWidth="1000" id="304">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Length">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -269,7 +269,7 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="YES" id="1074">
-                            <rect key="frame" x="1" y="-22" width="381" height="11"/>
+                            <rect key="frame" x="1" y="198" width="392" height="14"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" controlSize="small" horizontal="NO" id="1073">
@@ -425,16 +425,16 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="887">
-                        <rect key="frame" x="124" y="238" width="161" height="13"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" id="9s4-Bw-eUQ">
+                        <rect key="frame" x="132" y="232" width="183" height="20"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Output Directory not specified" id="1036">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Output Directory not specified" id="QWY-5i-Dwb">
                             <font key="font" metaFont="systemBold" size="10"/>
                             <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="888" name="hidden" keyPath="values.convertInPlace" id="891">
+                            <binding destination="888" name="hidden" keyPath="values.convertInPlace" id="p6C-UY-f2F">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>

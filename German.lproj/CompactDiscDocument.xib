@@ -18,9 +18,9 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Compact Disc 0xsfb+jmr" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="25" userLabel="CompactDiscWindow">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="23" y="154" width="434" height="518"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
@@ -143,7 +143,7 @@
                         <rect key="frame" x="20" y="20" width="394" height="210"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="trl-Da-6l4">
-                            <rect key="frame" x="1" y="23" width="392" height="186"/>
+                            <rect key="frame" x="1" y="0.0" width="392" height="209"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" headerView="1008" id="33">
@@ -174,14 +174,6 @@
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
                                                 </binding>
-                                                <binding destination="-2" name="enabled3" keyPath="discInDrive" previousBinding="617" id="822">
-                                                    <dictionary key="options">
-                                                        <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                                        <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                                        <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                                        <integer key="NSNullPlaceholder" value="-1"/>
-                                                    </dictionary>
-                                                </binding>
                                                 <binding destination="109" name="enabled" keyPath="arrangedObjects.ripInProgress" id="503">
                                                     <dictionary key="options">
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -190,6 +182,14 @@
                                                 <binding destination="109" name="value" keyPath="arrangedObjects.selected" id="128">
                                                     <dictionary key="options">
                                                         <integer key="NSConditionallySetsEditable" value="1"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="-2" name="enabled3" keyPath="discInDrive" previousBinding="617" id="822">
+                                                    <dictionary key="options">
+                                                        <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                        <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                        <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                        <integer key="NSNullPlaceholder" value="-1"/>
                                                     </dictionary>
                                                 </binding>
                                             </connections>
