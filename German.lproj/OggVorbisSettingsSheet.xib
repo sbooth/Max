@@ -303,7 +303,7 @@ DQ
                     <button imageHugsTitle="YES" id="122">
                         <rect key="frame" x="135" y="58" width="200" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="check" title="Konstante Bitrate erzwingen" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="272">
+                        <buttonCell key="cell" type="check" title="Konstante Bitrate erzwingen" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="272">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
