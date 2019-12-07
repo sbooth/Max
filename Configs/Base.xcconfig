@@ -5,6 +5,8 @@ GCC_VERSION = com.apple.compilers.llvm.clang.1_0
 //GCC_VERSION = com.apple.compilers.llvmgcc42
 GCC_C_LANGUAGE_STANDARD = gnu99
 
+CLANG_CXX_LIBRARY = libc++
+
 ALWAYS_SEARCH_USER_PATHS = NO
 
 GCC_WARN_CHECK_SWITCH_STATEMENTS = YES

@@ -19,6 +19,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+
 #import "Decoder.h"
 
 @interface MonkeysAudioDecoder : Decoder

@@ -27,7 +27,7 @@ addMPEG4AACGaplessInformationAtom(NSString *filename, SInt64 totalFrames)
 {
 	NSCParameterAssert(nil != filename);
 	
-	MP4FileHandle file = MP4Modify([filename fileSystemRepresentation], MP4_DETAILS_ERROR, 0);
+	MP4FileHandle file = MP4Modify([filename fileSystemRepresentation], MP4_DETAILS_ERROR);
 	if(file == MP4_INVALID_FILE_HANDLE)
 		return;
 
@@ -54,7 +54,7 @@ addMPEG4AACGaplessInformationAtom(NSString *filename, SInt64 totalFrames)
 	MP4ItmfAddItem(file, smpb);	
 	MP4ItmfItemFree(smpb);
 	
-	MP4Close(file);
+	MP4Close(file, 0);
 }
 
 void 
@@ -62,7 +62,7 @@ addMPEG4AACBitrateInformationAtom(NSString *filename, UInt32 bitrate, int bitrat
 {
 	NSCParameterAssert(nil != filename);
 	
-	MP4FileHandle file = MP4Modify([filename fileSystemRepresentation], MP4_DETAILS_ERROR, 0);
+	MP4FileHandle file = MP4Modify([filename fileSystemRepresentation], MP4_DETAILS_ERROR);
 	if(file == MP4_INVALID_FILE_HANDLE)
 		return;
 	
@@ -109,5 +109,5 @@ addMPEG4AACBitrateInformationAtom(NSString *filename, UInt32 bitrate, int bitrat
 	MP4ItmfAddItem(file, smpb);	
 	MP4ItmfItemFree(smpb);
 	
-	MP4Close(file);
+	MP4Close(file, 0);
 }

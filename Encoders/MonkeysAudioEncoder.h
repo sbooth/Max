@@ -36,7 +36,7 @@ enum {
 
 @interface MonkeysAudioEncoder : Encoder
 {
-	IAPECompress			*_compressor;
+	APE::IAPECompress		*_compressor;
 	int						_compressionLevel;
 	UInt32					_sourceBitsPerChannel;
 	UInt32					_sourceBytesPerFrame;

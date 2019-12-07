@@ -26,8 +26,10 @@
 #include <mac/APETag.h>
 #include <mac/CharacterHelper.h>
 
+using namespace APE;
+
 @interface AudioMetadata (TagMappings)
-+ (str_utf16 *)			customizeAPETag:(NSString *)tag;
++ (str_utfn *)			customizeAPETag:(NSString *)tag;
 @end
 
 @implementation MonkeysAudioEncoderTask
@@ -60,14 +62,14 @@
 	NSString									*isrc					= nil;
 	NSString									*mcn					= nil;
 	NSString									*bundleVersion			= nil;
-	str_utf16									*chars					= NULL;
-	str_utf16									*tagName				= NULL;
+	str_utfn									*chars					= NULL;
+	str_utfn									*tagName				= NULL;
 	CAPETag										*f						= NULL;
 	int											result;
 	
 
 	@try {
-		chars = GetUTF16FromANSI([[self outputFilename] fileSystemRepresentation]);
+		chars = CAPECharacterHelper::GetUTF16FromANSI([[self outputFilename] fileSystemRepresentation]);
 		NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 		f = new CAPETag(chars);

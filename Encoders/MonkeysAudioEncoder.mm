@@ -38,6 +38,8 @@
 
 #import "UtilityFunctions.h"
 
+using namespace APE;
+
 @interface MonkeysAudioEncoder (Private)
 - (void)	parseSettings;
 - (void)	compressChunk:(const AudioBufferList *)chunk frameCount:(UInt32)frameCount;
@@ -62,7 +64,7 @@
 	ssize_t							bufferLen					= 0;
 	UInt32							bufferByteSize				= 0;
 	WAVEFORMATEX					formatDesc;
-	str_utf16						*chars						= NULL;
+	str_utfn						*chars						= NULL;
 	int								result;
 	SInt64							totalFrames, framesToRead;
 	UInt32							frameCount;
@@ -135,7 +137,7 @@
 		NSAssert(NULL != _compressor, NSLocalizedStringFromTable(@"Unable to create the Monkey's Audio compressor.", @"Exceptions", @""));
 						
 		// Setup compressor
-		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
+		chars = CAPECharacterHelper::GetUTF16FromANSI([filename fileSystemRepresentation]);
 		NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		result = FillWaveFormatEx(&formatDesc, (int)[decoder pcmFormat].mSampleRate, [decoder pcmFormat].mBitsPerChannel, [decoder pcmFormat].mChannelsPerFrame);
