@@ -2,7 +2,9 @@
 
 **Main website:** [https://sbooth.org/Max/](https://sbooth.org/Max/)
 
-Max is an application for creating high-quality audio files in various formats, from compact discs or files.
+
+Max is an application for creating high-quality audio files in various formats, on macOS (32-bit), from compact discs
+or files.
 
 When extracting audio from compact discs, Max offers the maximum in flexibility to ensure the true sound of your CD is faithfully extracted. For pristine discs, Max offers a high-speed ripper with no error correction. For damaged discs, Max can either use its built-in comparison ripper (for drives that cache audio) or the error-correcting power of cdparanoia.
 
