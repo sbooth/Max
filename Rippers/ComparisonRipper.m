@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -224,18 +222,18 @@
 	int8_t				*sectorAlias		= NULL;
 	
 	int8_t				sectorBuffer		[ kCDSectorSizeCDDA ];
-	unsigned			bufferLen			= 0;
+	NSUInteger			bufferLen			= 0;
 	
-	unsigned			sectorsRead			= 0;
-	unsigned			sectorCount			= 0;
-	unsigned			startSector			= 0;
-	unsigned			sectorsRemaining	= 0;
+	NSUInteger			sectorsRead			= 0;
+	NSUInteger			sectorCount			= 0;
+	NSUInteger			startSector			= 0;
+	NSUInteger			sectorsRemaining	= 0;
 	SectorRange			*readRange			= nil;
 	SectorRange			*blockRange			= nil;
 	OSStatus			err					= noErr;
-	unsigned			totalSectors		= 0;
-	unsigned			sectorsToRead		= 0;
-	unsigned long		iterations			= 0;
+	NSUInteger			totalSectors		= 0;
+	NSUInteger			sectorsToRead		= 0;
+	NSUInteger			iterations			= 0;
 	AudioBufferList		bufferList;
 	UInt32				frameCount			= 0;
 	NSMutableArray		*rips				= nil;
@@ -246,19 +244,19 @@
 	Rip					*comparator			= nil;
 	NSDate				*phaseStartTime		= nil;
 	BOOL				gotMatch;
-	unsigned			i, j, k;
-	unsigned			sector;
-	unsigned			sectorIndex;
-	unsigned			masterIndex;
-	unsigned			comparatorIndex;
-	unsigned			matchCount;
+	NSUInteger			i, j, k;
+	NSUInteger			sector;
+	NSUInteger			sectorIndex;
+	NSUInteger			masterIndex;
+	NSUInteger			comparatorIndex;
+	NSUInteger			matchCount;
 	unsigned char		*masterHash;
-	unsigned			blockEnd;
-	unsigned			retries;
-	unsigned			blockPadding;
+	NSUInteger			blockEnd;
+	NSUInteger			retries;
+	NSUInteger			blockPadding;
 	double				percentComplete;
 	NSTimeInterval		interval;
-	unsigned			secondsRemaining;	
+	NSUInteger			secondsRemaining;
 	
 	@try {
 		
@@ -354,7 +352,7 @@
 						if(c2Buffer[j]) {
 							for(k = 0; k < 8; ++k) {
 								if((1 << k) & c2Buffer[j]) {
-									[self logMessage:[NSString stringWithFormat:@"C2 error for sector %u", [readRange firstSector] + (8 * j) + k]];
+									[self logMessage:[NSString stringWithFormat:@"C2 error for sector %lu", [readRange firstSector] + (8 * j) + k]];
 								}
 							}					
 						}
@@ -635,7 +633,7 @@
 							if(c2Buffer[j]) {
 								for(k = 0; k < 8; ++k) {
 									if((1 << k) & c2Buffer[j]) {
-										[self logMessage:[NSString stringWithFormat:@"C2 error for sector %u", [readRange firstSector] + (8 * j) + k]];
+										[self logMessage:[NSString stringWithFormat:@"C2 error for sector %lu", [readRange firstSector] + (8 * j) + k]];
 									}
 								}					
 							}
