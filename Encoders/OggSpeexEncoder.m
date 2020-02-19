@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +28,6 @@
 #include <speex/speex_header.h>
 #include <speex/speex_stereo.h>
 #include <speex/speex_callbacks.h>
-#include <speex/speex_preprocess.h>
 
 #include <ogg/ogg.h>
 
@@ -134,7 +131,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	
 	void						*speexState									= NULL;
 	const SpeexMode				*mode										= NULL;
-	SpeexPreprocessState		*preprocess									= NULL;
 	SpeexBits					bits;
 
 	int							rate										= 44100;
@@ -294,10 +290,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		speex_encoder_ctl(speexState, SPEEX_GET_LOOKAHEAD, &lookahead);
 		
 		if(_denoiseEnabled || _agcEnabled) {
-			lookahead	+= frameSize;
-			preprocess	= speex_preprocess_state_init(frameSize, rate);
-			speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_DENOISE, &_denoiseEnabled);
-			speex_preprocess_ctl(preprocess, SPEEX_PREPROCESS_SET_AGC, &_agcEnabled);
+//			lookahead	+= frameSize;
 		}
 		
 		// Write header
@@ -457,10 +450,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 						speex_encode_stereo(floatBuffer, frameSize, &bits);
 					}
 
-					if(NULL != preprocess) {
-						NSLog(@"Speex preprocessing is only supported for 16-bit samples");
-					}
-					
 					speex_encode(speexState, floatBuffer, &bits);
 
 					free(floatBuffer);
@@ -470,10 +459,6 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 				case 16:
 					if(2 == [decoder pcmFormat].mChannelsPerFrame) {
 						speex_encode_stereo_int(bufferList.mBuffers[0].mData, frameSize, &bits);
-					}
-					
-					if(NULL != preprocess) {
-						speex_preprocess(preprocess, bufferList.mBuffers[0].mData, NULL);
 					}
 					
 					speex_encode_int(speexState, bufferList.mBuffers[0].mData, &bits);
