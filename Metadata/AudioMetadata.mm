@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2009 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,7 +63,7 @@
 + (NSString *)			customizeFLACTag:(NSString *)tag;
 + (TagLib::String)		customizeOggVorbisTag:(NSString *)tag;
 + (TagLib::String)		customizeOggFLACTag:(NSString *)tag;
-+ (str_utf16 *)			customizeAPETag:(NSString *)tag;
++ (APE::str_utfn *)		customizeAPETag:(NSString *)tag;
 + (NSString *)			customizeWavPackTag:(NSString *)tag;
 @end
 
@@ -704,7 +702,7 @@
 + (AudioMetadata *) metadataFromMP4File:(NSString *)filename
 {
 	AudioMetadata		*result			= [[AudioMetadata alloc] init];
-	MP4FileHandle		mp4FileHandle	= MP4Read([filename fileSystemRepresentation], 0);
+	MP4FileHandle		mp4FileHandle	= MP4Read([filename fileSystemRepresentation]);
 	
 	if(MP4_INVALID_FILE_HANDLE != mp4FileHandle) {
 		// Read the tags
@@ -1243,16 +1241,16 @@
 + (AudioMetadata *) metadataFromMonkeysAudioFile:(NSString *)filename
 {
 	AudioMetadata					*result					= [[AudioMetadata alloc] init];
-	str_utf16						*chars					= NULL;
-	str_utf16						*tagName				= NULL;
-	CAPETag							*f						= NULL;
-	CAPETagField					*tag					= NULL;		
+	APE::str_utfn					*chars					= NULL;
+	APE::str_utfn					*tagName				= NULL;
+	APE::CAPETag					*f						= NULL;
+	APE::CAPETagField				*tag					= NULL;
 	
 	@try {
-		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
+		chars = APE::CAPECharacterHelper::GetUTF16FromANSI([filename fileSystemRepresentation]);
 		NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
-		f = new CAPETag(chars);
+		f = new APE::CAPETag(chars);
 		NSAssert(NULL != f, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		// Album title
@@ -1954,13 +1952,13 @@
 	return (nil == customTag ? TagLib::String([tag UTF8String], TagLib::String::UTF8) : TagLib::String([customTag UTF8String], TagLib::String::UTF8));
 }
 
-+ (str_utf16 *) customizeAPETag:(NSString *)tag
++ (APE::str_utfn *) customizeAPETag:(NSString *)tag
 {
 	NSString		*customTag		= nil;
-	str_utf16		*result			= NULL;
+	APE::str_utfn	*result			= NULL;
 	
 	customTag	= [[NSUserDefaults standardUserDefaults] stringForKey:[NSString stringWithFormat:@"APETag_%@", tag]];
-	result		= GetUTF16FromUTF8((const unsigned char *)[(nil == customTag ? tag : customTag) UTF8String]);
+	result		= APE::CAPECharacterHelper::GetUTF16FromUTF8((const unsigned char *)[(nil == customTag ? tag : customTag) UTF8String]);
 	NSAssert(NULL != result, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 	
 	return result;
