@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -111,11 +109,6 @@ static ApplicationController *sharedController = nil;
 - (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
 - (oneway void)	release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
-
-- (void) awakeFromNib
-{
-	[GrowlApplicationBridge setGrowlDelegate:self];
-}
 
 - (BOOL)		applicationShouldOpenUntitledFile:(NSApplication *)sender	{ return NO; }
 
@@ -290,45 +283,6 @@ static ApplicationController *sharedController = nil;
 	}
 	
 	return result;
-}
-
-- (NSDictionary *) registrationDictionaryForGrowl
-{
-	NSArray *defaultNotifications = [NSArray arrayWithObjects:
-		@"Rip stopped",
-		@"Ripping completed",
-		@"Convert stopped",
-		@"Conversion completed",
-		@"Encode stopped",
-		@"Encoding completed",
-		nil
-		];
-
-	NSArray *allNotifications = [NSArray arrayWithObjects:
-		@"Rip started",
-		@"Rip completed",
-		@"Rip stopped",
-		@"Ripping completed",
-		@"Disc ripping completed",
-		@"Convert started",
-		@"Convert completed",
-		@"Convert stopped",
-		@"Conversion completed",
-		@"Encode started",
-		@"Encode completed",
-		@"Encode stopped",
-		@"Encoding completed",
-		@"Disc encoding completed",
-		nil
-		];
-	
-	
-	NSDictionary *regDict = [NSDictionary dictionaryWithObjectsAndKeys:
-		@"Max", GROWL_APP_NAME, 
-		allNotifications, GROWL_NOTIFICATIONS_ALL, 
-		defaultNotifications, GROWL_NOTIFICATIONS_DEFAULT,
-		nil];
-	return regDict;
 }
 
 @end

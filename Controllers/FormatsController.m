@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,7 +68,7 @@ static FormatsController			*sharedController						= nil;
 - (id)			copyWithZone:(NSZone *)zone						{ return self; }
 - (id)			retain											{ return self; }
 - (NSUInteger)	retainCount										{ return UINT_MAX;  /* denotes an object that cannot be released */ }
-- (void)		release											{ /* do nothing */ }
+- (oneway void)	release											{ /* do nothing */ }
 - (id)			autorelease										{ return self; }
 
 - (NSArray *) selectedFormats

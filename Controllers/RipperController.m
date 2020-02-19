@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,8 +28,6 @@
 #import "CompactDiscDocument.h"
 #import "MediaController.h"
 #import "UtilityFunctions.h"
-
-#import <Growl/GrowlApplicationBridge.h>
 
 #include <paths.h>			// _PATH_TMP
 #include <sys/param.h>		// statfs
@@ -87,7 +83,8 @@ static RipperController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_tasks release],		_tasks = nil;
+	[_tasks release];
+	_tasks = nil;
 
 	[super dealloc];
 }
@@ -247,8 +244,10 @@ static RipperController *sharedController = nil;
 	NSString *trackName = [task description];
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Rip started for %@", @"Log", @""), trackName]];
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Rip started", @"Log", @"") description:trackName
-						   notificationName:@"Rip started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+	notification.title = NSLocalizedStringFromTable(@"Rip started", @"Log", @"");
+	notification.informativeText = trackName;
+	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
 - (void) ripperTaskDidStop:(RipperTask *)task
@@ -256,8 +255,10 @@ static RipperController *sharedController = nil;
 	NSString *trackName = [task description];
 		
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Rip stopped for %@", @"Log", @""), trackName]];
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Rip stopped", @"Log", @"") description:trackName
-						   notificationName:@"Rip stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+	notification.title = NSLocalizedStringFromTable(@"Rip stopped", @"Log", @"");
+	notification.informativeText = trackName;
+	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 
 	[task retain];
 
@@ -283,26 +284,29 @@ static RipperController *sharedController = nil;
 	BOOL			justNotified	= NO;
 	
 	[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Rip completed for %@", @"Log", @""), trackName]];
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Rip completed", @"Log", @"") 
-								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
-						   notificationName:@"Rip completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
-		
+	NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+	notification.title = NSLocalizedStringFromTable(@"Rip completed", @"Log", @"");
+	notification.informativeText = [NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]];
+	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+
 	[task retain];
 
 	[self removeTask:task];
 	[self spawnThreads];
 
 	if(NO == [[[task objectInTracksAtIndex:0] document] ripInProgress]) {
-		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc ripping completed", @"Log", @"")
-									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All ripping tasks completed for %@", @"Log", @""), [[[task taskInfo] metadata] albumTitle]]
-							   notificationName:@"Disc ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+		notification.title = NSLocalizedStringFromTable(@"Disc ripping completed", @"Log", @"");
+		notification.informativeText = [NSString stringWithFormat:NSLocalizedStringFromTable(@"All ripping tasks completed for %@", @"Log", @""), [[[task taskInfo] metadata] albumTitle]];
+		[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 		justNotified = YES;
 	}
 	
 	if(NO == [self hasTasks] && NO == justNotified) {
-		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Ripping completed", @"Log", @"")
-									description:NSLocalizedStringFromTable(@"All ripping tasks completed", @"Log", @"")
-							   notificationName:@"Ripping completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+		notification.title = NSLocalizedStringFromTable(@"Ripping completed", @"Log", @"");
+		notification.informativeText = NSLocalizedStringFromTable(@"All ripping tasks completed", @"Log", @"");
+		[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 	}
 	
 	if([[NSUserDefaults standardUserDefaults] boolForKey:@"ejectAfterRipping"] && NO == [self documentHasRipperTasks:[[task objectInTracksAtIndex:0] document]]) {

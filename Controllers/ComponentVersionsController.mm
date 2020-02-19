@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +24,22 @@
 #include <sndfile/sndfile.h>
 #include <mac/All.h>
 #include <wavpack/wavpack.h>
+
+#include <wchar.h>
+
+@implementation NSString (WideCharSupport)
+
++ (NSString *) stringWithWideString:(const wchar_t *)ws
+{
+	size_t buflen = 8 * wcslen(ws) + 1;
+	char *temp = (char *)malloc(buflen);
+	wcstombs(temp, ws, buflen);
+	NSString* retVal = [self stringWithUTF8String:temp];
+	free(temp);
+	return retVal;
+}
+
+@end
 
 static ComponentVersionsController *sharedController = nil;
 
@@ -63,7 +77,7 @@ static ComponentVersionsController *sharedController = nil;
 		
 		_flacVersion		= [NSString stringWithFormat:@"FLAC %s", FLAC__VERSION_STRING];
 		_lameVersion		= [NSString stringWithFormat:@"LAME %s", get_lame_version()];
-		_macVersion			= [NSString stringWithFormat:@"Monkey's Audio %s", MAC_VERSION_STRING];
+		_macVersion			= [NSString stringWithFormat:@"Monkey's Audio %@", [NSString stringWithWideString:MAC_VERSION_STRING]];
 
 		if(NULL != speexVersion) {
 			_speexVersion		= [NSString stringWithCString:speexVersion encoding:NSASCIIStringEncoding];

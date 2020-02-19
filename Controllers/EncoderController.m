@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +34,6 @@
 #import "LogController.h"
 #import "RipperController.h"
 
-#import <Growl/GrowlApplicationBridge.h>
 #include <AudioToolbox/AudioFile.h>
 #include <sndfile/sndfile.h>
 
@@ -91,7 +88,8 @@ static EncoderController *sharedController = nil;
 
 - (void) dealloc
 {
-	[_tasks release],		_tasks = nil;
+	[_tasks release];
+	_tasks = nil;
 
 	[super dealloc];
 }
@@ -269,9 +267,10 @@ static EncoderController *sharedController = nil;
 	if(nil != settings)
 		[LogController logMessage:settings];
 
-	[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode started", @"Log", @"") 
-								description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
-						   notificationName:@"Encode started" iconData:nil priority:0 isSticky:NO clickContext:nil];
+	NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+	notification.title = NSLocalizedStringFromTable(@"Encode started", @"Log", @"");
+	notification.informativeText = [NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]];
+	[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
 - (void) encoderTaskDidStop:(EncoderTask *)task notify:(BOOL)notify
@@ -281,9 +280,10 @@ static EncoderController *sharedController = nil;
 		NSString	*type			= [task outputFormatName];
 		
 		[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode stopped for %@ [%@]", @"Log", @""), trackName, type]];
-		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode stopped", @"Log", @"") 
-									description:[NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]]
-							   notificationName:@"Encode stopped" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+		notification.title = NSLocalizedStringFromTable(@"Encode stopped", @"Log", @"");
+		notification.informativeText = [NSString stringWithFormat:@"%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type]];
+		[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 	}
 	
 	[self removeTask:task];
@@ -303,9 +303,10 @@ static EncoderController *sharedController = nil;
 		NSString		*type			= [task outputFormatName];
 		
 		[LogController logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Encode completed for %@ [%@]", @"Log", @""), trackName, type]];
-		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encode completed", @"Log", @"") 
-									description:[NSString stringWithFormat:@"%@\n%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type], [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]]
-							   notificationName:@"Encode completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+		notification.title = NSLocalizedStringFromTable(@"Encode completed", @"Log", @"");
+		notification.informativeText = [NSString stringWithFormat:@"%@\n%@\n%@", trackName, [NSString stringWithFormat:NSLocalizedStringFromTable(@"File format: %@", @"Log", @""), type], [NSString stringWithFormat:NSLocalizedStringFromTable(@"Duration: %@", @"Log", @""), duration]];
+		[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 	}
 	
 	[task retain];
@@ -314,9 +315,10 @@ static EncoderController *sharedController = nil;
 	[self spawnThreads];
 	
 	if(notify && 0 != [[[task taskInfo] inputTracks] count] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] ripInProgress] && NO == [[[[[task taskInfo] inputTracks] objectAtIndex:0] document] encodeInProgress]) {
-		[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"")
-									description:[NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[[task taskInfo] metadata] albumTitle]]
-							   notificationName:@"Disc encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+		notification.title = NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"");
+		notification.informativeText = [NSString stringWithFormat:NSLocalizedStringFromTable(@"All encoding tasks completed for %@", @"Log", @""), [[[task taskInfo] metadata] albumTitle]];
+		[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 		justNotified = YES;
 	}
 
@@ -327,11 +329,13 @@ static EncoderController *sharedController = nil;
 		if(NO == [[NSApplication sharedApplication] isActive])
 			[[NSApplication sharedApplication] requestUserAttention:NSInformationalRequest];			
 		
-		// Try to avoid Growl floods
-		if(NO == justNotified)
-			[GrowlApplicationBridge notifyWithTitle:NSLocalizedStringFromTable(@"Encoding completed", @"Log", @"")
-										description:NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"")
-								   notificationName:@"Encoding completed" iconData:nil priority:0 isSticky:NO clickContext:nil];
+		// Try to avoid notification floods
+		if(NO == justNotified) {
+			NSUserNotification *notification = [[[NSUserNotification alloc] init] autorelease];
+			notification.title = NSLocalizedStringFromTable(@"Disc encoding completed", @"Log", @"");
+			notification.informativeText = NSLocalizedStringFromTable(@"All encoding tasks completed", @"Log", @"");
+			[[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
+		}
 	}
 
 	

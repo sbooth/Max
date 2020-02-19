@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,13 +18,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import <Growl/GrowlApplicationBridge.h>
-
 @interface NSApplication (ScriptingAdditions)
 - (id) handleConvertScriptCommand:(NSScriptCommand *)command;
 @end
 
-@interface ApplicationController : NSObject <GrowlApplicationBridgeDelegate>
+@interface ApplicationController : NSObject
 {
 }
 
@@ -46,7 +42,5 @@
 - (IBAction)			encodeFile:(id)sender;
 
 - (void)				encodeFiles:(NSArray *)filenames;
-
-- (NSDictionary *)		registrationDictionaryForGrowl;
 
 @end
