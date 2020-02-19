@@ -204,7 +204,7 @@
 				<string>ape</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Monkey's Audio</string>
+			<string>Monkey&apos;s Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -388,7 +388,7 @@
 	<key>SUEnableSystemProfiling</key>
 	<false/>
 	<key>SUFeedURL</key>
-	<string>http://sbooth.org/Max/appcast.xml</string>
+	<string>https://sbooth.org/Max/appcast.xml</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 	<key>UTImportedTypeDeclarations</key>
