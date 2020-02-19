@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,13 +25,13 @@ extern "C" {
 #endif
 	
 // Return an array of information on valid formats for output
-NSArray *	getCoreAudioWritableTypes();
+NSArray *	getCoreAudioWritableTypes(void);
 
 // Return an array of information on valid formats for input
-NSArray *	getCoreAudioReadableTypes();
+NSArray *	getCoreAudioReadableTypes(void);
 
 // Return an array of valid audio file extensions recognized by Core Audio
-NSArray *	getCoreAudioExtensions();
+NSArray *	getCoreAudioExtensions(void);
 
 // Get a descriptive string for the given filetype and format
 NSString * getCoreAudioOutputFormatName(AudioFileTypeID		fileType, 

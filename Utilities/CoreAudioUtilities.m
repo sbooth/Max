@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +26,7 @@
 #include <AudioUnit/AudioCodec.h>
 
 // Prototypes
-static NSMutableArray *			getCoreAudioEncodeFormats();
+static NSMutableArray *			getCoreAudioEncodeFormats(void);
 static BOOL						formatIDValidForOutput(UInt32 formatID);
 static NSMutableArray *			getCoreAudioFileDataFormats(OSType filetype);
 static NSMutableDictionary *	getCoreAudioFileTypeInfo(OSType filetype);
@@ -191,7 +189,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 							unsigned n;
 							for(n = 0; n < bitrateCount; ++n) {
 								unsigned long minRate = (unsigned long) bitrates[n].mMinimum;
-								unsigned long maxRate = (unsigned long) bitrates[n].mMaximum;
+//								unsigned long maxRate = (unsigned long) bitrates[n].mMaximum;
 								if(0 != minRate)
 									[bitratesA addObject:[NSNumber numberWithUnsignedLong: minRate / 1000]];
 							}
@@ -234,7 +232,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 							unsigned n;
 							for(n = 0; n < bitrateCount; ++n) {
 								unsigned long minRate = (unsigned long) bitrates[n].mMinimum;
-								unsigned long maxRate = (unsigned long) bitrates[n].mMaximum;
+//								unsigned long maxRate = (unsigned long) bitrates[n].mMaximum;
 								if(0 != minRate)
 									[bitratesA addObject:[NSNumber numberWithUnsignedLong: minRate / 1000]];
 							}
