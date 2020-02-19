@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -86,13 +84,13 @@
 - (BOOL)			shouldStop									{ return _shouldStop; }
 - (void)			setShouldStop:(BOOL)shouldStop				{ _shouldStop = shouldStop; }
 
-- (unsigned)		secondsRemaining							{ return _secondsRemaining; }
-- (void)			setSecondsRemaining:(unsigned)secondsRemaining { _secondsRemaining = secondsRemaining; }
+- (NSUInteger)		secondsRemaining							{ return _secondsRemaining; }
+- (void)			setSecondsRemaining:(NSUInteger)secondsRemaining { _secondsRemaining = secondsRemaining; }
 
 - (NSException *)	exception									{ return [[_exception retain] autorelease]; }
 - (void)			setException:(NSException *)exception		{ [_exception release]; _exception = [exception retain]; }
 
-- (void)			updateProgress:(float)percentComplete secondsRemaining:(unsigned)secondsRemaining
+- (void)			updateProgress:(float)percentComplete secondsRemaining:(NSUInteger)secondsRemaining
 {
 	[self setPercentComplete:percentComplete];
 	[self setSecondsRemaining:secondsRemaining];

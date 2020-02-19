@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -277,7 +275,8 @@ enum {
 	[super setStopped:YES]; 
 
 	// Once we're stopped, clean up the encoder and invalidate the connection
-	[(NSObject *)_encoder release],		_encoder = nil;
+	[(NSObject *)_encoder release];
+	_encoder = nil;
 	[_connection invalidate];
 
 	// Mark tracks as complete
@@ -306,7 +305,8 @@ enum {
 	_encoderSettingsString		= [[_encoder settingsString] retain];
 	
 	// Once we're complete, clean up the encoder and invalidate the connection
-	[(NSObject *)_encoder release],		_encoder = nil;
+	[(NSObject *)_encoder release];
+	_encoder = nil;
 	[_connection invalidate];
 	
 /*

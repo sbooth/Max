@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,10 +65,14 @@
 
 - (void) dealloc
 {
-	[_connection release],	_connection = nil;
-	[_sectors release],		_sectors = nil;	
-	[_tracks release],		_tracks = nil;	
-	[_phase release],		_phase = nil;
+	[_connection release];
+	_connection = nil;
+	[_sectors release];
+	_sectors = nil;
+	[_tracks release];
+	_tracks = nil;
+	[_phase release];
+	_phase = nil;
 	
 	[super dealloc];
 }

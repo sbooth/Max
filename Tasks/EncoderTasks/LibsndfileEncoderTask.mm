@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2009 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -148,7 +146,7 @@
 	NSString									*musicbrainzArtistId		= nil;
 	NSString									*musicbrainzAlbumArtistId	= nil;
 	NSString									*musicbrainzTrackId			= nil;
-	unsigned									index						= NSNotFound;
+	NSInteger									index						= NSNotFound;
 	
 	NSAssert(f.isValid(), NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
 	
@@ -195,7 +193,7 @@
  			if(NSNotFound == index)
  				frame->setText(TagLib::String([genre UTF8String], TagLib::String::UTF8));
  			else
- 				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%u)", index] UTF8String], TagLib::String::UTF8));
+				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%ld)", (long)index] UTF8String], TagLib::String::UTF8));
  			
  			f.tag()->addFrame(frame);
  		}
@@ -271,7 +269,7 @@
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"/@u", [discTotal intValue]] UTF8String], TagLib::String::UTF8));
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"/%u", [discTotal intValue]] UTF8String], TagLib::String::UTF8));
 		f.tag()->addFrame(frame);
 	}
 	
@@ -438,7 +436,7 @@
 	NSString									*musicbrainzArtistId		= nil;
 	NSString									*musicbrainzAlbumArtistId	= nil;
 	NSString									*musicbrainzTrackId			= nil;
-	unsigned									index						= NSNotFound;
+	NSInteger									index						= NSNotFound;
 	
 	NSAssert(f.isValid(), NSLocalizedStringFromTable(@"Unable to open the output file for tagging.", @"Exceptions", @""));
 	
@@ -485,7 +483,7 @@
  			if(NSNotFound == index)
  				frame->setText(TagLib::String([genre UTF8String], TagLib::String::UTF8));
  			else
- 				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%u)", index] UTF8String], TagLib::String::UTF8));
+				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%ld)", (long)index] UTF8String], TagLib::String::UTF8));
  			
  			f.tag()->addFrame(frame);
  		}
@@ -561,7 +559,7 @@
 		frame = new TagLib::ID3v2::TextIdentificationFrame("TPOS", TagLib::String::Latin1);
 		NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
-		frame->setText(TagLib::String([[NSString stringWithFormat:@"/@u", [discTotal intValue]] UTF8String], TagLib::String::UTF8));
+		frame->setText(TagLib::String([[NSString stringWithFormat:@"/%u", [discTotal intValue]] UTF8String], TagLib::String::UTF8));
 		f.tag()->addFrame(frame);
 	}
 	
