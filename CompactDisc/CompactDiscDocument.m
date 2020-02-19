@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,32 +67,50 @@
 
 - (void) dealloc
 {	
-	[_disc release],					_disc = nil;
+	[_disc release];
+	_disc = nil;
 
-	[_discID release],					_discID = nil;
+	[_discID release];
+	_discID = nil;
 
-	[_mbHelper release],				_mbHelper = nil;
+	[_mbHelper release];
+	_mbHelper = nil;
 
-	[_title release],					_title = nil;
-	[_artist release],					_artist = nil;
-	[_date release],					_date = nil;
-	[_genre release],					_genre = nil;
-	[_composer release],				_composer = nil;
-	[_comment release],					_comment = nil;
+	[_title release];
+	_title = nil;
+	[_artist release];
+	_artist = nil;
+	[_date release];
+	_date = nil;
+	[_genre release];
+	_genre = nil;
+	[_composer release];
+	_composer = nil;
+	[_comment release];
+	_comment = nil;
 
-	[_albumArt release],				_albumArt = nil;
-	[_albumArtDownloadDate release],	_albumArtDownloadDate = nil;
+	[_albumArt release];
+	_albumArt = nil;
+	[_albumArtDownloadDate release];
+	_albumArtDownloadDate = nil;
 
-	[_discNumber release],				_discNumber = nil;
-	[_discTotal release],				_discTotal = nil;
-	[_compilation release],				_compilation = nil;
+	[_discNumber release];
+	_discNumber = nil;
+	[_discTotal release];
+	_discTotal = nil;
+	[_compilation release];
+	_compilation = nil;
 
-	[_musicbrainzAlbumId release],		_musicbrainzAlbumId = nil;
-	[_musicbrainzArtistId release],		_musicbrainzArtistId = nil;
+	[_musicbrainzAlbumId release];
+	_musicbrainzAlbumId = nil;
+	[_musicbrainzArtistId release];
+	_musicbrainzArtistId = nil;
 	
-	[_MCN release],						_MCN = nil;
+	[_MCN release];
+	_MCN = nil;
 	
-	[_tracks release],					_tracks = nil;
+	[_tracks release];
+	_tracks = nil;
 	
 	[super dealloc];
 }
@@ -244,24 +260,38 @@
 				}
 			}
 			
-			[_title release],						_title = nil;
-			[_artist release],						_artist = nil;
-			[_date release],						_date = nil;
-			[_genre release],						_genre = nil;
-			[_composer release],					_composer = nil;
-			[_comment release],						_comment = nil;
+			[_title release];
+			_title = nil;
+			[_artist release];
+			_artist = nil;
+			[_date release];
+			_date = nil;
+			[_genre release];
+			_genre = nil;
+			[_composer release];
+			_composer = nil;
+			[_comment release];
+			_comment = nil;
 			
-			[_albumArt release],					_albumArt = nil;
-			[_albumArtDownloadDate release],		_albumArtDownloadDate = nil;
+			[_albumArt release];
+			_albumArt = nil;
+			[_albumArtDownloadDate release];
+			_albumArtDownloadDate = nil;
 			
-			[_musicbrainzAlbumId release],			_musicbrainzAlbumId = nil;
-			[_musicbrainzArtistId release],			_musicbrainzArtistId = nil;
+			[_musicbrainzAlbumId release];
+			_musicbrainzAlbumId = nil;
+			[_musicbrainzArtistId release];
+			_musicbrainzArtistId = nil;
 			
-			[_discNumber release],					_discNumber = nil;
-			[_discTotal release],					_discTotal = nil;
+			[_discNumber release];
+			_discNumber = nil;
+			[_discTotal release];
+			_discTotal = nil;
 			
-			[_discID release],						_discID = nil;
-			[_MCN release],							_MCN = nil;
+			[_discID release];
+			_discID = nil;
+			[_MCN release];
+			_MCN = nil;
 			
 			_discID			= [[dictionary valueForKey:@"discID"] retain];
 
@@ -605,7 +635,7 @@
 
 #pragma mark Miscellaneous
 
-- (NSString *)		length								{ return [NSString stringWithFormat:@"%u:%.02u", [[self disc] length] / 60, [[self disc] length] % 60]; }
+- (NSString *)		length								{ return [NSString stringWithFormat:@"%lu:%.02u", [[self disc] length] / 60, [[self disc] length] % 60]; }
 - (NSArray *)		genres								{ return [Genres sharedGenres]; }
 
 - (NSArray *) selectedTracks
