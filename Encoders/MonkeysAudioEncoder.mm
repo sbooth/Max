@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,8 +59,8 @@
 	AudioBufferList					bufferList;
 	ssize_t							bufferLen					= 0;
 	UInt32							bufferByteSize				= 0;
-	WAVEFORMATEX					formatDesc;
-	str_utf16						*chars						= NULL;
+	APE::WAVEFORMATEX				formatDesc;
+	APE::str_utfn					*chars						= NULL;
 	int								result;
 	SInt64							totalFrames, framesToRead;
 	UInt32							frameCount;
@@ -135,7 +133,7 @@
 		NSAssert(NULL != _compressor, NSLocalizedStringFromTable(@"Unable to create the Monkey's Audio compressor.", @"Exceptions", @""));
 						
 		// Setup compressor
-		chars = GetUTF16FromANSI([filename fileSystemRepresentation]);
+		chars = APE::CAPECharacterHelper::GetUTF16FromANSI([filename fileSystemRepresentation]);
 		NSAssert(NULL != chars, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		result = FillWaveFormatEx(&formatDesc, (int)[decoder pcmFormat].mSampleRate, [decoder pcmFormat].mBitsPerChannel, [decoder pcmFormat].mChannelsPerFrame);
