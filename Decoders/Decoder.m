@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,8 +98,10 @@
 
 - (void) dealloc
 {
-	[_pcmBuffer release],		_pcmBuffer = nil;
-	[_filename release],		_filename = nil;
+	[_pcmBuffer release];
+	_pcmBuffer = nil;
+	[_filename release];
+	_filename = nil;
 	
 	[super dealloc];
 }

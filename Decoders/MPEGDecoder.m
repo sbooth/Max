@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2006 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2006 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,14 +134,19 @@ audio_linear_round(unsigned int bits,
 	mad_frame_finish(&_mad_frame);
 	mad_stream_finish(&_mad_stream);
 	
-	free(_inputBuffer), _inputBuffer = NULL;
-	fclose(_file), _file = NULL;
+	free(_inputBuffer);
+	_inputBuffer = NULL;
+	fclose(_file);
+	_file = NULL;
 	
 	if(_bufferList) {
 		unsigned i;
-		for(i = 0; i < _bufferList->mNumberBuffers; ++i)
-			free(_bufferList->mBuffers[i].mData), _bufferList->mBuffers[i].mData = NULL;	
-		free(_bufferList), _bufferList = NULL;
+		for(i = 0; i < _bufferList->mNumberBuffers; ++i) {
+			free(_bufferList->mBuffers[i].mData);
+			_bufferList->mBuffers[i].mData = NULL;
+		}
+		free(_bufferList);
+		_bufferList = NULL;
 	}
 	
 	[super dealloc];
@@ -221,8 +224,8 @@ audio_linear_round(unsigned int bits,
 				bytesToRead			= INPUT_BUFFER_SIZE - bytesRemaining;
 			}
 			else {
-				bytesToRead			= INPUT_BUFFER_SIZE,
-				readStartPointer	= _inputBuffer,
+				bytesToRead			= INPUT_BUFFER_SIZE;
+				readStartPointer	= _inputBuffer;
 				bytesRemaining		= 0;
 			}
 			
@@ -373,8 +376,8 @@ audio_linear_round(unsigned int bits,
 				bytesToRead			= INPUT_BUFFER_SIZE - bytesRemaining;
 			}
 			else {
-				bytesToRead			= INPUT_BUFFER_SIZE,
-				readStartPointer	= _inputBuffer,
+				bytesToRead			= INPUT_BUFFER_SIZE;
+				readStartPointer	= _inputBuffer;
 				bytesRemaining		= 0;
 			}
 			
@@ -695,8 +698,8 @@ audio_linear_round(unsigned int bits,
 				bytesToRead			= INPUT_BUFFER_SIZE - bytesRemaining;
 			}
 			else {
-				bytesToRead			= INPUT_BUFFER_SIZE,
-				readStartPointer	= _inputBuffer,
+				bytesToRead			= INPUT_BUFFER_SIZE;
+				readStartPointer	= _inputBuffer;
 				bytesRemaining		= 0;
 			}
 			
