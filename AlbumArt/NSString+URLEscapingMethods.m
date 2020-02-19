@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2009 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2009 - 2020 Stephen F. Booth <me@sbooth.org>
  *  All Rights Reserved
  */
 
@@ -23,7 +23,8 @@
 	
 	NSString *result = [(NSString *)escapedString copy];
 	
-	CFRelease(escapedString), escapedString = NULL;
+	CFRelease(escapedString);
+	escapedString = NULL;
 	
 	return result;
 }
