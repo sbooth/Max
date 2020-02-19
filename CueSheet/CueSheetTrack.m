@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -104,7 +102,7 @@
 #pragma mark Mutators
 
 - (void) setDocument:(CueSheetDocument *)document		{ [_document release]; _document = [document retain]; }
-- (void) setFilename:(NSString *)filename				{ [_filename release], _filename = [filename retain]; }
+- (void) setFilename:(NSString *)filename				{ [_filename release]; _filename = [filename retain]; }
 
 - (void) setSelected:(BOOL)selected						{ _selected = selected; }
 - (void) setNumber:(unsigned)number
