@@ -332,9 +332,12 @@ NSString *PostProcessingPreferencesToolbarItemIdentifier	= @"org.sbooth.Max.Pref
 	}
 
 	// Calculate toolbar height
+	windowFrame = [NSWindow contentRectForFrameRect:[myWindow frame] styleMask:[myWindow styleMask]];
 	if([toolbar isVisible]) {
-		windowFrame = [NSWindow contentRectForFrameRect:[myWindow frame] styleMask:[myWindow styleMask]];
 		toolbarHeight = NSHeight(windowFrame) - windowHeight;
+	}
+	else {
+		toolbarHeight = 0;
 	}
 	
 	newWindowHeight		= NSHeight([prefView frame]) + toolbarHeight;
