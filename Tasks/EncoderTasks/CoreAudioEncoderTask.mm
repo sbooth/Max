@@ -181,7 +181,7 @@
 
 - (NSString *) outputFormatName
 {
-	return getCoreAudioOutputFormatName([self fileType], [self formatID], (UInt32)[[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue]);
+	return GetCoreAudioOutputFormatName([self fileType], [self formatID], (UInt32)[[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue]);
 }
 
 - (AudioFileTypeID)		fileType		{ return (AudioFileTypeID)[[[self encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }

@@ -25,16 +25,16 @@ extern "C" {
 #endif
 	
 // Return an array of information on valid formats for output
-NSArray *	getCoreAudioWritableTypes(void);
+NSArray *	GetCoreAudioWritableTypes(void);
 
 // Return an array of information on valid formats for input
-NSArray *	getCoreAudioReadableTypes(void);
+NSArray *	GetCoreAudioReadableTypes(void);
 
 // Return an array of valid audio file extensions recognized by Core Audio
-NSArray *	getCoreAudioExtensions(void);
+NSArray *	GetCoreAudioExtensions(void);
 
 // Get a descriptive string for the given filetype and format
-NSString * getCoreAudioOutputFormatName(AudioFileTypeID		fileType, 
+NSString * GetCoreAudioOutputFormatName(AudioFileTypeID		fileType, 
 										UInt32				formatID,
 										UInt32				formatFlags);
 

@@ -26,10 +26,10 @@
 #include <AudioUnit/AudioCodec.h>
 
 // Prototypes
-static NSMutableArray *			getCoreAudioEncodeFormats(void);
-static BOOL						formatIDValidForOutput(UInt32 formatID);
-static NSMutableArray *			getCoreAudioFileDataFormats(OSType filetype);
-static NSMutableDictionary *	getCoreAudioFileTypeInfo(OSType filetype);
+static NSMutableArray *			GetCoreAudioEncodeFormats(void);
+static BOOL						FormatIDIsValidForOutput(UInt32 formatID);
+static NSMutableArray *			GetCoreAudioFileDataFormats(OSType filetype);
+static NSMutableDictionary *	GetCoreAudioFileTypeInfo(OSType filetype);
 
 #pragma mark Implementation
 
@@ -58,7 +58,7 @@ static NSArray *sAudioExtensions	= nil;
 
 // Returns an array of valid formatIDs for encoding
 static NSMutableArray *
-getCoreAudioEncodeFormats() 
+GetCoreAudioEncodeFormats() 
 {
 	UInt32			*writableFormats	= NULL;
 	NSMutableArray	*result				= nil;	
@@ -94,11 +94,11 @@ getCoreAudioEncodeFormats()
 
 // Determine if the given formatID is valid for output
 static BOOL
-formatIDValidForOutput(UInt32 formatID)
+FormatIDIsValidForOutput(UInt32 formatID)
 {
 	@synchronized(sEncodeFormats) {
 		if(nil == sEncodeFormats) {
-			sEncodeFormats = [getCoreAudioEncodeFormats() retain];
+			sEncodeFormats = [GetCoreAudioEncodeFormats() retain];
 		}
 	}
 
@@ -106,7 +106,7 @@ formatIDValidForOutput(UInt32 formatID)
 }
 
 NSMutableArray *
-getCoreAudioFileDataFormats(OSType filetype)
+GetCoreAudioFileDataFormats(OSType filetype)
 {
 	NSMutableArray					*result			= nil;
 	OSType							*formatIDs		= NULL;
@@ -156,7 +156,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 				[d setObject:[NSNumber numberWithUnsignedLong:desc.mFormatID] forKey:@"formatID"];
 				[d setObject:[NSNumber numberWithUnsignedLong:desc.mFormatFlags] forKey:@"formatFlags"];
 				[d setObject:[NSNumber numberWithUnsignedLong:desc.mBitsPerChannel] forKey:@"bitsPerChannel"];
-				[d setObject:[NSNumber numberWithBool:formatIDValidForOutput(desc.mFormatID)] forKey:@"writable"];
+				[d setObject:[NSNumber numberWithBool:FormatIDIsValidForOutput(desc.mFormatID)] forKey:@"writable"];
 				
 				// Interleaved 16-bit PCM audio
 				AudioStreamBasicDescription inputASBD;
@@ -293,7 +293,7 @@ getCoreAudioFileDataFormats(OSType filetype)
 }
 
 static NSMutableDictionary *
-getCoreAudioFileTypeInfo(OSType filetype)
+GetCoreAudioFileTypeInfo(OSType filetype)
 {
 	NSMutableDictionary		*result				= [NSMutableDictionary dictionaryWithCapacity:2];
 	NSString				*fileTypeName		= nil;
@@ -317,14 +317,14 @@ getCoreAudioFileTypeInfo(OSType filetype)
 	if(extensions)
 		[result setObject:extensions forKey:@"extensionsForType"];
 	
-	[result setObject:getCoreAudioFileDataFormats(filetype) forKey:@"dataFormats"];
+	[result setObject:GetCoreAudioFileDataFormats(filetype) forKey:@"dataFormats"];
 	
 	return [[result retain] autorelease];
 }
 
 // Return an array of information on valid formats for output
 NSArray *
-getCoreAudioWritableTypes()
+GetCoreAudioWritableTypes()
 {
 	UInt32 *fileFormats = NULL;
 
@@ -356,7 +356,7 @@ getCoreAudioWritableTypes()
 					NSUInteger				dataFormatsCount;
 					
 					[d setObject:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
-					[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];
+					[d addEntriesFromDictionary:GetCoreAudioFileTypeInfo(fileFormats[i])];
 					
 					dataFormats			= [d valueForKey:@"dataFormats"];
 					dataFormatsCount	= [dataFormats count];
@@ -395,7 +395,7 @@ getCoreAudioWritableTypes()
 
 // Return an array of information on valid formats for input
 NSArray *
-getCoreAudioReadableTypes()
+GetCoreAudioReadableTypes()
 {
 	UInt32 *fileFormats = NULL;
 	
@@ -423,7 +423,7 @@ getCoreAudioReadableTypes()
 					NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:3];
 					
 					[d setObject:[NSNumber numberWithUnsignedLong:fileFormats[i]] forKey:@"fileType"];
-					[d addEntriesFromDictionary:getCoreAudioFileTypeInfo(fileFormats[i])];
+					[d addEntriesFromDictionary:GetCoreAudioFileTypeInfo(fileFormats[i])];
 					
 					[result addObject:d];		
 				}
@@ -446,7 +446,7 @@ getCoreAudioReadableTypes()
 
 // Return an array of valid audio file extensions recognized by Core Audio
 NSArray *
-getCoreAudioExtensions()
+GetCoreAudioExtensions()
 {
 	@synchronized(sAudioExtensions) {
 		if(nil == sAudioExtensions) {
@@ -464,7 +464,7 @@ getCoreAudioExtensions()
 
 // Set the format name
 NSString * 
-getCoreAudioOutputFormatName(AudioFileTypeID fileType, UInt32 formatID, UInt32 formatFlags)
+GetCoreAudioOutputFormatName(AudioFileTypeID fileType, UInt32 formatID, UInt32 formatFlags)
 {
 	AudioStreamBasicDescription		asbd;
 	NSString						*fileFormat				= nil;

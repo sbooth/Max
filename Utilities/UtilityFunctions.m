@@ -197,7 +197,7 @@ getAudioExtensions()
 {
 	@synchronized(sAudioExtensions) {
 		if(nil == sAudioExtensions) {
-			sAudioExtensions = [NSMutableArray arrayWithArray:getCoreAudioExtensions()];
+			sAudioExtensions = [NSMutableArray arrayWithArray:GetCoreAudioExtensions()];
 			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:getLibsndfileExtensions()];
 			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:getBuiltinExtensions()];
 			[sAudioExtensions retain];

@@ -42,7 +42,7 @@
 	Decoder *result = nil;
 		
 	// Create the source based on the file's extension
-	NSArray			*coreAudioExtensions	= getCoreAudioExtensions();
+	NSArray			*coreAudioExtensions	= GetCoreAudioExtensions();
 	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
 	NSString		*extension				= [[filename pathExtension] lowercaseString];
 

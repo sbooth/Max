@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,7 +55,7 @@
 
 	if((self = [super initWithWindowNibName:@"FormatsPreferences"])) {
 		
-		coreAudioFormats			= getCoreAudioWritableTypes();NSLog(@"fmts: %@",coreAudioFormats);
+		coreAudioFormats			= GetCoreAudioWritableTypes();
 		libsndfileFormats			= [NSMutableArray array];
 		_availableFormats			= [[NSMutableArray alloc] init];
 
