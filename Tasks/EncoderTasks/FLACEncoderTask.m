@@ -281,12 +281,12 @@
 			result = FLAC__metadata_object_picture_set_mime_type(block, "image/png", YES);
 			NSAssert1(YES == result, @"FLAC__metadata_object_picture_set_mime_type: %i", FLAC__metadata_chain_status(chain));
 
-			result = FLAC__metadata_object_picture_set_data(block, [imageData bytes], [imageData length], YES);
+			result = FLAC__metadata_object_picture_set_data(block, (FLAC__byte *)[imageData bytes], (FLAC__uint32)[imageData length], YES);
 			NSAssert1(YES == result, @"FLAC__metadata_object_picture_set_data: %i", FLAC__metadata_chain_status(chain));
 
  			block->data.picture.width		= [bitmapRep size].width;
  			block->data.picture.height		= [bitmapRep size].height;
- 			block->data.picture.depth		= [bitmapRep bitsPerPixel];			
+ 			block->data.picture.depth		= (FLAC__uint32)[bitmapRep bitsPerPixel];
 
 			result = FLAC__metadata_object_picture_is_legal(block, &errorDescription);
 			NSAssert1(YES == result, @"FLAC__metadata_object_picture_is_legal: %s", errorDescription);

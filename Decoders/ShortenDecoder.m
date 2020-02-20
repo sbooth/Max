@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,7 +43,7 @@
 #endif
 		
 		// Setup decoder
-		_shn = shn_load([[self filename] fileSystemRepresentation], config);
+		_shn = shn_load((char *)[[self filename] fileSystemRepresentation], config);
 		NSAssert(NULL != _shn, @"Unable to open the input file.");
 		
 		result	= shn_init_decoder(_shn);

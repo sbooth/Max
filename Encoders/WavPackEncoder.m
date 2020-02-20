@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,17 +115,17 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 			case 8:				
 			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
+				bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int8_t);
 				break;
 				
 			case 16:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
+				bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int16_t);
 				break;
 				
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
+				bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int32_t);
 				break;
 				
 			default:
@@ -174,7 +172,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 			config.bitrate				= _bitrate;
 		}
 		
-		result = WavpackSetConfiguration(wpc, &config, totalFrames);
+		result = WavpackSetConfiguration(wpc, &config, (uint32_t)totalFrames);
 		NSAssert(FALSE != result, NSLocalizedStringFromTable(@"Unable to initialize the WavPack encoder.", @"Exceptions", @""));
 
 		WavpackPackInit(wpc);

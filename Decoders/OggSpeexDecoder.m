@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,7 +74,7 @@
 		[self incrementPacketCount];
 		
 		// Convert the packet to the Speex header
-		SpeexHeader *header = speex_packet_to_header((char*)op.packet, op.bytes);
+		SpeexHeader *header = speex_packet_to_header((char*)op.packet, (int)op.bytes);
 		NSAssert(NULL != header, @"Unable to read the Speex header.");
 		NSAssert1(SPEEX_NB_MODES > header->mode, NSLocalizedStringFromTable(@"The Speex mode number %i was not recognized.", @"Exceptions", @""), header->mode);
 		
@@ -138,9 +136,9 @@
 	[super dealloc];
 }
 
-- (unsigned)		packetCount						{ return _packetCount; }
-- (unsigned)		framesPerPacket					{ return _framesPerPacket; }
-- (unsigned)		extraHeaderCount				{ return _extraHeaderCount; }
+- (NSUInteger)		packetCount						{ return _packetCount; }
+- (NSUInteger)		framesPerPacket					{ return _framesPerPacket; }
+- (NSUInteger)		extraHeaderCount				{ return _extraHeaderCount; }
 
 - (NSString *)		sourceFormatDescription			{ return [NSString stringWithFormat:@"Ogg (Speex, %u channels, %u Hz)", [self pcmFormat].mChannelsPerFrame, (unsigned)[self pcmFormat].mSampleRate]; }
 - (SInt64)			totalFrames						{ return -1; }
@@ -149,7 +147,7 @@
 {
 	CircularBuffer		*buffer				= [self pcmBuffer];
 	int					frameSize			= 0;
-	unsigned			packetsDesired;
+	NSUInteger			packetsDesired;
 
 	// Calculate how many Speex packets we have space for in buffer
 	speex_decoder_ctl(_st, SPEEX_GET_FRAME_SIZE, &frameSize);
@@ -184,7 +182,7 @@
 					int16_t			*alias;
 					
 					// Copy the Ogg packet to the Speex bitstream
-					speex_bits_read_from(&_bits, (char*)op.packet, op.bytes);
+					speex_bits_read_from(&_bits, (char*)op.packet, (int)op.bytes);
 
 					// Decode each frame in the Speex packet
 					for(i = 0; i < [self framesPerPacket]; ++i) {

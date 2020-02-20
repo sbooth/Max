@@ -160,7 +160,7 @@
 	bufferList.mNumberBuffers				= 1;
 	bufferList.mBuffers[0].mNumberChannels	= [self pcmFormat].mChannelsPerFrame;
 	bufferList.mBuffers[0].mData			= [buffer exposeBufferForWriting];
-	bufferList.mBuffers[0].mDataByteSize	= [buffer freeSpaceAvailable];
+	bufferList.mBuffers[0].mDataByteSize	= (UInt32)[buffer freeSpaceAvailable];
 
 	frameCount								= bufferList.mBuffers[0].mDataByteSize / [self pcmFormat].mBytesPerFrame;
 	result									= ExtAudioFileRead(_extAudioFile, &frameCount, &bufferList);

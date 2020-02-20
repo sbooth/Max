@@ -362,7 +362,7 @@
 {
 	AudioMetadata *result = [[AudioMetadata alloc] init];
 
-	[result setTrackNumber:[NSNumber numberWithUnsignedInt:[self number]]];
+	[result setTrackNumber:[NSNumber numberWithUnsignedInteger:[self number]]];
 	[result setTrackTitle:[self title]];
 	[result setTrackArtist:[self artist]];
 	[result setTrackDate:[self date]];
@@ -371,7 +371,7 @@
 	[result setTrackComment:[self comment]];
 	[result setISRC:[self ISRC]];
 	
-	[result setTrackTotal:[NSNumber numberWithUnsignedInt:[[self document] countOfTracks]]];
+	[result setTrackTotal:[NSNumber numberWithUnsignedInteger:[[self document] countOfTracks]]];
 	[result setAlbumTitle:[[self document] title]];
 	[result setAlbumArtist:[[self document] artist]];
 	[result setAlbumDate:[[self document] date]];

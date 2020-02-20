@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,10 +18,6 @@
 
 #import "FilesTableView.h"
 
-@interface FilesTableView (Private)
-- (void) openWithPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-@end
-
 @implementation FilesTableView
 
 - (BOOL) validateMenuItem:(NSMenuItem *)menuItem
@@ -36,9 +30,9 @@
 		return YES;
 }
 
-- (NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context
 {
-	return (isLocal ? NSDragOperationMove : NSDragOperationCopy);
+	return (NSDraggingContextWithinApplication == context ? NSDragOperationMove : NSDragOperationCopy);
 }
 
 - (void) keyDown:(NSEvent *)event
@@ -108,27 +102,19 @@
 - (IBAction) openWith:(id)sender
 {
 	NSOpenPanel		*panel		= [NSOpenPanel openPanel];
+
+	[panel setAllowedFileTypes:@[@"app"]];
 	
-	[panel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"app"] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openWithPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];	
-}
+	[panel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"app"] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openWithPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
+	[panel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+		if(NSOKButton == result) {
+			NSString			*path				= [[_filesController selection] valueForKey:@"filename"];
 
-@end
-
-@implementation FilesTableView (Private)
-
-- (void) openWithPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{	
-	if(NSOKButton == returnCode) {
-		NSString			*path				= [[_filesController selection] valueForKey:@"filename"];
-		NSArray				*applications		= [panel filenames];
-		NSString			*applicationPath	= nil;
-		unsigned			i;
-		
-		for(i = 0; i < [applications count]; ++i) {
-			applicationPath = [applications objectAtIndex:i];
-			[[NSWorkspace sharedWorkspace] openFile:path withApplication:applicationPath];
+			for(NSURL *url in [panel URLs]) {
+				[[NSWorkspace sharedWorkspace] openFile:path withApplication:[url path]];
+			}
 		}
-	}
+	}];
 }
 
 @end

@@ -33,9 +33,9 @@ static NSMutableDictionary *	getCoreAudioFileTypeInfo(OSType filetype);
 
 #pragma mark Implementation
 
-#ifndef DEBUG
+#if 0
 static void 
-dumpASBD(const AudioStreamBasicDescription *asbd)
+DumpASBD(const AudioStreamBasicDescription *asbd)
 {
 	NSCParameterAssert(NULL != asbd);
 	

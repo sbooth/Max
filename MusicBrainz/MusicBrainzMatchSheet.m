@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +42,7 @@
 }
 
 - (NSWindow *)		sheet					{ return [[_sheet retain] autorelease]; }
-- (unsigned)		selectedAlbumIndex		{ return [_matchesController selectionIndex]; }
+- (NSUInteger)		selectedAlbumIndex		{ return [_matchesController selectionIndex]; }
 
 - (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSCancelButton]; }
 - (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton]; }

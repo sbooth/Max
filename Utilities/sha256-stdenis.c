@@ -176,7 +176,7 @@ int sha_file(const char *filename, unsigned char *hash)
     if (!in)
         return 0;
     do {
-        i = fread(buf, 1, 512, in);
+        i = (int)fread(buf, 1, 512, in);
         sha_process(&md, buf, i);
     }
     while (i == 512);

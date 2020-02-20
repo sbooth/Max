@@ -51,7 +51,7 @@
 			_ws->setHost([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"] cStringUsingEncoding:NSUTF8StringEncoding]);
 		
 		if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzServerPort"])
-			_ws->setPort([[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"]);
+			_ws->setPort((int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"]);
 		
 		// Use authentication, if specified
 		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"])
@@ -65,7 +65,7 @@
 			if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"])
 				_ws->setProxyHost([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] cStringUsingEncoding:NSUTF8StringEncoding]);
 			if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerPort"])
-				_ws->setProxyPort([[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
+				_ws->setProxyPort((int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
 		}		
 	}
 	

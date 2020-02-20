@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2006 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2006 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,7 +31,7 @@
 	uint32_t			_mpegFramesDecoded;
 	uint32_t			_totalMPEGFrames;
 	
-	unsigned			_samplesToSkipInNextFrame;
+	NSUInteger			_samplesToSkipInNextFrame;
 	
 	SInt64				_myCurrentFrame;
 	SInt64				_totalFrames;
@@ -42,7 +40,7 @@
 	uint16_t			_encoderPadding;
 	
 	SInt64				_samplesDecoded;
-	unsigned			_samplesPerMPEGFrame;
+	NSUInteger			_samplesPerMPEGFrame;
 	
 	BOOL				_foundXingHeader;
 	BOOL				_foundLAMEHeader;

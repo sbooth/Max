@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,10 +44,10 @@
 	UInt32					_frameCount;
 
 	// Track properties
-	unsigned 				_number;
+	NSUInteger 				_number;
 	NSString				*_ISRC;
-	unsigned				_preGap;
-	unsigned				_postGap;
+	NSUInteger				_preGap;
+	NSUInteger				_postGap;
 }
 
 - (CueSheetDocument *)		document;
@@ -81,8 +79,8 @@
 - (NSString *)		comment;
 - (void)			setComment:(NSString *)comment;
 
-- (unsigned)		number;
-- (void)			setNumber:(unsigned)number;
+- (NSUInteger)		number;
+- (void)			setNumber:(NSUInteger)number;
 
 - (Float32)			sampleRate;
 - (void)			setSampleRate:(Float32)sampleRate;
@@ -96,11 +94,11 @@
 - (NSString *)		ISRC;
 - (void)			setISRC:(NSString *)ISRC;
 
-- (unsigned)		preGap;
-- (void)			setPreGap:(unsigned)preGap;
+- (NSUInteger)		preGap;
+- (void)			setPreGap:(NSUInteger)preGap;
 
-- (unsigned)		postGap;
-- (void)			setPostGap:(unsigned)postGap;
+- (NSUInteger)		postGap;
+- (void)			setPostGap:(NSUInteger)postGap;
 
 	// Metadata access
 - (AudioMetadata *)			metadata;

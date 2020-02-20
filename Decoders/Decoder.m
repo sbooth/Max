@@ -144,9 +144,9 @@
 	
 	// If there still aren't enough bytes available, return what we have
 	if([[self pcmBuffer] bytesAvailable] < byteCount)
-		byteCount = [[self pcmBuffer] bytesAvailable];
+		byteCount = (UInt32)[[self pcmBuffer] bytesAvailable];
 			
-	bytesRead								= [[self pcmBuffer] getData:bufferList->mBuffers[0].mData byteCount:byteCount];
+	bytesRead								= (UInt32)[[self pcmBuffer] getData:bufferList->mBuffers[0].mData byteCount:byteCount];
 	bufferList->mBuffers[0].mNumberChannels	= [self pcmFormat].mChannelsPerFrame;
 	bufferList->mBuffers[0].mDataByteSize	= bytesRead;
 	framesRead								= bytesRead / [self pcmFormat].mBytesPerFrame;

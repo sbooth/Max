@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +20,9 @@
 #import "FileConversionController.h"
 
 @interface FileArrayController (Private)
-- (void)			moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
+- (void)			moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 - (NSIndexSet *)	indexSetForRows:(NSArray *)rows;
-- (int)				rowsAboveRow:(int)row inIndexSet:(NSIndexSet *)indexSet;
+- (NSInteger)		rowsAboveRow:(NSInteger)row inIndexSet:(NSIndexSet *)indexSet;
 @end
 
 @implementation FileArrayController
@@ -166,7 +164,7 @@
 
 @implementation FileArrayController (Private)
 
-- (void) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)indexSet toIndex:(unsigned)insertIndex
+- (void) moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex
 {
 	NSArray			*objects					= [self arrangedObjects];
 	NSUInteger		index						= [indexSet lastIndex];
@@ -211,13 +209,13 @@
 	return indexSet;
 }
 
-- (int) rowsAboveRow:(int)row inIndexSet:(NSIndexSet *)indexSet
+- (NSInteger) rowsAboveRow:(NSInteger)row inIndexSet:(NSIndexSet *)indexSet
 {
-	int				i				= 0;
+	NSInteger		i				= 0;
 	NSUInteger		currentIndex	= [indexSet firstIndex];
 
 	while(NSNotFound != currentIndex) {
-		if(currentIndex < (unsigned)row) {
+		if(currentIndex < (NSUInteger)row) {
 			++i;
 		}
 

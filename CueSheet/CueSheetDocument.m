@@ -36,7 +36,6 @@
 
 @interface CueSheetDocument (Private)
 - (void) readFromCDInfoFileIfPresent;
-- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) updateMetadataFromMusicBrainz:(NSUInteger)index;
 @end
@@ -218,7 +217,7 @@
 		}
 		
 		// Parse each track
-		NSUInteger i;
+		int i;
 		for(i = 1; i <= cd_get_ntrack(cd); ++i) {
 			
 			struct Track	*track			= cd_get_track(cd, i);			
@@ -251,7 +250,7 @@
 				if(0 != track_get_length(track))
 					[newTrack setFrameCount:(track_get_length(track) / (float)75) * [decoder pcmFormat].mSampleRate];
 				else
-					[newTrack setFrameCount:([decoder totalFrames] - [newTrack startingFrame])];
+					[newTrack setFrameCount:(UInt32)([decoder totalFrames] - [newTrack startingFrame])];
 			}
 
 			@catch(NSException *exception) {
@@ -403,14 +402,14 @@
 							// Fill in frame counts
 							if(0 < i) {
 								NSUInteger frameCount = (block->data.cue_sheet.tracks[i].offset - 1) - block->data.cue_sheet.tracks[i - 1].offset;
-								[[self objectInTracksAtIndex:(i - 1)] setFrameCount:frameCount];
+								[[self objectInTracksAtIndex:(i - 1)] setFrameCount:(UInt32)frameCount];
 							}
 							
 							// Special handling for the last audio track
 							// FIXME: Is it safe the assume the lead out will always be the final track in the cue sheet?
 							if(i == block->data.cue_sheet.num_tracks - 1 - 1) {
 								NSUInteger frameCount = streamInfo.total_samples - block->data.cue_sheet.tracks[i].offset + 1;
-								[newTrack setFrameCount:frameCount];
+								[newTrack setFrameCount:(UInt32)frameCount];
 							}
 							
 							// Do this here to avoid registering for undo information
@@ -668,8 +667,17 @@
 	[panel setAllowsMultipleSelection:NO];
 	[panel setCanChooseDirectories:NO];
 	[panel setCanChooseFiles:YES];
+	[panel setAllowedFileTypes:[NSImage imageFileTypes]];
 	
-	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	[panel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse result) {
+		if(NSOKButton == result) {
+			for(NSURL *url in [panel URLs]) {
+				NSImage *image = [[NSImage alloc] initWithContentsOfURL:url];
+				if(nil != image)
+					[self setAlbumArt:[image autorelease]];
+			}
+		}
+	}];
 }
 
 - (NSArray *)		genres								{ return [Genres sharedGenres]; }
@@ -724,7 +732,7 @@
 	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i) {
 		CueSheetTrack *track = [self objectInTracksAtIndex:i];
-		UInt32 firstSector = [track startingFrame] / ((NSUInteger)[track sampleRate] / 75);
+		UInt32 firstSector = [track startingFrame] / ([track sampleRate] / 75);
 		offsets[1 + i] = firstSector + 150;
 		
 		// Use the sector immediately following the last track's last sector for lead out
@@ -734,7 +742,7 @@
 		}
 	}
 	
-	int result = discid_put(discID, 1, [self countOfTracks], offsets);
+	int result = discid_put(discID, 1, (int)[self countOfTracks], offsets);
 	if(result)
 		musicBrainzDiscID = [NSString stringWithCString:discid_get_id(discID) encoding:NSUTF8StringEncoding];
 	
@@ -950,22 +958,6 @@
 			[self setAlbumArtDownloadDate:nil];
 		}	
 	}
-}
-
-- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if(NSOKButton == returnCode) {
-		NSArray		*filesToOpen	= [sheet filenames];
-		NSUInteger	count			= [filesToOpen count];
-		NSUInteger	i;
-		NSImage		*image			= nil;
-		
-		for(i = 0; i < count; ++i) {
-			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
-			if(nil != image)
-				[self setAlbumArt:[image autorelease]];
-		}
-	}	
 }
 
 - (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo

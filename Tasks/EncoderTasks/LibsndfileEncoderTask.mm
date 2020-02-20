@@ -304,7 +304,7 @@
 		NSAssert(NULL != pictureFrame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		pictureFrame->setMimeType(TagLib::String("image/png", TagLib::String::Latin1));
-		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], [data length]));
+		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], (unsigned int)[data length]));
 		f.tag()->addFrame(pictureFrame);
 	}
 	
@@ -594,7 +594,7 @@
 		NSAssert(NULL != pictureFrame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		pictureFrame->setMimeType(TagLib::String("image/png", TagLib::String::Latin1));
-		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], [data length]));
+		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], (unsigned int)[data length]));
 		f.tag()->addFrame(pictureFrame);
 	}
 	

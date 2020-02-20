@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2009 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,7 +48,7 @@
 	NSDictionary					*settings							= nil;
 	OSStatus						err;
 	AudioBufferList					bufferList;
-	ssize_t							bufferLen							= 0;
+	size_t							bufferLen							= 0;
 	SInt64							totalFrames, framesToRead;
 	UInt32							size, frameCount;
 	UInt32							bitrate, quality, mode;
@@ -89,10 +87,10 @@
 		// Desired output
 		bzero(&asbd, sizeof(AudioStreamBasicDescription));
 		asbd.mFormatID			= [self formatID];
-		asbd.mFormatFlags		= [[settings objectForKey:@"formatFlags"] unsignedLongValue];
+		asbd.mFormatFlags		= (AudioFormatFlags)[[settings objectForKey:@"formatFlags"] unsignedLongValue];
 				
 		//asbd.mSampleRate		= [[settings objectForKey:@"sampleRate"] doubleValue];
-		asbd.mBitsPerChannel	= [[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
+		asbd.mBitsPerChannel	= (UInt32)[[settings objectForKey:@"bitsPerChannel"] unsignedLongValue];
 		
 		asbd.mSampleRate		= [decoder pcmFormat].mSampleRate;			
 		asbd.mChannelsPerFrame	= [decoder pcmFormat].mChannelsPerFrame;
@@ -114,32 +112,12 @@
 			}
 		}
 		
-		// A dilemma: ExtAudioFileWrapAudioFileID fails on Leopard, while ExtAudioFileCreateWithURL doesn't exist on Tiger
-		// To work around this, delete the input file and then immediately re-create it
-		if([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
-			BOOL deleteSuccessful = [[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];
-			NSAssert1(YES == deleteSuccessful, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"removeFileAtPath");
-		}
-		
-		// Create the file
-		NSString *file = [filename lastPathComponent];
-		NSString *parentDir = [filename stringByDeletingLastPathComponent];
-		
-		FSRef parentDirRef;		
-		err = FSPathMakeRef((const UInt8 *)[parentDir fileSystemRepresentation], &parentDirRef, NULL);
-		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"FSPathMakeRef", UTCreateStringForOSType(err));
-		
-		err = ExtAudioFileCreateNew(&parentDirRef, (CFStringRef)file, [self fileType], &asbd, NULL, &extAudioFile);
-		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileCreateNew", UTCreateStringForOSType(err));
-		
-#if 0
 		// Open the output file
 		NSURL *url = [NSURL fileURLWithPath:filename];
 		NSAssert(nil != url, NSLocalizedStringFromTable(@"Unable to locate the output file.", @"Exceptions", @""));
 
 		err = ExtAudioFileCreateWithURL((CFURLRef)url, [self fileType], &asbd, NULL, kAudioFileFlags_EraseFile, &extAudioFile);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"ExtAudioFileCreateWithURL", UTCreateStringForOSType(err));
-#endif
 
 		asbd = [decoder pcmFormat];
 		err = ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ClientDataFormat, sizeof(asbd), &asbd);
@@ -196,7 +174,7 @@
 
 			// Set up the buffer parameters
 			bufferList.mBuffers[0].mNumberChannels	= [decoder pcmFormat].mChannelsPerFrame;
-			bufferList.mBuffers[0].mDataByteSize	= bufferLen;
+			bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen;
 			frameCount								= bufferList.mBuffers[0].mDataByteSize / [decoder pcmFormat].mBytesPerFrame;
 			
 			// Read a chunk of PCM input
@@ -311,7 +289,7 @@
 
 @implementation CoreAudioEncoder (Private)
 
-- (AudioFileTypeID)		fileType		{ return [[[[self delegate] encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }
-- (UInt32)				formatID		{ return [[[[self delegate] encoderSettings] objectForKey:@"formatID"] unsignedLongValue]; }
+- (AudioFileTypeID)		fileType		{ return (AudioFileTypeID)[[[[self delegate] encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }
+- (UInt32)				formatID		{ return (UInt32)[[[[self delegate] encoderSettings] objectForKey:@"formatID"] unsignedLongValue]; }
 
 @end

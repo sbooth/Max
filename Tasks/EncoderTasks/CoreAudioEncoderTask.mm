@@ -181,11 +181,11 @@
 
 - (NSString *) outputFormatName
 {
-	return getCoreAudioOutputFormatName([self fileType], [self formatID], [[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue]);
+	return getCoreAudioOutputFormatName([self fileType], [self formatID], (UInt32)[[[self encoderSettings] objectForKey:@"formatFlags"] unsignedLongValue]);
 }
 
-- (AudioFileTypeID)		fileType		{ return [[[self encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }
-- (UInt32)				formatID		{ return [[[self encoderSettings] objectForKey:@"formatID"] unsignedLongValue]; }
+- (AudioFileTypeID)		fileType		{ return (AudioFileTypeID)[[[self encoderSettings] objectForKey:@"fileType"] unsignedLongValue]; }
+- (UInt32)				formatID		{ return (UInt32)[[[self encoderSettings] objectForKey:@"formatID"] unsignedLongValue]; }
 
 @end
 
@@ -363,7 +363,7 @@
 
 		MP4TagArtwork artwork;
 		artwork.data = (void *)[data bytes];
-		artwork.size = [data length];
+		artwork.size = (uint32_t)[data length];
 		artwork.type = MP4_ART_PNG;
 		
 		MP4TagsAddArtwork(tags, &artwork);
@@ -483,7 +483,7 @@
  			if(NSNotFound == index)
  				frame->setText(TagLib::String([genre UTF8String], TagLib::String::UTF8));
  			else
- 				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%u)", index] UTF8String], TagLib::String::UTF8));
+				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%ld)", (long)index] UTF8String], TagLib::String::UTF8));
  			
  			f.tag()->addFrame(frame);
  		}
@@ -594,7 +594,7 @@
 		NSAssert(NULL != pictureFrame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		pictureFrame->setMimeType(TagLib::String("image/png", TagLib::String::Latin1));
-		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], [data length]));
+		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], (unsigned int)[data length]));
 		f.tag()->addFrame(pictureFrame);
 	}
 	
@@ -773,7 +773,7 @@
  			if(NSNotFound == index)
  				frame->setText(TagLib::String([genre UTF8String], TagLib::String::UTF8));
  			else
- 				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%u)", index] UTF8String], TagLib::String::UTF8));
+				frame->setText(TagLib::String([[NSString stringWithFormat:@"(%ld)", (long)index] UTF8String], TagLib::String::UTF8));
  			
  			f.tag()->addFrame(frame);
  		}
@@ -884,7 +884,7 @@
 		NSAssert(NULL != pictureFrame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 		
 		pictureFrame->setMimeType(TagLib::String("image/png", TagLib::String::Latin1));
-		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], [data length]));
+		pictureFrame->setPicture(TagLib::ByteVector((const char *)[data bytes], (unsigned int)[data length]));
 		f.tag()->addFrame(pictureFrame);
 	}
 	

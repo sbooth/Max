@@ -45,8 +45,8 @@
 		_pcmFormat.mFormatFlags			= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked;
 		
 		_pcmFormat.mSampleRate			= SELF_DECOMPRESSOR->GetInfo(APE::APE_INFO_SAMPLE_RATE);
-		_pcmFormat.mChannelsPerFrame	= SELF_DECOMPRESSOR->GetInfo(APE::APE_INFO_CHANNELS);
-		_pcmFormat.mBitsPerChannel		= SELF_DECOMPRESSOR->GetInfo(APE::APE_INFO_BITS_PER_SAMPLE);
+		_pcmFormat.mChannelsPerFrame	= (UInt32)SELF_DECOMPRESSOR->GetInfo(APE::APE_INFO_CHANNELS);
+		_pcmFormat.mBitsPerChannel		= (UInt32)SELF_DECOMPRESSOR->GetInfo(APE::APE_INFO_BITS_PER_SAMPLE);
 		
 		_pcmFormat.mBytesPerPacket		= (_pcmFormat.mBitsPerChannel / 8) * _pcmFormat.mChannelsPerFrame;
 		_pcmFormat.mFramesPerPacket		= 1;

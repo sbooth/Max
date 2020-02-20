@@ -35,7 +35,7 @@ addMPEG4AACGaplessInformationAtom(NSString *filename, SInt64 totalFrames)
 
 	// Construct the encoder delay and padding
 	unsigned delay		= 0x840;
-	unsigned padding	= (unsigned)ceil((totalFrames + 2112) / 1024.0) * 1024 - (totalFrames + 2112);
+	unsigned padding	= ceil((totalFrames + 2112) / 1024.0) * 1024 - (totalFrames + 2112);
 	
 	NSString *value	= [NSString stringWithFormat:@"00000000 %.8x %.8x %.16qx 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000", delay, padding, totalFrames];
 	
@@ -43,7 +43,7 @@ addMPEG4AACGaplessInformationAtom(NSString *filename, SInt64 totalFrames)
 	
 	MP4ItmfData *data = &smpb->dataList.elements[0];
 	data->typeCode = MP4_ITMF_BT_UTF8;
-	data->valueSize = strlen(utf8);
+	data->valueSize = (uint32_t)strlen(utf8);
 	data->value = (uint8_t *)malloc( data->valueSize );
 
 	memcpy(data->value, utf8, data->valueSize);
@@ -98,7 +98,7 @@ addMPEG4AACBitrateInformationAtom(NSString *filename, UInt32 bitrate, int bitrat
 
 	MP4ItmfData *data = &smpb->dataList.elements[0];
 	data->typeCode = MP4_ITMF_BT_IMPLICIT;
-	data->valueSize = [blockData length];
+	data->valueSize = (uint32_t)[blockData length];
 	data->value = (uint8_t *)malloc( data->valueSize );
 	
 	memcpy(data->value, [blockData bytes], data->valueSize);

@@ -76,7 +76,7 @@ If you have troubles, please write to ymnk@jcraft.com.
 
 static void comment_init(char **comments, int *length, const char *vendor_string)
 {
-	int vendor_length = strlen(vendor_string);
+	int vendor_length = (int)strlen(vendor_string);
 	int user_comment_list_length = 0;
 	int len = 4+vendor_length+4;
 	char *p = (char*)malloc(len);
@@ -96,8 +96,8 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	char* p=*comments;
 	int vendor_length=readint(p, 0);
 	int user_comment_list_length=readint(p, 4+vendor_length);
-	int tag_len=(tag?strlen(tag):0);
-	int val_len=strlen(val);
+	int tag_len=(tag?(int)strlen(tag):0);
+	int val_len=(int)strlen(val);
 	int len=(*length)+4+tag_len+val_len;
 	
 	p=(char*)realloc(p, len);
@@ -138,7 +138,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 	int							frameSize;
 	char						*comments									= NULL;
 	int							comments_length;
-	int							totalFrames;
+	SInt64						totalFrames;
 	int							framesEncoded;
 	int							nbBytes;
 	int							lookahead									= 0;
@@ -240,8 +240,7 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 		}
 		
 		// Initialize ogg stream- use the current time as the stream id
-		srand(time(NULL));
-		result = ogg_stream_init(&os, rand());
+		result = ogg_stream_init(&os, (int)arc4random());
 		NSAssert(-1 != result, NSLocalizedStringFromTable(@"Unable to initialize the ogg stream.", @"Exceptions", @""));		
 		
 		// Setup encoder
@@ -346,17 +345,17 @@ static void comment_add(char **comments, int *length, const char *tag, const cha
 			case 8:
 			case 24:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int8_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int8_t);
+				bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int8_t);
 				break;
 				
 			case 16:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int16_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int16_t);
+				bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int16_t);
 				break;
 				
 			case 32:
 				bufferList.mBuffers[0].mData			= calloc(bufferLen, sizeof(int32_t));
-				bufferList.mBuffers[0].mDataByteSize	= bufferLen * sizeof(int32_t);
+				bufferList.mBuffers[0].mDataByteSize	= (UInt32)bufferLen * sizeof(int32_t);
 				break;
 				
 			default:

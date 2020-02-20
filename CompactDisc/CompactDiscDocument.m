@@ -38,7 +38,6 @@
 - (void)		displayExceptionAlert:(NSAlert *)alert;
 
 - (void)		didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (void)		openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (void)		updateMetadataFromMusicBrainz:(NSUInteger)index;
 @end
@@ -629,13 +628,23 @@
 	[panel setAllowsMultipleSelection:NO];
 	[panel setCanChooseDirectories:NO];
 	[panel setCanChooseFiles:YES];
+	[panel setAllowedFileTypes:[NSImage imageFileTypes]];
 	
-	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(openPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	[panel beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse result) {
+	    if(NSOKButton == result) {
+			for(NSURL *url in [panel URLs]) {
+				NSImage *image = [[NSImage alloc] initWithContentsOfURL:url];
+				if(nil != image) {
+					[self setAlbumArt:[image autorelease]];
+				}
+			}
+		}
+	}];
 }
 
 #pragma mark Miscellaneous
 
-- (NSString *)		length								{ return [NSString stringWithFormat:@"%lu:%.02u", [[self disc] length] / 60, [[self disc] length] % 60]; }
+- (NSString *)		length								{ return [NSString stringWithFormat:@"%lu:%.2lu", [[self disc] length] / 60, [[self disc] length] % 60]; }
 - (NSArray *)		genres								{ return [Genres sharedGenres]; }
 
 - (NSArray *) selectedTracks
@@ -887,23 +896,6 @@
 		[self updateMetadataFromMusicBrainz:[musicBrainzMatchSheet selectedAlbumIndex]];
 
 	[musicBrainzMatchSheet release];
-}
-
-- (void) openPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if(NSOKButton == returnCode) {
-		NSArray		*filesToOpen	= [sheet filenames];
-		NSUInteger	count			= [filesToOpen count];
-		NSUInteger	i;
-		NSImage		*image			= nil;
-		
-		for(i = 0; i < count; ++i) {
-			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
-			if(nil != image) {
-				[self setAlbumArt:[image autorelease]];
-			}
-		}
-	}	
 }
 
 - (void) updateMetadataFromMusicBrainz:(NSUInteger)index

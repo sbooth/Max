@@ -170,21 +170,21 @@ audio_linear_round(unsigned int bits,
 - (void) fillPCMBuffer
 {	
 	CircularBuffer		*buffer				= [self pcmBuffer];
-	UInt32				frameCount			= [buffer freeSpaceAvailable] / (_pcmFormat.mChannelsPerFrame * sizeof(int16_t));
+	NSUInteger			frameCount			= [buffer freeSpaceAvailable] / (_pcmFormat.mChannelsPerFrame * sizeof(int16_t));
 				
-	UInt32			bytesToRead;
-	UInt32			bytesRemaining;
+	NSUInteger		bytesToRead;
+	NSUInteger		bytesRemaining;
 	unsigned char	*readStartPointer;
 	
 	BOOL			readEOF					= NO;
 	
-	UInt32			framesRead				= 0;
+	NSUInteger		framesRead				= 0;
 
 	for(;;) {
 		
-		UInt32	framesRemaining	= frameCount - framesRead;
-		UInt32	framesInBuffer	= _bufferList->mBuffers[0].mDataByteSize / sizeof(int16_t);
-		UInt32	framesToCopy	= (framesInBuffer > framesRemaining ? framesRemaining : framesInBuffer);
+		NSUInteger	framesRemaining	= frameCount - framesRead;
+		NSUInteger	framesInBuffer	= _bufferList->mBuffers[0].mDataByteSize / sizeof(int16_t);
+		NSUInteger	framesToCopy	= (framesInBuffer > framesRemaining ? framesRemaining : framesInBuffer);
 		
 		// Copy data from the buffer to output
 		int16_t *outputBuffer = [buffer exposeBufferForWriting];
@@ -255,7 +255,7 @@ audio_linear_round(unsigned int bits,
 			if(MAD_RECOVERABLE(_mad_stream.error)) {
 				// Prevent ID3 tags from reporting recoverable frame errors
 				const uint8_t	*buffer			= _mad_stream.this_frame;
-				unsigned		buflen			= _mad_stream.bufend - _mad_stream.this_frame;
+				NSUInteger		buflen			= _mad_stream.bufend - _mad_stream.this_frame;
 				uint32_t		id3_length		= 0;
 				
 				if(10 <= buflen && 0x49 == buffer[0] && 0x44 == buffer[1] && 0x33 == buffer[2]) {
@@ -295,7 +295,7 @@ audio_linear_round(unsigned int bits,
 		
 		// Skip any samples that remain from last frame
 		// This can happen if the encoder delay is greater than the number of samples in a frame
-		unsigned startingSample = _samplesToSkipInNextFrame;
+		NSUInteger startingSample = _samplesToSkipInNextFrame;
 		
 		// Skip the Xing header (it contains empty audio)
 		if(_foundXingHeader && 1 == _mpegFramesDecoded)
@@ -305,7 +305,7 @@ audio_linear_round(unsigned int bits,
 			startingSample += _encoderDelay;
 
 		// The number of samples in this frame
-		unsigned sampleCount = _mad_synth.pcm.length;
+		NSUInteger sampleCount = _mad_synth.pcm.length;
 
 		// Skip this entire frame if necessary
 		if(startingSample > sampleCount) {
@@ -322,12 +322,12 @@ audio_linear_round(unsigned int bits,
 		
 		// Output samples as 16-bit integer PCM (big endian)
 		int16_t *intBuffer = _bufferList->mBuffers[0].mData;
-		unsigned channel, sample;
+		NSUInteger channel, sample;
 		for(sample = startingSample; sample < sampleCount; ++sample) {
 			for(channel = 0; channel < MAD_NCHANNELS(&_mad_frame.header); ++channel)
 				*intBuffer++ = (int16_t)OSSwapHostToBigInt16((int16_t)audio_linear_round(BIT_RESOLUTION, _mad_synth.pcm.samples[channel][sample]));
 		}
-		_bufferList->mBuffers[0].mDataByteSize = (sampleCount - startingSample) * MAD_NCHANNELS(&_mad_frame.header) * sizeof(int16_t);
+		_bufferList->mBuffers[0].mDataByteSize = (UInt32)((sampleCount - startingSample) * MAD_NCHANNELS(&_mad_frame.header) * sizeof(int16_t));
 
 		_samplesDecoded += (sampleCount - startingSample);
 	}
@@ -342,7 +342,7 @@ audio_linear_round(unsigned int bits,
 - (BOOL) scanFile
 {
 	uint32_t			framesDecoded = 0;
-	UInt32				bytesToRead, bytesRemaining;
+	NSUInteger			bytesToRead, bytesRemaining;
 	size_t				bytesRead;
 	unsigned char		*readStartPointer;
 	BOOL				readEOF;
@@ -406,7 +406,7 @@ audio_linear_round(unsigned int bits,
 			if(MAD_RECOVERABLE(stream.error)) {
 				// Prevent ID3 tags from reporting recoverable frame errors
 				const uint8_t	*buffer			= stream.this_frame;
-				unsigned		buflen			= stream.bufend - stream.this_frame;
+				NSUInteger		buflen			= stream.bufend - stream.this_frame;
 				
 				if(10 <= buflen && 0x49 == buffer[0] && 0x44 == buffer[1] && 0x33 == buffer[2]) {
 					id3_length = (((buffer[6] & 0x7F) << (3 * 7)) | ((buffer[7] & 0x7F) << (2 * 7)) |
@@ -453,14 +453,14 @@ audio_linear_round(unsigned int bits,
 			if(32 > ancillaryBitsRemaining)
 				continue;
 			
-			uint32_t magic = mad_bit_read(&stream.anc_ptr, 32);
+			uint32_t magic = (uint32_t)mad_bit_read(&stream.anc_ptr, 32);
 			ancillaryBitsRemaining -= 32;
 			
 			if('Xing' == magic || 'Info' == magic) {
 				if(32 > ancillaryBitsRemaining)
 					continue;
 				
-				uint32_t flags = mad_bit_read(&stream.anc_ptr, 32);
+				uint32_t flags = (uint32_t)mad_bit_read(&stream.anc_ptr, 32);
 				ancillaryBitsRemaining -= 32;
 				
 				// 4 byte value containing total frames
@@ -469,7 +469,7 @@ audio_linear_round(unsigned int bits,
 					if(32 > ancillaryBitsRemaining)
 						continue;
 					
-					uint32_t frames = mad_bit_read(&stream.anc_ptr, 32);
+					uint32_t frames = (uint32_t)mad_bit_read(&stream.anc_ptr, 32);
 					ancillaryBitsRemaining -= 32;
 					
 					_totalMPEGFrames = frames;
@@ -515,7 +515,7 @@ audio_linear_round(unsigned int bits,
 				// http://gabriel.mp3-tech.org/mp3infotag.html				
 				if(32 > ancillaryBitsRemaining)
 					continue;
-				magic = mad_bit_read(&stream.anc_ptr, 32);
+				magic = (uint32_t)mad_bit_read(&stream.anc_ptr, 32);
 				
 				ancillaryBitsRemaining -= 32;
 				
@@ -646,8 +646,8 @@ audio_linear_round(unsigned int bits,
 	
 	// Brute force seeking is necessary since frame-accurate seeking is required
 	
-	UInt32			bytesToRead;
-	UInt32			bytesRemaining;
+	NSUInteger		bytesToRead;
+	NSUInteger		bytesRemaining;
 	unsigned char	*readStartPointer;
 	
 	BOOL			readEOF					= NO;
@@ -729,7 +729,7 @@ audio_linear_round(unsigned int bits,
 			if(MAD_RECOVERABLE(_mad_stream.error)) {
 				// Prevent ID3 tags from reporting recoverable frame errors
 				const uint8_t	*buffer			= _mad_stream.this_frame;
-				unsigned		buflen			= _mad_stream.bufend - _mad_stream.this_frame;
+				NSUInteger		buflen			= _mad_stream.bufend - _mad_stream.this_frame;
 				uint32_t		id3_length		= 0;
 				
 				if(10 <= buflen && 0x49 == buffer[0] && 0x44 == buffer[1] && 0x33 == buffer[2]) {
@@ -766,7 +766,7 @@ audio_linear_round(unsigned int bits,
 
 		// Skip any samples that remain from last frame
 		// This can happen if the encoder delay is greater than the number of samples in a frame
-		unsigned startingSample = _samplesToSkipInNextFrame;
+		NSUInteger startingSample = _samplesToSkipInNextFrame;
 		
 		// Skip the Xing header (it contains empty audio)
 		if(_foundXingHeader && 1 == _mpegFramesDecoded)
@@ -776,7 +776,7 @@ audio_linear_round(unsigned int bits,
 			startingSample += _encoderDelay;
 
 		// The number of samples in this frame
-		unsigned sampleCount = 32 * MAD_NSBSAMPLES(&_mad_frame.header);
+		NSUInteger sampleCount = 32 * MAD_NSBSAMPLES(&_mad_frame.header);
 		
 		// Skip this entire frame if necessary
 		if(startingSample > sampleCount) {
@@ -797,17 +797,17 @@ audio_linear_round(unsigned int bits,
 			mad_synth_frame(&_mad_synth, &_mad_frame);
 
 			// Skip any audio frames before the sample we are seeking to
-			unsigned additionalSamplesToSkip = frame - _samplesDecoded;
+			NSUInteger additionalSamplesToSkip = frame - _samplesDecoded;
 			
 			// Output samples as 16-bit integer PCM (big endian)
 			int16_t *intBuffer = _bufferList->mBuffers[0].mData;
-			unsigned channel, sample;
+			NSUInteger channel, sample;
 			for(sample = startingSample + additionalSamplesToSkip; sample < sampleCount; ++sample) {
 				 for(channel = 0; channel < MAD_NCHANNELS(&_mad_frame.header); ++channel)
 					*intBuffer++ = (int16_t)OSSwapHostToBigInt16((int16_t)audio_linear_round(BIT_RESOLUTION, _mad_synth.pcm.samples[channel][sample]));
 			}
 			
-			_bufferList->mBuffers[0].mDataByteSize = (sampleCount - (startingSample + additionalSamplesToSkip)) * MAD_NCHANNELS(&_mad_frame.header) * sizeof(int16_t);
+			_bufferList->mBuffers[0].mDataByteSize = (UInt32)((sampleCount - (startingSample + additionalSamplesToSkip)) * MAD_NCHANNELS(&_mad_frame.header) * sizeof(int16_t));
 
 			// Only a portion of the frame was skipped- the rest was synthesized and stored in our buffers
 			_samplesDecoded		+= (sampleCount - startingSample);

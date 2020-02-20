@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -87,7 +85,7 @@
 	long				bytesRead;
 	long				totalBytes;
 	void				*rawBuffer;
-	unsigned			availableSpace;
+	NSUInteger			availableSpace;
 	int					currentSection;
 	
 	buffer				= [self pcmBuffer];
@@ -97,7 +95,7 @@
 	currentSection		= 0;
 	
 	for(;;) {
-		bytesRead		= ov_read(&_vf, rawBuffer + totalBytes, availableSpace - totalBytes, YES, sizeof(int16_t), YES, &currentSection);
+		bytesRead		= ov_read(&_vf, rawBuffer + totalBytes, (int)(availableSpace - totalBytes), YES, sizeof(int16_t), YES, &currentSection);
 		
 		NSAssert(0 <= bytesRead, @"Ogg Vorbis decode error.");
 		

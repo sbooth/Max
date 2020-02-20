@@ -61,7 +61,7 @@
 
 - (SInt64) seekToFrame:(SInt64)frame
 {
-	if(WavpackSeekSample(_wpc, frame)) {
+	if(WavpackSeekSample(_wpc, (uint32_t)frame)) {
 		[[self pcmBuffer] reset]; 
 		_currentFrame = frame; 
 	}

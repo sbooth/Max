@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2007 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,12 +39,12 @@
 // Creation
 // ========================================
 + (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount;
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount loopCount:(NSUInteger)loopCount;
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount;
++ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount loopCount:(NSUInteger)loopCount;
 
 - (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount;
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(NSUInteger)frameCount loopCount:(NSUInteger)loopCount;
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount;
+- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount loopCount:(NSUInteger)loopCount;
 
 // ========================================
 // Properties
