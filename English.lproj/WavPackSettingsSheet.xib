@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,18 +13,17 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="205" y="269" width="679" height="502"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
-            <value key="maxSize" type="size" width="1" height="-21"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="679" height="502"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button imageHugsTitle="YES" id="10">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="10">
                         <rect key="frame" x="364" y="399" width="193" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Enable hybrid compression" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="217">
@@ -35,7 +34,7 @@
                             <binding destination="123" name="value" keyPath="selection.enableHybridCompression" id="172"/>
                         </connections>
                     </button>
-                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="19">
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="19">
                         <rect key="frame" x="231" y="424" width="130" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Joint Stereo" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="2" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="22" id="220">
@@ -53,7 +52,7 @@
                             <binding destination="123" name="selectedTag" keyPath="selection.stereoMode" id="128"/>
                         </connections>
                     </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="26">
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26">
                         <rect key="frame" x="231" y="394" width="130" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="Very High" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="3" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="29" id="221">
@@ -72,7 +71,7 @@
                             <binding destination="123" name="selectedTag" keyPath="selection.compressionMode" id="130"/>
                         </connections>
                     </popUpButton>
-                    <textField verticalHuggingPriority="750" id="41">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="41">
                         <rect key="frame" x="141" y="430" width="88" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Stereo mode:" id="222">
@@ -81,7 +80,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="42">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="42">
                         <rect key="frame" x="137" y="400" width="92" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Compression:" id="223">
@@ -90,7 +89,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="170">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="170">
                         <rect key="frame" x="298" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="243">
@@ -104,7 +103,7 @@ DQ
                             <action selector="ok:" target="-2" id="171"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="177">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="177">
                         <rect key="frame" x="17" y="465" width="645" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="WavPack" id="244">
@@ -113,11 +112,11 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" boxType="separator" id="178">
+                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="178">
                         <rect key="frame" x="12" y="454" width="655" height="5"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
-                    <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="46">
+                    <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="46">
                         <rect key="frame" x="232" y="352" width="120" height="38"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -144,7 +143,7 @@ DQ
                             <binding destination="123" name="selectedTag" keyPath="selection.hybridMode" id="137"/>
                         </connections>
                     </matrix>
-                    <textField verticalHuggingPriority="750" id="180">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="180">
                         <rect key="frame" x="54" y="373" width="175" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Hybrid compression mode:" id="245">
@@ -153,7 +152,7 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button imageHugsTitle="YES" id="11">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="11">
                         <rect key="frame" x="232" y="330" width="155" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Create correction file" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="218">
@@ -161,11 +160,11 @@ DQ
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="186"/>
                             <binding destination="123" name="value" keyPath="selection.createCorrectionFile" id="138"/>
+                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="186"/>
                         </connections>
                     </button>
-                    <button imageHugsTitle="YES" id="14">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="14">
                         <rect key="frame" x="232" y="310" width="214" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Maximum hybrid compression" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="219">
@@ -177,7 +176,7 @@ DQ
                             <binding destination="123" name="value" keyPath="selection.maximumHybridCompression" id="139"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="181">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="181">
                         <rect key="frame" x="127" y="331" width="102" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Hybrid options:" id="246">
@@ -186,11 +185,13 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="65">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="65">
                         <rect key="frame" x="288" y="195" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" increment="128" minValue="24" maxValue="9600" doubleValue="24" valueWraps="YES" id="229"/>
                         <connections>
+                            <binding destination="123" name="value" keyPath="selection.bitrate" id="169"/>
+                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="190"/>
                             <binding destination="123" name="enabled2" keyPath="selection.hybridMode" previousBinding="190" id="213">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -199,11 +200,9 @@ DQ
                                     <integer key="NSNullPlaceholder" value="-1"/>
                                 </dictionary>
                             </binding>
-                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="190"/>
-                            <binding destination="123" name="value" keyPath="selection.bitrate" id="169"/>
                         </connections>
                     </stepper>
-                    <textField verticalHuggingPriority="750" id="69">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="69">
                         <rect key="frame" x="234" y="198" width="49" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="9600" drawsBackground="YES" id="233">
@@ -215,10 +214,12 @@ DQ
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="123" name="value" keyPath="selection.bitrate" id="191"/>
+                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="192"/>
                             <binding destination="123" name="enabled2" keyPath="selection.hybridMode" previousBinding="192" id="212">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -227,17 +228,17 @@ DQ
                                     <integer key="NSNullPlaceholder" value="-1"/>
                                 </dictionary>
                             </binding>
-                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="192"/>
-                            <binding destination="123" name="value" keyPath="selection.bitrate" id="191"/>
                         </connections>
                     </textField>
-                    <slider verticalHuggingPriority="750" id="66">
+                    <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="66">
                         <rect key="frame" x="234" y="166" width="407" height="25"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <sliderCell key="cell" continuous="YES" alignment="left" minValue="24" maxValue="9600" doubleValue="4800" tickMarkPosition="below" numberOfTickMarks="23" sliderType="linear" id="230">
-                            <font key="font" size="12" name="Helvetica"/>
+                            <font key="font" metaFont="user"/>
                         </sliderCell>
                         <connections>
+                            <binding destination="123" name="value" keyPath="selection.bitrate" id="165"/>
+                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="193"/>
                             <binding destination="123" name="enabled2" keyPath="selection.hybridMode" previousBinding="193" id="214">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -246,38 +247,36 @@ DQ
                                     <integer key="NSNullPlaceholder" value="-1"/>
                                 </dictionary>
                             </binding>
-                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="193"/>
-                            <binding destination="123" name="value" keyPath="selection.bitrate" id="165"/>
                         </connections>
                     </slider>
-                    <textField verticalHuggingPriority="750" id="68">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="68">
                         <rect key="frame" x="234" y="144" width="18" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="24" id="232">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="67">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="67">
                         <rect key="frame" x="615" y="144" width="32" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="9600" id="231">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="112">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="112">
                         <rect key="frame" x="421" y="144" width="32" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="4800" id="240">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="182">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="182">
                         <rect key="frame" x="180" y="200" width="49" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Bitrate:" id="247">
@@ -286,7 +285,7 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="53">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="53">
                         <rect key="frame" x="234" y="282" width="49" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="23.9" drawsBackground="YES" id="225">
@@ -298,10 +297,12 @@ DQ
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="123" name="value" keyPath="selection.bitsPerSample" id="147"/>
+                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="194"/>
                             <binding destination="123" name="enabled2" keyPath="selection.hybridMode" previousBinding="194" id="209">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -311,17 +312,17 @@ DQ
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="194"/>
-                            <binding destination="123" name="value" keyPath="selection.bitsPerSample" id="147"/>
                         </connections>
                     </textField>
-                    <slider verticalHuggingPriority="750" id="44">
+                    <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="44">
                         <rect key="frame" x="234" y="250" width="407" height="25"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <sliderCell key="cell" continuous="YES" alignment="left" minValue="2" maxValue="23.899999999999999" doubleValue="16" tickMarkPosition="below" numberOfTickMarks="23" sliderType="linear" id="224">
-                            <font key="font" size="12" name="Helvetica"/>
+                            <font key="font" metaFont="user"/>
                         </sliderCell>
                         <connections>
+                            <binding destination="123" name="value" keyPath="selection.bitsPerSample" id="145"/>
+                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="196"/>
                             <binding destination="123" name="enabled2" keyPath="selection.hybridMode" previousBinding="196" id="211">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -331,24 +332,24 @@ DQ
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="196"/>
-                            <binding destination="123" name="value" keyPath="selection.bitsPerSample" id="145"/>
                         </connections>
                     </slider>
-                    <textField verticalHuggingPriority="750" id="57">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="57">
                         <rect key="frame" x="232" y="228" width="22" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="2.0" id="227">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="56">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="56">
                         <rect key="frame" x="288" y="279" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" minValue="2" maxValue="23.899999999999999" doubleValue="2" valueWraps="YES" id="226"/>
                         <connections>
+                            <binding destination="123" name="value" keyPath="selection.bitsPerSample" id="149"/>
+                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="195"/>
                             <binding destination="123" name="enabled2" keyPath="selection.hybridMode" previousBinding="195" id="210">
                                 <dictionary key="options">
                                     <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -358,38 +359,36 @@ DQ
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="195"/>
-                            <binding destination="123" name="value" keyPath="selection.bitsPerSample" id="149"/>
                         </connections>
                     </stepper>
-                    <textField verticalHuggingPriority="750" id="58">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="58">
                         <rect key="frame" x="617" y="228" width="29" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="23.9" id="228">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="113">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="113">
                         <rect key="frame" x="477" y="228" width="29" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="16.0" id="241">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="114">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="114">
                         <rect key="frame" x="338" y="228" width="22" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="8.0" id="242">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="183">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="183">
                         <rect key="frame" x="124" y="284" width="105" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Bits per sample:" id="248">
@@ -398,7 +397,7 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="73">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="73">
                         <rect key="frame" x="288" y="111" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" increment="0.25" minValue="-1" maxValue="1" valueWraps="YES" id="234"/>
@@ -407,36 +406,36 @@ DQ
                             <binding destination="123" name="value" keyPath="selection.noiseShaping" id="143"/>
                         </connections>
                     </stepper>
-                    <textField verticalHuggingPriority="750" id="76">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="76">
                         <rect key="frame" x="229" y="60" width="28" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="-1.0" id="237">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="79">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="79">
                         <rect key="frame" x="426" y="60" width="22" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="0.0" id="239">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <slider verticalHuggingPriority="750" id="74">
+                    <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="74">
                         <rect key="frame" x="234" y="82" width="407" height="25"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <sliderCell key="cell" continuous="YES" alignment="left" minValue="-1" maxValue="1" tickMarkPosition="below" numberOfTickMarks="9" sliderType="linear" id="235">
-                            <font key="font" size="12" name="Helvetica"/>
+                            <font key="font" metaFont="user"/>
                         </sliderCell>
                         <connections>
                             <binding destination="123" name="enabled" keyPath="selection.enableHybridCompression" id="199"/>
                             <binding destination="123" name="value" keyPath="selection.noiseShaping" id="136"/>
                         </connections>
                     </slider>
-                    <textField verticalHuggingPriority="750" id="77">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="77">
                         <rect key="frame" x="234" y="114" width="49" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="-1.00" drawsBackground="YES" id="238">
@@ -448,7 +447,7 @@ DQ
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -456,16 +455,16 @@ DQ
                             <binding destination="123" name="value" keyPath="selection.noiseShaping" id="141"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="75">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="75">
                         <rect key="frame" x="620" y="60" width="22" height="14"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="1.0" id="236">
-                            <font key="font" metaFont="smallSystem"/>
+                            <font key="font" metaFont="toolTip"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="184">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="184">
                         <rect key="frame" x="75" y="116" width="154" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Noise shaping override:" id="249">
@@ -476,6 +475,7 @@ DQ
                     </textField>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="147"/>
         </window>
         <objectController id="123" userLabel="Settings">
             <declaredKeys>
