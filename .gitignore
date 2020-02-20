@@ -1,0 +1,13 @@
+.DS_Store
+
+## Build products
+build/
+
+## Project files
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace
+
+## Workspace files
+*.xcworkspace/xcuserdata/
+
+Frameworks/
