@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -142,7 +140,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 				// Apply style
 				[logMessage addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Helvetica" size:11.0] range:NSMakeRange(0, [logMessage length])];
 
-				NSData							*rtf			= [logMessage RTFFromRange:NSMakeRange(0, [logMessage length]) documentAttributes:nil];
+				NSData							*rtf			= [logMessage RTFFromRange:NSMakeRange(0, [logMessage length]) documentAttributes:@{ NSDocumentTypeDocumentAttribute: NSRTFTextDocumentType } ];
 
 				BOOL fileCreated = [[NSFileManager defaultManager] createFileAtPath:filename contents:rtf attributes:nil];
 				NSAssert(YES == fileCreated, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));

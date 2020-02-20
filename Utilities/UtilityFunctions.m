@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -293,11 +291,11 @@ oggStreamType(NSString *filename)
 	if(kOggStreamTypeUnknown == streamType) {
 		oggpack_buffer		opb;
 		char				buffer[6];
-		int					packtype;
+		long					packtype;
 		unsigned			i;
 		
 		memset(buffer, 0, 6);
-		oggpack_readinit(&opb, op.packet, op.bytes);
+		oggpack_readinit(&opb, op.packet, (int)op.bytes);
 		
 		packtype		= oggpack_read(&opb, 8);
 		for(i = 0; i < 6; ++i) {
@@ -378,7 +376,7 @@ getBitmapDataForImage(NSImage					*image,
 		[image unlockFocus];
 	}
 	
-	return [bitmapRep representationUsingType:type properties:nil]; 
+	return [bitmapRep representationUsingType:type properties:@{}];
 }
 
 NSImage *
@@ -511,7 +509,7 @@ generateTemporaryFilename(NSString *directory, NSString *extension)
 	pathString	= [NSString stringWithFormat:@"%@/%@-%.8x-XXXXXXXX.%@", directory, @"Max", sessionID, extension];
 	strlcpy(path, [pathString fileSystemRepresentation], MAXPATHLEN); 
 	
-	fd			= mkstemps(path, 1 + [extension length]);
+	fd			= mkstemps(path, 1 + (int)[extension length]);
 	NSCAssert1(-1 != fd, @"Unable to create a temporary file: %s", strerror(errno));
 	
 	intResult = close(fd);

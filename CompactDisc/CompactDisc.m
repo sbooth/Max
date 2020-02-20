@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -138,13 +136,13 @@
 	
 	// zero is lead out
 	int offsets[100];
-	offsets[0] = [self leadOut] + 150;
+	offsets[0] = (int)[self leadOut] + 150;
 	
 	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
-		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
+		offsets[1 + i] = (int)[self firstSectorForTrack:i] + 150;
 
-	int result = discid_put(discID, 1, [self countOfTracks], offsets);
+	int result = discid_put(discID, 1, (int)[self countOfTracks], offsets);
 	if(result)
 		musicBrainzDiscID = [NSString stringWithCString:discid_get_id(discID) encoding:NSASCIIStringEncoding];
 		
@@ -163,13 +161,13 @@
 	
 	// zero is lead out
 	int offsets[100];
-	offsets[0] = [self leadOut] + 150;
+	offsets[0] = (int)[self leadOut] + 150;
 	
 	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
-		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
+		offsets[1 + i] = (int)[self firstSectorForTrack:i] + 150;
 	
-	int result = discid_put(discID, 1, [self countOfTracks], offsets);
+	int result = discid_put(discID, 1, (int)[self countOfTracks], offsets);
 	if(result)
 		submissionUrl = [NSURL URLWithString:[NSString stringWithCString:discid_get_submission_url(discID) encoding:NSASCIIStringEncoding]];
 	
@@ -188,13 +186,13 @@
 	
 	// zero is lead out
 	int offsets[100];
-	offsets[0] = [self leadOut] + 150;
+	offsets[0] = (int)[self leadOut] + 150;
 	
 	NSUInteger i;
 	for(i = 0; i < [self countOfTracks]; ++i)
-		offsets[1 + i] = [self firstSectorForTrack:i] + 150;
+		offsets[1 + i] = (int)[self firstSectorForTrack:i] + 150;
 	
-	int result = discid_put(discID, 1, [self countOfTracks], offsets);
+	int result = discid_put(discID, 1, (int)[self countOfTracks], offsets);
 	if(result)
 		freeDBDiscID = [NSString stringWithCString:discid_get_freedb_id(discID) encoding:NSASCIIStringEncoding];
 	

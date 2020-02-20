@@ -709,10 +709,10 @@
 			// Put the data in an AudioBufferList
 			bufferList.mNumberBuffers					= 1;
 			bufferList.mBuffers[0].mData				= buffer;
-			bufferList.mBuffers[0].mDataByteSize		= [readRange byteSize];
+			bufferList.mBuffers[0].mDataByteSize		= (UInt32)[readRange byteSize];
 			bufferList.mBuffers[0].mNumberChannels		= 2;
 			
-			frameCount									= [readRange byteSize] / 4;
+			frameCount									= (UInt32)([readRange byteSize] / 4);
 			
 			// Write the data
 			err = ExtAudioFileWrite(file, frameCount, &bufferList);
