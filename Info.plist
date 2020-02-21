@@ -204,7 +204,7 @@
 				<string>ape</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Monkey&apos;s Audio</string>
+			<string>Monkey's Audio</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSTypeIsPackage</key>
@@ -337,7 +337,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Max 0.9.1</string>
+	<string>Max 0.9.3</string>
 	<key>CFBundleHelpBookFolder</key>
 	<string>Max Help</string>
 	<key>CFBundleHelpBookName</key>
