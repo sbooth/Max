@@ -941,6 +941,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8CB6E20008DACB8100345B8F /* COPYING.txt */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				32A147AF104745BD0020238F /* dsa_pub.pem */,
+				8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */,
+				8CD7F5E0098B0A30002C4D9F /* Credits.rtf */,
 				32C614A612E80CB800F714C9 /* Acknowledgments.xib */,
 				32C614A812E80CB800F714C9 /* AlbumArtPreferences.xib */,
 				32C614AA12E80CB800F714C9 /* AmazonAlbumArtSheet.xib */,
@@ -971,12 +977,6 @@
 				32C614DC12E80CB800F714C9 /* RipperPreferences.xib */,
 				32C614DE12E80CB800F714C9 /* TaggingPreferences.xib */,
 				32C614E012E80CB800F714C9 /* WavPackSettingsSheet.xib */,
-				32A147AF104745BD0020238F /* dsa_pub.pem */,
-				8C5266BA0970E6FB008F1B55 /* Acknowledgments.rtf */,
-				8CB6E20008DACB8100345B8F /* COPYING.txt */,
-				8CD7F5E0098B0A30002C4D9F /* Credits.rtf */,
-				8D1107310486CEB800E47090 /* Info.plist */,
-				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1002,10 +1002,10 @@
 			children = (
 				8C0883580A092EA500CAC5D0 /* AlbumArtDefaults.plist */,
 				8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */,
-				8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */,
-				8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */,
 				8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */,
+				8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */,
 				8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */,
+				8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */,
 			);
 			name = Defaults;
 			path = Preferences/Defaults;
@@ -1014,17 +1014,17 @@
 		8C32817C096D12A600608C9D /* Strings */ = {
 			isa = PBXGroup;
 			children = (
-				325BFE4A1050DB5A00FE11C2 /* CueSheet.strings */,
-				325BFE4C1050DB5A00FE11C2 /* Menus.strings */,
-				8C04064E0B5C584000648158 /* InfoPlist.strings */,
-				8C37D3F60B3ABF0F00C5F85A /* FileConversion.strings */,
-				8CA6E46C09D065260047C35C /* UndoRedo.strings */,
-				8C29D980097F46A200E8B766 /* Log.strings */,
-				8C29D94A097F442700E8B766 /* Genres.strings */,
-				8C29D927097F424900E8B766 /* General.strings */,
 				8C29D8FC097F3EBE00E8B766 /* CompactDisc.strings */,
-				8C29D8DA097F3D5D00E8B766 /* Preferences.strings */,
+				325BFE4A1050DB5A00FE11C2 /* CueSheet.strings */,
 				8C328181096D12CA00608C9D /* Exceptions.strings */,
+				8C37D3F60B3ABF0F00C5F85A /* FileConversion.strings */,
+				8C29D927097F424900E8B766 /* General.strings */,
+				8C29D94A097F442700E8B766 /* Genres.strings */,
+				8C04064E0B5C584000648158 /* InfoPlist.strings */,
+				8C29D980097F46A200E8B766 /* Log.strings */,
+				325BFE4C1050DB5A00FE11C2 /* Menus.strings */,
+				8C29D8DA097F3D5D00E8B766 /* Preferences.strings */,
+				8CA6E46C09D065260047C35C /* UndoRedo.strings */,
 			);
 			name = Strings;
 			sourceTree = "<group>";
@@ -1032,11 +1032,11 @@
 		8C4505080A8EEBFE001BF1A1 /* AlbumArt */ = {
 			isa = PBXGroup;
 			children = (
-				32A1478E104742030020238F /* NSString+URLEscapingMethods.h */,
-				32A1478F104742030020238F /* NSString+URLEscapingMethods.m */,
+				8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */,
 				8C4505090A8EEC13001BF1A1 /* AmazonAlbumArtSheet.h */,
 				8C45050A0A8EEC13001BF1A1 /* AmazonAlbumArtSheet.m */,
-				8C4505110A8EEC52001BF1A1 /* AlbumArtMethods.h */,
+				32A1478E104742030020238F /* NSString+URLEscapingMethods.h */,
+				32A1478F104742030020238F /* NSString+URLEscapingMethods.m */,
 			);
 			name = AlbumArt;
 			sourceTree = "<group>";
@@ -1044,10 +1044,10 @@
 		8C5300980A05CFDA00890518 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				8CD25D2E0AABF75E0037F33A /* TaskInfo.h */,
-				8CD25D2F0AABF75E0037F33A /* TaskInfo.m */,
 				8C53009B0A05CFEA00890518 /* Task.h */,
 				8C53009C0A05CFEA00890518 /* Task.m */,
+				8CD25D2E0AABF75E0037F33A /* TaskInfo.h */,
+				8CD25D2F0AABF75E0037F33A /* TaskInfo.m */,
 				8C53009D0A05CFEA00890518 /* TaskMethods.h */,
 			);
 			name = Tasks;
@@ -1056,24 +1056,24 @@
 		8C5300B00A05D18E00890518 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8C5301A00A05D2DB00890518 /* CompactDiscController.h */,
-				8C5301A10A05D2DB00890518 /* CompactDiscController.m */,
 				8C5300B10A05D18E00890518 /* AcknowledgmentsController.h */,
 				8C5300B20A05D18E00890518 /* AcknowledgmentsController.m */,
 				8C5300B30A05D18E00890518 /* ApplicationController.h */,
 				8C5300B40A05D18E00890518 /* ApplicationController.m */,
+				8C5301A00A05D2DB00890518 /* CompactDiscController.h */,
+				8C5301A10A05D2DB00890518 /* CompactDiscController.m */,
 				8C5300B50A05D18E00890518 /* ComponentVersionsController.h */,
 				8C5300B60A05D18E00890518 /* ComponentVersionsController.mm */,
 				8C5300B90A05D18E00890518 /* EncoderController.h */,
 				8C5300BA0A05D18E00890518 /* EncoderController.m */,
+				8C1370360C42649000D0238C /* FormatsController.h */,
+				8C1370370C42649000D0238C /* FormatsController.m */,
 				8C5300BB0A05D18E00890518 /* LogController.h */,
 				8C5300BC0A05D18E00890518 /* LogController.m */,
 				8C5300BD0A05D18F00890518 /* MediaController.h */,
 				8C5300BE0A05D18F00890518 /* MediaController.m */,
 				8C5300BF0A05D18F00890518 /* RipperController.h */,
 				8C5300C00A05D18F00890518 /* RipperController.m */,
-				8C1370360C42649000D0238C /* FormatsController.h */,
-				8C1370370C42649000D0238C /* FormatsController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1114,19 +1114,19 @@
 		8C53021E0A05D66A00890518 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				8C53021F0A05D66A00890518 /* CoreAudioUtilities.h */,
+				8C5302200A05D66A00890518 /* CoreAudioUtilities.m */,
+				8C57F9EC0B10DE1300AA493C /* GaplessUtilities.h */,
 				32C8F0ED10632AB0004AB74F /* GaplessUtilities.m */,
+				8C74F8660A0B2D89002260CF /* Genres.h */,
+				8C74F8670A0B2D89002260CF /* Genres.m */,
 				8CF0E8C30B0C21570018F871 /* ImageAndTextCell.h */,
 				8CF0E8C40B0C21570018F871 /* ImageAndTextCell.m */,
 				8C74F8900A0B307E002260CF /* ServicesProvider.h */,
 				8C74F8910A0B307E002260CF /* ServicesProvider.m */,
-				8C74F8660A0B2D89002260CF /* Genres.h */,
-				8C74F8670A0B2D89002260CF /* Genres.m */,
-				8C53021F0A05D66A00890518 /* CoreAudioUtilities.h */,
-				8C5302200A05D66A00890518 /* CoreAudioUtilities.m */,
 				8C5302210A05D66A00890518 /* sha256-stdenis.c */,
 				8C5302220A05D66A00890518 /* UtilityFunctions.h */,
 				8C5302230A05D66A00890518 /* UtilityFunctions.m */,
-				8C57F9EC0B10DE1300AA493C /* GaplessUtilities.h */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1138,10 +1138,10 @@
 				8C53022C0A05D6D800890518 /* Drive.m */,
 				8C53022D0A05D6D800890518 /* SectorRange.h */,
 				8C53022E0A05D6D800890518 /* SectorRange.m */,
-				8C53022F0A05D6D800890518 /* TrackDescriptor.h */,
-				8C5302300A05D6D800890518 /* TrackDescriptor.m */,
 				8CA9B4890AD21CF5000EF903 /* SessionDescriptor.h */,
 				8CA9B48A0AD21CF5000EF903 /* SessionDescriptor.m */,
+				8C53022F0A05D6D800890518 /* TrackDescriptor.h */,
+				8C5302300A05D6D800890518 /* TrackDescriptor.m */,
 			);
 			path = Drive;
 			sourceTree = "<group>";
@@ -1168,10 +1168,6 @@
 		8C53FEF30A05CB8E00890518 /* Encoders */ = {
 			isa = PBXGroup;
 			children = (
-				8CD015C80ADAA5BD00216B29 /* MP3Encoder.h */,
-				8CD015C90ADAA5BD00216B29 /* MP3Encoder.m */,
-				8CABDED10ABE6AF900905814 /* OggSpeexEncoder.h */,
-				8CABDED20ABE6AF900905814 /* OggSpeexEncoder.m */,
 				8C53FEF40A05CB8E00890518 /* CoreAudioEncoder.h */,
 				8C53FEF50A05CB8E00890518 /* CoreAudioEncoder.m */,
 				8C53FEF60A05CB8E00890518 /* Encoder.h */,
@@ -1183,8 +1179,12 @@
 				8C53FEFC0A05CB8E00890518 /* LibsndfileEncoder.m */,
 				8C53FEFD0A05CB8E00890518 /* MonkeysAudioEncoder.h */,
 				8C53FEFE0A05CB8E00890518 /* MonkeysAudioEncoder.mm */,
+				8CD015C80ADAA5BD00216B29 /* MP3Encoder.h */,
+				8CD015C90ADAA5BD00216B29 /* MP3Encoder.m */,
 				8C53FF010A05CB8E00890518 /* OggFLACEncoder.h */,
 				8C53FF020A05CB8E00890518 /* OggFLACEncoder.m */,
+				8CABDED10ABE6AF900905814 /* OggSpeexEncoder.h */,
+				8CABDED20ABE6AF900905814 /* OggSpeexEncoder.m */,
 				8C53FF030A05CB8E00890518 /* OggVorbisEncoder.h */,
 				8C53FF040A05CB8E00890518 /* OggVorbisEncoder.m */,
 				8C53FF070A05CB8E00890518 /* WavPackEncoder.h */,
@@ -1268,20 +1268,20 @@
 				8C89C62F0A069E5000359E67 /* FormatsPreferencesController.m */,
 				8C89C6320A069E5000359E67 /* GeneralPreferencesController.h */,
 				8C89C6330A069E5000359E67 /* GeneralPreferencesController.m */,
+				8CD020170ADB66E000216B29 /* iTunesPreferencesController.h */,
+				8CD020180ADB66E000216B29 /* iTunesPreferencesController.m */,
+				8CE250AB0AD31943009E1323 /* MusicBrainzPreferencesController.h */,
+				8CE250AC0AD31943009E1323 /* MusicBrainzPreferencesController.m */,
+				8CD01F080ADB488300216B29 /* OutputPreferencesController.h */,
+				8CD01F090ADB488300216B29 /* OutputPreferencesController.m */,
+				8CD025170ADC036A00216B29 /* PostProcessingPreferencesController.h */,
+				8CD025180ADC036A00216B29 /* PostProcessingPreferencesController.m */,
 				8C89C6360A069E5000359E67 /* PreferencesController.h */,
 				8C89C6370A069E5000359E67 /* PreferencesController.m */,
 				8C89C6380A069E5000359E67 /* RipperPreferencesController.h */,
 				8C89C6390A069E5000359E67 /* RipperPreferencesController.m */,
 				8C89C63A0A069E5000359E67 /* TaggingPreferencesController.h */,
 				8C89C63B0A069E5000359E67 /* TaggingPreferencesController.m */,
-				8CE250AB0AD31943009E1323 /* MusicBrainzPreferencesController.h */,
-				8CE250AC0AD31943009E1323 /* MusicBrainzPreferencesController.m */,
-				8CD01F080ADB488300216B29 /* OutputPreferencesController.h */,
-				8CD01F090ADB488300216B29 /* OutputPreferencesController.m */,
-				8CD020170ADB66E000216B29 /* iTunesPreferencesController.h */,
-				8CD020180ADB66E000216B29 /* iTunesPreferencesController.m */,
-				8CD025170ADC036A00216B29 /* PostProcessingPreferencesController.h */,
-				8CD025180ADC036A00216B29 /* PostProcessingPreferencesController.m */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1289,24 +1289,24 @@
 		8C89CA6D0A06F7B200359E67 /* EncoderSettingsSheets */ = {
 			isa = PBXGroup;
 			children = (
-				8CABDE8F0ABE6A0600905814 /* OggSpeexSettingsSheet.h */,
-				8CABDE900ABE6A0600905814 /* OggSpeexSettingsSheet.m */,
+				8C89CB8C0A07180300359E67 /* CoreAudioSettingsSheet.h */,
+				8C89CB8D0A07180300359E67 /* CoreAudioSettingsSheet.m */,
 				8C89CA6E0A06F7B200359E67 /* EncoderSettingsSheet.h */,
 				8C89CA6F0A06F7B200359E67 /* EncoderSettingsSheet.m */,
 				8C89CA700A06F7B200359E67 /* FLACSettingsSheet.h */,
 				8C89CA710A06F7B200359E67 /* FLACSettingsSheet.m */,
-				8C89CA720A06F7B200359E67 /* MonkeysAudioSettingsSheet.h */,
-				8C89CA730A06F7B200359E67 /* MonkeysAudioSettingsSheet.m */,
 				8C89CA850A06F7FD00359E67 /* LibsndfileSettingsSheet.h */,
 				8C89CA860A06F7FD00359E67 /* LibsndfileSettingsSheet.m */,
-				8C89CB8C0A07180300359E67 /* CoreAudioSettingsSheet.h */,
-				8C89CB8D0A07180300359E67 /* CoreAudioSettingsSheet.m */,
-				8C89CF830A07521E00359E67 /* WavPackSettingsSheet.h */,
-				8C89CF840A07521E00359E67 /* WavPackSettingsSheet.m */,
-				8C89D0190A075BB600359E67 /* OggVorbisSettingsSheet.h */,
-				8C89D01A0A075BB600359E67 /* OggVorbisSettingsSheet.m */,
+				8C89CA720A06F7B200359E67 /* MonkeysAudioSettingsSheet.h */,
+				8C89CA730A06F7B200359E67 /* MonkeysAudioSettingsSheet.m */,
 				8C89D0610A075EF500359E67 /* MP3SettingsSheet.h */,
 				8C89D0620A075EF500359E67 /* MP3SettingsSheet.m */,
+				8CABDE8F0ABE6A0600905814 /* OggSpeexSettingsSheet.h */,
+				8CABDE900ABE6A0600905814 /* OggSpeexSettingsSheet.m */,
+				8C89D0190A075BB600359E67 /* OggVorbisSettingsSheet.h */,
+				8C89D01A0A075BB600359E67 /* OggVorbisSettingsSheet.m */,
+				8C89CF830A07521E00359E67 /* WavPackSettingsSheet.h */,
+				8C89CF840A07521E00359E67 /* WavPackSettingsSheet.m */,
 			);
 			name = EncoderSettingsSheets;
 			path = Preferences/EncoderSettingsSheets;
@@ -1315,27 +1315,27 @@
 		8C9450E00A12E3FC00C8DCAE /* EncoderTasks */ = {
 			isa = PBXGroup;
 			children = (
-				32A145201046DD100020238F /* LibsndfileEncoderTask.mm */,
-				32A145121046DB920020238F /* CoreAudioEncoderTask.mm */,
-				322E1EB20DC81AAB00CB6DDB /* OggSpeexEncoderTask.mm */,
-				8CD015E80ADAA67A00216B29 /* MP3EncoderTask.h */,
-				8CD015E90ADAA67A00216B29 /* MP3EncoderTask.mm */,
-				8CFA57390ABE32BB00C5AE9F /* OggSpeexEncoderTask.h */,
 				8C9450E10A12E3FC00C8DCAE /* CoreAudioEncoderTask.h */,
+				32A145121046DB920020238F /* CoreAudioEncoderTask.mm */,
 				8C9450E30A12E3FC00C8DCAE /* EncoderTask.h */,
 				8C9450E40A12E3FC00C8DCAE /* EncoderTask.m */,
+				8CD26D790AB5171B0037F33A /* EncoderTaskMethods.h */,
 				8C9450E50A12E3FC00C8DCAE /* FLACEncoderTask.h */,
 				8C9450E60A12E3FC00C8DCAE /* FLACEncoderTask.m */,
 				8C9450E70A12E3FC00C8DCAE /* LibsndfileEncoderTask.h */,
+				32A145201046DD100020238F /* LibsndfileEncoderTask.mm */,
 				8C9450E90A12E3FC00C8DCAE /* MonkeysAudioEncoderTask.h */,
 				8C9450EA0A12E3FC00C8DCAE /* MonkeysAudioEncoderTask.mm */,
+				8CD015E80ADAA67A00216B29 /* MP3EncoderTask.h */,
+				8CD015E90ADAA67A00216B29 /* MP3EncoderTask.mm */,
 				8C9450ED0A12E3FC00C8DCAE /* OggFLACEncoderTask.h */,
 				8C9450EE0A12E3FC00C8DCAE /* OggFLACEncoderTask.mm */,
+				8CFA57390ABE32BB00C5AE9F /* OggSpeexEncoderTask.h */,
+				322E1EB20DC81AAB00CB6DDB /* OggSpeexEncoderTask.mm */,
 				8C9450EF0A12E3FC00C8DCAE /* OggVorbisEncoderTask.h */,
 				8C9450F00A12E3FC00C8DCAE /* OggVorbisEncoderTask.mm */,
 				8C9450F30A12E3FC00C8DCAE /* WavPackEncoderTask.h */,
 				8C9450F40A12E3FC00C8DCAE /* WavPackEncoderTask.m */,
-				8CD26D790AB5171B0037F33A /* EncoderTaskMethods.h */,
 			);
 			name = EncoderTasks;
 			path = Tasks/EncoderTasks;
@@ -1363,10 +1363,10 @@
 			children = (
 				8C94512D0A12E45B00C8DCAE /* CueSheetDocument.h */,
 				8C94512E0A12E45B00C8DCAE /* CueSheetDocument.m */,
-				8C1371230C42F43E00D0238C /* CueSheetTrack.h */,
-				8C1371240C42F43E00D0238C /* CueSheetTrack.m */,
 				8C13724A0C432CF400D0238C /* CueSheetDocumentToolbar.h */,
 				8C13724B0C432CF400D0238C /* CueSheetDocumentToolbar.m */,
+				8C1371230C42F43E00D0238C /* CueSheetTrack.h */,
+				8C1371240C42F43E00D0238C /* CueSheetTrack.m */,
 			);
 			path = CueSheet;
 			sourceTree = "<group>";
@@ -1393,10 +1393,10 @@
 				8C99DD570A82B97C00A8CBE4 /* FileArrayController.m */,
 				8C99DD580A82B97C00A8CBE4 /* FileConversionController.h */,
 				8C99DD590A82B97C00A8CBE4 /* FileConversionController.m */,
-				8C99DD5A0A82B97C00A8CBE4 /* FilesTableView.h */,
-				8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */,
 				8CBB34EC0CEFF42F004678FB /* FileConversionToolbar.h */,
 				8CBB34ED0CEFF42F004678FB /* FileConversionToolbar.m */,
+				8C99DD5A0A82B97C00A8CBE4 /* FilesTableView.h */,
+				8C99DD5B0A82B97C00A8CBE4 /* FilesTableView.m */,
 			);
 			path = FileConversion;
 			sourceTree = "<group>";
@@ -1440,22 +1440,21 @@
 		8CFA4B290ABDDB2700C5AE9F /* Decoders */ = {
 			isa = PBXGroup;
 			children = (
-				8C2682FD0CE95B8D00EF1929 /* MPEGDecoder.h */,
-				8C2682FE0CE95B8D00EF1929 /* MPEGDecoder.m */,
-				8CE607860C8ACD7900AEC125 /* RegionDecoder.h */,
-				8CE607870C8ACD7900AEC125 /* RegionDecoder.m */,
 				8CFA4B2E0ABDE11800C5AE9F /* CircularBuffer.h */,
 				8CFA4B2F0ABDE11800C5AE9F /* CircularBuffer.m */,
 				8CFA4B300ABDE11800C5AE9F /* CoreAudioDecoder.h */,
 				8CFA4B310ABDE11800C5AE9F /* CoreAudioDecoder.m */,
 				8CFA4B320ABDE11800C5AE9F /* Decoder.h */,
 				8CFA4B330ABDE11800C5AE9F /* Decoder.m */,
+				8C2681CF0CE8ED5D00EF1929 /* DecoderMethods.h */,
 				8CFA4B360ABDE11800C5AE9F /* FLACDecoder.h */,
 				8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */,
 				8CFA4B380ABDE11800C5AE9F /* LibsndfileDecoder.h */,
 				8CFA4B390ABDE11800C5AE9F /* LibsndfileDecoder.m */,
 				8CFA4B3A0ABDE11800C5AE9F /* MonkeysAudioDecoder.h */,
 				8CFA4B3B0ABDE11800C5AE9F /* MonkeysAudioDecoder.mm */,
+				8C2682FD0CE95B8D00EF1929 /* MPEGDecoder.h */,
+				8C2682FE0CE95B8D00EF1929 /* MPEGDecoder.m */,
 				8CFA4B3C0ABDE11800C5AE9F /* MusepackDecoder.h */,
 				8CFA4B3D0ABDE11800C5AE9F /* MusepackDecoder.m */,
 				8CFA4B3E0ABDE11800C5AE9F /* OggFLACDecoder.h */,
@@ -1464,11 +1463,12 @@
 				8CFA4B410ABDE11800C5AE9F /* OggSpeexDecoder.m */,
 				8CFA4B420ABDE11800C5AE9F /* OggVorbisDecoder.h */,
 				8CFA4B430ABDE11800C5AE9F /* OggVorbisDecoder.m */,
-				8CFA4B440ABDE11800C5AE9F /* WavPackDecoder.h */,
-				8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */,
+				8CE607860C8ACD7900AEC125 /* RegionDecoder.h */,
+				8CE607870C8ACD7900AEC125 /* RegionDecoder.m */,
 				8CC9A0C50ACD90BF00948BAA /* ShortenDecoder.h */,
 				8CC9A0C60ACD90BF00948BAA /* ShortenDecoder.m */,
-				8C2681CF0CE8ED5D00EF1929 /* DecoderMethods.h */,
+				8CFA4B440ABDE11800C5AE9F /* WavPackDecoder.h */,
+				8CFA4B450ABDE11800C5AE9F /* WavPackDecoder.m */,
 			);
 			name = Decoders;
 			sourceTree = "<group>";
