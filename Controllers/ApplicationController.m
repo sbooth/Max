@@ -201,11 +201,13 @@ static ApplicationController *sharedController = nil;
 	NSError		*error;
 	
 	// First try our document types
+//	[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES completionHandler:^(NSDocument * _Nullable document, BOOL documentWasAlreadyOpen, NSError * _Nullable error) {
+//	}];
 	document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES error:&error];
 	
 	if(nil != document)
 		return YES;
-	else if([getAudioExtensions() containsObject:[[filename pathExtension] lowercaseString]]) {
+	else if([GetAudioExtensions() containsObject:[[filename pathExtension] lowercaseString]]) {
 		[self encodeFiles:[NSArray arrayWithObject:filename]];
 		return YES;
 	}		

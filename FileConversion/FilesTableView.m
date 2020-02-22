@@ -105,7 +105,6 @@
 
 	[panel setAllowedFileTypes:@[@"app"]];
 	
-	[panel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"app"] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(openWithPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 	[panel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
 		if(NSOKButton == result) {
 			NSString			*path				= [[_filesController selection] valueForKey:@"filename"];

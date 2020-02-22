@@ -29,18 +29,18 @@
 static FileConversionController		*sharedController						= nil;
 
 @interface FileConversionController (Private)
-- (void)	addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (BOOL)	addOneFile:(NSString *)filename atIndex:(NSUInteger)index;
 - (void)	clearFileList;
-- (void)	selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
 @implementation FileConversionController
 
-+ (void) initialize
++ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
-	[self setKeys:[NSArray arrayWithObject:@"metadata.albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtWidth"];
-	[self setKeys:[NSArray arrayWithObject:@"metadata.albumArt"] triggerChangeNotificationsForDependentKey:@"albumArtHeight"];
+	if([key isEqualToString:@"metadata.albumArt"]) {
+		return [NSSet setWithObjects:@"albumArtWidth", @"albumArtHeight", nil];
+	}
+	return nil;
 }
 
 + (FileConversionController *) sharedController
@@ -322,8 +322,14 @@ static FileConversionController		*sharedController						= nil;
 	
 	[panel setAllowsMultipleSelection:YES];
 	[panel setCanChooseDirectories:YES];
-	
-	[panel beginSheetForDirectory:nil file:nil types:getAudioExtensions() modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(addFilesPanelDidEnd:returnCode:contextInfo:) contextInfo:NULL];	
+	[panel setAllowedFileTypes:GetAudioExtensions()];
+
+	[panel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+		if(NSOKButton == result) {
+			for(NSURL *url in [panel URLs])
+				[self addFile:[url path]];
+		}
+	}];
 }
 
 - (IBAction) removeFiles:(id)sender
@@ -343,7 +349,7 @@ static FileConversionController		*sharedController						= nil;
 	NSAutoreleasePool	*pool				= [[NSAutoreleasePool alloc] init];
 	NSAutoreleasePool	*loopPool			= nil;
 	NSFileManager		*manager			= [NSFileManager defaultManager];
-	NSArray				*allowedTypes		= getAudioExtensions();
+	NSArray				*allowedTypes		= GetAudioExtensions();
 	NSMutableArray		*newFiles;
 	NSDictionary		*file;
 	NSArray				*subpaths;
@@ -444,8 +450,18 @@ static FileConversionController		*sharedController						= nil;
 	[panel setAllowsMultipleSelection:NO];
 	[panel setCanChooseDirectories:NO];
 	[panel setCanChooseFiles:YES];
-	
-	[panel beginSheetForDirectory:nil file:nil types:[NSImage imageFileTypes] modalForWindow:[self window] modalDelegate:self didEndSelector:@selector(selectAlbumArtPanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	[panel setAllowedFileTypes:[NSImage imageFileTypes]];
+
+	[panel beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result) {
+	    if(NSOKButton == result) {
+			for(NSURL *url in [panel URLs]) {
+				NSImage *image = [[NSImage alloc] initWithContentsOfURL:url];
+				if(nil != image) {
+					[[_filesController selection] setValue:[image autorelease] forKeyPath:@"metadata.albumArt"];
+				}
+			}
+		}
+	}];
 }
 
 #pragma mark NSTableView Delegate Methods
@@ -473,15 +489,6 @@ static FileConversionController		*sharedController						= nil;
 
 @implementation FileConversionController (Private)
 
-- (void) addFilesPanelDidEnd:(NSOpenPanel *)panel returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	if(NSOKButton == returnCode) {
-		NSArray *filenames = [panel filenames];
-		for(NSString *filename in filenames)
-			[self addFile:filename];
-	}
-}
-
 - (BOOL) addOneFile:(NSString *)filename atIndex:(NSUInteger)index
 {
 	NSImage				*icon			= nil;
@@ -492,7 +499,7 @@ static FileConversionController		*sharedController						= nil;
 		return YES;
 	}
 	// Only accept files with our extensions
-	else if(NO == [getAudioExtensions() containsObject:[[filename pathExtension] lowercaseString]]) {	
+	else if(NO == [GetAudioExtensions() containsObject:[[filename pathExtension] lowercaseString]]) {	
 		return NO;
 	}
 	
@@ -513,7 +520,7 @@ static FileConversionController		*sharedController						= nil;
 	}
 	
 	// Get the icon for the file
-	icon = getIconForFile(filename, NSMakeSize(16, 16));
+	icon = GetIconForFile(filename, NSMakeSize(16, 16));
 	
 	if(NSNotFound == index) {
 		[_filesController addObject:[NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:filename, [[NSFileManager defaultManager] displayNameAtPath:filename], icon, metadata, nil] forKeys:[NSArray arrayWithObjects:@"filename", @"displayName", @"icon", @"metadata", nil]]];
@@ -528,23 +535,6 @@ static FileConversionController		*sharedController						= nil;
 - (void) clearFileList
 {
 	[_filesController removeObjects:[_filesController arrangedObjects]];
-}
-
-- (void) selectAlbumArtPanelDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-    if(NSOKButton == returnCode) {
-		NSArray		*filesToOpen	= [sheet filenames];
-		NSUInteger	count			= [filesToOpen count];
-		NSUInteger	i;
-		NSImage		*image			= nil;
-		
-		for(i = 0; i < count; ++i) {
-			image = [[NSImage alloc] initWithContentsOfFile:[filesToOpen objectAtIndex:i]];
-			if(nil != image) {
-				[[_filesController selection] setValue:[image autorelease] forKeyPath:@"metadata.albumArt"];
-			}
-		}
-	}
 }
 
 @end

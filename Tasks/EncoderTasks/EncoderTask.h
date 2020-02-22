@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,7 +25,7 @@
 @interface EncoderTask : Task <EncoderTaskMethods>
 {
 	NSConnection			*_connection;
-	Class					_encoderClass;
+	Class<EncoderMethods>	_encoderClass;
 	id <EncoderMethods>		_encoder;
 	NSDictionary			*_encoderSettings;
 	NSString				*_encoderSettingsString;

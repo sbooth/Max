@@ -86,7 +86,7 @@
 		
 		// Determine the content type of the ogg stream
 		AudioMetadata	*result		= nil;
-		OggStreamType	type		= oggStreamType(filename);
+		OggStreamType	type		= GetOggStreamType(filename);
 		NSAssert(kOggStreamTypeInvalid != type, @"The file does not appear to be an Ogg file.");
 		NSAssert(kOggStreamTypeUnknown != type, @"The Ogg file's data format was not recognized.");
 		
@@ -198,32 +198,32 @@
 	if(nil == albumArtist)
 		[customPath replaceOccurrencesOfString:@"{albumArtist}" withString:NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"") options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumArtist}" withString:makeStringSafeForFilename(albumArtist) options:0 range:NSMakeRange(0, [customPath length])];					
+		[customPath replaceOccurrencesOfString:@"{albumArtist}" withString:MakeStringSafeForFilename(albumArtist) options:0 range:NSMakeRange(0, [customPath length])];					
 
 	if(nil == albumTitle)
 		[customPath replaceOccurrencesOfString:@"{albumTitle}" withString:@"Unknown Disc" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumTitle}" withString:makeStringSafeForFilename(albumTitle) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumTitle}" withString:MakeStringSafeForFilename(albumTitle) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == albumGenre)
 		[customPath replaceOccurrencesOfString:@"{albumGenre}" withString:@"Unknown Genre" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumGenre}" withString:makeStringSafeForFilename(albumGenre) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumGenre}" withString:MakeStringSafeForFilename(albumGenre) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == albumYear)
 		[customPath replaceOccurrencesOfString:@"{albumDate}" withString:@"Unknown Date" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumDate}" withString:makeStringSafeForFilename(albumYear) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumDate}" withString:MakeStringSafeForFilename(albumYear) options:0 range:NSMakeRange(0, [customPath length])];
 	
 	if(nil == albumComposer)
 		[customPath replaceOccurrencesOfString:@"{albumComposer}" withString:@"Unknown Composer" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumComposer}" withString:makeStringSafeForFilename(albumComposer) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumComposer}" withString:MakeStringSafeForFilename(albumComposer) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == albumComment)
 		[customPath replaceOccurrencesOfString:@"{albumComment}" withString:@"" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{albumComment}" withString:makeStringSafeForFilename(albumComment) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{albumComment}" withString:MakeStringSafeForFilename(albumComment) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackNumber)
 		[customPath replaceOccurrencesOfString:@"{trackNumber}" withString:@"" options:0 range:NSMakeRange(0, [customPath length])];
@@ -238,32 +238,32 @@
 	if(nil == trackArtist)
 		[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:NSLocalizedStringFromTable(@"Unknown Artist", @"CompactDisc", @"") options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:makeStringSafeForFilename(trackArtist) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackArtist}" withString:MakeStringSafeForFilename(trackArtist) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackTitle)
 		[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:NSLocalizedStringFromTable(@"Unknown Track", @"CompactDisc", @"") options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:makeStringSafeForFilename(trackTitle) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackTitle}" withString:MakeStringSafeForFilename(trackTitle) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackGenre)
 		[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:@"Unknown Genre" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:makeStringSafeForFilename(trackGenre) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackGenre}" withString:MakeStringSafeForFilename(trackGenre) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackYear)
 		[customPath replaceOccurrencesOfString:@"{trackDate}" withString:@"Unknown Date" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackDate}" withString:makeStringSafeForFilename(trackYear) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackDate}" withString:MakeStringSafeForFilename(trackYear) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackComposer)
 		[customPath replaceOccurrencesOfString:@"{trackComposer}" withString:@"Unknown Composer" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackComposer}" withString:makeStringSafeForFilename(trackComposer) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackComposer}" withString:MakeStringSafeForFilename(trackComposer) options:0 range:NSMakeRange(0, [customPath length])];
 
 	if(nil == trackComment)
 		[customPath replaceOccurrencesOfString:@"{trackComment}" withString:@"" options:0 range:NSMakeRange(0, [customPath length])];
 	else
-		[customPath replaceOccurrencesOfString:@"{trackComment}" withString:makeStringSafeForFilename(trackComment) options:0 range:NSMakeRange(0, [customPath length])];
+		[customPath replaceOccurrencesOfString:@"{trackComment}" withString:MakeStringSafeForFilename(trackComment) options:0 range:NSMakeRange(0, [customPath length])];
 
 	return [customPath autorelease];
 }
@@ -555,17 +555,17 @@
 		
 		// Album title
 		s = f.tag()->album();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Artist
 		s = f.tag()->artist();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Genre
 		s = f.tag()->genre();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Year
@@ -574,12 +574,12 @@
 		
 		// Comment
 		s = f.tag()->comment();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track title
 		s = f.tag()->title();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track number
@@ -587,8 +587,8 @@
 			[result setTrackNumber:[NSNumber numberWithInt:f.tag()->track()]];
 		
 		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
-			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->lengthInSeconds())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->lengthInSeconds()]];
 		
 		id3v2tag = f.ID3v2Tag();
 		
@@ -929,8 +929,8 @@
 		}
 		
 		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
-			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->lengthInSeconds())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->lengthInSeconds()]];
 	}
 	
 	return [result autorelease];
@@ -1080,8 +1080,8 @@
 		}
 		
 		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
-			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->lengthInSeconds())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->lengthInSeconds()]];
 	}
 	
 	return [result autorelease];
@@ -1231,8 +1231,8 @@
 		}
 		
 		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
-			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->lengthInSeconds())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->lengthInSeconds()]];
 	}
 	
 	return [result autorelease];
@@ -1565,17 +1565,17 @@
 		
 		// Album title
 		s = f.tag()->album();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Artist
 		s = f.tag()->artist();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Genre
 		s = f.tag()->genre();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Year
@@ -1584,12 +1584,12 @@
 		
 		// Comment
 		s = f.tag()->comment();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track title
 		s = f.tag()->title();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track number
@@ -1597,8 +1597,8 @@
 			[result setTrackNumber:[NSNumber numberWithInt:f.tag()->track()]];
 		
 		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
-			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->lengthInSeconds())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->lengthInSeconds()]];
 		
 		id3v1Tag = f.ID3v1Tag();
 		if(NULL != id3v1Tag) {
@@ -1630,17 +1630,17 @@
 		
 		// Album title
 		s = f.tag()->album();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Artist
 		s = f.tag()->artist();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Genre
 		s = f.tag()->genre();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Year
@@ -1649,12 +1649,12 @@
 		
 		// Comment
 		s = f.tag()->comment();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track title
 		s = f.tag()->title();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track number
@@ -1662,8 +1662,8 @@
 			[result setTrackNumber:[NSNumber numberWithInt:f.tag()->track()]];
 		
 		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
-			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->lengthInSeconds())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->lengthInSeconds()]];
 		
 		// Extract composer if present
 		TagLib::ID3v2::FrameList frameList = f.tag()->frameListMap()["TCOM"];
@@ -1785,17 +1785,17 @@
 		
 		// Album title
 		s = f.tag()->album();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Artist
 		s = f.tag()->artist();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumArtist:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Genre
 		s = f.tag()->genre();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumGenre:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Year
@@ -1804,12 +1804,12 @@
 		
 		// Comment
 		s = f.tag()->comment();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setAlbumComment:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track title
 		s = f.tag()->title();
-		if(false == s.isNull())
+		if(!s.isEmpty())
 			[result setTrackTitle:[NSString stringWithUTF8String:s.toCString(true)]];
 		
 		// Track number
@@ -1817,8 +1817,8 @@
 			[result setTrackNumber:[NSNumber numberWithInt:f.tag()->track()]];
 		
 		// Length
-		if(NULL != f.audioProperties() && 0 != f.audioProperties()->length())
-			[result setLength:[NSNumber numberWithInt:f.audioProperties()->length()]];
+		if(NULL != f.audioProperties() && 0 != f.audioProperties()->lengthInSeconds())
+			[result setLength:[NSNumber numberWithInt:f.audioProperties()->lengthInSeconds()]];
 		
 		// Extract composer if present
 		TagLib::ID3v2::FrameList frameList = f.tag()->frameListMap()["TCOM"];

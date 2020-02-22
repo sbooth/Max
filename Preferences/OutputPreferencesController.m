@@ -50,8 +50,6 @@ enum {
 @interface OutputPreferencesController (Private)
 - (void)	updateOutputDirectoryMenuItemImage;
 - (void)	updateTemporaryDirectoryMenuItemImage;
-- (void)	selectOutputDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-- (void)	selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 @end
 
 @implementation OutputPreferencesController
@@ -107,7 +105,28 @@ enum {
 			[panel setCanCreateDirectories:YES];
 			[panel setCanChooseFiles:NO];
 
-			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(selectOutputDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
+			[panel beginSheetModalForWindow:[[PreferencesController sharedPreferences] window] completionHandler:^(NSModalResponse result) {
+				[panel orderOut:self];
+
+				switch(result) {
+
+					case NSOKButton:
+						for(NSURL *url in [panel URLs]) {
+							[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"convertInPlace"];
+							[[NSUserDefaults standardUserDefaults] setObject:[[url path] stringByAbbreviatingWithTildeInPath] forKey:@"outputDirectory"];
+							[self updateOutputDirectoryMenuItemImage];
+						}
+
+						[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];
+						break;
+
+					case NSCancelButton:
+						[self updateOutputDirectoryMenuItemImage];
+						[_outputDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"] ? kSameAsSourceFileMenuItemTag : kCurrentDirectoryMenuItemTag)];
+						break;
+				}
+			}];
+
 			break;
 			
 		case kSameAsSourceFileMenuItemTag:
@@ -201,8 +220,27 @@ enum {
 			[panel setCanChooseDirectories:YES];
 			[panel setCanCreateDirectories:YES];
 			[panel setCanChooseFiles:NO];
-			
-			[panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(selectTemporaryDirectoryDidEnd:returnCode:contextInfo:) contextInfo:nil];
+
+			[panel beginSheetModalForWindow:[[PreferencesController sharedPreferences] window] completionHandler:^(NSModalResponse result) {
+				[panel orderOut:self];
+
+				switch(result) {
+
+					case NSOKButton:
+						for(NSURL *url in [panel URLs]) {
+							[[NSUserDefaults standardUserDefaults] setObject:[[url path] stringByAbbreviatingWithTildeInPath] forKey:@"temporaryDirectory"];
+							[self updateTemporaryDirectoryMenuItemImage];
+						}
+
+						[_temporaryDirectoryPopUpButton selectItemWithTag:kCurrentTempDirectoryMenuItemTag];
+						break;
+
+					case NSCancelButton:
+						[_temporaryDirectoryPopUpButton selectItemWithTag:(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];
+						break;
+				}
+			}];
+
 			break;
 	}
 }
@@ -228,7 +266,7 @@ enum {
 	
 	// Set the menu item image for the output directory
 	path		= [[[NSUserDefaults standardUserDefaults] stringForKey:@"outputDirectory"] stringByExpandingTildeInPath];
-	image		= getIconForFile(path, NSMakeSize(16, 16));
+	image		= GetIconForFile(path, NSMakeSize(16, 16));
 	
 	[menuItem setTitle:[[NSFileManager defaultManager] displayNameAtPath:path]];
 	[menuItem setImage:image];
@@ -242,7 +280,7 @@ enum {
 	
 	// Set the menu item image for the output directory
 	path		= [[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"];
-	image		= getIconForFile(path, NSMakeSize(16, 16));
+	image		= GetIconForFile(path, NSMakeSize(16, 16));
 	menuItem	= [_temporaryDirectoryPopUpButton itemAtIndex:[_temporaryDirectoryPopUpButton indexOfItemWithTag:kCurrentTempDirectoryMenuItemTag]];
 	
 	if(nil != path) {
@@ -253,66 +291,6 @@ enum {
 		[menuItem setTitle:NSLocalizedStringFromTable(@"Not Specified", @"FileConversion", @"")];
 		[menuItem setImage:nil];
 	}
-}
-
-- (void) selectOutputDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	NSArray			*filesToOpen;
-	NSString		*dirname;
-	NSUInteger		count, i;
-
-	[sheet orderOut:self];
-
-	switch(returnCode) {
-		
-		case NSOKButton:
-			filesToOpen		= [sheet filenames];
-			count			= [filesToOpen count];
-			
-			for(i = 0; i < count; ++i) {
-				dirname = [filesToOpen objectAtIndex:i];
-				[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"convertInPlace"];
-				[[NSUserDefaults standardUserDefaults] setObject:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"outputDirectory"];
-				[self updateOutputDirectoryMenuItemImage];
-			}
-				
-			[_outputDirectoryPopUpButton selectItemWithTag:kCurrentDirectoryMenuItemTag];	
-			break;
-			
-		case NSCancelButton:
-			[self updateOutputDirectoryMenuItemImage];
-			[_outputDirectoryPopUpButton selectItemWithTag:([[NSUserDefaults standardUserDefaults] boolForKey:@"convertInPlace"] ? kSameAsSourceFileMenuItemTag : kCurrentDirectoryMenuItemTag)];	
-			break;
-	}				
-}
-
-- (void) selectTemporaryDirectoryDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	NSArray			*filesToOpen;
-	NSString		*dirname;
-	NSUInteger		count, i;
-	
-	[sheet orderOut:self];
-	
-	switch(returnCode) {
-		
-		case NSOKButton:
-			filesToOpen		= [sheet filenames];
-			count			= [filesToOpen count];
-			
-			for(i = 0; i < count; ++i) {
-				dirname = [filesToOpen objectAtIndex:i];
-				[[NSUserDefaults standardUserDefaults] setObject:[dirname stringByAbbreviatingWithTildeInPath] forKey:@"temporaryDirectory"];
-				[self updateTemporaryDirectoryMenuItemImage];
-			}
-				
-			[_temporaryDirectoryPopUpButton selectItemWithTag:kCurrentTempDirectoryMenuItemTag];	
-			break;
-			
-		case NSCancelButton:
-			[_temporaryDirectoryPopUpButton selectItemWithTag:(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"temporaryDirectory"] ? kCurrentTempDirectoryMenuItemTag : kDefaultTempDirectoryMenuItemTag)];
-			break;
-	}	
 }
 
 @end

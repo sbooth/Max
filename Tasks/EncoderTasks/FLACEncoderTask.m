@@ -113,35 +113,35 @@
 		// Album title
 		album = [metadata albumTitle];
 		if(nil != album)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"ALBUM"], album);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"ALBUM"], album);
 		
 		// Artist
 		artist = [metadata trackArtist];
 		if(nil == artist)
 			artist = [metadata albumArtist];
 		if(nil != artist)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"ARTIST"], artist);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"ARTIST"], artist);
 
 		// Composer
 		composer = [metadata trackComposer];
 		if(nil == composer)
 			composer = [metadata albumComposer];
 		if(nil != composer)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMPOSER"], composer);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMPOSER"], composer);
 		
 		// Genre
 		genre = [metadata trackGenre];
 		if(nil == genre)
 			genre = [metadata albumGenre];
 		if(nil != genre)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"GENRE"], genre);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"GENRE"], genre);
 		
 		// Year
 		year = [metadata trackDate];
 		if(nil == year)
 			year = [metadata albumDate];
 		if(nil != year)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DATE"], year);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"DATE"], year);
 		
 		// Comment
 		comment			= [metadata albumComment];
@@ -151,80 +151,80 @@
 		if([[[[self taskInfo] settings] objectForKey:@"saveSettingsInComment"] boolValue])
 			comment = (nil == comment ? [self encoderSettingsString] : [comment stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self encoderSettingsString]]]);
 		if(nil != comment)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DESCRIPTION"], comment);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"DESCRIPTION"], comment);
 		
 		// Track title
 		title = [metadata trackTitle];
 		if(nil != title)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TITLE"], title);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"TITLE"], title);
 		
 		// Track number
 		trackNumber = [metadata trackNumber];
 		if(nil != trackNumber)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKNUMBER"], [trackNumber stringValue]);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKNUMBER"], [trackNumber stringValue]);
 
 		// Total tracks
 		trackTotal = [metadata trackTotal];
 		if(nil != trackTotal)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKTOTAL"], [trackTotal stringValue]);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"TRACKTOTAL"], [trackTotal stringValue]);
 
 		// Compilation
 		compilation = [metadata compilation];
 		if(nil != compilation)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMPILATION"], [compilation stringValue]);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"COMPILATION"], [compilation stringValue]);
 		
 		// Disc number
 		discNumber = [metadata discNumber];
 		if(nil != discNumber)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCNUMBER"], [discNumber stringValue]);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCNUMBER"], [discNumber stringValue]);
 		
 		// Discs in set
 		discTotal = [metadata discTotal];
 		if(nil != discTotal)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCTOTAL"], [discTotal stringValue]);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"DISCTOTAL"], [discTotal stringValue]);
 		
 		// ISRC
 		isrc = [metadata ISRC];
 		if(nil != isrc)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"ISRC"], isrc);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"ISRC"], isrc);
 
 		// MCN
 		mcn = [metadata MCN];
 		if(nil != mcn)
-			addVorbisComment(block, [AudioMetadata customizeFLACTag:@"MCN"], mcn);
+			AddVorbisComment(block, [AudioMetadata customizeFLACTag:@"MCN"], mcn);
 		
 		// MusicBrainz Track Id
 		musicbrainzTrackId = [metadata musicbrainzTrackId];
 		if(nil != musicbrainzTrackId)
-			addVorbisComment(block, @"MUSICBRAINZ_TRACKID", musicbrainzTrackId);
+			AddVorbisComment(block, @"MUSICBRAINZ_TRACKID", musicbrainzTrackId);
 
 		// MusicBrainz Album Id
 		musicbrainzAlbumId = [metadata musicbrainzAlbumId];
 		if(nil != musicbrainzAlbumId)
-			addVorbisComment(block, @"MUSICBRAINZ_ALBUMID", musicbrainzAlbumId);
+			AddVorbisComment(block, @"MUSICBRAINZ_ALBUMID", musicbrainzAlbumId);
 		
 		// MusicBrainz Artist Id
 		musicbrainzArtistId = [metadata musicbrainzArtistId];
 		if(nil != musicbrainzArtistId)
-			addVorbisComment(block, @"MUSICBRAINZ_ARTISTID", musicbrainzArtistId);
+			AddVorbisComment(block, @"MUSICBRAINZ_ARTISTID", musicbrainzArtistId);
 		
 		// MusicBrainz Album Artist Id
 		musicbrainzAlbumArtistId = [metadata musicbrainzAlbumArtistId];
 		if(nil != musicbrainzAlbumArtistId)
-			addVorbisComment(block, @"MUSICBRAINZ_ALBUMARTISTID", musicbrainzAlbumArtistId);
+			AddVorbisComment(block, @"MUSICBRAINZ_ALBUMARTISTID", musicbrainzAlbumArtistId);
 		
 		// MusicBrainz Disc Id
 		musicbrainzDiscId = [metadata discId];
 		if(nil != musicbrainzDiscId)
-			addVorbisComment(block, @"MUSICBRAINZ_DISCID", musicbrainzDiscId);
+			AddVorbisComment(block, @"MUSICBRAINZ_DISCID", musicbrainzDiscId);
 
 		// Encoded by
 		bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
 		versionString = [NSString stringWithFormat:@"Max %@", bundleVersion];
-		addVorbisComment(block, @"ENCODER", versionString);
+		AddVorbisComment(block, @"ENCODER", versionString);
 
 		// Encoder settings
-		addVorbisComment(block, @"ENCODING", [self encoderSettingsString]);
+		AddVorbisComment(block, @"ENCODING", [self encoderSettingsString]);
 		
 		// Add album art if present
 		if(nil != [metadata albumArt]) {

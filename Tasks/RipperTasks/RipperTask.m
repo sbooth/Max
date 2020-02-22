@@ -104,7 +104,7 @@
 - (void) ripperReady:(id)anObject
 {
     [anObject setProtocolForProxy:@protocol(RipperMethods)];
-	[self setOutputFilename:generateTemporaryFilename([[[self taskInfo] settings] objectForKey:@"temporaryDirectory"], @"caf")];
+	[self setOutputFilename:GenerateTemporaryFilename([[[self taskInfo] settings] objectForKey:@"temporaryDirectory"], @"caf")];
 	[self touchOutputFile];
 	[anObject ripToFile:[self outputFilename]];
 }

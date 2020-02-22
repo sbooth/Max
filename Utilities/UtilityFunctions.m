@@ -37,7 +37,7 @@ static NSArray				*sLibsndfileExtensions	= nil;
 static NSArray				*sBuiltinExtensions		= nil;
 
 NSString *
-getApplicationDataDirectory()
+GetApplicationDataDirectory()
 {
 	@synchronized(sDataDirectory) {
 		if(nil == sDataDirectory) {
@@ -62,7 +62,7 @@ getApplicationDataDirectory()
 }
 
 void 
-createDirectoryStructure(NSString *path)
+CreateDirectoryStructure(NSString *path)
 {
 	NSString		*pathPart;
 	NSArray			*pathComponents		= [path pathComponents];
@@ -72,29 +72,29 @@ createDirectoryStructure(NSString *path)
 
 		// Accept a '/' as the first path
 		if(NO == [[pathComponents objectAtIndex:0] isEqualToString:@"/"]) {
-			pathPart = makeStringSafeForFilename([pathComponents objectAtIndex:0]);
+			pathPart = MakeStringSafeForFilename([pathComponents objectAtIndex:0]);
 		}
 		else {
 			pathPart = [pathComponents objectAtIndex:0];
 		}		
-		validateAndCreateDirectory(pathPart);
+		ValidateAndCreateDirectory(pathPart);
 		
 		// Iterate through all the components
 		for(NSUInteger i = 1; i < directoryCount - 1; ++i) {
-			pathPart = [NSString stringWithFormat:@"%@/%@", pathPart, makeStringSafeForFilename([pathComponents objectAtIndex:i])];				
-			validateAndCreateDirectory(pathPart);
+			pathPart = [NSString stringWithFormat:@"%@/%@", pathPart, MakeStringSafeForFilename([pathComponents objectAtIndex:i])];				
+			ValidateAndCreateDirectory(pathPart);
 		}
 		
 		// Ignore trailing '/'
 		if(NO == [[pathComponents objectAtIndex:directoryCount - 1] isEqualToString:@"/"]) {
-			pathPart = [NSString stringWithFormat:@"%@/%@", pathPart, makeStringSafeForFilename([pathComponents objectAtIndex:directoryCount - 1])];
-			validateAndCreateDirectory(pathPart);
+			pathPart = [NSString stringWithFormat:@"%@/%@", pathPart, MakeStringSafeForFilename([pathComponents objectAtIndex:directoryCount - 1])];
+			ValidateAndCreateDirectory(pathPart);
 		}
 	}
 }
 
 NSString * 
-makeStringSafeForFilename(NSString *string)
+MakeStringSafeForFilename(NSString *string)
 {
 	NSCharacterSet		*characterSet		= [NSCharacterSet characterSetWithCharactersInString:@"\"\\/<>?:*|"];
 	NSMutableString		*result				= [NSMutableString stringWithCapacity:[string length]];
@@ -112,7 +112,7 @@ makeStringSafeForFilename(NSString *string)
 }
 
 NSString * 
-generateUniqueFilename(NSString *basename, NSString *extension)
+GenerateUniqueFilename(NSString *basename, NSString *extension)
 {
 	NSFileManager		*manager			= [NSFileManager defaultManager];
 	unsigned			num					= 1;
@@ -131,7 +131,7 @@ generateUniqueFilename(NSString *basename, NSString *extension)
 }
 
 void
-validateAndCreateDirectory(NSString *path)
+ValidateAndCreateDirectory(NSString *path)
 {
 	NSFileManager		*manager			= [NSFileManager defaultManager];
 	BOOL				isDir;
@@ -148,7 +148,7 @@ validateAndCreateDirectory(NSString *path)
 }
 
 NSArray * 
-getBuiltinExtensions()
+GetBuiltinExtensions()
 {
 	@synchronized(sBuiltinExtensions) {
 		if(nil == sBuiltinExtensions) {
@@ -161,7 +161,7 @@ getBuiltinExtensions()
 }
 
 NSArray *
-getLibsndfileExtensions()
+GetLibsndfileExtensions()
 {
 	SF_FORMAT_INFO			formatInfo;
 	SF_INFO					info;
@@ -193,13 +193,13 @@ getLibsndfileExtensions()
 }
 
 NSArray *
-getAudioExtensions()
+GetAudioExtensions()
 {
 	@synchronized(sAudioExtensions) {
 		if(nil == sAudioExtensions) {
 			sAudioExtensions = [NSMutableArray arrayWithArray:GetCoreAudioExtensions()];
-			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:getLibsndfileExtensions()];
-			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:getBuiltinExtensions()];
+			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:GetLibsndfileExtensions()];
+			[(NSMutableArray *)sAudioExtensions addObjectsFromArray:GetBuiltinExtensions()];
 			[sAudioExtensions retain];
 		}
 	}
@@ -208,7 +208,7 @@ getAudioExtensions()
 }
 
 NSString *
-getID3v2Timestamp()
+GetID3v2Timestamp()
 {
 	@synchronized(sDateFormatter) {
 		if(nil == sDateFormatter) {
@@ -222,7 +222,7 @@ getID3v2Timestamp()
 }
 
 void
-addVorbisComment(FLAC__StreamMetadata		*block,
+AddVorbisComment(FLAC__StreamMetadata		*block,
 				 NSString					*key,
 				 NSString					*value)
 {
@@ -237,7 +237,7 @@ addVorbisComment(FLAC__StreamMetadata		*block,
 }
 
 OggStreamType 
-oggStreamType(NSString *filename)
+GetOggStreamType(NSString *filename)
 {
 	OggStreamType			streamType				= kOggStreamTypeInvalid;
 	
@@ -345,13 +345,13 @@ oggStreamType(NSString *filename)
 }
 
 NSData *
-getPNGDataForImage(NSImage *image)
+GetPNGDataForImage(NSImage *image)
 {
-	return getBitmapDataForImage(image, NSPNGFileType); 
+	return GetBitmapDataForImage(image, NSPNGFileType); 
 }
 
 NSData *
-getBitmapDataForImage(NSImage					*image,
+GetBitmapDataForImage(NSImage					*image,
 					  NSBitmapImageFileType		type)
 {
 	NSCParameterAssert(nil != image);
@@ -380,7 +380,7 @@ getBitmapDataForImage(NSImage					*image,
 }
 
 NSImage *
-getIconForFile(NSString *filename, NSSize iconSize)
+GetIconForFile(NSString *filename, NSSize iconSize)
 {
 	// Thanks to Matt Neuberg <matt@tidbits.com> for this
 	NSImage			*icon			= nil;
@@ -417,7 +417,7 @@ getIconForFile(NSString *filename, NSSize iconSize)
 }
 
 void
-addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
+AddFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 {
 	NSCParameterAssert(nil != filename);
 	NSCParameterAssert(nil != metadata);
@@ -483,7 +483,7 @@ addFileToiTunesLibrary(NSString *filename, AudioMetadata *metadata)
 }
 
 NSString *
-generateTemporaryFilename(NSString *directory, NSString *extension)
+GenerateTemporaryFilename(NSString *directory, NSString *extension)
 {
 	NSString				*pathString;
 	OSStatus				result;
@@ -519,7 +519,7 @@ generateTemporaryFilename(NSString *directory, NSString *extension)
 }
 
 BOOL
-fileContainsEmbeddedCueSheet(NSString *pathname)
+FileContainsEmbeddedCueSheet(NSString *pathname)
 {
 	NSCParameterAssert(nil != pathname);
 	

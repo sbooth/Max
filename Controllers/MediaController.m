@@ -212,8 +212,8 @@ static MediaController *sharedController = nil;
 		[LogController logMessage:[NSString stringWithFormat:@"Found CD on device %@", deviceName]];
 		
 		disc		= [[[CompactDisc alloc] initWithDeviceName:deviceName] autorelease];
-		filename	= [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [disc discID]];
-		oldFilename	= [NSString stringWithFormat:@"%@/0x%@.cdinfo", getApplicationDataDirectory(), [disc freeDBDiscID]];
+		filename	= [NSString stringWithFormat:@"%@/%@.cdinfo", GetApplicationDataDirectory(), [disc discID]];
+		oldFilename	= [NSString stringWithFormat:@"%@/0x%@.cdinfo", GetApplicationDataDirectory(), [disc freeDBDiscID]];
 		url			= [NSURL fileURLWithPath:filename];
 
 		// If a .cdinfo file exists with the old FreeDB ID naming scheme, rename it

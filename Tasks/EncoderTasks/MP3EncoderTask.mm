@@ -235,7 +235,7 @@
 	// Album art
 	albumArt = [metadata albumArt];
 	if(nil != albumArt) {
-		data			= getPNGDataForImage(albumArt); 
+		data			= GetPNGDataForImage(albumArt); 
 		pictureFrame	= new TagLib::ID3v2::AttachedPictureFrame();
 		NSAssert(NULL != pictureFrame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
@@ -323,7 +323,7 @@
 	
 	// Encoding time
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TDEN", TagLib::String::Latin1);
-	timestamp = getID3v2Timestamp();
+	timestamp = GetID3v2Timestamp();
 	NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 	frame->setText(TagLib::String([timestamp UTF8String], TagLib::String::UTF8));
@@ -331,7 +331,7 @@
 	
 	// Tagging time
 	frame = new TagLib::ID3v2::TextIdentificationFrame("TDTG", TagLib::String::Latin1);
-	timestamp = getID3v2Timestamp();
+	timestamp = GetID3v2Timestamp();
 	NSAssert(NULL != frame, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 
 	frame->setText(TagLib::String([timestamp UTF8String], TagLib::String::UTF8));

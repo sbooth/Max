@@ -43,13 +43,13 @@
 		
 	// Create the source based on the file's extension
 	NSArray			*coreAudioExtensions	= GetCoreAudioExtensions();
-	NSArray			*libsndfileExtensions	= getLibsndfileExtensions();
+	NSArray			*libsndfileExtensions	= GetLibsndfileExtensions();
 	NSString		*extension				= [[filename pathExtension] lowercaseString];
 
 	// Determine which type of converter to use and create it
 	if([extension isEqualToString:@"ogg"] || [extension isEqualToString:@"oga"]) {
 		// Determine the content type of the ogg stream
-		OggStreamType type = oggStreamType(filename);
+		OggStreamType type = GetOggStreamType(filename);
 		NSAssert(kOggStreamTypeInvalid != type, @"The file does not appear to be an Ogg file.");
 		NSAssert(kOggStreamTypeUnknown != type, @"The Ogg file's data format was not recognized.");
 		
@@ -57,6 +57,7 @@
 			case kOggStreamTypeVorbis:		result = [[OggVorbisDecoder alloc] initWithFilename:filename];		break;
 			case kOggStreamTypeFLAC:		result = [[OggFLACDecoder alloc] initWithFilename:filename];		break;
 			case kOggStreamTypeSpeex:		result = [[OggSpeexDecoder alloc] initWithFilename:filename];		break;
+			default:																							break;
 		}
 	}
 	else if([extension isEqualToString:@"flac"])

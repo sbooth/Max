@@ -123,7 +123,7 @@ static NSString			*ClearLogToolbarItemIdentifier		= @"org.sbooth.Max.Log.Toolbar
 	[panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
 		if(NSOKButton == result) {
 			@synchronized(self) {
-				NSString						*filename		= [panel filename];
+				NSString						*filename		= [[panel URL] path];
 				NSMutableAttributedString		*logMessage		= [[NSMutableAttributedString alloc] init];
 
 				// Build the strings

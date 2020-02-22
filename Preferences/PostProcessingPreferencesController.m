@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +21,6 @@
 #import "UtilityFunctions.h"
 
 @interface PostProcessingPreferencesController (Private)
-- (void)	addPostProcessingApplicationDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)	synchronizeDefaults;
 @end
 
@@ -48,7 +45,7 @@
 	applications = [[NSUserDefaults standardUserDefaults] stringArrayForKey:@"postProcessingApplications"];
 	for(i = 0; i < [applications count]; ++i) {
 		applicationPath		= [applications objectAtIndex:i];
-		applicationEntry	= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil] 
+		applicationEntry	= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], GetIconForFile(applicationPath, NSMakeSize(16, 16)), nil] 
 																 forKeys:[NSArray arrayWithObjects:@"path", @"displayName", @"icon", nil]];
 		
 		[_postProcessingActionsController addObject:applicationEntry];
@@ -65,8 +62,29 @@
 	NSOpenPanel		*panel		= [NSOpenPanel openPanel];
 
 	[panel setAllowsMultipleSelection:YES];
-	
-	[panel beginSheetForDirectory:nil file:nil types:[NSArray arrayWithObject:@"app"] modalForWindow:[[PreferencesController sharedPreferences] window] modalDelegate:self didEndSelector:@selector(addPostProcessingApplicationDidEnd:returnCode:contextInfo:) contextInfo:nil];
+	[panel setAllowedFileTypes:@[@"app"]];
+
+	[panel beginSheetModalForWindow:[[PreferencesController sharedPreferences] window] completionHandler:^(NSModalResponse result) {
+		if(NSOKButton == result) {
+			NSArray				*applications		= [panel URLs];
+			NSDictionary		*application		= nil;
+			NSString			*applicationPath	= nil;
+			unsigned			i;
+
+			for(i = 0; i < [applications count]; ++i) {
+				applicationPath = [[applications objectAtIndex:i] path];
+				application		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], GetIconForFile(applicationPath, NSMakeSize(16, 16)), nil]
+																	 forKeys:[NSArray arrayWithObjects:@"path", @"displayName", @"icon", nil]];
+
+				// Don't add existing items
+				if(0 == [[[_postProcessingActionsController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path == %@", applicationPath]] count]) {
+					[_postProcessingActionsController addObject:application];
+				}
+			}
+		}
+
+		[self synchronizeDefaults];
+	}];
 }
 
 - (IBAction) removePostProcessingApplication:(id)sender
@@ -78,29 +96,6 @@
 @end
 
 @implementation PostProcessingPreferencesController (Private)
-
-- (void) addPostProcessingApplicationDidEnd:(NSOpenPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	if(NSOKButton == returnCode) {
-		NSArray				*applications		= [sheet filenames];
-		NSDictionary		*application		= nil;
-		NSString			*applicationPath	= nil;
-		unsigned			i;
-		
-		for(i = 0; i < [applications count]; ++i) {
-			applicationPath = [applications objectAtIndex:i];
-			application		= [NSMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:applicationPath, [[NSFileManager defaultManager] displayNameAtPath:applicationPath], getIconForFile(applicationPath, NSMakeSize(16, 16)), nil]
-																 forKeys:[NSArray arrayWithObjects:@"path", @"displayName", @"icon", nil]];
-			
-			// Don't add existing items
-			if(0 == [[[_postProcessingActionsController arrangedObjects] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"path == %@", applicationPath]] count]) {
-				[_postProcessingActionsController addObject:application];
-			}			
-		}
-	}
-	
-	[self synchronizeDefaults];
-}
 
 - (void) synchronizeDefaults
 {

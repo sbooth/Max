@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,11 +21,12 @@
 #import "Task.h"
 #import "RipperTaskMethods.h"
 #import "Track.h"
+#import "RipperMethods.h"
 
 @interface RipperTask : Task <RipperTaskMethods>
 {
 	NSConnection			*_connection;
-	Class					_ripperClass;
+	Class<RipperMethods>	_ripperClass;
 	NSArray					*_tracks;
 	NSMutableArray			*_sectors;
 	NSString				*_deviceName;

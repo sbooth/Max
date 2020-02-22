@@ -216,7 +216,7 @@
 		[result setValue:[self discID] forKey:@"discID"];
 		
 		if(nil != [self albumArt]) {
-			data = getPNGDataForImage([self albumArt]); 
+			data = GetPNGDataForImage([self albumArt]); 
 			[result setValue:data forKey:@"albumArt"];
 			[result setValue:[self albumArtDownloadDate] forKey:@"albumArtDownloadDate"];
 		}

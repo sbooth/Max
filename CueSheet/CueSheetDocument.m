@@ -877,7 +877,7 @@
 
 - (void) readFromCDInfoFileIfPresent
 {    	
-	NSString *filename = [NSString stringWithFormat:@"%@/%@.cdinfo", getApplicationDataDirectory(), [self discID]];
+	NSString *filename = [NSString stringWithFormat:@"%@/%@.cdinfo", GetApplicationDataDirectory(), [self discID]];
 	NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:filename];
 	if(nil != dictionary) {
 		NSUInteger i;

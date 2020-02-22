@@ -146,7 +146,7 @@ static int writeWavPackBlock(void *wv_id, void *data, int32_t bcount)
 		// Open the correction file
 		cfd = -1;
 		if(_flags & CONFIG_CREATE_WVC) {
-			cfd = open([generateUniqueFilename([filename stringByDeletingPathExtension], @"wvc") fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+			cfd = open([GenerateUniqueFilename([filename stringByDeletingPathExtension], @"wvc") fileSystemRepresentation], O_WRONLY | O_CREAT | O_EXCL | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 			NSAssert(-1 != cfd, NSLocalizedStringFromTable(@"Unable to create the output file.", @"Exceptions", @""));
 		}
 		
