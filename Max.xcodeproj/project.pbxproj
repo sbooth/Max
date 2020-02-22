@@ -44,6 +44,7 @@
 		326D257812DE4D0500767B04 /* taglib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254212DE4CF800767B04 /* taglib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		326D257912DE4D0500767B04 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254412DE4CF800767B04 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		326D257A12DE4D0500767B04 /* wavpack.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 326D254612DE4CF800767B04 /* wavpack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		328272772401AD50002ED5BD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 328272762401AD4F002ED5BD /* README.md */; };
 		32A145131046DB920020238F /* CoreAudioEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145121046DB920020238F /* CoreAudioEncoderTask.mm */; };
 		32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145201046DD100020238F /* LibsndfileEncoderTask.mm */; };
 		32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A1478F104742030020238F /* NSString+URLEscapingMethods.m */; };
@@ -314,6 +315,7 @@
 		326D254212DE4CF800767B04 /* taglib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = taglib.framework; path = Frameworks/taglib.framework; sourceTree = "<group>"; };
 		326D254412DE4CF800767B04 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = Frameworks/vorbis.framework; sourceTree = "<group>"; };
 		326D254612DE4CF800767B04 /* wavpack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = wavpack.framework; path = Frameworks/wavpack.framework; sourceTree = "<group>"; };
+		328272762401AD4F002ED5BD /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		32A145121046DB920020238F /* CoreAudioEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoreAudioEncoderTask.mm; sourceTree = "<group>"; };
 		32A145201046DD100020238F /* LibsndfileEncoderTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibsndfileEncoderTask.mm; sourceTree = "<group>"; };
 		32A1478E104742030020238F /* NSString+URLEscapingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+URLEscapingMethods.h"; path = "AlbumArt/NSString+URLEscapingMethods.h"; sourceTree = "<group>"; };
@@ -893,6 +895,8 @@
 		29B97314FDCFA39411CA2CEA /* cocoa test */ = {
 			isa = PBXGroup;
 			children = (
+				328272762401AD4F002ED5BD /* README.md */,
+				8CB6E20008DACB8100345B8F /* COPYING.txt */,
 				8C53022A0A05D6D800890518 /* Drive */,
 				8C9451350A12E4D700C8DCAE /* CompactDisc */,
 				8C94512C0A12E45B00C8DCAE /* CueSheet */,
@@ -939,7 +943,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8CB6E20008DACB8100345B8F /* COPYING.txt */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				32A147AF104745BD0020238F /* dsa_pub.pem */,
@@ -1592,6 +1595,7 @@
 				32C614E712E80CB800F714C9 /* CoreAudioSettingsSheet.xib in Resources */,
 				32C614E812E80CB800F714C9 /* CueSheetDocument.xib in Resources */,
 				32C614E912E80CB800F714C9 /* Encoder.xib in Resources */,
+				328272772401AD50002ED5BD /* README.md in Resources */,
 				32C614EA12E80CB800F714C9 /* FileConversion.xib in Resources */,
 				32C614EB12E80CB800F714C9 /* FLACSettingsSheet.xib in Resources */,
 				32C614EC12E80CB800F714C9 /* Formats.xib in Resources */,
