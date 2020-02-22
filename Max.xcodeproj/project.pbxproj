@@ -498,7 +498,6 @@
 		32C6159112E80D3300F714C9 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Spanish; path = Spanish.lproj/TaggingPreferences.xib; sourceTree = "<group>"; };
 		32C6159212E80D3300F714C9 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Spanish; path = Spanish.lproj/WavPackSettingsSheet.xib; sourceTree = "<group>"; };
 		32C8F0ED10632AB0004AB74F /* GaplessUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GaplessUtilities.m; sourceTree = "<group>"; };
-		32CA4F630368D1EE00C91783 /* Max_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Max_Prefix.pch; sourceTree = "<group>"; };
 		8C0406480B5C582E00648158 /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nb_NO; path = nb_NO.lproj/Credits.rtf; sourceTree = "<group>"; };
 		8C0406490B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; lineEnding = 0; name = nb_NO; path = nb_NO.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8C04064A0B5C584000648158 /* nb_NO */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = nb_NO; path = nb_NO.lproj/Exceptions.strings; sourceTree = "<group>"; };
@@ -932,7 +931,6 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* Max_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -2318,7 +2316,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Frameworks\"",
 				);
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Info.plist;
@@ -2386,7 +2383,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -2421,7 +2417,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
