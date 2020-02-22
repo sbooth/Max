@@ -1,6 +1,4 @@
 /*
- *  $Id$
- *
  *  Copyright (C) 2005 - 2009 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
