@@ -1,7 +1,5 @@
 /*
- *  $Id$
- *
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,8 +24,7 @@
 @interface FileConversionController : NSWindowController <AlbumArtMethods>
 {
 	IBOutlet FileArrayController	*_filesController;
-	IBOutlet NSDrawer				*_metadataDrawer;
-	IBOutlet NSDrawer				*_artDrawer;
+	IBOutlet NSPanel				*_metadataPanel;
 	IBOutlet NSTableView			*_filesTableView;
 	IBOutlet NSTextField			*_trackNumberTextField;
 	IBOutlet NSTextField			*_trackTotalTextField;
@@ -44,8 +41,7 @@
 - (BOOL)							encodeAllowed;
 - (IBAction)						encode:(id)sender;
 
-- (IBAction)						toggleTrackInformation:(id)sender;
-- (IBAction)						toggleAlbumArt:(id)sender;
+- (IBAction)						toggleMetadataInspectorPanel:(id)sender;
 
 - (IBAction)						addFiles:(id)sender;
 - (IBAction)						removeFiles:(id)sender;

@@ -225,12 +225,7 @@ DQ
                             </menuItem>
                             <menuItem title="Titelinformationen" tag="2" keyEquivalent="i" id="895">
                                 <connections>
-                                    <action selector="toggleTrackInformation:" target="-1" id="899"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="CD-Cover" keyEquivalent="A" id="896">
-                                <connections>
-                                    <action selector="toggleAlbumArt:" target="-1" id="900"/>
+                                    <action selector="toggleMetadataInspectorPanel:" target="-1" id="G2d-lu-RIB"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="893">

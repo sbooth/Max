@@ -228,14 +228,9 @@ DQ
                             <menuItem isSeparatorItem="YES" id="919">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Track Information" tag="2" keyEquivalent="i" id="921">
+                            <menuItem title="Metadata Inspector" tag="2" keyEquivalent="i" id="921">
                                 <connections>
-                                    <action selector="toggleTrackInformation:" target="-1" id="924"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Album Art" keyEquivalent="A" id="920">
-                                <connections>
-                                    <action selector="toggleAlbumArt:" target="-1" id="925"/>
+                                    <action selector="toggleMetadataInspectorPanel:" target="-1" id="WHo-PK-Qu3"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="922">

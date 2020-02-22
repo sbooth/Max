@@ -225,12 +225,7 @@ DQ
                             </menuItem>
                             <menuItem title="Track-informatie" tag="2" keyEquivalent="i" id="895">
                                 <connections>
-                                    <action selector="toggleTrackInformation:" target="-1" id="901"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Album-illustratie" keyEquivalent="A" id="896">
-                                <connections>
-                                    <action selector="toggleAlbumArt:" target="-1" id="900"/>
+                                    <action selector="toggleMetadataInspectorPanel:" target="-1" id="QU2-j4-rcn"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="894">

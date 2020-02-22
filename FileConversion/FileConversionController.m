@@ -78,19 +78,11 @@ static FileConversionController		*sharedController						= nil;
 	}
 	else if([item action] == @selector(downloadAlbumArt:))
 	   return 0 != [[_filesController selectedObjects] count];
-	else if([item action] == @selector(toggleTrackInformation:)) {
-		if(NSDrawerOpenState == [_metadataDrawer state] || NSDrawerOpeningState == [_metadataDrawer state])
-			[item setTitle:NSLocalizedStringFromTable(@"Hide Metadata", @"Menus", @"")];
+	else if([item action] == @selector(toggleMetadataInspectorPanel:)) {
+		if([_metadataPanel isVisible])
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Metadata Inspector", @"Menus", @"")];
 		else
-			[item setTitle:NSLocalizedStringFromTable(@"Show Metadata", @"Menus", @"")];
-		
-		return YES;
-	}
-	else if([item action] == @selector(toggleAlbumArt:)) {
-		if(NSDrawerOpenState == [_artDrawer state] || NSDrawerOpeningState == [_artDrawer state])
-			[item setTitle:NSLocalizedStringFromTable(@"Hide Album Art", @"Menus", @"")];
-		else
-			[item setTitle:NSLocalizedStringFromTable(@"Show Album Art", @"Menus", @"")];
+			[item setTitle:NSLocalizedStringFromTable(@"Show Metadata Inspector", @"Menus", @"")];
 		
 		return YES;
 	}
@@ -306,14 +298,14 @@ static FileConversionController		*sharedController						= nil;
 	[self clearFileList];
 }
 
-- (IBAction) toggleTrackInformation:(id)sender
+- (IBAction) toggleMetadataInspectorPanel:(id)sender
 {
-	[_metadataDrawer toggle:sender];
-}
-
-- (IBAction) toggleAlbumArt:(id)sender
-{
-	[_artDrawer toggle:sender];
+	if(![_metadataPanel isVisible]) {
+		[_metadataPanel orderFront:sender];
+	}
+	else {
+		[_metadataPanel orderOut:sender];
+	}
 }
 
 - (IBAction) addFiles:(id)sender
