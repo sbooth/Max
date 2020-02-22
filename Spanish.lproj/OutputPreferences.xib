@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,25 +17,25 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="7" userLabel="Output Preferences">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="7" userLabel="Output Preferences">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="367" y="531" width="520" height="465"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
             <value key="minSize" type="size" width="72" height="5"/>
             <view key="contentView" id="8">
                 <rect key="frame" x="0.0" y="0.0" width="520" height="465"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box title="Ubicaciones" id="732">
+                    <box fixedFrame="YES" title="Ubicaciones" translatesAutoresizingMaskIntoConstraints="NO" id="732">
                         <rect key="frame" x="17" y="356" width="486" height="89"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="oGq-cX-N1A">
-                            <rect key="frame" x="2" y="2" width="482" height="72"/>
+                        <view key="contentView" id="qB7-lE-h3F">
+                            <rect key="frame" x="3" y="3" width="480" height="71"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="713">
-                                    <rect key="frame" x="36" y="43" width="123" height="17"/>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="119" translatesAutoresizingMaskIntoConstraints="NO" id="713">
+                                    <rect key="frame" x="36" y="41" width="123" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Archivos de salida:" id="774">
                                         <font key="font" metaFont="system"/>
@@ -44,8 +43,8 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="714">
-                                    <rect key="frame" x="161" y="37" width="241" height="26"/>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="714">
+                                    <rect key="frame" x="161" y="35" width="241" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="Musica" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="717" id="775">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -76,8 +75,8 @@
                                         <action selector="selectOutputDirectory:" target="-2" id="742"/>
                                     </connections>
                                 </popUpButton>
-                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="721">
-                                    <rect key="frame" x="161" y="7" width="241" height="26"/>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="721">
+                                    <rect key="frame" x="161" y="5" width="241" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="723" id="776">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -108,8 +107,8 @@
                                         <action selector="selectTemporaryDirectory:" target="-2" id="743"/>
                                     </connections>
                                 </popUpButton>
-                                <textField verticalHuggingPriority="750" id="728">
-                                    <rect key="frame" x="22" y="13" width="137" height="17"/>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="133" translatesAutoresizingMaskIntoConstraints="NO" id="728">
+                                    <rect key="frame" x="22" y="11" width="137" height="17"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Archivos temporales:" id="777">
                                         <font key="font" metaFont="system"/>
@@ -120,15 +119,15 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="Nombrar archivos" id="734">
+                    <box fixedFrame="YES" title="Nombrar archivos" translatesAutoresizingMaskIntoConstraints="NO" id="734">
                         <rect key="frame" x="17" y="190" width="486" height="162"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="Em0-qK-o0F">
-                            <rect key="frame" x="2" y="2" width="482" height="145"/>
+                        <view key="contentView" id="8TO-RH-eAh">
+                            <rect key="frame" x="3" y="3" width="480" height="144"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" id="685">
-                                    <rect key="frame" x="14" y="29" width="266" height="18"/>
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="685">
+                                    <rect key="frame" x="14" y="27" width="266" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Usar números de pista con dos dígitos" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="778">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -139,8 +138,8 @@
                                         <binding destination="280" name="value" keyPath="values.useTwoDigitTrackNumbers" id="760"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="686">
-                                    <rect key="frame" x="14" y="9" width="394" height="18"/>
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="686">
+                                    <rect key="frame" x="14" y="7" width="394" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Utilizar etiquetas de álbum si no existen etiquetas de pista" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="779">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -151,8 +150,8 @@
                                         <binding destination="280" name="value" keyPath="values.useNamingFallback" id="761"/>
                                     </connections>
                                 </button>
-                                <comboBox verticalHuggingPriority="750" textCompletion="NO" id="687">
-                                    <rect key="frame" x="16" y="90" width="453" height="26"/>
+                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="687">
+                                    <rect key="frame" x="16" y="88" width="453" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="780">
                                         <font key="font" metaFont="system"/>
@@ -170,8 +169,8 @@
                                         </binding>
                                     </connections>
                                 </comboBox>
-                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="688">
-                                    <rect key="frame" x="205" y="61" width="264" height="26"/>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="688">
+                                    <rect key="frame" x="205" y="59" width="264" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="Añadir especificador de formato" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" pullsDown="YES" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="696" id="781">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -218,7 +217,7 @@
                                         <binding destination="280" name="enabled" keyPath="values.useCustomOutputFileNaming" id="756"/>
                                     </connections>
                                 </popUpButton>
-                                <button imageHugsTitle="YES" id="712">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="712">
                                     <rect key="frame" x="14" y="118" width="423" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Usar un formato personalizado para nombrar ficheros de salida" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="782">
@@ -232,14 +231,14 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="Opciones" id="736">
+                    <box fixedFrame="YES" title="Opciones" translatesAutoresizingMaskIntoConstraints="NO" id="736">
                         <rect key="frame" x="17" y="93" width="486" height="93"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="8qN-3p-iOE">
-                            <rect key="frame" x="2" y="2" width="482" height="76"/>
+                        <view key="contentView" id="fhX-F7-TaI">
+                            <rect key="frame" x="3" y="3" width="480" height="75"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" id="681">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="681">
                                     <rect key="frame" x="14" y="9" width="306" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Guardar ajustes el codificador en comentario" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="783">
@@ -250,7 +249,7 @@
                                         <binding destination="280" name="value" keyPath="values.saveSettingsInComment" id="772"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="683">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="683">
                                     <rect key="frame" x="14" y="49" width="230" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Sobreescribir archivos existentes" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="784">
@@ -261,7 +260,7 @@
                                         <binding destination="280" name="value" keyPath="values.overwriteOutputFiles" id="751"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="684">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="684">
                                     <rect key="frame" x="14" y="29" width="225" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Preguntar antes de sobrescribir " bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="785">
@@ -276,14 +275,14 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="Opciones de conversión de archivos" id="765">
+                    <box fixedFrame="YES" title="Opciones de conversión de archivos" translatesAutoresizingMaskIntoConstraints="NO" id="765">
                         <rect key="frame" x="17" y="16" width="486" height="73"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="boE-ej-Yk5">
-                            <rect key="frame" x="2" y="2" width="482" height="56"/>
+                        <view key="contentView" id="D6h-eJ-VRs">
+                            <rect key="frame" x="3" y="3" width="480" height="55"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" id="682">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="682">
                                     <rect key="frame" x="14" y="29" width="177" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Unir archivos de entrada" bezelStyle="regularSquare" imagePosition="left" alignment="left" enabled="NO" inset="2" id="787">
@@ -294,8 +293,8 @@
                                         <binding destination="280" name="value" keyPath="values.joinFiles" id="762"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="680">
-                                    <rect key="frame" x="14" y="9" width="300" height="18"/>
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="680">
+                                    <rect key="frame" x="14" y="7" width="300" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Eliminar ficheros de origen tras codificación" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="786">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -313,6 +312,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="112"/>
             </connections>
+            <point key="canvasLocation" x="139" y="147"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="280" userLabel="Shared Defaults"/>
     </objects>

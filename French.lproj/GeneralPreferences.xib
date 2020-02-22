@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,17 +13,17 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="12" userLabel="General Preferences">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="12" userLabel="General Preferences">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="423" y="373" width="520" height="376"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
             <value key="minSize" type="size" width="72" height="5"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="520" height="376"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="100">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100">
                         <rect key="frame" x="152" y="12" width="216" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="Rétablir réglages par défaut" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="221">
@@ -35,7 +34,7 @@
                             <action selector="restoreDefaults:" target="-2" id="123"/>
                         </connections>
                     </button>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="104">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="104">
                         <rect key="frame" x="364" y="57" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="99" doubleValue="1" valueWraps="YES" id="224"/>
@@ -43,7 +42,7 @@
                             <binding destination="112" name="value" keyPath="values.maximumEncoderThreads" id="117"/>
                         </connections>
                     </stepper>
-                    <textField toolTip="The maximum number of files that will be encoded simultaneously" verticalHuggingPriority="750" id="101">
+                    <textField toolTip="The maximum number of files that will be encoded simultaneously" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="101">
                         <rect key="frame" x="307" y="60" width="52" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="222">
@@ -55,7 +54,7 @@
                                 <decimal key="maximum" value="99"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -66,7 +65,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="103">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="206" translatesAutoresizingMaskIntoConstraints="NO" id="103">
                         <rect key="frame" x="92" y="62" width="210" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Nb max de processus encodage:" id="223">
@@ -75,14 +74,14 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box title="A l’insertion d’un nouveau disque:" id="207">
+                    <box fixedFrame="YES" title="A l’insertion d’un nouveau disque:" translatesAutoresizingMaskIntoConstraints="NO" id="207">
                         <rect key="frame" x="17" y="203" width="486" height="73"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="Aax-VG-xuw">
-                            <rect key="frame" x="2" y="2" width="482" height="56"/>
+                        <view key="contentView" id="vC9-4g-ph7">
+                            <rect key="frame" x="3" y="3" width="480" height="55"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" id="167">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="167">
                                     <rect key="frame" x="44" y="9" width="380" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Enregistrer automatiquement les informations du disque" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="226">
@@ -94,7 +93,7 @@
                                         <binding destination="112" name="value" keyPath="values.automaticallySaveMusicBrainzInfo" id="217"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="126">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="126">
                                     <rect key="frame" x="44" y="29" width="268" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Reconnaissance auto artiste/morceaux" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="225">
@@ -108,14 +107,14 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="Réglages généraux pour tous les disques:" id="209">
+                    <box fixedFrame="YES" title="Réglages généraux pour tous les disques:" translatesAutoresizingMaskIntoConstraints="NO" id="209">
                         <rect key="frame" x="17" y="86" width="486" height="113"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="f3u-p2-tCG">
-                            <rect key="frame" x="2" y="2" width="482" height="96"/>
+                        <view key="contentView" id="8gi-yz-8Lh">
+                            <rect key="frame" x="3" y="3" width="480" height="95"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" id="147">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="147">
                                     <rect key="frame" x="44" y="9" width="234" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Fermer la fenêtre après encodage" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="229">
@@ -126,7 +125,7 @@
                                         <binding destination="112" name="value" keyPath="values.closeWindowAfterEncoding" id="153"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="128">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="128">
                                     <rect key="frame" x="44" y="29" width="233" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Ejecter le disque après extraction" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="228">
@@ -137,7 +136,7 @@
                                         <binding destination="112" name="value" keyPath="values.ejectAfterRipping" id="131"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="162">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="162">
                                     <rect key="frame" x="44" y="49" width="262" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Seulement la première fois par disque" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="230">
@@ -149,7 +148,7 @@
                                         <binding destination="112" name="value" keyPath="values.onFirstInsertOnly" id="163"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="127">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="127">
                                     <rect key="frame" x="44" y="69" width="106" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Tout encoder" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="227">
@@ -164,14 +163,14 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="Options Générales" id="213">
+                    <box fixedFrame="YES" title="Options Générales" translatesAutoresizingMaskIntoConstraints="NO" id="213">
                         <rect key="frame" x="17" y="280" width="486" height="76"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="0Sy-Hq-g48">
-                            <rect key="frame" x="2" y="2" width="482" height="59"/>
+                        <view key="contentView" id="GIN-bq-tOT">
+                            <rect key="frame" x="3" y="3" width="480" height="58"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" id="145">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="145">
                                     <rect key="frame" x="44" y="9" width="330" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Afficher et masquer les fenêtres dynamiquement" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="232">
@@ -182,7 +181,7 @@
                                         <binding destination="112" name="value" keyPath="values.useDynamicWindows" id="146"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="143">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="143">
                                     <rect key="frame" x="44" y="29" width="234" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Vérifier mise à jour au démarrage" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="231">
@@ -198,6 +197,7 @@
                     </box>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="147"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="112" userLabel="Shared Defaults"/>
     </objects>

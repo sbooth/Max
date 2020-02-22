@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,17 +14,17 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="FLAC Settings">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" deferred="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="FLAC Settings">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="446" y="283" width="431" height="464"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
             <value key="minSize" type="size" width="224.66399999999999" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="431" height="464"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button imageHugsTitle="YES" id="199">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="199">
                         <rect key="frame" x="26" y="224" width="387" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Enable loose mid-side adaptive switching for stereo input" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="608">
@@ -40,7 +40,7 @@
                             <binding destination="487" name="value" keyPath="selection.enableLooseMidSide" id="551"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="200">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="200">
                         <rect key="frame" x="252" y="154" width="52" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="609">
@@ -52,7 +52,7 @@
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -68,7 +68,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="475">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="475">
                         <rect key="frame" x="154" y="348" width="52" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="623">
@@ -80,7 +80,7 @@
                                 <decimal key="maximum" value="10240"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -91,7 +91,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="257">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="257">
                         <rect key="frame" x="309" y="55" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" valueWraps="YES" id="622"/>
@@ -104,7 +104,7 @@
                             <binding destination="487" name="value" keyPath="selection.maxLPCOrder" id="559"/>
                         </connections>
                     </stepper>
-                    <textField verticalHuggingPriority="750" id="205">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="214" translatesAutoresizingMaskIntoConstraints="NO" id="205">
                         <rect key="frame" x="29" y="124" width="218" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Minimum residual partition order:" id="612">
@@ -113,7 +113,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <popUpButton verticalHuggingPriority="750" tag="9" imageHugsTitle="YES" id="226">
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="9" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="226">
                         <rect key="frame" x="151" y="386" width="110" height="26"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <popUpButtonCell key="cell" type="push" title="6" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="7" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="236" id="617">
@@ -139,7 +139,7 @@
                             <binding destination="487" name="selectedTag" keyPath="selection.compressionLevel" id="588"/>
                         </connections>
                     </popUpButton>
-                    <textField verticalHuggingPriority="750" id="206">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="206">
                         <rect key="frame" x="252" y="90" width="52" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="613">
@@ -151,7 +151,7 @@
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -167,7 +167,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="479">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="129" translatesAutoresizingMaskIntoConstraints="NO" id="479">
                         <rect key="frame" x="232" y="350" width="133" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="bytes voor metadata" id="626">
@@ -176,7 +176,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="203">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="203">
                         <rect key="frame" x="252" y="122" width="52" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="611">
@@ -188,7 +188,7 @@
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -204,7 +204,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="202">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="160" translatesAutoresizingMaskIntoConstraints="NO" id="202">
                         <rect key="frame" x="83" y="156" width="164" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="QLP coefficient precision:" id="610">
@@ -213,7 +213,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button imageHugsTitle="YES" id="198">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="198">
                         <rect key="frame" x="26" y="244" width="275" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Enable mid-side coding for stereo input" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="607">
@@ -229,12 +229,12 @@
                             <binding destination="487" name="value" keyPath="selection.enableMidSide" id="550"/>
                         </connections>
                     </button>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="477">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="477">
                         <rect key="frame" x="211" y="345" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="10240" valueWraps="YES" id="624"/>
                     </stepper>
-                    <textField verticalHuggingPriority="750" id="478">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="66" translatesAutoresizingMaskIntoConstraints="NO" id="478">
                         <rect key="frame" x="79" y="350" width="70" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Reserveer:" id="625">
@@ -243,7 +243,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="254">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="254">
                         <rect key="frame" x="309" y="151" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" valueWraps="YES" id="619"/>
@@ -256,7 +256,7 @@
                             <binding destination="487" name="value" keyPath="selection.QLPCoeffPrecision" id="553"/>
                         </connections>
                     </stepper>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="255">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="255">
                         <rect key="frame" x="309" y="119" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" valueWraps="YES" id="620"/>
@@ -269,7 +269,7 @@
                             <binding destination="487" name="value" keyPath="selection.minPartitionOrder" id="555"/>
                         </connections>
                     </stepper>
-                    <textField verticalHuggingPriority="750" id="212">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="212">
                         <rect key="frame" x="252" y="58" width="52" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="615">
@@ -281,7 +281,7 @@
                                 <decimal key="maximum" value="NaN"/>
                             </numberFormatter>
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -297,7 +297,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="231">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="120" translatesAutoresizingMaskIntoConstraints="NO" id="231">
                         <rect key="frame" x="25" y="392" width="124" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Compressieniveau:" id="618">
@@ -306,7 +306,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button imageHugsTitle="YES" id="196">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="196">
                         <rect key="frame" x="26" y="264" width="179" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Exhaustive model search" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="606">
@@ -322,7 +322,7 @@
                             <binding destination="487" name="value" keyPath="selection.exhaustiveModelSearch" id="549"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="208">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="218" translatesAutoresizingMaskIntoConstraints="NO" id="208">
                         <rect key="frame" x="25" y="92" width="222" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Maximum residual partition order:" id="614">
@@ -331,7 +331,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="256">
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="256">
                         <rect key="frame" x="309" y="87" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="9999" valueWraps="YES" id="621"/>
@@ -344,7 +344,7 @@
                             <binding destination="487" name="value" keyPath="selection.maxPartitionOrder" id="557"/>
                         </connections>
                     </stepper>
-                    <textField verticalHuggingPriority="750" id="214">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="132" translatesAutoresizingMaskIntoConstraints="NO" id="214">
                         <rect key="frame" x="111" y="60" width="136" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Maximum LPC order:" id="616">
@@ -353,7 +353,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" imageHugsTitle="YES" id="583">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="583">
                         <rect key="frame" x="174" y="12" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="627">
@@ -367,7 +367,7 @@ DQ
                             <action selector="ok:" target="-2" id="584"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="591">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="399" translatesAutoresizingMaskIntoConstraints="NO" id="591">
                         <rect key="frame" x="25" y="427" width="403" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="FLAC" id="628">
@@ -376,11 +376,11 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" boxType="separator" id="592">
+                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="592">
                         <rect key="frame" x="12" y="416" width="421" height="5"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </box>
-                    <textField verticalHuggingPriority="750" id="594">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="81" translatesAutoresizingMaskIntoConstraints="NO" id="594">
                         <rect key="frame" x="64" y="320" width="85" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Apodization:" id="629">
@@ -389,12 +389,12 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="595">
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="595">
                         <rect key="frame" x="154" y="318" width="198" height="22"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="630">
                             <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
@@ -406,7 +406,7 @@ DQ
                             <binding destination="487" name="value" keyPath="selection.apodization" id="598"/>
                         </connections>
                     </textField>
-                    <button imageHugsTitle="YES" id="596">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="596">
                         <rect key="frame" x="26" y="284" width="149" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Controleer codering" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="631">
@@ -417,7 +417,7 @@ DQ
                             <binding destination="487" name="value" keyPath="selection.verifyEncoding" id="601"/>
                         </connections>
                     </button>
-                    <button imageHugsTitle="YES" id="597">
+                    <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="597">
                         <rect key="frame" x="26" y="204" width="269" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="check" title="Enable QLP coefficient precision search" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="632">
@@ -435,6 +435,7 @@ DQ
                     </button>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="140" y="147"/>
         </window>
         <objectController id="487" userLabel="Settings">
             <declaredKeys>
@@ -448,5 +449,9 @@ DQ
                 <binding destination="-2" name="contentObject" keyPath="settings" id="489"/>
             </connections>
         </objectController>
+        <view id="593">
+            <rect key="frame" x="0.0" y="0.0" width="125" height="1"/>
+            <autoresizingMask key="autoresizingMask"/>
+        </view>
     </objects>
 </document>

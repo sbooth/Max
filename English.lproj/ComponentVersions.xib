@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,24 +17,24 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="230" y="551" width="592" height="458"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="592" height="458"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box title="LAME MP3 Encoder" id="18">
+                    <box fixedFrame="YES" title="LAME MP3 Encoder" translatesAutoresizingMaskIntoConstraints="NO" id="18">
                         <rect key="frame" x="297" y="300" width="278" height="138"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="R5u-Eb-fhs">
-                            <rect key="frame" x="2" y="2" width="274" height="121"/>
+                        <view key="contentView" id="sKf-Ck-LHW">
+                            <rect key="frame" x="3" y="3" width="272" height="120"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="8">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="244" translatesAutoresizingMaskIntoConstraints="NO" id="8">
                                     <rect key="frame" x="13" y="96" width="248" height="14"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="System Font Text" id="50">
-                                        <font key="font" metaFont="smallSystem"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
@@ -43,7 +42,7 @@
                                         <binding destination="-2" name="value" keyPath="lameVersion" id="10"/>
                                     </connections>
                                 </textField>
-                                <imageView id="28">
+                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="28">
                                     <rect key="frame" x="60" y="11" width="154" height="77"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="LAME" id="51"/>
@@ -51,18 +50,18 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="FLAC/Ogg (FLAC) Encoders" id="20">
+                    <box fixedFrame="YES" title="FLAC/Ogg (FLAC) Encoders" translatesAutoresizingMaskIntoConstraints="NO" id="20">
                         <rect key="frame" x="17" y="300" width="278" height="138"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="a48-85-TDt">
-                            <rect key="frame" x="2" y="2" width="274" height="121"/>
+                        <view key="contentView" id="sZ5-EG-9bx">
+                            <rect key="frame" x="3" y="3" width="272" height="120"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="14">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="244" translatesAutoresizingMaskIntoConstraints="NO" id="14">
                                     <rect key="frame" x="13" y="96" width="248" height="14"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="System Font Text" id="52">
-                                        <font key="font" metaFont="smallSystem"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
@@ -70,7 +69,7 @@
                                         <binding destination="-2" name="value" keyPath="flacVersion" id="17"/>
                                     </connections>
                                 </textField>
-                                <imageView id="31">
+                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="31">
                                     <rect key="frame" x="66" y="11" width="142" height="77"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="FLAC" id="53"/>
@@ -78,18 +77,18 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="libsndfile Conversion Library" id="22">
+                    <box fixedFrame="YES" title="libsndfile Conversion Library" translatesAutoresizingMaskIntoConstraints="NO" id="22">
                         <rect key="frame" x="297" y="16" width="278" height="138"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="Nwg-Ul-NQc">
-                            <rect key="frame" x="2" y="2" width="274" height="121"/>
+                        <view key="contentView" id="avi-0y-yL9">
+                            <rect key="frame" x="3" y="3" width="272" height="120"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="15">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="244" translatesAutoresizingMaskIntoConstraints="NO" id="15">
                                     <rect key="frame" x="13" y="96" width="248" height="14"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="System Font Text" id="54">
-                                        <font key="font" metaFont="smallSystem"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
@@ -97,7 +96,7 @@
                                         <binding destination="-2" name="value" keyPath="libsndfileVersion" id="16"/>
                                     </connections>
                                 </textField>
-                                <imageView id="30">
+                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="30">
                                     <rect key="frame" x="16" y="11" width="242" height="77"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="libsndfile" id="55"/>
@@ -105,18 +104,18 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="Speex Encoder" id="32">
+                    <box fixedFrame="YES" title="Speex Encoder" translatesAutoresizingMaskIntoConstraints="NO" id="32">
                         <rect key="frame" x="297" y="158" width="278" height="138"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="xjj-Zk-Acc">
-                            <rect key="frame" x="2" y="2" width="274" height="121"/>
+                        <view key="contentView" id="MKG-cv-tzA">
+                            <rect key="frame" x="3" y="3" width="272" height="120"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="35">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="244" translatesAutoresizingMaskIntoConstraints="NO" id="35">
                                     <rect key="frame" x="13" y="96" width="248" height="14"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="System Font Text" id="56">
-                                        <font key="font" metaFont="smallSystem"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
@@ -124,7 +123,7 @@
                                         <binding destination="-2" name="value" keyPath="speexVersion" id="36"/>
                                     </connections>
                                 </textField>
-                                <imageView id="42">
+                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="42">
                                     <rect key="frame" x="47" y="11" width="181" height="77"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="Speex" id="57"/>
@@ -132,18 +131,18 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="Monkey's Audio Compressor" id="37">
+                    <box fixedFrame="YES" title="Monkey's Audio Compressor" translatesAutoresizingMaskIntoConstraints="NO" id="37">
                         <rect key="frame" x="17" y="16" width="278" height="138"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="bjb-w5-N1o">
-                            <rect key="frame" x="2" y="2" width="274" height="121"/>
+                        <view key="contentView" id="Lr5-NR-hQh">
+                            <rect key="frame" x="3" y="3" width="272" height="120"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="39">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="244" translatesAutoresizingMaskIntoConstraints="NO" id="39">
                                     <rect key="frame" x="13" y="96" width="248" height="14"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="System Font Text" id="58">
-                                        <font key="font" metaFont="smallSystem"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
@@ -151,7 +150,7 @@
                                         <binding destination="-2" name="value" keyPath="macVersion" id="40"/>
                                     </connections>
                                 </textField>
-                                <imageView id="41">
+                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="41">
                                     <rect key="frame" x="105" y="11" width="64" height="77"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="MonkeysAudio" id="59"/>
@@ -159,18 +158,18 @@
                             </subviews>
                         </view>
                     </box>
-                    <box title="WavPack Encoder" id="43">
+                    <box fixedFrame="YES" title="WavPack Encoder" translatesAutoresizingMaskIntoConstraints="NO" id="43">
                         <rect key="frame" x="17" y="158" width="278" height="138"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="2tp-kZ-YKh">
-                            <rect key="frame" x="2" y="2" width="274" height="121"/>
+                        <view key="contentView" id="lP2-6u-Yxi">
+                            <rect key="frame" x="3" y="3" width="272" height="120"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="45">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="244" translatesAutoresizingMaskIntoConstraints="NO" id="45">
                                     <rect key="frame" x="13" y="96" width="248" height="14"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Small System Font Text" id="60">
-                                        <font key="font" metaFont="smallSystem"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
@@ -178,7 +177,7 @@
                                         <binding destination="-2" name="value" keyPath="wavPackVersion" id="47"/>
                                     </connections>
                                 </textField>
-                                <imageView id="48">
+                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="48">
                                     <rect key="frame" x="70" y="11" width="135" height="77"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="WavPack" id="61"/>
@@ -188,6 +187,7 @@
                     </box>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="147"/>
         </window>
     </objects>
     <resources>

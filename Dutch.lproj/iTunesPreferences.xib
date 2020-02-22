@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,21 +19,21 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="74" y="541" width="520" height="192"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
             <value key="minSize" type="size" width="213" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="520" height="192"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box title="iTunes-opties" id="50">
+                    <box fixedFrame="YES" title="iTunes-opties" translatesAutoresizingMaskIntoConstraints="NO" id="50">
                         <rect key="frame" x="17" y="16" width="486" height="156"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <view key="contentView" id="xb0-uG-Tsm">
-                            <rect key="frame" x="2" y="2" width="482" height="139"/>
+                        <view key="contentView" id="2ea-E4-UNJ">
+                            <rect key="frame" x="3" y="3" width="480" height="138"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button imageHugsTitle="YES" id="7">
-                                    <rect key="frame" x="12" y="89" width="363" height="18"/>
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7">
+                                    <rect key="frame" x="12" y="87" width="363" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Voeg uitvoerbestanden toe aan de iTunes-bibliotheek" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="54">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -44,7 +43,7 @@
                                         <binding destination="39" name="value" keyPath="values.addToiTunes" id="40"/>
                                     </connections>
                                 </button>
-                                <button imageHugsTitle="YES" id="8">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8">
                                     <rect key="frame" x="12" y="69" width="274" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Voeg bestanden toe aan een afspeellijst" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="55">
@@ -56,8 +55,8 @@
                                         <binding destination="39" name="value" keyPath="values.addToiTunesPlaylist" id="44"/>
                                     </connections>
                                 </button>
-                                <popUpButton verticalHuggingPriority="750" imageHugsTitle="YES" id="9">
-                                    <rect key="frame" x="239" y="10" width="230" height="26"/>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9">
+                                    <rect key="frame" x="239" y="8" width="230" height="26"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="Voeg toe in naamstructuur" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" pullsDown="YES" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="27" id="56">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -104,7 +103,7 @@
                                         <binding destination="39" name="enabled" keyPath="values.addToiTunes" id="43"/>
                                     </connections>
                                 </popUpButton>
-                                <comboBox verticalHuggingPriority="750" textCompletion="NO" id="33">
+                                <comboBox verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="33">
                                     <rect key="frame" x="14" y="39" width="455" height="26"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="57">
@@ -127,7 +126,7 @@
                                         <binding destination="39" name="value" keyPath="values.iTunesPlaylistName" previousBinding="46" id="47"/>
                                     </connections>
                                 </comboBox>
-                                <button imageHugsTitle="YES" id="48">
+                                <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="48">
                                     <rect key="frame" x="12" y="109" width="266" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Gebruik iTunes-compatibiliteitsmodus" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="58">
@@ -143,6 +142,7 @@
                     </box>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="147"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="39" userLabel="Shared Defaults"/>
     </objects>
