@@ -37,7 +37,7 @@
 #pragma mark DiskArbitration callback functions
 
 static void diskAppearedCallback(DADiskRef disk, void * context);
-//static void diskDisppearedCallback(DADiskRef disk, void * context);
+static void diskDisappearedCallback(DADiskRef disk, void * context);
 static void unmountCallback(DADiskRef disk, DADissenterRef dissenter, void * context);
 static void ejectCallback(DADiskRef disk, DADissenterRef dissenter, void * context);
 
