@@ -69,7 +69,7 @@ static NSString		*MetadataToolbarItemIdentifier			= @"org.sbooth.Max.FileConvers
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Metadata", @"FileConversion", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Metadata", @"FileConversion", @"")];
 		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Show or hide the metadata inspector", @"FileConversion", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"TrackInfoToolbarImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"NSInfo"]];
 		
 		[toolbarItem setTarget:[FileConversionController sharedController]];
 		[toolbarItem setAction:@selector(toggleMetadataInspectorPanel:)];
