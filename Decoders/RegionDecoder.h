@@ -38,13 +38,13 @@
 // ========================================
 // Creation
 // ========================================
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount;
-+ (id) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount loopCount:(NSUInteger)loopCount;
++ (instancetype) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
++ (instancetype) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount;
++ (instancetype) decoderWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount loopCount:(NSUInteger)loopCount;
 
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount;
-- (id) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount loopCount:(NSUInteger)loopCount;
+- (instancetype) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame;
+- (instancetype) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount;
+- (instancetype) initWithFilename:(NSString *)filename startingFrame:(SInt64)startingFrame frameCount:(UInt32)frameCount loopCount:(NSUInteger)loopCount;
 
 // ========================================
 // Properties
