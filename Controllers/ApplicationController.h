@@ -19,7 +19,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface NSApplication (ScriptingAdditions)
-- (id) handleConvertScriptCommand:(NSScriptCommand *)command;
+- (instancetype) handleConvertScriptCommand:(NSScriptCommand *)command;
 @end
 
 @interface ApplicationController : NSObject

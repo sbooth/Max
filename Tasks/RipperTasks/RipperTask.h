@@ -32,7 +32,7 @@
 	NSString				*_deviceName;
 }
 
-- (id)				initWithTracks:(NSArray *)tracks;
+- (instancetype)	initWithTracks:(NSArray *)tracks;
 
 - (NSArray *)		sectors;
 - (NSString *)		deviceName;
