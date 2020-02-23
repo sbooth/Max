@@ -35,14 +35,6 @@ static FileConversionController		*sharedController						= nil;
 
 @implementation FileConversionController
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
-{
-	if([key isEqualToString:@"metadata.albumArt"]) {
-		return [NSSet setWithObjects:@"albumArtWidth", @"albumArtHeight", nil];
-	}
-	return nil;
-}
-
 + (FileConversionController *) sharedController
 {
 	@synchronized(self) {
@@ -418,9 +410,6 @@ static FileConversionController		*sharedController						= nil;
 {
 	return [[_filesController selection] valueForKeyPath:@"metadata.albumTitle"];
 }
-
-- (NSUInteger) albumArtWidth	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].width; }
-- (NSUInteger) albumArtHeight	{ return [[[_filesController selection] valueForKeyPath:@"metadata.albumArt"] size].height; }
 
 - (void) setAlbumArt:(NSImage *)albumArt
 {
