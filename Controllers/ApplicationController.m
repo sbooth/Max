@@ -33,6 +33,7 @@
 #import "UtilityFunctions.h"
 
 #import "BooleanArrayValueTransformer.h"
+#import "ImageDimensionsValueTransformer.h"
 #import "NegateBooleanArrayValueTransformer.h"
 #import "MultiplicationValueTransformer.h"
 #import "BOOLToStringValueTransformer.h"
@@ -52,6 +53,9 @@ static ApplicationController *sharedController = nil;
 
 	transformer = [[[BooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"BooleanArrayValueTransformer"];
+
+	transformer = [[[ImageDimensionsValueTransformer alloc] init] autorelease];
+	[NSValueTransformer setValueTransformer:transformer forName:@"ImageDimensionsValueTransformer"];
 
 	transformer = [[[NegateBooleanArrayValueTransformer alloc] init] autorelease];
 	[NSValueTransformer setValueTransformer:transformer forName:@"NegateBooleanArrayValueTransformer"];

@@ -49,6 +49,7 @@
 		32A145211046DD100020238F /* LibsndfileEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A145201046DD100020238F /* LibsndfileEncoderTask.mm */; };
 		32A14790104742030020238F /* NSString+URLEscapingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A1478F104742030020238F /* NSString+URLEscapingMethods.m */; };
 		32A147B0104745BD0020238F /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 32A147AF104745BD0020238F /* dsa_pub.pem */; };
+		32BD9BFE2401F655006A0E47 /* ImageDimensionsValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BD9BFD2401F655006A0E47 /* ImageDimensionsValueTransformer.m */; };
 		32C614E212E80CB800F714C9 /* Acknowledgments.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32C614A612E80CB800F714C9 /* Acknowledgments.xib */; };
 		32C614E312E80CB800F714C9 /* AlbumArtPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32C614A812E80CB800F714C9 /* AlbumArtPreferences.xib */; };
 		32C614E412E80CB800F714C9 /* AmazonAlbumArtSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32C614AA12E80CB800F714C9 /* AmazonAlbumArtSheet.xib */; };
@@ -323,6 +324,8 @@
 		32A147AF104745BD0020238F /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		32A14813104747240020238F /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Italian; path = Italian.lproj/Credits.rtf; sourceTree = "<group>"; };
 		32A14823104747240020238F /* Italian */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = Italian; path = Italian.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		32BD9BFC2401F655006A0E47 /* ImageDimensionsValueTransformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageDimensionsValueTransformer.h; sourceTree = "<group>"; };
+		32BD9BFD2401F655006A0E47 /* ImageDimensionsValueTransformer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageDimensionsValueTransformer.m; sourceTree = "<group>"; };
 		32C614A712E80CB800F714C9 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Acknowledgments.xib; sourceTree = "<group>"; };
 		32C614A912E80CB800F714C9 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AlbumArtPreferences.xib; sourceTree = "<group>"; };
 		32C614AB12E80CB800F714C9 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AmazonAlbumArtSheet.xib; sourceTree = "<group>"; };
@@ -1212,6 +1215,8 @@
 				8C53FF590A05CCA400890518 /* BooleanArrayValueTransformer.m */,
 				8C53FF5A0A05CCA400890518 /* BOOLToStringValueTransformer.h */,
 				8C53FF5B0A05CCA400890518 /* BOOLToStringValueTransformer.m */,
+				32BD9BFC2401F655006A0E47 /* ImageDimensionsValueTransformer.h */,
+				32BD9BFD2401F655006A0E47 /* ImageDimensionsValueTransformer.m */,
 				8C53FF5E0A05CCA400890518 /* MultiplicationValueTransformer.h */,
 				8C53FF5F0A05CCA400890518 /* MultiplicationValueTransformer.m */,
 				8C53FF600A05CCA400890518 /* NegateBooleanArrayValueTransformer.h */,
@@ -1630,6 +1635,7 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				8C53FF0C0A05CB8E00890518 /* Encoder.m in Sources */,
+				32BD9BFE2401F655006A0E47 /* ImageDimensionsValueTransformer.m in Sources */,
 				8C53FF540A05CC4700890518 /* StopException.m in Sources */,
 				8C53FF650A05CCA400890518 /* BooleanArrayValueTransformer.m in Sources */,
 				8C53FF670A05CCA400890518 /* BOOLToStringValueTransformer.m in Sources */,
