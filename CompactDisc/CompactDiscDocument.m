@@ -44,16 +44,6 @@
 
 @implementation CompactDiscDocument
 
-+ (NSSet *) keyPathsForValuesAffectingAlbumArtWidth
-{
-	return [NSSet setWithObject:@"albumArt"];
-}
-
-+ (NSSet *) keyPathsForValuesAffectingAlbumArtHeight
-{
-	return [NSSet setWithObject:@"albumArt"];
-}
-
 + (BOOL) accessInstanceVariablesDirectly	{ return NO; }
 
 - (id) init
@@ -66,50 +56,32 @@
 
 - (void) dealloc
 {	
-	[_disc release];
-	_disc = nil;
+	[_disc release];					_disc = nil;
 
-	[_discID release];
-	_discID = nil;
+	[_discID release];					_discID = nil;
 
-	[_mbHelper release];
-	_mbHelper = nil;
+	[_mbHelper release];				_mbHelper = nil;
 
-	[_title release];
-	_title = nil;
-	[_artist release];
-	_artist = nil;
-	[_date release];
-	_date = nil;
-	[_genre release];
-	_genre = nil;
-	[_composer release];
-	_composer = nil;
-	[_comment release];
-	_comment = nil;
+	[_title release];					_title = nil;
+	[_artist release];					_artist = nil;
+	[_date release];					_date = nil;
+	[_genre release];					_genre = nil;
+	[_composer release];				_composer = nil;
+	[_comment release];					_comment = nil;
 
-	[_albumArt release];
-	_albumArt = nil;
-	[_albumArtDownloadDate release];
-	_albumArtDownloadDate = nil;
+	[_albumArt release];				_albumArt = nil;
+	[_albumArtDownloadDate release];	_albumArtDownloadDate = nil;
 
-	[_discNumber release];
-	_discNumber = nil;
-	[_discTotal release];
-	_discTotal = nil;
-	[_compilation release];
-	_compilation = nil;
+	[_discNumber release];				_discNumber = nil;
+	[_discTotal release];				_discTotal = nil;
+	[_compilation release];				_compilation = nil;
 
-	[_musicbrainzAlbumId release];
-	_musicbrainzAlbumId = nil;
-	[_musicbrainzArtistId release];
-	_musicbrainzArtistId = nil;
+	[_musicbrainzAlbumId release];		_musicbrainzAlbumId = nil;
+	[_musicbrainzArtistId release];		_musicbrainzArtistId = nil;
 	
-	[_MCN release];
-	_MCN = nil;
+	[_MCN release];						_MCN = nil;
 	
-	[_tracks release];
-	_tracks = nil;
+	[_tracks release];					_tracks = nil;
 	
 	[super dealloc];
 }
@@ -149,19 +121,11 @@
 		return [_trackController canSelectNext];
 	else if([item action] == @selector(selectPreviousTrack:))
 		return [_trackController canSelectPrevious];
-	else if([item action] == @selector(toggleTrackInformation:)) {
-		if(NSDrawerOpenState == [_trackDrawer state] || NSDrawerOpeningState == [_trackDrawer state])
-			[item setTitle:NSLocalizedStringFromTable(@"Hide Track Information", @"Menus", @"")];
+	else if([item action] == @selector(toggleMetadataInspectorPanel:)) {
+		if([_metadataPanel isVisible])
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Track Inspector", @"Menus", @"")];
 		else
-			[item setTitle:NSLocalizedStringFromTable(@"Show Track Information", @"Menus", @"")];
-		
-		return YES;
-	}
-	else if([item action] == @selector(toggleAlbumArt:)) {
-		if(NSDrawerOpenState == [_artDrawer state] || NSDrawerOpeningState == [_artDrawer state])
-			[item setTitle:NSLocalizedStringFromTable(@"Hide Album Art", @"Menus", @"")];
-		else
-			[item setTitle:NSLocalizedStringFromTable(@"Show Album Art", @"Menus", @"")];
+			[item setTitle:NSLocalizedStringFromTable(@"Show Track Inspector", @"Menus", @"")];
 
 		return YES;
 	}
@@ -259,38 +223,24 @@
 				}
 			}
 			
-			[_title release];
-			_title = nil;
-			[_artist release];
-			_artist = nil;
-			[_date release];
-			_date = nil;
-			[_genre release];
-			_genre = nil;
-			[_composer release];
-			_composer = nil;
-			[_comment release];
-			_comment = nil;
+			[_title release];						_title = nil;
+			[_artist release];						_artist = nil;
+			[_date release];						_date = nil;
+			[_genre release];						_genre = nil;
+			[_composer release];					_composer = nil;
+			[_comment release];						_comment = nil;
 			
-			[_albumArt release];
-			_albumArt = nil;
-			[_albumArtDownloadDate release];
-			_albumArtDownloadDate = nil;
+			[_albumArt release];					_albumArt = nil;
+			[_albumArtDownloadDate release];		_albumArtDownloadDate = nil;
 			
-			[_musicbrainzAlbumId release];
-			_musicbrainzAlbumId = nil;
-			[_musicbrainzArtistId release];
-			_musicbrainzArtistId = nil;
+			[_musicbrainzAlbumId release];			_musicbrainzAlbumId = nil;
+			[_musicbrainzArtistId release];			_musicbrainzArtistId = nil;
 			
-			[_discNumber release];
-			_discNumber = nil;
-			[_discTotal release];
-			_discTotal = nil;
+			[_discNumber release];					_discNumber = nil;
+			[_discTotal release];					_discTotal = nil;
 			
-			[_discID release];
-			_discID = nil;
-			[_MCN release];
-			_MCN = nil;
+			[_discID release];						_discID = nil;
+			[_MCN release];							_MCN = nil;
 			
 			_discID			= [[dictionary valueForKey:@"discID"] retain];
 
@@ -359,7 +309,7 @@
 #pragma mark State
 
 - (BOOL) encodeAllowed				{ return ([self discInDrive] && NO == [self emptySelection] && NO == [self ripInProgress] && NO == [self encodeInProgress]); }
-- (BOOL) queryMusicBrainzAllowed	{ return [self discInDrive]; }
+- (BOOL) queryMusicBrainzAllowed	{ [self discInDrive]; }
 - (BOOL) ejectDiscAllowed			{ return [self discInDrive]; }
 - (BOOL) submitDiscIdAllowed		{ return [self discInDrive]; }
 - (BOOL) emptySelection				{ return (0 == [[self selectedTracks] count]); }
@@ -574,7 +524,7 @@
 	
 	if(nil == _mbHelper)
 		_mbHelper = [[MusicBrainzHelper alloc] initWithDiscID:[[self disc] discID]];
-	
+
 	[_mbHelper performQuery:sender];
 	
 	NSUInteger matchCount	= [_mbHelper matchCount];
@@ -610,14 +560,23 @@
 		[self updateMetadataFromMusicBrainz:0];
 }
 
-- (IBAction) toggleTrackInformation:(id)sender				{ [_trackDrawer toggle:sender]; }
-- (IBAction) toggleAlbumArt:(id)sender						{ [_artDrawer toggle:sender]; }
+- (IBAction) toggleMetadataInspectorPanel:(id)sender
+{
+	if(![_metadataPanel isVisible]) {
+		[_metadataPanel orderFront:sender];
+	}
+	else {
+		[_metadataPanel orderOut:sender];
+	}
+
+}
+
 - (IBAction) selectNextTrack:(id)sender						{ [_trackController selectNext:sender]; }
 - (IBAction) selectPreviousTrack:(id)sender					{ [_trackController selectPrevious:sender];	 }
 
 - (IBAction) downloadAlbumArt:(id)sender
 {	
-	AmazonAlbumArtSheet *art = [[(AmazonAlbumArtSheet *)[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
+	AmazonAlbumArtSheet *art = [[[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
 	[art showAlbumArtMatches];
 }
 
@@ -678,8 +637,6 @@
 
 - (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
 - (NSDate *)		albumArtDownloadDate				{ return [[_albumArtDownloadDate retain] autorelease]; }
-- (NSUInteger)		albumArtWidth						{ return (NSUInteger)[[self albumArt] size].width; }
-- (NSUInteger)		albumArtHeight						{ return (NSUInteger)[[self albumArt] size].height; }
 
 - (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
 - (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }
@@ -859,12 +816,11 @@
 
 @implementation CompactDiscDocument (ScriptingAdditions)
 
-- (id) handleEncodeScriptCommand:(NSScriptCommand *)command				{ [self encode:command]; return nil; }
-- (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command			{ [self ejectDisc:command]; return nil; }
-- (id) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command	{ [self queryMusicBrainz:command]; return nil; }
-- (id) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command { [self toggleTrackInformation:command]; return nil; }
-- (id) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self toggleAlbumArt:command]; return nil; }
-- (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command		{ [self fetchAlbumArt:command]; return nil; }
+- (id) handleEncodeScriptCommand:(NSScriptCommand *)command					{ [self encode:command]; return nil; }
+- (id) handleEjectDiscScriptCommand:(NSScriptCommand *)command				{ [self ejectDisc:command]; return nil; }
+- (id) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command		{ [self queryMusicBrainz:command]; return nil; }
+- (id) handleToggleInspectorPanelScriptCommand:(NSScriptCommand *)command 	{ [self toggleMetadataInspectorPanel:command]; return nil; }
+- (id) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command			{ [self fetchAlbumArt:command]; return nil; }
 
 @end
 

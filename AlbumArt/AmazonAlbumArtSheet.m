@@ -106,7 +106,7 @@ queryStringComponentFromPair(NSString *field, NSString *value)
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"searchInProgress"];
 	
 	// All searches start at this URL
-	NSString *urlBase = [NSString stringWithFormat:@"http://ecs.amazonaws.%@/onca/xml", [self localeDomain]];
+	NSString *urlBase = [NSString stringWithFormat:@"https://ecs.amazonaws.%@/onca/xml", [self localeDomain]];
 	
 	// Build up the query string
 	NSMutableArray *queryComponents = [NSMutableArray array];
@@ -133,7 +133,7 @@ queryStringComponentFromPair(NSString *field, NSString *value)
 	
 	// Calculate the HMAC for the string
 	// This is done on a server to avoid revealing the secret key
-	NSURL *signerURL = [NSURL URLWithString:@"http://sbooth.org/Max/sign_aws_query.php"];
+	NSURL *signerURL = [NSURL URLWithString:@"https://sbooth.org/Max/sign_aws_query.php"];
 	NSMutableURLRequest *signerURLRequest = [NSMutableURLRequest requestWithURL:signerURL];
 	[signerURLRequest setHTTPMethod:@"POST"];
 	[signerURLRequest setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"] forHTTPHeaderField:@"User-Agent"];

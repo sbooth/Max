@@ -372,11 +372,8 @@
 			<responds-to name="query MusicBrainz">
 				<cocoa method="handleQueryMusicBrainzScriptCommand:"/>
 			</responds-to>
-			<responds-to name="toggle track information">
-				<cocoa method="handleToggleTrackInformationScriptCommand:"/>
-			</responds-to>
-			<responds-to name="toggle album art">
-				<cocoa method="handleToggleAlbumArtScriptCommand:"/>
+			<responds-to name="toggle inspector">
+				<cocoa method="handleToggleInspectorPanelScriptCommand:"/>
 			</responds-to>
 			<responds-to name="download album art">
 				<cocoa method="handleFetchAlbumArtScriptCommand:"/>
