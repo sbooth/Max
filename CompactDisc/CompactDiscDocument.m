@@ -905,36 +905,36 @@
 //	BOOL isVariousArtists = [_mbHelper isVariousArtists];
 
 	[[self undoManager] beginUndoGrouping];
-		
+
 	[self setTitle:[releaseDictionary valueForKey:@"title"]];
 	[self setArtist:[releaseDictionary valueForKey:@"artist"]];
 	[self setComposer:[releaseDictionary valueForKey:@"composer"]];
 	[self setDate:[releaseDictionary valueForKey:@"date"]];
-	[self setMusicbrainzAlbumId:[[releaseDictionary valueForKey:@"albumId"] lastPathComponent]];
-	[self setMusicbrainzArtistId:[[releaseDictionary valueForKey:@"artistId"] lastPathComponent]];
-	
+	[self setMusicbrainzAlbumId:[releaseDictionary valueForKey:@"albumId"]];
+	[self setMusicbrainzArtistId:[releaseDictionary valueForKey:@"artistId"]];
+
 	NSArray *tracksArray = [releaseDictionary valueForKey:@"tracks"];
-	
+
 	NSUInteger i;
 	for(i = 0; i < [tracksArray count]; ++i) {
 		NSDictionary *trackDictionary = [tracksArray objectAtIndex:i];
 		Track *track = [self objectInTracksAtIndex:i];
-		
+
 		[track setTitle:[trackDictionary valueForKey:@"title"]];
 		[track setArtist:[trackDictionary valueForKey:@"artist"]];
 		[track setComposer:[trackDictionary valueForKey:@"composer"]];
-		[track setMusicbrainzTrackId:[[trackDictionary valueForKey:@"trackId"] lastPathComponent]];
+		[track setMusicbrainzTrackId:[trackDictionary valueForKey:@"trackId"]];
 		if ([trackDictionary valueForKey:@"artistId"] != nil)
-			[track setMusicbrainzArtistId:[[trackDictionary valueForKey:@"artistId"] lastPathComponent]];
+			[track setMusicbrainzArtistId:[trackDictionary valueForKey:@"artistId"]];
 		else
-			[track setMusicbrainzArtistId:[[releaseDictionary valueForKey:@"artistId"] lastPathComponent]];
+			[track setMusicbrainzArtistId:[releaseDictionary valueForKey:@"artistId"]];
 	}
-	
+
 	[self updateChangeCount:NSChangeReadOtherContents];
-	
+
 	[[self undoManager] setActionName:NSLocalizedStringFromTable(@"MusicBrainz", @"UndoRedo", @"")];
 	[[self undoManager] endUndoGrouping];
-	
+
 }
 
 @end
