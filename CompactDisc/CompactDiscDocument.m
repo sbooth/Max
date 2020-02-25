@@ -309,7 +309,7 @@
 #pragma mark State
 
 - (BOOL) encodeAllowed				{ return ([self discInDrive] && NO == [self emptySelection] && NO == [self ripInProgress] && NO == [self encodeInProgress]); }
-- (BOOL) queryMusicBrainzAllowed	{ [self discInDrive]; }
+- (BOOL) queryMusicBrainzAllowed	{ return [self discInDrive]; }
 - (BOOL) ejectDiscAllowed			{ return [self discInDrive]; }
 - (BOOL) submitDiscIdAllowed		{ return [self discInDrive]; }
 - (BOOL) emptySelection				{ return (0 == [[self selectedTracks] count]); }
