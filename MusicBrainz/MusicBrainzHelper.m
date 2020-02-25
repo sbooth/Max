@@ -18,222 +18,109 @@
 
 #import "MusicBrainzHelper.h"
 
-#include <musicbrainz5/Query.h>
-#include <musicbrainz5/Release.h>
-#include <musicbrainz5/Artist.h>
-#include <musicbrainz5/ArtistCredit.h>
-#include <musicbrainz5/NameCredit.h>
-#include <musicbrainz5/Medium.h>
-#include <musicbrainz5/Track.h>
-#include <musicbrainz5/Recording.h>
-#include <musicbrainz5/RelationListList.h>
-#include <musicbrainz5/RelationList.h>
-#include <musicbrainz5/Relation.h>
-#include <musicbrainz5/HTTPFetch.h>
-
-#import "CompactDiscDocument.h"
-
-@interface MusicBrainzHelper (Private)
-- (NSString *) discID;
-@end
-
-@implementation MusicBrainzHelper
-
-- (id) initWithDiscID:(NSString *)discID
+void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray*))
 {
-	NSParameterAssert(nil != discID);
-	
-	if((self = [super init])) {
-		_matches = [[NSMutableArray alloc] init];
-		_discID = [discID retain];
-	}
+	/*
+		 // Set MB server and port
+		 NSString *server = @"musicbrainz.org";
+		 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"]) {
+			 server = [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"];
+		 }
 
-	return self;
-}
+		 int port = 80;
+		 if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzServerPort"]) {
+			 port = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"];
+		 }
 
-- (void) dealloc
-{
-	[_matches release];	_matches = nil;
-	[_discID release];	_discID = nil;
-	
-	[super dealloc];
-}
+	 //	NSString *bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+		 auto query = MusicBrainz5::CQuery([[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String], [server UTF8String], port);
 
-- (IBAction) performQuery:(id)sender
-{
-	// Set MB server and port
-	NSString *server = @"musicbrainz.org";
-	if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"]) {
-		server = [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"];
-	}
+		 // Use authentication, if specified
+		 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"]) {
+			 query.SetUserName([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] UTF8String]);
+		 }
 
-	int port = 80;
-	if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzServerPort"]) {
-		port = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"];
-	}
+		 if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzPassword"]) {
+			 query.SetPassword([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzPassword"] UTF8String]);
+		 }
+
+		 // Proxy setup
+		 if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzUseProxy"]) {
+			 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"]) {
+				 query.SetProxyHost([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] UTF8String]);
+			 }
+			 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerPort"]) {
+				 query.SetProxyPort((int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
+			 }
+		 }
+	 */
+	NSString *url = [NSString stringWithFormat:@"https://musicbrainz.org/ws/2/discid/%@?inc=artists+labels+recordings+release-groups+artist-credits&fmt=json", discID];
+
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+	request.URL = [NSURL URLWithString:url];
+	request.HTTPMethod = @"GET";
 
 	NSString *bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-	auto query = MusicBrainz5::CQuery([[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String], [server UTF8String], port);
+	[request setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forHTTPHeaderField:@"User-Agent"];
 
-	// Use authentication, if specified
-	if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"]) {
-		query.SetUserName([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] UTF8String]);
-	}
+	[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 
-	if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzPassword"]) {
-		query.SetPassword([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzPassword"] UTF8String]);
-	}
+	NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+	NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
 
-	// Proxy setup
-	if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzUseProxy"]) {
-		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"]) {
-			query.SetProxyHost([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] UTF8String]);
+	NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:[request autorelease] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+		if(nil == data) {
+			return;
 		}
-		if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerPort"]) {
-			query.SetProxyPort((int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
-		}
-	}
 
-	[_matches removeAllObjects];
-	
-	try {
-		auto releaseList = query.LookupDiscID([[self discID] UTF8String]);
+		NSError *err = nil;
+		NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+//		NSLog(@"%@",json);
 
-		for(auto i = 0; i < releaseList.NumItems(); i++) {
-			auto rel = releaseList.Item(i);
+		NSMutableArray *releaseArray = [NSMutableArray array];
 
-			MusicBrainz5::CQuery::tParamMap params;
-			params["inc"] = "artists labels recordings release-groups url-rels discids artist-credits isrcs";
+		NSArray *releases = [json objectForKey:@"releases"];
+		for(NSDictionary *release in releases) {
+			NSMutableDictionary *releaseDictionary = [NSMutableDictionary dictionary];
 
-			auto metadata = query.Query("release", rel->ID(), "", params);
-			if(metadata.Release()) {
-				auto release = metadata.Release();
+			[releaseDictionary setValue:[release objectForKey:@"id"] forKey:@"id"];
+			[releaseDictionary setValue:[release objectForKey:@"title"] forKey:@"title"];
+			[releaseDictionary setValue:[release objectForKey:@"date"] forKey:@"date"];
 
-				NSMutableDictionary *releaseDictionary = [NSMutableDictionary dictionary];
+			NSArray *artistCredit = [release objectForKey:@"artist-credit"];
+			NSDictionary *artist = [[artistCredit firstObject] objectForKey:@"artist"];
+			[releaseDictionary setValue:[artist objectForKey:@"name"] forKey:@"artist"];
+			[releaseDictionary setValue:[artist objectForKey:@"id"] forKey:@"artistId"];
 
-				// ID
-				if(!release->ID().empty()) {
-					[releaseDictionary setValue:[NSString stringWithCString:release->ID().c_str() encoding:NSUTF8StringEncoding] forKey:@"albumId"];
+			NSMutableArray *tracksArray = [NSMutableArray array];
+
+			NSArray *media = [release objectForKey:@"media"];
+			for(NSDictionary *medium in media) {
+				NSArray *tracks = [medium objectForKey:@"tracks"];
+				for(NSDictionary *track in tracks) {
+					NSMutableDictionary *trackDictionary = [NSMutableDictionary dictionary];
+
+					[trackDictionary setValue:[track objectForKey:@"id"] forKey:@"trackId"];
+					[trackDictionary setValue:[track objectForKey:@"number"] forKey:@"trackNumber"];
+					[trackDictionary setValue:[track objectForKey:@"title"] forKey:@"title"];
+
+					artistCredit = [track objectForKey:@"artist-credit"];
+					artist = [[artistCredit firstObject] objectForKey:@"artist"];
+					[trackDictionary setValue:[artist objectForKey:@"name"] forKey:@"artist"];
+					[trackDictionary setValue:[artist objectForKey:@"id"] forKey:@"artistId"];
+
+					[tracksArray addObject:trackDictionary];
 				}
-
-				// Title
-				if(!release->Title().empty()) {
-					[releaseDictionary setValue:[NSString stringWithCString:release->Title().c_str() encoding:NSUTF8StringEncoding] forKey:@"title"];
-				}
-
-				// Artist
-				if(nullptr != release->ArtistCredit()) {
-					auto nameCreditList = release->ArtistCredit()->NameCreditList();
-					// TODO: Is it appropriate to just use the first entry?
-					if(nullptr != nameCreditList && 0 < nameCreditList->NumItems()) {
-						auto nameCredit = nameCreditList->Item(0);
-						if(nullptr != nameCredit->Artist()) {
-							auto artist = nameCredit->Artist();
-							if(!artist->Name().empty()) {
-								[releaseDictionary setValue:[NSString stringWithCString:artist->Name().c_str() encoding:NSUTF8StringEncoding] forKey:@"artist"];
-								[releaseDictionary setValue:[NSString stringWithCString:artist->ID().c_str() encoding:NSUTF8StringEncoding] forKey:@"artistId"];
-							}
-						}
-					}
-				}
-
-				// TODO: Iterate through the release group and search for the most applicable country code?
-
-				// Release date
-				if(!release->Date().empty()) {
-					[releaseDictionary setValue:[NSString stringWithCString:release->Date().c_str() encoding:NSUTF8StringEncoding] forKey:@"date"];
-				}
-
-				// Iterate through the tracks
-				NSMutableArray *tracksDictionary = [NSMutableArray array];
-
-				// TODO: Use MediaMatchingDiscID()?
-				auto mediumList = release->MediumList();
-				// TODO: Is it appropriate to just use the first entry?
-				if(nullptr != mediumList && 0 < mediumList->NumItems()) {
-					auto medium = mediumList->Item(0);
-
-					auto trackList = medium->TrackList();
-					if(nullptr != trackList) {
-						for(auto k = 0; k < trackList->NumItems(); k++) {
-							auto track = trackList->Item(k);
-
-							NSMutableDictionary *trackDictionary = [NSMutableDictionary dictionary];
-
-							// Number
-							[trackDictionary setValue:[NSNumber numberWithInt:track->Position()] forKey:@"trackNumber"];
-
-							auto recording = track->Recording();
-							if(nullptr != recording) {
-								// ID
-								if(!recording->ID().empty()) {
-									[trackDictionary setValue:[NSString stringWithCString:recording->ID().c_str() encoding:NSUTF8StringEncoding] forKey:@"trackId"];
-								}
-
-								// Track title
-								[trackDictionary setValue:[NSString stringWithCString:recording->Title().c_str() encoding:NSUTF8StringEncoding] forKey:@"title"];
-
-								// Track artist
-								if(nullptr != recording->ArtistCredit()) {
-									auto nameCreditList = recording->ArtistCredit()->NameCreditList();
-									// TODO: Is it appropriate to just use the first entry?
-									if(nullptr != nameCreditList && 0 < nameCreditList->NumItems()) {
-										auto nameCredit = nameCreditList->Item(0);
-										if(nullptr != nameCredit->Artist()) {
-											auto artist = nameCredit->Artist();
-											if(!artist->Name().empty()) {
-												[trackDictionary setValue:[NSString stringWithCString:artist->Name().c_str() encoding:NSUTF8StringEncoding] forKey:@"artist"];
-												[trackDictionary setValue:[NSString stringWithCString:artist->ID().c_str() encoding:NSUTF8StringEncoding] forKey:@"artistId"];
-											}
-										}
-									}
-								}
-							}
-
-							// FIXME
-							// Look for Composer relations
-							auto relationLists = recording->RelationListList();
-							if(nullptr != relationLists) {
-								for(auto m = 0; m < relationLists->NumItems(); ++m) {
-									auto relationList = relationLists->Item(m);
-									std::cout << relationList << std::endl;
-									if(nullptr != relationList && 0 < relationList->NumItems() && "composer" == relationList->TargetType()) {
-//										auto composerList = relationList->Item(0);
-//										[trackDictionary setValue:[NSString stringWithCString:XXXXX().c_str() encoding:NSUTF8StringEncoding] forKey:@"composer"];
-									}
-								}
-							}
-
-							[tracksDictionary addObject:trackDictionary];
-						}
-					}
-				}
-
-				[releaseDictionary setValue:tracksDictionary forKey:@"tracks"];
-				[_matches addObject:releaseDictionary];
 			}
+
+			[releaseDictionary setValue:tracksArray forKey:@"tracks"];
+			[releaseArray addObject:releaseDictionary];
 		}
-	}
-	
-	catch(const MusicBrainz5::CExceptionBase &e) {
-		NSLog(@"Error: %s", e.what());
-		return;
-	}
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completionHandler(releaseArray);
+		});
+	}];
+
+	[dataTask resume];
 }
-
-- (NSUInteger) matchCount
-{
-	return [_matches count];
-}
-
-- (NSDictionary *) matchAtIndex:(NSUInteger)matchIndex;
-{
-	return [_matches objectAtIndex:matchIndex];
-}
-
-@end
-
-@implementation MusicBrainzHelper (Private)
-- (MusicBrainzHelperData *)		data		{ return [[_data retain] autorelease]; }
-- (NSString *)					discID		{ return [[_discID retain] autorelease]; }
-@end

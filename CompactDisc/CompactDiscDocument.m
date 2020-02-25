@@ -29,17 +29,16 @@
 #import "Encoder.h"
 #import "MediaController.h"
 
+#import "MusicBrainzHelper.h"
 #import "MusicBrainzMatchSheet.h"
 
 #import "AmazonAlbumArtSheet.h"
 #import "UtilityFunctions.h"
 
 @interface CompactDiscDocument (Private)
-- (void)		displayExceptionAlert:(NSAlert *)alert;
-
-- (void)		didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-
-- (void)		updateMetadataFromMusicBrainz:(NSUInteger)index;
+- (void) displayExceptionAlert:(NSAlert *)alert;
+- (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void) updateMetadataFromMusicBrainz:(NSDictionary *)releaseDictionary;
 @end
 
 @implementation CompactDiscDocument
@@ -59,8 +58,6 @@
 	[_disc release];					_disc = nil;
 
 	[_discID release];					_discID = nil;
-
-	[_mbHelper release];				_mbHelper = nil;
 
 	[_title release];					_title = nil;
 	[_artist release];					_artist = nil;
@@ -519,45 +516,34 @@
 
 - (IBAction) queryMusicBrainz:(id)sender
 {
-	if(NO == [self queryMusicBrainzAllowed])
+	if(![self queryMusicBrainzAllowed])
 		return;
-	
-	if(nil == _mbHelper)
-		_mbHelper = [[MusicBrainzHelper alloc] initWithDiscID:[[self disc] discID]];
 
-	[_mbHelper performQuery:sender];
-	
-	NSUInteger matchCount	= [_mbHelper matchCount];
-	NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
+	PerformMusicBrainzQuery([[self disc] discID], ^(NSArray *results) {
+//		NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
 
-	// If only match was found, update ourselves
-	if(1 == matchCount)
-		[self updateMetadataFromMusicBrainz:0];
-	else {
-		MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
-		NSMutableArray			*matches	= [[NSMutableArray alloc] init];
-		
-		NSUInteger i;
-		for(i = 0; i < matchCount; ++i)
-			[matches addObject:[_mbHelper matchAtIndex:i]];
-		
-		[sheet setValue:[matches autorelease] forKey:@"matches"];
-		[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndQueryMusicBrainzSheet:returnCode:contextInfo:) contextInfo:sheet];
-	}	
+		// If only match was found, update ourselves
+		if(1 == [results count]) {
+			[self updateMetadataFromMusicBrainz:[results firstObject]];
+		}
+		else {
+			MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
+			[sheet setValue:results forKey:@"matches"];
+			[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndQueryMusicBrainzSheet:returnCode:contextInfo:) contextInfo:sheet];
+		}
+	});
 }
 
 - (void) queryMusicBrainzNonInteractive
 {
-	if(NO == [self queryMusicBrainzAllowed])
+	if(![self queryMusicBrainzAllowed])
 		return;
 	
-	if(nil == _mbHelper)
-		_mbHelper = [[MusicBrainzHelper alloc] initWithDiscID:[[self disc] discID]];
-	
-	[_mbHelper performQuery:self];
-	
-	if(1 <= [_mbHelper matchCount])
-		[self updateMetadataFromMusicBrainz:0];
+	PerformMusicBrainzQuery([self discID], ^(NSArray *results) {
+		if(0 < [results count]) {
+			[self updateMetadataFromMusicBrainz:[results firstObject]];
+		}
+	});
 }
 
 - (IBAction) toggleMetadataInspectorPanel:(id)sender
@@ -849,15 +835,13 @@
 	[sheet orderOut:self];
 	
 	if(NSOKButton == returnCode)
-		[self updateMetadataFromMusicBrainz:[musicBrainzMatchSheet selectedAlbumIndex]];
+		[self updateMetadataFromMusicBrainz:[musicBrainzMatchSheet selectedRelease]];
 
 	[musicBrainzMatchSheet release];
 }
 
-- (void) updateMetadataFromMusicBrainz:(NSUInteger)index
+- (void) updateMetadataFromMusicBrainz:(NSDictionary *)releaseDictionary
 {
-	NSDictionary *releaseDictionary = [_mbHelper matchAtIndex:index];
-
 //	BOOL isVariousArtists = [_mbHelper isVariousArtists];
 
 	[[self undoManager] beginUndoGrouping];

@@ -20,7 +20,6 @@
 
 #import "CompactDisc.h"
 #import "Track.h"
-#import "MusicBrainzHelper.h"
 #import "AlbumArtMethods.h"
 
 enum {
@@ -47,8 +46,6 @@ enum {
 	
 	BOOL							_ejectRequested;
 	
-	MusicBrainzHelper				*_mbHelper;
-
 	// Disc information
 	NSString						*_title;
 	NSString						*_artist;

@@ -18,22 +18,4 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class MusicBrainzHelperData;
-
-@interface MusicBrainzHelper : NSObject
-{
-	NSString					*_discID;
-	MusicBrainzHelperData		*_data;
-	NSMutableArray				*_matches;
-}
-
-- (instancetype) initWithDiscID:(NSString *)discID;
-
-// Hits the server for the requested disc
-- (IBAction) performQuery:(id)sender;
-
-// Number of matches found for the disc
-- (NSUInteger) matchCount;
-- (NSDictionary *) matchAtIndex:(NSUInteger)matchIndex;
-
-@end
+void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray*));
