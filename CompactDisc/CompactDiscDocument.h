@@ -36,8 +36,7 @@ enum {
 @interface CompactDiscDocument : NSDocument <AlbumArtMethods>
 {
     IBOutlet NSArrayController		*_trackController;
-    IBOutlet NSDrawer				*_trackDrawer;
-    IBOutlet NSDrawer				*_artDrawer;
+	IBOutlet NSPanel				*_metadataPanel;
     IBOutlet NSTableView			*_trackTable;
 	IBOutlet NSTextField			*_discNumberTextField;
 	IBOutlet NSTextField			*_discTotalTextField;
@@ -102,8 +101,7 @@ enum {
 - (IBAction)		queryMusicBrainz:(id)sender;
 - (void)			queryMusicBrainzNonInteractive;
 
-- (IBAction)		toggleTrackInformation:(id)sender;
-- (IBAction)		toggleAlbumArt:(id)sender;
+- (IBAction)		toggleMetadataInspectorPanel:(id)sender;
 
 - (IBAction)		selectNextTrack:(id)sender;
 - (IBAction)		selectPreviousTrack:(id)sender;
@@ -153,9 +151,6 @@ enum {
 - (NSDate *)		albumArtDownloadDate;
 - (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
 
-- (NSUInteger)		albumArtWidth;
-- (NSUInteger)		albumArtHeight;
-
 - (NSNumber *)		discNumber;
 - (void)			setDiscNumber:(NSNumber *)discNumber;
 
@@ -187,7 +182,6 @@ enum {
 - (instancetype) handleEncodeScriptCommand:(NSScriptCommand *)command;
 - (instancetype) handleEjectDiscScriptCommand:(NSScriptCommand *)command;
 - (instancetype) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command;
-- (instancetype) handleToggleTrackInformationScriptCommand:(NSScriptCommand *)command;
-- (instancetype) handleToggleAlbumArtScriptCommand:(NSScriptCommand *)command;
+- (instancetype) handleToggleInspectorPanelScriptCommand:(NSScriptCommand *)command;
 - (instancetype) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command;
 @end

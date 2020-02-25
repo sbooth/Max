@@ -58,7 +58,7 @@ static NSString		*MetadataToolbarItemIdentifier			= @"org.sbooth.Max.FileConvers
 		[toolbarItem setLabel: NSLocalizedStringFromTable(@"Convert", @"FileConversion", @"")];
 		[toolbarItem setPaletteLabel: NSLocalizedStringFromTable(@"Convert", @"FileConversion", @"")];
 		[toolbarItem setToolTip: NSLocalizedStringFromTable(@"Convert the selected files", @"FileConversion", @"")];
-		[toolbarItem setImage: [NSImage imageNamed:@"EncodeToolbarImage"]];
+		[toolbarItem setImage: [NSImage imageNamed:@"NSActionTemplate"]];
 		
 		[toolbarItem setTarget:[FileConversionController sharedController]];
 		[toolbarItem setAction:@selector(encode:)];
