@@ -19,9 +19,8 @@
 #import <Cocoa/Cocoa.h>
 
 #import "FileArrayController.h"
-#import "AlbumArtMethods.h"
 
-@interface FileConversionController : NSWindowController <AlbumArtMethods>
+@interface FileConversionController : NSWindowController
 {
 	IBOutlet FileArrayController	*_filesController;
 	IBOutlet NSPanel				*_metadataPanel;

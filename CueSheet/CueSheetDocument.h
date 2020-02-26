@@ -19,9 +19,8 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CueSheetTrack.h"
-#import "AlbumArtMethods.h"
 
-@interface CueSheetDocument : NSDocument <AlbumArtMethods>
+@interface CueSheetDocument : NSDocument
 {
     IBOutlet NSArrayController		*_trackController;
     IBOutlet NSDrawer				*_trackDrawer;
@@ -39,8 +38,6 @@
 	NSString						*_comment;
 	
 	NSImage							*_albumArt;
-	
-	NSDate							*_albumArtDownloadDate;
 	
 	// Other disc info
 	NSNumber						*_discNumber;
@@ -103,9 +100,6 @@
 
 - (NSImage *)		albumArt;
 - (void)			setAlbumArt:(NSImage *)albumArt;
-
-- (NSDate *)		albumArtDownloadDate;
-- (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
 
 - (NSUInteger)		albumArtWidth;
 - (NSUInteger)		albumArtHeight;

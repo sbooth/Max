@@ -18,4 +18,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray*));
+NS_ASSUME_NONNULL_BEGIN
+
+void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray *));
+void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(NSImage *));
+
+NS_ASSUME_NONNULL_END

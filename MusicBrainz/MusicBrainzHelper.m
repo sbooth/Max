@@ -18,7 +18,7 @@
 
 #import "MusicBrainzHelper.h"
 
-void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray*))
+void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray *))
 {
 	/*
 		 // Set MB server and port
@@ -83,7 +83,7 @@ void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray
 		for(NSDictionary *release in releases) {
 			NSMutableDictionary *releaseDictionary = [NSMutableDictionary dictionary];
 
-			[releaseDictionary setValue:[release objectForKey:@"id"] forKey:@"id"];
+			[releaseDictionary setValue:[release objectForKey:@"id"] forKey:@"albumId"];
 			[releaseDictionary setValue:[release objectForKey:@"title"] forKey:@"title"];
 			[releaseDictionary setValue:[release objectForKey:@"date"] forKey:@"date"];
 
@@ -114,12 +114,63 @@ void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray
 			}
 
 			[releaseDictionary setValue:tracksArray forKey:@"tracks"];
+
+//			NSDictionary *coverArtArchive = [release objectForKey:@"cover-art-archive"];
+
 			[releaseArray addObject:releaseDictionary];
 		}
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			completionHandler(releaseArray);
 		});
+	}];
+
+	[dataTask resume];
+}
+
+void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(NSImage *))
+{
+	NSString *url = [NSString stringWithFormat:@"https://coverartarchive.org/release/%@", releaseID];
+
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+	request.URL = [NSURL URLWithString:url];
+	request.HTTPMethod = @"GET";
+
+	NSString *bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+	[request setValue:[NSString stringWithFormat:@"Max %@", bundleVersion] forHTTPHeaderField:@"User-Agent"];
+
+	[request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+
+	NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+	NSURLSession *session = [NSURLSession sessionWithConfiguration:sessionConfig];
+
+	NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:[request autorelease] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+		if(nil == data) {
+			return;
+		}
+
+		NSError *err = nil;
+		NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+
+		NSURL *imageURL = nil;
+
+		NSArray *images = [json objectForKey:@"images"];
+		for(NSDictionary *image in images) {
+			if([[image objectForKey:@"front"] boolValue]) {
+				// Swap out http for https
+				NSURLComponents *urlComponents = [NSURLComponents componentsWithString:[image objectForKey:@"image"]];
+				urlComponents.scheme = @"https";
+				imageURL = urlComponents.URL;
+				break;
+			}
+		}
+
+		if(NULL != imageURL) {
+			NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageURL];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completionHandler(image);
+			});
+		}
 	}];
 
 	[dataTask resume];

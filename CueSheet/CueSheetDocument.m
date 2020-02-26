@@ -23,7 +23,6 @@
 #import "PreferencesController.h"
 #import "Decoder.h"
 #import "Genres.h"
-#import "AmazonAlbumArtSheet.h"
 #import "MusicBrainzMatchSheet.h"
 #import "MusicBrainzHelper.h"
 #import "UtilityFunctions.h"
@@ -37,7 +36,6 @@
 
 @interface CueSheetDocument (Private)
 - (void) readFromCDInfoFileIfPresent;
-- (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void) updateMetadataFromMusicBrainz:(NSDictionary *)releaseDictionary;
 @end
 
@@ -61,7 +59,6 @@
 	[_comment release];					_comment = nil;
 
 	[_albumArt release];				_albumArt = nil;
-	[_albumArtDownloadDate release];	_albumArtDownloadDate = nil;
 
 	[_discNumber release];				_discNumber = nil;
 	[_discTotal release];				_discTotal = nil;
@@ -604,12 +601,27 @@
 
 		// If only match was found, update ourselves
 		if(1 == [results count]) {
-			[self updateMetadataFromMusicBrainz:[results firstObject]];
+			NSDictionary *release = [results firstObject];
+			[self updateMetadataFromMusicBrainz:release];
+			NSString *releaseID = [release objectForKey:@"albumId"];
+			PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image) {
+				[self setAlbumArt:image];
+			});
 		}
 		else {
 			MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
 			[sheet setValue:results forKey:@"matches"];
-			[[NSApplication sharedApplication] beginSheet:[sheet sheet] modalForWindow:[self windowForSheet] modalDelegate:self didEndSelector:@selector(didEndQueryMusicBrainzSheet:returnCode:contextInfo:) contextInfo:sheet];
+			[[self windowForSheet] beginSheet:[sheet sheet] completionHandler:^(NSModalResponse returnCode) {
+				if(NSOKButton == returnCode) {
+					NSDictionary *release = [sheet selectedRelease];
+					[self updateMetadataFromMusicBrainz:release];
+					NSString *releaseID = [release objectForKey:@"albumId"];
+					PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image) {
+						[self setAlbumArt:image];
+					});
+				}
+			}];
+			[sheet release];
 		}
 	});
 }
@@ -621,7 +633,12 @@
 	
 	PerformMusicBrainzQuery([self discID], ^(NSArray *results) {
 		if(0 < [results count]) {
-			[self updateMetadataFromMusicBrainz:[results firstObject]];
+			NSDictionary *release = [results firstObject];
+			[self updateMetadataFromMusicBrainz:release];
+			NSString *releaseID = [release objectForKey:@"albumId"];
+			PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image) {
+				[self setAlbumArt:image];
+			});
 		}
 	});
 }
@@ -632,9 +649,7 @@
 - (IBAction) selectPreviousTrack:(id)sender					{ [_trackController selectPrevious:sender];	 }
 
 - (IBAction) downloadAlbumArt:(id)sender
-{	
-	AmazonAlbumArtSheet *art = [[(AmazonAlbumArtSheet *)[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
-	[art showAlbumArtMatches];
+{
 }
 
 - (IBAction) selectAlbumArt:(id) sender
@@ -683,7 +698,6 @@
 - (NSString *)		comment								{ return [[_comment retain] autorelease]; }
 
 - (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
-- (NSDate *)		albumArtDownloadDate				{ return [[_albumArtDownloadDate retain] autorelease]; }
 - (NSUInteger)		albumArtWidth						{ return (NSUInteger)[[self albumArt] size].width; }
 - (NSUInteger)		albumArtHeight						{ return (NSUInteger)[[self albumArt] size].height; }
 
@@ -728,8 +742,6 @@
 }
 
 #pragma mark Mutators
-
-- (void) setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate { [_albumArtDownloadDate release]; _albumArtDownloadDate = [albumArtDownloadDate retain]; }
 
 - (void) setTitle:(NSString *)title
 {
@@ -796,12 +808,10 @@
 	if(NO == [[self albumArt] isEqual:albumArt]) {
 		[[self undoManager] beginUndoGrouping];
 		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArt:) object:_albumArt];
-		[[self undoManager] registerUndoWithTarget:self selector:@selector(setAlbumArtDownloadDate:) object:_albumArtDownloadDate];
 		[[self undoManager] setActionName:NSLocalizedStringFromTable(@"Album Art", @"UndoRedo", @"")];
 		[[self undoManager] endUndoGrouping];
 		[_albumArt release];
 		_albumArt = [albumArt retain];
-		[self setAlbumArtDownloadDate:nil];
 	}
 }
 
@@ -926,33 +936,11 @@
 		// Convert PNG data to an NSImage
 		if([dictionary objectForKey:@"albumArt"])
 			[self setAlbumArt:[[NSImage alloc] initWithData:[dictionary objectForKey:@"albumArt"]]];
-		if([dictionary objectForKey:@"albumArtDownloadDate"])
-			[self setAlbumArtDownloadDate:[dictionary objectForKey:@"albumArtDownloadDate"]];
-		
-		// Album art downloaded from amazon can only be kept for 30 days
-		if(nil != [self albumArtDownloadDate] && (NSTimeInterval)(-30 * 24 * 60 * 60) >= [[self albumArtDownloadDate] timeIntervalSinceNow]) {
-			[self setAlbumArt:nil];
-			[self setAlbumArtDownloadDate:nil];
-		}	
 	}
-}
-
-- (void) didEndQueryMusicBrainzSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	MusicBrainzMatchSheet *musicBrainzMatchSheet = (MusicBrainzMatchSheet *)contextInfo;
-	
-	[sheet orderOut:self];
-	
-	if(NSOKButton == returnCode)
-		[self updateMetadataFromMusicBrainz:[musicBrainzMatchSheet selectedRelease]];
-	
-	[musicBrainzMatchSheet release];
 }
 
 - (void) updateMetadataFromMusicBrainz:(NSDictionary *)releaseDictionary
 {
-	//	BOOL isVariousArtists = [_mbHelper isVariousArtists];
-	
 	[[self undoManager] beginUndoGrouping];
 	
 	[self setTitle:[releaseDictionary valueForKey:@"title"]];
