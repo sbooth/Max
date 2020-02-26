@@ -20,7 +20,6 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="107" y="367" width="635" height="430"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
-            <value key="maxSize" type="size" width="2.3626499999999998e-38" height="-19"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="635" height="430"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -96,17 +95,17 @@ DQ
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         <size key="cellSize" width="67" height="18"/>
                         <size key="intercellSpacing" width="4" height="2"/>
-                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="leading" alignment="left" inset="2" id="413">
+                        <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="413">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <cells>
                             <column>
-                                <buttonCell type="radio" title="Qualità" imagePosition="leading" alignment="left" state="on" toolTip="Generate a variable bitrate (VBR) mp3 file" tag="1" inset="2" id="102">
+                                <buttonCell type="radio" title="Qualità" imagePosition="left" alignment="left" state="on" toolTip="Generate a variable bitrate (VBR) mp3 file" tag="1" inset="2" id="102">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
-                                <buttonCell type="radio" title="Bitrate" imagePosition="leading" alignment="left" toolTip="Generate an average bitrate (ABR) or constant bitrate (CBR) MP3 file" inset="2" id="101">
+                                <buttonCell type="radio" title="Bitrate" imagePosition="left" alignment="left" toolTip="Generate an average bitrate (ABR) or constant bitrate (CBR) MP3 file" inset="2" id="101">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -395,7 +394,7 @@ DQ
                     <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="113">
                         <rect key="frame" x="208" y="58" width="266" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <buttonCell key="cell" type="check" title="Forza il codificatore in bitrate costante" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="386">
+                        <buttonCell key="cell" type="check" title="Forza il codificatore in bitrate costante" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="386">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>

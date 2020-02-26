@@ -129,7 +129,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="685">
                                     <rect key="frame" x="14" y="27" width="226" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Usa numeri di traccia a due cifre" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="778">
+                                    <buttonCell key="cell" type="check" title="Usa numeri di traccia a due cifre" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="778">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -141,7 +141,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="686">
                                     <rect key="frame" x="14" y="7" width="421" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Usa etichette dell'album se non esistono etichette di traccia" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="779">
+                                    <buttonCell key="cell" type="check" title="Usa etichette dell'album se non esistono etichette di traccia" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="779">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -220,7 +220,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="712">
                                     <rect key="frame" x="14" y="118" width="410" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <buttonCell key="cell" type="check" title="Usa un formato personalizzato per denominare i file di uscita" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="782">
+                                    <buttonCell key="cell" type="check" title="Usa un formato personalizzato per denominare i file di uscita" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="782">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -241,7 +241,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="681">
                                     <rect key="frame" x="14" y="9" width="369" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <buttonCell key="cell" type="check" title="Appunta nei commenti le impostazioni del codificatore" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="783">
+                                    <buttonCell key="cell" type="check" title="Appunta nei commenti le impostazioni del codificatore" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="783">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -252,7 +252,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="683">
                                     <rect key="frame" x="14" y="49" width="227" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <buttonCell key="cell" type="check" title="Sovrascrivi file di uscita esistenti" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="784">
+                                    <buttonCell key="cell" type="check" title="Sovrascrivi file di uscita esistenti" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="784">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -263,7 +263,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="684">
                                     <rect key="frame" x="14" y="29" width="206" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <buttonCell key="cell" type="check" title="Chiedi prima di sovrascrivere" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="785">
+                                    <buttonCell key="cell" type="check" title="Chiedi prima di sovrascrivere" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="785">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -285,7 +285,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="682">
                                     <rect key="frame" x="14" y="29" width="149" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <buttonCell key="cell" type="check" title="Unisci file di entrata" bezelStyle="regularSquare" imagePosition="leading" alignment="left" enabled="NO" inset="2" id="787">
+                                    <buttonCell key="cell" type="check" title="Unisci file di entrata" bezelStyle="regularSquare" imagePosition="left" alignment="left" enabled="NO" inset="2" id="787">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -296,7 +296,7 @@
                                 <button fixedFrame="YES" imageHugsTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="680">
                                     <rect key="frame" x="14" y="7" width="268" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Elimina i file di origine dopo la codifica" bezelStyle="regularSquare" imagePosition="leading" alignment="left" inset="2" id="786">
+                                    <buttonCell key="cell" type="check" title="Elimina i file di origine dopo la codifica" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="786">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
