@@ -22,7 +22,6 @@
 #import "EncoderController.h"
 #import "PreferencesController.h"
 #import "Genres.h"
-#import "AmazonAlbumArtSheet.h"
 #import "ImageAndTextCell.h"
 #import "UtilityFunctions.h"
 
@@ -420,8 +419,6 @@ static FileConversionController		*sharedController						= nil;
 
 - (IBAction) downloadAlbumArt:(id)sender
 {	
-	AmazonAlbumArtSheet *art = [[(AmazonAlbumArtSheet *)[AmazonAlbumArtSheet alloc] initWithSource:self] autorelease];
-	[art showAlbumArtMatches];
 }
 
 - (IBAction) selectAlbumArt:(id) sender

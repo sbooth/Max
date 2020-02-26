@@ -42,7 +42,7 @@
 }
 
 - (NSWindow *)		sheet					{ return [[_sheet retain] autorelease]; }
-- (NSUInteger)		selectedAlbumIndex		{ return [_matchesController selectionIndex]; }
+- (NSDictionary *)	selectedRelease			{ return [[_matchesController selectedObjects] firstObject]; }
 
 - (IBAction)		cancel:(id)sender		{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSCancelButton]; }
 - (IBAction)		ok:(id)sender			{ [[NSApplication sharedApplication] endSheet:[self sheet] returnCode:NSOKButton]; }

@@ -23,12 +23,12 @@
     IBOutlet NSWindow			*_sheet;
     IBOutlet NSArrayController	*_matchesController;
 
-	NSMutableArray				*_matches;
+	NSArray						*_matches;
 }
 
 - (NSWindow *)		sheet;
 
-- (NSUInteger)		selectedAlbumIndex;
+- (NSDictionary *)	selectedRelease;
 
 - (IBAction)		ok:(id)sender;
 - (IBAction)		cancel:(id)sender;

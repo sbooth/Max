@@ -20,8 +20,6 @@
 
 #import "CompactDisc.h"
 #import "Track.h"
-#import "MusicBrainzHelper.h"
-#import "AlbumArtMethods.h"
 
 enum {
 	kEncodeMenuItemTag					= 1,
@@ -33,7 +31,7 @@ enum {
 	kDownloadAlbumArtMenuItemTag		= 8
 };
 
-@interface CompactDiscDocument : NSDocument <AlbumArtMethods>
+@interface CompactDiscDocument : NSDocument
 {
     IBOutlet NSArrayController		*_trackController;
 	IBOutlet NSPanel				*_metadataPanel;
@@ -47,8 +45,6 @@ enum {
 	
 	BOOL							_ejectRequested;
 	
-	MusicBrainzHelper				*_mbHelper;
-
 	// Disc information
 	NSString						*_title;
 	NSString						*_artist;
@@ -62,8 +58,6 @@ enum {
 	NSString						*_musicbrainzArtistId;
 	
 	NSImage							*_albumArt;
-	
-	NSDate							*_albumArtDownloadDate;
 
 	// Other disc info
 	NSNumber						*_discNumber;
@@ -148,9 +142,6 @@ enum {
 - (NSImage *)		albumArt;
 - (void)			setAlbumArt:(NSImage *)albumArt;
 
-- (NSDate *)		albumArtDownloadDate;
-- (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
-
 - (NSNumber *)		discNumber;
 - (void)			setDiscNumber:(NSNumber *)discNumber;
 
@@ -183,5 +174,4 @@ enum {
 - (instancetype) handleEjectDiscScriptCommand:(NSScriptCommand *)command;
 - (instancetype) handleQueryMusicBrainzScriptCommand:(NSScriptCommand *)command;
 - (instancetype) handleToggleInspectorPanelScriptCommand:(NSScriptCommand *)command;
-- (instancetype) handleFetchAlbumArtScriptCommand:(NSScriptCommand *)command;
 @end

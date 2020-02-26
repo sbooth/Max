@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2005 - 2007 Stephen F. Booth <me@sbooth.org>
+ *  Copyright (C) 2005 - 2020 Stephen F. Booth <me@sbooth.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,10 +19,8 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CueSheetTrack.h"
-#import "AlbumArtMethods.h"
-#import "MusicBrainzHelper.h"
 
-@interface CueSheetDocument : NSDocument <AlbumArtMethods>
+@interface CueSheetDocument : NSDocument
 {
     IBOutlet NSArrayController		*_trackController;
     IBOutlet NSDrawer				*_trackDrawer;
@@ -30,8 +28,6 @@
     IBOutlet NSTableView			*_trackTable;
 	IBOutlet NSTextField			*_discNumberTextField;
 	IBOutlet NSTextField			*_discTotalTextField;
-
-	MusicBrainzHelper				*_mbHelper;
 
 	// Disc information
 	NSString						*_title;
@@ -42,8 +38,6 @@
 	NSString						*_comment;
 	
 	NSImage							*_albumArt;
-	
-	NSDate							*_albumArtDownloadDate;
 	
 	// Other disc info
 	NSNumber						*_discNumber;
@@ -106,9 +100,6 @@
 
 - (NSImage *)		albumArt;
 - (void)			setAlbumArt:(NSImage *)albumArt;
-
-- (NSDate *)		albumArtDownloadDate;
-- (void)			setAlbumArtDownloadDate:(NSDate *)albumArtDownloadDate;
 
 - (NSUInteger)		albumArtWidth;
 - (NSUInteger)		albumArtHeight;
