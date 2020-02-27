@@ -506,8 +506,11 @@
 		return;
 
 	PerformMusicBrainzQuery([[self disc] discID], ^(NSArray *results) {
+		if(0 == [results count]) {
+			return;
+		}
 		// If only match was found, update ourselves
-		if(1 == [results count]) {
+		else if(1 == [results count]) {
 			NSDictionary *release = [results firstObject];
 			[self updateMetadataFromMusicBrainz:release];
 			NSString *releaseID = [release objectForKey:@"albumId"];
@@ -558,7 +561,6 @@
 	else {
 		[_metadataPanel orderOut:sender];
 	}
-
 }
 
 - (IBAction) selectNextTrack:(id)sender						{ [_trackController selectNext:sender]; }
