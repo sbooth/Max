@@ -23,8 +23,7 @@
 @interface CueSheetDocument : NSDocument
 {
     IBOutlet NSArrayController		*_trackController;
-    IBOutlet NSDrawer				*_trackDrawer;
-    IBOutlet NSDrawer				*_artDrawer;
+	IBOutlet NSPanel				*_metadataPanel;
     IBOutlet NSTableView			*_trackTable;
 	IBOutlet NSTextField			*_discNumberTextField;
 	IBOutlet NSTextField			*_discTotalTextField;
@@ -67,8 +66,7 @@
 - (IBAction)		queryMusicBrainz:(id)sender;
 - (void)			queryMusicBrainzNonInteractive;
 
-- (IBAction)		toggleTrackInformation:(id)sender;
-- (IBAction)		toggleAlbumArt:(id)sender;
+- (IBAction)		toggleMetadataInspectorPanel:(id)sender;
 
 - (IBAction)		selectNextTrack:(id)sender;
 - (IBAction)		selectPreviousTrack:(id)sender;
@@ -100,9 +98,6 @@
 
 - (NSImage *)		albumArt;
 - (void)			setAlbumArt:(NSImage *)albumArt;
-
-- (NSUInteger)		albumArtWidth;
-- (NSUInteger)		albumArtHeight;
 
 - (NSNumber *)		discNumber;
 - (void)			setDiscNumber:(NSNumber *)discNumber;

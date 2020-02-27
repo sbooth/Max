@@ -102,20 +102,12 @@
 		return [_trackController canSelectNext];
 	else if([item action] == @selector(selectPreviousTrack:))
 		return [_trackController canSelectPrevious];
-	else if([item action] == @selector(toggleTrackInformation:)) {
-		if(NSDrawerOpenState == [_trackDrawer state] || NSDrawerOpeningState == [_trackDrawer state])
-			[item setTitle:NSLocalizedStringFromTable(@"Hide Metadata", @"Menus", @"")];
+	else if([item action] == @selector(toggleMetadataInspectorPanel:)) {
+		if([_metadataPanel isVisible])
+			[item setTitle:NSLocalizedStringFromTable(@"Hide Track Inspector", @"Menus", @"")];
 		else
-			[item setTitle:NSLocalizedStringFromTable(@"Show Metadata", @"Menus", @"")];
-		
-		return YES;
-	}
-	else if([item action] == @selector(toggleAlbumArt:)) {
-		if(NSDrawerOpenState == [_artDrawer state] || NSDrawerOpeningState == [_artDrawer state])
-			[item setTitle:NSLocalizedStringFromTable(@"Hide Album Art", @"Menus", @"")];
-		else
-			[item setTitle:NSLocalizedStringFromTable(@"Show Album Art", @"Menus", @"")];
-		
+			[item setTitle:NSLocalizedStringFromTable(@"Show Track Inspector", @"Menus", @"")];
+
 		return YES;
 	}
 	else
@@ -599,8 +591,11 @@
 	PerformMusicBrainzQuery([self discID], ^(NSArray *results) {
 //		NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
 
+		if(0 == [results count]) {
+			return;
+		}
 		// If only match was found, update ourselves
-		if(1 == [results count]) {
+		else if(1 == [results count]) {
 			NSDictionary *release = [results firstObject];
 			[self updateMetadataFromMusicBrainz:release];
 			NSString *releaseID = [release objectForKey:@"albumId"];
@@ -643,8 +638,16 @@
 	});
 }
 
-- (IBAction) toggleTrackInformation:(id)sender				{ [_trackDrawer toggle:sender]; }
-- (IBAction) toggleAlbumArt:(id)sender						{ [_artDrawer toggle:sender]; }
+- (IBAction) toggleMetadataInspectorPanel:(id)sender
+{
+	if(![_metadataPanel isVisible]) {
+		[_metadataPanel orderFront:sender];
+	}
+	else {
+		[_metadataPanel orderOut:sender];
+	}
+}
+
 - (IBAction) selectNextTrack:(id)sender						{ [_trackController selectNext:sender]; }
 - (IBAction) selectPreviousTrack:(id)sender					{ [_trackController selectPrevious:sender];	 }
 
@@ -698,8 +701,6 @@
 - (NSString *)		comment								{ return [[_comment retain] autorelease]; }
 
 - (NSImage *)		albumArt							{ return [[_albumArt retain] autorelease]; }
-- (NSUInteger)		albumArtWidth						{ return (NSUInteger)[[self albumArt] size].width; }
-- (NSUInteger)		albumArtHeight						{ return (NSUInteger)[[self albumArt] size].height; }
 
 - (NSNumber *)		discNumber							{ return [[_discNumber retain] autorelease]; }
 - (NSNumber *)		discTotal							{ return [[_discTotal retain] autorelease]; }

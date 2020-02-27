@@ -1351,12 +1351,12 @@
 		8C9451350A12E4D700C8DCAE /* CompactDisc */ = {
 			isa = PBXGroup;
 			children = (
-				8C9451380A12E4D700C8DCAE /* CompactDisc.h */,
-				8C9451390A12E4D700C8DCAE /* CompactDisc.m */,
 				8C94513A0A12E4D700C8DCAE /* CompactDiscDocument.h */,
 				8C94513B0A12E4D700C8DCAE /* CompactDiscDocument.m */,
 				8C94513C0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.h */,
 				8C94513D0A12E4D700C8DCAE /* CompactDiscDocumentToolbar.m */,
+				8C9451380A12E4D700C8DCAE /* CompactDisc.h */,
+				8C9451390A12E4D700C8DCAE /* CompactDisc.m */,
 				8C9451400A12E4D700C8DCAE /* Track.h */,
 				8C9451410A12E4D700C8DCAE /* Track.m */,
 			);

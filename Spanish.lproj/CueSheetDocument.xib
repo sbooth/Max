@@ -8,16 +8,16 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CueSheetDocument">
             <connections>
-                <outlet property="_artDrawer" destination="391" id="392"/>
                 <outlet property="_discNumberTextField" destination="103" id="346"/>
                 <outlet property="_discTotalTextField" destination="106" id="347"/>
+                <outlet property="_metadataPanel" destination="zKD-rq-OWU" id="bOz-sS-hMZ"/>
                 <outlet property="_trackController" destination="25" id="158"/>
-                <outlet property="_trackDrawer" destination="44" id="157"/>
+                <outlet property="_trackTable" destination="95" id="F2K-Tk-Oen"/>
                 <outlet property="window" destination="5" id="7"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Cue Sheet">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -140,9 +140,9 @@
                             <rect key="frame" x="1" y="0.0" width="392" height="209"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" emptySelection="NO" autosaveColumns="NO" headerView="447" id="95">
+                                <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" emptySelection="NO" autosaveColumns="NO" headerView="447" id="95">
                                     <rect key="frame" x="0.0" y="0.0" width="392" height="184"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -461,249 +461,6 @@
                 <binding destination="-2" name="contentArray" keyPath="tracks" id="198"/>
             </connections>
         </arrayController>
-        <drawer trailingOffset="15" id="44" userLabel="TrackDrawer">
-            <size key="contentSize" width="314" height="573"/>
-            <size key="minContentSize" width="314" height="214"/>
-            <size key="maxContentSize" width="600" height="400"/>
-            <connections>
-                <outlet property="contentView" destination="46" id="47"/>
-                <outlet property="parentWindow" destination="5" id="45"/>
-            </connections>
-        </drawer>
-        <customView id="46" userLabel="Metadata View">
-            <rect key="frame" x="0.0" y="0.0" width="311" height="271"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <subviews>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="33" translatesAutoresizingMaskIntoConstraints="NO" id="145">
-                    <rect key="frame" x="65" y="76" width="37" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="ISRC:" id="440">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="144">
-                    <rect key="frame" x="107" y="74" width="184" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="439">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="25" name="value" keyPath="selection.ISRC" id="153">
-                            <dictionary key="options">
-                                <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
-                                <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
-                                <integer key="NSConditionallySetsEditable" value="1"/>
-                                <integer key="NSConditionallySetsEnabled" value="0"/>
-                                <integer key="NSConditionallySetsHidden" value="0"/>
-                                <integer key="NSContinuouslyUpdatesValue" value="0"/>
-                                <string key="NSMultipleValuesPlaceholder"></string>
-                                <string key="NSNoSelectionPlaceholder"></string>
-                                <string key="NSNotApplicablePlaceholder"></string>
-                                <string key="NSNullPlaceholder">Unknown</string>
-                                <integer key="NSRaisesForNotApplicableKeys" value="1"/>
-                                <integer key="NSValidatesImmediately" value="0"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="138">
-                    <rect key="frame" x="107" y="20" width="184" height="44"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="438">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="25" name="value" keyPath="selection.comment" id="256"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="78" translatesAutoresizingMaskIntoConstraints="NO" id="137">
-                    <rect key="frame" x="20" y="44" width="82" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Comentario:" id="437">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="78" translatesAutoresizingMaskIntoConstraints="NO" id="136">
-                    <rect key="frame" x="20" y="108" width="82" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Compositor:" id="436">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="135">
-                    <rect key="frame" x="107" y="106" width="184" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="435">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="25" name="value" keyPath="selection.composer" id="254">
-                            <dictionary key="options">
-                                <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
-                                <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
-                                <integer key="NSConditionallySetsEditable" value="1"/>
-                                <integer key="NSConditionallySetsEnabled" value="0"/>
-                                <integer key="NSConditionallySetsHidden" value="0"/>
-                                <integer key="NSContinuouslyUpdatesValue" value="0"/>
-                                <string key="NSMultipleValuesPlaceholder"></string>
-                                <string key="NSNoSelectionPlaceholder"></string>
-                                <string key="NSNotApplicablePlaceholder"></string>
-                                <string key="NSNullPlaceholder">Same As Album</string>
-                                <integer key="NSRaisesForNotApplicableKeys" value="1"/>
-                                <integer key="NSValidatesImmediately" value="0"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="134">
-                    <rect key="frame" x="48" y="137" width="54" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Género:" id="434">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <comboBox verticalHuggingPriority="750" fixedFrame="YES" tag="3" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="133">
-                    <rect key="frame" x="107" y="133" width="187" height="26"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" tag="3" drawsBackground="YES" numberOfVisibleItems="10" id="433">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </comboBoxCell>
-                    <connections>
-                        <binding destination="159" name="contentValues" keyPath="arrangedObjects" id="162"/>
-                        <binding destination="25" name="value" keyPath="selection.genre" previousBinding="162" id="252">
-                            <dictionary key="options">
-                                <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
-                                <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
-                                <integer key="NSConditionallySetsEditable" value="0"/>
-                                <integer key="NSConditionallySetsEnabled" value="1"/>
-                                <integer key="NSConditionallySetsHidden" value="0"/>
-                                <integer key="NSContinuouslyUpdatesValue" value="0"/>
-                                <string key="NSMultipleValuesPlaceholder"></string>
-                                <string key="NSNoSelectionPlaceholder"></string>
-                                <string key="NSNotApplicablePlaceholder"></string>
-                                <string key="NSNullPlaceholder">Same As Album</string>
-                                <integer key="NSRaisesForNotApplicableKeys" value="1"/>
-                                <integer key="NSValidatesImmediately" value="0"/>
-                            </dictionary>
-                        </binding>
-                        <outlet property="nextKeyView" destination="126" id="142"/>
-                    </connections>
-                </comboBox>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="41" translatesAutoresizingMaskIntoConstraints="NO" id="132">
-                    <rect key="frame" x="57" y="167" width="45" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Fecha:" id="432">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="130">
-                    <rect key="frame" x="107" y="165" width="184" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" tag="2" drawsBackground="YES" id="431">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="25" name="value" keyPath="selection.date" id="250">
-                            <dictionary key="options">
-                                <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
-                                <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
-                                <integer key="NSConditionallySetsEditable" value="1"/>
-                                <integer key="NSConditionallySetsEnabled" value="0"/>
-                                <integer key="NSConditionallySetsHidden" value="0"/>
-                                <integer key="NSContinuouslyUpdatesValue" value="0"/>
-                                <string key="NSMultipleValuesPlaceholder"></string>
-                                <string key="NSNoSelectionPlaceholder"></string>
-                                <string key="NSNotApplicablePlaceholder"></string>
-                                <string key="NSNullPlaceholder">Same As Album</string>
-                                <integer key="NSRaisesForNotApplicableKeys" value="1"/>
-                                <integer key="NSValidatesImmediately" value="0"/>
-                            </dictionary>
-                        </binding>
-                        <outlet property="nextKeyView" destination="133" id="141"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="46" translatesAutoresizingMaskIntoConstraints="NO" id="129">
-                    <rect key="frame" x="52" y="199" width="50" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Artista:" id="430">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="128">
-                    <rect key="frame" x="107" y="197" width="184" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" tag="1" drawsBackground="YES" id="429">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="25" name="value" keyPath="selection.artist" id="248">
-                            <dictionary key="options">
-                                <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
-                                <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
-                                <integer key="NSConditionallySetsEditable" value="1"/>
-                                <integer key="NSConditionallySetsEnabled" value="0"/>
-                                <integer key="NSConditionallySetsHidden" value="0"/>
-                                <integer key="NSContinuouslyUpdatesValue" value="0"/>
-                                <string key="NSMultipleValuesPlaceholder"></string>
-                                <string key="NSNoSelectionPlaceholder"></string>
-                                <string key="NSNotApplicablePlaceholder"></string>
-                                <string key="NSNullPlaceholder">Same As Album</string>
-                                <integer key="NSRaisesForNotApplicableKeys" value="1"/>
-                                <integer key="NSValidatesImmediately" value="0"/>
-                            </dictionary>
-                        </binding>
-                        <outlet property="nextKeyView" destination="130" id="140"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="41" translatesAutoresizingMaskIntoConstraints="NO" id="127">
-                    <rect key="frame" x="57" y="231" width="45" height="17"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Título:" id="428">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="126">
-                    <rect key="frame" x="107" y="229" width="184" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="427">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <action selector="alignRight:" target="-1" id="139"/>
-                        <binding destination="25" name="value" keyPath="selection.title" id="151"/>
-                        <outlet property="nextKeyView" destination="128" id="143"/>
-                    </connections>
-                </textField>
-            </subviews>
-        </customView>
         <arrayController id="159" userLabel="GenreController">
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="genres" id="160"/>
@@ -725,28 +482,270 @@
             </connections>
         </objectController>
         <userDefaultsController representsSharedInstance="YES" id="300" userLabel="Shared User Defaults Controller"/>
-        <drawer preferredEdge="minX" trailingOffset="15" id="391" userLabel="ArtDrawer">
-            <size key="contentSize" width="250" height="400"/>
-            <size key="minContentSize" width="50" height="214"/>
-            <size key="maxContentSize" width="600" height="400"/>
-            <connections>
-                <outlet property="contentView" destination="393" id="394"/>
-                <outlet property="parentWindow" destination="5" id="395"/>
-            </connections>
-        </drawer>
-        <customView id="393" userLabel="Album Art">
-            <rect key="frame" x="0.0" y="0.0" width="212" height="175"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="400">
-                    <rect key="frame" x="17" y="17" width="178" height="141"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <imageCell key="cell" selectable="YES" editable="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="441"/>
-                    <connections>
-                        <binding destination="184" name="value" keyPath="selection.albumArt" id="402"/>
-                    </connections>
-                </imageView>
-            </subviews>
-        </customView>
+        <window title="Metadata Inspector" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Metadata Inspector" animationBehavior="default" titleVisibility="hidden" id="zKD-rq-OWU" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" utility="YES" nonactivatingPanel="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="181" y="118" width="550" height="278"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1792" height="1097"/>
+            <view key="contentView" id="5l4-Ad-Fw6">
+                <rect key="frame" x="0.0" y="0.0" width="550" height="278"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView toolTip="Drag album artwork here" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jJS-vE-wfG">
+                        <rect key="frame" x="17" y="39" width="200" height="222"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" selectable="YES" editable="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="mdD-J6-4P5"/>
+                        <connections>
+                            <binding destination="184" name="value" keyPath="selection.albumArt" id="4QK-ZV-SuY"/>
+                        </connections>
+                    </imageView>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="196" translatesAutoresizingMaskIntoConstraints="NO" id="Ddr-iD-36U">
+                        <rect key="frame" x="18" y="20" width="200" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="1200 x 1600" id="uhh-ci-hJV">
+                            <font key="font" metaFont="message" size="11"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="184" name="value" keyPath="selection.albumArt" id="1TS-ge-GD2">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">ImageDimensionsValueTransformer</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="33" translatesAutoresizingMaskIntoConstraints="NO" id="145">
+                        <rect key="frame" x="304" y="79" width="37" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="ISRC:" id="440">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="144">
+                        <rect key="frame" x="346" y="77" width="184" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="439">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="25" name="value" keyPath="selection.ISRC" id="153">
+                                <dictionary key="options">
+                                    <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
+                                    <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
+                                    <integer key="NSConditionallySetsEditable" value="1"/>
+                                    <integer key="NSConditionallySetsEnabled" value="0"/>
+                                    <integer key="NSConditionallySetsHidden" value="0"/>
+                                    <integer key="NSContinuouslyUpdatesValue" value="0"/>
+                                    <string key="NSMultipleValuesPlaceholder"></string>
+                                    <string key="NSNoSelectionPlaceholder"></string>
+                                    <string key="NSNotApplicablePlaceholder"></string>
+                                    <string key="NSNullPlaceholder">Unknown</string>
+                                    <integer key="NSRaisesForNotApplicableKeys" value="1"/>
+                                    <integer key="NSValidatesImmediately" value="0"/>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="138">
+                        <rect key="frame" x="346" y="23" width="184" height="44"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="438">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="25" name="value" keyPath="selection.comment" id="256"/>
+                        </connections>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="78" translatesAutoresizingMaskIntoConstraints="NO" id="137">
+                        <rect key="frame" x="259" y="47" width="82" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Comentario:" id="437">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="78" translatesAutoresizingMaskIntoConstraints="NO" id="136">
+                        <rect key="frame" x="259" y="111" width="82" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Compositor:" id="436">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="135">
+                        <rect key="frame" x="346" y="109" width="184" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="435">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="25" name="value" keyPath="selection.composer" id="254">
+                                <dictionary key="options">
+                                    <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
+                                    <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
+                                    <integer key="NSConditionallySetsEditable" value="1"/>
+                                    <integer key="NSConditionallySetsEnabled" value="0"/>
+                                    <integer key="NSConditionallySetsHidden" value="0"/>
+                                    <integer key="NSContinuouslyUpdatesValue" value="0"/>
+                                    <string key="NSMultipleValuesPlaceholder"></string>
+                                    <string key="NSNoSelectionPlaceholder"></string>
+                                    <string key="NSNotApplicablePlaceholder"></string>
+                                    <string key="NSNullPlaceholder">Same As Album</string>
+                                    <integer key="NSRaisesForNotApplicableKeys" value="1"/>
+                                    <integer key="NSValidatesImmediately" value="0"/>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="134">
+                        <rect key="frame" x="287" y="140" width="54" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Género:" id="434">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <comboBox verticalHuggingPriority="750" fixedFrame="YES" tag="3" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="133">
+                        <rect key="frame" x="346" y="136" width="187" height="26"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" tag="3" drawsBackground="YES" numberOfVisibleItems="10" id="433">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </comboBoxCell>
+                        <connections>
+                            <binding destination="159" name="contentValues" keyPath="arrangedObjects" id="162"/>
+                            <binding destination="25" name="value" keyPath="selection.genre" previousBinding="162" id="252">
+                                <dictionary key="options">
+                                    <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
+                                    <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
+                                    <integer key="NSConditionallySetsEditable" value="0"/>
+                                    <integer key="NSConditionallySetsEnabled" value="1"/>
+                                    <integer key="NSConditionallySetsHidden" value="0"/>
+                                    <integer key="NSContinuouslyUpdatesValue" value="0"/>
+                                    <string key="NSMultipleValuesPlaceholder"></string>
+                                    <string key="NSNoSelectionPlaceholder"></string>
+                                    <string key="NSNotApplicablePlaceholder"></string>
+                                    <string key="NSNullPlaceholder">Same As Album</string>
+                                    <integer key="NSRaisesForNotApplicableKeys" value="1"/>
+                                    <integer key="NSValidatesImmediately" value="0"/>
+                                </dictionary>
+                            </binding>
+                            <outlet property="nextKeyView" destination="126" id="142"/>
+                        </connections>
+                    </comboBox>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="41" translatesAutoresizingMaskIntoConstraints="NO" id="132">
+                        <rect key="frame" x="296" y="170" width="45" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Fecha:" id="432">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="130">
+                        <rect key="frame" x="346" y="168" width="184" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" tag="2" drawsBackground="YES" id="431">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="25" name="value" keyPath="selection.date" id="250">
+                                <dictionary key="options">
+                                    <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
+                                    <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
+                                    <integer key="NSConditionallySetsEditable" value="1"/>
+                                    <integer key="NSConditionallySetsEnabled" value="0"/>
+                                    <integer key="NSConditionallySetsHidden" value="0"/>
+                                    <integer key="NSContinuouslyUpdatesValue" value="0"/>
+                                    <string key="NSMultipleValuesPlaceholder"></string>
+                                    <string key="NSNoSelectionPlaceholder"></string>
+                                    <string key="NSNotApplicablePlaceholder"></string>
+                                    <string key="NSNullPlaceholder">Same As Album</string>
+                                    <integer key="NSRaisesForNotApplicableKeys" value="1"/>
+                                    <integer key="NSValidatesImmediately" value="0"/>
+                                </dictionary>
+                            </binding>
+                            <outlet property="nextKeyView" destination="133" id="141"/>
+                        </connections>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="46" translatesAutoresizingMaskIntoConstraints="NO" id="129">
+                        <rect key="frame" x="291" y="202" width="50" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Artista:" id="430">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="128">
+                        <rect key="frame" x="346" y="200" width="184" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" tag="1" drawsBackground="YES" id="429">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="25" name="value" keyPath="selection.artist" id="248">
+                                <dictionary key="options">
+                                    <integer key="NSAllowsEditingMultipleValuesSelection" value="1"/>
+                                    <integer key="NSAlwaysPresentsApplicationModalAlerts" value="0"/>
+                                    <integer key="NSConditionallySetsEditable" value="1"/>
+                                    <integer key="NSConditionallySetsEnabled" value="0"/>
+                                    <integer key="NSConditionallySetsHidden" value="0"/>
+                                    <integer key="NSContinuouslyUpdatesValue" value="0"/>
+                                    <string key="NSMultipleValuesPlaceholder"></string>
+                                    <string key="NSNoSelectionPlaceholder"></string>
+                                    <string key="NSNotApplicablePlaceholder"></string>
+                                    <string key="NSNullPlaceholder">Same As Album</string>
+                                    <integer key="NSRaisesForNotApplicableKeys" value="1"/>
+                                    <integer key="NSValidatesImmediately" value="0"/>
+                                </dictionary>
+                            </binding>
+                            <outlet property="nextKeyView" destination="130" id="140"/>
+                        </connections>
+                    </textField>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" preferredMaxLayoutWidth="41" translatesAutoresizingMaskIntoConstraints="NO" id="127">
+                        <rect key="frame" x="296" y="234" width="45" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Título:" id="428">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="126">
+                        <rect key="frame" x="346" y="232" width="184" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="427">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <action selector="alignRight:" target="-1" id="139"/>
+                            <binding destination="25" name="value" keyPath="selection.title" id="151"/>
+                            <outlet property="nextKeyView" destination="128" id="143"/>
+                        </connections>
+                    </textField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="875" y="-11"/>
+        </window>
     </objects>
 </document>
