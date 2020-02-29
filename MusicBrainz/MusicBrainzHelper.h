@@ -20,7 +20,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray *));
-void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(NSImage *));
+void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray * _Nullable, NSError * _Nullable));
+void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(NSImage * _Nullable, NSError * _Nullable));
 
 NS_ASSUME_NONNULL_END

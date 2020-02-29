@@ -18,42 +18,8 @@
 
 #import "MusicBrainzHelper.h"
 
-void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray *))
+void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray *, NSError *))
 {
-	/*
-		 // Set MB server and port
-		 NSString *server = @"musicbrainz.org";
-		 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"]) {
-			 server = [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzServer"];
-		 }
-
-		 int port = 80;
-		 if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzServerPort"]) {
-			 port = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzServerPort"];
-		 }
-
-	 //	NSString *bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
-		 auto query = MusicBrainz5::CQuery([[NSString stringWithFormat:@"Max %@", bundleVersion] UTF8String], [server UTF8String], port);
-
-		 // Use authentication, if specified
-		 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"]) {
-			 query.SetUserName([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzUsername"] UTF8String]);
-		 }
-
-		 if(nil != [[NSUserDefaults standardUserDefaults] objectForKey:@"musicBrainzPassword"]) {
-			 query.SetPassword([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzPassword"] UTF8String]);
-		 }
-
-		 // Proxy setup
-		 if([[NSUserDefaults standardUserDefaults] boolForKey:@"musicBrainzUseProxy"]) {
-			 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"]) {
-				 query.SetProxyHost([[[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServer"] UTF8String]);
-			 }
-			 if(nil != [[NSUserDefaults standardUserDefaults] stringForKey:@"musicBrainzProxyServerPort"]) {
-				 query.SetProxyPort((int)[[NSUserDefaults standardUserDefaults] integerForKey:@"musicBrainzProxyServerPort"]);
-			 }
-		 }
-	 */
 	NSString *url = [NSString stringWithFormat:@"https://musicbrainz.org/ws/2/discid/%@?inc=artists+labels+recordings+release-groups+artist-credits&fmt=json", discID];
 
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -70,6 +36,9 @@ void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray
 
 	NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:[request autorelease] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 		if(nil == data) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completionHandler(nil, error);
+			});
 			return;
 		}
 
@@ -121,14 +90,14 @@ void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray
 		}
 
 		dispatch_async(dispatch_get_main_queue(), ^{
-			completionHandler(releaseArray);
+			completionHandler(releaseArray, nil);
 		});
 	}];
 
 	[dataTask resume];
 }
 
-void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(NSImage *))
+void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(NSImage *, NSError *))
 {
 	NSString *url = [NSString stringWithFormat:@"https://coverartarchive.org/release/%@", releaseID];
 
@@ -146,6 +115,9 @@ void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(
 
 	NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:[request autorelease] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 		if(nil == data) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				completionHandler(nil, error);
+			});
 			return;
 		}
 
@@ -165,12 +137,14 @@ void PerformCoverArtArchiveQuery(NSString *releaseID, void (^completionHandler)(
 			}
 		}
 
-		if(NULL != imageURL) {
-			NSImage *image = [[NSImage alloc] initWithContentsOfURL:imageURL];
-			dispatch_async(dispatch_get_main_queue(), ^{
-				completionHandler(image);
-			});
+		NSImage *image = nil;
+		if(nil != imageURL) {
+			image = [[NSImage alloc] initWithContentsOfURL:imageURL];
 		}
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completionHandler(image, nil);
+		});
 	}];
 
 	[dataTask resume];

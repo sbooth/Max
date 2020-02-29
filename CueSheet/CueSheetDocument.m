@@ -585,13 +585,24 @@
 
 - (IBAction) queryMusicBrainz:(id)sender
 {
-	if(![self queryMusicBrainzAllowed])
+	if(![self queryMusicBrainzAllowed]) {
 		return;
+	}
 
-	PerformMusicBrainzQuery([self discID], ^(NSArray *results) {
-//		NSAssert(0 != matchCount, NSLocalizedStringFromTable(@"No matching discs were found.", @"Exceptions", @""));
+	PerformMusicBrainzQuery([self discID], ^(NSArray *results, NSError *error) {
+		if(nil == results) {
+			if(nil != error) {
+				NSAlert *alert = [NSAlert alertWithError:error];
+				[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+				}];
+			}
+			return;
+		}
+		else if(0 == [results count]) {
+			NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedStringFromTable(@"No matches found.", @"CompactDisc", @"") defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedStringFromTable(@"No matching releases were found in MusicBrainz.", @"CompactDisc", @"")];
+			[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+			}];
 
-		if(0 == [results count]) {
 			return;
 		}
 		// If only match was found, update ourselves
@@ -599,8 +610,10 @@
 			NSDictionary *release = [results firstObject];
 			[self updateMetadataFromMusicBrainz:release];
 			NSString *releaseID = [release objectForKey:@"albumId"];
-			PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image) {
-				[self setAlbumArt:image];
+			PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image, NSError *error) {
+				if(nil != image) {
+					[self setAlbumArt:image];
+				}
 			});
 		}
 		else {
@@ -611,8 +624,10 @@
 					NSDictionary *release = [sheet selectedRelease];
 					[self updateMetadataFromMusicBrainz:release];
 					NSString *releaseID = [release objectForKey:@"albumId"];
-					PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image) {
-						[self setAlbumArt:image];
+					PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image, NSError *error) {
+						if(nil != image) {
+							[self setAlbumArt:image];
+						}
 					});
 				}
 			}];
@@ -623,16 +638,19 @@
 
 - (void) queryMusicBrainzNonInteractive
 {
-	if(NO == [self queryMusicBrainzAllowed])
+	if(NO == [self queryMusicBrainzAllowed]) {
 		return;
+	}
 	
-	PerformMusicBrainzQuery([self discID], ^(NSArray *results) {
+	PerformMusicBrainzQuery([self discID], ^(NSArray *results, NSError *error) {
 		if(0 < [results count]) {
 			NSDictionary *release = [results firstObject];
 			[self updateMetadataFromMusicBrainz:release];
 			NSString *releaseID = [release objectForKey:@"albumId"];
-			PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image) {
-				[self setAlbumArt:image];
+			PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image, NSError *error) {
+				if(nil != image) {
+					[self setAlbumArt:image];
+				}
 			});
 		}
 	});
