@@ -8,11 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		322D60CB2405D1740077AA91 /* MusicBrainzHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 322D60CA2405D1740077AA91 /* MusicBrainzHelper.m */; };
-		322D60CE2406A4010077AA91 /* MusicBrainzPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 322D60CD2406A4010077AA91 /* MusicBrainzPreferencesController.m */; };
-		322D60D12406A4150077AA91 /* MusicBrainzPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 322D60CF2406A4150077AA91 /* MusicBrainzPreferences.xib */; };
 		322E1EB30DC81AAB00CB6DDB /* OggSpeexEncoderTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 322E1EB20DC81AAB00CB6DDB /* OggSpeexEncoderTask.mm */; };
 		325BFE4E1050DB5A00FE11C2 /* CueSheet.strings in Resources */ = {isa = PBXBuildFile; fileRef = 325BFE4A1050DB5A00FE11C2 /* CueSheet.strings */; };
 		325BFE4F1050DB5A00FE11C2 /* Menus.strings in Resources */ = {isa = PBXBuildFile; fileRef = 325BFE4C1050DB5A00FE11C2 /* Menus.strings */; };
+		32697EE5240AB4430099DF70 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 32697EE4240AB4430099DF70 /* LICENSE.txt */; };
 		326D252712DE4CF800767B04 /* cdparanoia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252612DE4CF800767B04 /* cdparanoia.framework */; };
 		326D252912DE4CF800767B04 /* cuetools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252812DE4CF800767B04 /* cuetools.framework */; };
 		326D252B12DE4CF800767B04 /* discid.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 326D252A12DE4CF800767B04 /* discid.framework */; };
@@ -212,7 +211,6 @@
 		8CABDF9D0ABE731B00905814 /* WavPackEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF080A05CB8E00890518 /* WavPackEncoder.m */; };
 		8CABDFB70ABE751100905814 /* OggSpeexEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CABDED20ABE6AF900905814 /* OggSpeexEncoder.m */; };
 		8CABDFC70ABE768100905814 /* LibsndfileEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FEFC0A05CB8E00890518 /* LibsndfileEncoder.m */; };
-		8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8CB6E20008DACB8100345B8F /* COPYING.txt */; };
 		8CBB34EE0CEFF42F004678FB /* FileConversionToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CBB34ED0CEFF42F004678FB /* FileConversionToolbar.m */; };
 		8CBF385509CFA0FE00E89546 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CBF384009CFA0FE00E89546 /* Carbon.framework */; };
 		8CD015CB0ADAA5BD00216B29 /* MP3Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CD015C90ADAA5BD00216B29 /* MP3Encoder.m */; };
@@ -229,7 +227,6 @@
 		8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 8CD7F5E0098B0A30002C4D9F /* Credits.rtf */; };
 		8CDF024E0AD8A23E00193153 /* FileFormatNotSupportedException.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C53FF260A05CC4600890518 /* FileFormatNotSupportedException.m */; };
 		8CE24FE10AD30A2D009E1323 /* MusicBrainzMatchSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE24FDF0AD30A2D009E1323 /* MusicBrainzMatchSheet.m */; };
-		8CE251120AD335F2009E1323 /* MusicBrainzDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */; };
 		8CE608BF0C8ADC9000AEC125 /* RegionDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CE607870C8ACD7900AEC125 /* RegionDecoder.m */; };
 		8CE608D20C8ADCE900AEC125 /* FLACDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CFA4B370ABDE11800C5AE9F /* FLACDecoder.m */; };
 		8CEA8CF80942939800207809 /* DiskArbitration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CEA8CF00942939800207809 /* DiskArbitration.framework */; };
@@ -282,14 +279,6 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		322D60CA2405D1740077AA91 /* MusicBrainzHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MusicBrainzHelper.m; path = MusicBrainz/MusicBrainzHelper.m; sourceTree = "<group>"; };
-		322D60CC2406A4010077AA91 /* MusicBrainzPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicBrainzPreferencesController.h; sourceTree = "<group>"; };
-		322D60CD2406A4010077AA91 /* MusicBrainzPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicBrainzPreferencesController.m; sourceTree = "<group>"; };
-		322D60D02406A4150077AA91 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MusicBrainzPreferences.xib; sourceTree = "<group>"; };
-		322D60D22406A42A0077AA91 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/MusicBrainzPreferences.xib; sourceTree = "<group>"; };
-		322D60D32406A42D0077AA91 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MusicBrainzPreferences.xib; sourceTree = "<group>"; };
-		322D60D42406A4300077AA91 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MusicBrainzPreferences.xib; sourceTree = "<group>"; };
-		322D60D52406A4350077AA91 /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MusicBrainzPreferences.xib; sourceTree = "<group>"; };
-		322D60D72406A4460077AA91 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MusicBrainzPreferences.xib; sourceTree = "<group>"; };
 		322D60D82406A45C0077AA91 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MusicBrainzMatchSheet.xib; sourceTree = "<group>"; };
 		322D60D92406A4920077AA91 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MP3SettingsSheet.xib; sourceTree = "<group>"; };
 		322D60DA2406A49F0077AA91 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/OutputPreferences.xib; sourceTree = "<group>"; };
@@ -306,6 +295,7 @@
 		325BFE5A1050DB8600FE11C2 /* it */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Preferences.strings; sourceTree = "<group>"; };
 		325BFE5B1050DB8600FE11C2 /* it */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		325BFE5C1050DBB900FE11C2 /* it */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = it; path = it.lproj/Menus.strings; sourceTree = "<group>"; };
+		32697EE4240AB4430099DF70 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		326D252612DE4CF800767B04 /* cdparanoia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = cdparanoia.framework; path = Frameworks/cdparanoia.framework; sourceTree = "<group>"; };
 		326D252812DE4CF800767B04 /* cuetools.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = cuetools.framework; path = Frameworks/cuetools.framework; sourceTree = "<group>"; };
 		326D252A12DE4CF800767B04 /* discid.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = discid.framework; path = Frameworks/discid.framework; sourceTree = "<group>"; };
@@ -737,7 +727,6 @@
 		8CABDED10ABE6AF900905814 /* OggSpeexEncoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OggSpeexEncoder.h; sourceTree = "<group>"; };
 		8CABDED20ABE6AF900905814 /* OggSpeexEncoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OggSpeexEncoder.m; sourceTree = "<group>"; };
 		8CB34D16099AFF63001532C3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/Credits.rtf; sourceTree = "<group>"; };
-		8CB6E20008DACB8100345B8F /* COPYING.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = COPYING.txt; sourceTree = "<group>"; };
 		8CBA9F450999B374007C9F11 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/CompactDisc.strings; sourceTree = "<group>"; };
 		8CBA9F480999B381007C9F11 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Exceptions.strings; sourceTree = "<group>"; };
 		8CBA9F4B0999B38B007C9F11 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/General.strings; sourceTree = "<group>"; };
@@ -780,7 +769,6 @@
 		8CDE897B09D3B61600FBD401 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/UndoRedo.strings; sourceTree = "<group>"; };
 		8CE24FDE0AD30A2D009E1323 /* MusicBrainzMatchSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MusicBrainzMatchSheet.h; path = MusicBrainz/MusicBrainzMatchSheet.h; sourceTree = "<group>"; };
 		8CE24FDF0AD30A2D009E1323 /* MusicBrainzMatchSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MusicBrainzMatchSheet.m; path = MusicBrainz/MusicBrainzMatchSheet.m; sourceTree = "<group>"; };
-		8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = MusicBrainzDefaults.plist; sourceTree = "<group>"; };
 		8CE607860C8ACD7900AEC125 /* RegionDecoder.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RegionDecoder.h; path = Decoders/RegionDecoder.h; sourceTree = "<group>"; };
 		8CE607870C8ACD7900AEC125 /* RegionDecoder.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = RegionDecoder.m; path = Decoders/RegionDecoder.m; sourceTree = "<group>"; };
 		8CE6F51D08CD60970028DA37 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -884,7 +872,7 @@
 			isa = PBXGroup;
 			children = (
 				328272762401AD4F002ED5BD /* README.md */,
-				8CB6E20008DACB8100345B8F /* COPYING.txt */,
+				32697EE4240AB4430099DF70 /* LICENSE.txt */,
 				8C53022A0A05D6D800890518 /* Drive */,
 				8C9451350A12E4D700C8DCAE /* CompactDisc */,
 				8C94512C0A12E45B00C8DCAE /* CueSheet */,
@@ -954,7 +942,6 @@
 				32C614C812E80CB800F714C9 /* MonkeysAudioSettingsSheet.xib */,
 				32C614CA12E80CB800F714C9 /* MP3SettingsSheet.xib */,
 				32C614CC12E80CB800F714C9 /* MusicBrainzMatchSheet.xib */,
-				322D60CF2406A4150077AA91 /* MusicBrainzPreferences.xib */,
 				32C614D012E80CB800F714C9 /* OggSpeexSettingsSheet.xib */,
 				32C614D212E80CB800F714C9 /* OggVorbisSettingsSheet.xib */,
 				32C614D412E80CB800F714C9 /* OutputPreferences.xib */,
@@ -991,7 +978,6 @@
 				8C0883590A092EA500CAC5D0 /* ApplicationControllerDefaults.plist */,
 				8CA73F4A0A0FE6F300B12829 /* ComparisonRipperDefaults.plist */,
 				8C08835E0A092EA500CAC5D0 /* MediaControllerDefaults.plist */,
-				8CE251110AD335F2009E1323 /* MusicBrainzDefaults.plist */,
 				8C08835F0A092EA500CAC5D0 /* ParanoiaDefaults.plist */,
 			);
 			name = Defaults;
@@ -1247,8 +1233,6 @@
 				8C89C6330A069E5000359E67 /* GeneralPreferencesController.m */,
 				8CD020170ADB66E000216B29 /* iTunesPreferencesController.h */,
 				8CD020180ADB66E000216B29 /* iTunesPreferencesController.m */,
-				322D60CC2406A4010077AA91 /* MusicBrainzPreferencesController.h */,
-				322D60CD2406A4010077AA91 /* MusicBrainzPreferencesController.m */,
 				8CD01F080ADB488300216B29 /* OutputPreferencesController.h */,
 				8CD01F090ADB488300216B29 /* OutputPreferencesController.m */,
 				8CD025170ADC036A00216B29 /* PostProcessingPreferencesController.h */,
@@ -1510,7 +1494,6 @@
 				8C5302820A05DCC000890518 /* Add to iTunes Library.scpt in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				8CD7F5E1098B0A30002C4D9F /* Credits.rtf in Resources */,
-				8CB6E20108DACB8100345B8F /* COPYING.txt in Resources */,
 				8C8B0CCF092E5DAA00418C45 /* Max Help in Resources */,
 				8C328182096D12CA00608C9D /* Exceptions.strings in Resources */,
 				8C5266BB0970E6FB008F1B55 /* Acknowledgments.rtf in Resources */,
@@ -1552,10 +1535,10 @@
 				8CA73F4B0A0FE6F300B12829 /* ComparisonRipperDefaults.plist in Resources */,
 				8CD25ED50AAD122D0037F33A /* Speex.png in Resources */,
 				8CA9C18B0AD303C2000EF903 /* MusicBrainz.png in Resources */,
-				8CE251120AD335F2009E1323 /* MusicBrainzDefaults.plist in Resources */,
 				8CD020090ADB662600216B29 /* iTunesToolbarImage.png in Resources */,
 				8CD025750ADC0A4D00216B29 /* PostProcessingToolbarImage.png in Resources */,
 				8C37D3F80B3ABF0F00C5F85A /* FileConversion.strings in Resources */,
+				32697EE5240AB4430099DF70 /* LICENSE.txt in Resources */,
 				8C1F78150B4218910066072B /* WavPack.png in Resources */,
 				8C0406530B5C584000648158 /* InfoPlist.strings in Resources */,
 				32A147B0104745BD0020238F /* dsa_pub.pem in Resources */,
@@ -1563,7 +1546,6 @@
 				325BFE4F1050DB5A00FE11C2 /* Menus.strings in Resources */,
 				32C614E212E80CB800F714C9 /* Acknowledgments.xib in Resources */,
 				32C614E312E80CB800F714C9 /* AlbumArtPreferences.xib in Resources */,
-				322D60D12406A4150077AA91 /* MusicBrainzPreferences.xib in Resources */,
 				32C614E512E80CB800F714C9 /* CompactDiscDocument.xib in Resources */,
 				32C614E612E80CB800F714C9 /* ComponentVersions.xib in Resources */,
 				32C614E712E80CB800F714C9 /* CoreAudioSettingsSheet.xib in Resources */,
@@ -1700,7 +1682,6 @@
 				8C397B950CC1D99D004EFC92 /* MusepackDecoder.m in Sources */,
 				8C397B960CC1D99E004EFC92 /* OggFLACDecoder.m in Sources */,
 				8C397B970CC1D99F004EFC92 /* OggSpeexDecoder.m in Sources */,
-				322D60CE2406A4010077AA91 /* MusicBrainzPreferencesController.m in Sources */,
 				8C397B980CC1D9A0004EFC92 /* OggVorbisDecoder.m in Sources */,
 				8C397B990CC1D9A2004EFC92 /* ShortenDecoder.m in Sources */,
 				8C397B9A0CC1D9A3004EFC92 /* WavPackDecoder.m in Sources */,
@@ -1726,19 +1707,6 @@
 				32A14823104747240020238F /* it */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		322D60CF2406A4150077AA91 /* MusicBrainzPreferences.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				322D60D02406A4150077AA91 /* en */,
-				322D60D22406A42A0077AA91 /* nl */,
-				322D60D32406A42D0077AA91 /* fr */,
-				322D60D42406A4300077AA91 /* de */,
-				322D60D52406A4350077AA91 /* es */,
-				322D60D72406A4460077AA91 /* it */,
-			);
-			name = MusicBrainzPreferences.xib;
 			sourceTree = "<group>";
 		};
 		325BFE4A1050DB5A00FE11C2 /* CueSheet.strings */ = {
@@ -2278,6 +2246,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = TAHRGVZME4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2304,6 +2273,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = TAHRGVZME4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
