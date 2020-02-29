@@ -292,7 +292,7 @@
 #pragma mark State
 
 - (BOOL) encodeAllowed				{ return ([self discInDrive] && NO == [self emptySelection] && NO == [self ripInProgress] && NO == [self encodeInProgress]); }
-- (BOOL) queryMusicBrainzAllowed	{ return [self discInDrive]; }
+- (BOOL) queryMusicBrainzAllowed	{ return YES; }
 - (BOOL) ejectDiscAllowed			{ return [self discInDrive]; }
 - (BOOL) submitDiscIdAllowed		{ return [self discInDrive]; }
 - (BOOL) emptySelection				{ return (0 == [[self selectedTracks] count]); }
@@ -506,32 +506,24 @@
 		return;
 	}
 
-	PerformMusicBrainzQuery([[self disc] discID], ^(NSArray *results, NSError *error) {
+	PerformMusicBrainzQuery([self discID], ^(NSArray *results, NSError *error) {
 		if(nil == results) {
 			if(nil != error) {
 				NSAlert *alert = [NSAlert alertWithError:error];
 				[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
 				}];
 			}
-			return;
 		}
 		else if(0 == [results count]) {
-			NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedStringFromTable(@"No matches found.", @"CompactDisc", @"") defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedStringFromTable(@"No matching releases were found in MusicBrainz.", @"CompactDisc", @"")];
+			NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedStringFromTable(@"No matches.", @"CompactDisc", @"") defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedStringFromTable(@"No releases matching this disc were found in MusicBrainz.", @"CompactDisc", @"")];
 			[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
 			}];
-
-			return;
 		}
 		// If only match was found, update ourselves
 		else if(1 == [results count]) {
 			NSDictionary *release = [results firstObject];
 			[self updateMetadataFromMusicBrainz:release];
-			NSString *releaseID = [release objectForKey:@"albumId"];
-			PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image, NSError *error) {
-				if(nil != image) {
-					[self setAlbumArt:image];
-				}
-			});
+			[self downloadAlbumArt:sender];
 		}
 		else {
 			MusicBrainzMatchSheet	*sheet		= [[MusicBrainzMatchSheet alloc] init];
@@ -540,12 +532,7 @@
 				if(NSOKButton == returnCode) {
 					NSDictionary *release = [sheet selectedRelease];
 					[self updateMetadataFromMusicBrainz:release];
-					NSString *releaseID = [release objectForKey:@"albumId"];
-					PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image, NSError *error) {
-						if(nil != image) {
-							[self setAlbumArt:image];
-						}
-					});
+					[self downloadAlbumArt:sender];
 				}
 			}];
 			[sheet release];
@@ -588,13 +575,39 @@
 
 - (IBAction) downloadAlbumArt:(id)sender
 {
-	if(NULL == _musicbrainzAlbumId) {
+	if(![self queryMusicBrainzAllowed]) {
+		return;
+	}
+
+	if(nil == _musicbrainzAlbumId) {
 		PerformMusicBrainzQuery([self discID], ^(NSArray *results, NSError *error) {
-			if(0 < [results count]) {
+			if(nil == results) {
+				if(nil != error) {
+					NSAlert *alert = [NSAlert alertWithError:error];
+					[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+					}];
+				}
+			}
+			else if(0 == [results count]) {
+				NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedStringFromTable(@"No matches.", @"CompactDisc", @"") defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedStringFromTable(@"No releases matching this disc were found in MusicBrainz.", @"CompactDisc", @"")];
+				[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+				}];
+			}
+			else {
 				NSDictionary *release = [results firstObject];
 				NSString *releaseID = [release objectForKey:@"albumId"];
 				PerformCoverArtArchiveQuery(releaseID, ^(NSImage *image, NSError *error) {
-					if(nil != image) {
+					if(nil != error) {
+						NSAlert *alert = [NSAlert alertWithError:error];
+						[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+						}];
+					}
+					else if(nil == image) {
+						NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedStringFromTable(@"No album art.", @"CompactDisc", @"") defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedStringFromTable(@"No front cover art matching this disc was found.", @"CompactDisc", @"")];
+						[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+						}];
+					}
+					else {
 						[self setAlbumArt:image];
 					}
 				});
@@ -603,7 +616,17 @@
 	}
 	else {
 		PerformCoverArtArchiveQuery(_musicbrainzAlbumId, ^(NSImage *image, NSError *error) {
-			if(nil != image) {
+			if(nil != error) {
+				NSAlert *alert = [NSAlert alertWithError:error];
+				[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+				}];
+			}
+			else if(nil == image) {
+				NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedStringFromTable(@"No album art.", @"CompactDisc", @"") defaultButton:nil alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedStringFromTable(@"No front cover art matching this disc was found.", @"CompactDisc", @"")];
+				[alert beginSheetModalForWindow:[self windowForSheet] completionHandler:^(NSModalResponse returnCode) {
+				}];
+			}
+			else {
 				[self setAlbumArt:image];
 			}
 		});
