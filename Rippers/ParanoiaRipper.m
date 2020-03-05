@@ -185,7 +185,7 @@ callback(long inpos, int function, void *userdata)
 		outputASBD.mChannelsPerFrame	= 2;
 		outputASBD.mBitsPerChannel		= 16;
 
-		err = AudioFileCreateWithURL((CFURLRef)[NSURL fileURLWithPath:filename], kAudioFileCAFType, &outputASBD, 0, &audioFile);
+		err = AudioFileCreateWithURL((CFURLRef)[NSURL fileURLWithPath:filename], kAudioFileCAFType, &outputASBD, kAudioFileFlags_EraseFile, &audioFile);
 		NSAssert2(noErr == err, NSLocalizedStringFromTable(@"The call to %@ failed.", @"Exceptions", @""), @"AudioFileCreateWithURL", UTCreateStringForOSType(err));
 		
 		err = ExtAudioFileWrapAudioFileID(audioFile, YES, &extAudioFileRef);
