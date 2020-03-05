@@ -168,15 +168,32 @@ GetCoreAudioFileDataFormats(OSType filetype)
 				inputASBD.mBytesPerFrame		= 4;
 				inputASBD.mChannelsPerFrame		= 2;
 				inputASBD.mBitsPerChannel		= 16;
-				
+
+				// In order to query what parameters an AudioCodec supports it's necessary to specify mChannelsPerFrame
+				// I suppose it's possible this could lead to failure when encoding for files with more than two channels,
+				// but stereo audio is the most common and it isn't realistic with the current app architecture to set
+				// output formats based on the number of input channels.
+				// Ideally this would be possible, and support custom channel maps, etc.
+				desc.mChannelsPerFrame 			= 2;
+
 				// Create a dummy converter to query
 				AudioConverterRef dummyConverter;
 				err = AudioConverterNew(&inputASBD, &desc, &dummyConverter);
 				if(noErr == err) {					
+					// Get the quality settings
+					UInt32 defaultQuality;
+					size = sizeof(defaultQuality);
+
+					err = AudioConverterGetProperty(dummyConverter, kAudioConverterCodecQuality, &size, &defaultQuality);
+					if(noErr == err)
+						[d setObject:[NSNumber numberWithUnsignedLong:defaultQuality] forKey:@"quality"];
+
 					// Get the available bitrates (CBR)
-					UInt32 mode = kAudioCodecBitRateFormat_CBR;
-					err = AudioConverterSetProperty(dummyConverter, kAudioCodecBitRateFormat, sizeof(mode), &mode);
+					UInt32 mode = kAudioCodecBitRateControlMode_Constant;
+					err = AudioConverterSetProperty(dummyConverter, kAudioCodecPropertyBitRateControlMode, sizeof(mode), &mode);
 					if(noErr == err) {
+						[d setObject:[NSNumber numberWithBool:YES] forKey:@"cbrAvailable"];
+
 						err = AudioConverterGetPropertyInfo(dummyConverter, kAudioConverterApplicableEncodeBitRates, &size, NULL);
 						bitrates = malloc(size);
 						NSCAssert(NULL != bitrates, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
@@ -195,8 +212,11 @@ GetCoreAudioFileDataFormats(OSType filetype)
 							}
 							
 							// For some reason some codec return {0.,0.} as bitrates multiple times (alac)
-							if(0 != [bitratesA count])
+							if(0 != [bitratesA count]) {
+								// FIXME: Replace use of "bitrates" throughout with "bitratesCBR"
 								[d setObject:bitratesA forKey:@"bitrates"];
+								[d setObject:bitratesA forKey:@"bitratesCBR"];
+							}
 							
 							UInt32 defaultBitrate;
 							size = sizeof(defaultBitrate);
@@ -212,19 +232,18 @@ GetCoreAudioFileDataFormats(OSType filetype)
 						}
 					}
 
-
 					// Get the available bitrates (VBR)
-					mode = kAudioCodecBitRateFormat_VBR;
-					err = AudioConverterSetProperty(dummyConverter, kAudioCodecBitRateFormat, sizeof(mode), &mode);
+					mode = kAudioCodecBitRateControlMode_Variable;
+					err = AudioConverterSetProperty(dummyConverter, kAudioCodecPropertyBitRateControlMode, sizeof(mode), &mode);
 					if(noErr == err) {
 						[d setObject:[NSNumber numberWithBool:YES] forKey:@"vbrAvailable"];
 
-						err = AudioConverterGetPropertyInfo(dummyConverter, kAudioConverterApplicableEncodeBitRates, &size, NULL);
+						err = AudioConverterGetPropertyInfo(dummyConverter, kAudioCodecPropertyApplicableBitRateRange, &size, NULL);
 						bitrates = malloc(size);
 						NSCAssert(NULL != bitrates, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 						
 						// Determine which bitrates are supported for VBR (if any)
-						err = AudioConverterGetProperty(dummyConverter, kAudioConverterApplicableEncodeBitRates, &size, bitrates);
+						err = AudioConverterGetProperty(dummyConverter, kAudioCodecPropertyApplicableBitRateRange, &size, bitrates);
 						if(noErr == err) {
 							unsigned		bitrateCount	= size / sizeof(AudioValueRange);
 							NSMutableArray	*bitratesA		= [NSMutableArray arrayWithCapacity:bitrateCount];
@@ -245,14 +264,39 @@ GetCoreAudioFileDataFormats(OSType filetype)
 							bitrates = NULL;
 						}
 					}
-				
-					// Get the quality settings
-					UInt32 defaultQuality;
-					size = sizeof(defaultQuality);
 
-					err = AudioConverterGetProperty(dummyConverter, kAudioConverterCodecQuality, &size, &defaultQuality);
-					if(noErr == err)
-						[d setObject:[NSNumber numberWithUnsignedLong:defaultQuality] forKey:@"quality"];
+					// Get the available bitrates (ABR)
+					mode = kAudioCodecBitRateControlMode_LongTermAverage;
+					err = AudioConverterSetProperty(dummyConverter, kAudioCodecPropertyBitRateControlMode, sizeof(mode), &mode);
+					if(noErr == err) {
+						[d setObject:[NSNumber numberWithBool:YES] forKey:@"abrAvailable"];
+
+						err = AudioConverterGetPropertyInfo(dummyConverter, kAudioCodecPropertyApplicableBitRateRange, &size, NULL);
+						bitrates = malloc(size);
+						NSCAssert(NULL != bitrates, NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
+
+						// Determine which bitrates are supported for ABR (if any)
+						err = AudioConverterGetProperty(dummyConverter, kAudioCodecPropertyApplicableBitRateRange, &size, bitrates);
+						if(noErr == err) {
+							unsigned		bitrateCount	= size / sizeof(AudioValueRange);
+							NSMutableArray	*bitratesA		= [NSMutableArray arrayWithCapacity:bitrateCount];
+
+							unsigned n;
+							for(n = 0; n < bitrateCount; ++n) {
+								unsigned long minRate = (unsigned long) bitrates[n].mMinimum;
+//								unsigned long maxRate = (unsigned long) bitrates[n].mMaximum;
+								if(0 != minRate)
+									[bitratesA addObject:[NSNumber numberWithUnsignedLong: minRate / 1000]];
+							}
+
+							// For some reason some codec return {0.,0.} as bitrates multiple times (alac)
+							if(0 != [bitratesA count])
+								[d setObject:bitratesA forKey:@"bitratesABR"];
+
+							free(bitrates);
+							bitrates = NULL;
+						}
+					}
 
 					// Cleanup
 					err = AudioConverterDispose(dummyConverter);
