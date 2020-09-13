@@ -361,7 +361,9 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 		for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
 			channelBuffers[channel] = NULL;
 		}
-		
+
+		unsigned long max_long_value_for_lame = 1UL << (8 * sizeof(long) - 1);
+
 		// Split PCM data into channels and convert to appropriate sample size for LAME
 		switch(_sourceBitsPerChannel) {
 			
@@ -377,7 +379,7 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
 						// Rescale values to short
-						channelBuffers16[channel][wideSample] = (short)(((buffer8[sample] << 8) & 0xFF00) | (buffer8[sample] & 0xFF));
+						channelBuffers16[channel][wideSample] = (short)((buffer8[sample] / 128.f) * 32768);
 					}
 				}
 					
@@ -411,18 +413,19 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
 					NSAssert(NULL != channelBuffers32[channel], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 				}
-				
+
 				// Packed 24-bit data is 3 bytes, while unpacked is 24 bits in an int32_t
 				buffer8 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel) {
-						// Read three bytes and reconstruct them as a 32-bit BE integer
 						constructedSample = (int8_t)*buffer8++; constructedSample <<= 8;
 						constructedSample |= (uint8_t)*buffer8++; constructedSample <<= 8;
 						constructedSample |= (uint8_t)*buffer8++;
-												
-						// Convert to 32-bit sample scaling
-						channelBuffers32[channel][wideSample] = (long)((constructedSample << 8) | (constructedSample & 0x000000ff));
+
+						// lame_encode_buffer_long2() expects the values to be scaled to fit the size of long, not a particular bit width
+						// Specifically in the range 2^(8*sizeof(long)-1)
+						// Which for 32-bit longs = 2147483648 (0x80000000), for 64-bit longs = 9223372036854775808 (0x8000000000000000)
+						channelBuffers32[channel][wideSample] = (long)((constructedSample / 8388608.f) * max_long_value_for_lame);
 					}
 				}
 					
@@ -437,11 +440,12 @@ static int sLAMEBitrates [14] = { 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192
 					channelBuffers32[channel] = calloc(frameCount, sizeof(long));
 					NSAssert(NULL != channelBuffers32[channel], NSLocalizedStringFromTable(@"Unable to allocate memory.", @"Exceptions", @""));
 				}
-					
+
 				buffer32 = chunk->mBuffers[0].mData;
 				for(wideSample = sample = 0; wideSample < frameCount; ++wideSample) {
 					for(channel = 0; channel < chunk->mBuffers[0].mNumberChannels; ++channel, ++sample) {
-						channelBuffers32[channel][wideSample] = (long)OSSwapBigToHostInt32(buffer32[sample]);
+						// See comment above about expected scaling for lame_encode_buffer_long2()
+						channelBuffers32[channel][wideSample] = (long)((OSSwapBigToHostInt32(buffer32[sample]) / 2147483648.f) * max_long_value_for_lame);
 					}
 				}
 					
