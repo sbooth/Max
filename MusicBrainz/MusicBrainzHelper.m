@@ -44,7 +44,6 @@ void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray
 
 		NSError *err = nil;
 		NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
-//		NSLog(@"%@",json);
 
 		NSMutableArray *releaseArray = [NSMutableArray array];
 
@@ -65,6 +64,22 @@ void PerformMusicBrainzQuery(NSString *discID, void (^completionHandler)(NSArray
 
 			NSArray *media = [release objectForKey:@"media"];
 			for(NSDictionary *medium in media) {
+				// Multi-disc releases contain information on all discs in the release, so
+				// filter out media that don't have matching disc IDs
+				BOOL mediumHasMatchingDiscID = NO;
+				NSArray *discs = [medium objectForKey:@"discs"];
+				for(NSDictionary *disc in discs) {
+					if([discID isEqualToString:[disc objectForKey:@"id"]]) {
+						mediumHasMatchingDiscID = YES;
+						break;
+					}
+				}
+
+				if(!mediumHasMatchingDiscID)
+					continue;
+
+				[releaseDictionary setValue:[medium objectForKey:@"position"] forKey:@"position"];
+
 				NSArray *tracks = [medium objectForKey:@"tracks"];
 				for(NSDictionary *track in tracks) {
 					NSMutableDictionary *trackDictionary = [NSMutableDictionary dictionary];

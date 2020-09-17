@@ -898,6 +898,7 @@
 	[self setArtist:[releaseDictionary valueForKey:@"artist"]];
 	[self setComposer:[releaseDictionary valueForKey:@"composer"]];
 	[self setDate:[releaseDictionary valueForKey:@"date"]];
+	[self setDiscNumber:[releaseDictionary valueForKey:@"position"]];
 	[self setMusicbrainzAlbumId:[releaseDictionary valueForKey:@"albumId"]];
 	[self setMusicbrainzArtistId:[releaseDictionary valueForKey:@"artistId"]];
 
