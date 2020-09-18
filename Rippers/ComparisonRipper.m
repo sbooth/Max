@@ -324,7 +324,7 @@
 				readRange		= [SectorRange sectorRangeWithFirstSector:startSector sectorCount:sectorCount];
 
 				// Extract the audio from the disc
-				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];				
+				[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Ripping sectors %lu - %lu", @"Log", @""), (unsigned long)[readRange firstSector], (unsigned long)[readRange lastSector]]];
 				sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
 				
 				NSAssert(sectorCount == sectorsRead, NSLocalizedStringFromTable(@"Unable to read from the disc.", @"Log", @""));
@@ -556,10 +556,10 @@
 				
 				// Log this message here, instead of in the comparison loop, to avoid repetitive messages
 				if(blockEnd == i) {
-					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Mismatch for sector %i", @"Log", @""), [range sectorForIndex:i]]];
+					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Mismatch for sector %lu", @"Log", @""), (unsigned long)[range sectorForIndex:i]]];
 				}
 				else {
-					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Mismatches for sectors %i - %i", @"Log", @""), [range sectorForIndex:i], [range sectorForIndex:blockEnd]]];
+					[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Mismatches for sectors %lu - %lu", @"Log", @""), (unsigned long)[range sectorForIndex:i], (unsigned long)[range sectorForIndex:blockEnd]]];
 				}
 				
 				// Adjust boundaries so drive is up to speed when it reaches the problem area if
@@ -601,10 +601,10 @@
 					
 					// Extract the audio from the disc
 					if(1 == [readRange length]) {
-						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sector %i", @"Log", @""), [readRange firstSector]]];
+						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sector %lu", @"Log", @""), (unsigned long)[readRange firstSector]]];
 					}
 					else {
-						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sectors %i - %i", @"Log", @""), [readRange firstSector], [readRange lastSector]]];
+						[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Re-ripping sectors %lu - %lu", @"Log", @""), (unsigned long)[readRange firstSector], (unsigned long)[readRange lastSector]]];
 					}
 					sectorsRead		= [_drive readAudioAndErrorFlags:buffer sectorRange:readRange];
 					

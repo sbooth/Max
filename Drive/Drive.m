@@ -415,7 +415,7 @@
 	cd_read_isrc.track			= track;
 	
 	if(-1 == ioctl([self fileDescriptor], DKIOCCDREADISRC, &cd_read_isrc)) {
-		[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read the international standard recording code (ISRC) for track %i", @"Exceptions", @""), track]];
+		[self logMessage:[NSString stringWithFormat:NSLocalizedStringFromTable(@"Unable to read the international standard recording code (ISRC) for track %lu", @"Exceptions", @""), (unsigned long)track]];
 		return nil;
 	}
 	
